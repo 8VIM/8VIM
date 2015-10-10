@@ -57,7 +57,7 @@ public class EightVimKeyboardView extends View {
 
 
     @Override
-    protected void onDraw(Canvas canvas)
+    public void onDraw(Canvas canvas)
     {
         Logger.v(this, "onDraw called");
         //super.onDraw(canvas);
@@ -86,7 +86,7 @@ public class EightVimKeyboardView extends View {
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
         Logger.v(this, "onMeasure called");
         // Get size without mode
