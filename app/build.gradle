@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "inc.flide.eightvim"
-        minSdkVersion 7
-        targetSdkVersion 23
+        minSdkVersion 11
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
