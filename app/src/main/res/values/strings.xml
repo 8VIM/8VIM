@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">8Vim</string>
     <style name="version_name">8PenClone</style>
+    <string name="title_activity_preferences8_vim">Preferences 8Vim</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
