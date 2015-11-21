@@ -6,7 +6,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
-public class EightVimInputMethodService extends InputMethodService{
+public class EightVimInputMethodService extends InputMethodService {
+
     EightVimKeyboardView eightVimKeyboardView;
 
     /**
@@ -37,23 +38,6 @@ public class EightVimInputMethodService extends InputMethodService{
     {
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
-    }
-
-    /** Helper to read n characters relative to cursor position (n can be negative to read before cursor) */
-    public String readText(int n)
-    {
-        String returnString = "";
-
-        if(n > 0)
-        {
-            returnString = getCurrentInputConnection().getTextAfterCursor(n, 0).toString();
-        }
-        else if(n < 0)
-        {
-            returnString = getCurrentInputConnection().getTextBeforeCursor(-n, 0).toString();
-        }
-
-        return returnString;
     }
 
     /**

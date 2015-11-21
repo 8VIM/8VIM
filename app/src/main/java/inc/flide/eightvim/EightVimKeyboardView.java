@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -12,11 +13,11 @@ import android.view.View;
 
 import inc.flide.logging.Logger;
 
-public class EightVimKeyboardView extends View {
+public class EightVimKeyboardView extends View{
 
     private EightVimInputMethodService eightVimInputMethodService;
 
-    private PointF posLast;					// Last point of touch
+    private PointF      posLast;					// Last point of touch
     private PointF		posNow;						// Current point of touch
     private float		radius;						// Radius of circle
     private PointF		centre;
@@ -80,14 +81,13 @@ public class EightVimKeyboardView extends View {
         float r = radius + 200;
         canvas.drawLine(centre.x, centre.y, centre.x-r, centre.y-r, paint);
         canvas.drawLine(centre.x, centre.y, centre.x-r, centre.y+r, paint);
-        canvas.drawLine(centre.x, centre.y, centre.x+r, centre.y+r, paint);
+        canvas.drawLine(centre.x, centre.y, centre.x + r, centre.y + r, paint);
         canvas.drawLine(centre.x, centre.y, centre.x+r, centre.y-r, paint);
         Logger.v(this, "onDraw returns");
     }
 
     @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Logger.v(this, "onMeasure called");
         // Get size without mode
         int width = View.MeasureSpec.getSize(widthMeasureSpec);
@@ -114,38 +114,6 @@ public class EightVimKeyboardView extends View {
         // Set the new size
         setMeasuredDimension(width, height);
         Logger.v(this, "onMeasure returns");
-    }
-
-    void handleLettercase(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd)
-    {
-        Logger.d(this, "handleLettercase ->");
-        // Set uppercase if cursor is at position 0
-        if(newSelStart == 0)
-        {
-            uppercase = true;
-            return;
-        }
-
-        // Check if selection moved only 1 to the left/right, else return
-        if(Math.abs(newSelStart-oldSelStart) != 1) return;
-
-        // Get last character
-        char c = eightVimInputMethodService.readText(-1).charAt(0);
-
-        if((c == '.') || (c == ':') || (c == '!') || (c == '?') || (c == ''))  // Terminating character
-        {
-            uppercase = true;
-        }
-        else if((c == ' ') || (c == '\t') || (c == '\r') || (c == '\n'))  // Space character
-        {
-            // Don't change letter case
-        }
-        else  // Any other character
-        {
-            uppercase = false;
-        }
-
-        Logger.d(this, "handleLettercase <-");
     }
 
     /** Gets the distance from the center to point p */
@@ -241,6 +209,7 @@ public class EightVimKeyboardView extends View {
     {
         // Get touch point
         posNow = new PointF(e.getX(), e.getY());
+        //movedPos = false;
 
         if(getRadius(posNow) > radius)
         {
