@@ -7,9 +7,9 @@ import android.graphics.PointF;
  */
 public class Circle{
     private PointF centre;
-    private double radius;
+    private float radius;
 
-    public Circle(PointF centre, double radius) {
+    public Circle(PointF centre, float radius) {
         this.centre = centre;
         this.radius = radius;
     }
@@ -22,11 +22,32 @@ public class Circle{
         this.centre = centre;
     }
 
-    public double getRadius() {
+    public float getRadius() {
         return radius;
     }
 
-    public void setRadius(double radius) {
+    public void setRadius(float radius) {
         this.radius = radius;
+    }
+
+    private double getPowerOfPoint(PointF point) {
+        /*
+        If O is the centre of circle
+        Consider a point P not necessarily on the circumference of the circle.
+        If d = OP is the distance between P and the circle's center O, then the power of the point P relative to the circle is
+        p=d^2-r^2.
+        */
+
+        double dSquare = GeometryUtilities.getSquaredDistanceBetweenPoints(point, centre);
+        double rSquare = Math.pow(radius, 2);
+        double power = dSquare - rSquare;
+        return power;
+    }
+
+    public boolean isPointInsideCircle(PointF point){
+        if(getPowerOfPoint(point) < 0){
+            return true;
+        }
+        return false;
     }
 }

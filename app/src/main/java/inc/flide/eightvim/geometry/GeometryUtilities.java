@@ -14,19 +14,7 @@ public class GeometryUtilities {
         return distanceSquare;
     }
 
-    public static double getPowerOfPoint(PointF position, Circle circle) {
-        /*
-        If O is the centre of circle
-        Consider a point P not necessarily on the circumference of the circle.
-        If d = OP is the distance between P and the circle's center O, then the power of the point P relative to the circle is
-        p=d^2-r^2.
-        */
 
-        double dSquare = GeometryUtilities.getSquaredDistanceBetweenPoints(position, circle.getCentre());
-        double rSquare = Math.pow(circle.getRadius(), 2);
-        double power = dSquare - rSquare;
-        return power;
-    }
 
     /** Gets the angle of point p relative to the center */
     public static double getAngleOfPointWithRespectToCentreOfCircle(PointF p, Circle circle)
@@ -42,5 +30,17 @@ public class GeometryUtilities {
             angle = Math.PI * 2 + angle;
         }
         return angle;
+    }
+
+    public static int getBaseQuadrant(int continiousQuadrantValue)
+    {
+        int result;
+        // Calculate result with modulus operator
+        result = continiousQuadrantValue % 4;
+        // Fix zero truncation
+        if(result < 0){
+            result += 4;
+        }
+        return result;
     }
 }

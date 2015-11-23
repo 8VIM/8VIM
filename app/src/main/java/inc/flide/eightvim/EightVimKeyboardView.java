@@ -11,11 +11,11 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.Map;
 
 import inc.flide.eightvim.geometry.Circle;
 import inc.flide.eightvim.geometry.GeometryUtilities;
+import inc.flide.eightvim.geometry.KeyboardAction;
 import inc.flide.logging.Logger;
 
 import static inc.flide.eightvim.geometry.GeometryUtilities.*;
@@ -30,8 +30,7 @@ public class EightVimKeyboardView extends View{
     private FingerPosition currentFingerPosition;
     private Circle circle;
 
-    private float		radius;						// Radius of circle
-    private PointF		centre;
+    Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
 
     private char[][]	characters = {
             {'a', 's', 'i', 'o'},
@@ -60,9 +59,14 @@ public class EightVimKeyboardView extends View{
 
     private void initialize(Context context){
         eightVimInputMethodService = (EightVimInputMethodService) context;
+        initializeKeyboardActionMap();
         setHapticFeedbackEnabled(true);
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
+    }
+
+    private void initializeKeyboardActionMap() {
+        //TODO
     }
 
 
@@ -81,17 +85,17 @@ public class EightVimKeyboardView extends View{
         paint.setStrokeWidth(5);
         paint.setStyle(Paint.Style.STROKE);
 
-        //create the centre circle
+        //create the circle.getCentre() circle
         RectF oval = new RectF();
-        oval.set(centre.x-radius, centre.y-radius, centre.x+radius, centre.y+radius);
+        oval.set(circle.getCentre().x-circle.getRadius(), circle.getCentre().y-circle.getRadius(), circle.getCentre().x+circle.getRadius(), circle.getCentre().y+circle.getRadius());
         canvas.drawArc(oval, 0f, 360f, false, paint);
-        canvas.drawCircle(centre.x, centre.y, radius,paint);
+        canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(),paint);
 
-        float r = radius + 200;
-        canvas.drawLine(centre.x, centre.y, centre.x-r, centre.y-r, paint);
-        canvas.drawLine(centre.x, centre.y, centre.x-r, centre.y+r, paint);
-        canvas.drawLine(centre.x, centre.y, centre.x + r, centre.y + r, paint);
-        canvas.drawLine(centre.x, centre.y, centre.x + r, centre.y - r, paint);
+        float r = circle.getRadius() + 200;
+        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x-r, circle.getCentre().y-r, paint);
+        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x-r, circle.getCentre().y+r, paint);
+        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x + r, circle.getCentre().y + r, paint);
+        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x + r, circle.getCentre().y - r, paint);
         Logger.v(this, "onDraw returns");
     }
 
@@ -118,8 +122,8 @@ public class EightVimKeyboardView extends View{
 
         // Calculate the diameter with the circle width to image width ratio 260:800,
         // and divide in half to get the radius
-        radius = (0.325f * width) / 2;
-        centre = new PointF((width/2),(height/2));
+        float radius = (0.325f * width) / 2;
+        PointF centre = new PointF((width/2),(height/2));
         circle = new Circle(centre, radius);
         // Set the new size
         setMeasuredDimension(width, height);
@@ -128,20 +132,6 @@ public class EightVimKeyboardView extends View{
 
 
 
-
-    /** Modulus calculation (a % b) that supports negative numbers */
-    private double mod(double a, double b)
-    {
-        double result;
-        // Calculate result with modulus operator
-        result = a % b;
-        // Fix zero truncation
-        if(result < 0){
-            result += b;
-        }
-        return result;
-    }
-
     /** Get the number of the sector that point p is in
      *  @return 0: right, 1: top, 2: left, 3: bottom */
     private FingerPosition getSector(PointF p)
@@ -149,9 +139,9 @@ public class EightVimKeyboardView extends View{
         double angleDouble = GeometryUtilities.getAngleOfPointWithRespectToCentreOfCircle(p, circle);
         double angleToSectorValue = angleDouble/ (Math.PI / 2);
         int quadrantCyclic = (int)Math.round(angleToSectorValue);
-        int numericSector = (int)mod(quadrantCyclic, 4);
+        int baseQuadrant = GeometryUtilities.getBaseQuadrant(quadrantCyclic);
 
-        switch (numericSector){
+        switch (baseQuadrant){
             case 0:
                 return FingerPosition.RIGHT;
 
@@ -168,11 +158,8 @@ public class EightVimKeyboardView extends View{
         return null;
     }
 
-
-
     private FingerPosition getCurrentFingerPosition(PointF position) {
-        double powerOfPoint = getPowerOfPoint(position, circle);
-        if(powerOfPoint < 0){
+        if(circle.isPointInsideCircle(position)){
             return FingerPosition.INSIDE_CIRCLE;
         } else {
             return getSector(position);
@@ -185,15 +172,15 @@ public class EightVimKeyboardView extends View{
         switch(e.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                img_Input_onTouchDown(e);
+                movementStarted(e);
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                img_Input_onTouchMove(e);
+                movementContinues(e);
                 break;
 
             case MotionEvent.ACTION_UP:
-                img_Input_onTouchUp(e);
+                movementEnds(e);
                 break;
 
             default:
@@ -203,7 +190,7 @@ public class EightVimKeyboardView extends View{
         return true;
     }
 
-    private void img_Input_onTouchDown(MotionEvent e)
+    private void movementStarted(MotionEvent e)
     {
         PointF position = new PointF(e.getX(), e.getY());
         currentFingerPosition = getCurrentFingerPosition(position);
@@ -211,13 +198,13 @@ public class EightVimKeyboardView extends View{
         movementSequence.add(currentFingerPosition);
     }
 
-    private void img_Input_onTouchMove(MotionEvent e)
+    private void movementContinues(MotionEvent e)
     {
         PointF position = new PointF(e.getX(), e.getY());
         FingerPosition lastKnownFingerPosition = currentFingerPosition;
         currentFingerPosition = getCurrentFingerPosition(position);
 
-        boolean isFingerPositionChanged = (lastKnownFingerPosition == currentFingerPosition);
+        boolean isFingerPositionChanged = (lastKnownFingerPosition != currentFingerPosition);
 
         if(isFingerPositionChanged){
             movementSequence.add(currentFingerPosition);
@@ -227,16 +214,20 @@ public class EightVimKeyboardView extends View{
         }
     }
 
-    private void processMovementSequence() {
-        //TODO
-        //Clear the queue before this function finishes off
-    }
-
-    private void img_Input_onTouchUp(MotionEvent e)
+    private void movementEnds(MotionEvent e)
     {
         currentFingerPosition = FingerPosition.NO_TOUCH;
         movementSequence.add(currentFingerPosition);
         processMovementSequence();
+    }
+
+
+    private void processMovementSequence() {
+
+        KeyboardAction keyboardAction = keyboardActionMap.get(movementSequence);
+
+        //Clear the queue before this function finishes off
+        movementSequence.clear();
     }
 
 }
