@@ -5,7 +5,7 @@ import android.graphics.PointF;
 /**
  * Created by flide on 22/11/15.
  */
-public class GeometryUtilities {
+public class GeometricUtilities {
 
     public static double getSquaredDistanceBetweenPoints(PointF a, PointF b){
         double xSquare = Math.pow((a.x - b.x),2);

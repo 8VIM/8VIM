@@ -38,7 +38,7 @@ public class Circle{
         p=d^2-r^2.
         */
 
-        double dSquare = GeometryUtilities.getSquaredDistanceBetweenPoints(point, centre);
+        double dSquare = GeometricUtilities.getSquaredDistanceBetweenPoints(point, centre);
         double rSquare = Math.pow(radius, 2);
         double power = dSquare - rSquare;
         return power;
