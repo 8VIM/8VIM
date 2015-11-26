@@ -212,10 +212,12 @@
         <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
         <inputString>X</inputString>
     </keyboardAction>
+
+    <!-- TODO : FOR NOW NO CAPITALIZATION OF ? - FIND A REPLACEMENT-->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>?</inputString>
+        <inputString>*</inputString>
     </keyboardAction>
 
     <keyboardAction>
@@ -280,7 +282,7 @@
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>.</inputString>
+        <inputString>-</inputString>
     </keyboardAction>
 
     <keyboardAction>
@@ -302,8 +304,8 @@
     <!-- TODO : FOR NOW NO CAPITALIZATION OF COMMA - FIND A REPLACEMENT-->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>,</inputString>
+        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>_</inputString>
     </keyboardAction>
 
     <keyboardAction>
@@ -374,5 +376,28 @@
         <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
         <inputString>YO!! _\m/</inputString>
     </keyboardAction>
+
+    <!--D_Pad key-->
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;TOP;NO_TOUCH;</movementSequence>
+        <inputKey>19</inputKey>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;NO_TOUCH;</movementSequence>
+        <inputKey>20</inputKey>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;LEFT;NO_TOUCH;</movementSequence>
+        <inputKey>21</inputKey>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;NO_TOUCH;</movementSequence>
+        <inputKey>22</inputKey>
+    </keyboardAction>
+
 
 </keyboardActionMap>

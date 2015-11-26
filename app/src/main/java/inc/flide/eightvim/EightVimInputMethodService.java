@@ -30,7 +30,6 @@ public class EightVimInputMethodService extends InputMethodService {
     public void sendText(String str)
     {
         getCurrentInputConnection().commitText(str,1);
-        eightVimKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
     }
 
     /** Helper to send a special key to input */

@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -240,7 +241,7 @@ public class EightVimKeyboardView extends View{
     private void processMovementSequence() {
 
         KeyboardAction keyboardAction = keyboardActionMap.get(movementSequence);
-
+        boolean isMovementValid = true;
         if(keyboardAction == null){
             Logger.Warn(this, "No Action Mapping has been defined for the given Sequence : " + movementSequence.toString());
             movementSequence.clear();
@@ -259,7 +260,11 @@ public class EightVimKeyboardView extends View{
                 break;
             default:
                 Logger.Warn(this, "Action Type Undefined : " + keyboardAction.getKeyboardActionType().toString());
+                isMovementValid = false;
                 break;
+        }
+        if(isMovementValid){
+            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
         //Clear the queue before this function finishes off
         movementSequence.clear();
