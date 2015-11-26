@@ -6,23 +6,15 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.view.HapticFeedbackConstants;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import inc.flide.eightvim.geometry.Circle;
 import inc.flide.eightvim.geometry.GeometricUtilities;
 import inc.flide.eightvim.keyboardHelpers.FingerPosition;
-import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.logging.Logger;
 
 public class EightVimKeyboardView extends View{
@@ -32,9 +24,6 @@ public class EightVimKeyboardView extends View{
     private List<FingerPosition> movementSequence;
     private FingerPosition currentFingerPosition;
     private Circle circle;
-    private boolean isShiftPressed;
-
-    Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
 
     public EightVimKeyboardView(Context context) {
         super(context);
@@ -53,41 +42,13 @@ public class EightVimKeyboardView extends View{
 
     private void initialize(Context context){
         eightVimInputMethodService = (EightVimInputMethodService) context;
-        initializeKeyboardActionMap();
         setHapticFeedbackEnabled(true);
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
     }
 
-    private void initializeKeyboardActionMap() {
-
-        InputStream inputStream = null;
-        try{
-            inputStream = getResources().openRawResource(getResources().getIdentifier("raw/keyboard_actions", "raw", eightVimInputMethodService.getPackageName()));
-            KeyboardActionXmlParser keyboardActionXmlParser = new KeyboardActionXmlParser(inputStream);
-            keyboardActionMap = keyboardActionXmlParser.readKeyboardActionMap();
-
-        } catch (XmlPullParserException exception){
-            exception.printStackTrace();
-        } catch (IOException exception){
-            exception.printStackTrace();
-        } catch(Exception exception){
-            exception.printStackTrace();
-        }
-        finally {
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-        }
-
-    }
-
-
     @Override
-    public void onDraw(Canvas canvas)
-    {
+    public void onDraw(Canvas canvas) {
         Logger.v(this, "onDraw called");
         //super.onDraw(canvas);
         canvas.drawColor(0);
@@ -145,12 +106,9 @@ public class EightVimKeyboardView extends View{
         Logger.v(this, "onMeasure returns");
     }
 
-
-
     /** Get the number of the sector that point p is in
      *  @return 0: right, 1: top, 2: left, 3: bottom */
-    private FingerPosition getSector(PointF p)
-    {
+    private FingerPosition getSector(PointF p) {
         double angleDouble = GeometricUtilities.getAngleOfPointWithRespectToCentreOfCircle(p, circle);
         double angleToSectorValue = angleDouble/ (Math.PI / 2);
         int quadrantCyclic = (int)Math.round(angleToSectorValue);
@@ -182,8 +140,7 @@ public class EightVimKeyboardView extends View{
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent e)
-    {
+    public boolean onTouchEvent(MotionEvent e) {
         switch(e.getAction())
         {
             case MotionEvent.ACTION_DOWN:
@@ -205,16 +162,14 @@ public class EightVimKeyboardView extends View{
         return true;
     }
 
-    private void movementStarted(MotionEvent e)
-    {
+    private void movementStarted(MotionEvent e) {
         PointF position = new PointF(e.getX(), e.getY());
         currentFingerPosition = getCurrentFingerPosition(position);
         movementSequence.clear();
         movementSequence.add(currentFingerPosition);
     }
 
-    private void movementContinues(MotionEvent e)
-    {
+    private void movementContinues(MotionEvent e) {
         PointF position = new PointF(e.getX(), e.getY());
         FingerPosition lastKnownFingerPosition = currentFingerPosition;
         currentFingerPosition = getCurrentFingerPosition(position);
@@ -224,75 +179,16 @@ public class EightVimKeyboardView extends View{
         if(isFingerPositionChanged){
             movementSequence.add(currentFingerPosition);
             if(currentFingerPosition == FingerPosition.INSIDE_CIRCLE){
-                processMovementSequence();
+                eightVimInputMethodService.processMovementSequence(movementSequence);
                 movementSequence.add(currentFingerPosition);
             }
         }
     }
 
-    private void movementEnds(MotionEvent e)
-    {
+    private void movementEnds(MotionEvent e) {
         currentFingerPosition = FingerPosition.NO_TOUCH;
         movementSequence.add(currentFingerPosition);
-        processMovementSequence();
-    }
-
-
-    private void processMovementSequence() {
-
-        KeyboardAction keyboardAction = keyboardActionMap.get(movementSequence);
-        boolean isMovementValid = true;
-        if(keyboardAction == null){
-            Logger.Warn(this, "No Action Mapping has been defined for the given Sequence : " + movementSequence.toString());
-            movementSequence.clear();
-            return;
-        }
-
-        switch (keyboardAction.getKeyboardActionType()){
-            case INPUT_TEXT:
-                handleInputText(keyboardAction);
-                break;
-            case INPUT_KEY:
-                handleInputKey(keyboardAction);
-                break;
-            case INPUT_SPECIAL:
-                handleSpecialInput(keyboardAction);
-                break;
-            default:
-                Logger.Warn(this, "Action Type Undefined : " + keyboardAction.getKeyboardActionType().toString());
-                isMovementValid = false;
-                break;
-        }
-        if(isMovementValid){
-            performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        }
-        //Clear the queue before this function finishes off
-        movementSequence.clear();
-    }
-
-    private void handleInputText(KeyboardAction keyboardAction) {
-        if(keyboardAction.getText().length() == 1 && isShiftPressed){
-            eightVimInputMethodService.sendText(keyboardAction.getText().toUpperCase());
-            isShiftPressed = false;
-        }else{
-            eightVimInputMethodService.sendText(keyboardAction.getText());
-        }
-    }
-
-    private void handleInputKey(KeyboardAction keyboardAction) {
-        eightVimInputMethodService.sendKey(keyboardAction.getKeyEventCode());
-    }
-
-    private void handleSpecialInput(KeyboardAction keyboardAction) {
-        switch (keyboardAction.getKeyEventCode()){
-            case KeyEvent.KEYCODE_SHIFT_RIGHT:
-            case KeyEvent.KEYCODE_SHIFT_LEFT:
-                isShiftPressed = true;
-                break;
-            default:
-                Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getKeyEventCode());
-                break;
-        }
+        eightVimInputMethodService.processMovementSequence(movementSequence);
     }
 
 }
