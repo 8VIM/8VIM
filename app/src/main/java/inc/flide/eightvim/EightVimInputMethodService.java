@@ -21,57 +21,26 @@ public class EightVimInputMethodService extends InputMethodService {
 
     EightVimKeyboardView eightVimKeyboardView;
     private boolean isShiftPressed;
+    private boolean isCapsLockOn;
     Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
 
-    /**
-     *Create and return the view hierarchy used for the input area (such as a soft keyboard).
-     * This will be called once, when the input area is first displayed.
-     * You can return null to have no input area; the default implementation returns null.
-     *
-     * To control when the input view is displayed, implement onEvaluateInputViewShown().
-     * To change the input view after the first one is created by this function, use setInputView(View).
-     *
-     */
     @Override
     public View onCreateInputView() {
         eightVimKeyboardView = new EightVimKeyboardView(this);
         return eightVimKeyboardView;
     }
-    /**
-     * Called to inform the input method that text input has started in an editor.
-     * You should use this callback to initialize the state of your input to match
-     * the state of the editor given to it.
-     *
-     * @param attribute The attributes of the editor that input is starting in.
-     * @param restarting Set to true if input is restarting in the same editor such as
-     *                   because the application has changed the text in the editor.
-     *                   Otherwise will be false, indicating this is a new session with the editor.
-     */
+
+
     @Override
     public void onStartInput (EditorInfo attribute, boolean restarting){
         super.onStartInput(attribute, restarting);
     }
 
-    /**
-     * Called when the input view is being shown and input has started on a new editor.
-     * This will always be called after onStartInput(EditorInfo, boolean),
-     * allowing you to do your general setup there and just view-specific setup here.
-     * You are guaranteed that onCreateInputView() will have been called some
-     * time before this function is called.
-     *
-     * @param info Description of the type of text being edited.
-     * @param restarting Set to true if we are restarting input on the same text field as before.
-     */
     @Override
     public void onStartInputView (EditorInfo info, boolean restarting){
         super.onStartInputView(info, restarting);
     }
 
-    /**
-     * This is a hook that subclasses can use to perform initialization of their interface.
-     * It is called for you prior to any of your UI objects being created,
-     * both after the service is first created and after a configuration change happens.
-     */
     @Override
     public void onInitializeInterface(){
         super.onInitializeInterface();
@@ -145,7 +114,7 @@ public class EightVimInputMethodService extends InputMethodService {
     }
 
     private void handleInputText(KeyboardAction keyboardAction) {
-        if(keyboardAction.getText().length() == 1 && isShiftPressed){
+        if(keyboardAction.getText().length() == 1 && (isShiftPressed || isCapsLockOn)){
             sendText(keyboardAction.getText().toUpperCase());
             isShiftPressed = false;
         }else{
@@ -161,7 +130,16 @@ public class EightVimInputMethodService extends InputMethodService {
         switch (keyboardAction.getKeyEventCode()){
             case KeyEvent.KEYCODE_SHIFT_RIGHT:
             case KeyEvent.KEYCODE_SHIFT_LEFT:
-                isShiftPressed = true;
+                if(isShiftPressed){
+                    isShiftPressed = false;
+                    isCapsLockOn = true;
+                } else if(isCapsLockOn){
+                    isShiftPressed = false;
+                    isCapsLockOn = false;
+                } else{
+                    isShiftPressed = true;
+                    isCapsLockOn = false;
+                }
                 break;
             default:
                 Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getKeyEventCode());
