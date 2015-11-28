@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.os.Handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +20,15 @@ import inc.flide.logging.Logger;
 
 public class EightVimKeyboardView extends View{
 
+    private static final int DELAY_MILLIS_LONG_PRESS_INITIATION = 500;
+    private static final int DELAY_MILLIS_LONG_PRESS_CONTINUATION = 50;
+
     private EightVimInputMethodService eightVimInputMethodService;
 
     private List<FingerPosition> movementSequence;
     private FingerPosition currentFingerPosition;
+    private boolean isLongPressCallbackSet;
+
     private Circle circle;
 
     public EightVimKeyboardView(Context context) {
@@ -139,6 +145,18 @@ public class EightVimKeyboardView extends View{
         }
     }
 
+    final Handler longPressHandler = new Handler();
+    Runnable longPressRunnable = new Runnable() {
+        @Override
+        public void run() {
+            List<FingerPosition> movementSequenceAgumented = new ArrayList<>(movementSequence);
+            movementSequenceAgumented.add(FingerPosition.LONG_PRESS);
+            eightVimInputMethodService.processMovementSequence(movementSequenceAgumented);
+            longPressHandler.postDelayed(this, DELAY_MILLIS_LONG_PRESS_CONTINUATION);
+        }
+    };
+
+
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         switch(e.getAction())
@@ -162,11 +180,22 @@ public class EightVimKeyboardView extends View{
         return true;
     }
 
+    private void initiateLongPressDetection(){
+        isLongPressCallbackSet = true;
+        longPressHandler.postDelayed(longPressRunnable, DELAY_MILLIS_LONG_PRESS_INITIATION);
+    }
+
+    private void interruptLongPress(){
+        longPressHandler.removeCallbacks(longPressRunnable);
+        isLongPressCallbackSet = false;
+    }
+
     private void movementStarted(MotionEvent e) {
         PointF position = new PointF(e.getX(), e.getY());
         currentFingerPosition = getCurrentFingerPosition(position);
         movementSequence.clear();
         movementSequence.add(currentFingerPosition);
+        initiateLongPressDetection();
     }
 
     private void movementContinues(MotionEvent e) {
@@ -177,18 +206,24 @@ public class EightVimKeyboardView extends View{
         boolean isFingerPositionChanged = (lastKnownFingerPosition != currentFingerPosition);
 
         if(isFingerPositionChanged){
+            interruptLongPress();
             movementSequence.add(currentFingerPosition);
             if(currentFingerPosition == FingerPosition.INSIDE_CIRCLE){
                 eightVimInputMethodService.processMovementSequence(movementSequence);
+                movementSequence.clear();
                 movementSequence.add(currentFingerPosition);
             }
+        }else if(!isLongPressCallbackSet){
+            initiateLongPressDetection();
         }
     }
 
     private void movementEnds(MotionEvent e) {
+        interruptLongPress();
         currentFingerPosition = FingerPosition.NO_TOUCH;
         movementSequence.add(currentFingerPosition);
         eightVimInputMethodService.processMovementSequence(movementSequence);
+        movementSequence.clear();
     }
 
 }

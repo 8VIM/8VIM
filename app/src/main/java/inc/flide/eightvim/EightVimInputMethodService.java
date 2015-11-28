@@ -142,8 +142,6 @@ public class EightVimInputMethodService extends InputMethodService {
         if(isMovementValid){
             eightVimKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
-        //Clear the queue before this function finishes off
-        movementSequence.clear();
     }
 
     private void handleInputText(KeyboardAction keyboardAction) {

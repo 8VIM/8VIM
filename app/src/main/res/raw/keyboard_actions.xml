@@ -188,6 +188,11 @@
         <movementSequence>RIGHT;NO_TOUCH;</movementSequence>
         <inputKey>67</inputKey>
     </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>RIGHT;LONG_PRESS;</movementSequence>
+        <inputKey>67</inputKey>
+    </keyboardAction>
 
     <!--Shift-->
     <keyboardAction>
@@ -398,6 +403,25 @@
         <movementSequence>INSIDE_CIRCLE;RIGHT;NO_TOUCH;</movementSequence>
         <inputKey>22</inputKey>
     </keyboardAction>
-
-
+    <!--Long press configuration-->
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;TOP;LONG_PRESS;</movementSequence>
+        <inputKey>19</inputKey>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LONG_PRESS;</movementSequence>
+        <inputKey>20</inputKey>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;LEFT;LONG_PRESS;</movementSequence>
+        <inputKey>21</inputKey>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;LONG_PRESS;</movementSequence>
+        <inputKey>22</inputKey>
+    </keyboardAction>
 </keyboardActionMap>
