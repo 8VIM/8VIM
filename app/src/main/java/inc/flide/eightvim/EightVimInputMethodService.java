@@ -1,10 +1,13 @@
 package inc.flide.eightvim;
 
 import android.inputmethodservice.InputMethodService;
+import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -20,14 +23,26 @@ import inc.flide.logging.Logger;
 public class EightVimInputMethodService extends InputMethodService {
 
     EightVimKeyboardView eightVimKeyboardView;
-    private boolean isShiftPressed;
+
+    private KeyboardView kv;
+    private Keyboard keyboard;
+
+    private boolean isShiftLockOn;
     private boolean isCapsLockOn;
     Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
 
     @Override
     public View onCreateInputView() {
+
+        kv = (KeyboardView)getLayoutInflater().inflate(R.layout.keyboard, null);
+        keyboard = new Keyboard(this, R.xml.keyboard_view);
+        kv.setKeyboard(keyboard);
+        kv.setOnKeyboardActionListener(new NumberKeyboardActionListner(this));
+        return kv;
+        /*
         eightVimKeyboardView = new EightVimKeyboardView(this);
         return eightVimKeyboardView;
+        */
     }
 
 
@@ -45,6 +60,8 @@ public class EightVimInputMethodService extends InputMethodService {
     public void onInitializeInterface(){
         super.onInitializeInterface();
         initializeKeyboardActionMap();
+        isShiftLockOn = false;
+        isCapsLockOn = false;
     }
 
     /** Helper to commit text to input */
@@ -114,9 +131,9 @@ public class EightVimInputMethodService extends InputMethodService {
     }
 
     private void handleInputText(KeyboardAction keyboardAction) {
-        if(keyboardAction.getText().length() == 1 && (isShiftPressed || isCapsLockOn)){
+        if(keyboardAction.getText().length() == 1 && (isShiftLockOn || isCapsLockOn)){
             sendText(keyboardAction.getText().toUpperCase());
-            isShiftPressed = false;
+            isShiftLockOn = false;
         }else{
             sendText(keyboardAction.getText());
         }
@@ -130,14 +147,14 @@ public class EightVimInputMethodService extends InputMethodService {
         switch (keyboardAction.getKeyEventCode()){
             case KeyEvent.KEYCODE_SHIFT_RIGHT:
             case KeyEvent.KEYCODE_SHIFT_LEFT:
-                if(isShiftPressed){
-                    isShiftPressed = false;
+                if(isShiftLockOn){
+                    isShiftLockOn = false;
                     isCapsLockOn = true;
                 } else if(isCapsLockOn){
-                    isShiftPressed = false;
+                    isShiftLockOn = false;
                     isCapsLockOn = false;
                 } else{
-                    isShiftPressed = true;
+                    isShiftLockOn = true;
                     isCapsLockOn = false;
                 }
                 break;
@@ -146,4 +163,5 @@ public class EightVimInputMethodService extends InputMethodService {
                 break;
         }
     }
+
 }
