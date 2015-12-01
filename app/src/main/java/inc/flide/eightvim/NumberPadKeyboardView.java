@@ -4,18 +4,37 @@ import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.inputmethod.InputConnection;
+
+import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
+import inc.flide.logging.Logger;
 
 /**
  * Created by flide on 30/11/15.
  */
-public class NumberKeyboardActionListner implements KeyboardView.OnKeyboardActionListener {
+public class NumberPadKeyboardView extends KeyboardView implements KeyboardView.OnKeyboardActionListener {
 
-    InputMethodService context;
+    private EightVimInputMethodService eightVimInputMethodService;
 
-    public NumberKeyboardActionListner(InputMethodService context){
-        this.context = context;
+    private Keyboard keyboard;
+
+    public NumberPadKeyboardView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initialize(context);
+    }
+
+    public NumberPadKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initialize(context);
+    }
+
+    public void initialize(Context context){
+        eightVimInputMethodService = (EightVimInputMethodService) context;
+        keyboard = new Keyboard(eightVimInputMethodService, R.xml.keyboard_view);
+        this.setKeyboard(keyboard);
+        this.setOnKeyboardActionListener(this);
     }
     /**
      * Called when the user presses a key. This is sent before the {@link #onKey} is called.
@@ -53,9 +72,13 @@ public class NumberKeyboardActionListner implements KeyboardView.OnKeyboardActio
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
 
-        InputConnection ic = context.getCurrentInputConnection();
+        InputConnection ic = eightVimInputMethodService.getCurrentInputConnection();
 
         switch(primaryCode){
+            case KeyEvent.KEYCODE_EISU:
+                KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(KeyboardAction.KeyboardActionType.INPUT_SPECIAL,null, KeyEvent.KEYCODE_EISU);
+                eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
+                break;
             case Keyboard.KEYCODE_DELETE :
                 ic.deleteSurroundingText(1, 0);
                 break;

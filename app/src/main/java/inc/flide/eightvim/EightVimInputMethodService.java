@@ -1,13 +1,11 @@
 package inc.flide.eightvim;
 
 import android.inputmethodservice.InputMethodService;
-import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -22,10 +20,11 @@ import inc.flide.logging.Logger;
 
 public class EightVimInputMethodService extends InputMethodService {
 
-    EightVimKeyboardView eightVimKeyboardView;
+    private EightVimKeyboardView eightVimKeyboardView;
+    private boolean isEightVimKeyboardViewVisible;
 
-    private KeyboardView kv;
-    private Keyboard keyboard;
+    private NumberPadKeyboardView numberPadKeyboardView;
+
 
     private boolean isShiftLockOn;
     private boolean isCapsLockOn;
@@ -34,15 +33,12 @@ public class EightVimInputMethodService extends InputMethodService {
     @Override
     public View onCreateInputView() {
 
-        kv = (KeyboardView)getLayoutInflater().inflate(R.layout.keyboard, null);
-        keyboard = new Keyboard(this, R.xml.keyboard_view);
-        kv.setKeyboard(keyboard);
-        kv.setOnKeyboardActionListener(new NumberKeyboardActionListner(this));
-        return kv;
-        /*
+        numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater().inflate(R.layout.keyboard, null);
+
         eightVimKeyboardView = new EightVimKeyboardView(this);
+        isEightVimKeyboardViewVisible = true;
         return eightVimKeyboardView;
-        */
+
     }
 
 
@@ -143,7 +139,7 @@ public class EightVimInputMethodService extends InputMethodService {
         sendKey(keyboardAction.getKeyEventCode());
     }
 
-    private void handleSpecialInput(KeyboardAction keyboardAction) {
+    public void handleSpecialInput(KeyboardAction keyboardAction) {
         switch (keyboardAction.getKeyEventCode()){
             case KeyEvent.KEYCODE_SHIFT_RIGHT:
             case KeyEvent.KEYCODE_SHIFT_LEFT:
@@ -157,6 +153,16 @@ public class EightVimInputMethodService extends InputMethodService {
                     isShiftLockOn = true;
                     isCapsLockOn = false;
                 }
+                break;
+            case KeyEvent.KEYCODE_EISU:
+                if(isEightVimKeyboardViewVisible){
+                    isEightVimKeyboardViewVisible = false;
+                    setInputView(numberPadKeyboardView);
+                } else {
+                    isEightVimKeyboardViewVisible = true;
+                    setInputView(eightVimKeyboardView);
+                }
+
                 break;
             default:
                 Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getKeyEventCode());

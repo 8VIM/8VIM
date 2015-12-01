@@ -7,7 +7,7 @@
         <Key android:codes="55"    android:keyLabel="7" android:keyEdgeFlags="left" />
         <Key android:codes="56"    android:keyLabel="8" />
         <Key android:codes="57"    android:keyLabel="9" />
-        <Key android:codes="-5"    android:keyIcon="@drawable/sym_keyboard_delete" android:isRepeatable="true" android:horizontalGap="6.25%p" />
+        <Key android:codes="-5"    android:keyIcon="@drawable/sym_keyboard_delete" android:isRepeatable="true" android:keyEdgeFlags="right"/>
     </Row>
     <Row>
         <Key android:codes="52"    android:keyLabel="4" android:keyEdgeFlags="left"  />
@@ -20,6 +20,7 @@
         <Key android:codes="51"    android:keyLabel="3" />
     </Row>
     <Row>
-        <Key android:codes="48"    android:keyLabel="0" android:keyWidth="25%p" android:horizontalGap="6.25%p" android:keyEdgeFlags="left" />
+        <Key android:codes="48"    android:keyLabel="0" android:keyEdgeFlags="left" />
+        <Key android:codes="212"   android:keyLabel="a" android:keyEdgeFlags="right" />
     </Row>
 </Keyboard>

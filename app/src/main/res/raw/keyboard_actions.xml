@@ -201,6 +201,12 @@
         <inputKey>60</inputKey>
     </keyboardAction>
 
+    <keyboardAction>
+        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <movementSequence>LEFT;NO_TOUCH;</movementSequence>
+        <inputKey>212</inputKey>
+    </keyboardAction>
+
     <!--Capital Characters-->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
