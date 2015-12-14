@@ -1,4 +1,4 @@
-package inc.flide.eightvim;
+package inc.flide.eightvim.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,6 +13,7 @@ import android.os.Handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.geometry.Circle;
 import inc.flide.eightvim.geometry.GeometricUtilities;
 import inc.flide.eightvim.keyboardHelpers.FingerPosition;
@@ -93,6 +94,7 @@ public class EightVimKeyboardView extends View{
         {
             // Switch to button mode
             // TODO
+            Logger.Warn(this, "Say what you will, but I don't do Landscapes just yet!! So.. BACK OFF!!");
             width = Math.round(1.33f * height);
             // Placeholder:
         }

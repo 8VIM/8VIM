@@ -1,0 +1,42 @@
+package inc.flide.eightvim.views;
+
+import android.content.Context;
+import android.inputmethodservice.InputMethodService;
+import android.inputmethodservice.Keyboard;
+import android.inputmethodservice.KeyboardView;
+import android.util.AttributeSet;
+import android.view.KeyEvent;
+import android.view.inputmethod.InputConnection;
+
+import inc.flide.eightvim.EightVimInputMethodService;
+import inc.flide.eightvim.R;
+import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
+import inc.flide.logging.Logger;
+
+/**
+ * Created by flide on 30/11/15.
+ */
+public class NumberPadKeyboardView extends KeyboardView {
+
+    private EightVimInputMethodService eightVimInputMethodService;
+
+    private Keyboard keyboard;
+
+    public NumberPadKeyboardView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initialize(context);
+    }
+
+    public NumberPadKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initialize(context);
+    }
+
+    public void initialize(Context context){
+        eightVimInputMethodService = (EightVimInputMethodService) context;
+        keyboard = new Keyboard(eightVimInputMethodService, R.xml.keyboard_view);
+        this.setKeyboard(keyboard);
+        this.setOnKeyboardActionListener(eightVimInputMethodService);
+    }
+
+}

@@ -20,25 +20,11 @@ public class KeyboardAction {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public int getKeyEventCode() {
         return keyEventCode;
-    }
-
-    public void setKeyEventCode(int keyEventCode) {
-        this.keyEventCode = keyEventCode;
     }
 
     public KeyboardActionType getKeyboardActionType() {
         return keyboardActionType;
     }
-
-    public void setKeyboardActionType(KeyboardActionType keyboardActionType) {
-        this.keyboardActionType = keyboardActionType;
-    }
-
-
 }

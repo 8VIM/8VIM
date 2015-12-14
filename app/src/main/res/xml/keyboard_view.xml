@@ -24,7 +24,7 @@
     <Row>
         <Key android:codes="212"   android:keyLabel="ABC" android:keyEdgeFlags="left" />
         <Key android:codes="48"    android:keyLabel="0"/>
-        <Key android:codes="62"    android:keyLabel="  "/>
+        <Key android:codes="62"    android:keyLabel="Space"/>
         <Key android:codes="66"    android:keyLabel="Enter" android:keyEdgeFlags="right" />
     </Row>
 </Keyboard>

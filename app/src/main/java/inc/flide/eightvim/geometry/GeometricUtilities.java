@@ -14,8 +14,6 @@ public class GeometricUtilities {
         return distanceSquare;
     }
 
-
-
     /** Gets the angle of point p relative to the center */
     public static double getAngleOfPointWithRespectToCentreOfCircle(PointF p, Circle circle)
     {

@@ -1,4 +1,4 @@
-package inc.flide.eightvim;
+package inc.flide.eightvim.keyboardHelpers;
 
 import android.util.Xml;
 
