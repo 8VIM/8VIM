@@ -79,17 +79,15 @@ public class NumberPadKeyboardView extends KeyboardView implements KeyboardView.
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(KeyboardAction.KeyboardActionType.INPUT_SPECIAL,null, KeyEvent.KEYCODE_EISU);
                 eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
                 break;
-            case Keyboard.KEYCODE_DELETE :
-                ic.deleteSurroundingText(1, 0);
-                break;
-            case Keyboard.KEYCODE_SHIFT:
-                break;
-            case Keyboard.KEYCODE_DONE:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+            case KeyEvent.KEYCODE_DEL  :
+            case KeyEvent.KEYCODE_ENTER:
+            case KeyEvent.KEYCODE_SPACE:
+            case KeyEvent.KEYCODE_NUMPAD_DOT:
+            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
+                    eightVimInputMethodService.sendKey(primaryCode);
                 break;
             default:
                 char code = (char)primaryCode;
-
                 ic.commitText(String.valueOf(code),1);
         }
     }
