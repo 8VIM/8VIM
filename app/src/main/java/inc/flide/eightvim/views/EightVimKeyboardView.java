@@ -3,6 +3,7 @@ package inc.flide.eightvim.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.util.AttributeSet;
@@ -70,15 +71,20 @@ public class EightVimKeyboardView extends View{
 
         //create the circle.getCentre() circle
         RectF oval = new RectF();
-        oval.set(circle.getCentre().x-circle.getRadius(), circle.getCentre().y-circle.getRadius(), circle.getCentre().x+circle.getRadius(), circle.getCentre().y+circle.getRadius());
+        oval.set(circle.getCentre().x - circle.getRadius(), circle.getCentre().y - circle.getRadius(), circle.getCentre().x + circle.getRadius(), circle.getCentre().y + circle.getRadius());
         canvas.drawArc(oval, 0f, 360f, false, paint);
-        canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(),paint);
+        canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), paint);
 
         float r = circle.getRadius() + 200;
-        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x-r, circle.getCentre().y-r, paint);
-        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x-r, circle.getCentre().y+r, paint);
+        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x - r, circle.getCentre().y - r, paint);
+        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x - r, circle.getCentre().y + r, paint);
         canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x + r, circle.getCentre().y + r, paint);
         canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x + r, circle.getCentre().y - r, paint);
+
+        String charactersToDisplay = "a";
+        float[] pointsOfDisplay ={0,0};
+        canvas.drawPosText(charactersToDisplay, pointsOfDisplay, paint);
+
         Logger.v(this, "onDraw returns");
     }
 
@@ -107,7 +113,7 @@ public class EightVimKeyboardView extends View{
         // Calculate the diameter with the circle width to image width ratio 260:800,
         // and divide in half to get the radius
         float radius = (0.325f * width) / 2;
-        PointF centre = new PointF((width/2),(height/2));
+        Point centre = new Point((width/2),(height/2));
         circle = new Circle(centre, radius);
         // Set the new size
         setMeasuredDimension(width, height);
@@ -116,7 +122,7 @@ public class EightVimKeyboardView extends View{
 
     /** Get the number of the sector that point p is in
      *  @return 0: right, 1: top, 2: left, 3: bottom */
-    private FingerPosition getSector(PointF p) {
+    private FingerPosition getSector(Point p) {
         double angleDouble = GeometricUtilities.getAngleOfPointWithRespectToCentreOfCircle(p, circle);
         double angleToSectorValue = angleDouble/ (Math.PI / 2);
         int quadrantCyclic = (int)Math.round(angleToSectorValue);
@@ -139,7 +145,7 @@ public class EightVimKeyboardView extends View{
         return null;
     }
 
-    private FingerPosition getCurrentFingerPosition(PointF position) {
+    private FingerPosition getCurrentFingerPosition(Point position) {
         if(circle.isPointInsideCircle(position)){
             return FingerPosition.INSIDE_CIRCLE;
         } else {
@@ -193,7 +199,7 @@ public class EightVimKeyboardView extends View{
     }
 
     private void movementStarted(MotionEvent e) {
-        PointF position = new PointF(e.getX(), e.getY());
+        Point position = new Point((int)e.getX(), (int)e.getY());
         currentFingerPosition = getCurrentFingerPosition(position);
         movementSequence.clear();
         movementSequence.add(currentFingerPosition);
@@ -201,7 +207,7 @@ public class EightVimKeyboardView extends View{
     }
 
     private void movementContinues(MotionEvent e) {
-        PointF position = new PointF(e.getX(), e.getY());
+        Point position = new Point((int)e.getX(), (int)e.getY());
         FingerPosition lastKnownFingerPosition = currentFingerPosition;
         currentFingerPosition = getCurrentFingerPosition(position);
 

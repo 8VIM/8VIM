@@ -1,5 +1,6 @@
 package inc.flide.eightvim.geometry;
 
+import android.graphics.Point;
 import android.graphics.PointF;
 
 /**
@@ -7,7 +8,7 @@ import android.graphics.PointF;
  */
 public class GeometricUtilities {
 
-    public static double getSquaredDistanceBetweenPoints(PointF a, PointF b){
+    public static double getSquaredDistanceBetweenPoints(Point a, Point b){
         double xSquare = Math.pow((a.x - b.x),2);
         double ySquare = Math.pow((a.y - b.y),2);
         double distanceSquare = Math.abs(xSquare+ySquare);
@@ -15,7 +16,7 @@ public class GeometricUtilities {
     }
 
     /** Gets the angle of point p relative to the center */
-    public static double getAngleOfPointWithRespectToCentreOfCircle(PointF p, Circle circle)
+    public static double getAngleOfPointWithRespectToCentreOfCircle(Point p, Circle circle)
     {
         // Get difference of coordinates
         double x = p.x - circle.getCentre().x;
