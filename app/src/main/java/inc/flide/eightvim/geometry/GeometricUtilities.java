@@ -3,12 +3,14 @@ package inc.flide.eightvim.geometry;
 import android.graphics.Point;
 import android.graphics.PointF;
 
+import java.util.List;
+
 /**
  * Created by flide on 22/11/15.
  */
 public class GeometricUtilities {
 
-    public static double getSquaredDistanceBetweenPoints(Point a, Point b){
+    public static double getSquaredDistanceBetweenPoints(PointF a, PointF b){
         double xSquare = Math.pow((a.x - b.x),2);
         double ySquare = Math.pow((a.y - b.y),2);
         double distanceSquare = Math.abs(xSquare+ySquare);
@@ -16,7 +18,7 @@ public class GeometricUtilities {
     }
 
     /** Gets the angle of point p relative to the center */
-    public static double getAngleOfPointWithRespectToCentreOfCircle(Point p, Circle circle)
+    public static double getAngleOfPointWithRespectToCentreOfCircle(PointF p, Circle circle)
     {
         // Get difference of coordinates
         double x = p.x - circle.getCentre().x;
@@ -41,5 +43,19 @@ public class GeometricUtilities {
             result += 4;
         }
         return result;
+    }
+
+    public static double convertToRadians(int degree){
+        double radians = (Math.PI/180d)*degree;
+        return radians;
+    }
+
+    public static LineSegment getLineSegment(PointF startingPoint, int directionalAngleInDegree, int length){
+        double directionalAngleInRadians = convertToRadians(directionalAngleInDegree);
+        int x = (int) (startingPoint.x + (length * Math.cos(directionalAngleInRadians)));
+        int y = (int) (startingPoint.y + (length * Math.sin(directionalAngleInRadians)));
+
+        PointF endPoint = new PointF(x,y);
+        return new LineSegment(startingPoint, endPoint);
     }
 }

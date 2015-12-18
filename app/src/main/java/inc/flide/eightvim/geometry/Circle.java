@@ -1,25 +1,25 @@
 package inc.flide.eightvim.geometry;
 
-import android.graphics.Point;
+import android.graphics.PointF;
 import android.graphics.PointF;
 
 /**
  * Created by flide on 22/11/15.
  */
 public class Circle{
-    private Point centre;
+    private PointF centre;
     private float radius;
 
-    public Circle(Point centre, float radius) {
+    public Circle(PointF centre, float radius) {
         this.centre = centre;
         this.radius = radius;
     }
 
-    public Point getCentre() {
+    public PointF getCentre() {
         return centre;
     }
 
-    public void setCentre(Point centre) {
+    public void setCentre(PointF centre) {
         this.centre = centre;
     }
 
@@ -31,7 +31,7 @@ public class Circle{
         this.radius = radius;
     }
 
-    private double getPowerOfPoint(Point point) {
+    private double getPowerOfPoint(PointF point) {
         /*
         If O is the centre of circle
         Consider a point P not necessarily on the circumference of the circle.
@@ -45,11 +45,21 @@ public class Circle{
         return power;
     }
 
-    public boolean isPointInsideCircle(Point point){
+    public boolean isPointInsideCircle(PointF point){
         if(getPowerOfPoint(point) < 0){
             return true;
         }
         return false;
     }
 
+    public PointF getPointOnCircumferenceAtDegreeAngle(int angleInDegree){
+        double angleInRadians = GeometricUtilities.convertToRadians(angleInDegree);
+        return getPointOnCircumferenceAtRadianAngle(angleInRadians);
+    }
+
+    public PointF getPointOnCircumferenceAtRadianAngle(double angleInRadians){
+        float x = (float) (centre.x + (radius * Math.cos(angleInRadians)));
+        float y = (float) (centre.y + (radius * Math.sin(angleInRadians)));
+        return new PointF(x,y);
+    }
 }

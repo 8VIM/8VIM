@@ -17,6 +17,7 @@ import java.util.List;
 import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.geometry.Circle;
 import inc.flide.eightvim.geometry.GeometricUtilities;
+import inc.flide.eightvim.geometry.LineSegment;
 import inc.flide.eightvim.keyboardHelpers.FingerPosition;
 import inc.flide.logging.Logger;
 
@@ -75,16 +76,31 @@ public class EightVimKeyboardView extends View{
         canvas.drawArc(oval, 0f, 360f, false, paint);
         canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), paint);
 
-        float r = circle.getRadius() + 200;
-        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x - r, circle.getCentre().y - r, paint);
-        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x - r, circle.getCentre().y + r, paint);
-        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x + r, circle.getCentre().y + r, paint);
-        canvas.drawLine(circle.getCentre().x, circle.getCentre().y, circle.getCentre().x + r, circle.getCentre().y - r, paint);
+        int lengthOfLine = 200;
+        /*
+        int angle = (180);
+        Logger.d(this, "Angle : " + angle);
+        PointF statingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
+        Logger.d(this, "Starting point" + statingPoint.x + ":" + statingPoint.y);
+        LineSegment lineSegment = GeometricUtilities.getLineSegment(statingPoint, angle, lengthOfLine);
+        Logger.d(this, "Line Segment End Points : " + lineSegment.getA().x + ":" + lineSegment.getA().y + " - " + lineSegment.getB().x + ":" + lineSegment.getB().y);
+        canvas.drawLine(lineSegment.getA().x, lineSegment.getA().y, lineSegment.getB().x, lineSegment.getB().y, paint);
+        */
+        for(int i =0; i<4 ; i++) {
+            int angle = 45+(i*90);
+            Logger.d(this, "Angle : " + angle);
+            PointF statingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
+            Logger.d(this, "Starting point" + statingPoint.x + ":" + statingPoint.y);
+            LineSegment lineSegment = GeometricUtilities.getLineSegment(statingPoint, angle, lengthOfLine);
+            Logger.d(this, "Line Segment End Points : " + lineSegment.getA().x + ":" + lineSegment.getA().y + " - " + lineSegment.getB().x + ":" + lineSegment.getB().y);
+            canvas.drawLine(lineSegment.getA().x, lineSegment.getA().y, lineSegment.getB().x, lineSegment.getB().y, paint);
+        }
 
+        /*
         String charactersToDisplay = "a";
         float[] pointsOfDisplay ={0,0};
         canvas.drawPosText(charactersToDisplay, pointsOfDisplay, paint);
-
+        */
         Logger.v(this, "onDraw returns");
     }
 
@@ -113,7 +129,7 @@ public class EightVimKeyboardView extends View{
         // Calculate the diameter with the circle width to image width ratio 260:800,
         // and divide in half to get the radius
         float radius = (0.325f * width) / 2;
-        Point centre = new Point((width/2),(height/2));
+        PointF centre = new PointF((width/2),(height/2));
         circle = new Circle(centre, radius);
         // Set the new size
         setMeasuredDimension(width, height);
@@ -122,7 +138,7 @@ public class EightVimKeyboardView extends View{
 
     /** Get the number of the sector that point p is in
      *  @return 0: right, 1: top, 2: left, 3: bottom */
-    private FingerPosition getSector(Point p) {
+    private FingerPosition getSector(PointF p) {
         double angleDouble = GeometricUtilities.getAngleOfPointWithRespectToCentreOfCircle(p, circle);
         double angleToSectorValue = angleDouble/ (Math.PI / 2);
         int quadrantCyclic = (int)Math.round(angleToSectorValue);
@@ -145,7 +161,7 @@ public class EightVimKeyboardView extends View{
         return null;
     }
 
-    private FingerPosition getCurrentFingerPosition(Point position) {
+    private FingerPosition getCurrentFingerPosition(PointF position) {
         if(circle.isPointInsideCircle(position)){
             return FingerPosition.INSIDE_CIRCLE;
         } else {
@@ -199,7 +215,7 @@ public class EightVimKeyboardView extends View{
     }
 
     private void movementStarted(MotionEvent e) {
-        Point position = new Point((int)e.getX(), (int)e.getY());
+        PointF position = new PointF((int)e.getX(), (int)e.getY());
         currentFingerPosition = getCurrentFingerPosition(position);
         movementSequence.clear();
         movementSequence.add(currentFingerPosition);
@@ -207,7 +223,7 @@ public class EightVimKeyboardView extends View{
     }
 
     private void movementContinues(MotionEvent e) {
-        Point position = new Point((int)e.getX(), (int)e.getY());
+        PointF position = new PointF((int)e.getX(), (int)e.getY());
         FingerPosition lastKnownFingerPosition = currentFingerPosition;
         currentFingerPosition = getCurrentFingerPosition(position);
 
