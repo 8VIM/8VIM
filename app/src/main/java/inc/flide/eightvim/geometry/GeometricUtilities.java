@@ -17,22 +17,6 @@ public class GeometricUtilities {
         return distanceSquare;
     }
 
-    /** Gets the angle of point p relative to the center */
-    public static double getAngleOfPointWithRespectToCentreOfCircle(PointF p, Circle circle)
-    {
-        // Get difference of coordinates
-        double x = p.x - circle.getCentre().x;
-        double y = circle.getCentre().y - p.y;
-
-        // Calculate angle with special atan (calculates the correct angle in all quadrants)
-        double angle = Math.atan2(y, x);
-        // Make all angles positive
-        if(angle < 0) {
-            angle = Math.PI * 2 + angle;
-        }
-        return angle;
-    }
-
     public static int getBaseQuadrant(int continiousQuadrantValue)
     {
         int result;
@@ -45,17 +29,4 @@ public class GeometricUtilities {
         return result;
     }
 
-    public static double convertToRadians(int degree){
-        double radians = (Math.PI/180d)*degree;
-        return radians;
-    }
-
-    public static LineSegment getLineSegment(PointF startingPoint, int directionalAngleInDegree, int length){
-        double directionalAngleInRadians = convertToRadians(directionalAngleInDegree);
-        int x = (int) (startingPoint.x + (length * Math.cos(directionalAngleInRadians)));
-        int y = (int) (startingPoint.y + (length * Math.sin(directionalAngleInRadians)));
-
-        PointF endPoint = new PointF(x,y);
-        return new LineSegment(startingPoint, endPoint);
-    }
 }

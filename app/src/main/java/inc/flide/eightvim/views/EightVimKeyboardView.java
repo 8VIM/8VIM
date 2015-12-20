@@ -59,48 +59,39 @@ public class EightVimKeyboardView extends View{
     @Override
     public void onDraw(Canvas canvas) {
         Logger.v(this, "onDraw called");
-        //super.onDraw(canvas);
-        canvas.drawColor(0);
+
         Paint paint = new Paint();
-        paint.setARGB(255,255,255,255);
+        paint.setARGB(255, 255, 255, 255);
         paint.setStyle(Paint.Style.FILL);
+
+        //background colouring
         canvas.drawColor(paint.getColor());
-        paint = new Paint();
+
         paint.setARGB(255,0,0,0);
         paint.setStrokeWidth(5);
         paint.setStyle(Paint.Style.STROKE);
 
-        //create the circle.getCentre() circle
-        RectF oval = new RectF();
-        oval.set(circle.getCentre().x - circle.getRadius(), circle.getCentre().y - circle.getRadius(), circle.getCentre().x + circle.getRadius(), circle.getCentre().y + circle.getRadius());
-        canvas.drawArc(oval, 0f, 360f, false, paint);
+        //The centre circle
         canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), paint);
 
+        //The lines demarcating the sectors
+        List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
         int lengthOfLine = 200;
-        /*
-        int angle = (180);
-        Logger.d(this, "Angle : " + angle);
-        PointF statingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
-        Logger.d(this, "Starting point" + statingPoint.x + ":" + statingPoint.y);
-        LineSegment lineSegment = GeometricUtilities.getLineSegment(statingPoint, angle, lengthOfLine);
-        Logger.d(this, "Line Segment End Points : " + lineSegment.getA().x + ":" + lineSegment.getA().y + " - " + lineSegment.getB().x + ":" + lineSegment.getB().y);
-        canvas.drawLine(lineSegment.getA().x, lineSegment.getA().y, lineSegment.getB().x, lineSegment.getB().y, paint);
-        */
         for(int i =0; i<4 ; i++) {
             int angle = 45+(i*90);
-            Logger.d(this, "Angle : " + angle);
-            PointF statingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
-            Logger.d(this, "Starting point" + statingPoint.x + ":" + statingPoint.y);
-            LineSegment lineSegment = GeometricUtilities.getLineSegment(statingPoint, angle, lengthOfLine);
-            Logger.d(this, "Line Segment End Points : " + lineSegment.getA().x + ":" + lineSegment.getA().y + " - " + lineSegment.getB().x + ":" + lineSegment.getB().y);
+            PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
+            LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLine);
+            sectorDemarcatingLines.add(lineSegment);
             canvas.drawLine(lineSegment.getA().x, lineSegment.getA().y, lineSegment.getB().x, lineSegment.getB().y, paint);
         }
 
-        /*
+        //the text along the lines
+        paint.setTextSize(40);
+        paint.setStrokeWidth(1);
         String charactersToDisplay = "a";
-        float[] pointsOfDisplay ={0,0};
+        float[] pointsOfDisplay ={50,50};
         canvas.drawPosText(charactersToDisplay, pointsOfDisplay, paint);
-        */
+
         Logger.v(this, "onDraw returns");
     }
 
@@ -139,7 +130,7 @@ public class EightVimKeyboardView extends View{
     /** Get the number of the sector that point p is in
      *  @return 0: right, 1: top, 2: left, 3: bottom */
     private FingerPosition getSector(PointF p) {
-        double angleDouble = GeometricUtilities.getAngleOfPointWithRespectToCentreOfCircle(p, circle);
+        double angleDouble = circle.getAngleInRadiansOfPointWithRespectToCentreOfCircle(p);
         double angleToSectorValue = angleDouble/ (Math.PI / 2);
         int quadrantCyclic = (int)Math.round(angleToSectorValue);
         int baseQuadrant = GeometricUtilities.getBaseQuadrant(quadrantCyclic);

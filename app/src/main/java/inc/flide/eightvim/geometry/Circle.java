@@ -53,7 +53,7 @@ public class Circle{
     }
 
     public PointF getPointOnCircumferenceAtDegreeAngle(int angleInDegree){
-        double angleInRadians = GeometricUtilities.convertToRadians(angleInDegree);
+        double angleInRadians = Math.toRadians(angleInDegree);
         return getPointOnCircumferenceAtRadianAngle(angleInRadians);
     }
 
@@ -61,5 +61,21 @@ public class Circle{
         float x = (float) (centre.x + (radius * Math.cos(angleInRadians)));
         float y = (float) (centre.y + (radius * Math.sin(angleInRadians)));
         return new PointF(x,y);
+    }
+
+    /** Gets the angle of point p relative to the center */
+    public double getAngleInRadiansOfPointWithRespectToCentreOfCircle(PointF point)
+    {
+        // Get difference of coordinates
+        double x = point.x - centre.x;
+        double y = centre.y - point.y;
+
+        // Calculate angle with special atan (calculates the correct angle in all quadrants)
+        double angle = Math.atan2(y, x);
+        // Make all angles positive
+        if(angle < 0) {
+            angle = Math.PI * 2 + angle;
+        }
+        return angle;
     }
 }
