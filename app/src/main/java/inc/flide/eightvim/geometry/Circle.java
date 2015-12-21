@@ -34,7 +34,7 @@ public class Circle{
     private double getPowerOfPoint(PointF point) {
         /*
         If O is the centre of circle
-        Consider a point P not necessarily on the circumference of the circle.
+        Consider startingPoint point P not necessarily on the circumference of the circle.
         If d = OP is the distance between P and the circle's center O, then the power of the point P relative to the circle is
         p=d^2-r^2.
         */

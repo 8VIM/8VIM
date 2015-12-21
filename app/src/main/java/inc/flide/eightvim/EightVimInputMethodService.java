@@ -103,9 +103,10 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
     public void processMovementSequence(List<FingerPosition> movementSequence) {
 
         KeyboardAction keyboardAction = keyboardActionMap.get(movementSequence);
+
         boolean isMovementValid = true;
         if(keyboardAction == null){
-            Logger.Warn(this, "No Action Mapping has been defined for the given Sequence : " + movementSequence.toString());
+            Logger.Verbose(this, "No Action Mapping has been defined for the given Sequence : " + movementSequence.toString());
             movementSequence.clear();
             return;
         }

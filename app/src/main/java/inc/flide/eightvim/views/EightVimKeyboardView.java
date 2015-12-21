@@ -3,9 +3,7 @@ package inc.flide.eightvim.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +17,7 @@ import inc.flide.eightvim.geometry.Circle;
 import inc.flide.eightvim.geometry.GeometricUtilities;
 import inc.flide.eightvim.geometry.LineSegment;
 import inc.flide.eightvim.keyboardHelpers.FingerPosition;
+import inc.flide.eightvim.utilities.Utilities;
 import inc.flide.logging.Logger;
 
 public class EightVimKeyboardView extends View{
@@ -67,7 +66,7 @@ public class EightVimKeyboardView extends View{
         //background colouring
         canvas.drawColor(paint.getColor());
 
-        paint.setARGB(255,0,0,0);
+        paint.setARGB(255, 0, 0, 0);
         paint.setStrokeWidth(5);
         paint.setStyle(Paint.Style.STROKE);
 
@@ -82,17 +81,77 @@ public class EightVimKeyboardView extends View{
             PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
             LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLine);
             sectorDemarcatingLines.add(lineSegment);
-            canvas.drawLine(lineSegment.getA().x, lineSegment.getA().y, lineSegment.getB().x, lineSegment.getB().y, paint);
+            canvas.drawLine(lineSegment.getStartingPoint().x, lineSegment.getStartingPoint().y, lineSegment.getEndPoint().x, lineSegment.getEndPoint().y, paint);
         }
 
         //the text along the lines
         paint.setTextSize(40);
-        paint.setStrokeWidth(1);
-        String charactersToDisplay = "a";
-        float[] pointsOfDisplay ={50,50};
+        paint.setStrokeWidth(2);
+
+        String charactersToDisplay = "nmf!elk@tcz.ybpq";
+        List<PointF> listOfPointsOfDisplayInAntiClockwiseDirection = new ArrayList<>();
+        for(int i=0; i<4; i++) {
+            LineSegment currentLine = sectorDemarcatingLines.get(i);
+            listOfPointsOfDisplayInAntiClockwiseDirection.addAll(getCharacterDisplayPointsOnTheLineSegmentInAntiClockwiseDirection(currentLine, 4));
+        }
+        float[] pointsOfDisplay = Utilities.convertPointFListToPrimitiveFloatArray(listOfPointsOfDisplayInAntiClockwiseDirection);
         canvas.drawPosText(charactersToDisplay, pointsOfDisplay, paint);
 
         Logger.v(this, "onDraw returns");
+    }
+
+    private List<PointF> getCharacterDisplayPointsOnTheLineSegmentInAntiClockwiseDirection(LineSegment lineSegment, int numberOfCharactersToDisplay) {
+        List<PointF> pointsOfCharacterDisplay = new ArrayList<>();
+
+        //Assuming we got to derive 4 points
+        double spacingBetweenPoints = lineSegment.getLength()/numberOfCharactersToDisplay;
+        float xOffset = getXOffset(lineSegment);
+        float yOffset = getYOffset(lineSegment);
+
+        for(int i = 0 ; i < 4 ; i++){
+            PointF nextPoint = GeometricUtilities.findPointSpecifiedDistanceAwayInGivenDirection(lineSegment.getStartingPoint(), lineSegment.getDirectionOfLineInDegree(), (spacingBetweenPoints * i));
+            PointF nextDisplayPoint = new PointF(nextPoint.x + xOffset, nextPoint.y + yOffset);
+            pointsOfCharacterDisplay.add(nextDisplayPoint);
+        }
+
+        return pointsOfCharacterDisplay;
+    }
+
+    private float getYOffset(LineSegment lineSegment) {
+        int reverse = -1;
+        int ySign = (lineSegment.getStartingPoint().y - lineSegment.getEndPoint().y)>0?-1:1;
+        int slopeSign = lineSegment.isSlopePositive()?1:-1;
+        int aggregateSign = ySign*slopeSign*-1;
+        float offset = 0;
+        if(lineSegment.getDirectionOfLineInDegree()>0 && lineSegment.getDirectionOfLineInDegree() <=90){
+            offset = 0;
+        }else if(lineSegment.getDirectionOfLineInDegree()>90 && lineSegment.getDirectionOfLineInDegree() <=180){
+            offset = 60;
+        }else if(lineSegment.getDirectionOfLineInDegree()>180 && lineSegment.getDirectionOfLineInDegree() <=270){
+            offset = 20;
+        }else{
+            offset = 40;
+        }
+        return offset*aggregateSign;
+    }
+
+    private float getXOffset(LineSegment lineSegment) {
+
+        int xSign = (lineSegment.getStartingPoint().x - lineSegment.getEndPoint().x)>0?-1:1;
+
+        int slopeSign = lineSegment.isSlopePositive()?1:-1;
+        int aggregateSign = xSign*slopeSign;
+        float offset = 0;
+        if(lineSegment.getDirectionOfLineInDegree()>0 && lineSegment.getDirectionOfLineInDegree() <=90){
+            offset = 30;
+        }else if(lineSegment.getDirectionOfLineInDegree()>90 && lineSegment.getDirectionOfLineInDegree() <=180){
+            offset = 0;
+        }else if(lineSegment.getDirectionOfLineInDegree()>180 && lineSegment.getDirectionOfLineInDegree() <=270){
+            offset = 40;
+        }else{
+            offset = 0;
+        }
+        return offset*aggregateSign;
     }
 
     @Override
@@ -107,7 +166,7 @@ public class EightVimKeyboardView extends View{
         {
             // Switch to button mode
             // TODO
-            Logger.Warn(this, "Say what you will, but I don't do Landscapes just yet!! So.. BACK OFF!!");
+            Logger.Verbose(this, "Say what you will, but I don't do Landscapes just yet!! So.. BACK OFF!!");
             width = Math.round(1.33f * height);
             // Placeholder:
         }

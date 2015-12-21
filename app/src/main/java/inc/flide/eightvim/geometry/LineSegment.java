@@ -1,36 +1,69 @@
 package inc.flide.eightvim.geometry;
 
-import android.graphics.Point;
 import android.graphics.PointF;
 
 /**
  * Created by flide on 17/12/15.
  */
 public class LineSegment {
-    PointF a;
-    PointF b;
+    private PointF startingPoint;
+    private PointF endPoint;
+    private double length;
+    private double directionOfLineInDegree;
 
-    public PointF getB() {
-        return b;
+    public double getLength() {
+        return length;
     }
 
-    public PointF getA() {
-        return a;
+    public void setLength(double length) {
+        this.length = length;
     }
 
-    public LineSegment(PointF a, PointF b){
-        this.a = a;
-        this.b = b;
+    public double getDirectionOfLineInDegree() {
+        return directionOfLineInDegree;
+    }
+
+    public void setDirectionOfLineInDegree(double directionOfLineInDegree) {
+        this.directionOfLineInDegree = directionOfLineInDegree;
+    }
+
+    public PointF getEndPoint() {
+        return endPoint;
+    }
+
+    public PointF getStartingPoint() {
+        return startingPoint;
+    }
+
+    public LineSegment(PointF startingPoint, PointF endPoint){
+        this.startingPoint = startingPoint;
+        this.endPoint = endPoint;
+        this.length = computeLengthOfLineSegment();
+        this.directionOfLineInDegree = computeAngleOfLineSegment();
+    }
+
+    private double computeAngleOfLineSegment() {
+        double slope = (startingPoint.y - endPoint.y)/(startingPoint.x - endPoint.x);
+        double angleOfDirectionInRadians = Math.atan(slope);
+        return Math.toDegrees(angleOfDirectionInRadians);
+    }
+
+    private double computeLengthOfLineSegment() {
+        return Math.sqrt(GeometricUtilities.getSquaredDistanceBetweenPoints(startingPoint, endPoint));
     }
 
     public LineSegment(PointF startingPoint, int directionalAngleInDegree, int length){
 
-        double directionalAngleInRadians = Math.toRadians(directionalAngleInDegree);
-        int x = (int) (startingPoint.x + (length * Math.cos(directionalAngleInRadians)));
-        int y = (int) (startingPoint.y + (length * Math.sin(directionalAngleInRadians)));
-        PointF endPoint = new PointF(x,y);
+        PointF endPoint = GeometricUtilities.findPointSpecifiedDistanceAwayInGivenDirection(startingPoint, directionalAngleInDegree, length);
 
-        this.a = startingPoint;
-        this.b = endPoint;
+        this.startingPoint = startingPoint;
+        this.endPoint = endPoint;
+        this.length = length;
+        this.directionOfLineInDegree = directionalAngleInDegree;
+    }
+
+    public boolean isSlopePositive(){
+        double slope = (startingPoint.y - endPoint.y)/(startingPoint.x - endPoint.x);
+        return (slope >= 0);
     }
 }
