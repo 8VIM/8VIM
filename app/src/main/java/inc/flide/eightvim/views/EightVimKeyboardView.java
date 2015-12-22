@@ -87,20 +87,19 @@ public class EightVimKeyboardView extends View{
         //the text along the lines
         paint.setTextSize(40);
         paint.setStrokeWidth(2);
-
-        String charactersToDisplay = "nmf!elk@tcz.ybpq";
-        List<PointF> listOfPointsOfDisplayInAntiClockwiseDirection = new ArrayList<>();
+        String charactersToDisplay = "nomufv!weilhkj@,tscdzg.'yabrpxq?";
+        List<PointF> listOfPointsOfDisplay = new ArrayList<>();
         for(int i=0; i<4; i++) {
             LineSegment currentLine = sectorDemarcatingLines.get(i);
-            listOfPointsOfDisplayInAntiClockwiseDirection.addAll(getCharacterDisplayPointsOnTheLineSegmentInAntiClockwiseDirection(currentLine, 4));
+            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(currentLine, 4));
         }
-        float[] pointsOfDisplay = Utilities.convertPointFListToPrimitiveFloatArray(listOfPointsOfDisplayInAntiClockwiseDirection);
+        float[] pointsOfDisplay = Utilities.convertPointFListToPrimitiveFloatArray(listOfPointsOfDisplay);
         canvas.drawPosText(charactersToDisplay, pointsOfDisplay, paint);
 
         Logger.v(this, "onDraw returns");
     }
 
-    private List<PointF> getCharacterDisplayPointsOnTheLineSegmentInAntiClockwiseDirection(LineSegment lineSegment, int numberOfCharactersToDisplay) {
+    private List<PointF> getCharacterDisplayPointsOnTheLineSegment(LineSegment lineSegment, int numberOfCharactersToDisplay) {
         List<PointF> pointsOfCharacterDisplay = new ArrayList<>();
 
         //Assuming we got to derive 4 points
@@ -110,47 +109,27 @@ public class EightVimKeyboardView extends View{
 
         for(int i = 0 ; i < 4 ; i++){
             PointF nextPoint = GeometricUtilities.findPointSpecifiedDistanceAwayInGivenDirection(lineSegment.getStartingPoint(), lineSegment.getDirectionOfLineInDegree(), (spacingBetweenPoints * i));
-            PointF nextDisplayPoint = new PointF(nextPoint.x + xOffset, nextPoint.y + yOffset);
-            pointsOfCharacterDisplay.add(nextDisplayPoint);
+            PointF displayPointInAntiClockwiseDirection = new PointF(nextPoint.x + xOffset, nextPoint.y + yOffset);
+            PointF displayPointInClockwiseDirection = new PointF(nextPoint.x + (xOffset*-1), nextPoint.y + (yOffset*-1));
+            pointsOfCharacterDisplay.add(displayPointInAntiClockwiseDirection);
+            pointsOfCharacterDisplay.add(displayPointInClockwiseDirection);
         }
-
         return pointsOfCharacterDisplay;
     }
 
     private float getYOffset(LineSegment lineSegment) {
-        int reverse = -1;
         int ySign = (lineSegment.getStartingPoint().y - lineSegment.getEndPoint().y)>0?-1:1;
         int slopeSign = lineSegment.isSlopePositive()?1:-1;
         int aggregateSign = ySign*slopeSign*-1;
-        float offset = 0;
-        if(lineSegment.getDirectionOfLineInDegree()>0 && lineSegment.getDirectionOfLineInDegree() <=90){
-            offset = 0;
-        }else if(lineSegment.getDirectionOfLineInDegree()>90 && lineSegment.getDirectionOfLineInDegree() <=180){
-            offset = 60;
-        }else if(lineSegment.getDirectionOfLineInDegree()>180 && lineSegment.getDirectionOfLineInDegree() <=270){
-            offset = 20;
-        }else{
-            offset = 40;
-        }
+        float offset = 50;
         return offset*aggregateSign;
     }
 
     private float getXOffset(LineSegment lineSegment) {
-
         int xSign = (lineSegment.getStartingPoint().x - lineSegment.getEndPoint().x)>0?-1:1;
-
         int slopeSign = lineSegment.isSlopePositive()?1:-1;
         int aggregateSign = xSign*slopeSign;
-        float offset = 0;
-        if(lineSegment.getDirectionOfLineInDegree()>0 && lineSegment.getDirectionOfLineInDegree() <=90){
-            offset = 30;
-        }else if(lineSegment.getDirectionOfLineInDegree()>90 && lineSegment.getDirectionOfLineInDegree() <=180){
-            offset = 0;
-        }else if(lineSegment.getDirectionOfLineInDegree()>180 && lineSegment.getDirectionOfLineInDegree() <=270){
-            offset = 40;
-        }else{
-            offset = 0;
-        }
+        float offset = 50;
         return offset*aggregateSign;
     }
 
