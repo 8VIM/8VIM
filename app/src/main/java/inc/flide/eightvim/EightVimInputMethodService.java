@@ -133,7 +133,7 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
 
     private void handleInputText(KeyboardAction keyboardAction) {
         if(keyboardAction.getText().length() == 1 && (isShiftLockOn || isCapsLockOn)){
-            sendText(keyboardAction.getText().toUpperCase());
+            sendText(keyboardAction.getCapsLockText());
             isShiftLockOn = false;
         }else{
             sendText(keyboardAction.getText());
@@ -188,29 +188,26 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
 
-        InputConnection ic = this.getCurrentInputConnection();
+        InputConnection inputConnection = this.getCurrentInputConnection();
 
         switch(primaryCode){
             case KeyEvent.KEYCODE_EISU:
-                KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(KeyboardAction.KeyboardActionType.INPUT_SPECIAL,null, KeyEvent.KEYCODE_EISU);
+                KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(KeyboardAction.KeyboardActionType.INPUT_SPECIAL,null,null, KeyEvent.KEYCODE_EISU);
                 this.handleSpecialInput(switchToEightVimKeyboardView);
                 break;
             case KeyEvent.KEYCODE_DEL  :
             case KeyEvent.KEYCODE_ENTER:
-            case KeyEvent.KEYCODE_SPACE:
-            case KeyEvent.KEYCODE_NUMPAD_DOT:
-            case KeyEvent.KEYCODE_NUMPAD_SUBTRACT:
                 this.sendKey(primaryCode);
                 break;
             default:
                 char code = (char)primaryCode;
-                ic.commitText(String.valueOf(code),1);
+                inputConnection.commitText(String.valueOf(code), 1);
         }
     }
 
     @Override
     public void onText(CharSequence text) {
-
+        this.sendText(text.toString());
     }
 
     @Override

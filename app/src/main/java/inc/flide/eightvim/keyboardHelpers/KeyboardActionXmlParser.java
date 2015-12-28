@@ -27,6 +27,7 @@ public class KeyboardActionXmlParser {
     public static final String KEYBOARD_ACTION_TYPE_TAG = "keyboardActionType";
     public static final String MOVEMENT_SEQUENCE_TAG = "movementSequence";
     public static final String INPUT_STRING_TAG = "inputString";
+    public static final String INPUT_CAPSLOCK_STRING_TAG = "inputCapsLockString";
     public static final String INPUT_KEY_TAG = "inputKey";
 
     XmlPullParser parser;
@@ -60,6 +61,7 @@ public class KeyboardActionXmlParser {
         KeyboardAction keyboardAction = null;
         KeyboardAction.KeyboardActionType keyboardActionType = null;
         String associatedText = "";
+        String associatedCapsLockText = "";
         int keyEventCode = 0;
 
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -82,12 +84,15 @@ public class KeyboardActionXmlParser {
                 case INPUT_KEY_TAG:
                     keyEventCode = readInputKey();
                     break;
+                case INPUT_CAPSLOCK_STRING_TAG:
+                    associatedCapsLockText = readInputCapsLockString();
+                    break;
                 default:
                     Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
             }
         }
 
-        keyboardAction = new KeyboardAction(keyboardActionType, associatedText, keyEventCode);
+        keyboardAction = new KeyboardAction(keyboardActionType, associatedText, associatedCapsLockText, keyEventCode);
         return new AbstractMap.SimpleEntry(movementSequence, keyboardAction);
     }
 
@@ -105,6 +110,14 @@ public class KeyboardActionXmlParser {
         parser.require(XmlPullParser.START_TAG,null, INPUT_STRING_TAG);
         String inputString = readText();
         parser.require(XmlPullParser.END_TAG, null, INPUT_STRING_TAG);
+
+        return inputString;
+    }
+
+    private String readInputCapsLockString() throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG,null, INPUT_CAPSLOCK_STRING_TAG);
+        String inputString = readText();
+        parser.require(XmlPullParser.END_TAG, null, INPUT_CAPSLOCK_STRING_TAG);
 
         return inputString;
     }
