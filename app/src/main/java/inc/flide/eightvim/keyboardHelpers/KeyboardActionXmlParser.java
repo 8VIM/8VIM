@@ -41,7 +41,7 @@ public class KeyboardActionXmlParser {
 
     public Map<List<FingerPosition>, KeyboardAction> readKeyboardActionMap() throws IOException, XmlPullParserException {
         Map<List<FingerPosition>, KeyboardAction> keyboardActionMap = new HashMap<>();
-
+        
         parser.require(XmlPullParser.START_TAG, null, KEYBOARD_ACTION_MAP_TAG);
         while (parser.next() != parser.END_TAG){
             if (parser.getEventType() != XmlPullParser.START_TAG) {

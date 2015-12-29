@@ -19,7 +19,7 @@ public class KeyboardAction {
     }
 
     private void setCapsLockText(String capsLockText) {
-        if(capsLockText==null || capsLockText.length()==0){
+        if((capsLockText==null || capsLockText.length()==0) && this.text!=null){
             this.capsLockText = this.text.toUpperCase();
         } else{
             this.capsLockText = capsLockText;
