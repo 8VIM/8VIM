@@ -158,7 +158,7 @@ public class EightVimKeyboardView extends View{
         // Calculate the diameter with the circle width to image width ratio 260:800,
         // and divide in half to get the radius
         float radius = (0.325f * width) / 2;
-        PointF centre = new PointF((width/2),(height/2));
+        PointF centre = new PointF((width*3/5),(height/2));
         circle = new Circle(centre, radius);
         // Set the new size
         setMeasuredDimension(width, height);
