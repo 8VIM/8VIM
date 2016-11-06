@@ -465,7 +465,7 @@
     <!--Paste Sequence-->
     <keyboardAction>
         <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
-        <movementSequence>LEFT;TOP;RIGHT;NO_TOUCH;</movementSequence>
+        <movementSequence>LEFT;INSIDE_CIRCLE;</movementSequence>
         <inputKey>2</inputKey>
     </keyboardAction>
 </keyboardActionMap>
