@@ -229,13 +229,13 @@
     <keyboardAction>
         <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
         <movementSequence>TOP;NO_TOUCH;</movementSequence>
-        <inputKey>60</inputKey>
+        <inputKey>0</inputKey>
     </keyboardAction>
 
     <keyboardAction>
         <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
         <movementSequence>LEFT;NO_TOUCH;</movementSequence>
-        <inputKey>212</inputKey>
+        <inputKey>1</inputKey>
     </keyboardAction>
 
     <!--Capital Characters-->
@@ -460,5 +460,12 @@
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;RIGHT;LONG_PRESS;</movementSequence>
         <inputKey>22</inputKey>
+    </keyboardAction>
+
+    <!--Paste Sequence-->
+    <keyboardAction>
+        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <movementSequence>LEFT;TOP;RIGHT;NO_TOUCH;</movementSequence>
+        <inputKey>2</inputKey>
     </keyboardAction>
 </keyboardActionMap>

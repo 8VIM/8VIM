@@ -1,5 +1,8 @@
 package inc.flide.eightvim;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.KeyboardView;
 import android.view.HapticFeedbackConstants;
@@ -16,11 +19,14 @@ import java.util.List;
 import java.util.Map;
 
 import inc.flide.eightvim.keyboardHelpers.FingerPosition;
+import inc.flide.eightvim.keyboardHelpers.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.keyboardHelpers.KeyboardActionXmlParser;
 import inc.flide.eightvim.views.EightVimKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 import inc.flide.logging.Logger;
+
+import static android.os.SystemClock.uptimeMillis;
 
 public class EightVimInputMethodService extends InputMethodService implements KeyboardView.OnKeyboardActionListener{
 
@@ -145,9 +151,10 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
     }
 
     public void handleSpecialInput(KeyboardAction keyboardAction) {
-        switch (keyboardAction.getKeyEventCode()){
-            case KeyEvent.KEYCODE_SHIFT_RIGHT:
-            case KeyEvent.KEYCODE_SHIFT_LEFT:
+
+        InputSpecialKeyEventCode keyeventCode = InputSpecialKeyEventCode.getInputSpecialKeyEventCodeWithValue(keyboardAction.getKeyEventCode());
+        switch (keyeventCode){
+            case SHIFT_TOOGLE:
                 if(isShiftLockOn){
                     isShiftLockOn = false;
                     isCapsLockOn = true;
@@ -159,13 +166,23 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
                     isCapsLockOn = false;
                 }
                 break;
-            case KeyEvent.KEYCODE_EISU:
+            case KEYBOARD_TOOGLE:
                 if(isEightVimKeyboardViewVisible){
                     isEightVimKeyboardViewVisible = false;
                     setInputView(numberPadKeyboardView);
                 } else {
                     isEightVimKeyboardViewVisible = true;
                     setInputView(eightVimKeyboardView);
+                }
+                break;
+
+            case PASTE:
+
+                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData primaryClip = clipboardManager.getPrimaryClip();
+
+                if(primaryClip!=null && primaryClip.getItemAt(0)!=null) {
+                    sendText(primaryClip.getItemAt(0).coerceToText(getApplicationContext()).toString());
                 }
 
                 break;
@@ -192,7 +209,9 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
 
         switch(primaryCode){
             case KeyEvent.KEYCODE_EISU:
-                KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(KeyboardAction.KeyboardActionType.INPUT_SPECIAL,null,null, KeyEvent.KEYCODE_EISU);
+                KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
+                        KeyboardAction.KeyboardActionType.INPUT_SPECIAL,null,null
+                        ,InputSpecialKeyEventCode.KEYBOARD_TOOGLE.getValue());
                 this.handleSpecialInput(switchToEightVimKeyboardView);
                 break;
             case KeyEvent.KEYCODE_DEL  :
