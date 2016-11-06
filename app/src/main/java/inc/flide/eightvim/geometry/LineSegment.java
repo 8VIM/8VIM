@@ -2,9 +2,6 @@ package inc.flide.eightvim.geometry;
 
 import android.graphics.PointF;
 
-/**
- * Created by flide on 17/12/15.
- */
 public class LineSegment {
     private PointF startingPoint;
     private PointF endPoint;

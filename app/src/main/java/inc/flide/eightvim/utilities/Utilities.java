@@ -4,9 +4,6 @@ import android.graphics.PointF;
 
 import java.util.List;
 
-/**
- * Created by flide on 20/12/15.
- */
 public class Utilities {
 
     public static float[] convertPointFListToPrimitiveFloatArray(List<PointF> FloatList) {

@@ -8,9 +8,6 @@ import java.util.List;
 
 import inc.flide.eightvim.utilities.Utilities;
 
-/**
- * Created by flide on 22/11/15.
- */
 public class GeometricUtilities {
 
     public static double getSquaredDistanceBetweenPoints(PointF a, PointF b){

@@ -9,26 +9,20 @@ import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
 import inc.flide.eightvim.keyboardHelpers.FingerPosition;
+import inc.flide.eightvim.keyboardHelpers.EightVimInputMethodServiceHelper;
 import inc.flide.eightvim.keyboardHelpers.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
-import inc.flide.eightvim.keyboardHelpers.KeyboardActionXmlParser;
 import inc.flide.eightvim.views.EightVimKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 import inc.flide.logging.Logger;
 
-import static android.os.SystemClock.uptimeMillis;
-
-public class EightVimInputMethodService extends InputMethodService implements KeyboardView.OnKeyboardActionListener{
+public class EightVimInputMethodService extends InputMethodService
+        implements KeyboardView.OnKeyboardActionListener{
 
     private EightVimKeyboardView eightVimKeyboardView;
     private boolean isEightVimKeyboardViewVisible;
@@ -40,17 +34,16 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
     private boolean isCapsLockOn;
     Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
 
+    EightVimInputMethodServiceHelper eightVimInputMethodServiceHelper = new EightVimInputMethodServiceHelper();
+
     @Override
     public View onCreateInputView() {
-
-        numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater().inflate(R.layout.keyboard, null);
-
+        numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater()
+                                    .inflate(R.layout.keyboard, null);
         eightVimKeyboardView = new EightVimKeyboardView(this);
         isEightVimKeyboardViewVisible = true;
         return eightVimKeyboardView;
-
     }
-
 
     @Override
     public void onStartInput (EditorInfo attribute, boolean restarting){
@@ -65,45 +58,19 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
     @Override
     public void onInitializeInterface(){
         super.onInitializeInterface();
-        initializeKeyboardActionMap();
+        keyboardActionMap = eightVimInputMethodServiceHelper
+                            .initializeKeyboardActionMap(getResources(), getPackageName());
         isShiftLockOn = false;
         isCapsLockOn = false;
     }
 
-    /** Helper to commit text to input */
-    public void sendText(String str) {
+    private void sendText(String str) {
         getCurrentInputConnection().commitText(str, 1);
     }
 
-    /** Helper to send a special key to input */
-    public void sendKey(int keyEventCode) {
+    private void sendKey(int keyEventCode) {
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
-    }
-
-    private void initializeKeyboardActionMap() {
-
-        InputStream inputStream = null;
-        try{
-            inputStream = getResources().openRawResource(getResources().getIdentifier("raw/keyboard_actions", "raw", getPackageName()));
-            KeyboardActionXmlParser keyboardActionXmlParser = new KeyboardActionXmlParser(inputStream);
-            keyboardActionMap = keyboardActionXmlParser.readKeyboardActionMap();
-
-        } catch (XmlPullParserException exception){
-            exception.printStackTrace();
-        } catch (IOException exception){
-            exception.printStackTrace();
-        } catch(Exception exception){
-            exception.printStackTrace();
-        }
-        finally {
-            try {
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 
     public void processMovementSequence(List<FingerPosition> movementSequence) {
@@ -150,9 +117,11 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
         sendKey(keyboardAction.getKeyEventCode());
     }
 
-    public void handleSpecialInput(KeyboardAction keyboardAction) {
+    private void handleSpecialInput(KeyboardAction keyboardAction) {
 
-        InputSpecialKeyEventCode keyeventCode = InputSpecialKeyEventCode.getInputSpecialKeyEventCodeWithValue(keyboardAction.getKeyEventCode());
+        InputSpecialKeyEventCode keyeventCode = InputSpecialKeyEventCode
+                                                    .getInputSpecialKeyEventCodeWithValue(
+                                                            keyboardAction.getKeyEventCode());
         switch (keyeventCode){
             case SHIFT_TOOGLE:
                 if(isShiftLockOn){
@@ -179,13 +148,13 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
             case PASTE:
 
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData primaryClip = clipboardManager.getPrimaryClip();
+                ClipData primaryClipData = clipboardManager.getPrimaryClip();
 
-                if(primaryClip!=null && primaryClip.getItemAt(0)!=null) {
-                    sendText(primaryClip.getItemAt(0).coerceToText(getApplicationContext()).toString());
+                if(primaryClipData!=null && primaryClipData.getItemAt(0)!=null) {
+                    sendText(primaryClipData.getItemAt(0).coerceToText(getApplicationContext()).toString());
                 }
-
                 break;
+
             default:
                 Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getKeyEventCode());
                 break;
@@ -205,13 +174,12 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
 
-        InputConnection inputConnection = this.getCurrentInputConnection();
-
         switch(primaryCode){
             case KeyEvent.KEYCODE_EISU:
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
-                        KeyboardAction.KeyboardActionType.INPUT_SPECIAL,null,null
-                        ,InputSpecialKeyEventCode.KEYBOARD_TOOGLE.getValue());
+                                    KeyboardAction.KeyboardActionType.INPUT_SPECIAL
+                                    ,null,null
+                                    ,InputSpecialKeyEventCode.KEYBOARD_TOOGLE.getValue());
                 this.handleSpecialInput(switchToEightVimKeyboardView);
                 break;
             case KeyEvent.KEYCODE_DEL  :
@@ -219,8 +187,7 @@ public class EightVimInputMethodService extends InputMethodService implements Ke
                 this.sendKey(primaryCode);
                 break;
             default:
-                char code = (char)primaryCode;
-                inputConnection.commitText(String.valueOf(code), 1);
+                sendText(String.valueOf((char)primaryCode));
         }
     }
 

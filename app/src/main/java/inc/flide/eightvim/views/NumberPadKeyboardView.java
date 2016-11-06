@@ -13,9 +13,6 @@ import inc.flide.eightvim.R;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.logging.Logger;
 
-/**
- * Created by flide on 30/11/15.
- */
 public class NumberPadKeyboardView extends KeyboardView {
 
     private EightVimInputMethodService eightVimInputMethodService;

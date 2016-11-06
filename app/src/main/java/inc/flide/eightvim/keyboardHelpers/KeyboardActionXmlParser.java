@@ -18,9 +18,6 @@ import inc.flide.eightvim.keyboardHelpers.FingerPosition;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.logging.Logger;
 
-/**
- * Created by flide on 24/11/15.
- */
 public class KeyboardActionXmlParser {
     public static final String KEYBOARD_ACTION_MAP_TAG = "keyboardActionMap";
     public static final String KEYBOARD_ACTION_TAG = "keyboardAction";

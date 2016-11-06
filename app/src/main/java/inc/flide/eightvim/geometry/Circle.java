@@ -3,9 +3,6 @@ package inc.flide.eightvim.geometry;
 import android.graphics.PointF;
 import android.graphics.PointF;
 
-/**
- * Created by flide on 22/11/15.
- */
 public class Circle{
     private PointF centre;
     private float radius;

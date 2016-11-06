@@ -1,9 +1,5 @@
 package inc.flide.eightvim.keyboardHelpers;
 
-/**
- * Created by flide on 5/11/16.
- */
-
 public enum InputSpecialKeyEventCode {
 
     SHIFT_TOOGLE(0),
