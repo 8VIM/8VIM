@@ -120,8 +120,8 @@ public class EightVimInputMethodService extends InputMethodService
     private void handleSpecialInput(KeyboardAction keyboardAction) {
 
         InputSpecialKeyEventCode keyeventCode = InputSpecialKeyEventCode
-                                                    .getInputSpecialKeyEventCodeWithValue(
-                                                            keyboardAction.getKeyEventCode());
+                                                    .getInputSpecialKeyEventCodeWithName(
+                                                            keyboardAction.getText());
         switch (keyeventCode){
             case SHIFT_TOOGLE:
                 if(isShiftLockOn){
@@ -156,7 +156,7 @@ public class EightVimInputMethodService extends InputMethodService
                 break;
 
             default:
-                Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getKeyEventCode());
+                Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getText());
                 break;
         }
     }
@@ -178,7 +178,7 @@ public class EightVimInputMethodService extends InputMethodService
             case KeyEvent.KEYCODE_EISU:
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
                                     KeyboardAction.KeyboardActionType.INPUT_SPECIAL
-                                    ,null,null
+                                    ,InputSpecialKeyEventCode.KEYBOARD_TOOGLE.getName(),null
                                     ,InputSpecialKeyEventCode.KEYBOARD_TOOGLE.getValue());
                 this.handleSpecialInput(switchToEightVimKeyboardView);
                 break;

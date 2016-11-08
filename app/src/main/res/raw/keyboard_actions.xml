@@ -225,19 +225,6 @@
         <inputKey>67</inputKey>
     </keyboardAction>
 
-    <!--Shift-->
-    <keyboardAction>
-        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
-        <movementSequence>TOP;NO_TOUCH;</movementSequence>
-        <inputKey>0</inputKey>
-    </keyboardAction>
-
-    <keyboardAction>
-        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
-        <movementSequence>LEFT;NO_TOUCH;</movementSequence>
-        <inputKey>1</inputKey>
-    </keyboardAction>
-
     <!--Capital Characters-->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
@@ -466,6 +453,21 @@
     <keyboardAction>
         <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
         <movementSequence>LEFT;INSIDE_CIRCLE;</movementSequence>
-        <inputKey>2</inputKey>
+        <inputString>PASTE</inputString>
     </keyboardAction>
+
+    <!--Shift-->
+    <keyboardAction>
+        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <movementSequence>TOP;NO_TOUCH;</movementSequence>
+        <inputString>SHIFT_TOOGLE</inputString>
+    </keyboardAction>
+
+    <!-- Switch to Numpad-->
+    <keyboardAction>
+        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <movementSequence>LEFT;NO_TOUCH;</movementSequence>
+        <inputString>KEYBOARD_TOOGLE</inputString>
+    </keyboardAction>
+
 </keyboardActionMap>
