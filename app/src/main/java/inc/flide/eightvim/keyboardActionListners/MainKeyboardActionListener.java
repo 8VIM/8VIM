@@ -1,7 +1,11 @@
 package inc.flide.eightvim.keyboardActionListners;
 
+import android.graphics.PointF;
+import android.os.Handler;
 import android.view.HapticFeedbackConstants;
+import android.view.MotionEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,20 +17,85 @@ import inc.flide.logging.Logger;
 
 public class MainKeyboardActionListener {
 
+    private static final int DELAY_MILLIS_LONG_PRESS_INITIATION = 500;
+    private static final int DELAY_MILLIS_LONG_PRESS_CONTINUATION = 50;
 
     private EightVimInputMethodService eightVimInputMethodService;
     private MainKeyboardView mainKeyboardView;
 
     Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
 
+    private List<FingerPosition> movementSequence;
+    private FingerPosition currentFingerPosition;
+    private boolean isLongPressCallbackSet;
+
     public MainKeyboardActionListener(EightVimInputMethodService inputMethodService,
                                       MainKeyboardView view) {
         this.eightVimInputMethodService = inputMethodService;
         this.mainKeyboardView = view;
+
         keyboardActionMap = eightVimInputMethodService.buildKeyboardActionMap();
+
+        movementSequence = new ArrayList<>();
+        currentFingerPosition = FingerPosition.NO_TOUCH;
     }
 
-    public void processMovementSequence(List<FingerPosition> movementSequence) {
+    public void movementStarted(FingerPosition fingerPosition) {
+        currentFingerPosition = fingerPosition;
+        movementSequence.clear();
+        movementSequence.add(currentFingerPosition);
+        initiateLongPressDetection();
+    }
+
+    public void movementContinues(FingerPosition fingerPosition) {
+        FingerPosition lastKnownFingerPosition = currentFingerPosition;
+        currentFingerPosition = fingerPosition;
+
+        boolean isFingerPositionChanged = (lastKnownFingerPosition != currentFingerPosition);
+
+        if(isFingerPositionChanged){
+            interruptLongPress();
+            movementSequence.add(currentFingerPosition);
+            if(currentFingerPosition == FingerPosition.INSIDE_CIRCLE){
+                processMovementSequence(movementSequence);
+                movementSequence.clear();
+                movementSequence.add(currentFingerPosition);
+            }
+        }else if(!isLongPressCallbackSet){
+            initiateLongPressDetection();
+        }
+    }
+
+    public void movementEnds() {
+        interruptLongPress();
+        currentFingerPosition = FingerPosition.NO_TOUCH;
+        movementSequence.add(currentFingerPosition);
+        processMovementSequence(movementSequence);
+        movementSequence.clear();
+    }
+
+    final Handler longPressHandler = new Handler();
+    Runnable longPressRunnable = new Runnable() {
+        @Override
+        public void run() {
+            List<FingerPosition> movementSequenceAgumented = new ArrayList<>(movementSequence);
+            movementSequenceAgumented.add(FingerPosition.LONG_PRESS);
+            processMovementSequence(movementSequenceAgumented);
+            longPressHandler.postDelayed(this, DELAY_MILLIS_LONG_PRESS_CONTINUATION);
+        }
+    };
+
+    private void initiateLongPressDetection(){
+        isLongPressCallbackSet = true;
+        longPressHandler.postDelayed(longPressRunnable, DELAY_MILLIS_LONG_PRESS_INITIATION);
+    }
+
+    private void interruptLongPress(){
+        longPressHandler.removeCallbacks(longPressRunnable);
+        isLongPressCallbackSet = false;
+    }
+
+    private void processMovementSequence(List<FingerPosition> movementSequence) {
 
         KeyboardAction keyboardAction = keyboardActionMap.get(movementSequence);
 

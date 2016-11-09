@@ -7,7 +7,6 @@ import android.graphics.PointF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.os.Handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +22,7 @@ import inc.flide.logging.Logger;
 
 public class MainKeyboardView extends View{
 
-    private static final int DELAY_MILLIS_LONG_PRESS_INITIATION = 500;
-    private static final int DELAY_MILLIS_LONG_PRESS_CONTINUATION = 50;
-
     private MainKeyboardActionListener mainKeyboardActionListener;
-
-    private List<FingerPosition> movementSequence;
-    private FingerPosition currentFingerPosition;
-    private boolean isLongPressCallbackSet;
 
     private Circle circle;
 
@@ -54,8 +46,6 @@ public class MainKeyboardView extends View{
         mainKeyboardActionListener = new MainKeyboardActionListener(eightVimInputMethodService
                                                                 , this);
         setHapticFeedbackEnabled(true);
-        movementSequence = new ArrayList<>();
-        currentFingerPosition = FingerPosition.NO_TOUCH;
     }
 
     @Override
@@ -170,7 +160,7 @@ public class MainKeyboardView extends View{
 
 
 
-    private FingerPosition getCurrentFingerPosition(PointF position) {
+    public FingerPosition getCurrentFingerPosition(PointF position) {
         if(circle.isPointInsideCircle(position)){
             return FingerPosition.INSIDE_CIRCLE;
         } else {
@@ -178,85 +168,27 @@ public class MainKeyboardView extends View{
         }
     }
 
-    final Handler longPressHandler = new Handler();
-    Runnable longPressRunnable = new Runnable() {
-        @Override
-        public void run() {
-            List<FingerPosition> movementSequenceAgumented = new ArrayList<>(movementSequence);
-            movementSequenceAgumented.add(FingerPosition.LONG_PRESS);
-            mainKeyboardActionListener.processMovementSequence(movementSequenceAgumented);
-            longPressHandler.postDelayed(this, DELAY_MILLIS_LONG_PRESS_CONTINUATION);
-        }
-    };
-
-
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        PointF position = new PointF((int)e.getX(), (int)e.getY());
+        FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
         switch(e.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                movementStarted(e);
+                mainKeyboardActionListener.movementStarted(currentFingerPosition);
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                movementContinues(e);
+                mainKeyboardActionListener.movementContinues(currentFingerPosition);
                 break;
 
             case MotionEvent.ACTION_UP:
-                movementEnds(e);
+                mainKeyboardActionListener.movementEnds();
                 break;
 
             default:
                 return false;
         }
-
         return true;
     }
-
-    private void initiateLongPressDetection(){
-        isLongPressCallbackSet = true;
-        longPressHandler.postDelayed(longPressRunnable, DELAY_MILLIS_LONG_PRESS_INITIATION);
-    }
-
-    private void interruptLongPress(){
-        longPressHandler.removeCallbacks(longPressRunnable);
-        isLongPressCallbackSet = false;
-    }
-
-    private void movementStarted(MotionEvent e) {
-        PointF position = new PointF((int)e.getX(), (int)e.getY());
-        currentFingerPosition = getCurrentFingerPosition(position);
-        movementSequence.clear();
-        movementSequence.add(currentFingerPosition);
-        initiateLongPressDetection();
-    }
-
-    private void movementContinues(MotionEvent e) {
-        PointF position = new PointF((int)e.getX(), (int)e.getY());
-        FingerPosition lastKnownFingerPosition = currentFingerPosition;
-        currentFingerPosition = getCurrentFingerPosition(position);
-
-        boolean isFingerPositionChanged = (lastKnownFingerPosition != currentFingerPosition);
-
-        if(isFingerPositionChanged){
-            interruptLongPress();
-            movementSequence.add(currentFingerPosition);
-            if(currentFingerPosition == FingerPosition.INSIDE_CIRCLE){
-                mainKeyboardActionListener.processMovementSequence(movementSequence);
-                movementSequence.clear();
-                movementSequence.add(currentFingerPosition);
-            }
-        }else if(!isLongPressCallbackSet){
-            initiateLongPressDetection();
-        }
-    }
-
-    private void movementEnds(MotionEvent e) {
-        interruptLongPress();
-        currentFingerPosition = FingerPosition.NO_TOUCH;
-        movementSequence.add(currentFingerPosition);
-        mainKeyboardActionListener.processMovementSequence(movementSequence);
-        movementSequence.clear();
-    }
-
 }
