@@ -21,8 +21,7 @@ import inc.flide.eightvim.views.EightVimKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 import inc.flide.logging.Logger;
 
-public class EightVimInputMethodService extends InputMethodService
-        implements KeyboardView.OnKeyboardActionListener{
+public class EightVimInputMethodService extends InputMethodService {
 
     private EightVimKeyboardView eightVimKeyboardView;
     private boolean isEightVimKeyboardViewVisible;
@@ -64,11 +63,11 @@ public class EightVimInputMethodService extends InputMethodService
         isCapsLockOn = false;
     }
 
-    private void sendText(String str) {
+    public void sendText(String str) {
         getCurrentInputConnection().commitText(str, 1);
     }
 
-    private void sendKey(int keyEventCode) {
+    public void sendKey(int keyEventCode) {
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
     }
@@ -117,7 +116,7 @@ public class EightVimInputMethodService extends InputMethodService
         sendKey(keyboardAction.getKeyEventCode());
     }
 
-    private void handleSpecialInput(KeyboardAction keyboardAction) {
+    public void handleSpecialInput(KeyboardAction keyboardAction) {
 
         InputSpecialKeyEventCode keyeventCode = InputSpecialKeyEventCode
                                                     .getInputSpecialKeyEventCodeWithName(
@@ -160,60 +159,4 @@ public class EightVimInputMethodService extends InputMethodService
                 break;
         }
     }
-
-    @Override
-    public void onPress(int primaryCode) {
-
-    }
-
-    @Override
-    public void onRelease(int primaryCode) {
-
-    }
-
-    @Override
-    public void onKey(int primaryCode, int[] keyCodes) {
-
-        switch(primaryCode){
-            case KeyEvent.KEYCODE_EISU:
-                KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
-                                    KeyboardAction.KeyboardActionType.INPUT_SPECIAL
-                                    ,InputSpecialKeyEventCode.KEYBOARD_TOOGLE.getName(),null
-                                    ,InputSpecialKeyEventCode.KEYBOARD_TOOGLE.getValue());
-                this.handleSpecialInput(switchToEightVimKeyboardView);
-                break;
-            case KeyEvent.KEYCODE_DEL  :
-            case KeyEvent.KEYCODE_ENTER:
-                this.sendKey(primaryCode);
-                break;
-            default:
-                sendText(String.valueOf((char)primaryCode));
-        }
-    }
-
-    @Override
-    public void onText(CharSequence text) {
-        this.sendText(text.toString());
-    }
-
-    @Override
-    public void swipeLeft() {
-
-    }
-
-    @Override
-    public void swipeRight() {
-
-    }
-
-    @Override
-    public void swipeDown() {
-
-    }
-
-    @Override
-    public void swipeUp() {
-
-    }
-
 }
