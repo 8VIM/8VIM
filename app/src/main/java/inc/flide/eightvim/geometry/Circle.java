@@ -3,6 +3,8 @@ package inc.flide.eightvim.geometry;
 import android.graphics.PointF;
 import android.graphics.PointF;
 
+import inc.flide.eightvim.keyboardHelpers.FingerPosition;
+
 public class Circle{
     private PointF centre;
     private float radius;
@@ -74,5 +76,30 @@ public class Circle{
             angle = Math.PI * 2 + angle;
         }
         return angle;
+    }
+
+    /** Get the number of the sector that point p is in
+     *  @return 0: right, 1: top, 2: left, 3: bottom */
+    public FingerPosition getSectorOfPoint(PointF p) {
+        double angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p);
+        double angleToSectorValue = angleDouble/ (Math.PI / 2);
+        int quadrantCyclic = (int)Math.round(angleToSectorValue);
+        int baseQuadrant = GeometricUtilities.getBaseQuadrant(quadrantCyclic);
+
+        switch (baseQuadrant){
+            case 0:
+                return FingerPosition.RIGHT;
+
+            case 1:
+                return FingerPosition.TOP;
+
+            case 2 :
+                return FingerPosition.LEFT;
+
+            case 3 :
+                return FingerPosition.BOTTOM;
+
+        }
+        return null;
     }
 }

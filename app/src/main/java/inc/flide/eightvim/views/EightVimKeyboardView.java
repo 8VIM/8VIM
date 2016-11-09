@@ -165,36 +165,13 @@ public class EightVimKeyboardView extends View{
         Logger.v(this, "onMeasure returns");
     }
 
-    /** Get the number of the sector that point p is in
-     *  @return 0: right, 1: top, 2: left, 3: bottom */
-    private FingerPosition getSector(PointF p) {
-        double angleDouble = circle.getAngleInRadiansOfPointWithRespectToCentreOfCircle(p);
-        double angleToSectorValue = angleDouble/ (Math.PI / 2);
-        int quadrantCyclic = (int)Math.round(angleToSectorValue);
-        int baseQuadrant = GeometricUtilities.getBaseQuadrant(quadrantCyclic);
 
-        switch (baseQuadrant){
-            case 0:
-                return FingerPosition.RIGHT;
-
-            case 1:
-                return FingerPosition.TOP;
-
-            case 2 :
-                return FingerPosition.LEFT;
-
-            case 3 :
-                return FingerPosition.BOTTOM;
-
-        }
-        return null;
-    }
 
     private FingerPosition getCurrentFingerPosition(PointF position) {
         if(circle.isPointInsideCircle(position)){
             return FingerPosition.INSIDE_CIRCLE;
         } else {
-            return getSector(position);
+            return circle.getSectorOfPoint(position);
         }
     }
 
