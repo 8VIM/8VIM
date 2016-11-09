@@ -50,7 +50,6 @@ public class MainKeyboardView extends View{
 
     @Override
     public void onDraw(Canvas canvas) {
-        Logger.v(this, "onDraw called");
 
         Paint paint = new Paint();
         paint.setARGB(255, 255, 255, 255);
@@ -89,7 +88,6 @@ public class MainKeyboardView extends View{
         float[] pointsOfDisplay = Utilities.convertPointFListToPrimitiveFloatArray(listOfPointsOfDisplay);
         canvas.drawPosText(charactersToDisplay, pointsOfDisplay, paint);
 
-        Logger.v(this, "onDraw returns");
     }
 
     private List<PointF> getCharacterDisplayPointsOnTheLineSegment(LineSegment lineSegment, int numberOfCharactersToDisplay) {
