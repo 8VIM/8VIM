@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.inputmethodservice.InputMethodService;
-import android.inputmethodservice.KeyboardView;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,13 +16,13 @@ import inc.flide.eightvim.keyboardHelpers.FingerPosition;
 import inc.flide.eightvim.keyboardHelpers.EightVimInputMethodServiceHelper;
 import inc.flide.eightvim.keyboardHelpers.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
-import inc.flide.eightvim.views.EightVimKeyboardView;
+import inc.flide.eightvim.views.MainKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 import inc.flide.logging.Logger;
 
 public class EightVimInputMethodService extends InputMethodService {
 
-    private EightVimKeyboardView eightVimKeyboardView;
+    private MainKeyboardView mainKeyboardView;
     private boolean isEightVimKeyboardViewVisible;
 
     private NumberPadKeyboardView numberPadKeyboardView;
@@ -31,7 +30,6 @@ public class EightVimInputMethodService extends InputMethodService {
 
     private boolean isShiftLockOn;
     private boolean isCapsLockOn;
-    Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
 
     EightVimInputMethodServiceHelper eightVimInputMethodServiceHelper = new EightVimInputMethodServiceHelper();
 
@@ -39,9 +37,9 @@ public class EightVimInputMethodService extends InputMethodService {
     public View onCreateInputView() {
         numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater()
                                     .inflate(R.layout.keyboard, null);
-        eightVimKeyboardView = new EightVimKeyboardView(this);
+        mainKeyboardView = new MainKeyboardView(this);
         isEightVimKeyboardViewVisible = true;
-        return eightVimKeyboardView;
+        return mainKeyboardView;
     }
 
     @Override
@@ -57,10 +55,13 @@ public class EightVimInputMethodService extends InputMethodService {
     @Override
     public void onInitializeInterface(){
         super.onInitializeInterface();
-        keyboardActionMap = eightVimInputMethodServiceHelper
-                            .initializeKeyboardActionMap(getResources(), getPackageName());
         isShiftLockOn = false;
         isCapsLockOn = false;
+    }
+
+    public Map<List<FingerPosition>, KeyboardAction> buildKeyboardActionMap() {
+        return eightVimInputMethodServiceHelper
+                .initializeKeyboardActionMap(getResources(), getPackageName());
     }
 
     public void sendText(String str) {
@@ -72,38 +73,7 @@ public class EightVimInputMethodService extends InputMethodService {
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
     }
 
-    public void processMovementSequence(List<FingerPosition> movementSequence) {
-
-        KeyboardAction keyboardAction = keyboardActionMap.get(movementSequence);
-
-        boolean isMovementValid = true;
-        if(keyboardAction == null){
-            Logger.Verbose(this, "No Action Mapping has been defined for the given Sequence : " + movementSequence.toString());
-            movementSequence.clear();
-            return;
-        }
-
-        switch (keyboardAction.getKeyboardActionType()){
-            case INPUT_TEXT:
-                handleInputText(keyboardAction);
-                break;
-            case INPUT_KEY:
-                handleInputKey(keyboardAction);
-                break;
-            case INPUT_SPECIAL:
-                handleSpecialInput(keyboardAction);
-                break;
-            default:
-                Logger.Warn(this, "Action Type Undefined : " + keyboardAction.getKeyboardActionType().toString());
-                isMovementValid = false;
-                break;
-        }
-        if(isMovementValid){
-            eightVimKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-        }
-    }
-
-    private void handleInputText(KeyboardAction keyboardAction) {
+    public void handleInputText(KeyboardAction keyboardAction) {
         if(keyboardAction.getText().length() == 1 && (isShiftLockOn || isCapsLockOn)){
             sendText(keyboardAction.getCapsLockText());
             isShiftLockOn = false;
@@ -112,7 +82,7 @@ public class EightVimInputMethodService extends InputMethodService {
         }
     }
 
-    private void handleInputKey(KeyboardAction keyboardAction) {
+    public void handleInputKey(KeyboardAction keyboardAction) {
         sendKey(keyboardAction.getKeyEventCode());
     }
 
@@ -140,7 +110,7 @@ public class EightVimInputMethodService extends InputMethodService {
                     setInputView(numberPadKeyboardView);
                 } else {
                     isEightVimKeyboardViewVisible = true;
-                    setInputView(eightVimKeyboardView);
+                    setInputView(mainKeyboardView);
                 }
                 break;
 

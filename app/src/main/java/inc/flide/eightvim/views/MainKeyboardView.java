@@ -16,6 +16,7 @@ import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.geometry.Circle;
 import inc.flide.eightvim.geometry.GeometricUtilities;
 import inc.flide.eightvim.geometry.LineSegment;
+import inc.flide.eightvim.keyboardActionListners.MainKeyboardActionListener;
 import inc.flide.eightvim.keyboardHelpers.FingerPosition;
 import inc.flide.eightvim.utilities.Utilities;
 import inc.flide.logging.Logger;
@@ -25,7 +26,7 @@ public class MainKeyboardView extends View{
     private static final int DELAY_MILLIS_LONG_PRESS_INITIATION = 500;
     private static final int DELAY_MILLIS_LONG_PRESS_CONTINUATION = 50;
 
-    private EightVimInputMethodService eightVimInputMethodService;
+    private MainKeyboardActionListener mainKeyboardActionListener;
 
     private List<FingerPosition> movementSequence;
     private FingerPosition currentFingerPosition;
@@ -49,7 +50,9 @@ public class MainKeyboardView extends View{
     }
 
     private void initialize(Context context){
-        eightVimInputMethodService = (EightVimInputMethodService) context;
+        EightVimInputMethodService eightVimInputMethodService = (EightVimInputMethodService) context;
+        mainKeyboardActionListener = new MainKeyboardActionListener(eightVimInputMethodService
+                                                                , this);
         setHapticFeedbackEnabled(true);
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
@@ -181,7 +184,7 @@ public class MainKeyboardView extends View{
         public void run() {
             List<FingerPosition> movementSequenceAgumented = new ArrayList<>(movementSequence);
             movementSequenceAgumented.add(FingerPosition.LONG_PRESS);
-            eightVimInputMethodService.processMovementSequence(movementSequenceAgumented);
+            mainKeyboardActionListener.processMovementSequence(movementSequenceAgumented);
             longPressHandler.postDelayed(this, DELAY_MILLIS_LONG_PRESS_CONTINUATION);
         }
     };
@@ -239,7 +242,7 @@ public class MainKeyboardView extends View{
             interruptLongPress();
             movementSequence.add(currentFingerPosition);
             if(currentFingerPosition == FingerPosition.INSIDE_CIRCLE){
-                eightVimInputMethodService.processMovementSequence(movementSequence);
+                mainKeyboardActionListener.processMovementSequence(movementSequence);
                 movementSequence.clear();
                 movementSequence.add(currentFingerPosition);
             }
@@ -252,7 +255,7 @@ public class MainKeyboardView extends View{
         interruptLongPress();
         currentFingerPosition = FingerPosition.NO_TOUCH;
         movementSequence.add(currentFingerPosition);
-        eightVimInputMethodService.processMovementSequence(movementSequence);
+        mainKeyboardActionListener.processMovementSequence(movementSequence);
         movementSequence.clear();
     }
 
