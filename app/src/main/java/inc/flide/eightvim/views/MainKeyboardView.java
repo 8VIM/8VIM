@@ -20,7 +20,7 @@ import inc.flide.eightvim.keyboardHelpers.FingerPosition;
 import inc.flide.eightvim.utilities.Utilities;
 import inc.flide.logging.Logger;
 
-public class EightVimKeyboardView extends View{
+public class MainKeyboardView extends View{
 
     private static final int DELAY_MILLIS_LONG_PRESS_INITIATION = 500;
     private static final int DELAY_MILLIS_LONG_PRESS_CONTINUATION = 50;
@@ -33,17 +33,17 @@ public class EightVimKeyboardView extends View{
 
     private Circle circle;
 
-    public EightVimKeyboardView(Context context) {
+    public MainKeyboardView(Context context) {
         super(context);
         initialize(context);
     }
 
-    public EightVimKeyboardView(Context context, AttributeSet attrs) {
+    public MainKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
     }
 
-    public EightVimKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MainKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context);
     }
