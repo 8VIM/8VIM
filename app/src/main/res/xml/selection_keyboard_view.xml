@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keyWidth="20%p"
+    android:keyHeight="10%p" >
+
+    <Row>
+        <Key android:keyOutputText="#"      android:keyLabel="#" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:keyOutputText="$"      android:keyLabel="$" />
+        <Key android:keyOutputText="1"      android:keyLabel="1" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="2"      android:keyLabel="2" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="3"      android:keyLabel="3" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="\?"     android:keyLabel="\?" android:keyWidth="25%p" android:keyEdgeFlags="right"/>
+    </Row>
+    <Row>
+        <Key android:keyOutputText="\@"     android:keyLabel="\@" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:keyOutputText="6"      android:keyLabel="6" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="!"      android:keyLabel="!" android:keyWidth="25%p" android:keyEdgeFlags="right"/>
+    </Row>
+    <Row>
+        <Key android:keyOutputText=""       android:keyLabel="{+=" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:codes="67"             android:keyIcon="@drawable/sym_keyboard_delete" android:keyWidth="25%p" android:isRepeatable="true" android:keyEdgeFlags="right"/>
+    </Row>
+    <Row>
+        <Key android:codes="212"            android:keyLabel="ABC" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:keyOutputText="."      android:keyLabel="." android:keyWidth="25%p"/>
+        <Key android:codes="66"             android:keyLabel="Enter" android:keyWidth="25%p" android:keyEdgeFlags="right" />
+    </Row>
+</Keyboard>

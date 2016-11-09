@@ -470,4 +470,20 @@
         <inputString>SWITCH_TO_NUMBER_PAD</inputString>
     </keyboardAction>
 
+    <!--Selection Mode Sequence-->
+    <keyboardAction>
+        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <movementSequence>RIGHT;INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
+        <inputString>SELECTION_START</inputString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <movementSequence>RIGHT;INSIDE_CIRCLE;LONG_PRESS;</movementSequence>
+        <inputString>SELECTION_START</inputString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <movementSequence>RIGHT;INSIDE_CIRCLE;LONG_PRESS_END;</movementSequence>
+        <inputString>SWITCH_TO_SELECTION_KEYBOARD</inputString>
+    </keyboardAction>
 </keyboardActionMap>

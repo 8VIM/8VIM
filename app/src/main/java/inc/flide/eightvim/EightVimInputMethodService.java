@@ -7,6 +7,10 @@ import android.inputmethodservice.InputMethodService;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.ExtractedText;
+import android.view.inputmethod.ExtractedTextRequest;
+import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.List;
 import java.util.Map;
@@ -17,13 +21,15 @@ import inc.flide.eightvim.keyboardHelpers.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.views.MainKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
+import inc.flide.eightvim.views.SelectionKeyboardView;
 import inc.flide.logging.Logger;
 
 public class EightVimInputMethodService extends InputMethodService {
 
     private MainKeyboardView mainKeyboardView;
-
     private NumberPadKeyboardView numberPadKeyboardView;
+    private SelectionKeyboardView selectionKeyboardView;
+    private View curentView;
 
 
     private boolean isShiftLockOn;
@@ -35,9 +41,12 @@ public class EightVimInputMethodService extends InputMethodService {
     @Override
     public View onCreateInputView() {
         numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater()
-                                    .inflate(R.layout.keyboard, null);
+                                    .inflate(R.layout.numberpad_keyboard_layout, null);
+        selectionKeyboardView = (SelectionKeyboardView) getLayoutInflater()
+                                    .inflate(R.layout.selection_keyboard_layout, null);
         mainKeyboardView = new MainKeyboardView(this);
-        return mainKeyboardView;
+        curentView = mainKeyboardView;
+        return curentView;
     }
 
     @Override
@@ -97,37 +106,63 @@ public class EightVimInputMethodService extends InputMethodService {
                                                             keyboardAction.getText());
         switch (keyeventCode){
             case SHIFT_TOOGLE:
-                if(isShiftLockOn){
-                    isShiftLockOn = false;
-                    isCapsLockOn = true;
-                } else if(isCapsLockOn){
-                    isShiftLockOn = false;
-                    isCapsLockOn = false;
-                } else{
-                    isShiftLockOn = true;
-                    isCapsLockOn = false;
-                }
+                performShiftToogle();
                 break;
             case SWITCH_TO_NUMBER_PAD:
-                    setInputView(numberPadKeyboardView);
+                    curentView = numberPadKeyboardView;
+                    setInputView(curentView);
                 break;
             case SWITCH_TO_MAIN_KEYBOARD:
-                    setInputView(mainKeyboardView);
+                    curentView = mainKeyboardView;
+                    setInputView(curentView);
                 break;
-            case PASTE:
+            case PASTE: {
 
-                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData primaryClipData = clipboardManager.getPrimaryClip();
+                    ClipboardManager clipboardManager = (ClipboardManager)
+                            getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData primaryClipData = clipboardManager.getPrimaryClip();
 
-                if(primaryClipData!=null && primaryClipData.getItemAt(0)!=null) {
-                    sendText(primaryClipData.getItemAt(0).coerceToText(getApplicationContext()).toString());
-                    shouldSkipImmediateNextCharacter = true;
+                    if (primaryClipData != null && primaryClipData.getItemAt(0) != null) {
+                        sendText(primaryClipData
+                                .getItemAt(0)
+                                .coerceToText(getApplicationContext())
+                                .toString());
+                        shouldSkipImmediateNextCharacter = true;
+                    }
                 }
                 break;
+            case SELECTION_START: {
 
+                InputConnection inputConnection = getCurrentInputConnection();
+                ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
+                inputConnection.setSelection(extractedText.selectionStart-1,extractedText.selectionEnd);
+
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.updateSelection(curentView, extractedText.selectionStart-1,extractedText.selectionEnd, 0, 0);
+
+                }
+                break;
+            case SWITCH_TO_SELECTION_KEYBOARD: {
+                    curentView = selectionKeyboardView;
+                    setInputView(curentView);
+                }
+                break;
             default:
                 Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getText());
                 break;
+        }
+    }
+
+    private void performShiftToogle() {
+        if(isShiftLockOn){
+            isShiftLockOn = false;
+            isCapsLockOn = true;
+        } else if(isCapsLockOn){
+            isShiftLockOn = false;
+            isCapsLockOn = false;
+        } else{
+            isShiftLockOn = true;
+            isCapsLockOn = false;
         }
     }
 }

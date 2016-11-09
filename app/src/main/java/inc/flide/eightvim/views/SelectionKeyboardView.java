@@ -7,30 +7,30 @@ import android.util.AttributeSet;
 
 import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.R;
-import inc.flide.eightvim.keyboardActionListners.NumberPadKeyboardActionListener;
+import inc.flide.eightvim.keyboardActionListners.SelectionKeyboardActionListener;
 
-public class NumberPadKeyboardView extends KeyboardView {
+public class SelectionKeyboardView extends KeyboardView {
 
-    private NumberPadKeyboardActionListener actionListener;
+    private SelectionKeyboardActionListener actionListener;
 
     private Keyboard keyboard;
 
-    public NumberPadKeyboardView(Context context, AttributeSet attrs) {
+    public SelectionKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
     }
 
-    public NumberPadKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SelectionKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context);
     }
 
     public void initialize(Context context){
         EightVimInputMethodService eightVimInputMethodService = (EightVimInputMethodService) context;
-        keyboard = new Keyboard(context, R.xml.numberpad_keyboard_view);
+        keyboard = new Keyboard(context, R.xml.selection_keyboard_view);
         this.setKeyboard(keyboard);
         setHapticFeedbackEnabled(true);
-        actionListener = new NumberPadKeyboardActionListener(eightVimInputMethodService, this);
+        actionListener = new SelectionKeyboardActionListener(eightVimInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
     }
 

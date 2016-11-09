@@ -5,7 +5,9 @@ public enum InputSpecialKeyEventCode {
     SHIFT_TOOGLE("SHIFT_TOOGLE",0),
     SWITCH_TO_NUMBER_PAD("SWITCH_TO_NUMBER_PAD",1),
     PASTE("PASTE",2),
-    SWITCH_TO_MAIN_KEYBOARD("SWITCH_TO_MAIN_KEYBOARD",3);
+    SWITCH_TO_MAIN_KEYBOARD("SWITCH_TO_MAIN_KEYBOARD",3),
+    SELECTION_START("SELECTION_START",4),
+    SWITCH_TO_SELECTION_KEYBOARD("SWITCH_TO_SELECTION_KEYBOARD",5);
 
     private final String stringValue;
     private final int value;
@@ -26,6 +28,10 @@ public enum InputSpecialKeyEventCode {
                 return SWITCH_TO_MAIN_KEYBOARD;
             case "PASTE":
                 return PASTE;
+            case "SELECTION_START":
+                return SELECTION_START;
+            case "SWITCH_TO_SELECTION_KEYBOARD":
+                return SWITCH_TO_SELECTION_KEYBOARD;
             default:
                 return null;
         }

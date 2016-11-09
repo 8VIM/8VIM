@@ -1,9 +1,7 @@
 package inc.flide.eightvim.keyboardActionListners;
 
-import android.graphics.PointF;
 import android.os.Handler;
 import android.view.HapticFeedbackConstants;
-import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +54,8 @@ public class MainKeyboardActionListener {
         if(isFingerPositionChanged){
             interruptLongPress();
             movementSequence.add(currentFingerPosition);
-            if(currentFingerPosition == FingerPosition.INSIDE_CIRCLE){
+            if(currentFingerPosition == FingerPosition.INSIDE_CIRCLE
+                    && keyboardActionMap.get(movementSequence)!=null){
                 processMovementSequence(movementSequence);
                 movementSequence.clear();
                 movementSequence.add(currentFingerPosition);
@@ -92,6 +91,9 @@ public class MainKeyboardActionListener {
 
     private void interruptLongPress(){
         longPressHandler.removeCallbacks(longPressRunnable);
+        List<FingerPosition> movementSequenceAgumented = new ArrayList<>(movementSequence);
+        movementSequenceAgumented.add(FingerPosition.LONG_PRESS_END);
+        processMovementSequence(movementSequenceAgumented);
         isLongPressCallbackSet = false;
     }
 
