@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import inc.flide.eightvim.structures.FingerPosition;
+
 public class EightVimInputMethodServiceHelper {
 
     public Map<List<FingerPosition>, KeyboardAction> initializeKeyboardActionMap(Resources resources, String packageName) {
@@ -31,6 +33,8 @@ public class EightVimInputMethodServiceHelper {
         finally {
             try {
                 inputStream.close();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }

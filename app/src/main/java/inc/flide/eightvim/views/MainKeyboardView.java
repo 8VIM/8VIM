@@ -16,7 +16,7 @@ import inc.flide.eightvim.geometry.Circle;
 import inc.flide.eightvim.geometry.GeometricUtilities;
 import inc.flide.eightvim.geometry.LineSegment;
 import inc.flide.eightvim.keyboardActionListners.MainKeyboardActionListener;
-import inc.flide.eightvim.keyboardHelpers.FingerPosition;
+import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.utilities.Utilities;
 import inc.flide.logging.Logger;
 

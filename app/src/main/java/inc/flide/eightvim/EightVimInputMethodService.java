@@ -15,9 +15,9 @@ import android.view.inputmethod.InputMethodManager;
 import java.util.List;
 import java.util.Map;
 
-import inc.flide.eightvim.keyboardHelpers.FingerPosition;
+import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.keyboardHelpers.EightVimInputMethodServiceHelper;
-import inc.flide.eightvim.keyboardHelpers.InputSpecialKeyEventCode;
+import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.views.MainKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
@@ -104,6 +104,10 @@ public class EightVimInputMethodService extends InputMethodService {
         InputSpecialKeyEventCode keyeventCode = InputSpecialKeyEventCode
                                                     .getInputSpecialKeyEventCodeWithName(
                                                             keyboardAction.getText());
+        if(keyeventCode == null) {
+            return;
+        }
+
         switch (keyeventCode){
             case SHIFT_TOOGLE:
                 performShiftToogle();

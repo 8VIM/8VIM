@@ -1,7 +1,8 @@
 package inc.flide.eightvim.keyboardHelpers;
 
+import inc.flide.eightvim.structures.KeyboardActionType;
+
 public class KeyboardAction {
-    public enum KeyboardActionType {INPUT_TEXT, INPUT_KEY, INPUT_SPECIAL};
 
     private KeyboardActionType keyboardActionType;
     private String text;

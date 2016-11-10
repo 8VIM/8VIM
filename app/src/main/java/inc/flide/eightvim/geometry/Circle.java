@@ -1,9 +1,8 @@
 package inc.flide.eightvim.geometry;
 
 import android.graphics.PointF;
-import android.graphics.PointF;
 
-import inc.flide.eightvim.keyboardHelpers.FingerPosition;
+import inc.flide.eightvim.structures.FingerPosition;
 
 public class Circle{
     private PointF centre;
@@ -40,15 +39,11 @@ public class Circle{
 
         double dSquare = GeometricUtilities.getSquaredDistanceBetweenPoints(point, centre);
         double rSquare = Math.pow(radius, 2);
-        double power = dSquare - rSquare;
-        return power;
+        return (dSquare - rSquare);
     }
 
     public boolean isPointInsideCircle(PointF point){
-        if(getPowerOfPoint(point) < 0){
-            return true;
-        }
-        return false;
+        return (getPowerOfPoint(point) < 0);
     }
 
     public PointF getPointOnCircumferenceAtDegreeAngle(int angleInDegree){
@@ -56,14 +51,14 @@ public class Circle{
         return getPointOnCircumferenceAtRadianAngle(angleInRadians);
     }
 
-    public PointF getPointOnCircumferenceAtRadianAngle(double angleInRadians){
+    private PointF getPointOnCircumferenceAtRadianAngle(double angleInRadians){
         float x = (float) (centre.x + (radius * Math.cos(angleInRadians)));
         float y = (float) (centre.y + (radius * Math.sin(angleInRadians)));
         return new PointF(x,y);
     }
 
     /** Gets the angle of point p relative to the center */
-    public double getAngleInRadiansOfPointWithRespectToCentreOfCircle(PointF point)
+    private double getAngleInRadiansOfPointWithRespectToCentreOfCircle(PointF point)
     {
         // Get difference of coordinates
         double x = point.x - centre.x;

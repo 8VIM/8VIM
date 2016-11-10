@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import inc.flide.eightvim.EightVimInputMethodService;
-import inc.flide.eightvim.keyboardHelpers.FingerPosition;
+import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.views.MainKeyboardView;
 import inc.flide.logging.Logger;
@@ -21,7 +21,7 @@ public class MainKeyboardActionListener {
     private EightVimInputMethodService eightVimInputMethodService;
     private MainKeyboardView mainKeyboardView;
 
-    Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
+    private Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
 
     private List<FingerPosition> movementSequence;
     private FingerPosition currentFingerPosition;
@@ -73,8 +73,8 @@ public class MainKeyboardActionListener {
         movementSequence.clear();
     }
 
-    final Handler longPressHandler = new Handler();
-    Runnable longPressRunnable = new Runnable() {
+    private final Handler longPressHandler = new Handler();
+    private Runnable longPressRunnable = new Runnable() {
         @Override
         public void run() {
             List<FingerPosition> movementSequenceAgumented = new ArrayList<>(movementSequence);
@@ -121,7 +121,6 @@ public class MainKeyboardActionListener {
             default:
                 Logger.Warn(this, "Action Type Undefined : " + keyboardAction.getKeyboardActionType().toString());
                 isMovementValid = false;
-                break;
         }
         if(isMovementValid){
             mainKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);

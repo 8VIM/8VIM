@@ -14,33 +14,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import inc.flide.eightvim.keyboardHelpers.FingerPosition;
-import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
+import inc.flide.eightvim.structures.FingerPosition;
+import inc.flide.eightvim.structures.KeyboardActionType;
 import inc.flide.logging.Logger;
 
-public class KeyboardActionXmlParser {
-    public static final String KEYBOARD_ACTION_MAP_TAG = "keyboardActionMap";
-    public static final String KEYBOARD_ACTION_TAG = "keyboardAction";
-    public static final String KEYBOARD_ACTION_TYPE_TAG = "keyboardActionType";
-    public static final String MOVEMENT_SEQUENCE_TAG = "movementSequence";
-    public static final String INPUT_STRING_TAG = "inputString";
-    public static final String INPUT_CAPSLOCK_STRING_TAG = "inputCapsLockString";
-    public static final String INPUT_KEY_TAG = "inputKey";
+class KeyboardActionXmlParser {
+    private static final String KEYBOARD_ACTION_MAP_TAG = "keyboardActionMap";
+    private static final String KEYBOARD_ACTION_TAG = "keyboardAction";
+    private static final String KEYBOARD_ACTION_TYPE_TAG = "keyboardActionType";
+    private static final String MOVEMENT_SEQUENCE_TAG = "movementSequence";
+    private static final String INPUT_STRING_TAG = "inputString";
+    private static final String INPUT_CAPSLOCK_STRING_TAG = "inputCapsLockString";
+    private static final String INPUT_KEY_TAG = "inputKey";
 
-    XmlPullParser parser;
+    private XmlPullParser parser;
 
-    public KeyboardActionXmlParser(InputStream inputStream) throws XmlPullParserException, IOException {
+    KeyboardActionXmlParser(InputStream inputStream) throws XmlPullParserException, IOException {
         parser = Xml.newPullParser();
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(inputStream, null);
         parser.nextTag();
     }
 
-    public Map<List<FingerPosition>, KeyboardAction> readKeyboardActionMap() throws IOException, XmlPullParserException {
+    Map<List<FingerPosition>, KeyboardAction> readKeyboardActionMap() throws IOException, XmlPullParserException {
         Map<List<FingerPosition>, KeyboardAction> keyboardActionMap = new HashMap<>();
         
         parser.require(XmlPullParser.START_TAG, null, KEYBOARD_ACTION_MAP_TAG);
-        while (parser.next() != parser.END_TAG){
+        while (parser.next() != XmlPullParser.END_TAG){
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
@@ -55,8 +55,8 @@ public class KeyboardActionXmlParser {
 
     private Map.Entry<List<FingerPosition>, KeyboardAction> readKeyboardAction() throws XmlPullParserException, IOException {
         List<FingerPosition> movementSequence = null;
-        KeyboardAction keyboardAction = null;
-        KeyboardAction.KeyboardActionType keyboardActionType = null;
+        KeyboardAction keyboardAction;
+        KeyboardActionType keyboardActionType = null;
         String associatedText = "";
         String associatedCapsLockText = "";
         int keyEventCode = 0;
@@ -90,7 +90,7 @@ public class KeyboardActionXmlParser {
         }
 
         keyboardAction = new KeyboardAction(keyboardActionType, associatedText, associatedCapsLockText, keyEventCode);
-        return new AbstractMap.SimpleEntry(movementSequence, keyboardAction);
+        return new AbstractMap.SimpleEntry<>(movementSequence, keyboardAction);
     }
 
     private int readInputKey() throws IOException, XmlPullParserException {
@@ -98,9 +98,7 @@ public class KeyboardActionXmlParser {
         String inputKeyString = readText();
         parser.require(XmlPullParser.END_TAG, null, INPUT_KEY_TAG);
 
-        int keyEventCode = Integer.parseInt(inputKeyString);
-
-        return keyEventCode;
+        return Integer.parseInt(inputKeyString);
     }
 
     private String readInputString() throws IOException, XmlPullParserException {
@@ -133,13 +131,12 @@ public class KeyboardActionXmlParser {
         return movementSequence;
     }
 
-    private KeyboardAction.KeyboardActionType readKeyboardActionType() throws IOException, XmlPullParserException {
+    private KeyboardActionType readKeyboardActionType() throws IOException, XmlPullParserException {
         parser.require(XmlPullParser.START_TAG, null, KEYBOARD_ACTION_TYPE_TAG);
         String keyboardActionTypeString = readText();
         parser.require(XmlPullParser.END_TAG, null, KEYBOARD_ACTION_TYPE_TAG);
 
-        KeyboardAction.KeyboardActionType keyboardActionType = KeyboardAction.KeyboardActionType.valueOf(keyboardActionTypeString);
-        return keyboardActionType;
+        return KeyboardActionType.valueOf(keyboardActionTypeString);
     }
 
     private String readText() throws IOException, XmlPullParserException {

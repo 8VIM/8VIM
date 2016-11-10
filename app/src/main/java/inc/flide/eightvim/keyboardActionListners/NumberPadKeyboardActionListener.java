@@ -5,8 +5,9 @@ import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 
 import inc.flide.eightvim.EightVimInputMethodService;
-import inc.flide.eightvim.keyboardHelpers.InputSpecialKeyEventCode;
+import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
+import inc.flide.eightvim.structures.KeyboardActionType;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 
 public class NumberPadKeyboardActionListener implements KeyboardView.OnKeyboardActionListener {
@@ -36,7 +37,7 @@ public class NumberPadKeyboardActionListener implements KeyboardView.OnKeyboardA
         switch(primaryCode){
             case KeyEvent.KEYCODE_EISU:
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
-                        KeyboardAction.KeyboardActionType.INPUT_SPECIAL
+                        KeyboardActionType.INPUT_SPECIAL
                         , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.getName(),null
                         ,InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.getValue());
                 eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);

@@ -1,4 +1,4 @@
-package inc.flide.eightvim.keyboardHelpers;
+package inc.flide.eightvim.structures;
 
 public enum InputSpecialKeyEventCode {
 
