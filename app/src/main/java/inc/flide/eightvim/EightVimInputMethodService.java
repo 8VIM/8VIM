@@ -136,9 +136,7 @@ public class EightVimInputMethodService extends InputMethodService {
                 ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
                 inputConnection.setSelection(extractedText.selectionStart-1,extractedText.selectionEnd);
 
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.updateSelection(curentView, extractedText.selectionStart-1,extractedText.selectionEnd, 0, 0);
-
+                updateSelection(extractedText.selectionStart-1,extractedText.selectionEnd);
                 }
                 break;
             case SWITCH_TO_SELECTION_KEYBOARD: {
@@ -150,6 +148,11 @@ public class EightVimInputMethodService extends InputMethodService {
                 Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getText());
                 break;
         }
+    }
+
+    public void updateSelection(int start, int end) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.updateSelection(curentView, start, end, 0, 0);
     }
 
     private void performShiftToogle() {

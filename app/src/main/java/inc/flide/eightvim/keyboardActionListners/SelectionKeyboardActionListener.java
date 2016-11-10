@@ -1,13 +1,19 @@
 package inc.flide.eightvim.keyboardActionListners;
 
+import android.content.Context;
 import android.inputmethodservice.KeyboardView;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
+import android.view.inputmethod.ExtractedText;
+import android.view.inputmethod.ExtractedTextRequest;
+import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 
 import inc.flide.eightvim.EightVimInputMethodService;
-import inc.flide.eightvim.keyboardHelpers.InputSpecialKeyEventCode;
+import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
-import inc.flide.eightvim.views.NumberPadKeyboardView;
+import inc.flide.eightvim.structures.KeyboardActionType;
+import inc.flide.eightvim.structures.SelectionKeyCode;
 import inc.flide.eightvim.views.SelectionKeyboardView;
 
 public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardActionListener {
@@ -34,20 +40,28 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
 
-        switch(primaryCode){
-            case KeyEvent.KEYCODE_EISU:
+        SelectionKeyCode selectionKeyCode = SelectionKeyCode.getAssociatedSelectionKeyCode(primaryCode);
+        if (selectionKeyCode == null) {
+            return;
+        }
+
+        switch(selectionKeyCode){
+            case SWITCH_TO_MAIN_KEYBOARD: {
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
-                        KeyboardAction.KeyboardActionType.INPUT_SPECIAL
-                        , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.getName(),null
-                        ,InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.getValue());
+                        KeyboardActionType.INPUT_SPECIAL
+                        , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
+                        , null, 0);
                 eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
+                }
                 break;
-            case KeyEvent.KEYCODE_DEL  :
-            case KeyEvent.KEYCODE_ENTER:
-                eightVimInputMethodService.sendKey(primaryCode);
+            case MOVE_CURRENT_END_POINT_LEFT:
+                InputConnection inputConnection = eightVimInputMethodService.getCurrentInputConnection();
+                ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
+                inputConnection.setSelection(extractedText.selectionStart-1,extractedText.selectionEnd);
+
+                eightVimInputMethodService.updateSelection(extractedText.selectionStart-1,extractedText.selectionEnd);
+
                 break;
-            default:
-                eightVimInputMethodService.sendText(String.valueOf((char)primaryCode));
         }
 
         selectionKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
