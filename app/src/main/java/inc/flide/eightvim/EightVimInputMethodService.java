@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.inputmethodservice.InputMethodService;
-import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,7 +22,6 @@ import inc.flide.logging.Logger;
 public class EightVimInputMethodService extends InputMethodService {
 
     private MainKeyboardView mainKeyboardView;
-    private boolean isEightVimKeyboardViewVisible;
 
     private NumberPadKeyboardView numberPadKeyboardView;
 
@@ -38,7 +36,6 @@ public class EightVimInputMethodService extends InputMethodService {
         numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater()
                                     .inflate(R.layout.keyboard, null);
         mainKeyboardView = new MainKeyboardView(this);
-        isEightVimKeyboardViewVisible = true;
         return mainKeyboardView;
     }
 
@@ -104,16 +101,12 @@ public class EightVimInputMethodService extends InputMethodService {
                     isCapsLockOn = false;
                 }
                 break;
-            case KEYBOARD_TOOGLE:
-                if(isEightVimKeyboardViewVisible){
-                    isEightVimKeyboardViewVisible = false;
+            case SWITCH_TO_NUMBER_PAD:
                     setInputView(numberPadKeyboardView);
-                } else {
-                    isEightVimKeyboardViewVisible = true;
-                    setInputView(mainKeyboardView);
-                }
                 break;
-
+            case SWITCH_TO_MAIN_KEYBOARD:
+                    setInputView(mainKeyboardView);
+                break;
             case PASTE:
 
                 ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);

@@ -467,7 +467,7 @@
     <keyboardAction>
         <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
         <movementSequence>LEFT;NO_TOUCH;</movementSequence>
-        <inputString>KEYBOARD_TOOGLE</inputString>
+        <inputString>SWITCH_TO_NUMBER_PAD</inputString>
     </keyboardAction>
 
 </keyboardActionMap>

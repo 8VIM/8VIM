@@ -3,8 +3,9 @@ package inc.flide.eightvim.keyboardHelpers;
 public enum InputSpecialKeyEventCode {
 
     SHIFT_TOOGLE("SHIFT_TOOGLE",0),
-    KEYBOARD_TOOGLE("KEYBOARD_TOOGLE",1),
-    PASTE("PASTE",2);
+    SWITCH_TO_NUMBER_PAD("SWITCH_TO_NUMBER_PAD",1),
+    PASTE("PASTE",2),
+    SWITCH_TO_MAIN_KEYBOARD("SWITCH_TO_MAIN_KEYBOARD",3);
 
     private final String stringValue;
     private final int value;
@@ -19,8 +20,10 @@ public enum InputSpecialKeyEventCode {
         switch (newValue){
             case "SHIFT_TOOGLE":
                 return SHIFT_TOOGLE;
-            case "KEYBOARD_TOOGLE":
-                return KEYBOARD_TOOGLE;
+            case "SWITCH_TO_NUMBER_PAD":
+                return SWITCH_TO_NUMBER_PAD;
+            case "SWITCH_TO_MAIN_KEYBOARD":
+                return SWITCH_TO_MAIN_KEYBOARD;
             case "PASTE":
                 return PASTE;
             default:
