@@ -28,6 +28,7 @@ public class EightVimInputMethodService extends InputMethodService {
 
     private boolean isShiftLockOn;
     private boolean isCapsLockOn;
+    private boolean shouldSkipImmediateNextCharacter;
 
     EightVimInputMethodServiceHelper eightVimInputMethodServiceHelper = new EightVimInputMethodServiceHelper();
 
@@ -54,6 +55,7 @@ public class EightVimInputMethodService extends InputMethodService {
         super.onInitializeInterface();
         isShiftLockOn = false;
         isCapsLockOn = false;
+        shouldSkipImmediateNextCharacter = false;
     }
 
     public Map<List<FingerPosition>, KeyboardAction> buildKeyboardActionMap() {
@@ -61,13 +63,18 @@ public class EightVimInputMethodService extends InputMethodService {
                 .initializeKeyboardActionMap(getResources(), getPackageName());
     }
 
-    public void sendText(String str) {
-        getCurrentInputConnection().commitText(str, 1);
+    public void sendText(String text) {
+        if(shouldSkipImmediateNextCharacter){
+            shouldSkipImmediateNextCharacter = false;
+            return;
+        }
+        getCurrentInputConnection().commitText(text, 1);
     }
 
     public void sendKey(int keyEventCode) {
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
         getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
+        shouldSkipImmediateNextCharacter = false;
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
@@ -114,6 +121,7 @@ public class EightVimInputMethodService extends InputMethodService {
 
                 if(primaryClipData!=null && primaryClipData.getItemAt(0)!=null) {
                     sendText(primaryClipData.getItemAt(0).coerceToText(getApplicationContext()).toString());
+                    shouldSkipImmediateNextCharacter = true;
                 }
                 break;
 
