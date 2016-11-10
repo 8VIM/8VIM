@@ -38,8 +38,8 @@ public class NumberPadKeyboardActionListener implements KeyboardView.OnKeyboardA
             case KeyEvent.KEYCODE_EISU:
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
-                        , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.getName(),null
-                        ,InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.getValue());
+                        , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
+                        , null, 0);
                 eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
                 break;
             case KeyEvent.KEYCODE_DEL  :

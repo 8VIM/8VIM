@@ -101,12 +101,7 @@ public class EightVimInputMethodService extends InputMethodService {
 
     public void handleSpecialInput(KeyboardAction keyboardAction) {
 
-        InputSpecialKeyEventCode keyeventCode = InputSpecialKeyEventCode
-                                                    .getInputSpecialKeyEventCodeWithName(
-                                                            keyboardAction.getText());
-        if(keyeventCode == null) {
-            return;
-        }
+        InputSpecialKeyEventCode keyeventCode = InputSpecialKeyEventCode.valueOf(keyboardAction.getText());
 
         switch (keyeventCode){
             case SHIFT_TOOGLE:
