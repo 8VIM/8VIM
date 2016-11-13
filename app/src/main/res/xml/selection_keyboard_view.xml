@@ -18,6 +18,7 @@
             android:keyEdgeFlags="right"
             android:isRepeatable="true"/>
     </Row>
+
     <Row>
         <Key android:codes="4"
             android:keyLabel="ABC"

@@ -45,22 +45,30 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
             return;
         }
 
-        switch(selectionKeyCode){
+        switch(selectionKeyCode) {
             case SWITCH_TO_MAIN_KEYBOARD: {
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
                         , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
                         , null, 0);
                 eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
-                }
-                break;
-            case MOVE_CURRENT_END_POINT_LEFT:
+            }
+            break;
+            case MOVE_CURRENT_END_POINT_LEFT: {
                 InputConnection inputConnection = eightVimInputMethodService.getCurrentInputConnection();
                 ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
-                inputConnection.setSelection(extractedText.selectionStart-1,extractedText.selectionEnd);
+                inputConnection.setSelection(extractedText.selectionStart - 1, extractedText.selectionEnd);
 
-                eightVimInputMethodService.updateSelection(extractedText.selectionStart-1,extractedText.selectionEnd);
+                eightVimInputMethodService.updateSelection(extractedText.selectionStart - 1, extractedText.selectionEnd);
+                }
+                break;
+            case MOVE_CURRENT_END_POINT_RIGHT:{
+                InputConnection inputConnection = eightVimInputMethodService.getCurrentInputConnection();
+                ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
+                inputConnection.setSelection(extractedText.selectionStart + 1, extractedText.selectionEnd);
 
+                eightVimInputMethodService.updateSelection(extractedText.selectionStart - 1, extractedText.selectionEnd);
+                }
                 break;
         }
 
