@@ -82,7 +82,6 @@ public class EightVimInputMethodService extends InputMethodService {
     }
 
     public void sendKey(int keyEventCode) {
-        Logger.d(this,KeyEvent.keyCodeToString(keyEventCode));
         getCurrentInputConnection().sendKeyEvent(
                 new KeyEvent(
                         SystemClock.uptimeMillis(),
