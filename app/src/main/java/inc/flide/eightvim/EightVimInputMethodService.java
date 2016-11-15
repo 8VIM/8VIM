@@ -141,20 +141,8 @@ public class EightVimInputMethodService extends InputMethodService {
                     curentView = mainKeyboardView;
                     setInputView(curentView);
                 break;
-            case PASTE: {
-
-                    ClipboardManager clipboardManager = (ClipboardManager)
-                            getSystemService(Context.CLIPBOARD_SERVICE);
-                    ClipData primaryClipData = clipboardManager.getPrimaryClip();
-
-                    if (primaryClipData != null && primaryClipData.getItemAt(0) != null) {
-                        sendText(primaryClipData
-                                .getItemAt(0)
-                                .coerceToText(getApplicationContext())
-                                .toString());
-                        shouldSkipImmediateNextCharacter = true;
-                    }
-                }
+            case PASTE:
+                getCurrentInputConnection().performContextMenuAction(android.R.id.paste);
                 break;
             case SELECTION_START: {
 
