@@ -2,6 +2,7 @@ package inc.flide.eightvim.keyboardActionListners;
 
 import android.content.Context;
 import android.inputmethodservice.KeyboardView;
+import android.os.SystemClock;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.inputmethod.ExtractedText;
@@ -46,6 +47,18 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
         }
 
         switch(selectionKeyCode) {
+            case CUT:
+                eightVimInputMethodService.cut();
+                break;
+            case COPY:
+                eightVimInputMethodService.copy();
+                break;
+            case PASTE:
+                eightVimInputMethodService.paste();
+                break;
+            case SELECT_ALL:
+                selectAll();
+                break;
             case SWITCH_TO_MAIN_KEYBOARD: {
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
@@ -55,7 +68,9 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
             }
             break;
             case MOVE_CURRENT_END_POINT_LEFT: {
+
                 InputConnection inputConnection = eightVimInputMethodService.getCurrentInputConnection();
+                inputConnection.performContextMenuAction(android.R.id.startSelectingText);
                 ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
                 inputConnection.setSelection(extractedText.selectionStart - 1, extractedText.selectionEnd);
 
@@ -74,6 +89,29 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
 
         selectionKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
                                             HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+    }
+
+    private void selectAll() {
+        eightVimInputMethodService.getCurrentInputConnection().sendKeyEvent(
+                new KeyEvent(
+                        SystemClock.uptimeMillis(),
+                        SystemClock.uptimeMillis(),
+                        KeyEvent.ACTION_DOWN,
+                        KeyEvent.KEYCODE_A,
+                        0,
+                        KeyEvent.META_CTRL_ON
+                )
+        );
+        eightVimInputMethodService.getCurrentInputConnection().sendKeyEvent(
+                new KeyEvent(
+                        SystemClock.uptimeMillis(),
+                        SystemClock.uptimeMillis(),
+                        KeyEvent.ACTION_UP,
+                        KeyEvent.KEYCODE_A,
+                        0,
+                        KeyEvent.META_CTRL_ON
+                )
+        );
     }
 
     @Override

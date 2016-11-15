@@ -141,7 +141,7 @@ public class EightVimInputMethodService extends InputMethodService {
                     setInputView(curentView);
                 break;
             case PASTE:
-                getCurrentInputConnection().performContextMenuAction(android.R.id.paste);
+                paste();
                 break;
             case SELECTION_START: {
 
@@ -161,6 +161,18 @@ public class EightVimInputMethodService extends InputMethodService {
                 Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getText());
                 break;
         }
+    }
+
+    public void cut() {
+        getCurrentInputConnection().performContextMenuAction(android.R.id.cut);
+    }
+
+    public void copy() {
+        getCurrentInputConnection().performContextMenuAction(android.R.id.copy);
+    }
+
+    public void paste() {
+        getCurrentInputConnection().performContextMenuAction(android.R.id.paste);
     }
 
     public void updateSelection(int start, int end) {

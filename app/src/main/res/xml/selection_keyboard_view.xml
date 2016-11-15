@@ -4,14 +4,22 @@
     android:keyHeight="10%p" >
 
     <Row>
+        <Key android:codes="5"
+            android:keyLabel="cut"/>
+        <Key android:codes="6"
+            android:keyLabel="copy"/>
+        <Key android:codes="7"
+            android:keyLabel="paste"/>
+        <Key android:codes="8"
+            android:keyLabel="Select All"/>
+    </Row>
+    <Row>
         <Key android:codes="0"
             android:keyLabel="&lt;-"
-            android:keyWidth="25%p"
             android:keyEdgeFlags="left"
             android:isRepeatable="true" />
         <Key android:keyOutputText="6"
-            android:keyLabel="Switch Ends"
-            android:keyWidth="25%p"/>
+            android:keyLabel="Switch Ends" />
         <Key android:codes="1"
             android:keyLabel="-&gt;"
             android:keyWidth="25%p"
