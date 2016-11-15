@@ -34,16 +34,16 @@
         <Key android:keyOutputText="7"      android:keyLabel="7" android:keyWidth="25%p"/>
         <Key android:keyOutputText="8"      android:keyLabel="8" android:keyWidth="25%p"/>
         <Key android:keyOutputText="9"      android:keyLabel="9" android:keyWidth="25%p"/>
-        <Key android:codes="67"             android:keyIcon="@drawable/sym_keyboard_delete" android:keyWidth="25%p" android:isRepeatable="true" android:keyEdgeFlags="right"/>
+        <Key android:codes="67"             android:keyLabel="@string/eraseToTheLeft" android:keyWidth="25%p" android:isRepeatable="true" android:keyEdgeFlags="right"/>
     </Row>
     <Row>
-        <Key android:codes="212"            android:keyLabel="ABC" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:codes="212"            android:keyLabel="@string/MainKeyboard" android:keyWidth="25%p" android:keyEdgeFlags="left" />
         <Key android:keyOutputText="&quot;" android:keyLabel="&quot;" />
-        <Key android:keyOutputText=" "      android:keyLabel=" " android:keyWidth="40%p"/>
+        <Key android:keyOutputText=" "      android:keyLabel="@string/fullWidthLowLine" android:keyWidth="40%p"/>
         <Key android:keyOutputText="*"      android:keyLabel="*" />
         <Key android:keyOutputText=","      android:keyLabel="," android:keyWidth="25%p"/>
         <Key android:keyOutputText="0"      android:keyLabel="0" android:keyWidth="25%p"/>
         <Key android:keyOutputText="."      android:keyLabel="." android:keyWidth="25%p"/>
-        <Key android:codes="66"             android:keyLabel="Enter" android:keyWidth="25%p" android:keyEdgeFlags="right" />
+        <Key android:codes="66"             android:keyLabel="@string/enter" android:keyWidth="25%p" android:keyEdgeFlags="right" />
     </Row>
 </Keyboard>

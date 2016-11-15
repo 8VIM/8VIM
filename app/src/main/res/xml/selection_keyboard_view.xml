@@ -5,32 +5,33 @@
 
     <Row>
         <Key android:codes="5"
-            android:keyLabel="cut"/>
+            android:keyLabel="@string/cut"/>
         <Key android:codes="6"
-            android:keyLabel="copy"/>
-        <Key android:codes="7"
-            android:keyLabel="paste"/>
-        <Key android:codes="8"
-            android:keyLabel="Select All"/>
+            android:keyLabel="@string/copy"/>
+        <Key android:codes="2"
+            android:keyLabel="@string/dpadUp"
+            android:isRepeatable="true" />
     </Row>
     <Row>
+        <Key android:codes="7"
+            android:keyLabel="@string/paste"/>
         <Key android:codes="0"
-            android:keyLabel="&#x25c1;"
-            android:keyEdgeFlags="left"
+            android:keyLabel="@string/dpadLeft"
             android:isRepeatable="true" />
         <Key android:keyOutputText="6"
-            android:keyLabel="Switch Ends" />
+            android:keyLabel="@string/switchEnds" />
         <Key android:codes="1"
-            android:keyLabel="&#x25b7;"
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="right"
+            android:keyLabel="@string/dpadRight"
             android:isRepeatable="true"/>
     </Row>
 
     <Row>
         <Key android:codes="4"
-            android:keyLabel="ABC"
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="left" />
+            android:keyLabel="@string/MainKeyboard"/>
+        <Key android:codes="8"
+            android:keyLabel="@string/selectAll"/>
+        <Key android:codes="3"
+            android:keyLabel="@string/dpadDown"
+            android:isRepeatable="true" />
     </Row>
 </Keyboard>
