@@ -39,12 +39,12 @@ public class NumberPadKeyboardActionListener implements KeyboardView.OnKeyboardA
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
                         , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
-                        , null, 0);
+                        , null, 0, 0);
                 eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
                 break;
             case KeyEvent.KEYCODE_DEL  :
             case KeyEvent.KEYCODE_ENTER:
-                eightVimInputMethodService.sendKey(primaryCode);
+                eightVimInputMethodService.sendKey(primaryCode, 0);
                 break;
             default:
                 eightVimInputMethodService.sendText(String.valueOf((char)primaryCode));

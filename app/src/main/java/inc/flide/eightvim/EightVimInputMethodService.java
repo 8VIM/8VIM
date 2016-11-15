@@ -81,7 +81,7 @@ public class EightVimInputMethodService extends InputMethodService {
         getCurrentInputConnection().commitText(text, 1);
     }
 
-    public void sendKey(int keyEventCode) {
+    public void sendKey(int keyEventCode , int flags) {
         getCurrentInputConnection().sendKeyEvent(
                 new KeyEvent(
                         SystemClock.uptimeMillis(),
@@ -89,7 +89,7 @@ public class EightVimInputMethodService extends InputMethodService {
                         KeyEvent.ACTION_DOWN,
                         keyEventCode,
                         0,
-                        isShiftLockOn | isCapsLockOn
+                        isShiftLockOn | isCapsLockOn | flags
                 )
         );
         getCurrentInputConnection().sendKeyEvent(
@@ -99,7 +99,7 @@ public class EightVimInputMethodService extends InputMethodService {
                         KeyEvent.ACTION_UP,
                         keyEventCode,
                         0,
-                        isShiftLockOn | isCapsLockOn
+                        isShiftLockOn | isCapsLockOn | flags
                 )
         );
 
@@ -120,7 +120,7 @@ public class EightVimInputMethodService extends InputMethodService {
     }
 
     public void handleInputKey(KeyboardAction keyboardAction) {
-        sendKey(keyboardAction.getKeyEventCode());
+        sendKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
         isShiftLockOn = 0;
     }
 

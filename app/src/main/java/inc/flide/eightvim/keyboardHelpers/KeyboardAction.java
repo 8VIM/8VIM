@@ -8,12 +8,14 @@ public class KeyboardAction {
     private String text;
     private String capsLockText;
     private int keyEventCode;
+    private int keyFlags;
 
-    public KeyboardAction(KeyboardActionType keyboardActionType, String text, String capsLockText, int keyEventCode) {
+    public KeyboardAction(KeyboardActionType keyboardActionType, String text, String capsLockText, int keyEventCode ,int keyFlags) {
         this.keyboardActionType = keyboardActionType;
         this.text = text;
         this.keyEventCode = keyEventCode;
         setCapsLockText(capsLockText);
+        this.keyFlags = keyFlags;
     }
 
     private void setCapsLockText(String capsLockText) {
@@ -23,6 +25,8 @@ public class KeyboardAction {
             this.capsLockText = capsLockText;
         }
     }
+
+    public int getKeyFlags() { return keyFlags; }
 
     public String getText() {
         return text;

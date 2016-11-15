@@ -141,17 +141,26 @@
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_A</inputString>
+        <inputKey>KEYCODE_A</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_R</inputString>
+        <inputKey>KEYCODE_R</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_X</inputString>
+        <inputKey>KEYCODE_X</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
 
     <keyboardAction>
@@ -163,38 +172,59 @@
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_Y</inputString>
+        <inputKey>KEYCODE_Y</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_B</inputString>
+        <inputKey>KEYCODE_B</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_P</inputString>
+        <inputKey>KEYCODE_P</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_Q</inputString>
+        <inputKey>KEYCODE_Q</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
 
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_S</inputString>
+        <inputKey>KEYCODE_S</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_D</inputString>
+        <inputKey>KEYCODE_D</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_G</inputString>
+        <inputKey>KEYCODE_G</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
@@ -205,17 +235,26 @@
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_T</inputString>
+        <inputKey>KEYCODE_T</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_C</inputString>
+        <inputKey>KEYCODE_C</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_Z</inputString>
+        <inputKey>KEYCODE_Z</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
 
     <keyboardAction>
@@ -227,17 +266,26 @@
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_I</inputString>
+        <inputKey>KEYCODE_I</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_H</inputString>
+        <inputKey>KEYCODE_H</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_J</inputString>
+        <inputKey>KEYCODE_J</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
 
     <keyboardAction>
@@ -249,17 +297,26 @@
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_E</inputString>
+        <inputKey>KEYCODE_E</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_L</inputString>
+        <inputKey>KEYCODE_L</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_K</inputString>
+        <inputKey>KEYCODE_K</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
 
     <!-- For now let me use it to enter my email id :P -->
@@ -272,38 +329,59 @@
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_O</inputString>
+        <inputKey>KEYCODE_O</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_U</inputString>
+        <inputKey>KEYCODE_U</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_V</inputString>
+        <inputKey>KEYCODE_V</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_W</inputString>
+        <inputKey>KEYCODE_W</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
 
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_N</inputString>
+        <inputKey>KEYCODE_N</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_M</inputString>
+        <inputKey>KEYCODE_M</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
-        <inputString>KEYCODE_F</inputString>
+        <inputKey>KEYCODE_F</inputKey>
+	<flags>
+		<flag>1</flag>
+	</flags>
     </keyboardAction>
 
     <!-- Let me just YO-YO the position :) -->

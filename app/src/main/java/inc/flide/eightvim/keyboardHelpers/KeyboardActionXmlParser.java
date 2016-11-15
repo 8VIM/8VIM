@@ -27,6 +27,8 @@ class KeyboardActionXmlParser {
     private static final String INPUT_STRING_TAG = "inputString";
     private static final String INPUT_CAPSLOCK_STRING_TAG = "inputCapsLockString";
     private static final String INPUT_KEY_TAG = "inputKey";
+    private static final String INPUT_KEY_FLAGS_TAG = "flags";
+    private static final String INPUT_KEY_FLAG_TAG = "flag";
 
     private XmlPullParser parser;
 
@@ -61,6 +63,7 @@ class KeyboardActionXmlParser {
         String associatedText = "";
         String associatedCapsLockText = "";
         int keyEventCode = 0;
+        int flags = 0;
 
         while (parser.next() != XmlPullParser.END_TAG) {
 
@@ -85,13 +88,45 @@ class KeyboardActionXmlParser {
                 case INPUT_CAPSLOCK_STRING_TAG:
                     associatedCapsLockText = readInputCapsLockString();
                     break;
+                case INPUT_KEY_FLAGS_TAG:
+                    flags = readInputFlags();
                 default:
                     Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
             }
         }
 
-        keyboardAction = new KeyboardAction(keyboardActionType, associatedText, associatedCapsLockText, keyEventCode);
+        keyboardAction = new KeyboardAction(keyboardActionType, associatedText, associatedCapsLockText, keyEventCode, flags);
         return new AbstractMap.SimpleEntry<>(movementSequence, keyboardAction);
+    }
+
+    private int readInputFlags() throws IOException, XmlPullParserException {
+
+        int flags = 0;
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            String tagName = parser.getName();
+            switch (tagName) {
+                case INPUT_KEY_FLAG_TAG:
+                    flags = flags | readInputFlag();
+                    break;
+                default:
+                    Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
+            }
+        }
+        return flags ;
+    }
+
+    private int readInputFlag() throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG,null, INPUT_KEY_FLAG_TAG);
+        String inputKeyString = readText();
+        parser.require(XmlPullParser.END_TAG, null, INPUT_KEY_FLAG_TAG);
+
+        return Integer.valueOf(inputKeyString);
     }
 
     private int readInputKey() throws IOException, XmlPullParserException {
