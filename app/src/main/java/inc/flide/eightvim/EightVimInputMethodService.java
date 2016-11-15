@@ -1,7 +1,5 @@
 package inc.flide.eightvim;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.os.SystemClock;

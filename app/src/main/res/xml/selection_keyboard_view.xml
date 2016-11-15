@@ -15,13 +15,13 @@
     </Row>
     <Row>
         <Key android:codes="0"
-            android:keyLabel="&lt;-"
+            android:keyLabel="&#x25c1;"
             android:keyEdgeFlags="left"
             android:isRepeatable="true" />
         <Key android:keyOutputText="6"
             android:keyLabel="Switch Ends" />
         <Key android:codes="1"
-            android:keyLabel="-&gt;"
+            android:keyLabel="&#x25b7;"
             android:keyWidth="25%p"
             android:keyEdgeFlags="right"
             android:isRepeatable="true"/>
