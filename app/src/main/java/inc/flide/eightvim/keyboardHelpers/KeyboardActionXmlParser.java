@@ -1,6 +1,7 @@
 package inc.flide.eightvim.keyboardHelpers;
 
 import android.util.Xml;
+import android.view.KeyEvent;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -98,7 +99,8 @@ class KeyboardActionXmlParser {
         String inputKeyString = readText();
         parser.require(XmlPullParser.END_TAG, null, INPUT_KEY_TAG);
 
-        return Integer.parseInt(inputKeyString);
+        //Strictly the inputKey has to has to be a Keycode from the KeyEvent class
+        return KeyEvent.keyCodeFromString(inputKeyString);
     }
 
     private String readInputString() throws IOException, XmlPullParserException {

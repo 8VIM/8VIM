@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.inputmethodservice.InputMethodService;
+import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -32,8 +33,8 @@ public class EightVimInputMethodService extends InputMethodService {
     private View curentView;
 
 
-    private boolean isShiftLockOn;
-    private boolean isCapsLockOn;
+    private int isShiftLockOn;
+    private int isCapsLockOn;
     private boolean shouldSkipImmediateNextCharacter;
 
     EightVimInputMethodServiceHelper eightVimInputMethodServiceHelper = new EightVimInputMethodServiceHelper();
@@ -62,8 +63,8 @@ public class EightVimInputMethodService extends InputMethodService {
     @Override
     public void onInitializeInterface(){
         super.onInitializeInterface();
-        isShiftLockOn = false;
-        isCapsLockOn = false;
+        isShiftLockOn = 0;
+        isCapsLockOn = 0;
         shouldSkipImmediateNextCharacter = false;
     }
 
@@ -81,15 +82,39 @@ public class EightVimInputMethodService extends InputMethodService {
     }
 
     public void sendKey(int keyEventCode) {
-        getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
-        getCurrentInputConnection().sendKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
-        shouldSkipImmediateNextCharacter = false;
+        Logger.d(this,KeyEvent.keyCodeToString(keyEventCode));
+        getCurrentInputConnection().sendKeyEvent(
+                new KeyEvent(
+                        SystemClock.uptimeMillis(),
+                        SystemClock.uptimeMillis(),
+                        KeyEvent.ACTION_DOWN,
+                        keyEventCode,
+                        0,
+                        isShiftLockOn | isCapsLockOn
+                )
+        );
+        getCurrentInputConnection().sendKeyEvent(
+                new KeyEvent(
+                        SystemClock.uptimeMillis(),
+                        SystemClock.uptimeMillis(),
+                        KeyEvent.ACTION_UP,
+                        keyEventCode,
+                        0,
+                        isShiftLockOn | isCapsLockOn
+                )
+        );
+
+        if (shouldSkipImmediateNextCharacter) {
+            shouldSkipImmediateNextCharacter = false;
+        }
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
-        if(keyboardAction.getText().length() == 1 && (isShiftLockOn || isCapsLockOn)){
+        if(keyboardAction.getText().length() == 1
+                && (isShiftLockOn == KeyEvent.META_SHIFT_ON
+                    || isCapsLockOn == KeyEvent.META_CAPS_LOCK_ON)){
             sendText(keyboardAction.getCapsLockText());
-            isShiftLockOn = false;
+            isShiftLockOn = 0;
         }else{
             sendText(keyboardAction.getText());
         }
@@ -97,6 +122,7 @@ public class EightVimInputMethodService extends InputMethodService {
 
     public void handleInputKey(KeyboardAction keyboardAction) {
         sendKey(keyboardAction.getKeyEventCode());
+        isShiftLockOn = 0;
     }
 
     public void handleSpecialInput(KeyboardAction keyboardAction) {
@@ -156,15 +182,18 @@ public class EightVimInputMethodService extends InputMethodService {
     }
 
     private void performShiftToogle() {
-        if(isShiftLockOn){
-            isShiftLockOn = false;
-            isCapsLockOn = true;
-        } else if(isCapsLockOn){
-            isShiftLockOn = false;
-            isCapsLockOn = false;
+        //single press locks the shift key,
+        //double press locks the caps key
+        //a third press unlocks both.
+        if(isShiftLockOn == KeyEvent.META_SHIFT_ON){
+            isShiftLockOn = 0;
+            isCapsLockOn = KeyEvent.META_CAPS_LOCK_ON;
+        } else if(isCapsLockOn == KeyEvent.META_CAPS_LOCK_ON){
+            isShiftLockOn = 0;
+            isCapsLockOn = 0;
         } else{
-            isShiftLockOn = true;
-            isCapsLockOn = false;
+            isShiftLockOn = KeyEvent.META_SHIFT_ON;
+            isCapsLockOn = 0;
         }
     }
 }
