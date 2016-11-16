@@ -8,13 +8,19 @@
             android:keyLabel="@string/cut"/>
         <Key android:codes="6"
             android:keyLabel="@string/copy"/>
+        <Key android:keyOutputText=""
+            android:keyLabel=" "/>
         <Key android:codes="2"
             android:keyLabel="@string/dpadUp"
             android:isRepeatable="true" />
+        <Key android:keyOutputText=""
+            android:keyLabel=" "/>
     </Row>
     <Row>
         <Key android:codes="7"
             android:keyLabel="@string/paste"/>
+        <Key android:keyOutputText=""
+            android:keyLabel=" "/>
         <Key android:codes="0"
             android:keyLabel="@string/dpadLeft"
             android:isRepeatable="true" />
@@ -30,8 +36,12 @@
             android:keyLabel="@string/MainKeyboard"/>
         <Key android:codes="8"
             android:keyLabel="@string/selectAll"/>
+        <Key android:keyOutputText=""
+            android:keyLabel=" "/>
         <Key android:codes="3"
             android:keyLabel="@string/dpadDown"
             android:isRepeatable="true" />
+        <Key android:keyOutputText=""
+            android:keyLabel=" "/>
     </Row>
 </Keyboard>
