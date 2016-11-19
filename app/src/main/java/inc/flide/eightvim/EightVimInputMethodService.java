@@ -6,8 +6,6 @@ import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.ExtractedText;
-import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 
@@ -56,6 +54,11 @@ public class EightVimInputMethodService extends InputMethodService {
     }
 
     @Override
+    public void onBindInput() {
+        inputConnection = getCurrentInputConnection();
+    }
+
+    @Override
     public void onStartInputView (EditorInfo info, boolean restarting){
         super.onStartInputView(info, restarting);
     }
@@ -66,7 +69,6 @@ public class EightVimInputMethodService extends InputMethodService {
         isShiftLockOn = 0;
         isCapsLockOn = 0;
         shouldSkipImmediateNextCharacter = false;
-        inputConnection = getCurrentInputConnection();
     }
 
     public Map<List<FingerPosition>, KeyboardAction> buildKeyboardActionMap() {
