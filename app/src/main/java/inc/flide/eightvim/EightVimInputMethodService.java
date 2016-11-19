@@ -31,11 +31,13 @@ public class EightVimInputMethodService extends InputMethodService {
     private View curentView;
 
 
+
     private int isShiftLockOn;
     private int isCapsLockOn;
     private boolean shouldSkipImmediateNextCharacter;
 
     EightVimInputMethodServiceHelper eightVimInputMethodServiceHelper = new EightVimInputMethodServiceHelper();
+    InputConnection inputConnection;
 
     @Override
     public View onCreateInputView() {
@@ -64,6 +66,7 @@ public class EightVimInputMethodService extends InputMethodService {
         isShiftLockOn = 0;
         isCapsLockOn = 0;
         shouldSkipImmediateNextCharacter = false;
+        inputConnection = getCurrentInputConnection();
     }
 
     public Map<List<FingerPosition>, KeyboardAction> buildKeyboardActionMap() {
@@ -76,30 +79,42 @@ public class EightVimInputMethodService extends InputMethodService {
             shouldSkipImmediateNextCharacter = false;
             return;
         }
-        getCurrentInputConnection().commitText(text, 1);
+        inputConnection.commitText(text, 1);
     }
 
-    public void sendKey(int keyEventCode , int flags) {
-        getCurrentInputConnection().sendKeyEvent(
+    public void sendDownKeyEvent(int keyEventCode, int flags) {
+        inputConnection.sendKeyEvent(
                 new KeyEvent(
                         SystemClock.uptimeMillis(),
                         SystemClock.uptimeMillis(),
                         KeyEvent.ACTION_DOWN,
                         keyEventCode,
                         0,
-                        isShiftLockOn | isCapsLockOn | flags
+                        flags
                 )
         );
-        getCurrentInputConnection().sendKeyEvent(
+    }
+
+    public void sendUpKeyEvent(int keyEventCode, int flags) {
+        inputConnection.sendKeyEvent(
                 new KeyEvent(
                         SystemClock.uptimeMillis(),
                         SystemClock.uptimeMillis(),
                         KeyEvent.ACTION_UP,
                         keyEventCode,
                         0,
-                        isShiftLockOn | isCapsLockOn | flags
+                        flags
                 )
         );
+    }
+    public void sendDownAndUpKeyEvent(int keyEventCode, int flags){
+        sendDownKeyEvent(keyEventCode, flags);
+        sendUpKeyEvent(keyEventCode, flags);
+    }
+
+    public void sendKey(int keyEventCode , int flags) {
+
+        sendDownAndUpKeyEvent(keyEventCode, (isShiftLockOn | isCapsLockOn | flags));
 
         if (shouldSkipImmediateNextCharacter) {
             shouldSkipImmediateNextCharacter = false;
@@ -141,14 +156,10 @@ public class EightVimInputMethodService extends InputMethodService {
             case PASTE:
                 paste();
                 break;
-            case SELECTION_START: {
-
-                InputConnection inputConnection = getCurrentInputConnection();
-                ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
-                inputConnection.setSelection(extractedText.selectionStart-1,extractedText.selectionEnd);
-
-                updateSelection(extractedText.selectionStart-1,extractedText.selectionEnd);
-                }
+            case SELECTION_START:
+                sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+                    sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, 0);
+                sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
                 break;
             case SWITCH_TO_SELECTION_KEYBOARD: {
                     curentView = selectionKeyboardView;
@@ -162,16 +173,14 @@ public class EightVimInputMethodService extends InputMethodService {
     }
 
     public void cut() {
-        getCurrentInputConnection().performContextMenuAction(android.R.id.cut);
+        inputConnection.performContextMenuAction(android.R.id.cut);
     }
 
     public void copy() {
-        getCurrentInputConnection().performContextMenuAction(android.R.id.copy);
+        inputConnection.performContextMenuAction(android.R.id.copy);
     }
 
-    public void paste() {
-        getCurrentInputConnection().performContextMenuAction(android.R.id.paste);
-    }
+    public void paste() { inputConnection.performContextMenuAction(android.R.id.paste); }
 
     public void updateSelection(int start, int end) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

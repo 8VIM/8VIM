@@ -59,31 +59,25 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
             case SELECT_ALL:
                 selectAll();
                 break;
-            case SWITCH_TO_MAIN_KEYBOARD: {
+            case SWITCH_TO_MAIN_KEYBOARD:
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
                         , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
                         , null, 0,0);
                 eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
-            }
-            break;
-            case MOVE_CURRENT_END_POINT_LEFT: {
 
-                InputConnection inputConnection = eightVimInputMethodService.getCurrentInputConnection();
-                inputConnection.performContextMenuAction(android.R.id.startSelectingText);
-                ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
-                inputConnection.setSelection(extractedText.selectionStart - 1, extractedText.selectionEnd);
-
-                eightVimInputMethodService.updateSelection(extractedText.selectionStart - 1, extractedText.selectionEnd);
-                }
                 break;
-            case MOVE_CURRENT_END_POINT_RIGHT:{
-                InputConnection inputConnection = eightVimInputMethodService.getCurrentInputConnection();
-                ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
-                inputConnection.setSelection(extractedText.selectionStart + 1, extractedText.selectionEnd);
-
-                eightVimInputMethodService.updateSelection(extractedText.selectionStart - 1, extractedText.selectionEnd);
-                }
+            case MOVE_CURRENT_END_POINT_LEFT:
+                moveSelection(KeyEvent.KEYCODE_DPAD_LEFT);
+                break;
+            case MOVE_CURRENT_END_POINT_RIGHT:
+                moveSelection(KeyEvent.KEYCODE_DPAD_RIGHT);
+                break;
+            case MOVE_CURRENT_END_POINT_DOWN:
+                moveSelection(KeyEvent.KEYCODE_DPAD_DOWN);
+                break;
+            case MOVE_CURRENT_END_POINT_UP:
+                moveSelection(KeyEvent.KEYCODE_DPAD_UP);
                 break;
         }
 
@@ -92,26 +86,13 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
     }
 
     private void selectAll() {
-        eightVimInputMethodService.getCurrentInputConnection().sendKeyEvent(
-                new KeyEvent(
-                        SystemClock.uptimeMillis(),
-                        SystemClock.uptimeMillis(),
-                        KeyEvent.ACTION_DOWN,
-                        KeyEvent.KEYCODE_A,
-                        0,
-                        KeyEvent.META_CTRL_ON
-                )
-        );
-        eightVimInputMethodService.getCurrentInputConnection().sendKeyEvent(
-                new KeyEvent(
-                        SystemClock.uptimeMillis(),
-                        SystemClock.uptimeMillis(),
-                        KeyEvent.ACTION_UP,
-                        KeyEvent.KEYCODE_A,
-                        0,
-                        KeyEvent.META_CTRL_ON
-                )
-        );
+        eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
+    }
+
+    private void moveSelection(int dpad_keyCode) {
+        eightVimInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+        eightVimInputMethodService.sendDownAndUpKeyEvent(dpad_keyCode, 0);
+        eightVimInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
     }
 
     @Override
