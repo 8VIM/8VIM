@@ -1,6 +1,6 @@
 package inc.flide.eightvim.structures;
 
-public enum SelectionKeyCode {
+public enum SelectionKeyboardKeyCode {
     MOVE_CURRENT_END_POINT_LEFT(0),
     MOVE_CURRENT_END_POINT_RIGHT(1),
     MOVE_CURRENT_END_POINT_UP(2),
@@ -9,15 +9,17 @@ public enum SelectionKeyCode {
     CUT(5),
     COPY(6),
     PASTE(7),
-    SELECT_ALL(8);
+    SELECT_ALL(8),
+    TOOGLE_SELECTION_MODE(9),
+    DELETE_SELECTION(10);
 
     private final int value;
 
-    SelectionKeyCode(final int value){
+    SelectionKeyboardKeyCode(final int value){
         this.value = value;
     }
 
-    public static SelectionKeyCode getAssociatedSelectionKeyCode(final int code) {
+    public static SelectionKeyboardKeyCode getAssociatedSelectionKeyCode(final int code) {
         switch (code) {
             case 0:
                 return MOVE_CURRENT_END_POINT_LEFT;
@@ -37,6 +39,10 @@ public enum SelectionKeyCode {
                 return PASTE;
             case 8:
                 return SELECT_ALL;
+            case 9:
+                return TOOGLE_SELECTION_MODE;
+            case 10:
+                return DELETE_SELECTION;
             default:
                 return null;
         }

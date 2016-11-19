@@ -175,20 +175,13 @@ public class EightVimInputMethodService extends InputMethodService {
         }
     }
 
-    public void cut() {
-        inputConnection.performContextMenuAction(android.R.id.cut);
-    }
+    public void cut() { inputConnection.performContextMenuAction(android.R.id.cut); }
 
     public void copy() {
         inputConnection.performContextMenuAction(android.R.id.copy);
     }
 
     public void paste() { inputConnection.performContextMenuAction(android.R.id.paste); }
-
-    public void updateSelection(int start, int end) {
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMethodManager.updateSelection(curentView, start, end, 0, 0);
-    }
 
     private void performShiftToogle() {
         //single press locks the shift key,

@@ -19,13 +19,14 @@
     <Row>
         <Key android:codes="7"
             android:keyLabel="@string/paste"/>
-        <Key android:keyOutputText=""
-            android:keyLabel=" "/>
+        <Key android:codes="10"
+            android:keyLabel="@string/delete"/>
         <Key android:codes="0"
             android:keyLabel="@string/dpadLeft"
             android:isRepeatable="true" />
-        <Key android:keyOutputText="6"
-            android:keyLabel="@string/switchEnds" />
+        <Key android:codes="9"
+            android:keyLabel="@string/dpadCenter"
+            android:isSticky="true"/>
         <Key android:codes="1"
             android:keyLabel="@string/dpadRight"
             android:isRepeatable="true"/>

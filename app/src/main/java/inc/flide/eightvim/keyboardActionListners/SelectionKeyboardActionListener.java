@@ -1,26 +1,22 @@
 package inc.flide.eightvim.keyboardActionListners;
 
-import android.content.Context;
 import android.inputmethodservice.KeyboardView;
-import android.os.SystemClock;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
-import android.view.inputmethod.ExtractedText;
-import android.view.inputmethod.ExtractedTextRequest;
-import android.view.inputmethod.InputConnection;
-import android.view.inputmethod.InputMethodManager;
 
 import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.structures.KeyboardActionType;
-import inc.flide.eightvim.structures.SelectionKeyCode;
+import inc.flide.eightvim.structures.SelectionKeyboardKeyCode;
 import inc.flide.eightvim.views.SelectionKeyboardView;
 
 public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardActionListener {
 
     private EightVimInputMethodService eightVimInputMethodService;
     private SelectionKeyboardView selectionKeyboardView;
+
+    private boolean isSelectionOn = true;
 
     public SelectionKeyboardActionListener(EightVimInputMethodService inputMethodService
                                             , SelectionKeyboardView view){
@@ -41,20 +37,20 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
 
-        SelectionKeyCode selectionKeyCode = SelectionKeyCode.getAssociatedSelectionKeyCode(primaryCode);
-        if (selectionKeyCode == null) {
+        SelectionKeyboardKeyCode selectionKeyboardKeyCode = SelectionKeyboardKeyCode.getAssociatedSelectionKeyCode(primaryCode);
+        if (selectionKeyboardKeyCode == null) {
             return;
         }
 
-        switch(selectionKeyCode) {
+        switch(selectionKeyboardKeyCode) {
             case CUT:
-                eightVimInputMethodService.cut();
+                eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_X, KeyEvent.META_CTRL_ON);
                 break;
             case COPY:
-                eightVimInputMethodService.copy();
+                eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_C, KeyEvent.META_CTRL_ON);;
                 break;
             case PASTE:
-                eightVimInputMethodService.paste();
+                eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_V, KeyEvent.META_CTRL_ON);;
                 break;
             case SELECT_ALL:
                 selectAll();
@@ -66,6 +62,12 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
                         , null, 0,0);
                 eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
 
+                break;
+            case TOOGLE_SELECTION_MODE:
+                isSelectionOn = !isSelectionOn;
+                break;
+            case DELETE_SELECTION:
+                eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL,0);
                 break;
             case MOVE_CURRENT_END_POINT_LEFT:
                 moveSelection(KeyEvent.KEYCODE_DPAD_LEFT);
@@ -90,9 +92,13 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
     }
 
     private void moveSelection(int dpad_keyCode) {
-        eightVimInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+        if(isSelectionOn){
+            eightVimInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+        }
         eightVimInputMethodService.sendDownAndUpKeyEvent(dpad_keyCode, 0);
-        eightVimInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+        if(isSelectionOn){
+            eightVimInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+        }
     }
 
     @Override
