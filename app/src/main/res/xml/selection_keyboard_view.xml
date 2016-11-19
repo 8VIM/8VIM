@@ -4,42 +4,42 @@
     android:keyHeight="10%p" >
 
     <Row>
-        <Key android:codes="5"
+        <Key android:codes="@integer/CUT"
             android:keyLabel="@string/cut"/>
-        <Key android:codes="6"
+        <Key android:codes="@integer/COPY"
             android:keyLabel="@string/copy"/>
         <Key android:keyOutputText=""
             android:keyLabel=" "/>
-        <Key android:codes="2"
+        <Key android:codes="@integer/MOVE_CURRENT_END_POINT_UP"
             android:keyLabel="@string/dpadUp"
             android:isRepeatable="true" />
         <Key android:keyOutputText=""
             android:keyLabel=" "/>
     </Row>
     <Row>
-        <Key android:codes="7"
+        <Key android:codes="@integer/PASTE"
             android:keyLabel="@string/paste"/>
-        <Key android:codes="10"
+        <Key android:codes="@integer/DELETE_SELECTION"
             android:keyLabel="@string/delete"/>
-        <Key android:codes="0"
+        <Key android:codes="@integer/MOVE_CURRENT_END_POINT_LEFT"
             android:keyLabel="@string/dpadLeft"
             android:isRepeatable="true" />
-        <Key android:codes="9"
+        <Key android:codes="@integer/TOOGLE_SELECTION_MODE"
             android:keyLabel="@string/dpadCenter"
             android:isSticky="true"/>
-        <Key android:codes="1"
+        <Key android:codes="@integer/MOVE_CURRENT_END_POINT_RIGHT"
             android:keyLabel="@string/dpadRight"
             android:isRepeatable="true"/>
     </Row>
 
     <Row>
-        <Key android:codes="4"
+        <Key android:codes="@integer/SWITCH_TO_MAIN_KEYBOARD"
             android:keyLabel="@string/MainKeyboard"/>
-        <Key android:codes="8"
+        <Key android:codes="@integer/SELECT_ALL"
             android:keyLabel="@string/selectAll"/>
         <Key android:keyOutputText=""
             android:keyLabel=" "/>
-        <Key android:codes="3"
+        <Key android:codes="@integer/MOVE_CURRENT_END_POINT_DOWN"
             android:keyLabel="@string/dpadDown"
             android:isRepeatable="true" />
         <Key android:keyOutputText=""
