@@ -69,6 +69,7 @@ public class EightVimInputMethodService extends InputMethodService {
         isShiftLockOn = 0;
         isCapsLockOn = 0;
         shouldSkipImmediateNextCharacter = false;
+        inputConnection = getCurrentInputConnection();
     }
 
     public Map<List<FingerPosition>, KeyboardAction> buildKeyboardActionMap() {
