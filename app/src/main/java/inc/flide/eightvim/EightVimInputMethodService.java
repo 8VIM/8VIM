@@ -51,6 +51,7 @@ public class EightVimInputMethodService extends InputMethodService {
     @Override
     public void onStartInput (EditorInfo attribute, boolean restarting){
         super.onStartInput(attribute, restarting);
+        inputConnection = getCurrentInputConnection();
     }
 
     @Override
