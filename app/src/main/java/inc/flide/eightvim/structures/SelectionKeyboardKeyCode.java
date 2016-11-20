@@ -11,7 +11,9 @@ public enum SelectionKeyboardKeyCode {
     PASTE(7),
     SELECT_ALL(8),
     TOOGLE_SELECTION_MODE(9),
-    DELETE_SELECTION(10);
+    DELETE_SELECTION(10),
+    BACKSPACE(11),
+    ENTER(12);
 
     private final int value;
 
@@ -43,6 +45,10 @@ public enum SelectionKeyboardKeyCode {
                 return TOOGLE_SELECTION_MODE;
             case 10:
                 return DELETE_SELECTION;
+            case 11:
+                return BACKSPACE;
+            case 12:
+                return ENTER;
             default:
                 return null;
         }

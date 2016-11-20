@@ -8,19 +8,20 @@
             android:keyLabel="@string/cut"/>
         <Key android:codes="@integer/COPY"
             android:keyLabel="@string/copy"/>
-        <Key android:keyOutputText=""
-            android:keyLabel=" "/>
+        <Key android:codes="@integer/DELETE_SELECTION"
+            android:keyLabel="@string/eraseToTheRight"/>
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_UP"
             android:keyLabel="@string/dpadUp"
             android:isRepeatable="true" />
-        <Key android:keyOutputText=""
-            android:keyLabel=" "/>
+        <Key android:codes="@integer/BACKSPACE"
+            android:keyLabel="@string/eraseToTheLeft"
+            android:isRepeatable="true" />
     </Row>
     <Row>
         <Key android:codes="@integer/PASTE"
             android:keyLabel="@string/paste"/>
-        <Key android:codes="@integer/DELETE_SELECTION"
-            android:keyLabel="@string/delete"/>
+        <Key android:keyOutputText=""
+            android:keyLabel=" "/>
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_LEFT"
             android:keyLabel="@string/dpadLeft"
             android:isRepeatable="true" />
@@ -42,7 +43,7 @@
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_DOWN"
             android:keyLabel="@string/dpadDown"
             android:isRepeatable="true" />
-        <Key android:keyOutputText=""
-            android:keyLabel=" "/>
+        <Key android:codes="@integer/ENTER"
+            android:keyLabel="@string/enter" />
     </Row>
 </Keyboard>

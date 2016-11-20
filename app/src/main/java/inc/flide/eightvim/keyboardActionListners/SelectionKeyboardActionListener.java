@@ -53,7 +53,7 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
                 eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_V, KeyEvent.META_CTRL_ON);;
                 break;
             case SELECT_ALL:
-                selectAll();
+                eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
                 break;
             case SWITCH_TO_MAIN_KEYBOARD:
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
@@ -67,7 +67,7 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
                 isSelectionOn = !isSelectionOn;
                 break;
             case DELETE_SELECTION:
-                eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL,0);
+                eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_FORWARD_DEL,0);
                 break;
             case MOVE_CURRENT_END_POINT_LEFT:
                 moveSelection(KeyEvent.KEYCODE_DPAD_LEFT);
@@ -81,14 +81,16 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
             case MOVE_CURRENT_END_POINT_UP:
                 moveSelection(KeyEvent.KEYCODE_DPAD_UP);
                 break;
+            case BACKSPACE:
+                eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL,0);
+                break;
+            case ENTER:
+                eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER,0);
+                break;
         }
 
         selectionKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
                                             HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-    }
-
-    private void selectAll() {
-        eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
     }
 
     private void moveSelection(int dpad_keyCode) {

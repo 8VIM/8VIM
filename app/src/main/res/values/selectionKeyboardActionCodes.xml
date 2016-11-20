@@ -11,4 +11,6 @@
     <integer name="SELECT_ALL">8</integer>
     <integer name="TOOGLE_SELECTION_MODE">9</integer>
     <integer name="DELETE_SELECTION">10</integer>
+    <integer name="BACKSPACE">11</integer>
+    <integer name="ENTER">12</integer>
 </resources>

@@ -12,6 +12,7 @@
     <string name="dpadDown">&#x25BD;</string>
     <string name="dpadCenter">&#x25CB;</string>
     <string name="eraseToTheLeft">&#x232B;</string>
+    <string name="eraseToTheRight">&#x2326;</string>
     <string name="delete">&#x2421;</string>
     <string name="enter">&#x21B5;</string>
     <string name="fullWidthLowLine">&#xFF3F;</string>
