@@ -1,13 +1,11 @@
 package inc.flide.eightvim;
 
-import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.view.inputmethod.InputMethodManager;
 
 import java.util.List;
 import java.util.Map;
@@ -19,6 +17,7 @@ import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.views.MainKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 import inc.flide.eightvim.views.SelectionKeyboardView;
+import inc.flide.eightvim.views.SymbolKeyboardView;
 import inc.flide.logging.Logger;
 
 public class EightVimInputMethodService extends InputMethodService {
@@ -26,7 +25,8 @@ public class EightVimInputMethodService extends InputMethodService {
     private MainKeyboardView mainKeyboardView;
     private NumberPadKeyboardView numberPadKeyboardView;
     private SelectionKeyboardView selectionKeyboardView;
-    private View curentView;
+    private SymbolKeyboardView symbolKeyboardView;
+    private View currentView;
 
 
 
@@ -43,9 +43,11 @@ public class EightVimInputMethodService extends InputMethodService {
                                     .inflate(R.layout.numberpad_keyboard_layout, null);
         selectionKeyboardView = (SelectionKeyboardView) getLayoutInflater()
                                     .inflate(R.layout.selection_keyboard_layout, null);
+        symbolKeyboardView = (SymbolKeyboardView) getLayoutInflater()
+                                    .inflate(R.layout.symbols_keyboard_layout, null);
         mainKeyboardView = new MainKeyboardView(this);
-        curentView = mainKeyboardView;
-        return curentView;
+        currentView = mainKeyboardView;
+        return currentView;
     }
 
     @Override
@@ -150,12 +152,17 @@ public class EightVimInputMethodService extends InputMethodService {
                 performShiftToogle();
                 break;
             case SWITCH_TO_NUMBER_PAD:
-                    curentView = numberPadKeyboardView;
-                    setInputView(curentView);
+                    currentView = numberPadKeyboardView;
+                    setInputView(currentView);
                 break;
             case SWITCH_TO_MAIN_KEYBOARD:
-                    curentView = mainKeyboardView;
-                    setInputView(curentView);
+                    currentView = mainKeyboardView;
+                    setInputView(currentView);
+                break;
+            case SWITCH_TO_SYMBOLS_KEYBOARD:
+                    Logger.d(this, "switching to symbols keyboard");
+                    currentView = symbolKeyboardView;
+                    setInputView(currentView);
                 break;
             case PASTE:
                 paste();
@@ -166,8 +173,8 @@ public class EightVimInputMethodService extends InputMethodService {
                 sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
                 break;
             case SWITCH_TO_SELECTION_KEYBOARD: {
-                    curentView = selectionKeyboardView;
-                    setInputView(curentView);
+                    currentView = selectionKeyboardView;
+                    setInputView(currentView);
                 }
                 break;
             default:

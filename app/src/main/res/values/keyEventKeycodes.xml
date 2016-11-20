@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="KEYCODE_NUM_LOCK">143</integer>
+    <integer name="KEYCODE_ENTER">66</integer>
+    <integer name="KEYCODE_EISU">212</integer>
+    <integer name="KEYCODE_DEL">67</integer>
+    <integer name="KEYCODE_TAB">61</integer>
+</resources>

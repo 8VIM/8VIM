@@ -5,7 +5,7 @@
 
     <Row>
         <Key android:keyOutputText="#"      android:keyLabel="#" android:keyWidth="25%p" android:keyEdgeFlags="left" />
-        <Key android:keyOutputText="$"      android:keyLabel="$" />
+        <Key android:keyOutputText="@string/rupeeSymbol"      android:keyLabel="@string/rupeeSymbol" />
         <Key android:keyOutputText="&amp;"  android:keyLabel="&amp;" />
         <Key android:keyOutputText="_"      android:keyLabel="_" />
         <Key android:keyOutputText="-"      android:keyLabel="-" />
@@ -26,7 +26,7 @@
         <Key android:keyOutputText="!"      android:keyLabel="!" android:keyWidth="25%p" android:keyEdgeFlags="right"/>
     </Row>
     <Row>
-        <Key android:keyOutputText=""       android:keyLabel="{+=" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:codes="143"       android:keyLabel="{+=" android:keyWidth="25%p" android:keyEdgeFlags="left" />
         <Key android:keyOutputText="'"      android:keyLabel="'" />
         <Key android:keyOutputText=":"      android:keyLabel=":" />
         <Key android:keyOutputText="%"      android:keyLabel="%" />

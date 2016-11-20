@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:keyWidth="20%p"
+    android:keyHeight="10%p" >
+
+    <Row>
+        <Key android:keyOutputText="$"      android:keyLabel="$" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:keyOutputText="@string/poundSign"      android:keyLabel="@string/poundSign" />
+        <Key android:keyOutputText="@string/euroSign"  android:keyLabel="@string/euroSign" />
+        <Key android:keyOutputText="@string/centSign"      android:keyLabel="@string/centSign" />
+        <Key android:keyOutputText="@string/copyrightSign"      android:keyLabel="@string/copyrightSign" />
+        <Key android:keyOutputText="@string/registeredSign"      android:keyLabel="@string/registeredSign" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="@string/tradeMarkSign"     android:keyLabel="@string/tradeMarkSign" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="~"      android:keyLabel="~" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="@string/invertedQuestionMark"     android:keyLabel="@string/invertedQuestionMark" android:keyWidth="25%p" android:keyEdgeFlags="right"/>
+    </Row>
+    <Row>
+        <Key android:codes="@integer/KEYCODE_TAB"     android:keyLabel="@string/rightwardsArrowToBar" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:keyOutputText="["      android:keyLabel="[" />
+        <Key android:keyOutputText="]"      android:keyLabel="]" />
+        <Key android:keyOutputText="{"      android:keyLabel="{" />
+        <Key android:keyOutputText="}"      android:keyLabel="}" />
+        <Key android:keyOutputText="@string/lessThan"      android:keyLabel="@string/lessThan" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="@string/greaterThan"      android:keyLabel="@string/greaterThan" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="^"      android:keyLabel="^" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="@string/invertedExclamationMark"      android:keyLabel="@string/invertedExclamationMark" android:keyWidth="25%p" android:keyEdgeFlags="right"/>
+    </Row>
+    <Row>
+        <Key android:codes="@integer/KEYCODE_NUM_LOCK"       android:keyLabel="123" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:keyOutputText="`"      android:keyLabel="`" />
+        <Key android:keyOutputText=";"      android:keyLabel=";" />
+        <Key android:keyOutputText="@string/divisionSign"      android:keyLabel="@string/divisionSign" />
+        <Key android:keyOutputText="\\"      android:keyLabel="\\" />
+        <Key android:keyOutputText="@string/verticalLine"      android:keyLabel="@string/verticalLine" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="@string/brokenBar"      android:keyLabel="@string/brokenBar" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="@string/notSign"      android:keyLabel="@string/notSign" android:keyWidth="25%p"/>
+        <Key android:codes="@integer/KEYCODE_DEL"             android:keyLabel="@string/eraseToTheLeft" android:keyWidth="25%p" android:isRepeatable="true" android:keyEdgeFlags="right"/>
+    </Row>
+    <Row>
+        <Key android:codes="@integer/KEYCODE_EISU"            android:keyLabel="@string/MainKeyboard" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:keyOutputText=" "      android:keyLabel="@string/fullWidthLowLine" android:keyWidth="60%p"/>
+        <Key android:keyOutputText="@string/crossProduct"      android:keyLabel="@string/crossProduct" />
+        <Key android:keyOutputText="@string/sectionSign"      android:keyLabel="@string/sectionSign" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="@string/pilcrowSign"      android:keyLabel="@string/pilcrowSign" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="@string/degreeSign"      android:keyLabel="@string/degreeSign" android:keyWidth="25%p"/>
+        <Key android:codes="@integer/KEYCODE_ENTER"             android:keyLabel="@string/enter" android:keyWidth="25%p" android:keyEdgeFlags="right" />
+    </Row>
+</Keyboard>

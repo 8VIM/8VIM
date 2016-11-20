@@ -5,21 +5,20 @@ import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 
 import inc.flide.eightvim.EightVimInputMethodService;
-import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
+import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.structures.KeyboardActionType;
-import inc.flide.eightvim.views.NumberPadKeyboardView;
-import inc.flide.logging.Logger;
+import inc.flide.eightvim.views.SymbolKeyboardView;
 
-public class NumberPadKeyboardActionListener implements KeyboardView.OnKeyboardActionListener {
+public class SymbolKeyboardActionListener implements KeyboardView.OnKeyboardActionListener {
 
     private EightVimInputMethodService eightVimInputMethodService;
-    private NumberPadKeyboardView numberPadKeyboardView;
+    private SymbolKeyboardView symbolKeyboardView;
 
-    public NumberPadKeyboardActionListener(EightVimInputMethodService inputMethodService
-                                            , NumberPadKeyboardView view){
+    public SymbolKeyboardActionListener(EightVimInputMethodService inputMethodService
+                                            , SymbolKeyboardView view){
         this.eightVimInputMethodService = inputMethodService;
-        this.numberPadKeyboardView = view;
+        this.symbolKeyboardView = view;
     }
 
     @Override
@@ -45,28 +44,28 @@ public class NumberPadKeyboardActionListener implements KeyboardView.OnKeyboardA
                 break;
             case KeyEvent.KEYCODE_DEL  :
             case KeyEvent.KEYCODE_ENTER:
+            case KeyEvent.KEYCODE_TAB:
                 eightVimInputMethodService.sendKey(primaryCode, 0);
                 break;
             case KeyEvent.KEYCODE_NUM_LOCK:
-                Logger.d(this,"Num lock pessed");
-                KeyboardAction switchToSymbolsKeyboard = new KeyboardAction(
+                KeyboardAction switchToNumberPadKeyboardView = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
-                        , InputSpecialKeyEventCode.SWITCH_TO_SYMBOLS_KEYBOARD.toString()
+                        , InputSpecialKeyEventCode.SWITCH_TO_NUMBER_PAD.toString()
                         , null, 0, 0);
-                eightVimInputMethodService.handleSpecialInput(switchToSymbolsKeyboard);
+                eightVimInputMethodService.handleSpecialInput(switchToNumberPadKeyboardView);
                 break;
             default:
                 eightVimInputMethodService.sendText(String.valueOf((char)primaryCode));
         }
 
-        numberPadKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
+        symbolKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
                                             HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
     }
 
     @Override
     public void onText(CharSequence text) {
         eightVimInputMethodService.sendText(text.toString());
-        numberPadKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
+        symbolKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
                 HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
     }
 
