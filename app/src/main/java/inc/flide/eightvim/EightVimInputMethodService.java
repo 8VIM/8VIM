@@ -133,6 +133,7 @@ public class EightVimInputMethodService extends InputMethodService {
                     || isCapsLockOn == KeyEvent.META_CAPS_LOCK_ON)){
             sendText(keyboardAction.getCapsLockText());
             isShiftLockOn = 0;
+            currentView.invalidate();
         }else{
             sendText(keyboardAction.getText());
         }
@@ -141,6 +142,7 @@ public class EightVimInputMethodService extends InputMethodService {
     public void handleInputKey(KeyboardAction keyboardAction) {
         sendKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
         isShiftLockOn = 0;
+        currentView.invalidate();
     }
 
     public void handleSpecialInput(KeyboardAction keyboardAction) {
@@ -150,6 +152,7 @@ public class EightVimInputMethodService extends InputMethodService {
         switch (keyeventCode){
             case SHIFT_TOOGLE:
                 performShiftToogle();
+                currentView.invalidate();
                 break;
             case SWITCH_TO_NUMBER_PAD:
                     currentView = numberPadKeyboardView;
@@ -205,5 +208,13 @@ public class EightVimInputMethodService extends InputMethodService {
             isShiftLockOn = KeyEvent.META_SHIFT_ON;
             isCapsLockOn = 0;
         }
+    }
+
+    public boolean areCharactersCapitalized(){
+        if (isShiftLockOn == KeyEvent.META_SHIFT_ON || isCapsLockOn == KeyEvent.META_CAPS_LOCK_ON) {
+            return true;
+        }
+
+        return false;
     }
 }

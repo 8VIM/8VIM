@@ -23,6 +23,7 @@ import inc.flide.logging.Logger;
 public class MainKeyboardView extends View{
 
     private MainKeyboardActionListener mainKeyboardActionListener;
+    private EightVimInputMethodService eightVimInputMethodService;
 
     private Circle circle;
 
@@ -42,7 +43,7 @@ public class MainKeyboardView extends View{
     }
 
     private void initialize(Context context){
-        EightVimInputMethodService eightVimInputMethodService = (EightVimInputMethodService) context;
+        eightVimInputMethodService = (EightVimInputMethodService) context;
         mainKeyboardActionListener = new MainKeyboardActionListener(eightVimInputMethodService
                                                                 , this);
         setHapticFeedbackEnabled(true);
@@ -79,7 +80,7 @@ public class MainKeyboardView extends View{
         //the text along the lines
         paint.setTextSize(40);
         paint.setStrokeWidth(2);
-        String charactersToDisplay = "nomufv!weilhkj@,tscdzg.'yabrpxq?";
+        String charactersToDisplay = getCharacterSetToDisplay();
         List<PointF> listOfPointsOfDisplay = new ArrayList<>();
         for(int i=0; i<4; i++) {
             LineSegment currentLine = sectorDemarcatingLines.get(i);
@@ -88,6 +89,17 @@ public class MainKeyboardView extends View{
         float[] pointsOfDisplay = Utilities.convertPointFListToPrimitiveFloatArray(listOfPointsOfDisplay);
         canvas.drawPosText(charactersToDisplay, pointsOfDisplay, paint);
 
+    }
+
+    private String getCharacterSetToDisplay() {
+        String characterSetSmall = "nomufv!weilhkj@,tscdzg.'yabrpxq?";
+        String characterSetCaps = "NOMUFV!WEILHKJ@_TSCDZG-\"YABRPXQ*";
+
+        if(eightVimInputMethodService.areCharactersCapitalized()){
+            return characterSetCaps;
+        }
+
+        return characterSetSmall;
     }
 
     private List<PointF> getCharacterDisplayPointsOnTheLineSegment(LineSegment lineSegment, int numberOfCharactersToDisplay) {
