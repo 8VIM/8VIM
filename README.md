@@ -24,10 +24,10 @@ Once you know how to type with this thing (Learn how to type with this original 
 
 #####Basic Needed Stuff
 
--Right Sector acts as a backspace Key.
--Bottom Sector acts as a Enter Key.
--Top Sector acts as a combi of SHIFT and CAPS_LOCK Key, i.e, Press once Shift is active, Press Twice CAPS is active and Press once more and everything is back to usual.
--Left Sector acts as the button that takes you to the Number Pad.
+- Right Sector acts as a backspace Key.
+- Bottom Sector acts as a Enter Key.
+- Top Sector acts as a combi of SHIFT and CAPS_LOCK Key, i.e, Press once Shift is active, Press Twice CAPS is active and Press once more and everything is back to usual.
+- Left Sector acts as the button that takes you to the Number Pad.
 
 
 #####Cursor Movements 
