@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
-public class Preferences8Vim extends PreferenceActivity{
+public class Setting extends PreferenceActivity{
 
     @Override
     public Intent getIntent() {
