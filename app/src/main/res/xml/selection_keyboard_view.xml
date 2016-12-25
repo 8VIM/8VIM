@@ -20,8 +20,8 @@
     <Row>
         <Key android:codes="@integer/PASTE"
             android:keyLabel="@string/paste"/>
-        <Key android:keyOutputText=""
-            android:keyLabel=" "/>
+        <Key android:codes="@integer/SWITCH_TO_EMOJI_KEYBOARD"
+            android:keyLabel="S"/>
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_LEFT"
             android:keyLabel="@string/dpadLeft"
             android:isRepeatable="true" />

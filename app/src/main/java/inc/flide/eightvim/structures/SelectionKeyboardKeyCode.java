@@ -13,7 +13,8 @@ public enum SelectionKeyboardKeyCode {
     TOOGLE_SELECTION_MODE(9),
     DELETE_SELECTION(10),
     BACKSPACE(11),
-    ENTER(12);
+    ENTER(12),
+    SWITCH_TO_EMOJI_KEYBOARD(13);
 
     private final int value;
 
@@ -49,6 +50,8 @@ public enum SelectionKeyboardKeyCode {
                 return BACKSPACE;
             case 12:
                 return ENTER;
+            case 13:
+                return SWITCH_TO_EMOJI_KEYBOARD;
             default:
                 return null;
         }

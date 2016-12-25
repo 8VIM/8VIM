@@ -61,8 +61,13 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
                         , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
                         , null, 0,0);
                 eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
-
                 break;
+            case SWITCH_TO_EMOJI_KEYBOARD:
+                KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
+                        KeyboardActionType.INPUT_SPECIAL
+                        , InputSpecialKeyEventCode.SWITCH_TO_EMOJI_KEYBOARD.toString()
+                        , null, 0,0);
+                eightVimInputMethodService.handleSpecialInput(switchToEmojiKeyboard);
             case TOOGLE_SELECTION_MODE:
                 isSelectionOn = !isSelectionOn;
                 break;

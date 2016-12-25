@@ -14,6 +14,7 @@ import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.keyboardHelpers.EightVimInputMethodServiceHelper;
 import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
+import inc.flide.eightvim.emojiSpecific.EmojiKeyboardView;
 import inc.flide.eightvim.views.MainKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 import inc.flide.eightvim.views.SelectionKeyboardView;
@@ -26,6 +27,7 @@ public class EightVimInputMethodService extends InputMethodService {
     private NumberPadKeyboardView numberPadKeyboardView;
     private SelectionKeyboardView selectionKeyboardView;
     private SymbolKeyboardView symbolKeyboardView;
+    private EmojiKeyboardView emojiKeyboardView;
     private View currentView;
 
 
@@ -39,6 +41,10 @@ public class EightVimInputMethodService extends InputMethodService {
 
     @Override
     public View onCreateInputView() {
+
+        emojiKeyboardView = (EmojiKeyboardView) getLayoutInflater()
+                .inflate(R.layout.emoji_keyboard_layout, null);
+
         numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater()
                                     .inflate(R.layout.numberpad_keyboard_layout, null);
         selectionKeyboardView = (SelectionKeyboardView) getLayoutInflater()
@@ -47,6 +53,7 @@ public class EightVimInputMethodService extends InputMethodService {
                                     .inflate(R.layout.symbols_keyboard_layout, null);
         mainKeyboardView = new MainKeyboardView(this);
         currentView = mainKeyboardView;
+
         return currentView;
     }
 
@@ -153,6 +160,10 @@ public class EightVimInputMethodService extends InputMethodService {
             case SHIFT_TOOGLE:
                 performShiftToogle();
                 currentView.invalidate();
+                break;
+            case SWITCH_TO_EMOJI_KEYBOARD:
+                    currentView = emojiKeyboardView.getView();
+                    setInputView(currentView);
                 break;
             case SWITCH_TO_NUMBER_PAD:
                     currentView = numberPadKeyboardView;

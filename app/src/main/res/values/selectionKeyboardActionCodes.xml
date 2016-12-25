@@ -13,4 +13,5 @@
     <integer name="DELETE_SELECTION">10</integer>
     <integer name="BACKSPACE">11</integer>
     <integer name="ENTER">12</integer>
+    <integer name="SWITCH_TO_EMOJI_KEYBOARD">13</integer>
 </resources>
