@@ -38,3 +38,12 @@ There is selection built in to the keyboard. if you move your finger from the ri
 
 #####Paste Functionality
 Moving your finger from right->circle->lift-your-finger performs a paste. whatever is in the clipboard.
+
+#####Emoji support
+The 8Vim keyboard supports emoji's in two styles - 'Google/Android' and 'Apple'
+Right now the access to the emojis is a little troublesome, you have to go to the selection keyboard and then there exists a button that takes you to the emoji-keyboard. Pretty shity right? I know...
+
+
+#Thanks To
+- [CaptainBlagbird](https://github.com/CaptainBlagbird) for the inspiration to me to get to start this project. It initially started as a fork for [Xpen](https://github.com/CaptainBlagbird/Xpen).
+- [klinker24](https://github.com/klinker24) for his efforts in the project [Android-SlidingEmojiKeyboard](https://github.com/klinker24/Android-SlidingEmojiKeyboard) from which I salvaged a lot of Emoji codebase.
