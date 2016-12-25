@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="testName">
-        <item>Light</item>
-        <item>Black</item>
-        <item>Dark</item>
-    </string-array>
-
-    <string-array name="testSet">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+    <string-array name="emojiIconsCategory">
+        <item>@string/setting_change_icon_set_value_google</item>
+        <item>@string/setting_change_icon_set_value_apple</item>
     </string-array>
 
 </resources>

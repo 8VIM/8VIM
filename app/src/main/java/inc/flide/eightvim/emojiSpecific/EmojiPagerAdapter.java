@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import inc.flide.eightvim.Setting;
 import inc.flide.logging.Logger;
 
 public class EmojiPagerAdapter extends PagerAdapter {
@@ -69,18 +70,18 @@ public class EmojiPagerAdapter extends PagerAdapter {
     }
 
     private EmojiIcons getPreferedIconSet() {
-/*
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pager.getContext());
 
         if (sharedPreferences
-                .getString(MainSettings.CHANGE_ICON_SET_KEY, MainSettings.CHANGE_ICON_SET_VALUE_DEFAULT)
-                .equals(MainSettings.CHANGE_ICON_SET_VALUE_GOOGLE)){
+                .getString(Setting.CHANGE_ICON_SET_KEY, Setting.CHANGE_ICON_SET_VALUE_DEFAULT)
+                .equals(Setting.CHANGE_ICON_SET_VALUE_GOOGLE)){
             return new Google_EmojiIcons();
         } else if (sharedPreferences
-                .getString(MainSettings.CHANGE_ICON_SET_KEY, MainSettings.CHANGE_ICON_SET_VALUE_DEFAULT)
-                .equals(MainSettings.CHANGE_ICON_SET_VALUE_APPLE)) {
+                .getString(Setting.CHANGE_ICON_SET_KEY, Setting.CHANGE_ICON_SET_VALUE_DEFAULT)
+                .equals(Setting.CHANGE_ICON_SET_VALUE_APPLE)) {
             return new Apple_EmojiIcons();
-        }*/
+        }
 
         return new Google_EmojiIcons();
     }

@@ -2,7 +2,10 @@
     <string name="app_name">8Vim</string>
     <style name="version_name">8PenClone</style>
     <string name="title_activity_preferences8_vim">Preferences 8Vim</string>
-
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="emoji_icon_set">Emoji Icon Set</string>
+    <string name="setting_change_icon_set_key">icon_set</string>
+    <string name="setting_change_icon_set_value_google">Google</string>
+    <string name="setting_change_icon_set_value_apple">Apple</string>
 </resources>

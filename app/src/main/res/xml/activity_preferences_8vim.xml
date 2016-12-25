@@ -4,10 +4,10 @@
     android:title="@string/title_activity_preferences8_vim">
 
     <ListPreference
-        android:key="Testing"
-        android:title="Test Title"
-        android:entries="@array/testName"
-        android:entryValues="@array/testSet"
-        android:defaultValue="1" />
+        android:key="@string/setting_change_icon_set_key"
+        android:title="@string/emoji_icon_set"
+        android:entries="@array/emojiIconsCategory"
+        android:entryValues="@array/emojiIconsCategory"
+        android:defaultValue="Google" />
 
 </PreferenceScreen>

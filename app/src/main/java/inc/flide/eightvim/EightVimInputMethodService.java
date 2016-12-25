@@ -1,5 +1,6 @@
 package inc.flide.eightvim;
 
+import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.os.SystemClock;
 import android.view.KeyEvent;
@@ -39,8 +40,16 @@ public class EightVimInputMethodService extends InputMethodService {
     EightVimInputMethodServiceHelper eightVimInputMethodServiceHelper = new EightVimInputMethodServiceHelper();
     InputConnection inputConnection;
 
+    private static Context staticApplicationContext;
+
+    public static Context getStaticApplicationContext() {
+        return staticApplicationContext;
+    }
+
     @Override
     public View onCreateInputView() {
+
+        staticApplicationContext = getApplicationContext();
 
         emojiKeyboardView = (EmojiKeyboardView) getLayoutInflater()
                 .inflate(R.layout.emoji_keyboard_layout, null);
