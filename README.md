@@ -36,3 +36,5 @@ If you move your finger from the centre-circle to any sector and stay, the curso
 #####Selection
 There is selection built in to the keyboard. if you move your finger from the right sector to the circle, the cursor will start moving left and selecting everything in it's path. once you release, a selection keyboard will open up for various stupidities to do.
 
+#####Paste Functionality
+Moving your finger from right->circle performs a paste. whatever is in the clipboard.
