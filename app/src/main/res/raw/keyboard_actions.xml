@@ -419,7 +419,7 @@
     <!--Paste Sequence-->
     <keyboardAction>
         <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
-        <movementSequence>LEFT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>LEFT;INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
         <inputString>PASTE</inputString>
     </keyboardAction>
 
