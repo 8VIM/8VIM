@@ -8,8 +8,11 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 import java.util.ArrayList;
 
+import inc.flide.eightvim.R;
 import inc.flide.eightvim.Setting;
 import inc.flide.eightvim.emojis.constants.Apple_EmojiIcons;
 import inc.flide.eightvim.emojis.constants.EmojiIcons;
@@ -17,14 +20,13 @@ import inc.flide.eightvim.emojis.constants.EmojiTexts;
 import inc.flide.eightvim.emojis.constants.Google_EmojiIcons;
 import inc.flide.eightvim.emojis.view.EmojiKeyboardView;
 
-public class EmojiPagerAdapter extends PagerAdapter {
+public class EmojiPagerAdapter extends PagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
 
-    private final String[] TITLES = { "people",
-                                    "things",
-                                    "nature",
-                                    "places",
-                                    "symbols" };
-
+    private final int ICONS[] = {R.drawable.ic_people,
+                                R.drawable.ic_objects,
+                                R.drawable.ic_nature,
+                                R.drawable.ic_travel,
+                                R.drawable.ic_symbols};
 
     private ViewPager pager;
     private ArrayList<View> pages;
@@ -59,13 +61,13 @@ public class EmojiPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
-        return TITLES[position];
+    public int getCount() {
+        return ICONS.length;
     }
 
     @Override
-    public int getCount() {
-        return TITLES.length;
+    public int getPageIconResId(int position) {
+        return ICONS[position];
     }
 
     @Override
