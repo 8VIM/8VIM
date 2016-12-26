@@ -1,4 +1,4 @@
-package inc.flide.eightvim.emojiSpecific;
+package inc.flide.eightvim.emojis.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,7 +11,11 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import inc.flide.eightvim.Setting;
-import inc.flide.logging.Logger;
+import inc.flide.eightvim.emojis.constants.Apple_EmojiIcons;
+import inc.flide.eightvim.emojis.constants.EmojiIcons;
+import inc.flide.eightvim.emojis.constants.EmojiTexts;
+import inc.flide.eightvim.emojis.constants.Google_EmojiIcons;
+import inc.flide.eightvim.emojis.view.EmojiKeyboardView;
 
 public class EmojiPagerAdapter extends PagerAdapter {
 
@@ -35,11 +39,11 @@ public class EmojiPagerAdapter extends PagerAdapter {
 
         EmojiIcons icons = getPreferedIconSet();
         /*pages.add(new KeyboardSinglePageView(context, new RecentEmojiAdapter(context)).getView());*/
-        pages.add(new KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.peopleEmojiTexts, icons.getPeopleIconIds())).getView());
-        pages.add(new KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.thingsEmojiTexts, icons.getThingsIconIds())).getView());
-        pages.add(new KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.natureEmojiTexts, icons.getNatureIconIds())).getView());
-        pages.add(new KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.transEmojiTexts, icons.getTransIconIds())).getView());
-        pages.add(new KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.otherEmojiTexts, icons.getOtherIconIds())).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.peopleEmojiTexts, icons.getPeopleIconIds())).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.thingsEmojiTexts, icons.getThingsIconIds())).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.natureEmojiTexts, icons.getNatureIconIds())).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.transEmojiTexts, icons.getTransIconIds())).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.otherEmojiTexts, icons.getOtherIconIds())).getView());
 
     }
 

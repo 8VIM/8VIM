@@ -1,7 +1,7 @@
 package inc.flide.eightvim.utilities;
-
 import android.graphics.PointF;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Utilities {
@@ -13,5 +13,14 @@ public class Utilities {
             floatArray[j++] = FloatList.get(i).y;
         }
         return floatArray;
+    }
+
+    public static final ArrayList<Integer> initArrayList(int... ints) {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i : ints)
+        {
+            list.add(i);
+        }
+        return list;
     }
 }

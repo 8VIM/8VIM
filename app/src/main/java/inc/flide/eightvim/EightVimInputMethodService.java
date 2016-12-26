@@ -15,7 +15,7 @@ import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.keyboardHelpers.EightVimInputMethodServiceHelper;
 import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
-import inc.flide.eightvim.emojiSpecific.EmojiKeyboardView;
+import inc.flide.eightvim.emojis.view.EmojiKeyboardView;
 import inc.flide.eightvim.views.MainKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 import inc.flide.eightvim.views.SelectionKeyboardView;

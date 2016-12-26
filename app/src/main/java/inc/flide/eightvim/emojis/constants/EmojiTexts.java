@@ -1,4 +1,4 @@
-package inc.flide.eightvim.emojiSpecific;
+package inc.flide.eightvim.emojis.constants;
 
 public interface EmojiTexts {
 

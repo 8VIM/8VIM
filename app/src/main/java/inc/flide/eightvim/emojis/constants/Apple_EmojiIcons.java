@@ -1,10 +1,11 @@
-package inc.flide.eightvim.emojiSpecific;
+package inc.flide.eightvim.emojis.constants;
 
 import inc.flide.eightvim.R;
+import inc.flide.eightvim.utilities.Utilities;
 
 public final class Apple_EmojiIcons extends EmojiIcons {
     public Apple_EmojiIcons(){
-        transIconIds = Utility.initArrayList(
+        transIconIds = Utilities.initArrayList(
                 R.drawable.apple_emoji_u1f3e0, R.drawable.apple_emoji_u1f3e1, R.drawable.apple_emoji_u1f3e2, R.drawable.apple_emoji_u1f3e3, R.drawable.apple_emoji_u1f3e4,
                 R.drawable.apple_emoji_u1f3e5, R.drawable.apple_emoji_u1f3e6, R.drawable.apple_emoji_u1f3e7, R.drawable.apple_emoji_u1f3e8, R.drawable.apple_emoji_u1f3e9,
                 R.drawable.apple_emoji_u1f3ea, R.drawable.apple_emoji_u1f3eb, R.drawable.apple_emoji_u26ea, R.drawable.apple_emoji_u26f2, R.drawable.apple_emoji_u1f3ec,
@@ -32,7 +33,7 @@ public final class Apple_EmojiIcons extends EmojiIcons {
                 R.drawable.apple_emoji_ufe4ed, R.drawable.apple_emoji_ufe4ee
         );
 
-        thingsIconIds = Utility.initArrayList(
+        thingsIconIds = Utilities.initArrayList(
                 //things
                 R.drawable.apple_emoji_u1f530, R.drawable.apple_emoji_u1f484, R.drawable.apple_emoji_u1f45e, R.drawable.apple_emoji_u1f45f, R.drawable.apple_emoji_u1f451,
                 R.drawable.apple_emoji_u1f452, R.drawable.apple_emoji_u1f3a9, R.drawable.apple_emoji_u1f393, R.drawable.apple_emoji_u1f453, R.drawable.apple_emoji_u231a,
@@ -69,7 +70,7 @@ public final class Apple_EmojiIcons extends EmojiIcons {
                 R.drawable.apple_emoji_u1f3b8, R.drawable.apple_emoji_u303d
         );
 
-        peopleIconIds = Utility.initArrayList(
+        peopleIconIds = Utilities.initArrayList(
                 // people
                 R.drawable.apple_emoji_u263a, R.drawable.apple_emoji_u1f60a, R.drawable.apple_emoji_u1f600, R.drawable.apple_emoji_u1f601, R.drawable.apple_emoji_u1f602,
                 R.drawable.apple_emoji_u1f603, R.drawable.apple_emoji_u1f604, R.drawable.apple_emoji_u1f605, R.drawable.apple_emoji_u1f606, R.drawable.apple_emoji_u1f607,
@@ -103,7 +104,7 @@ public final class Apple_EmojiIcons extends EmojiIcons {
                 R.drawable.apple_emoji_u261d, R.drawable.apple_emoji_u1f446, R.drawable.apple_emoji_u1f447, R.drawable.apple_emoji_u1f448, R.drawable.apple_emoji_u1f449,
                 R.drawable.apple_emoji_u1f44b, R.drawable.apple_emoji_u1f44f, R.drawable.apple_emoji_u1f450
         );
-        otherIconIds = Utility.initArrayList(
+        otherIconIds = Utilities.initArrayList(
                 // other
                 R.drawable.apple_emoji_u1f51d, R.drawable.apple_emoji_u1f519, R.drawable.apple_emoji_u1f51b, R.drawable.apple_emoji_u1f51c, R.drawable.apple_emoji_u1f51a,
                 R.drawable.apple_emoji_u23f3, R.drawable.apple_emoji_u231b, R.drawable.apple_emoji_u23f0, R.drawable.apple_emoji_u2648, R.drawable.apple_emoji_u2649,
@@ -155,7 +156,7 @@ public final class Apple_EmojiIcons extends EmojiIcons {
                 R.drawable.apple_emoji_u1f1fb, R.drawable.apple_emoji_u1f1fc, R.drawable.apple_emoji_u1f1fd, R.drawable.apple_emoji_u1f1fe, R.drawable.apple_emoji_u1f1ff
         );
 
-        natureIconIds = Utility.initArrayList(
+        natureIconIds = Utilities.initArrayList(
                 // nature
                 R.drawable.apple_emoji_u1f415, R.drawable.apple_emoji_u1f436, R.drawable.apple_emoji_u1f429, R.drawable.apple_emoji_u1f408, R.drawable.apple_emoji_u1f431,
                 R.drawable.apple_emoji_u1f400, R.drawable.apple_emoji_u1f401, R.drawable.apple_emoji_u1f42d, R.drawable.apple_emoji_u1f439, R.drawable.apple_emoji_u1f422,

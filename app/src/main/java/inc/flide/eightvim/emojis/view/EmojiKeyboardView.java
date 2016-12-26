@@ -1,4 +1,4 @@
-package inc.flide.eightvim.emojiSpecific;
+package inc.flide.eightvim.emojis.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,16 +6,20 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 
 import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.R;
+import inc.flide.eightvim.emojis.adapter.EmojiPagerAdapter;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.structures.KeyboardActionType;
@@ -146,6 +150,28 @@ public class EmojiKeyboardView extends View implements SharedPreferences.OnShare
             emojiPagerAdapter = new EmojiPagerAdapter(getContext(), viewPager, height);
             viewPager.setAdapter(emojiPagerAdapter);
             this.invalidate();
+        }
+    }
+
+    public static class KeyboardSinglePageView {
+
+        private Context context;
+        private BaseAdapter adapter;
+
+        public KeyboardSinglePageView(Context context, BaseAdapter adapter) {
+            this.context = context;
+            this.adapter = adapter;
+        }
+
+        public View getView() {
+
+            final GridView emojiGrid = new GridView(context);
+
+            emojiGrid.setColumnWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, context.getResources().getDisplayMetrics()));
+            emojiGrid.setNumColumns(GridView.AUTO_FIT);
+
+            emojiGrid.setAdapter(adapter);
+            return emojiGrid;
         }
     }
 }

@@ -1,12 +1,13 @@
-package inc.flide.eightvim.emojiSpecific;
+package inc.flide.eightvim.emojis.constants;
 
 
 import inc.flide.eightvim.R;
+import inc.flide.eightvim.utilities.Utilities;
 
 public final class Google_EmojiIcons extends EmojiIcons {
     public Google_EmojiIcons(){
 
-        transIconIds = Utility.initArrayList(
+        transIconIds = Utilities.initArrayList(
                 R.drawable.google_emoji_u1f3e0, R.drawable.google_emoji_u1f3e1, R.drawable.google_emoji_u1f3e2, R.drawable.google_emoji_u1f3e3, R.drawable.google_emoji_u1f3e4,
                 R.drawable.google_emoji_u1f3e5, R.drawable.google_emoji_u1f3e6, R.drawable.google_emoji_u1f3e7, R.drawable.google_emoji_u1f3e8, R.drawable.google_emoji_u1f3e9,
                 R.drawable.google_emoji_u1f3ea, R.drawable.google_emoji_u1f3eb, R.drawable.google_emoji_u26ea, R.drawable.google_emoji_u26f2, R.drawable.google_emoji_u1f3ec,
@@ -34,7 +35,7 @@ public final class Google_EmojiIcons extends EmojiIcons {
                 R.drawable.google_emoji_ufe4ed, R.drawable.google_emoji_ufe4ee
         );
 
-        thingsIconIds = Utility.initArrayList(
+        thingsIconIds = Utilities.initArrayList(
                 //things
                 R.drawable.google_emoji_u1f530, R.drawable.google_emoji_u1f484, R.drawable.google_emoji_u1f45e, R.drawable.google_emoji_u1f45f, R.drawable.google_emoji_u1f451,
                 R.drawable.google_emoji_u1f452, R.drawable.google_emoji_u1f3a9, R.drawable.google_emoji_u1f393, R.drawable.google_emoji_u1f453, R.drawable.google_emoji_u231a,
@@ -71,7 +72,7 @@ public final class Google_EmojiIcons extends EmojiIcons {
                 R.drawable.google_emoji_u1f3b8, R.drawable.google_emoji_u303d
         );
 
-        peopleIconIds = Utility.initArrayList(
+        peopleIconIds = Utilities.initArrayList(
                 // people
                 R.drawable.google_emoji_u263a, R.drawable.google_emoji_u1f60a, R.drawable.google_emoji_u1f600, R.drawable.google_emoji_u1f601, R.drawable.google_emoji_u1f602,
                 R.drawable.google_emoji_u1f603, R.drawable.google_emoji_u1f604, R.drawable.google_emoji_u1f605, R.drawable.google_emoji_u1f606, R.drawable.google_emoji_u1f607,
@@ -105,7 +106,7 @@ public final class Google_EmojiIcons extends EmojiIcons {
                 R.drawable.google_emoji_u261d, R.drawable.google_emoji_u1f446, R.drawable.google_emoji_u1f447, R.drawable.google_emoji_u1f448, R.drawable.google_emoji_u1f449,
                 R.drawable.google_emoji_u1f44b, R.drawable.google_emoji_u1f44f, R.drawable.google_emoji_u1f450
         );
-        otherIconIds = Utility.initArrayList(
+        otherIconIds = Utilities.initArrayList(
                 // other
                 R.drawable.google_emoji_u1f51d, R.drawable.google_emoji_u1f519, R.drawable.google_emoji_u1f51b, R.drawable.google_emoji_u1f51c, R.drawable.google_emoji_u1f51a,
                 R.drawable.google_emoji_u23f3, R.drawable.google_emoji_u231b, R.drawable.google_emoji_u23f0, R.drawable.google_emoji_u2648, R.drawable.google_emoji_u2649,
@@ -157,7 +158,7 @@ public final class Google_EmojiIcons extends EmojiIcons {
                 R.drawable.google_emoji_u1f1fb, R.drawable.google_emoji_u1f1fc, R.drawable.google_emoji_u1f1fd, R.drawable.google_emoji_u1f1fe, R.drawable.google_emoji_u1f1ff
         );
 
-        natureIconIds = Utility.initArrayList(
+        natureIconIds = Utilities.initArrayList(
                 // nature
                 R.drawable.google_emoji_u1f415, R.drawable.google_emoji_u1f436, R.drawable.google_emoji_u1f429, R.drawable.google_emoji_u1f408, R.drawable.google_emoji_u1f431,
                 R.drawable.google_emoji_u1f400, R.drawable.google_emoji_u1f401, R.drawable.google_emoji_u1f42d, R.drawable.google_emoji_u1f439, R.drawable.google_emoji_u1f422,
