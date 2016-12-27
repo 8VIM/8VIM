@@ -7,7 +7,7 @@ import inc.flide.eightvim.utilities.Utilities;
 public final class Google_EmojiIcons extends EmojiIcons {
     public Google_EmojiIcons(){
 
-        transIconIds = Utilities.initArrayList(
+        transportationIconIds = Utilities.initArrayList(
                 R.drawable.google_emoji_u1f3e0, R.drawable.google_emoji_u1f3e1, R.drawable.google_emoji_u1f3e2, R.drawable.google_emoji_u1f3e3, R.drawable.google_emoji_u1f3e4,
                 R.drawable.google_emoji_u1f3e5, R.drawable.google_emoji_u1f3e6, R.drawable.google_emoji_u1f3e7, R.drawable.google_emoji_u1f3e8, R.drawable.google_emoji_u1f3e9,
                 R.drawable.google_emoji_u1f3ea, R.drawable.google_emoji_u1f3eb, R.drawable.google_emoji_u26ea, R.drawable.google_emoji_u26f2, R.drawable.google_emoji_u1f3ec,

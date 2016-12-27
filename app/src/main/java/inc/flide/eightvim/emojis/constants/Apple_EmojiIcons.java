@@ -5,7 +5,7 @@ import inc.flide.eightvim.utilities.Utilities;
 
 public final class Apple_EmojiIcons extends EmojiIcons {
     public Apple_EmojiIcons(){
-        transIconIds = Utilities.initArrayList(
+        transportationIconIds = Utilities.initArrayList(
                 R.drawable.apple_emoji_u1f3e0, R.drawable.apple_emoji_u1f3e1, R.drawable.apple_emoji_u1f3e2, R.drawable.apple_emoji_u1f3e3, R.drawable.apple_emoji_u1f3e4,
                 R.drawable.apple_emoji_u1f3e5, R.drawable.apple_emoji_u1f3e6, R.drawable.apple_emoji_u1f3e7, R.drawable.apple_emoji_u1f3e8, R.drawable.apple_emoji_u1f3e9,
                 R.drawable.apple_emoji_u1f3ea, R.drawable.apple_emoji_u1f3eb, R.drawable.apple_emoji_u26ea, R.drawable.apple_emoji_u26f2, R.drawable.apple_emoji_u1f3ec,

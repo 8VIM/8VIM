@@ -44,7 +44,7 @@ public class EmojiPagerAdapter extends PagerAdapter implements PagerSlidingTabSt
         pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.peopleEmojiTexts, icons.getPeopleIconIds())).getView());
         pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.thingsEmojiTexts, icons.getThingsIconIds())).getView());
         pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.natureEmojiTexts, icons.getNatureIconIds())).getView());
-        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.transEmojiTexts, icons.getTransIconIds())).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.transportationEmojiTexts, icons.getTransportationIconIds())).getView());
         pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.otherEmojiTexts, icons.getOtherIconIds())).getView());
 
     }

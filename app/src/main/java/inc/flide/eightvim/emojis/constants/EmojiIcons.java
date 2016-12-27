@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public abstract class EmojiIcons {
 
-    protected ArrayList<Integer> transIconIds;
+    protected ArrayList<Integer> transportationIconIds;
     protected ArrayList<Integer> thingsIconIds;
     protected ArrayList<Integer> peopleIconIds;
     protected ArrayList<Integer> otherIconIds;
@@ -26,8 +26,8 @@ public abstract class EmojiIcons {
         return thingsIconIds;
     }
 
-    public ArrayList<Integer> getTransIconIds() {
-        return transIconIds;
+    public ArrayList<Integer> getTransportationIconIds() {
+        return transportationIconIds;
     }
 
 }
