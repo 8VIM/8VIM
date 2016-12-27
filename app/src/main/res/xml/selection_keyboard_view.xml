@@ -21,7 +21,7 @@
         <Key android:codes="@integer/PASTE"
             android:keyLabel="@string/paste"/>
         <Key android:codes="@integer/SWITCH_TO_EMOJI_KEYBOARD"
-            android:keyIcon="@drawable/icon_emoji" />
+            android:keyIcon="@drawable/ic_people_white" />
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_LEFT"
             android:keyLabel="@string/dpadLeft"
             android:isRepeatable="true" />

@@ -22,11 +22,11 @@ import inc.flide.eightvim.emojis.view.EmojiKeyboardView;
 
 public class EmojiPagerAdapter extends PagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
 
-    private final int ICONS[] = {R.drawable.ic_people,
-                                R.drawable.ic_objects,
-                                R.drawable.ic_nature,
-                                R.drawable.ic_travel,
-                                R.drawable.ic_symbols};
+    private final int ICONS[] = {R.drawable.ic_emoji_category_people,
+                                R.drawable.ic_emoji_category_objects,
+                                R.drawable.ic_emoji_category_nature,
+                                R.drawable.ic_emoji_category_travel,
+                                R.drawable.ic_emoji_category_symbols};
 
     private ViewPager pager;
     private ArrayList<View> pages;
