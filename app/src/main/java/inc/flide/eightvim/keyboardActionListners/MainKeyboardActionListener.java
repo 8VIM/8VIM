@@ -8,15 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import inc.flide.eightvim.EightVimInputMethodService;
+import inc.flide.eightvim.structures.Constants;
 import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.views.MainKeyboardView;
 import inc.flide.logging.Logger;
 
 public class MainKeyboardActionListener {
-
-    private static final int DELAY_MILLIS_LONG_PRESS_INITIATION = 500;
-    private static final int DELAY_MILLIS_LONG_PRESS_CONTINUATION = 50;
 
     private EightVimInputMethodService eightVimInputMethodService;
     private MainKeyboardView mainKeyboardView;
@@ -80,13 +78,13 @@ public class MainKeyboardActionListener {
             List<FingerPosition> movementSequenceAgumented = new ArrayList<>(movementSequence);
             movementSequenceAgumented.add(FingerPosition.LONG_PRESS);
             processMovementSequence(movementSequenceAgumented);
-            longPressHandler.postDelayed(this, DELAY_MILLIS_LONG_PRESS_CONTINUATION);
+            longPressHandler.postDelayed(this, Constants.DELAY_MILLIS_LONG_PRESS_CONTINUATION);
         }
     };
 
     private void initiateLongPressDetection(){
         isLongPressCallbackSet = true;
-        longPressHandler.postDelayed(longPressRunnable, DELAY_MILLIS_LONG_PRESS_INITIATION);
+        longPressHandler.postDelayed(longPressRunnable, Constants.DELAY_MILLIS_LONG_PRESS_INITIATION);
     }
 
     private void interruptLongPress(){

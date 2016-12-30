@@ -2,11 +2,13 @@ package inc.flide.eightvim.views;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,7 @@ import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.R;
 import inc.flide.eightvim.emojis.adapter.EmojiPagerAdapter;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
+import inc.flide.eightvim.structures.Constants;
 import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.structures.KeyboardActionType;
 
@@ -29,6 +32,8 @@ public class EmojiKeyboardView extends View implements SharedPreferences.OnShare
     private ViewPager viewPager;
     private PagerSlidingTabStrip pagerSlidingTabStrip;
     private LinearLayout layout;
+
+    Button deleteButton;
 
     private EmojiPagerAdapter emojiPagerAdapter;
     private EightVimInputMethodService eightVimInputMethodService;
@@ -87,29 +92,40 @@ public class EmojiKeyboardView extends View implements SharedPreferences.OnShare
 
     private void setupDeleteButton() {
 
-        Button delete = (Button) layout.findViewById(R.id.deleteButton);
+        deleteButton = (Button) layout.findViewById(R.id.deleteButton);
 
-        delete.setOnClickListener(new OnClickListener() {
+        deleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL, 0);
             }
         });
 
-        delete.setOnLongClickListener(new OnLongClickListener() {
+        deleteButton.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                //eightVimInputMethodService.switchToPreviousInputMethod();
-                return false;
+                longDeleteButtonPressHandler.postDelayed(longDeleteButtonPressRunnable, Constants.DELAY_MILLIS_LONG_PRESS_CONTINUATION);
+                return true;
             }
         });
     }
 
+    private final Handler longDeleteButtonPressHandler = new Handler();
+    private Runnable longDeleteButtonPressRunnable = new Runnable() {
+        @Override
+        public void run() {
+            eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL, 0);
+            if(deleteButton.isPressed()) {
+                longDeleteButtonPressHandler.postDelayed(this, Constants.DELAY_MILLIS_LONG_PRESS_CONTINUATION);
+            }
+        }
+    };
+
     private void setupKeyboardButton() {
 
-        Button delete = (Button) layout.findViewById(R.id.switchToKeyboard);
+        Button keyboardButton = (Button) layout.findViewById(R.id.switchToKeyboard);
 
-        delete.setOnClickListener(new OnClickListener() {
+        keyboardButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
@@ -119,16 +135,7 @@ public class EmojiKeyboardView extends View implements SharedPreferences.OnShare
                 eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
             }
         });
-
-        delete.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                //eightVimInputMethodService.switchToPreviousInputMethod();
-                return false;
-            }
-        });
     }
-
 
     private int width;
     private int height;
