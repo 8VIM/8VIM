@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:viewportWidth="64"
+    android:viewportHeight="64"
+    android:width="64dp"
+    android:height="64dp">
+    <group
+        android:scaleX="0.9999904"
+        android:scaleY="0.9999904"
+        android:rotation="-44.9919"
+        android:translateX="-13.9145"
+        android:translateY="31.7241">
+        <path
+            android:pathData="M8.8 22.1l45.1 0 0 21.1 -45.1 0z"
+            android:fillColor="#ffce31" />
+    </group>
+    <path
+        android:pathData="M61.3 4.6L59.4 2.7C55.8 -0.9 50 -0.9 46.3 2.7l-6.5 6.5 15 15 6.5 -6.5c3.6 -3.6 3.6 -9.5 0 -13.1"
+        android:fillColor="#ed4c5c" />
+    <group
+        android:scaleX="0.9999904"
+        android:scaleY="0.9999904"
+        android:rotation="-45"
+        android:translateX="0.0023"
+        android:translateY="37.4923">
+        <path
+            android:pathData="M42.4 8.2l5.8 0 0 21.1 -5.8 0z"
+            android:fillColor="#93a2aa" />
+    </group>
+    <group
+        android:scaleX="0.9999904"
+        android:scaleY="0.9999904"
+        android:rotation="-45"
+        android:translateX="0.00263"
+        android:translateY="37.4922">
+        <path
+            android:pathData="M42.4 10.4l5.8 0 0 16.6 -5.8 0z"
+            android:fillColor="#c7d3d8" />
+    </group>
+    <path
+        android:pathData="M7.9 41.1l-6.5 17 4.5 4.5 17 -6.5z"
+        android:fillColor="#fed0ac" />
+    <path
+        android:pathData="M0.3 61.1c-0.9 2.4 0.3 3.5 2.7 2.6l8.2 -3.1 -7.7 -7.7 -3.2 8.2"
+        android:fillColor="#333333" />
+    <group
+        android:scaleX="0.9999904"
+        android:scaleY="0.9999904"
+        android:rotation="-45"
+        android:translateX="-13.8881"
+        android:translateY="25.9017">
+        <path
+            android:pathData="M4.6 26.2l39.4 0 0 7 -39.4 0z"
+            android:fillColor="#ffdf85" />
+    </group>
+    <group
+        android:scaleX="0.9999904"
+        android:scaleY="0.9999904"
+        android:rotation="-45"
+        android:translateX="-18.0167"
+        android:translateY="35.8688">
+        <path
+            android:pathData="M14.6 36.2l39.4 0 0 7 -39.4 0z"
+            android:fillColor="#ff8736" />
+    </group>
+</vector>

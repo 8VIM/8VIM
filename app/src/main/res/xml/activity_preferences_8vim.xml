@@ -8,6 +8,6 @@
         android:title="@string/emoji_icon_set"
         android:entries="@array/emojiIconsCategory"
         android:entryValues="@array/emojiIconsCategoryValues"
-        android:defaultValue="@string/setting_change_icon_set_value_google" />
+        android:defaultValue="@string/setting_change_icon_set_value_emojione" />
 
 </PreferenceScreen>

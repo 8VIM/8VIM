@@ -11,7 +11,9 @@ public class Setting extends PreferenceActivity{
             .getString(R.string.setting_change_icon_set_key);
     public static final String CHANGE_ICON_SET_VALUE_GOOGLE = EightVimInputMethodService.getStaticApplicationContext()
             .getString(R.string.setting_change_icon_set_value_google);
-    public static final String CHANGE_ICON_SET_VALUE_DEFAULT = CHANGE_ICON_SET_VALUE_GOOGLE;
+    public static final String CHANGE_ICON_SET_VALUE_EMOJIONE = EightVimInputMethodService.getStaticApplicationContext()
+            .getString(R.string.setting_change_icon_set_value_emojione);
+    public static final String CHANGE_ICON_SET_VALUE_DEFAULT = CHANGE_ICON_SET_VALUE_EMOJIONE;
     public static final String CHANGE_ICON_SET_VALUE_APPLE = EightVimInputMethodService.getStaticApplicationContext()
             .getString(R.string.setting_change_icon_set_value_apple);
 
