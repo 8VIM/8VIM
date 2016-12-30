@@ -1,52 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:background="@color/light_silver">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_silver"
+    android:orientation="vertical">
 
-        <LinearLayout
-                android:layout_height="48dp"
-                android:layout_width="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
 
-            <com.astuetz.PagerSlidingTabStrip
-                    android:id="@+id/emojiCategorytab"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="48dp"/>
+        <Button
+            android:id="@+id/switchToKeyboard"
+            android:layout_width="50dp"
+            android:layout_height="48dp"
+            android:background="@drawable/btn_background"
+            android:scaleType="fitCenter"
+            android:text="&#x2328;" />
 
-            <LinearLayout android:orientation="vertical"
-                          android:layout_width="wrap_content"
-                          android:layout_height="fill_parent">
 
-                <LinearLayout android:orientation="horizontal"
-                              android:layout_width="wrap_content"
-                              android:layout_height="46dp">
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/emojiCategorytab"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1" />
 
-                    <Button android:id="@+id/deleteButton"
-                                 android:layout_width="50dp"
-                                 android:layout_height="48dp"
-                                 android:scaleType="center"
-                                 android:text="@string/eraseToTheLeft"
-                                 android:background="@drawable/btn_background"/>
 
-                    <Button android:id="@+id/switchToKeyboard"
-                        android:layout_width="50dp"
-                        android:layout_height="48dp"
-                        android:scaleType="fitCenter"
-                        android:text="&#x2328;"
-                        android:background="@drawable/btn_background"/>
-                </LinearLayout>
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="50dp"
+            android:layout_height="48dp"
+            android:background="@drawable/btn_background"
+            android:scaleType="center"
+            android:text="@string/eraseToTheLeft" />
 
-            </LinearLayout>
+    </LinearLayout>
 
-        </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/emojiKeyboard"
+        android:layout_width="match_parent"
+        android:layout_height="200dp">
 
-        <android.support.v4.view.ViewPager
-                android:id="@+id/emojiKeyboard"
-                android:layout_width="match_parent"
-                android:layout_height="200dp">
-
-        </android.support.v4.view.ViewPager>
+    </android.support.v4.view.ViewPager>
 </LinearLayout>
