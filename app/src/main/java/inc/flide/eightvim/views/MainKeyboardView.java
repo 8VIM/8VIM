@@ -138,7 +138,7 @@ public class MainKeyboardView extends View{
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Logger.v(this, "onMeasure called");
+
         // Get size without mode
         int width = View.MeasureSpec.getSize(widthMeasureSpec);
         int height = View.MeasureSpec.getSize(heightMeasureSpec);
@@ -165,7 +165,7 @@ public class MainKeyboardView extends View{
         circle = new Circle(centre, radius);
         // Set the new size
         setMeasuredDimension(width, height);
-        Logger.v(this, "onMeasure returns");
+        
     }
 
 
