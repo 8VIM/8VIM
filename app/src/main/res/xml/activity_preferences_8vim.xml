@@ -7,7 +7,7 @@
         android:key="@string/setting_change_icon_set_key"
         android:title="@string/emoji_icon_set"
         android:entries="@array/emojiIconsCategory"
-        android:entryValues="@array/emojiIconsCategory"
-        android:defaultValue="Google" />
+        android:entryValues="@array/emojiIconsCategoryValues"
+        android:defaultValue="@string/setting_change_icon_set_value_google" />
 
 </PreferenceScreen>

@@ -4,14 +4,33 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import inc.flide.eightvim.EightVimInputMethodService;
+import inc.flide.eightvim.emojis.Emoji;
 
 public class StaticEmojiAdapter extends BaseEmojiAdapter {
 
-    public StaticEmojiAdapter(Context context, String[] emojiTextsAsStrings, ArrayList<Integer> iconIds) {
+    private String filePrefix;
+    public StaticEmojiAdapter(Context context, List<Emoji> emojiList, String filePrefix) {
         super((EightVimInputMethodService) context);
-        this.emojiTexts =  new ArrayList<String>(Arrays.asList(emojiTextsAsStrings));
-        this.iconIds = iconIds;
+        this.emojiList = emojiList;
+        this.filePrefix = filePrefix;
+    }
+
+    @Override
+    public int getIconId(int position) {
+        String resourceString = filePrefix+emojiList.get(position).getUnicodeHexcode();
+        int resourceId;
+        resourceId = emojiKeyboardService.getResources().getIdentifier(resourceString, "drawable", emojiKeyboardService.getPackageName());
+        if (resourceId == 0) {
+            resourceId = emojiKeyboardService.getResources().getIdentifier("ic_not_available_sign", "drawable", emojiKeyboardService.getPackageName());
+        }
+        return resourceId;
+    }
+
+    @Override
+    public String getEmojiUnicodeString(int position) {
+        return emojiList.get(position).getUnicodeJavaString();
     }
 }

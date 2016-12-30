@@ -14,19 +14,21 @@ import java.util.ArrayList;
 
 import inc.flide.eightvim.R;
 import inc.flide.eightvim.Setting;
-import inc.flide.eightvim.emojis.constants.Apple_EmojiIcons;
-import inc.flide.eightvim.emojis.constants.EmojiIcons;
-import inc.flide.eightvim.emojis.constants.EmojiTexts;
-import inc.flide.eightvim.emojis.constants.Google_EmojiIcons;
+import inc.flide.eightvim.emojis.CategorizedEmojiList;
 import inc.flide.eightvim.emojis.view.EmojiKeyboardView;
+import inc.flide.eightvim.keyboardHelpers.EightVimInputMethodServiceHelper;
+import inc.flide.logging.Logger;
 
 public class EmojiPagerAdapter extends PagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
 
     private final int ICONS[] = {R.drawable.ic_emoji_category_people,
-                                R.drawable.ic_emoji_category_objects,
                                 R.drawable.ic_emoji_category_nature,
+                                R.drawable.ic_emoji_category_foods,
+                                R.drawable.ic_emoji_category_activity,
                                 R.drawable.ic_emoji_category_travel,
-                                R.drawable.ic_emoji_category_symbols};
+                                R.drawable.ic_emoji_category_objects,
+                                R.drawable.ic_emoji_category_symbols,
+                                R.drawable.ic_emoji_category_flags};
 
     private ViewPager pager;
     private ArrayList<View> pages;
@@ -35,17 +37,23 @@ public class EmojiPagerAdapter extends PagerAdapter implements PagerSlidingTabSt
     public EmojiPagerAdapter(Context context, ViewPager pager, int keyboardHeight) {
         super();
 
+        CategorizedEmojiList categorizedEmojiList = new CategorizedEmojiList(EightVimInputMethodServiceHelper.loadEmojiData(context.getResources(), context.getPackageName()));
+
         this.pager = pager;
         this.keyboardHeight = keyboardHeight;
         this.pages = new ArrayList<View>();
 
-        EmojiIcons icons = getPreferedIconSet();
-        /*pages.add(new KeyboardSinglePageView(context, new RecentEmojiAdapter(context)).getView());*/
-        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.peopleEmojiTexts, icons.getPeopleIconIds())).getView());
-        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.thingsEmojiTexts, icons.getThingsIconIds())).getView());
-        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.natureEmojiTexts, icons.getNatureIconIds())).getView());
-        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.transportationEmojiTexts, icons.getTransportationIconIds())).getView());
-        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, EmojiTexts.otherEmojiTexts, icons.getOtherIconIds())).getView());
+        String iconSetFilePrefix = getPreferedIconSet();
+        Logger.d(this, iconSetFilePrefix);
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getPeople(), iconSetFilePrefix)).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getNature(), iconSetFilePrefix)).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getFood(), iconSetFilePrefix)).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getActivity(), iconSetFilePrefix)).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getTravel(), iconSetFilePrefix)).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getObjects(), iconSetFilePrefix)).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getSymbols(), iconSetFilePrefix)).getView());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getFlags(), iconSetFilePrefix)).getView());
+
 
     }
 
@@ -75,20 +83,8 @@ public class EmojiPagerAdapter extends PagerAdapter implements PagerSlidingTabSt
         return view == object;
     }
 
-    private EmojiIcons getPreferedIconSet() {
-
+    private String getPreferedIconSet() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(pager.getContext());
-
-        if (sharedPreferences
-                .getString(Setting.CHANGE_ICON_SET_KEY, Setting.CHANGE_ICON_SET_VALUE_DEFAULT)
-                .equals(Setting.CHANGE_ICON_SET_VALUE_GOOGLE)){
-            return new Google_EmojiIcons();
-        } else if (sharedPreferences
-                .getString(Setting.CHANGE_ICON_SET_KEY, Setting.CHANGE_ICON_SET_VALUE_DEFAULT)
-                .equals(Setting.CHANGE_ICON_SET_VALUE_APPLE)) {
-            return new Apple_EmojiIcons();
-        }
-
-        return new Google_EmojiIcons();
+        return sharedPreferences.getString(Setting.CHANGE_ICON_SET_KEY, Setting.CHANGE_ICON_SET_VALUE_DEFAULT);
     }
 }

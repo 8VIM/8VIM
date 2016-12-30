@@ -6,6 +6,9 @@
 
     <string name="emoji_icon_set">Emoji Icon Set</string>
     <string name="setting_change_icon_set_key">icon_set</string>
-    <string name="setting_change_icon_set_value_google">Google</string>
-    <string name="setting_change_icon_set_value_apple">Apple</string>
+    <string name="setting_change_icon_set_entry_google">Google</string>
+    <string name="setting_change_icon_set_entry_apple">Apple</string>
+
+    <string name="setting_change_icon_set_value_google">google_emoji_u</string>
+    <string name="setting_change_icon_set_value_apple">apple_emoji_u</string>
 </resources>

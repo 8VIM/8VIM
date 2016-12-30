@@ -7,15 +7,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.R;
+import inc.flide.eightvim.emojis.Emoji;
 
 public abstract class BaseEmojiAdapter extends BaseAdapter {
 
     protected EightVimInputMethodService emojiKeyboardService;
-    protected ArrayList<String> emojiTexts;
-    protected ArrayList<Integer> iconIds;
+    protected List<Emoji> emojiList;
 
     public BaseEmojiAdapter(EightVimInputMethodService emojiKeyboardService ) {
         this.emojiKeyboardService = emojiKeyboardService;
@@ -23,7 +24,7 @@ public abstract class BaseEmojiAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return emojiTexts.size();
+        return emojiList.size();
     }
 
     @Override
@@ -39,13 +40,13 @@ public abstract class BaseEmojiAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageResource(iconIds.get(position));
+        imageView.setImageResource(getIconId(position));
         imageView.setBackgroundResource(R.drawable.btn_background);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                emojiKeyboardService.sendText(emojiTexts.get(position));
+                emojiKeyboardService.sendText(getEmojiUnicodeString(position));
             }
         });
 
@@ -61,4 +62,7 @@ public abstract class BaseEmojiAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return 0;
     }
+
+    public abstract int getIconId(int position);
+    public abstract String getEmojiUnicodeString(int position);
 }
