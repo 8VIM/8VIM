@@ -76,7 +76,7 @@ public class EmojiKeyboardView extends View implements SharedPreferences.OnShare
 
         pagerSlidingTabStrip.setViewPager(viewPager);
 
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(0);
 
         PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(this);
     }
