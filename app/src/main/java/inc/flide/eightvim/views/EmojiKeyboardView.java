@@ -1,4 +1,4 @@
-package inc.flide.eightvim.emojis.view;
+package inc.flide.eightvim.views;
 
 import android.content.Context;
 import android.content.SharedPreferences;

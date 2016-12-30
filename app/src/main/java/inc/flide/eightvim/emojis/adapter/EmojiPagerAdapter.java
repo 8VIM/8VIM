@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import inc.flide.eightvim.R;
 import inc.flide.eightvim.Setting;
 import inc.flide.eightvim.emojis.CategorizedEmojiList;
-import inc.flide.eightvim.emojis.view.EmojiKeyboardView;
+import inc.flide.eightvim.views.EmojiKeyboardView;
 import inc.flide.eightvim.keyboardHelpers.EightVimInputMethodServiceHelper;
 import inc.flide.logging.Logger;
 

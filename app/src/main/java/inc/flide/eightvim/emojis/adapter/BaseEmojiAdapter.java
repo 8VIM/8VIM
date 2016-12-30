@@ -6,12 +6,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.R;
-import inc.flide.eightvim.emojis.Emoji;
+import inc.flide.eightvim.structures.Emoji;
 
 public abstract class BaseEmojiAdapter extends BaseAdapter {
 

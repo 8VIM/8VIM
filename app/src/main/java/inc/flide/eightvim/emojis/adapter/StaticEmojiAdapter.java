@@ -2,12 +2,10 @@ package inc.flide.eightvim.emojis.adapter;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import inc.flide.eightvim.EightVimInputMethodService;
-import inc.flide.eightvim.emojis.Emoji;
+import inc.flide.eightvim.structures.Emoji;
 
 public class StaticEmojiAdapter extends BaseEmojiAdapter {
 

@@ -9,9 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import inc.flide.eightvim.emojis.Emoji;
+import inc.flide.eightvim.structures.Emoji;
 import inc.flide.eightvim.structures.EmojiCategory;
-import inc.flide.logging.Logger;
 
 /*
 {
@@ -75,7 +74,7 @@ public class EmojiJSONReader {
         String unicode = "";
         String unicode_alt;
         String code_decimal;
-        String name;
+        String name = "";
         String shortname = "";
         String category = "";
         int emoji_order = 0;
@@ -97,7 +96,7 @@ public class EmojiJSONReader {
                     reader.skipValue();
                     break;
                 case JSON_TAG_NAME:
-                    reader.skipValue();
+                    name = reader.nextString();
                     break;
                 case JSON_TAG_SHORTNAME:
                     shortname = reader.nextString();
@@ -123,7 +122,7 @@ public class EmojiJSONReader {
         }
         reader.endObject();
 
-        return new Emoji(shortname, convertStringToUnicode(unicode), unicode, EmojiCategory.valueOf(category), emoji_order);
+        return new Emoji(name, shortname, convertStringToUnicode(unicode), unicode, EmojiCategory.valueOf(category), emoji_order);
 
     }
 
