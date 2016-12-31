@@ -7,10 +7,8 @@ import android.preference.PreferenceFragment;
 
 public class Setting extends PreferenceActivity{
 
-    public static final String CHANGE_ICON_SET_KEY = EightVimInputMethodService.getStaticApplicationContext()
-            .getString(R.string.setting_change_icon_set_key);
-    public static final String CHANGE_ICON_SET_VALUE_DEFAULT = EightVimInputMethodService.getStaticApplicationContext()
-            .getString(R.string.setting_change_icon_set_value_emojione);
+    public static final String CHANGE_ICON_SET_KEY = "icon_set";
+    public static final String CHANGE_ICON_SET_VALUE_DEFAULT ="emojione_emoji_";
 
     @Override
     public Intent getIntent() {

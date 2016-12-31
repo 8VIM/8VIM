@@ -31,8 +31,6 @@ public class EightVimInputMethodService extends InputMethodService {
     private EmojiKeyboardView emojiKeyboardView;
     private View currentView;
 
-
-
     private int isShiftLockOn;
     private int isCapsLockOn;
     private boolean shouldSkipImmediateNextCharacter;
@@ -40,16 +38,8 @@ public class EightVimInputMethodService extends InputMethodService {
     EightVimInputMethodServiceHelper eightVimInputMethodServiceHelper = new EightVimInputMethodServiceHelper();
     InputConnection inputConnection;
 
-    private static Context staticApplicationContext;
-
-    public static Context getStaticApplicationContext() {
-        return staticApplicationContext;
-    }
-
     @Override
     public View onCreateInputView() {
-
-        staticApplicationContext = getApplicationContext();
 
         emojiKeyboardView = (EmojiKeyboardView) getLayoutInflater()
                 .inflate(R.layout.emoji_keyboard_layout, null);
