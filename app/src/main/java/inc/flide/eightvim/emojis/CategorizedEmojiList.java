@@ -21,19 +21,8 @@ public class CategorizedEmojiList {
     private List<Emoji> regional = new ArrayList<>();
 
     public CategorizedEmojiList(List<Emoji> emojis) {
-        emojis = removeDiversityEmojis(emojis);
         categorizeEmoji(emojis);
         sortEmoji();
-    }
-
-    private List<Emoji> removeDiversityEmojis(List<Emoji> emojis) {
-        List<Emoji> emojiListMinusDiversity = new ArrayList<>();
-        for(Emoji emoji: emojis){
-            if(emoji.getName().indexOf("tone", 0) == -1) {
-                emojiListMinusDiversity.add(emoji);
-            }
-        }
-        return emojiListMinusDiversity;
     }
 
     private void sortEmoji() {
