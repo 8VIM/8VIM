@@ -10,11 +10,15 @@ import inc.flide.logging.Logger;
 
 public class StaticEmojiAdapter extends BaseEmojiAdapter {
 
-    private String filePrefix;
-    public StaticEmojiAdapter(Context context, List<Emoji> emojiList, String filePrefix) {
+    private static String filePrefix;
+
+    public static void setFilePrefix(String prefix) {
+        filePrefix = prefix;
+    }
+
+    public StaticEmojiAdapter(Context context, List<Emoji> emojiList) {
         super((EightVimInputMethodService) context);
         this.emojiList = emojiList;
-        this.filePrefix = filePrefix;
     }
 
     @Override
