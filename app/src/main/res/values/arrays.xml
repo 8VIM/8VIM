@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="emojiIconsCategory">
-        <item>@string/setting_change_icon_set_entry_google</item>
-        <item>@string/setting_change_icon_set_entry_apple</item>
         <item>@string/setting_change_icon_set_entry_emojione</item>
         <item>@string/setting_change_icon_set_entry_emojione_bw</item>
     </string-array>
 
     <string-array name="emojiIconsCategoryValues">
-        <item>@string/setting_change_icon_set_value_google</item>
-        <item>@string/setting_change_icon_set_value_apple</item>
         <item>@string/setting_change_icon_set_value_emojione</item>
         <item>@string/setting_change_icon_set_value_emojione_bw</item>
     </string-array>
