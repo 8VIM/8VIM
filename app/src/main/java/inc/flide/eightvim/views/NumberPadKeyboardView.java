@@ -27,7 +27,7 @@ public class NumberPadKeyboardView extends KeyboardView {
 
     public void initialize(Context context){
         EightVimInputMethodService eightVimInputMethodService = (EightVimInputMethodService) context;
-        keyboard = new Keyboard(context, R.xml.numberpad_keyboard_view);
+        keyboard = new Keyboard(context, R.layout.numberpad_keyboard_view);
         this.setKeyboard(keyboard);
         setHapticFeedbackEnabled(true);
         actionListener = new NumberPadKeyboardActionListener(eightVimInputMethodService, this);

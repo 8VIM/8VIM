@@ -2,6 +2,7 @@
 <resources>
 
     <color name="light_silver">#E8E8E8</color>
+    <color name="white">#FFFFFF</color>
     <color name="pager_color">#CECECE</color>
     <color name="holo_blue">#33B5E5</color>
     <color name="delete_color">#adadad</color>

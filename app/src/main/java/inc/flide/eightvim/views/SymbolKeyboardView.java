@@ -28,7 +28,7 @@ public class SymbolKeyboardView extends KeyboardView {
 
     public void initialize(Context context){
         EightVimInputMethodService eightVimInputMethodService = (EightVimInputMethodService) context;
-        keyboard = new Keyboard(context, R.xml.symbols_keyboard_view);
+        keyboard = new Keyboard(context, R.layout.symbols_keyboard_view);
         this.setKeyboard(keyboard);
         setHapticFeedbackEnabled(true);
         actionListener = new SymbolKeyboardActionListener(eightVimInputMethodService, this);

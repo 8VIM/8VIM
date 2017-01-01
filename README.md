@@ -63,8 +63,6 @@ Moving your finger from right->circle->lift-your-finger performs a paste. whatev
 
 #####Emoji support
 The 8Vim keyboard supports emoji's in two styles - EmojiOne and EmojiOne-Black&White
-Right now the access to the emojis is a little troublesome, you have to go to the selection keyboard and then there exists a button that takes you to the emoji-keyboard. Pretty shity right? I know...
-
 
 #Thanks To
 - [CaptainBlagbird](https://github.com/CaptainBlagbird) for the inspiration to me to get to start this project. It initially started as a fork for [Xpen](https://github.com/CaptainBlagbird/Xpen).

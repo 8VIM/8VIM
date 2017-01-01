@@ -11,13 +11,13 @@ import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.structures.Constants;
 import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
-import inc.flide.eightvim.views.MainKeyboardView;
+import inc.flide.eightvim.views.mainKeyboard.XboardView;
 import inc.flide.logging.Logger;
 
 public class MainKeyboardActionListener {
 
     private EightVimInputMethodService eightVimInputMethodService;
-    private MainKeyboardView mainKeyboardView;
+    private XboardView mainKeyboardView;
 
     private Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
 
@@ -26,7 +26,7 @@ public class MainKeyboardActionListener {
     private boolean isLongPressCallbackSet;
 
     public MainKeyboardActionListener(EightVimInputMethodService inputMethodService,
-                                      MainKeyboardView view) {
+                                      XboardView view) {
         this.eightVimInputMethodService = inputMethodService;
         this.mainKeyboardView = view;
 

@@ -1,6 +1,5 @@
 package inc.flide.eightvim;
 
-import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.os.SystemClock;
 import android.view.KeyEvent;
@@ -16,7 +15,7 @@ import inc.flide.eightvim.keyboardHelpers.EightVimInputMethodServiceHelper;
 import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.views.EmojiKeyboardView;
-import inc.flide.eightvim.views.MainKeyboardView;
+import inc.flide.eightvim.views.mainKeyboard.MainKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 import inc.flide.eightvim.views.SelectionKeyboardView;
 import inc.flide.eightvim.views.SymbolKeyboardView;
@@ -50,8 +49,9 @@ public class EightVimInputMethodService extends InputMethodService {
                                     .inflate(R.layout.selection_keyboard_layout, null);
         symbolKeyboardView = (SymbolKeyboardView) getLayoutInflater()
                                     .inflate(R.layout.symbols_keyboard_layout, null);
-        mainKeyboardView = new MainKeyboardView(this);
-        currentView = mainKeyboardView;
+        mainKeyboardView = (MainKeyboardView) getLayoutInflater()
+                                    .inflate(R.layout.main_keyboard_layout, null);
+        currentView = mainKeyboardView.getView();
 
         return currentView;
     }
@@ -169,7 +169,7 @@ public class EightVimInputMethodService extends InputMethodService {
                     setInputView(currentView);
                 break;
             case SWITCH_TO_MAIN_KEYBOARD:
-                    currentView = mainKeyboardView;
+                    currentView = mainKeyboardView.getView();
                     setInputView(currentView);
                 break;
             case SWITCH_TO_SYMBOLS_KEYBOARD:

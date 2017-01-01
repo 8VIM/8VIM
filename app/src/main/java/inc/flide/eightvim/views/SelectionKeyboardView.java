@@ -27,7 +27,7 @@ public class SelectionKeyboardView extends KeyboardView {
 
     public void initialize(Context context){
         EightVimInputMethodService eightVimInputMethodService = (EightVimInputMethodService) context;
-        keyboard = new Keyboard(context, R.xml.selection_keyboard_view);
+        keyboard = new Keyboard(context, R.layout.selection_keyboard_view);
         this.setKeyboard(keyboard);
         setHapticFeedbackEnabled(true);
         actionListener = new SelectionKeyboardActionListener(eightVimInputMethodService, this);

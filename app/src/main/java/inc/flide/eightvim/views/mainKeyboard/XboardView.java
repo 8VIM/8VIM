@@ -1,17 +1,20 @@
-package inc.flide.eightvim.views;
+package inc.flide.eightvim.views.mainKeyboard;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import inc.flide.eightvim.EightVimInputMethodService;
+import inc.flide.eightvim.R;
 import inc.flide.eightvim.geometry.Circle;
 import inc.flide.eightvim.geometry.GeometricUtilities;
 import inc.flide.eightvim.geometry.LineSegment;
@@ -20,24 +23,24 @@ import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.utilities.Utilities;
 import inc.flide.logging.Logger;
 
-public class MainKeyboardView extends View{
+public class XboardView extends View{
 
     private MainKeyboardActionListener mainKeyboardActionListener;
     private EightVimInputMethodService eightVimInputMethodService;
 
     private Circle circle;
 
-    public MainKeyboardView(Context context) {
+    public XboardView(Context context) {
         super(context);
         initialize(context);
     }
 
-    public MainKeyboardView(Context context, AttributeSet attrs) {
+    public XboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
     }
 
-    public MainKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public XboardView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context);
     }
@@ -45,7 +48,8 @@ public class MainKeyboardView extends View{
     private void initialize(Context context){
         eightVimInputMethodService = (EightVimInputMethodService) context;
         mainKeyboardActionListener = new MainKeyboardActionListener(eightVimInputMethodService
-                                                                , this);
+                , this);
+
         setHapticFeedbackEnabled(true);
     }
 
@@ -136,40 +140,6 @@ public class MainKeyboardView extends View{
         return offset*aggregateSign;
     }
 
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        // Get size without mode
-        int width = View.MeasureSpec.getSize(widthMeasureSpec);
-        int height = View.MeasureSpec.getSize(heightMeasureSpec);
-
-        // Get orientation
-        if(getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE)
-        {
-            // Switch to button mode
-            // TODO
-            Logger.Verbose(this, "Say what you will, but I don't do Landscapes just yet!! So.. BACK OFF!!");
-            width = Math.round(1.33f * height);
-            // Placeholder:
-        }
-        else  // Portrait mode
-        {
-            // Adjust the height to match the aspect ratio 4:3
-            height = Math.round(0.75f * width);
-        }
-
-        // Calculate the diameter with the circle width to image width ratio 260:800,
-        // and divide in half to get the radius
-        float radius = (0.325f * width) / 2;
-        PointF centre = new PointF((width*3/5),(height/2));
-        circle = new Circle(centre, radius);
-        // Set the new size
-        setMeasuredDimension(width, height);
-        
-    }
-
-
-
     public FingerPosition getCurrentFingerPosition(PointF position) {
         if(circle.isPointInsideCircle(position)){
             return FingerPosition.INSIDE_CIRCLE;
@@ -200,5 +170,36 @@ public class MainKeyboardView extends View{
                 return false;
         }
         return true;
+    }
+
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        // Get size without mode
+        int width = View.MeasureSpec.getSize(widthMeasureSpec);
+        int height = View.MeasureSpec.getSize(heightMeasureSpec);
+
+        // Get orientation
+        if(getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE)
+        {
+            // Switch to button mode
+            // TODO
+            Logger.Verbose(this, "Say what you will, but I don't do Landscapes just yet!! So.. BACK OFF!!");
+            width = Math.round(1.33f * height);
+            // Placeholder:
+        }
+        else  // Portrait mode
+        {
+            // Adjust the height to match the aspect ratio 4:3
+            height = Math.round(0.75f * width);
+        }
+
+        // Calculate the diameter with the circle width to image width ratio 260:800,
+        // and divide in half to get the radius
+        float radius = (0.325f * width) / 2;
+        PointF centre = new PointF((width/2),(height/2));
+        circle = new Circle(centre, radius);
+        // Set the new size
+        setMeasuredDimension(width, height);
     }
 }
