@@ -1,5 +1,9 @@
 # 8Vim
 
+## Download
+
+The current version of that app is a single keyboard, and can be downloaded from the attached [APK](8vim.apk), if you would rather not just clone the repo and build it.
+
 ## Initial Idea
 
 The application is essentially a clone for 8pen, which for some reason they have stopped distributing. ( I can no longer install it even though when i paid for it!!!)
