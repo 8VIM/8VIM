@@ -14,18 +14,47 @@
         <Button
             android:id="@+id/switchToEmojiKeyboard"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/btn_background"
             android:text="&#x263A;"
             android:scaleType="centerInside" />
 
         <Button
+            android:id="@+id/tabButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_background"
+            android:text="@string/rightwardsArrowToBar"
+            android:scaleType="centerInside" />
+
+        <Button
             android:id="@+id/switchToSelectionKeyboard"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/btn_background"
             android:scaleType="fitCenter"
             android:text="&#x2318;" />
+
+        <Button
+            android:id="@+id/altButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_background"
+            android:text="ALT"
+            android:scaleType="centerInside" />
+
+        <Button
+            android:id="@+id/ctrlButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/btn_background"
+            android:text="CTRL"
+            android:scaleType="centerInside" />
 
     </LinearLayout>
     <inc.flide.eightvim.views.mainKeyboard.XboardView

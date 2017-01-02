@@ -2,6 +2,7 @@ package inc.flide.eightvim.views.mainKeyboard;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -51,7 +52,42 @@ public class MainKeyboardView extends View{
 
         setupSwitchToEmojiKeyboardButton();
         setupSwitchToSelectionKeyboardButton();
+        setupTabKey();
+        setupAltKey();
+        setupCtrlKey();
 
+    }
+
+    private void setupCtrlKey() {
+        Button ctrlKeyButton = (Button) layout.findViewById(R.id.ctrlButton);
+
+        ctrlKeyButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eightVimInputMethodService.setModifierFlags(KeyEvent.META_CTRL_MASK);
+            }
+        });
+    }
+
+    private void setupAltKey() {
+        Button altKeyButton = (Button) layout.findViewById(R.id.altButton);
+        altKeyButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eightVimInputMethodService.setModifierFlags(KeyEvent.META_ALT_MASK);
+            }
+        });
+    }
+
+    private void setupTabKey() {
+        Button tabKeyButton = (Button) layout.findViewById(R.id.tabButton);
+
+        tabKeyButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                eightVimInputMethodService.sendKey(KeyEvent.KEYCODE_TAB, 0);
+            }
+        });
     }
 
     private void setupSwitchToSelectionKeyboardButton() {

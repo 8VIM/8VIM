@@ -32,7 +32,7 @@ public class EightVimInputMethodService extends InputMethodService {
 
     private int isShiftLockOn;
     private int isCapsLockOn;
-    private boolean shouldSkipImmediateNextCharacter;
+    private int modifierFlags;
 
     EightVimInputMethodServiceHelper eightVimInputMethodServiceHelper = new EightVimInputMethodServiceHelper();
     InputConnection inputConnection;
@@ -75,10 +75,10 @@ public class EightVimInputMethodService extends InputMethodService {
     @Override
     public void onInitializeInterface(){
         super.onInitializeInterface();
+        inputConnection = getCurrentInputConnection();
         isShiftLockOn = 0;
         isCapsLockOn = 0;
-        shouldSkipImmediateNextCharacter = false;
-        inputConnection = getCurrentInputConnection();
+        clearModifierFlags();
     }
 
     public Map<List<FingerPosition>, KeyboardAction> buildKeyboardActionMap() {
@@ -87,11 +87,12 @@ public class EightVimInputMethodService extends InputMethodService {
     }
 
     public void sendText(String text) {
-        if(shouldSkipImmediateNextCharacter){
-            shouldSkipImmediateNextCharacter = false;
-            return;
-        }
         inputConnection.commitText(text, 1);
+        clearModifierFlags();
+    }
+
+    private void clearModifierFlags() {
+        modifierFlags = 0;
     }
 
     public void sendDownKeyEvent(int keyEventCode, int flags) {
@@ -125,12 +126,8 @@ public class EightVimInputMethodService extends InputMethodService {
     }
 
     public void sendKey(int keyEventCode , int flags) {
-
-        sendDownAndUpKeyEvent(keyEventCode, (isShiftLockOn | isCapsLockOn | flags));
-
-        if (shouldSkipImmediateNextCharacter) {
-            shouldSkipImmediateNextCharacter = false;
-        }
+        sendDownAndUpKeyEvent(keyEventCode, (isShiftLockOn | isCapsLockOn | modifierFlags | flags));
+        clearModifierFlags();
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
@@ -226,5 +223,9 @@ public class EightVimInputMethodService extends InputMethodService {
         }
 
         return false;
+    }
+
+    public void setModifierFlags(int newModifierFlags) {
+        this.modifierFlags = this.modifierFlags | newModifierFlags;
     }
 }
