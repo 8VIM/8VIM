@@ -190,8 +190,7 @@ public class XboardView extends View{
         }
         else  // Portrait mode
         {
-            // Adjust the height to match the aspect ratio 4:3
-            height = Math.round(0.75f * width);
+            height = Math.round(0.8f * width);
         }
 
         // Calculate the diameter with the circle width to image width ratio 260:800,
