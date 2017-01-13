@@ -21,7 +21,6 @@ import inc.flide.eightvim.geometry.LineSegment;
 import inc.flide.eightvim.keyboardActionListners.MainKeyboardActionListener;
 import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.utilities.Utilities;
-import inc.flide.logging.Logger;
 
 public class XboardView extends View{
 
@@ -184,7 +183,6 @@ public class XboardView extends View{
         {
             // Switch to button mode
             // TODO
-            Logger.Verbose(this, "Say what you will, but I don't do Landscapes just yet!! So.. BACK OFF!!");
             width = Math.round(1.33f * height);
             // Placeholder:
         }

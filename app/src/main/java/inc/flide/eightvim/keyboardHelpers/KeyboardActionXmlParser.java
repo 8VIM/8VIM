@@ -17,7 +17,6 @@ import java.util.Map;
 
 import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.structures.KeyboardActionType;
-import inc.flide.logging.Logger;
 
 class KeyboardActionXmlParser {
     private static final String KEYBOARD_ACTION_MAP_TAG = "keyboardActionMap";
@@ -91,7 +90,7 @@ class KeyboardActionXmlParser {
                 case INPUT_KEY_FLAGS_TAG:
                     flags = readInputFlags();
                 default:
-                    Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
+                    //Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
             }
         }
 
@@ -115,7 +114,7 @@ class KeyboardActionXmlParser {
                     flags = flags | readInputFlag();
                     break;
                 default:
-                    Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
+                    //Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
             }
         }
         return flags ;

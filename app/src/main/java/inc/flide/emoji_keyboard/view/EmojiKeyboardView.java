@@ -1,4 +1,4 @@
-package inc.flide.eightvim.views;
+package inc.flide.emoji_keyboard.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +18,11 @@ import android.widget.LinearLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
 
-import inc.flide.eightvim.EightVimInputMethodService;
 import inc.flide.eightvim.R;
-import inc.flide.eightvim.emojis.adapter.EmojiPagerAdapter;
-import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
-import inc.flide.eightvim.structures.Constants;
-import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
-import inc.flide.eightvim.structures.KeyboardActionType;
+import inc.flide.emoji_keyboard.InputMethodServiceProxy;
+import inc.flide.emoji_keyboard.adapter.EmojiPagerAdapter;
+import inc.flide.emoji_keyboard.constants.Constants;
+
 
 public class EmojiKeyboardView extends View implements SharedPreferences.OnSharedPreferenceChangeListener{
 
@@ -36,7 +33,7 @@ public class EmojiKeyboardView extends View implements SharedPreferences.OnShare
     Button deleteButton;
 
     private EmojiPagerAdapter emojiPagerAdapter;
-    private EightVimInputMethodService eightVimInputMethodService;
+    private InputMethodServiceProxy emojiKeyboardService;
 
     public EmojiKeyboardView(Context context) {
         super(context);
@@ -55,7 +52,7 @@ public class EmojiKeyboardView extends View implements SharedPreferences.OnShare
 
     private void initialize(Context context) {
 
-        eightVimInputMethodService = (EightVimInputMethodService) context;
+        emojiKeyboardService = (InputMethodServiceProxy) context;
 
         LayoutInflater inflater = (LayoutInflater)   getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -97,7 +94,7 @@ public class EmojiKeyboardView extends View implements SharedPreferences.OnShare
         deleteButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL, 0);
+                emojiKeyboardService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL, 0);
             }
         });
 
@@ -114,7 +111,7 @@ public class EmojiKeyboardView extends View implements SharedPreferences.OnShare
     private Runnable longDeleteButtonPressRunnable = new Runnable() {
         @Override
         public void run() {
-            eightVimInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL, 0);
+            emojiKeyboardService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL, 0);
             if(deleteButton.isPressed()) {
                 longDeleteButtonPressHandler.postDelayed(this, Constants.DELAY_MILLIS_LONG_PRESS_CONTINUATION);
             }
@@ -128,11 +125,7 @@ public class EmojiKeyboardView extends View implements SharedPreferences.OnShare
         keyboardButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
-                        KeyboardActionType.INPUT_SPECIAL
-                        , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
-                        , null, 0,0);
-                eightVimInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
+                emojiKeyboardService.switchToPreviousInputMethod();
             }
         });
     }

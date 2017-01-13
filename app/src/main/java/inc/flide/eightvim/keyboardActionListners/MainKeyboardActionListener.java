@@ -12,7 +12,6 @@ import inc.flide.eightvim.structures.Constants;
 import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.views.mainKeyboard.XboardView;
-import inc.flide.logging.Logger;
 
 public class MainKeyboardActionListener {
 
@@ -101,7 +100,7 @@ public class MainKeyboardActionListener {
 
         boolean isMovementValid = true;
         if(keyboardAction == null){
-            Logger.Verbose(this, "No Action Mapping has been defined for the given Sequence : " + movementSequence.toString());
+            //Logger.Verbose(this, "No Action Mapping has been defined for the given Sequence : " + movementSequence.toString());
             movementSequence.clear();
             return;
         }
@@ -117,7 +116,7 @@ public class MainKeyboardActionListener {
                 eightVimInputMethodService.handleSpecialInput(keyboardAction);
                 break;
             default:
-                Logger.Warn(this, "Action Type Undefined : " + keyboardAction.getKeyboardActionType().toString());
+                //Logger.Warn(this, "Action Type Undefined : " + keyboardAction.getKeyboardActionType().toString());
                 isMovementValid = false;
         }
         if(isMovementValid){

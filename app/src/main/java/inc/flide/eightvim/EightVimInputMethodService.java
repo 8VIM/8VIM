@@ -1,5 +1,6 @@
 package inc.flide.eightvim;
 
+import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.os.SystemClock;
 import android.view.KeyEvent;
@@ -14,14 +15,15 @@ import inc.flide.eightvim.structures.FingerPosition;
 import inc.flide.eightvim.keyboardHelpers.EightVimInputMethodServiceHelper;
 import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
-import inc.flide.eightvim.views.EmojiKeyboardView;
+import inc.flide.eightvim.structures.KeyboardActionType;
 import inc.flide.eightvim.views.mainKeyboard.MainKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 import inc.flide.eightvim.views.SelectionKeyboardView;
 import inc.flide.eightvim.views.SymbolKeyboardView;
-import inc.flide.logging.Logger;
+import inc.flide.emoji_keyboard.InputMethodServiceProxy;
+import inc.flide.emoji_keyboard.view.EmojiKeyboardView;
 
-public class EightVimInputMethodService extends InputMethodService {
+public class EightVimInputMethodService extends InputMethodService implements InputMethodServiceProxy{
 
     private MainKeyboardView mainKeyboardView;
     private NumberPadKeyboardView numberPadKeyboardView;
@@ -91,6 +93,18 @@ public class EightVimInputMethodService extends InputMethodService {
         clearModifierFlags();
     }
 
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public int getDrawableResourceId(String resourceString) {
+        return getContext().getResources()
+                .getIdentifier(resourceString, "drawable", getPackageName());
+
+    }
+
     private void clearModifierFlags() {
         modifierFlags = 0;
     }
@@ -123,6 +137,15 @@ public class EightVimInputMethodService extends InputMethodService {
     public void sendDownAndUpKeyEvent(int keyEventCode, int flags){
         sendDownKeyEvent(keyEventCode, flags);
         sendUpKeyEvent(keyEventCode, flags);
+    }
+
+    @Override
+    public void switchToPreviousInputMethod() {
+        KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
+                KeyboardActionType.INPUT_SPECIAL
+                , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
+                , null, 0,0);
+        this.handleSpecialInput(switchToEightVimKeyboardView);
     }
 
     public void sendKey(int keyEventCode , int flags) {
@@ -170,7 +193,6 @@ public class EightVimInputMethodService extends InputMethodService {
                     setInputView(currentView);
                 break;
             case SWITCH_TO_SYMBOLS_KEYBOARD:
-                    Logger.d(this, "switching to symbols keyboard");
                     currentView = symbolKeyboardView;
                     setInputView(currentView);
                 break;
@@ -188,7 +210,7 @@ public class EightVimInputMethodService extends InputMethodService {
                 }
                 break;
             default:
-                Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getText());
+                //Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getText());
                 break;
         }
     }

@@ -9,7 +9,6 @@ import inc.flide.eightvim.structures.InputSpecialKeyEventCode;
 import inc.flide.eightvim.keyboardHelpers.KeyboardAction;
 import inc.flide.eightvim.structures.KeyboardActionType;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
-import inc.flide.logging.Logger;
 
 public class NumberPadKeyboardActionListener implements KeyboardView.OnKeyboardActionListener {
 
@@ -48,7 +47,6 @@ public class NumberPadKeyboardActionListener implements KeyboardView.OnKeyboardA
                 eightVimInputMethodService.sendKey(primaryCode, 0);
                 break;
             case KeyEvent.KEYCODE_NUM_LOCK:
-                Logger.d(this,"Num lock pessed");
                 KeyboardAction switchToSymbolsKeyboard = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
                         , InputSpecialKeyEventCode.SWITCH_TO_SYMBOLS_KEYBOARD.toString()

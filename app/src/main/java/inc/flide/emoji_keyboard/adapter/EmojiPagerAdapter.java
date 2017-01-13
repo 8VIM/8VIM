@@ -1,4 +1,4 @@
-package inc.flide.eightvim.emojis.adapter;
+package inc.flide.emoji_keyboard.adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,14 +14,15 @@ import java.util.ArrayList;
 
 import inc.flide.eightvim.R;
 import inc.flide.eightvim.Setting;
-import inc.flide.eightvim.emojis.CategorizedEmojiList;
-import inc.flide.eightvim.views.EmojiKeyboardView;
-import inc.flide.eightvim.keyboardHelpers.EightVimInputMethodServiceHelper;
-import inc.flide.logging.Logger;
+import inc.flide.emoji_keyboard.utilities.CategorizedEmojiList;
+import inc.flide.emoji_keyboard.utilities.Utility;
+import inc.flide.emoji_keyboard.view.EmojiKeyboardView;
 
 public class EmojiPagerAdapter extends PagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
 
-    private final int ICONS[] = {R.drawable.ic_emoji_category_people,
+    private final int ICONS[] = {
+                                R.drawable.ic_emoji_category_recent,
+                                R.drawable.ic_emoji_category_people,
                                 R.drawable.ic_emoji_category_nature,
                                 R.drawable.ic_emoji_category_foods,
                                 R.drawable.ic_emoji_category_activity,
@@ -37,13 +38,15 @@ public class EmojiPagerAdapter extends PagerAdapter implements PagerSlidingTabSt
     public EmojiPagerAdapter(Context context, ViewPager pager, int keyboardHeight) {
         super();
 
-        CategorizedEmojiList categorizedEmojiList = new CategorizedEmojiList(EightVimInputMethodServiceHelper.loadEmojiData(context.getResources(), context.getPackageName()));
+        CategorizedEmojiList categorizedEmojiList = CategorizedEmojiList.getInstance();
+        categorizedEmojiList.initializeCategoziedEmojiList(Utility.loadEmojiData(context.getResources(), context.getPackageName()));
 
         this.pager = pager;
         this.keyboardHeight = keyboardHeight;
         this.pages = new ArrayList<View>();
 
-        StaticEmojiAdapter.setFilePrefix(getPreferedIconSet());
+        BaseEmojiAdapter.setFilePrefix(getPreferedIconSet());
+        pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new RecentEmojiAdapter(context)).getView());
         pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getPeople())).getView());
         pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getNature())).getView());
         pages.add(new EmojiKeyboardView.KeyboardSinglePageView(context, new StaticEmojiAdapter(context, categorizedEmojiList.getFood())).getView());
