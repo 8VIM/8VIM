@@ -6,6 +6,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import inc.flide.eightvim.EightVimInputMethodService;
@@ -80,7 +81,7 @@ public class MainKeyboardView extends View{
     }
 
     private void setupTabKey() {
-        Button tabKeyButton = (Button) layout.findViewById(R.id.tabButton);
+        ImageButton tabKeyButton = (ImageButton) layout.findViewById(R.id.tabButton);
 
         tabKeyButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -105,7 +106,7 @@ public class MainKeyboardView extends View{
     }
 
     private void setupSwitchToEmojiKeyboardButton() {
-        Button switchToEmojiKeyboardButton = (Button) layout.findViewById(R.id.switchToEmojiKeyboard);
+        ImageButton switchToEmojiKeyboardButton = (ImageButton) layout.findViewById(R.id.switchToEmojiKeyboard);
         switchToEmojiKeyboardButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -7,45 +7,45 @@
 
     <Row>
         <Key android:codes="@integer/CUT"
-            android:keyLabel="@string/cut"/>
+            android:keyIcon="@drawable/ic_content_cut" />
         <Key android:codes="@integer/COPY"
-            android:keyLabel="@string/copy"/>
+            android:keyIcon="@drawable/ic_content_copy" />
         <Key android:codes="@integer/DELETE_SELECTION"
-            android:keyLabel="@string/eraseToTheRight"/>
+            android:keyIcon="@drawable/ic_delete" />
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_UP"
-            android:keyLabel="@string/dpadUp"
+            android:keyIcon="@drawable/ic_keyboard_arrow_up"
             android:isRepeatable="true" />
         <Key android:codes="@integer/BACKSPACE"
-            android:keyLabel="@string/eraseToTheLeft"
+            android:keyIcon="@drawable/ic_backspace"
             android:isRepeatable="true" />
     </Row>
     <Row>
         <Key android:codes="@integer/PASTE"
-            android:keyLabel="@string/paste"/>
-        <Key android:codes="@integer/SWITCH_TO_EMOJI_KEYBOARD"
-            android:keyIcon="@drawable/ic_people_white" />
+            android:keyIcon="@drawable/ic_content_paste" />
+        <Key android:keyOutputText=""
+            android:keyLabel=" "/>
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_LEFT"
-            android:keyLabel="@string/dpadLeft"
+            android:keyIcon="@drawable/ic_keyboard_arrow_left"
             android:isRepeatable="true" />
         <Key android:codes="@integer/TOOGLE_SELECTION_MODE"
             android:keyLabel="@string/dpadCenter"
             android:isSticky="true"/>
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_RIGHT"
-            android:keyLabel="@string/dpadRight"
+            android:keyIcon="@drawable/ic_keyboard_arrow_right"
             android:isRepeatable="true"/>
     </Row>
 
     <Row>
         <Key android:codes="@integer/SWITCH_TO_MAIN_KEYBOARD"
-            android:keyLabel="@string/MainKeyboard"/>
+            android:keyIcon="@drawable/ic_infinity"/>
         <Key android:codes="@integer/SELECT_ALL"
-            android:keyLabel="@string/selectAll"/>
+            android:keyIcon="@drawable/ic_select_all"/>
         <Key android:keyOutputText=""
             android:keyLabel=" "/>
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_DOWN"
-            android:keyLabel="@string/dpadDown"
+            android:keyIcon="@drawable/ic_keyboard_arrow_down"
             android:isRepeatable="true" />
         <Key android:codes="@integer/ENTER"
-            android:keyLabel="@string/enter" />
+            android:keyIcon="@drawable/ic_keyboard_return"/>
     </Row>
 </Keyboard>

@@ -11,29 +11,29 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
+        <ImageButton
             android:id="@+id/switchToEmojiKeyboard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
             android:background="@drawable/btn_background"
-            android:text="&#x263A;"
+            android:src="@drawable/ic_emoji"
             android:scaleType="centerInside" />
 
-        <Button
+        <ImageButton
             android:id="@+id/tabButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
             android:background="@drawable/btn_background"
-            android:text="@string/rightwardsArrowToBar"
+            android:src="@drawable/ic_keyboard_tab"
             android:scaleType="centerInside" />
 
         <Button
             android:id="@+id/switchToSelectionKeyboard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
             android:background="@drawable/btn_background"
             android:scaleType="fitCenter"
             android:text="&#x2318;" />
@@ -41,8 +41,8 @@
         <Button
             android:id="@+id/altButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
             android:background="@drawable/btn_background"
             android:text="ALT"
             android:scaleType="centerInside" />
@@ -50,8 +50,8 @@
         <Button
             android:id="@+id/ctrlButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_weight=".2"
             android:background="@drawable/btn_background"
             android:text="CTRL"
             android:scaleType="centerInside" />
