@@ -9,8 +9,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.orhanobut.logger.Logger;
-
 import inc.flide.emoji_keyboard.utilities.CategorizedEmojiList;
 import inc.flide.emoji_keyboard.utilities.Emoji;
 
