@@ -92,7 +92,7 @@ public class MainKeyboardView extends View{
     }
 
     private void setupSwitchToSelectionKeyboardButton() {
-        Button switchToSelectionKeyboardButton = (Button) layout.findViewById(R.id.switchToSelectionKeyboard);
+        ImageButton switchToSelectionKeyboardButton = (ImageButton) layout.findViewById(R.id.switchToSelectionKeyboard);
         switchToSelectionKeyboardButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
