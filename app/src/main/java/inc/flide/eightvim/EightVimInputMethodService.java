@@ -22,16 +22,13 @@ import inc.flide.eightvim.views.mainKeyboard.MainKeyboardView;
 import inc.flide.eightvim.views.NumberPadKeyboardView;
 import inc.flide.eightvim.views.SelectionKeyboardView;
 import inc.flide.eightvim.views.SymbolKeyboardView;
-import inc.flide.emoji_keyboard.InputMethodServiceProxy;
-import inc.flide.emoji_keyboard.view.EmojiKeyboardView;
 
-public class EightVimInputMethodService extends InputMethodService implements InputMethodServiceProxy{
+public class EightVimInputMethodService extends InputMethodService {
 
     private MainKeyboardView mainKeyboardView;
     private NumberPadKeyboardView numberPadKeyboardView;
     private SelectionKeyboardView selectionKeyboardView;
     private SymbolKeyboardView symbolKeyboardView;
-    private EmojiKeyboardView emojiKeyboardView;
     private View currentView;
 
     private int isShiftLockOn;
@@ -43,9 +40,6 @@ public class EightVimInputMethodService extends InputMethodService implements In
 
     @Override
     public View onCreateInputView() {
-
-        emojiKeyboardView = (EmojiKeyboardView) getLayoutInflater()
-                .inflate(R.layout.emoji_keyboard_layout, null);
 
         numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater()
                                     .inflate(R.layout.numberpad_keyboard_layout, null);
@@ -95,12 +89,10 @@ public class EightVimInputMethodService extends InputMethodService implements In
         clearModifierFlags();
     }
 
-    @Override
     public Context getContext() {
         return this;
     }
 
-    @Override
     public int getDrawableResourceId(String resourceString) {
         return getContext().getResources()
                 .getIdentifier(resourceString, "drawable", getPackageName());
@@ -139,15 +131,6 @@ public class EightVimInputMethodService extends InputMethodService implements In
     public void sendDownAndUpKeyEvent(int keyEventCode, int flags){
         sendDownKeyEvent(keyEventCode, flags);
         sendUpKeyEvent(keyEventCode, flags);
-    }
-
-    @Override
-    public void switchToPreviousInputMethod() {
-        KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
-                KeyboardActionType.INPUT_SPECIAL
-                , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
-                , null, 0,0);
-        this.handleSpecialInput(switchToEightVimKeyboardView);
     }
 
     private void switchToExternalEmojiKeyboard() {
