@@ -2,11 +2,13 @@ package inc.flide.eightvim;
 
 import android.content.Context;
 import android.inputmethodservice.InputMethodService;
+import android.os.IBinder;
 import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.List;
 import java.util.Map;
@@ -148,6 +150,34 @@ public class EightVimInputMethodService extends InputMethodService implements In
         this.handleSpecialInput(switchToEightVimKeyboardView);
     }
 
+    private void switchToExternalEmojiKeyboard() {
+        //Check if the user has ever set up the emoji keyboard?
+            // if no then display a dialog box and allow him to select one of the available keyboards or previous keyboard
+            // if yes then try switching to external keyboard
+        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        IBinder iBinder = this.getWindow().getWindow().getAttributes().token;
+
+        inputMethodManager.setInputMethod(iBinder, getSelectedEmojiKeyboardId());
+
+        //Following piece of code finds all available ime's
+        /*
+        final InputMethodManager imeManager = (InputMethodManager)eightVimInputMethodService.getApplicationContext().getSystemService(eightVimInputMethodService.INPUT_METHOD_SERVICE);
+        List<InputMethodInfo> inputMethods = imeManager.getEnabledInputMethodList();
+
+        Map<String, String> inputMethodsNameAndId = new HashMap<>();
+        for (InputMethodInfo inputMethodInfo: inputMethods){
+            inputMethodsNameAndId.put(inputMethodInfo.loadLabel(eightVimInputMethodService.getPackageManager()).toString(), inputMethodInfo.getId());
+        }
+        */
+    }
+
+    private String getSelectedEmojiKeyboardId(){
+        //if the selected keyboard from the user preference settings is no longer available,
+        //return the id of the last keyboard
+        return "inc.flide.emojiKeyboard/inc.flide.ime.EmojiKeyboardService";
+    }
+
     public void sendKey(int keyEventCode , int flags) {
         sendDownAndUpKeyEvent(keyEventCode, (isShiftLockOn | isCapsLockOn | modifierFlags | flags));
         clearModifierFlags();
@@ -181,8 +211,7 @@ public class EightVimInputMethodService extends InputMethodService implements In
                 currentView.invalidate();
                 break;
             case SWITCH_TO_EMOJI_KEYBOARD:
-                    currentView = emojiKeyboardView.getView();
-                    setInputView(currentView);
+                    switchToExternalEmojiKeyboard();
                 break;
             case SWITCH_TO_NUMBER_PAD:
                     currentView = numberPadKeyboardView;
