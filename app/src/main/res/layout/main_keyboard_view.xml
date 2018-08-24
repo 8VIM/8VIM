@@ -57,7 +57,7 @@
             android:scaleType="centerInside" />
 
     </LinearLayout>
-    <inc.flide.viii.views.mainKeyboard.XboardView
+    <inc.flide.vi8.views.mainKeyboard.XboardView
         android:id="@+id/xboardView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />

@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">VIII</string>
-    <style name="version_name">iteration 1</style>
+    <string name="app_name">VI8</string>
+    <string name="version_name">iteration 1</string>
     <string name="title_activity_preferences8_vim">Preferences 8Vim</string>
     <string name="action_settings">Settings</string>
 
