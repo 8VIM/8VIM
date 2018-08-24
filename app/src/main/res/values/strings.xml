@@ -1,15 +1,4 @@
 <resources>
     <string name="app_name">VI8</string>
     <string name="version_name">iteration 1</string>
-    <string name="title_activity_preferences8_vim">Preferences 8Vim</string>
-    <string name="action_settings">Settings</string>
-
-    <string name="emoji_icon_set">Emoji Icon Set</string>
-    <string name="setting_change_icon_set_key">icon_set</string>
-
-    <string name="setting_change_icon_set_entry_emojione">EmojiOne</string>
-    <string name="setting_change_icon_set_entry_emojione_bw">EmojiOne \'B&amp;W\'</string>
-
-    <string name="setting_change_icon_set_value_emojione">emojione_emoji_</string>
-    <string name="setting_change_icon_set_value_emojione_bw">emojione_emoji_bw_</string>
 </resources>
