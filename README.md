@@ -1,8 +1,8 @@
 # VIII
 
-## Download
+## Download - No More
 
-The current version of that app is a single keyboard, and can be downloaded from the attached [APK](8vim.apk), if you would rather not just clone the repo and build it.
+For the sake of sanity, I have stopped uploading the APK for the "current" state of the application. So you will have to clone the repository and build it yourself.
 
 ## Initial Idea
 
