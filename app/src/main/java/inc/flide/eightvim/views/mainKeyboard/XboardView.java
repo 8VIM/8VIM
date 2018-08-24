@@ -5,16 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import inc.flide.eightvim.EightVimInputMethodService;
-import inc.flide.eightvim.R;
 import inc.flide.eightvim.geometry.Circle;
 import inc.flide.eightvim.geometry.GeometricUtilities;
 import inc.flide.eightvim.geometry.LineSegment;
@@ -52,6 +49,9 @@ public class XboardView extends View{
         setHapticFeedbackEnabled(true);
     }
 
+    private final int offset = 15;
+    private final int lengthOfLineDemarcatingSectors = 250;
+
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -71,11 +71,10 @@ public class XboardView extends View{
 
         //The lines demarcating the sectors
         List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
-        int lengthOfLine = 200;
         for(int i =0; i<4 ; i++) {
             int angle = 45+(i*90);
             PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
-            LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLine);
+            LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
             sectorDemarcatingLines.add(lineSegment);
             canvas.drawLine(lineSegment.getStartingPoint().x, lineSegment.getStartingPoint().y, lineSegment.getEndPoint().x, lineSegment.getEndPoint().y, paint);
         }
@@ -83,11 +82,13 @@ public class XboardView extends View{
         //the text along the lines
         paint.setTextSize(40);
         paint.setStrokeWidth(2);
+
+        float characterHeight = paint.getFontMetrics().descent - paint.getFontMetrics().ascent;
         String charactersToDisplay = getCharacterSetToDisplay();
         List<PointF> listOfPointsOfDisplay = new ArrayList<>();
         for(int i=0; i<4; i++) {
             LineSegment currentLine = sectorDemarcatingLines.get(i);
-            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(currentLine, 4));
+            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(currentLine, 4, characterHeight));
         }
         float[] pointsOfDisplay = Utilities.convertPointFListToPrimitiveFloatArray(listOfPointsOfDisplay);
         canvas.drawPosText(charactersToDisplay, pointsOfDisplay, paint);
@@ -105,41 +106,66 @@ public class XboardView extends View{
         return characterSetSmall;
     }
 
-    private List<PointF> getCharacterDisplayPointsOnTheLineSegment(LineSegment lineSegment, int numberOfCharactersToDisplay) {
+    private List<PointF> getCharacterDisplayPointsOnTheLineSegment(LineSegment lineSegment, int numberOfCharactersToDisplay, float height) {
         List<PointF> pointsOfCharacterDisplay = new ArrayList<>();
 
         //Assuming we got to derive 4 points
         double spacingBetweenPoints = lineSegment.getLength()/numberOfCharactersToDisplay;
-        float xOffset = getXOffset(lineSegment);
-        float yOffset = getYOffset(lineSegment);
 
         for(int i = 0 ; i < 4 ; i++){
             PointF nextPoint = GeometricUtilities.findPointSpecifiedDistanceAwayInGivenDirection(lineSegment.getStartingPoint(), lineSegment.getDirectionOfLineInDegree(), (spacingBetweenPoints * i));
-            PointF displayPointInAntiClockwiseDirection = new PointF(nextPoint.x + xOffset, nextPoint.y + yOffset);
-            PointF displayPointInClockwiseDirection = new PointF(nextPoint.x + (xOffset*-1), nextPoint.y + (yOffset*-1));
+            PointF displayPointInAntiClockwiseDirection = new PointF(nextPoint.x + computeAntiClockwiseXOffset(lineSegment, height)
+                                                                    , nextPoint.y + computeAntiClockwiseYOffset(lineSegment, height));
+
+            PointF displayPointInClockwiseDirection     = new PointF(nextPoint.x + computeClockwiseXOffset(lineSegment, height)
+                                                                    , nextPoint.y+ computeClockwiseYOffset(lineSegment, height));
+
             pointsOfCharacterDisplay.add(displayPointInAntiClockwiseDirection);
             pointsOfCharacterDisplay.add(displayPointInClockwiseDirection);
         }
         return pointsOfCharacterDisplay;
     }
 
-    private float getYOffset(LineSegment lineSegment) {
-        int ySign = (lineSegment.getStartingPoint().y - lineSegment.getEndPoint().y)>0?-1:1;
-        int slopeSign = lineSegment.isSlopePositive()?1:-1;
-        int aggregateSign = ySign*slopeSign*-1;
-        float offset = 50;
-        return offset*aggregateSign;
+    private float computeClockwiseYOffset(LineSegment lineSegment, float height) {
+        double angle = lineSegment.getDirectionOfLineInDegree();
+        boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
+
+        if(lineSegment.isSlopePositive()){
+            return offset + (isXDirectionPositive?height:-height);
+        }
+        return 0;
     }
 
-    private float getXOffset(LineSegment lineSegment) {
-        int xSign = (lineSegment.getStartingPoint().x - lineSegment.getEndPoint().x)>0?-1:1;
-        int slopeSign = lineSegment.isSlopePositive()?1:-1;
-        int aggregateSign = xSign*slopeSign;
-        float offset = 50;
-        return offset*aggregateSign;
+    private float computeAntiClockwiseYOffset(LineSegment lineSegment, float height) {
+        double angle = lineSegment.getDirectionOfLineInDegree();
+        boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
+        if(lineSegment.isSlopePositive()){
+            return offset;
+        }
+        return isXDirectionPositive?-height:height;
     }
 
-    public FingerPosition getCurrentFingerPosition(PointF position) {
+    private float computeClockwiseXOffset(LineSegment lineSegment, float height) {
+        double angle = lineSegment.getDirectionOfLineInDegree();
+        boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
+
+        if (lineSegment.isSlopePositive()) {
+            return 0;
+        }
+        return isXDirectionPositive?height:-height;
+    }
+
+    private float computeAntiClockwiseXOffset(LineSegment lineSegment, float height) {
+        double angle = lineSegment.getDirectionOfLineInDegree();
+        boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
+
+        if (lineSegment.isSlopePositive()){
+           return isXDirectionPositive?height:-height;
+        }
+        return 0;
+    }
+
+    private FingerPosition getCurrentFingerPosition(PointF position) {
         if(circle.isPointInsideCircle(position)){
             return FingerPosition.INSIDE_CIRCLE;
         } else {
@@ -174,29 +200,23 @@ public class XboardView extends View{
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-        // Get size without mode
         int width = View.MeasureSpec.getSize(widthMeasureSpec);
         int height = View.MeasureSpec.getSize(heightMeasureSpec);
 
-        // Get orientation
         if(getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE)
         {
-            // Switch to button mode
-            // TODO
+            //Landscape is just un-usable right now.
+            // TODO: Landscape mode requires more clarity, what exactly do you want to do?
             width = Math.round(1.33f * height);
-            // Placeholder:
         }
         else  // Portrait mode
         {
             height = Math.round(0.8f * width);
         }
 
-        // Calculate the diameter with the circle width to image width ratio 260:800,
-        // and divide in half to get the radius
         float radius = (0.325f * width) / 2;
         PointF centre = new PointF((width/2),(height/2));
         circle = new Circle(centre, radius);
-        // Set the new size
         setMeasuredDimension(width, height);
     }
 }
