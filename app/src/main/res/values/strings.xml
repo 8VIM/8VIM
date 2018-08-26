@@ -4,4 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "VI8 Keyboard" there.</string>
+    <string name="enable_ime_dialog_neutral_button_text">Enable</string>
+    <string name="enable_ime_dialog_title">Please Enable IME</string>
 </resources>

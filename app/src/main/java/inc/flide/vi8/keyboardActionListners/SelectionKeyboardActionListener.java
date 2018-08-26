@@ -56,11 +56,11 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
                 mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
                 break;
             case SWITCH_TO_MAIN_KEYBOARD:
-                KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
+                KeyboardAction switchToMainKeyboardView = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
                         , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
                         , null, 0,0);
-                mainInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
+                mainInputMethodService.handleSpecialInput(switchToMainKeyboardView);
                 break;
             case SWITCH_TO_EMOJI_KEYBOARD:
                 KeyboardAction switchToEmojiKeyboard = new KeyboardAction(

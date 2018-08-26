@@ -36,11 +36,11 @@ public class SymbolKeyboardActionListener implements KeyboardView.OnKeyboardActi
 
         switch(primaryCode){
             case KeyEvent.KEYCODE_EISU:
-                KeyboardAction switchToEightVimKeyboardView = new KeyboardAction(
+                KeyboardAction switchToMainKeyboardView = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
                         , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
                         , null, 0, 0);
-                mainInputMethodService.handleSpecialInput(switchToEightVimKeyboardView);
+                mainInputMethodService.handleSpecialInput(switchToMainKeyboardView);
                 break;
             case KeyEvent.KEYCODE_DEL  :
             case KeyEvent.KEYCODE_ENTER:
