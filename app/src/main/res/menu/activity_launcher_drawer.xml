@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/configure_emoji"
+        android:icon="@drawable/ic_emoji"
+        android:title="Configure Emoji Keyboard" />
+    <item
+        android:id="@+id/add_gesture"
+        android:icon="@drawable/add_gesture"
+        android:title="Add a Gesture" />
+    <item
+        android:id="@+id/donate"
+        android:icon="@drawable/donate"
+        android:title="Donate" />
+    <item
+        android:id="@+id/about"
+        android:icon="@drawable/about"
+        android:title="About" />
+
+</menu>
