@@ -1,6 +1,7 @@
 package inc.flide.vi8;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -134,7 +135,7 @@ public class MainInputMethodService extends InputMethodService {
 
     private void switchToExternalEmojiKeyboard() {
         //Check if the user has ever set up the emoji keyboard?
-            // if no then display a dialog box and allow him to select one of the available keyboards or previous keyboard
+            // TODO: if no then display a dialog box and allow him to select one of the available keyboards or previous keyboard
             // if yes then try switching to external keyboard
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -142,22 +143,17 @@ public class MainInputMethodService extends InputMethodService {
 
         inputMethodManager.setInputMethod(iBinder, getSelectedEmojiKeyboardId());
 
-        //Following piece of code finds all available ime's
-        /*
-        final InputMethodManager imeManager = (InputMethodManager)eightVimInputMethodService.getApplicationContext().getSystemService(eightVimInputMethodService.INPUT_METHOD_SERVICE);
-        List<InputMethodInfo> inputMethods = imeManager.getEnabledInputMethodList();
-
-        Map<String, String> inputMethodsNameAndId = new HashMap<>();
-        for (InputMethodInfo inputMethodInfo: inputMethods){
-            inputMethodsNameAndId.put(inputMethodInfo.loadLabel(eightVimInputMethodService.getPackageManager()).toString(), inputMethodInfo.getId());
-        }
-        */
     }
 
     private String getSelectedEmojiKeyboardId(){
-        //if the selected keyboard from the user preference settings is no longer available,
-        //return the id of the last keyboard
-        return "inc.flide.emojiKeyboard/inc.flide.ime.EmojiKeyboardService";
+        //TODO: find the id for the previous keyboard as default value
+        String previousKeyboardId = new String("");
+
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
+                    getString(R.string.basic_preference_file_name), Context.MODE_PRIVATE);
+        String emoticonKeyboardId = sharedPreferences.getString(getString(R.string.bp_selected_emoticon_keyboard), previousKeyboardId);
+        //TODO: before returning verify that this keyboard Id we have does exist in the system.
+        return emoticonKeyboardId;
     }
 
     public void sendKey(int keyEventCode , int flags) {

@@ -62,7 +62,7 @@ public class LauncherActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.configure_emoji) {
-
+            startActivity(new Intent(this, ConfigureEmoticonKeyboardActivity.class));
         } else if (id == R.id.add_gesture) {
 
         } else if (id == R.id.donate) {

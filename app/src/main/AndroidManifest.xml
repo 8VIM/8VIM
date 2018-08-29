@@ -28,6 +28,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.ConfigureEmoticonKeyboardActivity"
+            android:label="@string/title_activity_configure_emoticon_keyboard"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.LauncherActivity">
+        </activity>
     </application>
 
 </manifest>
