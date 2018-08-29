@@ -38,7 +38,9 @@ public class ConfigureEmoticonKeyboardActivity extends AppCompatActivity {
         List<Map.Entry<InputMethodInfo, RadioButton>> availableKeyboards = getAllAvailableKeyboards();
         final RadioGroup radioGroup = findViewById(R.id.radioGroup);
         if (radioGroup != null){
-            availableKeyboards.stream().forEachOrdered(ime -> radioGroup.addView(ime.getValue()));
+            for (Map.Entry<InputMethodInfo, RadioButton> ime: availableKeyboards) {
+                radioGroup.addView(ime.getValue());
+            }
 
             radioGroup.setOnCheckedChangeListener( (group, checkedId) -> {
                 String text = "the selected keyboard " + availableKeyboards.get(checkedId).getKey().loadLabel(this.getPackageManager());
