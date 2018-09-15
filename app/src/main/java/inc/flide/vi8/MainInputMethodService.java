@@ -93,12 +93,6 @@ public class MainInputMethodService extends InputMethodService {
         return this;
     }
 
-    public int getDrawableResourceId(String resourceString) {
-        return getContext().getResources()
-                .getIdentifier(resourceString, "drawable", getPackageName());
-
-    }
-
     private void clearModifierFlags() {
         modifierFlags = 0;
     }
@@ -133,25 +127,22 @@ public class MainInputMethodService extends InputMethodService {
         sendUpKeyEvent(keyEventCode, flags);
     }
 
-    private void switchToExternalEmojiKeyboard() {
-        //Check if the user has ever set up the emoji keyboard?
-            // TODO: if no then display a dialog box and allow him to select one of the available keyboards or previous keyboard
-            // if yes then try switching to external keyboard
+    private void switchToExternalEmoticonKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-
         IBinder iBinder = this.getWindow().getWindow().getAttributes().token;
-
-        inputMethodManager.setInputMethod(iBinder, getSelectedEmojiKeyboardId());
+        String keyboardId = getSelectedEmoticonKeyboardId();
+        if (keyboardId.isEmpty()){
+            inputMethodManager.switchToLastInputMethod(iBinder);
+        } else {
+            inputMethodManager.setInputMethod(iBinder, getSelectedEmoticonKeyboardId());
+        }
 
     }
 
-    private String getSelectedEmojiKeyboardId(){
-        //TODO: find the id for the previous keyboard as default value
-        String previousKeyboardId = new String("");
-
+    private String getSelectedEmoticonKeyboardId(){
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
                     getString(R.string.basic_preference_file_name), Context.MODE_PRIVATE);
-        String emoticonKeyboardId = sharedPreferences.getString(getString(R.string.bp_selected_emoticon_keyboard), previousKeyboardId);
+        String emoticonKeyboardId = sharedPreferences.getString(getString(R.string.bp_selected_emoticon_keyboard), "");
         //TODO: before returning verify that this keyboard Id we have does exist in the system.
         return emoticonKeyboardId;
     }
@@ -189,7 +180,7 @@ public class MainInputMethodService extends InputMethodService {
                 currentView.invalidate();
                 break;
             case SWITCH_TO_EMOJI_KEYBOARD:
-                    switchToExternalEmojiKeyboard();
+                    switchToExternalEmoticonKeyboard();
                 break;
             case SWITCH_TO_NUMBER_PAD:
                     currentView = numberPadKeyboardView;
