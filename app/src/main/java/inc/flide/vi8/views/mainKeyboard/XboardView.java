@@ -214,6 +214,7 @@ public class XboardView extends View{
             height = Math.round(0.8f * width);
         }
 
+        height = height - 50;
         float radius = (0.325f * width) / 2;
         PointF centre = new PointF((width/2),(height/2));
         circle = new Circle(centre, radius);

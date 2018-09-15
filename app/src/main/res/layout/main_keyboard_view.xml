@@ -3,62 +3,99 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_silver"
-    android:orientation="horizontal">
+    android:background="@color/main_keyboard_sidebar_background"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="60dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/switchToEmojiKeyboard"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".2"
-            android:background="@drawable/btn_background"
-            android:src="@drawable/ic_emoji"
-            android:scaleType="centerInside" />
-
-        <ImageButton
-            android:id="@+id/tabButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".2"
-            android:background="@drawable/btn_background"
-            android:src="@drawable/ic_keyboard_tab"
-            android:scaleType="centerInside" />
-
-        <ImageButton
-            android:id="@+id/switchToSelectionKeyboard"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".2"
-            android:background="@drawable/btn_background"
-            android:src="@drawable/ic_open_with_black"
-            android:scaleType="centerInside" />
+        android:layout_width="match_parent"
+        android:background="@color/word_prediction_bar_background"
+        android:layout_height="40dp">
 
         <Button
-            android:id="@+id/altButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".2"
+            android:id="@+id/selectLeftPrediction"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
             android:background="@drawable/btn_background"
-            android:text="ALT"
-            android:scaleType="centerInside" />
-
+            android:layout_height="match_parent" />
+        <View android:layout_height="fill_parent"
+            android:layout_width="2px"
+            android:background="#90909090"/>
         <Button
-            android:id="@+id/ctrlButton"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight=".2"
+            android:id="@+id/selectCentrePrediction"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
             android:background="@drawable/btn_background"
-            android:text="CTRL"
-            android:scaleType="centerInside" />
-
+            android:layout_height="match_parent" />
+        <View android:layout_height="fill_parent"
+            android:layout_width="2px"
+            android:background="#90909090"/>
+        <Button
+            android:id="@+id/selectRightPrediction"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
+            android:background="@drawable/btn_background"
+            android:layout_height="match_parent" />
     </LinearLayout>
-    <inc.flide.vi8.views.mainKeyboard.XboardView
-        android:id="@+id/xboardView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/switchToEmojiKeyboard"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".2"
+                android:background="@drawable/btn_background"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_emoji" />
+
+            <ImageButton
+                android:id="@+id/tabButton"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".2"
+                android:background="@drawable/btn_background"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_keyboard_tab" />
+
+            <ImageButton
+                android:id="@+id/switchToSelectionKeyboard"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".2"
+                android:background="@drawable/btn_background"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_open_with_black" />
+
+            <Button
+                android:id="@+id/altButton"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".2"
+                android:background="@drawable/btn_background"
+                android:scaleType="centerInside"
+                android:text="ALT" />
+
+            <Button
+                android:id="@+id/ctrlButton"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".2"
+                android:background="@drawable/btn_background"
+                android:scaleType="centerInside"
+                android:text="CTRL" />
+
+        </LinearLayout>
+
+        <inc.flide.vi8.views.mainKeyboard.XboardView
+            android:id="@+id/xboardView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </LinearLayout>
