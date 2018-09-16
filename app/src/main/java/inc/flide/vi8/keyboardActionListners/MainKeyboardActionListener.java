@@ -2,6 +2,7 @@ package inc.flide.vi8.keyboardActionListners;
 
 import android.os.Handler;
 import android.view.HapticFeedbackConstants;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +12,11 @@ import inc.flide.vi8.MainInputMethodService;
 import inc.flide.vi8.structures.Constants;
 import inc.flide.vi8.structures.FingerPosition;
 import inc.flide.vi8.keyboardHelpers.KeyboardAction;
-import inc.flide.vi8.views.mainKeyboard.XboardView;
 
 public class MainKeyboardActionListener {
 
     private MainInputMethodService mainInputMethodService;
-    private XboardView mainKeyboardView;
+    private View mainKeyboardView;
 
     private Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
 
@@ -25,7 +25,7 @@ public class MainKeyboardActionListener {
     private boolean isLongPressCallbackSet;
 
     public MainKeyboardActionListener(MainInputMethodService inputMethodService,
-                                      XboardView view) {
+                                      View view) {
         this.mainInputMethodService = inputMethodService;
         this.mainKeyboardView = view;
 
@@ -100,7 +100,6 @@ public class MainKeyboardActionListener {
 
         boolean isMovementValid = true;
         if(keyboardAction == null){
-            //Logger.Verbose(this, "No Action Mapping has been defined for the given Sequence : " + movementSequence.toString());
             movementSequence.clear();
             return;
         }
@@ -108,6 +107,7 @@ public class MainKeyboardActionListener {
         switch (keyboardAction.getKeyboardActionType()){
             case INPUT_TEXT:
                 mainInputMethodService.handleInputText(keyboardAction);
+                processPredictiveTextCandidates();
                 break;
             case INPUT_KEY:
                 mainInputMethodService.handleInputKey(keyboardAction);
@@ -116,11 +116,29 @@ public class MainKeyboardActionListener {
                 mainInputMethodService.handleSpecialInput(keyboardAction);
                 break;
             default:
-                //Logger.Warn(this, "Action Type Undefined : " + keyboardAction.getKeyboardActionType().toString());
                 isMovementValid = false;
         }
         if(isMovementValid){
             mainKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
+    }
+
+    private void processPredictiveTextCandidates() {
+    }
+
+    public boolean areCharactersCapitalized() {
+        return mainInputMethodService.areCharactersCapitalized();
+    }
+
+    public void setModifierFlags(int modifierFlags) {
+        this.mainInputMethodService.setModifierFlags(modifierFlags);
+    }
+
+    public void sendKey(int keycode, int flags) {
+        this.mainInputMethodService.sendKey(keycode, flags);
+    }
+
+    public void handleSpecialInput(KeyboardAction keyboardAction) {
+        this.mainInputMethodService.handleSpecialInput(keyboardAction);
     }
 }

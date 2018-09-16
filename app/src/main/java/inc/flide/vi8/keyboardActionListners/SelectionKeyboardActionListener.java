@@ -1,7 +1,5 @@
 package inc.flide.vi8.keyboardActionListners;
 
-import android.inputmethodservice.KeyboardView;
-import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 
 import inc.flide.vi8.MainInputMethodService;
@@ -11,57 +9,42 @@ import inc.flide.vi8.structures.KeyboardActionType;
 import inc.flide.vi8.structures.SelectionKeyboardKeyCode;
 import inc.flide.vi8.views.SelectionKeyboardView;
 
-public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardActionListener {
-
-    private MainInputMethodService mainInputMethodService;
-    private SelectionKeyboardView selectionKeyboardView;
+public class SelectionKeyboardActionListener extends KeyboardActionListner {
 
     private boolean isSelectionOn = true;
 
     public SelectionKeyboardActionListener(MainInputMethodService inputMethodService
                                             , SelectionKeyboardView view){
-        this.mainInputMethodService = inputMethodService;
-        this.selectionKeyboardView = view;
+        super(inputMethodService, view);
     }
 
-    @Override
-    public void onPress(int primaryCode) {
-
-    }
-
-    @Override
-    public void onRelease(int primaryCode) {
-
-    }
-
-    @Override
-    public void onKey(int primaryCode, int[] keyCodes) {
+    protected boolean ExtendedOnkey(int primaryCode, int[] keyCodes) {
 
         SelectionKeyboardKeyCode selectionKeyboardKeyCode = SelectionKeyboardKeyCode.getAssociatedSelectionKeyCode(primaryCode);
         if (selectionKeyboardKeyCode == null) {
-            return;
+            return false;
         }
 
         switch(selectionKeyboardKeyCode) {
             case CUT:
                 mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_X, KeyEvent.META_CTRL_ON);
-                break;
+                return true;
             case COPY:
                 mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_C, KeyEvent.META_CTRL_ON);;
-                break;
+                return true;
             case PASTE:
                 mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_V, KeyEvent.META_CTRL_ON);;
-                break;
+                return true;
             case SELECT_ALL:
                 mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
-                break;
+                return true;
             case SWITCH_TO_MAIN_KEYBOARD:
                 KeyboardAction switchToMainKeyboardView = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
                         , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
                         , null, 0,0);
                 mainInputMethodService.handleSpecialInput(switchToMainKeyboardView);
-                break;
+                return true;
             case SWITCH_TO_EMOJI_KEYBOARD:
                 KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
@@ -70,32 +53,31 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
                 mainInputMethodService.handleSpecialInput(switchToEmojiKeyboard);
             case TOOGLE_SELECTION_MODE:
                 isSelectionOn = !isSelectionOn;
-                break;
+                return true;
             case DELETE_SELECTION:
                 mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_FORWARD_DEL,0);
-                break;
+                return true;
             case MOVE_CURRENT_END_POINT_LEFT:
                 moveSelection(KeyEvent.KEYCODE_DPAD_LEFT);
-                break;
+                return true;
             case MOVE_CURRENT_END_POINT_RIGHT:
                 moveSelection(KeyEvent.KEYCODE_DPAD_RIGHT);
-                break;
+                return true;
             case MOVE_CURRENT_END_POINT_DOWN:
                 moveSelection(KeyEvent.KEYCODE_DPAD_DOWN);
-                break;
+                return true;
             case MOVE_CURRENT_END_POINT_UP:
                 moveSelection(KeyEvent.KEYCODE_DPAD_UP);
-                break;
+                return true;
             case BACKSPACE:
                 mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL,0);
-                break;
+                return true;
             case ENTER:
                 mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER,0);
-                break;
+                return true;
         }
 
-        selectionKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
-                                            HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        return false;
     }
 
     private void moveSelection(int dpad_keyCode) {
@@ -108,27 +90,4 @@ public class SelectionKeyboardActionListener implements KeyboardView.OnKeyboardA
         }
     }
 
-    @Override
-    public void onText(CharSequence text) {
-    }
-
-    @Override
-    public void swipeLeft() {
-
-    }
-
-    @Override
-    public void swipeRight() {
-
-    }
-
-    @Override
-    public void swipeDown() {
-
-    }
-
-    @Override
-    public void swipeUp() {
-
-    }
 }

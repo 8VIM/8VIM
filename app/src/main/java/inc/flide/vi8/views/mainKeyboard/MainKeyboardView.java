@@ -11,13 +11,14 @@ import android.widget.LinearLayout;
 
 import inc.flide.vi8.MainInputMethodService;
 import inc.flide.vi8.R;
+import inc.flide.vi8.keyboardActionListners.MainKeyboardActionListener;
 import inc.flide.vi8.keyboardHelpers.KeyboardAction;
 import inc.flide.vi8.structures.InputSpecialKeyEventCode;
 import inc.flide.vi8.structures.KeyboardActionType;
 
 public class MainKeyboardView extends View{
 
-    private MainInputMethodService mainInputMethodService;
+    private MainKeyboardActionListener actionListener;
 
     private LinearLayout layout;
     private XboardView xboardView;
@@ -38,13 +39,14 @@ public class MainKeyboardView extends View{
     }
 
     private void initialize(Context context){
-        mainInputMethodService = (MainInputMethodService) context;
 
+        actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
         LayoutInflater inflater = (LayoutInflater)   getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         layout = (LinearLayout) inflater.inflate(R.layout.main_keyboard_view, null);
-        xboardView = (XboardView) layout.findViewById(R.id.xboardView);
+        xboardView = layout.findViewById(R.id.xboardView);
         setupButtonsOnSideBar();
+        setupPredictiveTextCandidateButtons();
 
         setHapticFeedbackEnabled(true);
     }
@@ -65,7 +67,7 @@ public class MainKeyboardView extends View{
         ctrlKeyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainInputMethodService.setModifierFlags(KeyEvent.META_CTRL_MASK);
+                actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK);
             }
         });
     }
@@ -75,7 +77,7 @@ public class MainKeyboardView extends View{
         altKeyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainInputMethodService.setModifierFlags(KeyEvent.META_ALT_MASK);
+                actionListener.setModifierFlags(KeyEvent.META_ALT_MASK);
             }
         });
     }
@@ -86,7 +88,7 @@ public class MainKeyboardView extends View{
         tabKeyButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mainInputMethodService.sendKey(KeyEvent.KEYCODE_TAB, 0);
+                actionListener.sendKey(KeyEvent.KEYCODE_TAB, 0);
             }
         });
     }
@@ -100,13 +102,13 @@ public class MainKeyboardView extends View{
                         KeyboardActionType.INPUT_SPECIAL
                         , InputSpecialKeyEventCode.SWITCH_TO_SELECTION_KEYBOARD.toString()
                         , null, 0,0);
-                mainInputMethodService.handleSpecialInput(switchToSelectionKeyboard);
+                actionListener.handleSpecialInput(switchToSelectionKeyboard);
             }
         });
     }
 
     private void setupSwitchToEmojiKeyboardButton() {
-        ImageButton switchToEmojiKeyboardButton = (ImageButton) layout.findViewById(R.id.switchToEmojiKeyboard);
+        ImageButton switchToEmojiKeyboardButton = layout.findViewById(R.id.switchToEmojiKeyboard);
         switchToEmojiKeyboardButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -114,7 +116,35 @@ public class MainKeyboardView extends View{
                         KeyboardActionType.INPUT_SPECIAL
                         , InputSpecialKeyEventCode.SWITCH_TO_EMOJI_KEYBOARD.toString()
                         , null, 0,0);
-                mainInputMethodService.handleSpecialInput(switchToEmojiKeyboard);
+                actionListener.handleSpecialInput(switchToEmojiKeyboard);
+            }
+        });
+    }
+
+    private void setupPredictiveTextCandidateButtons() {
+        Button leftCanditateButton = layout.findViewById(R.id.selectLeftPrediction);
+        Button centreCanditateButton = layout.findViewById(R.id.selectCentrePrediction);
+        Button rightCanditateButton = layout.findViewById(R.id.selectRightPrediction);
+
+        leftCanditateButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                leftCanditateButton.getText();
+            }
+        });
+
+        centreCanditateButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        rightCanditateButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

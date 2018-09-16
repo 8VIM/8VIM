@@ -21,8 +21,7 @@ import inc.flide.vi8.utilities.Utilities;
 
 public class XboardView extends View{
 
-    private MainKeyboardActionListener mainKeyboardActionListener;
-    private MainInputMethodService mainInputMethodService;
+    private MainKeyboardActionListener actionListener;
 
     private Circle circle;
 
@@ -42,10 +41,7 @@ public class XboardView extends View{
     }
 
     private void initialize(Context context){
-        mainInputMethodService = (MainInputMethodService) context;
-        mainKeyboardActionListener = new MainKeyboardActionListener(mainInputMethodService
-                , this);
-
+        actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
     }
 
@@ -99,7 +95,7 @@ public class XboardView extends View{
         String characterSetSmall = "nomufv!weilhkj@,tscdzg.'yabrpxq?";
         String characterSetCaps = "NOMUFV!WEILHKJ@_TSCDZG-\"YABRPXQ*";
 
-        if(mainInputMethodService.areCharactersCapitalized()){
+        if(actionListener.areCharactersCapitalized()){
             return characterSetCaps;
         }
 
@@ -180,15 +176,15 @@ public class XboardView extends View{
         switch(e.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                mainKeyboardActionListener.movementStarted(currentFingerPosition);
+                actionListener.movementStarted(currentFingerPosition);
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                mainKeyboardActionListener.movementContinues(currentFingerPosition);
+                actionListener.movementContinues(currentFingerPosition);
                 break;
 
             case MotionEvent.ACTION_UP:
-                mainKeyboardActionListener.movementEnds();
+                actionListener.movementEnds();
                 break;
 
             default:
