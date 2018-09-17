@@ -12,4 +12,6 @@
     <!--Preference Related Strings-->
     <string name="basic_preference_file_name">inc.flide.vi8.basicPreferences</string>
     <string name="bp_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
+
+    <string name="keyboard_test_edittext_hint">Test your keyboard here</string>
 </resources>

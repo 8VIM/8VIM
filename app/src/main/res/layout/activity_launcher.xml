@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+
     <include
         layout="@layout/app_bar_launcher"
         android:layout_width="match_parent"
@@ -21,5 +22,42 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_launcher"
         app:menu="@menu/activity_launcher_drawer" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:orientation="horizontal">
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="8"
+            android:background="@color/holo_blue"
+            android:elevation="@dimen/md_button_frame_vertical_padding"
+            android:hint="@string/keyboard_test_edittext_hint"
+            android:inputType="textMultiLine" />
+        <View
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+    </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
