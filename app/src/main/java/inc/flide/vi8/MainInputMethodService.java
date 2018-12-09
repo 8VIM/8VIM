@@ -31,8 +31,8 @@ public class MainInputMethodService extends InputMethodService {
     private SymbolKeyboardView symbolKeyboardView;
     private View currentView;
 
-    private int isShiftLockOn;
-    private int isCapsLockOn;
+    private int shiftLockFlag;
+    private int capsLockFlag;
     private int modifierFlags;
 
     InputMethodServiceHelper inputMethodServiceHelper = new InputMethodServiceHelper();
@@ -74,8 +74,8 @@ public class MainInputMethodService extends InputMethodService {
     public void onInitializeInterface(){
         super.onInitializeInterface();
         inputConnection = getCurrentInputConnection();
-        isShiftLockOn = 0;
-        isCapsLockOn = 0;
+        setShiftLockFlag(0);
+        setCapsLockFlag(0);
         clearModifierFlags();
     }
 
@@ -148,17 +148,16 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public void sendKey(int keyEventCode , int flags) {
-        sendDownAndUpKeyEvent(keyEventCode, (isShiftLockOn | isCapsLockOn | modifierFlags | flags));
+        sendDownAndUpKeyEvent(keyEventCode, (getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags));
         clearModifierFlags();
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
         if(keyboardAction.getText().length() == 1
-                && (isShiftLockOn == KeyEvent.META_SHIFT_ON
-                    || isCapsLockOn == KeyEvent.META_CAPS_LOCK_ON)){
+                && (getShiftLockFlag() == KeyEvent.META_SHIFT_ON
+                    || getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON)){
             sendText(keyboardAction.getCapsLockText());
-            isShiftLockOn = 0;
-            currentView.invalidate();
+            setShiftLockFlag(0);
         }else{
             sendText(keyboardAction.getText());
         }
@@ -166,8 +165,7 @@ public class MainInputMethodService extends InputMethodService {
 
     public void handleInputKey(KeyboardAction keyboardAction) {
         sendKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
-        isShiftLockOn = 0;
-        currentView.invalidate();
+        setShiftLockFlag(0);
     }
 
     public void handleSpecialInput(KeyboardAction keyboardAction) {
@@ -177,7 +175,6 @@ public class MainInputMethodService extends InputMethodService {
         switch (keyeventCode){
             case SHIFT_TOOGLE:
                 performShiftToogle();
-                currentView.invalidate();
                 break;
             case SWITCH_TO_EMOJI_KEYBOARD:
                     switchToExternalEmoticonKeyboard();
@@ -225,20 +222,20 @@ public class MainInputMethodService extends InputMethodService {
         //single press locks the shift key,
         //double press locks the caps key
         //a third press unlocks both.
-        if(isShiftLockOn == KeyEvent.META_SHIFT_ON){
-            isShiftLockOn = 0;
-            isCapsLockOn = KeyEvent.META_CAPS_LOCK_ON;
-        } else if(isCapsLockOn == KeyEvent.META_CAPS_LOCK_ON){
-            isShiftLockOn = 0;
-            isCapsLockOn = 0;
+        if(getShiftLockFlag() == KeyEvent.META_SHIFT_ON){
+            setShiftLockFlag(0);
+            setCapsLockFlag(KeyEvent.META_CAPS_LOCK_ON);
+        } else if(getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON){
+            setShiftLockFlag(0);
+            setCapsLockFlag(0);
         } else{
-            isShiftLockOn = KeyEvent.META_SHIFT_ON;
-            isCapsLockOn = 0;
+            setShiftLockFlag(KeyEvent.META_SHIFT_ON);
+            setCapsLockFlag(0);
         }
     }
 
     public boolean areCharactersCapitalized(){
-        if (isShiftLockOn == KeyEvent.META_SHIFT_ON || isCapsLockOn == KeyEvent.META_CAPS_LOCK_ON) {
+        if (getShiftLockFlag() == KeyEvent.META_SHIFT_ON || getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON) {
             return true;
         }
 
@@ -247,5 +244,24 @@ public class MainInputMethodService extends InputMethodService {
 
     public void setModifierFlags(int newModifierFlags) {
         this.modifierFlags = this.modifierFlags | newModifierFlags;
+    }
+
+    public int getShiftLockFlag() {
+        return shiftLockFlag;
+    }
+
+    public void setShiftLockFlag(int shiftLockFlag) {
+        this.shiftLockFlag = shiftLockFlag;
+        if (getWindow().findViewById(R.id.xboardView) != null) {
+                getWindow().findViewById(R.id.xboardView).invalidate();
+        }
+    }
+
+    public int getCapsLockFlag() {
+        return capsLockFlag;
+    }
+
+    public void setCapsLockFlag(int capsLockFlag) {
+        this.capsLockFlag = capsLockFlag;
     }
 }
