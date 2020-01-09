@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import inc.flide.vi8.MainInputMethodService;
+import inc.flide.vi8.R;
 import inc.flide.vi8.geometry.Circle;
 import inc.flide.vi8.geometry.GeometricUtilities;
 import inc.flide.vi8.geometry.LineSegment;
@@ -78,6 +80,12 @@ public class XboardView extends View{
         //the text along the lines
         paint.setTextSize(40);
         paint.setStrokeWidth(2);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(getResources().getColor(R.color.black));
+        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
+                "SF-UI-Display-Regular.otf");
+        paint.setTypeface(font);
+
 
         float characterHeight = paint.getFontMetrics().descent - paint.getFontMetrics().ascent;
         String charactersToDisplay = getCharacterSetToDisplay();
