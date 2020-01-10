@@ -119,10 +119,10 @@ public class XboardView extends View{
         for(int i = 0 ; i < 4 ; i++){
             PointF nextPoint = GeometricUtilities.findPointSpecifiedDistanceAwayInGivenDirection(lineSegment.getStartingPoint(), lineSegment.getDirectionOfLineInDegree(), (spacingBetweenPoints * i));
             PointF displayPointInAntiClockwiseDirection = new PointF(nextPoint.x + computeAntiClockwiseXOffset(lineSegment, height)
-                                                                    , nextPoint.y + computeAntiClockwiseYOffset(lineSegment, height));
+                    , nextPoint.y + computeAntiClockwiseYOffset(lineSegment, height));
 
             PointF displayPointInClockwiseDirection     = new PointF(nextPoint.x + computeClockwiseXOffset(lineSegment, height)
-                                                                    , nextPoint.y+ computeClockwiseYOffset(lineSegment, height));
+                    , nextPoint.y+ computeClockwiseYOffset(lineSegment, height));
 
             pointsOfCharacterDisplay.add(displayPointInAntiClockwiseDirection);
             pointsOfCharacterDisplay.add(displayPointInClockwiseDirection);
@@ -164,7 +164,7 @@ public class XboardView extends View{
         boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
 
         if (lineSegment.isSlopePositive()){
-           return isXDirectionPositive?height:-height;
+            return isXDirectionPositive?height:-height;
         }
         return 0;
     }
@@ -219,7 +219,7 @@ public class XboardView extends View{
         }
 
         float radius = (0.325f * width) / 2;
-        PointF centre = new PointF((width/2),(height/2));
+        PointF centre = new PointF((width / 2), (height / 2));
         circle = new Circle(centre, radius);
         setMeasuredDimension(width, height);
     }

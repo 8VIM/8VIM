@@ -34,6 +34,8 @@ public class LauncherActivity extends AppCompatActivity
         setContentView(R.layout.activity_launcher);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
+        toolbar.setTitleTextColor(getResources().getColor(R.color.black));
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -62,8 +64,8 @@ public class LauncherActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.share) {
-            startActivity(new Intent(this, ConfigureEmoticonKeyboardActivity.class));
-        }  else if (id == R.id.help) {
+
+        } else if (id == R.id.help) {
 
         } else if (id == R.id.about) {
 
