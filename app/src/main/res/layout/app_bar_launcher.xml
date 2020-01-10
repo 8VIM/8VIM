@@ -16,10 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            app:navigationIcon="@drawable/back_icon_foreground"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_launcher" />
 
 </android.support.design.widget.CoordinatorLayout>

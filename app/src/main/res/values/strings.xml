@@ -14,4 +14,6 @@
     <string name="bp_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
 
     <string name="keyboard_test_edittext_hint">Test your keyboard here</string>
+    <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
+    <string name="share_vi8">Share VI8</string>
 </resources>

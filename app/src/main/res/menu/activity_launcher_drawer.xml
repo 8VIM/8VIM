@@ -4,17 +4,14 @@
     tools:showIn="navigation_view">
 
     <item
-        android:id="@+id/configure_emoji"
-        android:icon="@drawable/ic_emoji"
-        android:title="Configure Emoji Keyboard" />
+        android:id="@+id/share"
+        android:icon="@drawable/share_icon_foreground"
+        android:title="@string/share_vi8" />
     <item
-        android:id="@+id/add_gesture"
-        android:icon="@drawable/add_gesture"
-        android:title="Add a Gesture" />
-    <item
-        android:id="@+id/donate"
-        android:icon="@drawable/donate"
-        android:title="Donate" />
+        android:id="@+id/help"
+        android:icon="@drawable/help_icon_foreground"
+        android:title="@string/help_feedback" />
+
     <item
         android:id="@+id/about"
         android:icon="@drawable/about"

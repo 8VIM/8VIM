@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
     android:keyWidth="20%p"
-    android:keyHeight="10%p"
+    android:keyHeight="85dp"
     android:layout_height="match_parent"
     android:layout_width="fill_parent">
 
@@ -39,7 +39,7 @@
         <Key android:codes="@integer/KEYCODE_DEL"             android:keyLabel="@string/eraseToTheLeft" android:keyWidth="25%p" android:isRepeatable="true" android:keyEdgeFlags="right"/>
     </Row>
     <Row>
-        <Key android:codes="@integer/KEYCODE_EISU"            android:keyLabel="@string/MainKeyboard" android:keyWidth="25%p" android:keyEdgeFlags="left" />
+        <Key android:codes="@integer/KEYCODE_EISU"            android:keyIcon="@drawable/ic_viii" android:keyWidth="25%p" android:keyEdgeFlags="left" />
         <Key android:keyOutputText=" "      android:keyLabel="@string/fullWidthLowLine" android:keyWidth="60%p"/>
         <Key android:keyOutputText="@string/crossProduct"      android:keyLabel="@string/crossProduct" />
         <Key android:keyOutputText="@string/sectionSign"      android:keyLabel="@string/sectionSign" android:keyWidth="25%p"/>
