@@ -6,13 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@color/white"
     tools:openDrawer="start">
 
-
-    <include
-        layout="@layout/app_bar_launcher"
+    <include layout="@layout/app_bar_launcher"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/content_launcher"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp" />
+
+    </LinearLayout>
+
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
@@ -20,6 +33,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:itemIconTint="#000000"
         app:headerLayout="@layout/nav_header_launcher"
         app:menu="@menu/activity_launcher_drawer" />
 
@@ -33,17 +47,16 @@
             android:layout_weight="1"
             android:layout_height="wrap_content" />
 
-
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/testView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/holo_blue"
-            android:elevation="6dp"
-            android:ems="10"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:background="@drawable/textview_background"
+            android:textSize="20sp"
+            android:padding="5dp"
             android:maxLines="6"
             android:hint="@string/keyboard_test_edittext_hint"
             android:inputType="textCapSentences|textMultiLine" />

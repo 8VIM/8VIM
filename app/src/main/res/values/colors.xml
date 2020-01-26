@@ -5,13 +5,12 @@
     <color name="word_prediction_bar_background">#F1F1F1</color>
     <color name="white">#FFFFFF</color>
     <color name="pager_color">#CECECE</color>
-    <color name="holo_blue">#33B5E5</color>
     <color name="delete_color">#adadad</color>
     <color name="divider_color">#1A000000</color>
-    <color name="experimental">#FF0000</color>
-
-    <color name="trial_expired_background">#DD000000</color>
 
     <color name="black">#222222</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="purple">#8186d5</color>
 
 </resources>
