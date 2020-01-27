@@ -1,7 +1,9 @@
 package inc.flide.vi8.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -9,6 +11,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -20,6 +23,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.List;
 
+import inc.flide.vi8.BuildConfig;
 import inc.flide.vi8.R;
 import inc.flide.vi8.structures.Constants;
 
@@ -61,14 +65,32 @@ public class LauncherActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.share:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
+                String shareMessage= "\nCheck out this awesome keyboard application\n\n";
+                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n";
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                startActivity(Intent.createChooser(shareIntent, "Share VI8"));
+                break;
 
-        if (id == R.id.share) {
+            case R.id.help:
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri data = Uri.parse("mailto:flideravi@gmail.com?subject=" + "Feedback");
+                intent.setData(data);
+                startActivity(intent);
+                break;
 
-        } else if (id == R.id.help) {
-
-        } else if (id == R.id.about) {
-
+            case R.id.about :
+                AlertDialog.Builder about = new AlertDialog.Builder(this);
+                about.setTitle("About VI8");
+                about.setMessage("More than just a clone for now defunct 8Pen Application\n\n" +
+                        "Designed and Developed by Flide\n" + "Version 1.0.0");
+                about.setCancelable(true);
+                about.show();
+                break;
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
