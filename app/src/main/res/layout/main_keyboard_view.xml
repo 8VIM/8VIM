@@ -6,6 +6,7 @@
     android:background="@color/main_keyboard_sidebar_background"
     android:orientation="vertical">
 
+    <!--
     <LinearLayout
         android:layout_width="match_parent"
         android:background="@color/word_prediction_bar_background"
@@ -36,6 +37,7 @@
             android:background="@drawable/btn_background"
             android:layout_height="match_parent" />
     </LinearLayout>
+    -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

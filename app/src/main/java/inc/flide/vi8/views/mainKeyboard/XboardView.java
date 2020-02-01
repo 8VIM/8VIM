@@ -18,6 +18,7 @@ import inc.flide.vi8.geometry.Circle;
 import inc.flide.vi8.geometry.GeometricUtilities;
 import inc.flide.vi8.geometry.LineSegment;
 import inc.flide.vi8.keyboardActionListners.MainKeyboardActionListener;
+import inc.flide.vi8.structures.Constants;
 import inc.flide.vi8.structures.FingerPosition;
 import inc.flide.vi8.utilities.Utilities;
 
@@ -78,8 +79,8 @@ public class XboardView extends View{
         }
 
         //the text along the lines
-        paint.setTextSize(40);
-        paint.setStrokeWidth(2);
+        paint.setTextSize(Constants.TEXT_SIZE);
+        //paint.setStrokeWidth(2);
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(getResources().getColor(R.color.black));
         Typeface font = Typeface.createFromAsset(getContext().getAssets(),
