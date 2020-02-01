@@ -8,4 +8,5 @@
     android:keyPreviewLayout ="@layout/preview"
     android:keyBackground="@color/white"
     android:keyTextColor="@color/black"
+    android:background="@color/white"
     />

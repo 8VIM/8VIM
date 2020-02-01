@@ -4,6 +4,7 @@ import android.content.Context;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
+import android.view.View;
 
 import inc.flide.vi8.MainInputMethodService;
 import inc.flide.vi8.R;
@@ -34,4 +35,23 @@ public class SelectionKeyboardView extends KeyboardView {
         this.setOnKeyboardActionListener(actionListener);
     }
 
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        int width = View.MeasureSpec.getSize(widthMeasureSpec);
+        int height = View.MeasureSpec.getSize(heightMeasureSpec);
+
+        if(getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE)
+        {
+            //Landscape is just un-usable right now.
+            // TODO: Landscape mode requires more clarity, what exactly do you want to do?
+            width = Math.round(1.33f * height);
+        }
+        else  // Portrait mode
+        {
+            height = Math.round(0.8f * (width-(60*3)));
+        }
+
+        setMeasuredDimension(width, height);
+    }
 }

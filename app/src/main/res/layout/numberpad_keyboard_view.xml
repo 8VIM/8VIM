@@ -7,10 +7,10 @@
 
     <Row>
         <Key android:keyOutputText="#"      android:keyLabel="#" android:keyWidth="25%p" android:keyEdgeFlags="left" />
-        <Key android:keyOutputText="@string/rupeeSymbol"      android:keyLabel="@string/rupeeSymbol" />
-        <Key android:keyOutputText="&amp;"  android:keyLabel="&amp;" />
-        <Key android:keyOutputText="_"      android:keyLabel="_" />
-        <Key android:keyOutputText="-"      android:keyLabel="-" />
+        <Key android:keyOutputText="@string/rupeeSymbol"      android:keyLabel="@string/rupeeSymbol" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="&amp;"  android:keyLabel="&amp;" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="_"      android:keyLabel="_" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="-"      android:keyLabel="-" android:keyWidth="25%p"/>
         <Key android:keyOutputText="1"      android:keyLabel="1" android:keyWidth="25%p"/>
         <Key android:keyOutputText="2"      android:keyLabel="2" android:keyWidth="25%p"/>
         <Key android:keyOutputText="3"      android:keyLabel="3" android:keyWidth="25%p"/>
@@ -18,10 +18,10 @@
     </Row>
     <Row>
         <Key android:keyOutputText="\@"     android:keyLabel="\@" android:keyWidth="25%p" android:keyEdgeFlags="left" />
-        <Key android:keyOutputText="("      android:keyLabel="(" />
-        <Key android:keyOutputText=")"      android:keyLabel=")" />
-        <Key android:keyOutputText="="      android:keyLabel="=" />
-        <Key android:keyOutputText="+"      android:keyLabel="+" />
+        <Key android:keyOutputText="("      android:keyLabel="(" android:keyWidth="25%p"/>
+        <Key android:keyOutputText=")"      android:keyLabel=")" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="="      android:keyLabel="=" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="+"      android:keyLabel="+" android:keyWidth="25%p"/>
         <Key android:keyOutputText="4"      android:keyLabel="4" android:keyWidth="25%p"/>
         <Key android:keyOutputText="5"      android:keyLabel="5" android:keyWidth="25%p"/>
         <Key android:keyOutputText="6"      android:keyLabel="6" android:keyWidth="25%p"/>
@@ -29,10 +29,10 @@
     </Row>
     <Row>
         <Key android:codes="@integer/KEYCODE_NUM_LOCK"       android:keyLabel="{+=" android:keyWidth="25%p" android:keyEdgeFlags="left" />
-        <Key android:keyOutputText="'"      android:keyLabel="'" />
-        <Key android:keyOutputText=":"      android:keyLabel=":" />
-        <Key android:keyOutputText="%"      android:keyLabel="%" />
-        <Key android:keyOutputText="/"      android:keyLabel="/" />
+        <Key android:keyOutputText="'"      android:keyLabel="'" android:keyWidth="25%p"/>
+        <Key android:keyOutputText=":"      android:keyLabel=":" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="%"      android:keyLabel="%" android:keyWidth="25%p"/>
+        <Key android:keyOutputText="/"      android:keyLabel="/" android:keyWidth="25%p"/>
         <Key android:keyOutputText="7"      android:keyLabel="7" android:keyWidth="25%p"/>
         <Key android:keyOutputText="8"      android:keyLabel="8" android:keyWidth="25%p"/>
         <Key android:keyOutputText="9"      android:keyLabel="9" android:keyWidth="25%p"/>
@@ -40,7 +40,7 @@
     </Row>
     <Row>
         <Key android:codes="@integer/KEYCODE_EISU"            android:keyIcon="@drawable/ic_viii" android:keyWidth="25%p" android:keyEdgeFlags="left" />
-        <Key android:keyOutputText="&quot;" android:keyLabel="&quot;" />
+        <Key android:keyOutputText="&quot;" android:keyLabel="&quot;" android:keyWidth="25%p"/>
         <Key android:keyOutputText=" "      android:keyLabel="@string/fullWidthLowLine" android:keyWidth="40%p"/>
         <Key android:keyOutputText="*"      android:keyLabel="*" />
         <Key android:keyOutputText=","      android:keyLabel="," android:keyWidth="25%p"/>
@@ -48,4 +48,4 @@
         <Key android:keyOutputText="."      android:keyLabel="." android:keyWidth="25%p"/>
         <Key android:codes="@integer/KEYCODE_ENTER"             android:keyLabel="@string/enter" android:keyWidth="25%p" android:keyEdgeFlags="right" />
     </Row>
-</Keyboard>
+</Keyboard >

@@ -46,7 +46,7 @@ public class MainKeyboardView extends View{
         layout = (LinearLayout) inflater.inflate(R.layout.main_keyboard_view, null);
         xboardView = layout.findViewById(R.id.xboardView);
         setupButtonsOnSideBar();
-        setupPredictiveTextCandidateButtons();
+        //setupPredictiveTextCandidateButtons();
 
         setHapticFeedbackEnabled(true);
     }
@@ -121,6 +121,7 @@ public class MainKeyboardView extends View{
         });
     }
 
+    /*
     private void setupPredictiveTextCandidateButtons() {
         Button leftCanditateButton = layout.findViewById(R.id.selectLeftPrediction);
         Button centreCanditateButton = layout.findViewById(R.id.selectCentrePrediction);
@@ -148,6 +149,7 @@ public class MainKeyboardView extends View{
             }
         });
     }
+     */
 
     public View getView() {
         return layout;
