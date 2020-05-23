@@ -46,7 +46,7 @@ public abstract class KeyboardActionListner implements KeyboardView.OnKeyboardAc
                 mainInputMethodService.sendKey(primaryCode, 0);
                 break;
             default:
-                if (!ExtendedOnkey(primaryCode, keyCodes)) {
+                if (!ExtendedOnKey(primaryCode, keyCodes)) {
                     mainInputMethodService.sendText(String.valueOf((char) primaryCode));
                 }
         }
@@ -55,7 +55,7 @@ public abstract class KeyboardActionListner implements KeyboardView.OnKeyboardAc
                 HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
     }
 
-    protected abstract boolean ExtendedOnkey(int primaryCode, int[] keyCodes);
+    protected abstract boolean ExtendedOnKey(int primaryCode, int[] keyCodes);
 
     @Override
     public void onText(CharSequence text) {

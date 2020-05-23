@@ -18,7 +18,7 @@ public class SelectionKeyboardActionListener extends KeyboardActionListner {
         super(inputMethodService, view);
     }
 
-    protected boolean ExtendedOnkey(int primaryCode, int[] keyCodes) {
+    protected boolean ExtendedOnKey(int primaryCode, int[] keyCodes) {
 
         SelectionKeyboardKeyCode selectionKeyboardKeyCode = SelectionKeyboardKeyCode.getAssociatedSelectionKeyCode(primaryCode);
         if (selectionKeyboardKeyCode == null) {

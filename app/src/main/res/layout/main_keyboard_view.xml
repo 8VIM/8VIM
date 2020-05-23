@@ -18,7 +18,7 @@
             android:layout_weight=".33"
             android:background="@drawable/btn_background"
             android:layout_height="match_parent" />
-        <View android:layout_height="fill_parent"
+        <View android:layout_height="match_parent"
             android:layout_width="2px"
             android:background="#90909090"/>
         <Button
@@ -27,7 +27,7 @@
             android:layout_weight=".33"
             android:background="@drawable/btn_background"
             android:layout_height="match_parent" />
-        <View android:layout_height="fill_parent"
+        <View android:layout_height="match_parent"
             android:layout_width="2px"
             android:background="#90909090"/>
         <Button

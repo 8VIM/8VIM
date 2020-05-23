@@ -10,7 +10,7 @@ import inc.flide.vi8.MainInputMethodService;
 import inc.flide.vi8.R;
 import inc.flide.vi8.keyboardActionListners.SelectionKeyboardActionListener;
 
-public class SelectionKeyboardView extends KeyboardView {
+public class SelectionKeyboardView extends ButtonKeyboardView {
 
     private SelectionKeyboardActionListener actionListener;
 
@@ -33,25 +33,5 @@ public class SelectionKeyboardView extends KeyboardView {
         setHapticFeedbackEnabled(true);
         actionListener = new SelectionKeyboardActionListener(mainInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
-    }
-
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        int width = View.MeasureSpec.getSize(widthMeasureSpec);
-        int height = View.MeasureSpec.getSize(heightMeasureSpec);
-
-        if(getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE)
-        {
-            //Landscape is just un-usable right now.
-            // TODO: Landscape mode requires more clarity, what exactly do you want to do?
-            width = Math.round(1.33f * height);
-        }
-        else  // Portrait mode
-        {
-            height = Math.round(0.8f * (width-(60*3)));
-        }
-
-        setMeasuredDimension(width, height);
     }
 }

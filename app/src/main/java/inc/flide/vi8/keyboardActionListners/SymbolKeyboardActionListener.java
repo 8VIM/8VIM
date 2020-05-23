@@ -16,7 +16,7 @@ public class SymbolKeyboardActionListener extends KeyboardActionListner {
     }
 
     @Override
-    protected boolean ExtendedOnkey(int primaryCode, int[] keyCodes) {
+    protected boolean ExtendedOnKey(int primaryCode, int[] keyCodes) {
         switch (primaryCode) {
             case KeyEvent.KEYCODE_NUM_LOCK:
                 KeyboardAction switchToNumberPadKeyboardView = new KeyboardAction(
