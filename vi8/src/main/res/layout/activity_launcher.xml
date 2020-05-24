@@ -18,19 +18,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include
-            layout="@layout/content_launcher"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
         <View
             android:layout_width="match_parent"
             android:layout_weight="1"
