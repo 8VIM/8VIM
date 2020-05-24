@@ -43,7 +43,7 @@ TO BE CONTINUED...
 ## Usability Guide
 
 So, what capablities does VIII have?
-Once you know how to type with this thing (Learn how to type with this original [8Pen-game App] (https://play.google.com/store/apps/details?id=com.eightpen.android.wordcup&hl=en), you must know the following 
+Once you know how to type with this thing (Learn how to type with this original [8Pen-game App](https://play.google.com/store/apps/details?id=com.eightpen.android.wordcup&hl=en), you must know the following
 
 ##### Basic Needed Stuff
 
