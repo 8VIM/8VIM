@@ -5,9 +5,9 @@ Please get the latest release build from Play store : https://play.google.com/st
 
 ## Initial Idea
 
-The application was started essentially as a clone of 8pen, which for some reason they have stopped distributing. (I can no longer install it even though when i paid for it!!!)
+The application was started essentially as a clone of 8pen, which for some reason they have stopped distributing. (I can no longer install it even though when I paid for it!!!)
 
-To understand what exactly this keyboard is please watch the video "https://www.youtube.com/watch?v=99vsUF4NuLk"
+To understand what exactly this keyboard is, please watch the video "https://www.youtube.com/watch?v=99vsUF4NuLk"
 
 ## Usability Guide
 
@@ -27,7 +27,7 @@ If you move your finger from the centre-circle to any sector and stay, the curso
 There is selection built in to the keyboard. If you move your finger from the right sector to the circle, the cursor will start moving left and selecting everything in it's path. Once you release, a selection keyboard will open up for various stupidities to do. (i.e. right-sector->circle->lift-finger)
 
 ##### Paste Functionality
-Moving your finger from left-sector->circle->lift-finger performs a paste of watever is in the clipboard.
+Moving your finger towards the right from left-sector->circle->lift-finger performs a paste of watever is in the clipboard.
 
 
 ###### Handwriting reinvented
