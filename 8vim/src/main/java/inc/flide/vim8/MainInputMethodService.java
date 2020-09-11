@@ -2,6 +2,7 @@ package inc.flide.vim8;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -40,6 +41,12 @@ public class MainInputMethodService extends InputMethodService {
 
     @Override
     public View onCreateInputView() {
+        
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+            IBinder iBinder = this.getWindow().getWindow().getAttributes().token;
+            inputMethodManager.switchToLastInputMethod(iBinder);
+        }
 
         numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater()
                                     .inflate(R.layout.numberpad_keyboard_layout, null);
