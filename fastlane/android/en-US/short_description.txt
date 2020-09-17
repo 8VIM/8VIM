@@ -1,3 +1,0 @@
-The application was started essentially as a clone of 8pen, which for some reason they have stopped distributing. (I can no longer install it even though when I paid for it!!!)
-I hope this would be better than just a clone for 8pen and more like a vim style editor for every textbox for which the
-keyboard is called upon.
