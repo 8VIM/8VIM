@@ -48,8 +48,8 @@ public class XboardView extends View{
         setHapticFeedbackEnabled(true);
     }
 
-    private final int offset = 25;
-    private final int lengthOfLineDemarcatingSectors = 350;
+    private final int offset = 15;
+    private final int lengthOfLineDemarcatingSectors = 250;
 
     @Override
     public void onDraw(Canvas canvas) {
