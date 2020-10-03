@@ -25,4 +25,6 @@
     <string name="keyboard_test_edit_text_hint">Test your keyboard here</string>
     <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
     <string name="share_app">Share &appname;</string>
+    <string name="title">choose the input method</string>
+    <string name="choose">ok</string>
 </resources>
