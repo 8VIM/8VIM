@@ -20,6 +20,8 @@
                 android:resource="@xml/method" />
         </service>
 
+
+
         <activity
             android:name="inc.flide.vim8.ui.LauncherActivity"
             android:label="@string/app_name"
@@ -38,6 +40,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName="inc.flide.vim8.ui.LauncherActivity">
         </activity>
+
+        <activity android:name=".ui.ResizeActivity"
+            android:label="null"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ui.LauncherActivity"/>
 
     </application>
 
