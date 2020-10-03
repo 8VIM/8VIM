@@ -1,7 +1,10 @@
 package inc.flide.vim8.ui;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -12,15 +15,25 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import inc.flide.vim8.BuildConfig;
+import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.structures.Constants;
 
@@ -28,6 +41,11 @@ public class LauncherActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean isKeyboardEnabled;
+
+    public String preference = "";
+
+    private Button emojibutton;
+    private  TextView mResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +64,53 @@ public class LauncherActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        emojibutton = (Button) findViewById(R.id.emoji);
+        mResult = (TextView) findViewById(R.id.result);
+
+        emojibutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                emojiActivity();
+            }
+        });
+    }
+
+    public void emojiActivity(){
+
+        //get the list of all installed keyboards on the device
+       InputMethodManager imeManager = (InputMethodManager) getApplicationContext().getSystemService(INPUT_METHOD_SERVICE);
+       List<InputMethodInfo> inputMethods = imeManager.getEnabledInputMethodList();
+
+       //Extract the name and id's from this list
+        Map<String,String> inputMethodsNameAndId = new HashMap<>();
+        for(InputMethodInfo inputMethodInfo : inputMethods){
+            inputMethodsNameAndId.put(inputMethodInfo.loadLabel(getPackageManager()).toString(),inputMethodInfo.getId());
+        }
+        ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
+
+        //create a dialog box to show the user
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
+        builder.title(R.string.title);
+        builder.items(inputMethodsNameAndId.keySet());
+        builder.itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+            @Override
+            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+
+                if(which != -1) {
+                    mResult.setText(keyboardIds.get(which));
+                    SharedPreferences sp = getSharedPreferences("VIM8keyboard", Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("selected keyboard id",keyboardIds.get(which));
+                    editor.commit();
+                    return true;
+                }
+                return true;
+            }
+
+        });
+        builder.positiveText(R.string.choose);
+        builder.show();
     }
 
     @Override
