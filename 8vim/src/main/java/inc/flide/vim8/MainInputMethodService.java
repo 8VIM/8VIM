@@ -9,6 +9,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.List;
@@ -134,7 +135,7 @@ public class MainInputMethodService extends InputMethodService {
         if (keyboardId.isEmpty()){
             inputMethodManager.switchToLastInputMethod(iBinder);
         } else {
-            inputMethodManager.setInputMethod(iBinder, getSelectedEmoticonKeyboardId());
+            inputMethodManager.setInputMethod(iBinder, keyboardId);
         }
 
     }
@@ -143,8 +144,16 @@ public class MainInputMethodService extends InputMethodService {
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
                     getString(R.string.basic_preference_file_name), Context.MODE_PRIVATE);
         String emoticonKeyboardId = sharedPreferences.getString(getString(R.string.bp_selected_emoticon_keyboard), "");
-        //TODO: before returning verify that this keyboard Id we have does exist in the system.
-        return emoticonKeyboardId;
+
+        // Before returning verify that this keyboard Id we have does exist in the system.
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        List<InputMethodInfo> enabledInputMethodList = inputMethodManager.getEnabledInputMethodList();
+        for(InputMethodInfo inputMethodInfo: enabledInputMethodList) {
+            if(inputMethodInfo.getId().compareTo(emoticonKeyboardId) == 0) {
+                return emoticonKeyboardId;
+            }
+        }
+        return "";
     }
 
     public void sendKey(int keyEventCode , int flags) {

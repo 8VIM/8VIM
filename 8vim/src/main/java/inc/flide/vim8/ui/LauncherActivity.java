@@ -2,7 +2,6 @@ package inc.flide.vim8.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -16,14 +15,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -33,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import inc.flide.vim8.BuildConfig;
-import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.structures.Constants;
 
@@ -41,11 +35,7 @@ public class LauncherActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean isKeyboardEnabled;
-
-    public String preference = "";
-
-    private Button emojibutton;
-    private  TextView mResult;
+    private Button switchToEmojiKeyboardButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,52 +55,38 @@ public class LauncherActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        emojibutton = (Button) findViewById(R.id.emoji);
-        mResult = (TextView) findViewById(R.id.result);
+        switchToEmojiKeyboardButton = (Button) findViewById(R.id.emoji);
 
-        emojibutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                emojiActivity();
-            }
-        });
+        switchToEmojiKeyboardButton.setOnClickListener(v -> askUserPreferredEmoticonKeyboard());
     }
 
-    public void emojiActivity(){
-
-        //get the list of all installed keyboards on the device
+    public void askUserPreferredEmoticonKeyboard(){
        InputMethodManager imeManager = (InputMethodManager) getApplicationContext().getSystemService(INPUT_METHOD_SERVICE);
        List<InputMethodInfo> inputMethods = imeManager.getEnabledInputMethodList();
 
-       //Extract the name and id's from this list
         Map<String,String> inputMethodsNameAndId = new HashMap<>();
         for(InputMethodInfo inputMethodInfo : inputMethods){
-            inputMethodsNameAndId.put(inputMethodInfo.loadLabel(getPackageManager()).toString(),inputMethodInfo.getId());
+            if(inputMethodInfo.getId().compareTo(Constants.SELF_KEYBOARD_ID) != 0) {
+                inputMethodsNameAndId.put(inputMethodInfo.loadLabel(getPackageManager()).toString(),inputMethodInfo.getId());
+            }
         }
         ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
 
-        //create a dialog box to show the user
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
-        builder.title(R.string.title);
-        builder.items(inputMethodsNameAndId.keySet());
-        builder.itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
+        new MaterialDialog.Builder(this)
+            .title(R.string.select_prefered_emoji_keyboard_dialog_title)
+            .items(inputMethodsNameAndId.keySet())
+            .itemsCallbackSingleChoice(-1, (dialog, itemView, which, text) -> {
 
                 if(which != -1) {
-                    mResult.setText(keyboardIds.get(which));
-                    SharedPreferences sp = getSharedPreferences("VIM8keyboard", Activity.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("selected keyboard id",keyboardIds.get(which));
-                    editor.commit();
-                    return true;
+                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                    sharedPreferencesEditor.putString(getString(R.string.bp_selected_emoticon_keyboard),keyboardIds.get(which));
+                    sharedPreferencesEditor.apply();
                 }
                 return true;
-            }
-
-        });
-        builder.positiveText(R.string.choose);
-        builder.show();
+            })
+            .positiveText(R.string.generic_okay_text)
+            .show();
     }
 
     @Override
@@ -168,7 +144,7 @@ public class LauncherActivity extends AppCompatActivity
         List<InputMethodInfo> enabledInputMethodList = inputMethodManager.getEnabledInputMethodList();
         isKeyboardEnabled = false;
         for(InputMethodInfo inputMethodInfo: enabledInputMethodList) {
-            if(inputMethodInfo.getId().compareTo(Constants.KEYBOARD_ID) == 0) {
+            if(inputMethodInfo.getId().compareTo(Constants.SELF_KEYBOARD_ID) == 0) {
                 isKeyboardEnabled = true;
             }
         }
@@ -182,7 +158,7 @@ public class LauncherActivity extends AppCompatActivity
             enableInputMethodDialog();
         }
         // Ask user to activate the IME while he is using the settings application
-        else if(!Constants.KEYBOARD_ID.equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD))) {
+        else if(!Constants.SELF_KEYBOARD_ID.equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD))) {
             activateInputMethodDialog();
         }
     }

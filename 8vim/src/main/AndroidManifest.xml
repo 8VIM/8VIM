@@ -31,14 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="inc.flide.vim8.ui.ConfigureEmoticonKeyboardActivity"
-            android:label="@string/title_activity_configure_emoticon_keyboard"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName="inc.flide.vim8.ui.LauncherActivity">
-        </activity>
-
     </application>
 
 </manifest>
