@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -73,13 +74,20 @@ public class LauncherActivity extends AppCompatActivity
         ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
 
         SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        String selectedId = sp.getString("selected_emoticon_keyboard","");
-        int selectedIndex = keyboardIds.indexOf(selectedId);
-
+        String selectedKeyboardString = getString(R.string.bp_selected_emoticon_keyboard);
+        String selectedKeyboardId = sp.getString(selectedKeyboardString,"-1");
+        int selectedKeyboardIndex = -1;
+        if (selectedKeyboardId != "-1"){
+            selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
+        }
+        if (selectedKeyboardIndex == -1)
+        {
+            sp.edit().remove(selectedKeyboardString).commit();
+        }
         new MaterialDialog.Builder(this)
             .title(R.string.select_prefered_emoji_keyboard_dialog_title)
             .items(inputMethodsNameAndId.keySet())
-            .itemsCallbackSingleChoice(selectedIndex, (dialog, itemView, which, text) -> {
+            .itemsCallbackSingleChoice(selectedKeyboardIndex, (dialog, itemView, which, text) -> {
 
                 if(which != -1) {
                     SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
@@ -87,7 +95,6 @@ public class LauncherActivity extends AppCompatActivity
                     sharedPreferencesEditor.putString(getString(R.string.bp_selected_emoticon_keyboard),keyboardIds.get(which));
                     sharedPreferencesEditor.apply();
                 }
-
                 return true;
             })
             .positiveText(R.string.generic_okay_text)
