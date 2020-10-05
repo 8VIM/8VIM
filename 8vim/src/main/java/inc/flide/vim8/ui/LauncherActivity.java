@@ -15,7 +15,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -74,15 +73,15 @@ public class LauncherActivity extends AppCompatActivity
         ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
 
         SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        String selectedKeyboardString = getString(R.string.bp_selected_emoticon_keyboard);
-        String selectedKeyboardId = sp.getString(selectedKeyboardString,"-1");
+        String selectedKeyboardId = sp.getString(getString(R.string.bp_selected_emoticon_keyboard),"");
         int selectedKeyboardIndex = -1;
-        if (selectedKeyboardId != "-1"){
+        if (!selectedKeyboardId.isEmpty()) {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
-        }
-        if (selectedKeyboardIndex == -1)
-        {
-            sp.edit().remove(selectedKeyboardString).commit();
+
+            if (selectedKeyboardIndex == -1) {
+                // seems like we have a stale selection, it should be removed.
+                sp.edit().remove(getString(R.string.bp_selected_emoticon_keyboard)).commit();
+            }
         }
         new MaterialDialog.Builder(this)
             .title(R.string.select_prefered_emoji_keyboard_dialog_title)
