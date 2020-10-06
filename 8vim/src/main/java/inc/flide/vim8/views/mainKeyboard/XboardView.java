@@ -216,7 +216,10 @@ public class XboardView extends View{
         }
         else  // Portrait mode
         {
-            height = Math.round(0.8f * width);
+            if(height > width) {
+                height = Math.round(0.8f * width);
+                width = height;
+            }
         }
 
         float radius = (0.325f * width) / 2;

@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
@@ -20,7 +22,7 @@ public class MainKeyboardView extends View{
 
     private MainKeyboardActionListener actionListener;
 
-    private LinearLayout layout;
+    private View layout;
     private XboardView xboardView;
 
     public MainKeyboardView(Context context) {
@@ -43,7 +45,7 @@ public class MainKeyboardView extends View{
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
         LayoutInflater inflater = (LayoutInflater)   getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        layout = (LinearLayout) inflater.inflate(R.layout.main_keyboard_view, null);
+        layout = inflater.inflate(R.layout.main_keyboard_view, null);
         xboardView = layout.findViewById(R.id.xboardView);
         setupButtonsOnSideBar();
         //setupPredictiveTextCandidateButtons();
