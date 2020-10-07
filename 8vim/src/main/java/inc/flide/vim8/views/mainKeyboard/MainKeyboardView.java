@@ -1,7 +1,10 @@
 package inc.flide.vim8.views.mainKeyboard;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,12 +43,26 @@ public class MainKeyboardView extends View{
         initialize(context);
     }
 
-    private void initialize(Context context){
+    public void initialize(Context context){
 
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
-        LayoutInflater inflater = (LayoutInflater)   getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        layout = inflater.inflate(R.layout.main_keyboard_view, null);
+        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        String selectedKeyboardId = sp.getString(context.getString(R.string.input_keyboard_id),"");
+        String selectedKeyboardIndex = "left_click";
+        if(!(selectedKeyboardId == "")){
+            selectedKeyboardIndex = selectedKeyboardId;
+        }
+
+        if(selectedKeyboardIndex == "left_click"){
+
+            layout = inflater.inflate(R.layout.main_keyboard_view, null);
+        }
+        else{
+            layout = inflater.inflate(R.layout.main_keyboard_right_view, null);
+        }
+
         xboardView = layout.findViewById(R.id.xboardView);
         setupButtonsOnSideBar();
         //setupPredictiveTextCandidateButtons();
@@ -154,6 +171,28 @@ public class MainKeyboardView extends View{
      */
 
     public View getView() {
+
+        actionListener = new MainKeyboardActionListener((MainInputMethodService) getContext(), this);
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        SharedPreferences sp = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        String selectedKeyboardId = sp.getString(getContext().getString(R.string.input_keyboard_id),"");
+        String selectedKeyboardIndex = "left_click";
+        if(!(selectedKeyboardId == "")){
+            selectedKeyboardIndex = selectedKeyboardId;
+        }
+
+        if(selectedKeyboardIndex == "left_click"){
+            layout = inflater.inflate(R.layout.main_keyboard_view, null);
+        }
+        else{
+            layout = inflater.inflate(R.layout.main_keyboard_right_view, null);
+        }
+
+        xboardView = layout.findViewById(R.id.xboardView);
+        setupButtonsOnSideBar();
+        //setupPredictiveTextCandidateButtons();
+        setHapticFeedbackEnabled(true);
         return layout;
     }
 
