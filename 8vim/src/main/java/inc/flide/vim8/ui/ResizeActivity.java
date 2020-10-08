@@ -63,13 +63,13 @@ public class ResizeActivity extends AppCompatActivity {
         textView = (TextView)findViewById(R.id.textView);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        float selectedKeyboardId = sp.getFloat(getString(R.string.current_radius_value),0);
-        float selectedKeyboardIndex = 0.1f;
-        if (!(selectedKeyboardId == 0)) {
-            selectedKeyboardIndex = selectedKeyboardId;
+        float spRadius= sp.getFloat(getString(R.string.current_radius_value),0);
+        float currentRadius = 0.1f;
+        if (!(spRadius == 0)) {
+            currentRadius = spRadius;
         }
-        seekBar.setProgress((int) (selectedKeyboardIndex * 20));
-        textView.setText("" + selectedKeyboardIndex + "");
+        seekBar.setProgress((int) (currentRadius * 20));
+        textView.setText("" + currentRadius + "");
         seekBar.setMin(1);
         seekBar.setMax(10);
 
@@ -77,13 +77,9 @@ public class ResizeActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-
-
                 seekBar.setProgress(progress);
                 Float x = new Float((0.05 * progress));
                 textView.setText("" + x + "");
-
-
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
