@@ -52,8 +52,6 @@ public class MainInputMethodService extends InputMethodService {
                                     .inflate(R.layout.main_keyboard_layout, null);
         currentView = mainKeyboardView.getView();
 
-        currentView.invalidate();
-
         return currentView;
     }
 
@@ -71,6 +69,7 @@ public class MainInputMethodService extends InputMethodService {
     @Override
     public void onStartInputView (EditorInfo info, boolean restarting){
         super.onStartInputView(info, restarting);
+        currentView.invalidate();
         onCreateInputView();
     }
 
