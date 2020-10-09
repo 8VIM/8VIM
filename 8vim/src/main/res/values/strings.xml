@@ -32,4 +32,6 @@
     <string name="mainKeyboard_sidebar_position_preference_key">input keyboard value</string>
     <string name="mainKeyboard_sidebar_position_preference_left_value">sidebar_left_preferred</string>
     <string name="mainKeyboard_sidebar_position_preference_right_value">sidebar_right_preferred</string>
+    <string name="input_keyboard_id">input keyboard value</string>
+    <string name="current_radius_value">current_radius_value</string>
 </resources>

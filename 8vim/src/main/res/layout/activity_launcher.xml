@@ -36,6 +36,7 @@
             android:layout_weight="1"
             android:layout_height="wrap_content" />
 
+
         <EditText
             android:id="@+id/testView"
             android:layout_width="match_parent"

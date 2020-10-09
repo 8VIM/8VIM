@@ -1,11 +1,14 @@
 package inc.flide.vim8.views.mainKeyboard;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -218,8 +221,13 @@ public class XboardView extends View{
         {
             height = Math.round(0.8f * width);
         }
-
-        float radius = (0.325f * width) / 2;
+        SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        float selectedKeyboardId = sp.getFloat(this.getContext().getString(R.string.current_radius_value),0);
+        float selectedKeyboardIndex = 0.1f;
+        if (!(selectedKeyboardId == 0)) {
+            selectedKeyboardIndex = selectedKeyboardId;
+        }
+        float radius = (selectedKeyboardIndex * width) / 2;
         PointF centre = new PointF((width / 2), (height / 2));
         circle = new Circle(centre, radius);
         setMeasuredDimension(width, height);

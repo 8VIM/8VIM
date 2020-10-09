@@ -44,6 +44,9 @@ public class LauncherActivity extends AppCompatActivity
     private Button leftButtonClick;
     private Button rightButtonClick;
 
+    //created resize button
+    private Button resizeButton;
+
 
 
     @Override
@@ -68,8 +71,18 @@ public class LauncherActivity extends AppCompatActivity
 
         switchToEmojiKeyboardButton.setOnClickListener(v -> askUserPreferredEmoticonKeyboard());
 
-        //Set onclick event
+        //setting onclick event on resize button to open a new screen
 
+        resizeButton = (Button) findViewById(R.id.resize_button);
+        resizeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openNewActivity();
+            }
+        });
+
+
+        //Setting onclick event on buttons
         leftButtonClick = (Button) findViewById(R.id.left_button);
         leftButtonClick.setOnClickListener(v -> {
 
@@ -92,6 +105,13 @@ public class LauncherActivity extends AppCompatActivity
             sharedPreferencesEditor.apply();
         });
 
+    }
+
+    //starting new activity i.e resizeActivity
+
+    public void openNewActivity(){
+        Intent intent = new Intent(this, ResizeActivity.class);
+        startActivity(intent);
     }
 
     public void askUserPreferredEmoticonKeyboard(){
