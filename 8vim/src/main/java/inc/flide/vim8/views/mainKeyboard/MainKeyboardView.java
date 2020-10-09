@@ -4,15 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -48,19 +44,15 @@ public class MainKeyboardView extends View{
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        String selectedKeyboardId = sp.getString(context.getString(R.string.input_keyboard_id),"");
-        String selectedKeyboardIndex = "left_click";
-        if(!(selectedKeyboardId == "")){
-            selectedKeyboardIndex = selectedKeyboardId;
-        }
+        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        String preferredSidebarPositionOnMainKeyboard = sharedPreferences.getString(
+                context.getString(R.string.mainKeyboard_sidebar_position_preference_key),
+                context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
 
-        if(selectedKeyboardIndex == "left_click"){
-
-            layout = inflater.inflate(R.layout.main_keyboard_view, null);
-        }
-        else{
-            layout = inflater.inflate(R.layout.main_keyboard_right_view, null);
+        if(preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))){
+            layout = inflater.inflate(R.layout.main_keyboard_right_sidebar_view, null);
+        } else{
+            layout = inflater.inflate(R.layout.main_keyboard_left_sidebar_view, null);
         }
 
         xboardView = layout.findViewById(R.id.xboardView);
@@ -140,59 +132,7 @@ public class MainKeyboardView extends View{
         });
     }
 
-    /*
-    private void setupPredictiveTextCandidateButtons() {
-        Button leftCanditateButton = layout.findViewById(R.id.selectLeftPrediction);
-        Button centreCanditateButton = layout.findViewById(R.id.selectCentrePrediction);
-        Button rightCanditateButton = layout.findViewById(R.id.selectRightPrediction);
-
-        leftCanditateButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                leftCanditateButton.getText();
-            }
-        });
-
-        centreCanditateButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        rightCanditateButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-    }
-     */
-
     public View getView() {
-
-        actionListener = new MainKeyboardActionListener((MainInputMethodService) getContext(), this);
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        SharedPreferences sp = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        String selectedKeyboardId = sp.getString(getContext().getString(R.string.input_keyboard_id),"");
-        String selectedKeyboardIndex = "left_click";
-        if(!(selectedKeyboardId == "")){
-            selectedKeyboardIndex = selectedKeyboardId;
-        }
-
-        if(selectedKeyboardIndex == "left_click"){
-            layout = inflater.inflate(R.layout.main_keyboard_view, null);
-        }
-        else{
-            layout = inflater.inflate(R.layout.main_keyboard_right_view, null);
-        }
-
-        xboardView = layout.findViewById(R.id.xboardView);
-        setupButtonsOnSideBar();
-        //setupPredictiveTextCandidateButtons();
-        setHapticFeedbackEnabled(true);
         return layout;
     }
 

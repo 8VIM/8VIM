@@ -29,5 +29,7 @@
     <string name="select_prefered_emoji_keyboard_dialog_title">Choose the input method</string>
     <string name="generic_okay_text">Ok</string>
 
-    <string name="input_keyboard_id">input keyboard value</string>
+    <string name="mainKeyboard_sidebar_position_preference_key">input keyboard value</string>
+    <string name="mainKeyboard_sidebar_position_preference_left_value">sidebar_left_preferred</string>
+    <string name="mainKeyboard_sidebar_position_preference_right_value">sidebar_right_preferred</string>
 </resources>

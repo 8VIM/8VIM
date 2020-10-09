@@ -93,10 +93,6 @@ public class MainInputMethodService extends InputMethodService {
         clearModifierFlags();
     }
 
-    public Context getContext() {
-        return this;
-    }
-
     private void clearModifierFlags() {
         modifierFlags = 0;
     }
@@ -276,4 +272,5 @@ public class MainInputMethodService extends InputMethodService {
     public void setCapsLockFlag(int capsLockFlag) {
         this.capsLockFlag = capsLockFlag;
     }
+
 }

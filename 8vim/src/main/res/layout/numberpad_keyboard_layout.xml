@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inc.flide.vim8.views.NumberPadKeyboardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/keyboard"
+    android:id="@+id/main_keyboard_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"

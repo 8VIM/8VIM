@@ -15,7 +15,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
@@ -30,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import inc.flide.vim8.BuildConfig;
+import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.structures.Constants;
 
@@ -71,28 +71,25 @@ public class LauncherActivity extends AppCompatActivity
         //Set onclick event
 
         leftButtonClick = (Button) findViewById(R.id.left_button);
-        leftButtonClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        leftButtonClick.setOnClickListener(v -> {
 
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-                SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putString(getString(R.string.input_keyboard_id),"left_click");
-                sharedPreferencesEditor.apply();
-
-            }
+            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+            SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+            sharedPreferencesEditor.putString(
+                    getString(R.string.mainKeyboard_sidebar_position_preference_key),
+                    getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
+            sharedPreferencesEditor.apply();
         });
 
         rightButtonClick = (Button) findViewById(R.id.right_button);
-        rightButtonClick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        rightButtonClick.setOnClickListener(v -> {
 
-                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-                SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putString(getString(R.string.input_keyboard_id),"right_click");
-                sharedPreferencesEditor.apply();
-            }
+            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+            SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+            sharedPreferencesEditor.putString(
+                    getString(R.string.mainKeyboard_sidebar_position_preference_key),
+                    getString(R.string.mainKeyboard_sidebar_position_preference_right_value));
+            sharedPreferencesEditor.apply();
         });
 
     }
