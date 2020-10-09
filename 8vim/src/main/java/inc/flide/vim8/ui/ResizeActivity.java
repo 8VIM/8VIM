@@ -4,21 +4,13 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import inc.flide.vim8.R;
-import inc.flide.vim8.views.ResizeCircleView;
 
 public class ResizeActivity extends AppCompatActivity {
 
@@ -29,36 +21,6 @@ public class ResizeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resize_activity);
-
-//        LinearLayout layout = new LinearLayout(this);
-//        layout.setLayoutParams(new LinearLayout.LayoutParams(320,420));
-//        layout.setOrientation(LinearLayout.VERTICAL);
-//
-//        ResizeCircleView resizeCircleView = new ResizeCircleView(this);
-//        resizeCircleView.setLayoutParams(new LinearLayout.LayoutParams(300,200));
-//        SeekBar bar = new SeekBar(this);
-//        bar.setMax(100);
-//        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//
-//                resizeCircleView.setRadius(progress);
-//                resizeCircleView.invalidate();
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//        });
-
-//        layout.addView(bar);
-//        setContentView(layout);
 
         textView = (TextView)findViewById(R.id.textView);
         seekBar = (SeekBar) findViewById(R.id.seekBar);

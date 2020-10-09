@@ -222,12 +222,9 @@ public class XboardView extends View{
             height = Math.round(0.8f * width);
         }
         SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        float selectedKeyboardId = sp.getFloat(this.getContext().getString(R.string.current_radius_value),0);
-        float selectedKeyboardIndex = 0.1f;
-        if (!(selectedKeyboardId == 0)) {
-            selectedKeyboardIndex = selectedKeyboardId;
-        }
-        float radius = (selectedKeyboardIndex * width) / 2;
+        float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.current_radius_value),0.1f);
+
+        float radius = (spRadiusValue * width) / 2;
         PointF centre = new PointF((width / 2), (height / 2));
         circle = new Circle(centre, radius);
         setMeasuredDimension(width, height);
