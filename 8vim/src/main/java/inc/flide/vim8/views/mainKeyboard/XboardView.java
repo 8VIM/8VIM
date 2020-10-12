@@ -222,7 +222,7 @@ public class XboardView extends View{
             height = Math.round(0.8f * width);
         }
         SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.current_radius_value),0.1f);
+        float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.current_radius_value),0.3f);
 
         float radius = (spRadiusValue * width) / 2;
         PointF centre = new PointF((width / 2), (height / 2));
