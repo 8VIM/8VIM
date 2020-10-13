@@ -32,4 +32,7 @@
     <string name="mainKeyboard_sidebar_position_preference_key">input keyboard value</string>
     <string name="mainKeyboard_sidebar_position_preference_left_value">sidebar_left_preferred</string>
     <string name="mainKeyboard_sidebar_position_preference_right_value">sidebar_right_preferred</string>
+
+    <string name="x_postion_values">X position values</string>
+    <string name="y_postion_values">Y position values</string>
 </resources>

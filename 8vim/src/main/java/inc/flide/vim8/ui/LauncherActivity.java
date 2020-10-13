@@ -44,6 +44,9 @@ public class LauncherActivity extends AppCompatActivity
     private Button leftButtonClick;
     private Button rightButtonClick;
 
+    private Button setCenterButton;
+
+
 
 
     @Override
@@ -92,6 +95,20 @@ public class LauncherActivity extends AppCompatActivity
             sharedPreferencesEditor.apply();
         });
 
+        setCenterButton = (Button) findViewById(R.id.setcenter_button);
+        setCenterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity();
+            }
+        });
+
+    }
+
+    public void openActivity(){
+
+        Intent intent = new Intent(this,SetCenterActivity.class);
+        startActivity(intent);
     }
 
     public void askUserPreferredEmoticonKeyboard(){
