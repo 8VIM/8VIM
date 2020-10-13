@@ -1,6 +1,7 @@
 package inc.flide.vim8.geometry;
 
 import android.graphics.PointF;
+import android.util.Log;
 
 public class GeometricUtilities {
 

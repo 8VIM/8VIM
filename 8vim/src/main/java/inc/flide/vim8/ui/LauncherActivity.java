@@ -46,6 +46,7 @@ public class LauncherActivity extends AppCompatActivity
 
     //created resize button
     private Button resizeButton;
+    private Button setCenterButton;
 
 
 
@@ -105,12 +106,26 @@ public class LauncherActivity extends AppCompatActivity
             sharedPreferencesEditor.apply();
         });
 
+        setCenterButton = (Button) findViewById(R.id.setcenter_button);
+        setCenterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity();
+            }
+        });
+
     }
 
     //starting new activity i.e resizeActivity
 
     public void openNewActivity(){
         Intent intent = new Intent(this, ResizeActivity.class);
+        startActivity(intent);
+    }
+
+    public void openActivity(){
+
+        Intent intent = new Intent(this,SetCenterActivity.class);
         startActivity(intent);
     }
 

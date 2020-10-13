@@ -35,6 +35,13 @@
         <activity android:name=".ui.ResizeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+
+        <activity android:name=".ui.SetCenterActivity"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
+
+
 
 </manifest>
