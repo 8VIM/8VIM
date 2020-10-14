@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -69,7 +68,7 @@ public class XboardView extends View{
         paint.setStyle(Paint.Style.STROKE);
 
         //The centre circle
-            canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), paint);
+        canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), paint);
 
         //The lines demarcating the sectors
         List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
@@ -216,41 +215,22 @@ public class XboardView extends View{
             //Landscape is just un-usable right now.
             // TODO: Landscape mode requires more clarity, what exactly do you want to do?
             width = Math.round(1.33f * height);
-
         }
         else  // Portrait mode
         {
             height = Math.round(0.8f * width);
-
         }
-        SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.current_radius_value),0.3f);
 
+        SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key),0.3f);
         float radius = (spRadiusValue * width) / 2;
+
         PointF centre = new PointF((width / 2), (height / 2));
-
-        //initial value of centre.x is 450 n centre.y is 360
-
-        int offset_x = 0  ,offset_y = 0 ;
-
-        //shared prefrence for x-axis
-
-        SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        offset_x = sp.getInt(this.getContext().getString(R.string.x_postion_values),0);
-
-        offset_x = offset_x * 26;
-
-        //shared prefrence for y-axis
-
-        SharedPreferences sp_offset_y = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        offset_y = sp_offset_y.getInt(this.getContext().getString(R.string.y_postion_values),0);
-
-        offset_y = offset_y * 26;
-
-        centre.x = centre.x + offset_x;
-        centre.y = centre.y + offset_y;
+        centre.x = centre.x + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key),0)) * 26);
+        centre.y = centre.y + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key),0)) * 26);
 
         circle = new Circle(centre, radius);
+
         setMeasuredDimension(width, height);
     }
 }

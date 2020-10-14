@@ -7,108 +7,103 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="inc.flide.vim8.ui.LauncherActivity">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints">
+    <Button
+        android:id="@+id/emoji"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_background"
+        android:elevation="10dp"
+        android:text="Select Emoji Keyboard"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/resize_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/liner1"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <Button
+        android:id="@+id/resize_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_background"
+        android:elevation="10dp"
+        android:text="Resize Circle"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/setcenter_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/emoji" />
 
+    <Button
+        android:id="@+id/setcenter_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/button_background"
+        android:elevation="10dp"
+        android:text="Position Circle"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/left_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/resize_button" />
 
-            <Button
-                android:id="@+id/emoji"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_background"
-                android:elevation="10dp"
-                android:text="Emoji"
-                android:textAllCaps="false"
-                android:textColor="@color/white" />
+    <Button
+        android:id="@+id/left_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_background"
+        android:elevation="10dp"
+        android:text="Sidebar Left"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/right_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/setcenter_button" />
 
-            <Button
-                android:id="@+id/resize_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_background"
-                android:elevation="10dp"
-                android:text="Resize"
-                android:textAllCaps="false"
-                android:textColor="@color/white" />
-
-            <Button
-                android:id="@+id/setcenter_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_background"
-                android:elevation="10dp"
-                android:text="Set center"
-                android:textAllCaps="false"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="10dp"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_below="@+id/liner1">
-
-
-            <Button
-                android:id="@+id/left_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_background"
-                android:elevation="10dp"
-                android:text="Left"
-                android:textAllCaps="false"
-                android:textColor="@color/white" />
-
-            <Button
-                android:id="@+id/right_button"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_background"
-                android:elevation="10dp"
-                android:text="Right"
-                android:textAllCaps="false"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-
-
-    </RelativeLayout>
-
-
+    <Button
+        android:id="@+id/right_button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/button_background"
+        android:elevation="10dp"
+        android:text="Sidebar Right"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/left_button"
+        app:layout_constraintTop_toBottomOf="@id/setcenter_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

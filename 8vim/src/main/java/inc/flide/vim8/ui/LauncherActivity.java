@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -29,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import inc.flide.vim8.BuildConfig;
-import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.structures.Constants;
 
@@ -37,18 +35,13 @@ public class LauncherActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean isKeyboardEnabled;
-    private Button switchToEmojiKeyboardButton;
 
     //Buttons
-
+    private Button switchToEmojiKeyboardButton;
     private Button leftButtonClick;
     private Button rightButtonClick;
-
-    //created resize button
     private Button resizeButton;
     private Button setCenterButton;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,68 +61,46 @@ public class LauncherActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        switchToEmojiKeyboardButton = (Button) findViewById(R.id.emoji);
-
+        switchToEmojiKeyboardButton = findViewById(R.id.emoji);
         switchToEmojiKeyboardButton.setOnClickListener(v -> askUserPreferredEmoticonKeyboard());
 
-        //setting onclick event on resize button to open a new screen
+        resizeButton = findViewById(R.id.resize_button);
+        resizeButton.setOnClickListener(v -> allowUserToResizeCircle());
 
-        resizeButton = (Button) findViewById(R.id.resize_button);
-        resizeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openNewActivity();
-            }
-        });
+        setCenterButton = findViewById(R.id.setcenter_button);
+        setCenterButton.setOnClickListener(v -> allowUserToSetCentreForCircle());
 
+        leftButtonClick = findViewById(R.id.left_button);
+        leftButtonClick.setOnClickListener(v -> switchSidebarPosition(getString(R.string.mainKeyboard_sidebar_position_preference_left_value)));
 
-        //Setting onclick event on buttons
-        leftButtonClick = (Button) findViewById(R.id.left_button);
-        leftButtonClick.setOnClickListener(v -> {
-
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-            SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putString(
-                    getString(R.string.mainKeyboard_sidebar_position_preference_key),
-                    getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
-            sharedPreferencesEditor.apply();
-        });
-
-        rightButtonClick = (Button) findViewById(R.id.right_button);
-        rightButtonClick.setOnClickListener(v -> {
-
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-            SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putString(
-                    getString(R.string.mainKeyboard_sidebar_position_preference_key),
-                    getString(R.string.mainKeyboard_sidebar_position_preference_right_value));
-            sharedPreferencesEditor.apply();
-        });
-
-        setCenterButton = (Button) findViewById(R.id.setcenter_button);
-        setCenterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity();
-            }
-        });
-
+        rightButtonClick = findViewById(R.id.right_button);
+        rightButtonClick.setOnClickListener(v -> switchSidebarPosition(getString(R.string.mainKeyboard_sidebar_position_preference_right_value)));
     }
 
-    //starting new activity i.e resizeActivity
+    private void switchSidebarPosition(String userPreferedPositionForSidebar) {
+        if (userPreferedPositionForSidebar.equals(getString(R.string.mainKeyboard_sidebar_position_preference_left_value)) ||
+            userPreferedPositionForSidebar.equals(getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
 
-    public void openNewActivity(){
+            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+            SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+            sharedPreferencesEditor.putString(
+                    getString(R.string.mainKeyboard_sidebar_position_preference_key),
+                    userPreferedPositionForSidebar);
+            sharedPreferencesEditor.apply();
+        }
+    }
+
+    private void allowUserToResizeCircle(){
         Intent intent = new Intent(this, ResizeActivity.class);
         startActivity(intent);
     }
 
-    public void openActivity(){
-
+    private void allowUserToSetCentreForCircle(){
         Intent intent = new Intent(this,SetCenterActivity.class);
         startActivity(intent);
     }
 
-    public void askUserPreferredEmoticonKeyboard(){
+    private void askUserPreferredEmoticonKeyboard(){
        InputMethodManager imeManager = (InputMethodManager) getApplicationContext().getSystemService(INPUT_METHOD_SERVICE);
        List<InputMethodInfo> inputMethods = imeManager.getEnabledInputMethodList();
 

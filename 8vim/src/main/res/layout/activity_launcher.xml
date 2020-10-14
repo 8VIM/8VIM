@@ -9,48 +9,50 @@
     android:background="@color/white"
     tools:openDrawer="start">
 
-    <include layout="@layout/app_bar_launcher"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <include
-            layout="@layout/content_launcher"
-            android:layout_width="match_parent"
+            android:id="@+id/app_bar_launcher"
+            layout="@layout/app_bar_launcher"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp" />
+            app:layout_constraintBottom_toTopOf="@id/content_launcher_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
-
+        <include
+            android:id="@+id/content_launcher_view"
+            layout="@layout/content_launcher"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@id/keyboard_text_test_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_bar_launcher" />
 
         <EditText
-            android:id="@+id/testView"
-            android:layout_width="match_parent"
+            android:id="@+id/keyboard_text_test_view"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/textview_background"
-            android:textSize="20sp"
-            android:padding="5dp"
-            android:maxLines="6"
             android:hint="@string/keyboard_test_edit_text_hint"
-            android:inputType="textCapSentences|textMultiLine" />
-    </LinearLayout>
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="6"
+            android:padding="5dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content_launcher_view" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
