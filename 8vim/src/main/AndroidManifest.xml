@@ -5,7 +5,7 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@drawable/vd_vector_aliceblue"
+        android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         tools:ignore="GoogleAppIndexingWarning">
         <service

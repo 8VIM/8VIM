@@ -8,7 +8,6 @@
     <string name="version_name">&version_name;</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="enable_ime_dialog_title">Please Enable IME</string>
     <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "&appname; Keyboard" there.</string>
     <string name="enable_ime_dialog_neutral_button_text">Enable</string>
@@ -16,7 +15,6 @@
     <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname; Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
-    <string name="title_activity_configure_emoticon_keyboard">ConfigureEmoticonKeyboardActivity</string>
 
     <!--Preference Related Strings-->
     <string name="basic_preference_file_name">inc.flide.&appname;.basicPreferences</string>
