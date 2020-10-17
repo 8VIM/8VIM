@@ -1,13 +1,15 @@
 # 8Vim
 
-## Download -
-Please get the latest release build from Play store : https://play.google.com/store/apps/details?id=inc.flide.vi8
-
-## Initial Idea
-
 The application was started essentially as a clone of 8pen, which for some reason they have stopped distributing. (I can no longer install it even though when I paid for it!!!)
 
 To understand what exactly this keyboard is, please watch the video "https://www.youtube.com/watch?v=99vsUF4NuLk"
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/inc.flide.vim8/)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
+     alt="Get it on Google Play"
+     height="80">](https://play.google.com/store/apps/details?id=inc.flide.vi8)
 
 ## Usability Guide
 
