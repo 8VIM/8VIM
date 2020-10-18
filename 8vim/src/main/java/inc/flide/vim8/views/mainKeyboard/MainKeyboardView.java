@@ -2,6 +2,7 @@ package inc.flide.vim8.views.mainKeyboard;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -67,7 +68,7 @@ public class MainKeyboardView extends View{
         setupSwitchToEmojiKeyboardButton();
         setupSwitchToSelectionKeyboardButton();
         setupTabKey();
-        setupAltKey();
+        setupGoToSettingsButton();
         setupCtrlKey();
 
     }
@@ -83,12 +84,14 @@ public class MainKeyboardView extends View{
         });
     }
 
-    private void setupAltKey() {
-        Button altKeyButton = (Button) layout.findViewById(R.id.altButton);
-        altKeyButton.setOnClickListener(new OnClickListener() {
+    private void setupGoToSettingsButton() {
+        ImageButton goToSettingsButton = (ImageButton) layout.findViewById(R.id.goToSettingsButton);
+        goToSettingsButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                actionListener.setModifierFlags(KeyEvent.META_ALT_MASK);
+                Intent vim8SettingsIntent = new Intent(getContext(),inc.flide.vim8.ui.LauncherActivity.class);
+                vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(vim8SettingsIntent);
             }
         });
     }

@@ -39,18 +39,18 @@
         android:background="@drawable/btn_background"
         android:scaleType="centerInside"
         android:src="@drawable/ic_open_with_black"
-        app:layout_constraintBottom_toTopOf="@id/altButton"
+        app:layout_constraintBottom_toTopOf="@id/goToSettingsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tabButton" />
 
-    <Button
-        android:id="@+id/altButton"
+    <ImageButton
+        android:id="@+id/goToSettingsButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/btn_background"
         android:scaleType="centerInside"
-        android:text="ALT"
+        android:src="@drawable/key_icon_settings"
         app:layout_constraintBottom_toTopOf="@id/ctrlButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,6 +66,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/altButton" />
+        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
