@@ -212,6 +212,9 @@ public class MainInputMethodService extends InputMethodService {
                     setInputView(currentView);
                 }
                 break;
+            case HIDE_KEYBOARD:
+                hideKeyboard();
+                break;
             default:
                 //Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getText());
                 break;
@@ -225,6 +228,10 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public void paste() { inputConnection.performContextMenuAction(android.R.id.paste); }
+
+    public void hideKeyboard() {
+        this.requestHideSelf(InputMethodManager.HIDE_NOT_ALWAYS);
+    }
 
     private void performShiftToogle() {
         //single press locks the shift key,

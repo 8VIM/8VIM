@@ -601,4 +601,12 @@
         <inputString>ŭ</inputString>
         <inputCapsLockString>Ŭ</inputCapsLockString>
     </keyboardAction>
+
+    <!-- Hide keyboard -->
+    <keyboardAction>
+        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <movementSequence>TOP;INSIDE_CIRCLE;NO_TOUCH</movementSequence>
+        <inputString>HIDE_KEYBOARD</inputString>
+    </keyboardAction>
+
 </keyboardActionMap>
