@@ -1,6 +1,5 @@
 package inc.flide.vim8.views.mainKeyboard;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import inc.flide.vim8.MainInputMethodService;
@@ -59,11 +57,13 @@ public class MainKeyboardView extends View{
         } else{
             layout = inflater.inflate(R.layout.main_keyboard_left_sidebar_view, null);
         }
+    }
 
-        XboardView xboardView = layout.findViewById(R.id.xboardView);
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+
         setupButtonsOnSideBar();
-        //setupPredictiveTextCandidateButtons();
-
         setHapticFeedbackEnabled(true);
     }
 
