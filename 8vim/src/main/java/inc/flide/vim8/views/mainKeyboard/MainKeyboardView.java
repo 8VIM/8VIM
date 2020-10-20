@@ -14,7 +14,9 @@ import android.widget.ImageButton;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
+import inc.flide.vim8.geometry.Dimention;
 import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
+import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.structures.KeyboardActionType;
@@ -120,6 +122,17 @@ public class MainKeyboardView extends View{
 
     public View getView() {
         return layout;
+    }
+
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        Dimention computedDimension = InputMethodViewHelper.onMeasureHelper(
+                MeasureSpec.getSize(widthMeasureSpec),
+                MeasureSpec.getSize(heightMeasureSpec),
+                getResources().getConfiguration().orientation);
+
+        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
     }
 
 }

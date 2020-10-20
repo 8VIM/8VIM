@@ -10,7 +10,7 @@
     <!--TODO: Convert the layout_height number to "keyboard height" global variable-->
     <include
         android:id="@+id/sidebarButtonsLayout"
-        layout="@layout/main_keyboard_sidebar_view"
+        layout="@layout/main_keyboard_sidebar_layout"
         android:layout_width="0dp"
         android:layout_height="275dp"
         app:layout_constraintHorizontal_weight="1"

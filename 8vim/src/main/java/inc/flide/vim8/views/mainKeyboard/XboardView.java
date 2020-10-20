@@ -30,6 +30,8 @@ import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.GeometricUtilities;
 import inc.flide.vim8.geometry.LineSegment;
 import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
+import inc.flide.vim8.geometry.Dimention;
+import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.utilities.Utilities;
@@ -338,24 +340,16 @@ public class XboardView extends View {
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-        int width = View.MeasureSpec.getSize(widthMeasureSpec);
-        int height = View.MeasureSpec.getSize(heightMeasureSpec);
-
-        if (getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
-            //Landscape is just un-usable right now.
-            // TODO: Landscape mode requires more clarity, what exactly do you want to do?
-            width = Math.round(1.33f * height);
-        } else  // Portrait mode
-        {
-            height = Math.round(0.8f * width);
-        }
+        Dimention computedDimension = new Dimention(
+                                                    MeasureSpec.getSize(widthMeasureSpec),
+                                                    MeasureSpec.getSize(heightMeasureSpec));
 
         SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key), 0.3f);
-        float radius = (spRadiusValue * width) / 2;
+        float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key),0.3f);
+        float radius = (spRadiusValue * computedDimension.getWidth()) / 2;
 
-        circleCenter.x = (width / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
-        circleCenter.y = (height / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
+        circleCenter.x = (computedDimension.getWidth() / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
+        circleCenter.y = (computedDimension.getHeight() / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
 
         circle.setCentre(circleCenter);
         circle.setRadius(radius);
@@ -370,7 +364,7 @@ public class XboardView extends View {
 
         }
 
-        setMeasuredDimension(width, height);
+        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
     }
 
 }
