@@ -251,4 +251,5 @@ public class LauncherActivity extends AppCompatActivity
 
         activateInputMethodNotificationDialog.show();
     }
+
 }

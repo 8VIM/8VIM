@@ -11,11 +11,12 @@
         layout="@layout/x_keyboard_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHorizontal_weight="5"
         app:layout_constraintBottom_toBottomOf="@+id/sidebarButtonsLayout"
         app:layout_constraintEnd_toStartOf="@id/sidebarButtonsLayout"
+        app:layout_constraintHorizontal_weight="5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sidebarButtonsLayout" />
+        app:layout_constraintTop_toTopOf="@+id/sidebarButtonsLayout"
+        app:layout_constraintVertical_bias="0.0" />
 
     <include
         android:id="@+id/sidebarButtonsLayout"
