@@ -21,7 +21,7 @@
         android:id="@+id/sidebarButtonsLayout"
         layout="@layout/main_keyboard_sidebar_layout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="275dp"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
