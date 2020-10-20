@@ -40,6 +40,24 @@ public class MainInputMethodService extends InputMethodService {
     InputMethodServiceHelper inputMethodServiceHelper = new InputMethodServiceHelper();
     InputConnection inputConnection;
 
+    /**
+    Lifecycle of IME
+
+    01.  InputMethodService Starts
+    02.  onCreate()
+    03.  onCreateInputView()
+    04.  onCreateCandidateViews()
+    05.  onStartInputViews()
+    06.  Text input gets the current input method subtype
+    07.  InputMethodManager#getCurrentInputMethodSubtype()
+    08.  Text input has started
+    09.  onCurrentInputMethodSubtypeChanged()
+    10. Detect the current input method subtype has been changed -> can go to step 6
+    11. onFinishInput() -> cursor can Move to an additional field -> step 5
+    12. onDestroy()
+    13. InputMethodService stops
+     */
+
     @Override
     public View onCreateInputView() {
 
