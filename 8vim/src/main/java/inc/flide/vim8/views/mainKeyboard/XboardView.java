@@ -7,7 +7,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.graphics.PointF;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -15,8 +18,11 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.core.graphics.ColorUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -34,8 +40,11 @@ public class XboardView extends View {
 
     private Circle circle;
 
+    private Paint paint = new Paint();
+    private Paint shader_paint = new Paint();
     private Path path = new Path();
-    private  Paint paint = new Paint();
+
+    float pathPos[]=new float[2];
     Context context;
 
     GestureDetector gestureDetector;
@@ -84,7 +93,35 @@ public class XboardView extends View {
         paint.setStrokeWidth(5);
         paint.setStyle(Paint.Style.STROKE);
 
-        canvas.drawPath(path,paint);
+        if (path != null) {
+            final short steps = 150;
+            final byte stepDistance = 5;
+            final byte maxTrailRadius = 14;
+            PathMeasure pathMeasure = new PathMeasure();
+            pathMeasure.setPath(path, false);
+            Random random = new Random();
+            final float pathLength = pathMeasure.getLength();
+            for (short i = 1; i <= steps; i++) {
+                final float distance = pathLength - i * stepDistance;
+                if (distance >= 0) {
+                    final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
+                    pathMeasure.getPosTan(distance, pathPos, null);
+                    final float x = pathPos[0] + random.nextFloat() - trailRadius;
+                    final float y = pathPos[1] + random.nextFloat() - trailRadius;
+                    shader_paint.setShader(new RadialGradient(
+                            x,
+                            y,
+                            trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
+                            ColorUtils.setAlphaComponent(Color.GREEN, random.nextInt(0xff)),
+                            Color.TRANSPARENT,
+                            Shader.TileMode.CLAMP
+                    ));
+                    canvas.drawCircle(x, y, trailRadius, shader_paint);
+                }
+            }
+        }
+         canvas.drawPath(path,shader_paint);
+
 
         //The centre circle
         canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), paint);
@@ -160,6 +197,8 @@ public class XboardView extends View {
         if (lineSegment.isSlopePositive()) {
             return offset + (isXDirectionPositive ? height : -height);
         }
+
+
         return 0;
     }
 
@@ -240,9 +279,7 @@ public class XboardView extends View {
                 actionListener.movementEnds();
             case MotionEvent.ACTION_POINTER_DOWN:
                  path.reset();
-
                 break;
-
             default:
                 return false;
         }
