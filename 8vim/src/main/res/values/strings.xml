@@ -20,6 +20,10 @@
     <string name="basic_preference_file_name">inc.flide.&appname;.basicPreferences</string>
     <string name="bp_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
 
+<!--    shared preference for switch-->
+
+    <string name="switch_mode">switch_mode</string>
+
     <string name="keyboard_test_edit_text_hint">Test your keyboard here</string>
     <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
     <string name="share_app">Share &appname;</string>

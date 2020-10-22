@@ -15,10 +15,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -42,6 +45,9 @@ public class LauncherActivity extends AppCompatActivity
     private Button rightButtonClick;
     private Button resizeButton;
     private Button setCenterButton;
+
+    //Switch
+    private Switch touch_trail_switch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,41 @@ public class LauncherActivity extends AppCompatActivity
 
         rightButtonClick = findViewById(R.id.right_button);
         rightButtonClick.setOnClickListener(v -> switchSidebarPosition(getString(R.string.mainKeyboard_sidebar_position_preference_right_value)));
+
+
+        // switch functionality
+        touch_trail_switch = (Switch) findViewById(R.id.touch_trail);
+
+        SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        String current_switch_mode = sp.getString(getString(R.string.switch_mode),"");
+
+        if(current_switch_mode.equals("true"))
+        {
+            touch_trail_switch.setChecked(true);
+        }
+        else{
+            touch_trail_switch.setChecked(false);
+        }
+
+        touch_trail_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                {
+                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                    sharedPreferencesEditor.putString(getString(R.string.switch_mode),"true");
+                    sharedPreferencesEditor.apply();
+                }
+                else {
+
+                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                    sharedPreferencesEditor.putString(getString(R.string.switch_mode),"false");
+                    sharedPreferencesEditor.apply();
+                }
+            }
+        });
     }
 
     private void switchSidebarPosition(String userPreferedPositionForSidebar) {
