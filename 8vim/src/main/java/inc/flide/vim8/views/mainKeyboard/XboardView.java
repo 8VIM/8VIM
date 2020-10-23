@@ -39,15 +39,15 @@ public class XboardView extends View {
     private MainKeyboardActionListener actionListener;
 
     private Circle circle;
+    List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
+    List<PointF> listOfPointsOfDisplay = new ArrayList<>();
 
-    private Paint paint = new Paint();
-    private Paint shader_paint = new Paint();
-    private Path path = new Path();
-
-    float pathPos[]=new float[2];
+    Path path = new Path();
     Context context;
 
     GestureDetector gestureDetector;
+    Paint backgroundPaint = new Paint();
+    Paint foregroundPaint = new Paint();
 
     public XboardView(Context context) {
         super(context);
@@ -59,9 +59,6 @@ public class XboardView extends View {
         initialize(context);
         gestureDetector = new GestureDetector(context,new GestureListener());
         this.context = context;
-
-
-
     }
 
 
@@ -73,6 +70,16 @@ public class XboardView extends View {
     private void initialize(Context context) {
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
+
+        backgroundPaint.setARGB(255, 255, 255, 255);
+
+        foregroundPaint.setARGB(255, 0, 0, 0);
+        foregroundPaint.setAntiAlias(true);
+        foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
+        foregroundPaint.setTextSize(Constants.TEXT_SIZE);
+        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
+                "SF-UI-Display-Regular.otf");
+        foregroundPaint.setTypeface(font);
     }
 
     private final int offset = 15;
@@ -81,91 +88,64 @@ public class XboardView extends View {
     @Override
     public void onDraw(Canvas canvas) {
 
-        paint.setARGB(255, 255, 255, 255);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setAntiAlias(true);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-
-        //background colouring
-        canvas.drawColor(paint.getColor());
-
-        paint.setARGB(255, 0, 0, 0);
-        paint.setStrokeWidth(5);
-        paint.setStyle(Paint.Style.STROKE);
-
-        //applying the condition for switch
+        canvas.drawColor(backgroundPaint.getColor());
 
         SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        String current_switch_value = sp.getString(this.getContext().getString(R.string.switch_mode),"");
-
-        String setValue = "true";
-
-        if(current_switch_value.equals(setValue))
+        if(sp.getBoolean(this.getContext().getString(R.string.user_preferred_typing_trail_visibility),true))
         {
-            if (path != null) {
-                final short steps = 150;
-                final byte stepDistance = 5;
-                final byte maxTrailRadius = 14;
-                PathMeasure pathMeasure = new PathMeasure();
-                pathMeasure.setPath(path, false);
-                Random random = new Random();
-                final float pathLength = pathMeasure.getLength();
-                for (short i = 1; i <= steps; i++) {
-                    final float distance = pathLength - i * stepDistance;
-                    if (distance >= 0) {
-                        final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
-                        pathMeasure.getPosTan(distance, pathPos, null);
-                        final float x = pathPos[0] + random.nextFloat() - trailRadius;
-                        final float y = pathPos[1] + random.nextFloat() - trailRadius;
-                        shader_paint.setShader(new RadialGradient(
-                                x,
-                                y,
-                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(Color.GREEN, random.nextInt(0xff)),
-                                Color.TRANSPARENT,
-                                Shader.TileMode.CLAMP
-                        ));
-                        canvas.drawCircle(x, y, trailRadius, shader_paint);
-                    }
-                }
-            }
-            canvas.drawPath(path,shader_paint);
-
+            paintTypingTrail(canvas);
         }
 
+        foregroundPaint.setStrokeWidth(5);
+        foregroundPaint.setStyle(Paint.Style.STROKE);
         //The centre circle
-        canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), paint);
+        canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), foregroundPaint);
         //The lines demarcating the sectors
-        List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            int angle = 45 + (i * 90);
-            PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
-            LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
-            sectorDemarcatingLines.add(lineSegment);
-
-            canvas.drawLine(lineSegment.getStartingPoint().x, lineSegment.getStartingPoint().y, lineSegment.getEndPoint().x, lineSegment.getEndPoint().y, paint);
+        for (LineSegment lineSegment: sectorDemarcatingLines) {
+            canvas.drawLine(lineSegment.getStartingPoint().x, lineSegment.getStartingPoint().y, lineSegment.getEndPoint().x, lineSegment.getEndPoint().y, foregroundPaint);
         }
 
         //the text along the lines
-        paint.setTextSize(Constants.TEXT_SIZE);
-        paint.setStrokeWidth(2);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(getResources().getColor(R.color.black));
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
-                "SF-UI-Display-Regular.otf");
-        paint.setTypeface(font);
+        foregroundPaint.setStrokeWidth(2);
+        foregroundPaint.setStyle(Paint.Style.FILL);
 
-
-        float characterHeight = paint.getFontMetrics().descent - paint.getFontMetrics().ascent;
         String charactersToDisplay = getCharacterSetToDisplay();
-        List<PointF> listOfPointsOfDisplay = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            LineSegment currentLine = sectorDemarcatingLines.get(i);
-            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(currentLine, 4, characterHeight));
-        }
         float[] pointsOfDisplay = Utilities.convertPointFListToPrimitiveFloatArray(listOfPointsOfDisplay);
-        canvas.drawPosText(charactersToDisplay, pointsOfDisplay, paint);
+        canvas.drawPosText(charactersToDisplay, pointsOfDisplay, foregroundPaint);
 
+    }
+
+    private void paintTypingTrail(Canvas canvas) {
+        float[] pathPos =new float[2];
+        Paint typingTrailPaint = new Paint();
+        if (path != null) {
+            final short steps = 150;
+            final byte stepDistance = 5;
+            final byte maxTrailRadius = 14;
+            PathMeasure pathMeasure = new PathMeasure();
+            pathMeasure.setPath(path, false);
+            Random random = new Random();
+            final float pathLength = pathMeasure.getLength();
+            for (short i = 1; i <= steps; i++) {
+                final float distance = pathLength - i * stepDistance;
+                if (distance >= 0) {
+                    final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
+                    pathMeasure.getPosTan(distance, pathPos, null);
+                    final float x = pathPos[0] + random.nextFloat() - trailRadius;
+                    final float y = pathPos[1] + random.nextFloat() - trailRadius;
+                    typingTrailPaint.setShader(new RadialGradient(
+                            x,
+                            y,
+                            trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
+                            ColorUtils.setAlphaComponent(Color.GREEN, random.nextInt(0xff)),
+                            Color.TRANSPARENT,
+                            Shader.TileMode.CLAMP
+                    ));
+                    canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
+                }
+            }
+        }
+        canvas.drawPath(path,typingTrailPaint);
     }
 
 
@@ -293,10 +273,10 @@ public class XboardView extends View {
             default:
                 return false;
         }
-            gestureDetector.onTouchEvent(e);
-            // Schedules a repaint.
+        gestureDetector.onTouchEvent(e);
 
-            invalidate();
+        // Schedules a repaint.
+        invalidate();
         return true;
     }
 
@@ -325,6 +305,15 @@ public class XboardView extends View {
         centre.y = centre.y + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
 
         circle = new Circle(centre, radius);
+
+        float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
+        for (int i = 0; i < 4; i++) {
+            int angle = 45 + (i * 90);
+            PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
+            LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
+            sectorDemarcatingLines.add(lineSegment);
+            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(lineSegment, 4, characterHeight));
+        }
 
         setMeasuredDimension(width, height);
     }

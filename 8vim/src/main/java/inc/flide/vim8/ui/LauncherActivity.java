@@ -15,12 +15,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -38,16 +36,6 @@ public class LauncherActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean isKeyboardEnabled;
-
-    //Buttons
-    private Button switchToEmojiKeyboardButton;
-    private Button leftButtonClick;
-    private Button rightButtonClick;
-    private Button resizeButton;
-    private Button setCenterButton;
-
-    //Switch
-    private Switch touch_trail_switch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,66 +55,43 @@ public class LauncherActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        switchToEmojiKeyboardButton = findViewById(R.id.emoji);
+        Button switchToEmojiKeyboardButton = findViewById(R.id.emoji);
         switchToEmojiKeyboardButton.setOnClickListener(v -> askUserPreferredEmoticonKeyboard());
 
-        resizeButton = findViewById(R.id.resize_button);
+        Button resizeButton = findViewById(R.id.resize_button);
         resizeButton.setOnClickListener(v -> allowUserToResizeCircle());
 
-        setCenterButton = findViewById(R.id.setcenter_button);
+        Button setCenterButton = findViewById(R.id.setcenter_button);
         setCenterButton.setOnClickListener(v -> allowUserToSetCentreForCircle());
 
-        leftButtonClick = findViewById(R.id.left_button);
+        Button leftButtonClick = findViewById(R.id.left_button);
         leftButtonClick.setOnClickListener(v -> switchSidebarPosition(getString(R.string.mainKeyboard_sidebar_position_preference_left_value)));
 
-        rightButtonClick = findViewById(R.id.right_button);
+        Button rightButtonClick = findViewById(R.id.right_button);
         rightButtonClick.setOnClickListener(v -> switchSidebarPosition(getString(R.string.mainKeyboard_sidebar_position_preference_right_value)));
 
-
-        // switch functionality
-        touch_trail_switch = (Switch) findViewById(R.id.touch_trail);
-
+        Switch touch_trail_switch = findViewById(R.id.touch_trail);
         SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        String current_switch_mode = sp.getString(getString(R.string.switch_mode),"");
-
-        if(current_switch_mode.equals("true"))
-        {
-            touch_trail_switch.setChecked(true);
-        }
-        else{
-            touch_trail_switch.setChecked(false);
-        }
-
-        touch_trail_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)
-                {
-                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                    sharedPreferencesEditor.putString(getString(R.string.switch_mode),"true");
-                    sharedPreferencesEditor.apply();
-                }
-                else {
-
-                    SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                    sharedPreferencesEditor.putString(getString(R.string.switch_mode),"false");
-                    sharedPreferencesEditor.apply();
-                }
-            }
-        });
+        touch_trail_switch.setChecked(sp.getBoolean(getString(R.string.user_preferred_typing_trail_visibility),true));
+        touch_trail_switch.setOnCheckedChangeListener((buttonView, isChecked) -> touchTrailPreferenceChangeListner(isChecked));
     }
 
-    private void switchSidebarPosition(String userPreferedPositionForSidebar) {
-        if (userPreferedPositionForSidebar.equals(getString(R.string.mainKeyboard_sidebar_position_preference_left_value)) ||
-            userPreferedPositionForSidebar.equals(getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
+    private void touchTrailPreferenceChangeListner(boolean isChecked) {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+        sharedPreferencesEditor.putBoolean(getString(R.string.user_preferred_typing_trail_visibility),isChecked);
+        sharedPreferencesEditor.apply();
+    }
+
+    private void switchSidebarPosition(String userPreferredPositionForSidebar) {
+        if (userPreferredPositionForSidebar.equals(getString(R.string.mainKeyboard_sidebar_position_preference_left_value)) ||
+            userPreferredPositionForSidebar.equals(getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
 
             SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
             sharedPreferencesEditor.putString(
                     getString(R.string.mainKeyboard_sidebar_position_preference_key),
-                    userPreferedPositionForSidebar);
+                    userPreferredPositionForSidebar);
             sharedPreferencesEditor.apply();
         }
     }
@@ -158,14 +123,13 @@ public class LauncherActivity extends AppCompatActivity
         int selectedKeyboardIndex = -1;
         if (!selectedKeyboardId.isEmpty()) {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
-
             if (selectedKeyboardIndex == -1) {
                 // seems like we have a stale selection, it should be removed.
-                sp.edit().remove(getString(R.string.bp_selected_emoticon_keyboard)).commit();
+                sp.edit().remove(getString(R.string.bp_selected_emoticon_keyboard)).apply();
             }
         }
         new MaterialDialog.Builder(this)
-            .title(R.string.select_prefered_emoji_keyboard_dialog_title)
+            .title(R.string.select_preferred_emoticon_keyboard_dialog_title)
             .items(inputMethodsNameAndId.keySet())
             .itemsCallbackSingleChoice(selectedKeyboardIndex, (dialog, itemView, which, text) -> {
 
@@ -191,7 +155,6 @@ public class LauncherActivity extends AppCompatActivity
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
