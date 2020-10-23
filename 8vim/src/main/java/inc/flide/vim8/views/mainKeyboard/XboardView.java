@@ -93,35 +93,45 @@ public class XboardView extends View {
         paint.setStrokeWidth(5);
         paint.setStyle(Paint.Style.STROKE);
 
-        if (path != null) {
-            final short steps = 150;
-            final byte stepDistance = 5;
-            final byte maxTrailRadius = 14;
-            PathMeasure pathMeasure = new PathMeasure();
-            pathMeasure.setPath(path, false);
-            Random random = new Random();
-            final float pathLength = pathMeasure.getLength();
-            for (short i = 1; i <= steps; i++) {
-                final float distance = pathLength - i * stepDistance;
-                if (distance >= 0) {
-                    final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
-                    pathMeasure.getPosTan(distance, pathPos, null);
-                    final float x = pathPos[0] + random.nextFloat() - trailRadius;
-                    final float y = pathPos[1] + random.nextFloat() - trailRadius;
-                    shader_paint.setShader(new RadialGradient(
-                            x,
-                            y,
-                            trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                            ColorUtils.setAlphaComponent(Color.GREEN, random.nextInt(0xff)),
-                            Color.TRANSPARENT,
-                            Shader.TileMode.CLAMP
-                    ));
-                    canvas.drawCircle(x, y, trailRadius, shader_paint);
+        //applying the condition for switch
+
+        SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        String current_switch_value = sp.getString(this.getContext().getString(R.string.switch_mode),"");
+
+        String setValue = "true";
+
+        if(current_switch_value.equals(setValue))
+        {
+            if (path != null) {
+                final short steps = 150;
+                final byte stepDistance = 5;
+                final byte maxTrailRadius = 14;
+                PathMeasure pathMeasure = new PathMeasure();
+                pathMeasure.setPath(path, false);
+                Random random = new Random();
+                final float pathLength = pathMeasure.getLength();
+                for (short i = 1; i <= steps; i++) {
+                    final float distance = pathLength - i * stepDistance;
+                    if (distance >= 0) {
+                        final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
+                        pathMeasure.getPosTan(distance, pathPos, null);
+                        final float x = pathPos[0] + random.nextFloat() - trailRadius;
+                        final float y = pathPos[1] + random.nextFloat() - trailRadius;
+                        shader_paint.setShader(new RadialGradient(
+                                x,
+                                y,
+                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
+                                ColorUtils.setAlphaComponent(Color.GREEN, random.nextInt(0xff)),
+                                Color.TRANSPARENT,
+                                Shader.TileMode.CLAMP
+                        ));
+                        canvas.drawCircle(x, y, trailRadius, shader_paint);
+                    }
                 }
             }
-        }
-         canvas.drawPath(path,shader_paint);
+            canvas.drawPath(path,shader_paint);
 
+        }
 
         //The centre circle
         canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), paint);
