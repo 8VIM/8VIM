@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -36,6 +38,12 @@ public class LauncherActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean isKeyboardEnabled;
+
+
+    private Button red_button;
+    private Button green_button;
+    private Button yellow_button;
+    private Button blue_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +79,59 @@ public class LauncherActivity extends AppCompatActivity
         rightButtonClick.setOnClickListener(v -> switchSidebarPosition(getString(R.string.mainKeyboard_sidebar_position_preference_right_value)));
 
         Switch touch_trail_switch = findViewById(R.id.touch_trail);
+
         SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         touch_trail_switch.setChecked(sp.getBoolean(getString(R.string.user_preferred_typing_trail_visibility),true));
         touch_trail_switch.setOnCheckedChangeListener((buttonView, isChecked) -> touchTrailPreferenceChangeListner(isChecked));
+
+
+        red_button = (Button) findViewById(R.id.red_button);
+        red_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                sharedPreferencesEditor.putString(getString(R.string.color_selection),"Red");
+                sharedPreferencesEditor.apply();
+            }
+        });
+
+        green_button = (Button) findViewById(R.id.green_button);
+        green_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                sharedPreferencesEditor.putString(getString(R.string.color_selection),"Green");
+                sharedPreferencesEditor.apply();
+            }
+        });
+
+        yellow_button = (Button) findViewById(R.id.yellow_button);
+        yellow_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                sharedPreferencesEditor.putString(getString(R.string.color_selection),"Yellow");
+                sharedPreferencesEditor.apply();
+            }
+        });
+
+        blue_button = (Button) findViewById(R.id.blue_button);
+        blue_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                sharedPreferencesEditor.putString(getString(R.string.color_selection),"Blue");
+                sharedPreferencesEditor.apply();
+            }
+        });
+
     }
 
     private void touchTrailPreferenceChangeListner(boolean isChecked) {
