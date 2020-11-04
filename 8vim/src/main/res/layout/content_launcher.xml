@@ -24,14 +24,9 @@
 
                 <Button
                     android:id="@+id/emoji"
-                    android:layout_width="330dp"
-                    android:layout_height="110dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/button_background"
+                    style="@style/ContentLauncherFullWidthButton"
+                    android:layout_marginTop="20dp"
                     android:text="Select Emoji Keyboard"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="15dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -52,13 +47,8 @@
 
                 <Button
                     android:id="@+id/resize_button"
-                    android:layout_width="330dp"
-                    android:layout_height="110dp"
-                    android:background="@drawable/button_background"
                     android:text="Resize Circle"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="15dp"
+                    style="@style/ContentLauncherFullWidthButton"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -79,13 +69,8 @@
 
                 <Button
                     android:id="@+id/setcenter_button"
-                    android:layout_width="330dp"
-                    android:layout_height="110dp"
-                    android:background="@drawable/button_background"
                     android:text="Set circle center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="15dp"
+                    style="@style/ContentLauncherFullWidthButton"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -109,12 +94,13 @@
                     android:id="@+id/left_button"
                     android:layout_width="150dp"
                     android:layout_height="110dp"
+                    android:layout_marginEnd="160dp"
+                    android:layout_marginRight="160dp"
                     android:background="@drawable/button_background"
                     android:text="Left Button"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="15dp"
-                    android:layout_marginRight="180dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.378"
@@ -126,12 +112,13 @@
                     android:id="@+id/right_button"
                     android:layout_width="150dp"
                     android:layout_height="110dp"
+                    android:layout_marginStart="160dp"
+                    android:layout_marginLeft="160dp"
                     android:background="@drawable/button_background"
                     android:text="Right Button"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="15dp"
-                    android:layout_marginLeft="180dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.621"
@@ -157,7 +144,6 @@
                     android:layout_height="wrap_content"
                     android:text="Configurable Touch Trail"
                     android:textAllCaps="false"
-                    android:textColor="@color/black"
                     android:textSize="18dp"
                     android:layout_marginRight="120dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -199,7 +185,6 @@
                     android:layout_height="wrap_content"
                     android:text="Choose the color for Touch Trail :"
                     android:textAllCaps="false"
-                    android:textColor="@color/black"
                     android:textSize="18dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -211,107 +196,88 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/constraintlayout7"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_marginTop="5dp"
                 android:layout_below="@+id/constraintlayout6"
-                tools:ignore="DuplicateIds">
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
 
                 <Button
                     android:id="@+id/red_button"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
-                    android:elevation="10dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="1"
                     android:background="@drawable/red_rounded_button"
+                    android:elevation="10dp"
                     android:text="Red"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="13dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.307"
-                    tools:ignore="MissingConstraints" />
+                    android:textSize="13dp" />
 
                 <Button
                     android:id="@+id/green_button"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:elevation="10dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_weight="1"
                     android:background="@drawable/green_rounded_button"
+                    android:elevation="10dp"
                     android:text="Green"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="13dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/yellow_button"
-                    app:layout_constraintHorizontal_bias="0.07"
-                    app:layout_constraintStart_toEndOf="@+id/red_button"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.307"
-                    tools:ignore="MissingConstraints" />
+                    android:textSize="13dp" />
 
                 <Button
                     android:id="@+id/yellow_button"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:elevation="10dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_weight="1"
                     android:background="@drawable/yellow_rounded_button"
+                    android:elevation="10dp"
                     android:text="Yellow"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="13dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/blue_button"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.307"
-                    tools:ignore="MissingConstraints" />
+                    android:textSize="13dp" />
 
                 <Button
                     android:id="@+id/blue_button"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginLeft="4dp"
                     android:layout_marginRight="16dp"
-                    android:elevation="10dp"
+                    android:layout_weight="1"
                     android:background="@drawable/blue_rounded_button"
+                    android:elevation="10dp"
                     android:text="Blue"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="13dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.307"
-                    tools:ignore="MissingConstraints" />
+                    android:textSize="13dp" />
 
                 <!--                <Button-->
-<!--                    android:id="@+id/black_button"-->
-<!--                    android:layout_width="70dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:background="@android:color/holo_red_light"-->
-<!--                    android:text="Black"-->
-<!--                    android:textAllCaps="false"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:textSize="13dp"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintHorizontal_bias="0.621"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:layout_constraintVertical_bias="0.557"-->
-<!--                    tools:ignore="MissingConstraints" />-->
+                <!--                    android:id="@+id/black_button"-->
+                <!--                    android:layout_width="70dp"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:background="@android:color/holo_red_light"-->
+                <!--                    android:text="Black"-->
+                <!--                    android:textAllCaps="false"-->
+                <!--                    android:textColor="@color/white"-->
+                <!--                    android:textSize="13dp"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintHorizontal_bias="0.621"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toTopOf="parent"-->
+                <!--                    app:layout_constraintVertical_bias="0.557"-->
+                <!--                    tools:ignore="MissingConstraints" />-->
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </RelativeLayout>
 

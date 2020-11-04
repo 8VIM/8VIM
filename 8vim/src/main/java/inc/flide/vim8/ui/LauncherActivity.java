@@ -51,8 +51,8 @@ public class LauncherActivity extends AppCompatActivity
         setContentView(R.layout.activity_launcher);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setBackgroundColor(getResources().getColor(R.color.white));
-        toolbar.setTitleTextColor(getResources().getColor(R.color.black));
+        //toolbar.setBackgroundColor(getResources().getColor(R.color.white));
+        //toolbar.setTitleTextColor(getResources().getColor(R.color.black));
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

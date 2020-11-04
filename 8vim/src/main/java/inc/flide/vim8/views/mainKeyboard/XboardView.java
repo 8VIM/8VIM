@@ -1,5 +1,6 @@
 package inc.flide.vim8.views.mainKeyboard;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,6 +20,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.core.graphics.ColorUtils;
+
+import com.google.android.material.color.MaterialColors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,13 +70,13 @@ public class XboardView extends View {
         initialize(context);
     }
 
+    @SuppressLint("RestrictedApi") // For some reason MaterialColors.getColor triggers this.
     private void initialize(Context context) {
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
 
-        backgroundPaint.setARGB(255, 255, 255, 255);
-
-        foregroundPaint.setARGB(255, 0, 0, 0);
+        backgroundPaint.setColor(MaterialColors.getColor(context, android.R.attr.colorBackground, Color.BLACK));
+        foregroundPaint.setColor(MaterialColors.getColor(context, android.R.attr.colorForeground, Color.MAGENTA));
         foregroundPaint.setAntiAlias(true);
         foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
         foregroundPaint.setTextSize(Constants.TEXT_SIZE);

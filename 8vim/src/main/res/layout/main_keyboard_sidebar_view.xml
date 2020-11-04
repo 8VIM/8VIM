@@ -10,62 +10,51 @@
 
     <ImageButton
         android:id="@+id/switchToEmojiKeyboard"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/btn_background"
-        android:scaleType="centerInside"
         android:src="@drawable/ic_emoji"
+        android:tint="?android:textColorPrimary"
         app:layout_constraintBottom_toTopOf="@id/tabButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/KeyboardSidebarButton" />
 
     <ImageButton
         android:id="@+id/tabButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/btn_background"
-        android:scaleType="centerInside"
         android:src="@drawable/ic_keyboard_tab"
+        android:tint="?android:textColorPrimary"
         app:layout_constraintBottom_toTopOf="@id/switchToSelectionKeyboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/switchToEmojiKeyboard" />
+        app:layout_constraintTop_toBottomOf="@id/switchToEmojiKeyboard"
+        style="@style/KeyboardSidebarButton" />
 
     <ImageButton
         android:id="@+id/switchToSelectionKeyboard"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/btn_background"
-        android:scaleType="centerInside"
         android:src="@drawable/ic_open_with_black"
+        android:tint="?android:textColorPrimary"
         app:layout_constraintBottom_toTopOf="@id/goToSettingsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tabButton" />
+        app:layout_constraintTop_toBottomOf="@id/tabButton"
+        style="@style/KeyboardSidebarButton" />
 
     <ImageButton
         android:id="@+id/goToSettingsButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/btn_background"
-        android:scaleType="centerInside"
         android:src="@drawable/key_icon_settings"
+        android:tint="?android:textColorPrimary"
         app:layout_constraintBottom_toTopOf="@id/ctrlButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/switchToSelectionKeyboard" />
+        app:layout_constraintTop_toBottomOf="@id/switchToSelectionKeyboard"
+        style="@style/KeyboardSidebarButton" />
 
     <Button
         android:id="@+id/ctrlButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/btn_background"
-        android:scaleType="centerInside"
         android:text="CTRL"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton" />
+        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton"
+        style="@style/KeyboardSidebarButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
