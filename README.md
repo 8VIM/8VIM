@@ -11,6 +11,9 @@ To understand what exactly this keyboard is, please watch the video "https://www
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=inc.flide.vi8)
 
+## Build Status
+[![Build Status](https://travis-ci.org/flide/8VIM.svg?branch=master)](https://travis-ci.org/flide/8VIM)
+
 ## Usability Guide
 
 So, what capablities does 8Vim have?
@@ -22,7 +25,7 @@ So, what capablities does 8Vim have?
 - Top Sector acts as a combo of SHIFT and CAPS_LOCK Key, i.e, Press once Shift is active, Press Twice CAPS is active and Press once more and everything is back to usual.
 - Left Sector acts as the button that takes you to the Number Pad.
 
-##### Cursor Movements 
+##### Cursor Movements
 If you move your finger from the centre-circle to any sector and stay, the cursor movement will be emulated. For example, if you swipe from circle->right, the cursor will move right.
 
 ##### Selection
@@ -52,11 +55,10 @@ I am a huge fan of Vim - the editor. It is so cool to be able to edit without le
 
 I hear you say - "comeon! don't dismiss the idea without trying it first!". Believe me I did try, you can too, it's called [vimtouch](https://github.com/momodalo/vimtouch). Vimtouch, the port of vim on android, although a real big deal technologically, but utterly un-usable in a practical world setting. why? because at best you got 2 thumbs to do the job of a total 10 fingers. it's highly inefficient.
 
-No matter what editor you use it has one basic issue, it works only when you open it. Think I am stupid? Let's try a practical, common, frequently occuring scenario. Your boss has sent you a mail and you are ANGRY! You want to reply to him/her and want to pour your heart out. you press the reply button and suddenly realize this is the perfect job for the editor!! so you search through your million installed app for that editor of yours and start editing. it takes you an hour to compose 5 lines and then you copy paste the stuff to the mail and you are done. The hassel!! 
+No matter what editor you use it has one basic issue, it works only when you open it. Think I am stupid? Let's try a practical, common, frequently occuring scenario. Your boss has sent you a mail and you are ANGRY! You want to reply to him/her and want to pour your heart out. you press the reply button and suddenly realize this is the perfect job for the editor!! so you search through your million installed app for that editor of yours and start editing. it takes you an hour to compose 5 lines and then you copy paste the stuff to the mail and you are done. The hassel!!
 
 And then it hit me... why the hell do you need the text editors? why can't your keyboard act as the editor? it's always there when you actually want to input/edit something, it's only and only software, no hardware to worry about, so you can hack the shit out of it. I mean WHY NOT??
 
 And this inspiration (rant) became the idea for VIII - a Editor-in-Keyboard.
 
 TO BE CONTINUED...
-
