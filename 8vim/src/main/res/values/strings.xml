@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE resources [
     <!ENTITY appname "8Vim">
-    <!ENTITY version_name "iteration 3">
+    <!ENTITY version_name "iteration 5">
     ]>
 <resources>
     <string name="app_name">&appname;</string>
@@ -15,6 +15,9 @@
     <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname; Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
+
+    <string name="color_selection">color_selection</string>
+
     <string name="keyboard_test_edit_text_hint">Test your keyboard here</string>
     <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
     <string name="share_app">Share &appname;</string>

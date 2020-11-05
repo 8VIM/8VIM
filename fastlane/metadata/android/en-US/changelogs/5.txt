@@ -1,0 +1,6 @@
+- Icon refresh
+- Easier Access to settings from the keyboard
+- Now you can hide keyboard with a down swipe [Top -> Center]
+- A visible trail of your finger movement as you type
+- Select from 4 (not so vibrant colours at the moment) to mark your typing trail
+- Bug-fix: No more unwanted cursor movement if you end your letters in a sector to avoid auto space
