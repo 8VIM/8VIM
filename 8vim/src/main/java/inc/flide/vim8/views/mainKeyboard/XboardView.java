@@ -19,6 +19,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 
 import com.google.android.material.color.MaterialColors;
@@ -70,13 +72,18 @@ public class XboardView extends View {
         initialize(context);
     }
 
-    @SuppressLint("RestrictedApi") // For some reason MaterialColors.getColor triggers this.
+    //@SuppressLint("RestrictedApi") // For some reason MaterialColors.getColor triggers this.
     private void initialize(Context context) {
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
 
-        backgroundPaint.setColor(MaterialColors.getColor(context, android.R.attr.colorBackground, Color.BLACK));
-        foregroundPaint.setColor(MaterialColors.getColor(context, android.R.attr.colorForeground, Color.MAGENTA));
+        //@ColorInt int bg_color = MaterialColors.getColor(context, android.R.attr.colorBackground, Color.BLACK);
+        //@ColorInt int fg_color = MaterialColors.getColor(context, android.R.attr.colorForeground, Color.MAGENTA);
+        //@ColorInt int bg_color = ContextCompat.getColor(context, android.R.attr.colorBackground);
+        //@ColorInt int fg_color = ContextCompat.getColor(context, android.R.attr.colorBackground);
+
+        backgroundPaint.setColor(getResources().getColor(R.color.black));
+        foregroundPaint.setColor(getResources().getColor(R.color.white));
         foregroundPaint.setAntiAlias(true);
         foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
         foregroundPaint.setTextSize(Constants.TEXT_SIZE);

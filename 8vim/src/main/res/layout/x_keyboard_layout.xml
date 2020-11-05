@@ -5,5 +5,5 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:layout_gravity="bottom"
-    android:keyPreviewLayout ="@layout/preview"
+    android:keyPreviewLayout="@layout/preview"
     />
