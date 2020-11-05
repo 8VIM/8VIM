@@ -177,12 +177,8 @@ public class LauncherActivity extends AppCompatActivity
                 break;
 
             case R.id.about :
-                AlertDialog.Builder about = new AlertDialog.Builder(this);
-                about.setTitle("About "+ R.string.app_name);
-                about.setMessage("More than just a clone for now defunct 8Pen Application\n\n" +
-                        "Designed and Developed by Flide\n" + R.string.version_name);
-                about.setCancelable(true);
-                about.show();
+                 Intent intent_about = new Intent(LauncherActivity.this,AboutUsActivity.class);
+                 startActivity(intent_about);
                 break;
         }
 
