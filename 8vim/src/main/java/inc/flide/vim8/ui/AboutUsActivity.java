@@ -104,6 +104,8 @@ public class AboutUsActivity extends AppCompatActivity {
 
         });
 
+        //for playstore
+        
         playstore = (ConstraintLayout) findViewById(R.id.constraintLayout_playstore);
         playstore.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -115,7 +117,7 @@ public class AboutUsActivity extends AppCompatActivity {
                         break;
                     case MotionEvent.ACTION_UP:
                         playstore.setBackgroundColor(Color.WHITE);
-                        Uri uri = Uri.parse("https://twitter.com/8vim_?s=09"); // missing 'http://' will cause crashed
+                        Uri uri = Uri.parse("https://play.google.com/store/apps/details?id=inc.flide.vi8"); // missing 'http://' will cause crashed
                         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(intent);
                         break;
