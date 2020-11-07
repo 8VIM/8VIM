@@ -5,7 +5,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/main_keyboard_sidebar_background"
     android:orientation="horizontal">
 
     <!--TODO: Convert the layout_height number to "keyboard height" global variable-->

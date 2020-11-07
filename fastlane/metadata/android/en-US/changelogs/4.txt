@@ -1,0 +1,5 @@
+- User is now prompted to switch to 8vim keyboard when Settings application is opened
+- You can now select the emoji keyboard you want opened using the emoji button
+- Sidebar in the keyboard is now configurable to either be on the left or on the right
+- The size of the circle on the X-board is now configurable
+- The centre of the circle on the X-board is now configurable
