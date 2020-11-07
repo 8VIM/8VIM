@@ -236,9 +236,11 @@ public class LauncherActivity extends AppCompatActivity
 
             case R.id.about :
 
+
                  Intent intent_about = new Intent(LauncherActivity.this,AboutUsActivity.class);
                  startActivity(intent_about);
                 break;
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
