@@ -83,8 +83,7 @@ else
     unless previous_error_warning_string.nil?
         previous_results = true
 
-        previous_issue_string = previous_error_warning_string.match(/[0-9]+ issue found/)[0]
-        previous_issue_count = previous_issue_string.match(/[0-9]*/)[0].to_i
+        previous_issue_count = previous_error_warning_string[/[0-9]+/].to_i
         puts "previous issue count: " + previous_issue_count.to_s
     end
 end
