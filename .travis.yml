@@ -9,7 +9,7 @@ env:
 
 install:
     - echo yes | sdkmanager "tools"
-    - echo yes | sdkmanager "platforms;andoid-${ANDROID_API_LEVEL}"
+    - echo yes | sdkmanager "platforms;android-${ANDROID_API_LEVEL}"
 android:
     components:
         - tools
