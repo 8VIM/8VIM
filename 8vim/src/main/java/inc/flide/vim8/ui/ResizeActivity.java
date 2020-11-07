@@ -40,7 +40,7 @@ public class ResizeActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 seekBar.setProgress(progress);
-                Float x = new Float((0.05 * progress));
+                Float x = Float.valueOf((float) (0.05 * progress));
                 textView.setText("" + x + "");
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
