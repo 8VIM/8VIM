@@ -6,6 +6,10 @@ env:
     global:
         - ANDROID_API_LEVEL=30
         - ANDROID_BUILD_TOOLS_VERSION=29.0.3
+
+install:
+    - echo yes | sdkmanager "tools"
+    - echo yes | sdkmanager "platforms;andoid-${ANDROID_API_LEVEL}"
 android:
     components:
         - tools
