@@ -27,7 +27,7 @@
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_LEFT"
             android:keyIcon="@drawable/ic_keyboard_arrow_left"
             android:isRepeatable="true" />
-        <Key android:codes="@integer/TOOGLE_SELECTION_MODE"
+        <Key android:codes="@integer/TOGGLE_SELECTION_MODE"
             android:keyIcon="@drawable/pad_center"
             android:isSticky="true"/>
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_RIGHT"
