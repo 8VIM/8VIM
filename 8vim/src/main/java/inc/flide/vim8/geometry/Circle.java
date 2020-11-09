@@ -8,6 +8,11 @@ public class Circle{
     private PointF centre;
     private float radius;
 
+    public Circle() {
+        this.centre = new PointF(0f, 0f);
+        this.radius = 0f;
+    }
+
     public Circle(PointF centre, float radius) {
         this.centre = centre;
         this.radius = radius;

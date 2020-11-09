@@ -38,6 +38,7 @@ public class XboardView extends View {
 
     private MainKeyboardActionListener actionListener;
 
+    private PointF circleCenter;
     private Circle circle;
     List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
     List<PointF> listOfPointsOfDisplay = new ArrayList<>();
@@ -48,6 +49,9 @@ public class XboardView extends View {
     GestureDetector gestureDetector;
     Paint backgroundPaint = new Paint();
     Paint foregroundPaint = new Paint();
+
+    private final int offset = 15;
+    private final int lengthOfLineDemarcatingSectors = 250;
 
     public XboardView(Context context) {
         super(context);
@@ -71,8 +75,18 @@ public class XboardView extends View {
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
 
-        backgroundPaint.setARGB(255, 255, 255, 255);
+        setBackgroundPaint();
+        setForegroundPaint();
 
+        circleCenter = new PointF();
+        circle = new Circle();
+    }
+
+    private void setBackgroundPaint() {
+        backgroundPaint.setARGB(255, 255, 255, 255);
+    }
+
+    private void setForegroundPaint() {
         foregroundPaint.setARGB(255, 0, 0, 0);
         foregroundPaint.setAntiAlias(true);
         foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -81,9 +95,6 @@ public class XboardView extends View {
                 "SF-UI-Display-Regular.otf");
         foregroundPaint.setTypeface(font);
     }
-
-    private final int offset = 15;
-    private final int lengthOfLineDemarcatingSectors = 250;
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -342,11 +353,11 @@ public class XboardView extends View {
         float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key), 0.3f);
         float radius = (spRadiusValue * width) / 2;
 
-        PointF centre = new PointF((width / 2), (height / 2));
-        centre.x = centre.x + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
-        centre.y = centre.y + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
+        circleCenter.x = (width / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
+        circleCenter.y = (height / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
 
-        circle = new Circle(centre, radius);
+        circle.setCentre(circleCenter);
+        circle.setRadius(radius);
 
         float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
         for (int i = 0; i < 4; i++) {

@@ -14,12 +14,21 @@ import inc.flide.vim8.structures.Constants;
 
 public abstract class ButtonKeyboardView extends KeyboardView {
 
+    private final Paint foregroundPaint = new Paint();
     public ButtonKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     public ButtonKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    private void setupForegroundPaint() {
+        foregroundPaint.setTextAlign(Paint.Align.CENTER);
+        foregroundPaint.setTextSize(Constants.TEXT_SIZE);
+        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
+                "SF-UI-Display-Regular.otf");
+        foregroundPaint.setTypeface(font);
     }
 
     @Override
@@ -38,23 +47,16 @@ public abstract class ButtonKeyboardView extends KeyboardView {
         {
             height = Math.round(0.8f * (width-(60*3)));
         }
-
         setMeasuredDimension(width, height);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(Constants.TEXT_SIZE);
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
-                "SF-UI-Display-Regular.otf");
-        paint.setTypeface(font);
-
+        setupForegroundPaint();
         List<Keyboard.Key> keys = getKeyboard().getKeys();
         for(Keyboard.Key key: keys) {
             if(key.label != null)
-                canvas.drawText(key.label.toString(), (key.x*2 + key.width)/2, (key.y*2 + key.height)/2, paint);
+                canvas.drawText(key.label.toString(), (key.x*2 + key.width)/2f, (key.y*2 + key.height)/2f, this.foregroundPaint);
             if(key.icon != null) {
                 int side = key.height;
                 if (key.width < key.height) {
