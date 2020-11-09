@@ -49,12 +49,20 @@ public class LineSegment {
         return Math.sqrt(GeometricUtilities.getSquaredDistanceBetweenPoints(startingPoint, endPoint));
     }
 
-    public LineSegment(PointF startingPoint, int directionalAngleInDegree, int length){
+    public LineSegment () {
+        this.startingPoint = new PointF();
+        this.endPoint = new PointF();
+        this.length = 0;
+        this.directionOfLineInDegree = 0;
+    }
 
-        PointF endPoint = GeometricUtilities.findPointSpecifiedDistanceAwayInGivenDirection(startingPoint, directionalAngleInDegree, length);
+    public LineSegment(PointF startingPoint, double directionalAngleInDegree, double length){
+        setupLineSegment(startingPoint, directionalAngleInDegree,length);
+    }
 
+    public void setupLineSegment(PointF startingPoint, double directionalAngleInDegree, double length){
         this.startingPoint = startingPoint;
-        this.endPoint = endPoint;
+        this.endPoint = GeometricUtilities.findPointSpecifiedDistanceAwayInGivenDirection(startingPoint, directionalAngleInDegree, length);
         this.length = length;
         this.directionOfLineInDegree = directionalAngleInDegree;
     }

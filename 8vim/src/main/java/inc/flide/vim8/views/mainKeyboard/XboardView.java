@@ -80,6 +80,10 @@ public class XboardView extends View {
 
         circleCenter = new PointF();
         circle = new Circle();
+
+        for (int i = 0; i < 4; i++) {
+            this.sectorDemarcatingLines.add(new LineSegment());
+        }
     }
 
     private void setBackgroundPaint() {
@@ -284,8 +288,6 @@ public class XboardView extends View {
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         // event when double tap occurs
-
-
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             float x = e.getX();
@@ -303,36 +305,35 @@ public class XboardView extends View {
 
     }
 
-        @Override
-       public boolean onTouchEvent(MotionEvent e) {
-        PointF position = new PointF((int) e.getX(), (int) e.getY());
-        FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                 actionListener.movementStarted(currentFingerPosition);
-                 path.moveTo(e.getX(),e.getY());
-                return true;
+   @Override
+   public boolean onTouchEvent(MotionEvent e) {
+    PointF position = new PointF((int) e.getX(), (int) e.getY());
+    FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
+    switch (e.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+             actionListener.movementStarted(currentFingerPosition);
+             path.moveTo(e.getX(),e.getY());
+            return true;
 
-            case MotionEvent.ACTION_MOVE:
-                actionListener.movementContinues(currentFingerPosition);
-                path.lineTo(e.getX(), e.getY());
-                break;
+        case MotionEvent.ACTION_MOVE:
+            actionListener.movementContinues(currentFingerPosition);
+            path.lineTo(e.getX(), e.getY());
+            break;
 
-            case MotionEvent.ACTION_UP:
-                actionListener.movementEnds();
-            case MotionEvent.ACTION_POINTER_DOWN:
-                 path.reset();
-                break;
-            default:
-                return false;
-        }
-        gestureDetector.onTouchEvent(e);
-
-        // Schedules a repaint.
-        invalidate();
-        return true;
+        case MotionEvent.ACTION_UP:
+            actionListener.movementEnds();
+        case MotionEvent.ACTION_POINTER_DOWN:
+             path.reset();
+            break;
+        default:
+            return false;
     }
+    gestureDetector.onTouchEvent(e);
 
+    // Schedules a repaint.
+    invalidate();
+    return true;
+    }
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -363,9 +364,8 @@ public class XboardView extends View {
         for (int i = 0; i < 4; i++) {
             int angle = 45 + (i * 90);
             PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
-            LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
-            sectorDemarcatingLines.add(lineSegment);
-            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(lineSegment, 4, characterHeight));
+            sectorDemarcatingLines.get(i).setupLineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
+            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(sectorDemarcatingLines.get(i), 4, characterHeight));
         }
 
         setMeasuredDimension(width, height);
