@@ -12,14 +12,14 @@ import java.util.List;
 
 import inc.flide.vim8.structures.Constants;
 
-public abstract class ButtonKeyboardView extends KeyboardView {
+public abstract class ButtonKeypadView extends KeyboardView {
 
     private final Paint foregroundPaint = new Paint();
-    public ButtonKeyboardView(Context context, AttributeSet attrs) {
+    public ButtonKeypadView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public ButtonKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ButtonKeypadView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

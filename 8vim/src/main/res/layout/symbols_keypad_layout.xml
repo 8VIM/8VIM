@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<inc.flide.vim8.views.SelectionKeyboardView
+<inc.flide.vim8.views.SymbolKeypadView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

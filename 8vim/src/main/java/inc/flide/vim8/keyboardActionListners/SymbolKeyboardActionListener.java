@@ -6,12 +6,12 @@ import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.structures.KeyboardActionType;
-import inc.flide.vim8.views.SymbolKeyboardView;
+import inc.flide.vim8.views.SymbolKeypadView;
 
 public class SymbolKeyboardActionListener extends KeyboardActionListner {
 
     public SymbolKeyboardActionListener(MainInputMethodService inputMethodService
-                                            , SymbolKeyboardView view){
+                                            , SymbolKeypadView view){
         super(inputMethodService, view);
     }
 
