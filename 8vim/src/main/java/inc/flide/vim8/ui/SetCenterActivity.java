@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Locale;
+
 import inc.flide.vim8.R;
 
 public class SetCenterActivity extends AppCompatActivity {
@@ -23,7 +25,6 @@ public class SetCenterActivity extends AppCompatActivity {
     private SeekBar seekBar_y;
 
 
-    @SuppressLint("WrongConstant")
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -41,7 +42,7 @@ public class SetCenterActivity extends AppCompatActivity {
             current_x_Value = offset_x;
         }
 
-        textView_x_Value.setText("" + current_x_Value + "");
+        textView_x_Value.setText(String.format(Locale.US, "%d", current_x_Value));
 
         seekBar_x.setMin(-5);
         seekBar_x.setProgress(current_x_Value);
@@ -53,7 +54,7 @@ public class SetCenterActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 seekBar_x.setProgress(progress);
-                textView_x_Value.setText("" + progress + "");
+                textView_x_Value.setText(String.format(Locale.US, "%d", progress));
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
@@ -84,7 +85,7 @@ public class SetCenterActivity extends AppCompatActivity {
             current_y_Value = offset_y;
         }
 
-        textView_y_value.setText("" + current_y_Value + "");
+        textView_y_value.setText(String.format(Locale.US, "%d", current_y_Value));
 
         seekBar_y.setMin(-5);
         seekBar_y.setProgress(current_y_Value);
@@ -95,7 +96,7 @@ public class SetCenterActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 seekBar_y.setProgress(progress);
-                textView_y_value.setText("" + progress + "");
+                textView_y_value.setText(String.format(Locale.US, "%d", progress));
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();

@@ -10,12 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Locale;
+
 import inc.flide.vim8.R;
 
 public class ResizeActivity extends AppCompatActivity {
 
     private TextView textView;
-    private SeekBar seekBar;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,7 @@ public class ResizeActivity extends AppCompatActivity {
         setContentView(R.layout.resize_activity);
 
         textView = (TextView)findViewById(R.id.textView);
-        seekBar = (SeekBar) findViewById(R.id.seekBar);
+        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         float spRadius= sp.getFloat(getString(R.string.x_board_circle_radius_size_factor_key),0);
         float currentRadius = 0.1f;
@@ -31,7 +32,7 @@ public class ResizeActivity extends AppCompatActivity {
             currentRadius = spRadius;
         }
         seekBar.setProgress((int) (currentRadius * 20));
-        textView.setText("" + currentRadius + "");
+        textView.setText(String.format(Locale.US, "%.2f", currentRadius));
         seekBar.setMin(1);
         seekBar.setMax(10);
 
@@ -40,8 +41,8 @@ public class ResizeActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 seekBar.setProgress(progress);
-                Float x = Float.valueOf((float) (0.05 * progress));
-                textView.setText("" + x + "");
+                float x = (float) (0.05 * progress);
+                textView.setText(String.format(Locale.US, "%.2f", x));
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
@@ -59,7 +60,6 @@ public class ResizeActivity extends AppCompatActivity {
 
             }
         });
-
 
     }
 
