@@ -1,5 +1,7 @@
 package inc.flide.vim8.keyboardHelpers;
 
+import java.util.Locale;
+
 import inc.flide.vim8.structures.KeyboardActionType;
 
 public class KeyboardAction {
@@ -20,7 +22,7 @@ public class KeyboardAction {
 
     private void setCapsLockText(String capsLockText) {
         if((capsLockText==null || capsLockText.length()==0) && this.text!=null){
-            this.capsLockText = this.text.toUpperCase();
+            this.capsLockText = this.text.toUpperCase(Locale.US);
         } else{
             this.capsLockText = capsLockText;
         }
