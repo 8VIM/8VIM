@@ -51,4 +51,5 @@
     <string name="generic_green_text">Green</string>
     <string name="generic_yellow_text">Yellow</string>
     <string name="generic_blue_text">Blue</string>
+    <string name="about_8vim">More than just a clone for now defunct 8Pen Application.</string>
 </resources>

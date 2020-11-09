@@ -217,6 +217,7 @@ public class LauncherActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+            //noinspection
             case R.id.share:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
@@ -226,7 +227,7 @@ public class LauncherActivity extends AppCompatActivity
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                 startActivity(Intent.createChooser(shareIntent, "Share "+ R.string.app_name));
                 break;
-
+            //noinspection
             case R.id.help:
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 Uri data = Uri.parse("mailto:flideravi@gmail.com?subject=" + "Feedback");
@@ -234,12 +235,11 @@ public class LauncherActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
 
+            //noinspection
             case R.id.about :
-
-
                  Intent intent_about = new Intent(LauncherActivity.this,AboutUsActivity.class);
                  startActivity(intent_about);
-                break;
+                 break;
 
         }
 

@@ -1,5 +1,6 @@
 package inc.flide.vim8.views.mainKeyboard;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -33,6 +34,8 @@ import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.utilities.Utilities;
+
+
 
 public class XboardView extends View {
 
@@ -342,16 +345,19 @@ public class XboardView extends View {
         float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key), 0.3f);
         float radius = (spRadiusValue * width) / 2;
 
+
+
+        @SuppressLint("DrawAllocation")
         PointF centre = new PointF((width / 2), (height / 2));
         centre.x = centre.x + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
         centre.y = centre.y + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
 
         circle = new Circle(centre, radius);
-
         float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
         for (int i = 0; i < 4; i++) {
             int angle = 45 + (i * 90);
             PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
+            @SuppressLint("DrawAllocation")
             LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
             sectorDemarcatingLines.add(lineSegment);
             listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(lineSegment, 4, characterHeight));

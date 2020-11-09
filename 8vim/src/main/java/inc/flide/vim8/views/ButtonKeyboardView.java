@@ -1,5 +1,6 @@
 package inc.flide.vim8.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,6 +12,8 @@ import android.util.AttributeSet;
 import java.util.List;
 
 import inc.flide.vim8.structures.Constants;
+
+
 
 public abstract class ButtonKeyboardView extends KeyboardView {
 
@@ -44,6 +47,8 @@ public abstract class ButtonKeyboardView extends KeyboardView {
 
     @Override
     public void onDraw(Canvas canvas) {
+
+        @SuppressLint("DrawAllocation")
         Paint paint = new Paint();
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(Constants.TEXT_SIZE);

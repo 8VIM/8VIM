@@ -1,5 +1,6 @@
 package inc.flide.vim8.views.mainKeyboard;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +19,10 @@ import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.structures.KeyboardActionType;
 
+@SuppressLint("id")
+
 public class MainKeyboardView extends View{
+
 
     private MainKeyboardActionListener actionListener;
 

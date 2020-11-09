@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    tools:ignore="Overdraw"
     android:background="@color/white"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -15,7 +16,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_aboutus"
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -23,8 +24,8 @@
 
         <ImageView
             android:id="@+id/back_arrow"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="25sp"
+            android:layout_height="25sp"
             android:src="@drawable/ic_baseline_arrow_back_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView2"
@@ -38,18 +39,17 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="204dp"
-            android:layout_marginRight="204dp"
+            android:layout_marginEnd="204sp"
             android:text="About Us"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.25"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="HardcodedText,MissingConstraints" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -57,7 +57,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_applogo"
         android:layout_width="match_parent"
-        android:layout_height="130dp"
+        android:layout_height="130sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,10 +66,10 @@
         tools:ignore="MissingConstraints">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cardCornerRadius="60dp"
-            android:elevation="5dp"
+            android:layout_width="100sp"
+            android:layout_height="100sp"
+            app:cardCornerRadius="60sp"
+            android:elevation="5sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -107,11 +107,11 @@
             android:text="@string/app_name"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteY="0sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -119,7 +119,7 @@
         android:id="@+id/constraintlayout7"
         android:layout_width="match_parent"
         android:layout_height="40sp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_appname"
@@ -128,13 +128,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="More than just a clone for now defunct 8Pen Application."
-            android:textSize="16dp"
+            android:text="@string/about_8vim"
+            android:textSize="16sp"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:paddingLeft="5dp"
+            android:paddingStart="5sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="RtlSymmetry" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -142,7 +143,7 @@
         android:id="@+id/constraintLayout7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintlayout7"
@@ -151,15 +152,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="5dp"
+            android:paddingLeft="5sp"
             android:text="Designed and Developed by Flide"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteY="0sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -167,7 +168,7 @@
         android:id="@+id/constraintLayout_version"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout7"
@@ -177,21 +178,21 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="5dp"
+            android:paddingLeft="5sp"
             android:text="Version name :"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="5dp"
+            android:paddingLeft="5sp"
             android:text="@string/version_name"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.024"
@@ -207,16 +208,19 @@
         android:id="@+id/constraintLayout10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_version"
         tools:ignore="MissingConstraints">
 
+
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray" />
+            android:layout_height="0.5sp"
+            android:background="@android:color/darker_gray"
+            tools:ignore="Autofill,LabelFor,TextFields"
+            android:importantForAutofill="no" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -225,7 +229,7 @@
         android:id="@+id/constraintLayout_connectus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout10"
@@ -234,18 +238,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingLeft="5dp"
+            android:paddingLeft="5sp"
             android:text="Connect with us"
             android:textAllCaps="false"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_github"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="25dp"
+        android:layout_height="45sp"
+        android:layout_marginTop="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_connectus"
@@ -253,9 +257,9 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="5dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
+            android:layout_marginLeft="5sp"
             android:src="@drawable/github"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView7"
@@ -269,13 +273,13 @@
             android:layout_height="wrap_content"
             android:text="Fork us on GitHub"
             android:textColor="@color/black"
-            android:textSize="16dp"
-            android:layout_marginLeft="50dp"
+            android:textSize="16sp"
+            android:layout_marginLeft="50sp"
             app:layout_constraintLeft_toLeftOf="@+id/constraintLayout_github"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.478"
-            tools:layout_editor_absoluteX="200dp"
+            tools:layout_editor_absoluteX="200sp"
             tools:ignore="UnknownId" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -284,7 +288,7 @@
         android:id="@+id/constraintLayout14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_github"
@@ -292,8 +296,9 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray" />
+            android:layout_height="0.5sp"
+            android:background="@android:color/darker_gray"
+            tools:ignore="Autofill,LabelFor,TextFields"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -301,8 +306,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_website"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="45sp"
+        android:layout_marginTop="5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout14"
@@ -310,31 +315,32 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
+            android:layout_width="20sp"
+            android:layout_height="20sp"
+            android:layout_marginStart="4sp"
+            android:layout_marginLeft="4sp"
             android:src="@drawable/link"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView5"
             app:layout_constraintHorizontal_bias="0.065"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.481" />
+            app:layout_constraintVertical_bias="0.481"
+            tools:ignore="ContentDescription,RtlHardcoded" />
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Visit our Website"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="50sp"
             app:layout_constraintLeft_toLeftOf="@+id/constraintLayout_website"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.478"
-            tools:layout_editor_absoluteX="192dp" />
+            tools:layout_editor_absoluteX="192sp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -343,15 +349,16 @@
         android:id="@+id/constraintLayout15"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="5sp"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_website"
         tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="16dp">
+        tools:layout_editor_absoluteX="16sp">
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@android:color/darker_gray"/>
+            android:layout_height="0.5sp"
+            android:background="@android:color/darker_gray"
+            tools:ignore="Autofill,LabelFor,TextFields"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -359,23 +366,24 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_twitter"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="45sp"
+        android:layout_marginTop="5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout15"
         tools:ignore="MissingConstraints">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="25sp"
+            android:layout_height="25sp"
             android:src="@drawable/twitter_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView6"
             app:layout_constraintHorizontal_bias="0.125"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.466" />
+            app:layout_constraintVertical_bias="0.466"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/textView6"
@@ -383,13 +391,14 @@
             android:layout_height="wrap_content"
             android:text="Follow us on Twitter"
             android:textColor="@color/black"
-            android:textSize="16dp"
-            android:layout_marginLeft="50dp"
+            android:textSize="16sp"
+            android:layout_marginLeft="50sp"
             app:layout_constraintLeft_toLeftOf="@+id/constraintLayout_twitter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.478"
-            tools:layout_editor_absoluteX="128dp" />
+            tools:layout_editor_absoluteX="128sp"
+            tools:ignore="RtlHardcoded" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -398,7 +407,7 @@
         android:id="@+id/constraintLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="4sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_twitter"
@@ -406,16 +415,16 @@
 
         <EditText
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="0.5sp"
             android:background="@android:color/darker_gray"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="Autofill,LabelFor,MissingConstraints,TextFields"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_playstore"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="45sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -424,10 +433,10 @@
         tools:ignore="MissingConstraints">
 
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
+            android:layout_width="25sp"
+            android:layout_height="25sp"
+            android:layout_marginStart="4sp"
+            android:layout_marginLeft="4sp"
             android:src="@drawable/playstore_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView8"
@@ -440,10 +449,10 @@
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="50sp"
             android:text="Rate us on the Play Store"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.396"
             app:layout_constraintStart_toStartOf="parent"
