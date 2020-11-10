@@ -35,8 +35,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -47,8 +46,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_below="@+id/constraintlayout1"
-                android:layout_marginTop="10dp"
-                tools:ignore="DuplicateIds">
+                android:layout_marginTop="10dp">
 
                 <Button
                     android:id="@+id/resize_button"
@@ -62,8 +60,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -74,8 +71,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_below="@+id/constraintlayout2"
-                android:layout_marginTop="10dp"
-                tools:ignore="DuplicateIds">
+                android:layout_marginTop="10dp">
 
                 <Button
                     android:id="@+id/setcenter_button"
@@ -89,8 +85,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -101,8 +96,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:layout_below="@+id/constraintlayout3"
-                android:layout_marginTop="10dp"
-                tools:ignore="DuplicateIds">
+                android:layout_marginTop="10dp">
 
 
                 <Button
@@ -119,8 +113,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.378"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <Button
                     android:id="@+id/right_button"
@@ -137,8 +130,7 @@
                     app:layout_constraintHorizontal_bias="0.621"
                     app:layout_constraintRight_toRightOf="@+id/left_button"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -148,8 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:layout_below="@+id/constraintlayout4"
-                tools:ignore="DuplicateIds">
+                android:layout_below="@+id/constraintlayout4">
 
                 <TextView
                     android:id="@+id/textView3"
@@ -164,8 +155,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.412"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <Switch
                     android:id="@+id/touch_trail"
@@ -180,8 +170,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.636"
                     app:layout_constraintStart_toEndOf="@+id/textView3"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -191,8 +180,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:layout_below="@+id/constraintlayout5"
-                tools:ignore="DuplicateIds">
+                android:layout_below="@+id/constraintlayout5">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -205,8 +193,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.125"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -216,8 +203,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginTop="5dp"
-                android:layout_below="@+id/constraintlayout6"
-                tools:ignore="DuplicateIds">
+                android:layout_below="@+id/constraintlayout6">
 
                 <Button
                     android:id="@+id/red_button"
@@ -233,8 +219,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.307"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintVertical_bias="0.307"/>
 
                 <Button
                     android:id="@+id/green_button"
@@ -252,8 +237,7 @@
                     app:layout_constraintHorizontal_bias="0.07"
                     app:layout_constraintStart_toEndOf="@+id/red_button"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.307"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintVertical_bias="0.307"/>
 
                 <Button
                     android:id="@+id/yellow_button"
@@ -269,8 +253,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/blue_button"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.307"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintVertical_bias="0.307"/>
 
                 <Button
                     android:id="@+id/blue_button"
@@ -286,8 +269,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.307"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintVertical_bias="0.307"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
