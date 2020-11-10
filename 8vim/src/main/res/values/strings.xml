@@ -51,4 +51,7 @@
     <string name="generic_green_text">Green</string>
     <string name="generic_yellow_text">Yellow</string>
     <string name="generic_blue_text">Blue</string>
+    <string name="about">About</string>
+    <string name="x_axis_label">X Axis : </string>
+    <string name="y_axis_label">Y Axis : </string>
 </resources>

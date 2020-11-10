@@ -56,13 +56,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/switchToSelectionKeyboard" />
 
-    <Button
+    <ImageButton
         android:id="@+id/ctrlButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/btn_background"
         android:scaleType="centerInside"
-        android:text="CTRL"
+        android:src="@drawable/ic_ctrl"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

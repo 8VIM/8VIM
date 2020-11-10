@@ -13,14 +13,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="X : "
+            android:text="@string/x_axis_label"
             android:textSize="20sp" />
         
         <TextView
             android:id="@+id/x_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
             android:textSize="22sp" />
 
     </LinearLayout>
@@ -49,14 +48,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Y : "
+            android:text="@string/y_axis_label"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/y_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
             android:textSize="22sp" />
 
     </LinearLayout>
