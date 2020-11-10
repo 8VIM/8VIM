@@ -181,7 +181,7 @@
                     app:layout_constraintHorizontal_bias="0.636"
                     app:layout_constraintStart_toEndOf="@+id/textView3"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="MissingConstraints" />
+                    tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

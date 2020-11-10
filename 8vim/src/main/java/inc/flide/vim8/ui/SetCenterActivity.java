@@ -23,7 +23,7 @@ public class SetCenterActivity extends AppCompatActivity {
     private SeekBar seekBar_y;
 
 
-    @SuppressLint("WrongConstant")
+    @SuppressLint({"WrongConstant", "SetTextI18n"})
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onCreate(Bundle savedInstanceState) {
 

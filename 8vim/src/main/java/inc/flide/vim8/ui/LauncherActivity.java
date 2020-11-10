@@ -1,5 +1,6 @@
 package inc.flide.vim8.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -39,12 +40,6 @@ public class LauncherActivity extends AppCompatActivity
 
     private boolean isKeyboardEnabled;
 
-
-    private Button red_button;
-    private Button green_button;
-    private Button yellow_button;
-    private Button blue_button;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +73,7 @@ public class LauncherActivity extends AppCompatActivity
         Button rightButtonClick = findViewById(R.id.right_button);
         rightButtonClick.setOnClickListener(v -> switchSidebarPosition(getString(R.string.mainKeyboard_sidebar_position_preference_right_value)));
 
+        @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch touch_trail_switch = findViewById(R.id.touch_trail);
 
         SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
@@ -85,7 +81,7 @@ public class LauncherActivity extends AppCompatActivity
         touch_trail_switch.setOnCheckedChangeListener((buttonView, isChecked) -> touchTrailPreferenceChangeListner(isChecked));
 
 
-        red_button = (Button) findViewById(R.id.red_button);
+        Button red_button = (Button) findViewById(R.id.red_button);
         red_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +93,7 @@ public class LauncherActivity extends AppCompatActivity
             }
         });
 
-        green_button = (Button) findViewById(R.id.green_button);
+        Button green_button = (Button) findViewById(R.id.green_button);
         green_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +106,7 @@ public class LauncherActivity extends AppCompatActivity
             }
         });
 
-        yellow_button = (Button) findViewById(R.id.yellow_button);
+        Button yellow_button = (Button) findViewById(R.id.yellow_button);
         yellow_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +117,7 @@ public class LauncherActivity extends AppCompatActivity
             }
         });
 
-        blue_button = (Button) findViewById(R.id.blue_button);
+        Button blue_button = (Button) findViewById(R.id.blue_button);
         blue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -213,11 +209,12 @@ public class LauncherActivity extends AppCompatActivity
         }
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
+
     public boolean onNavigationItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
-            //noinspection
             case R.id.share:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
@@ -227,7 +224,7 @@ public class LauncherActivity extends AppCompatActivity
                 shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
                 startActivity(Intent.createChooser(shareIntent, "Share "+ R.string.app_name));
                 break;
-            //noinspection
+
             case R.id.help:
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 Uri data = Uri.parse("mailto:flideravi@gmail.com?subject=" + "Feedback");
@@ -235,7 +232,6 @@ public class LauncherActivity extends AppCompatActivity
                 startActivity(intent);
                 break;
 
-            //noinspection
             case R.id.about :
                  Intent intent_about = new Intent(LauncherActivity.this,AboutUsActivity.class);
                  startActivity(intent_about);

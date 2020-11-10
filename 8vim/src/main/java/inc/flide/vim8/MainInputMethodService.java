@@ -1,5 +1,6 @@
 package inc.flide.vim8;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
@@ -39,6 +40,8 @@ public class MainInputMethodService extends InputMethodService {
     InputMethodServiceHelper inputMethodServiceHelper = new InputMethodServiceHelper();
     InputConnection inputConnection;
 
+
+    @SuppressLint("InflateParams")
     @Override
     public View onCreateInputView() {
 

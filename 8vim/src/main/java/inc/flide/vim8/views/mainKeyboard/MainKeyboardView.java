@@ -19,15 +19,15 @@ import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.structures.KeyboardActionType;
 
-@SuppressLint("id")
+
 
 public class MainKeyboardView extends View{
+
 
 
     private MainKeyboardActionListener actionListener;
 
     private View layout;
-    private XboardView xboardView;
 
     public MainKeyboardView(Context context) {
         super(context);
@@ -44,6 +44,7 @@ public class MainKeyboardView extends View{
         initialize(context);
     }
 
+    @SuppressLint("InflateParams")
     public void initialize(Context context){
 
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
@@ -55,12 +56,13 @@ public class MainKeyboardView extends View{
                 context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
 
         if(preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))){
+
             layout = inflater.inflate(R.layout.main_keyboard_right_sidebar_view, null);
         } else{
             layout = inflater.inflate(R.layout.main_keyboard_left_sidebar_view, null);
         }
 
-        xboardView = layout.findViewById(R.id.xboardView);
+        XboardView xboardView = layout.findViewById(R.id.xboardView);
         setupButtonsOnSideBar();
         //setupPredictiveTextCandidateButtons();
 

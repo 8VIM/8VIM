@@ -22,9 +22,7 @@ public class AboutUsActivity extends AppCompatActivity {
     private ConstraintLayout playstore;
 
 
-    private ImageView back_arrow;
-
-    @SuppressLint("RestrictedApi")
+    @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_page_layout);
@@ -128,8 +126,7 @@ public class AboutUsActivity extends AppCompatActivity {
         });
 
 
-
-        back_arrow = (ImageView) findViewById(R.id.back_arrow);
+        ImageView back_arrow = (ImageView) findViewById(R.id.back_arrow);
         back_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

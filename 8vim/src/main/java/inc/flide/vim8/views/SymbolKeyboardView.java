@@ -12,8 +12,6 @@ public class SymbolKeyboardView extends ButtonKeyboardView {
 
     private SymbolKeyboardActionListener actionListener;
 
-    private Keyboard keyboard;
-
     public SymbolKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
@@ -26,7 +24,7 @@ public class SymbolKeyboardView extends ButtonKeyboardView {
 
     public void initialize(Context context){
         MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
-        keyboard = new Keyboard(context, R.layout.symbols_keyboard_view);
+        Keyboard keyboard = new Keyboard(context, R.layout.symbols_keyboard_view);
         this.setKeyboard(keyboard);
         setHapticFeedbackEnabled(true);
         actionListener = new SymbolKeyboardActionListener(mainInputMethodService, this);

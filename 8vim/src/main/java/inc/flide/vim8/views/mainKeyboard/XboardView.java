@@ -86,7 +86,6 @@ public class XboardView extends View {
     }
 
     private final int offset = 15;
-    private final int lengthOfLineDemarcatingSectors = 250;
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -295,6 +294,7 @@ public class XboardView extends View {
 
     }
 
+        @SuppressLint("ClickableViewAccessibility")
         @Override
        public boolean onTouchEvent(MotionEvent e) {
         PointF position = new PointF((int) e.getX(), (int) e.getY());
@@ -326,6 +326,7 @@ public class XboardView extends View {
     }
 
 
+    @SuppressLint("DrawAllocation")
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
@@ -346,7 +347,6 @@ public class XboardView extends View {
         float radius = (spRadiusValue * width) / 2;
 
 
-
         @SuppressLint("DrawAllocation")
         PointF centre = new PointF((width / 2), (height / 2));
         centre.x = centre.x + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
@@ -357,6 +357,7 @@ public class XboardView extends View {
         for (int i = 0; i < 4; i++) {
             int angle = 45 + (i * 90);
             PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
+            int lengthOfLineDemarcatingSectors = 250;
             @SuppressLint("DrawAllocation")
             LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
             sectorDemarcatingLines.add(lineSegment);

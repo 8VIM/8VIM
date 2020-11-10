@@ -18,7 +18,8 @@
         app:layout_constraintBottom_toTopOf="@id/tabButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/tabButton"
@@ -30,7 +31,8 @@
         app:layout_constraintBottom_toTopOf="@id/switchToSelectionKeyboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/switchToEmojiKeyboard" />
+        app:layout_constraintTop_toBottomOf="@id/switchToEmojiKeyboard"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/switchToSelectionKeyboard"
@@ -42,7 +44,8 @@
         app:layout_constraintBottom_toTopOf="@id/goToSettingsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tabButton" />
+        app:layout_constraintTop_toBottomOf="@id/tabButton"
+        tools:ignore="ContentDescription" />
 
     <ImageButton
         android:id="@+id/goToSettingsButton"
@@ -54,7 +57,8 @@
         app:layout_constraintBottom_toTopOf="@id/ctrlButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/switchToSelectionKeyboard" />
+        app:layout_constraintTop_toBottomOf="@id/switchToSelectionKeyboard"
+        tools:ignore="ContentDescription" />
 
     <Button
         android:id="@+id/ctrlButton"
@@ -66,6 +70,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton" />
+        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton"
+        tools:ignore="HardcodedText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

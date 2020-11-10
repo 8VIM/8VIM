@@ -15,6 +15,7 @@
     <item
         android:id="@+id/about"
         android:icon="@drawable/about"
-        android:title="About" />
+        android:title="About"
+        tools:ignore="HardcodedText" />
 
 </menu>

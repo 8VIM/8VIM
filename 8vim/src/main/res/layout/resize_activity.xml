@@ -11,7 +11,7 @@
        android:layout_height="wrap_content"
        android:text="0%"
        android:textSize="30sp"
-       tools:ignore="InvalidId"
+       tools:ignore="HardcodedText,InvalidId"
        android:layout_centerHorizontal="true"
        android:layout_marginTop="50dp"/>
 

@@ -1,5 +1,6 @@
 package inc.flide.vim8.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -15,15 +16,15 @@ import inc.flide.vim8.R;
 public class ResizeActivity extends AppCompatActivity {
 
     private TextView textView;
-    private SeekBar seekBar;
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resize_activity);
 
         textView = (TextView)findViewById(R.id.textView);
-        seekBar = (SeekBar) findViewById(R.id.seekBar);
+        SeekBar seekBar = (SeekBar) findViewById(R.id.seekBar);
         SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         float spRadius= sp.getFloat(getString(R.string.x_board_circle_radius_size_factor_key),0);
         float currentRadius = 0.1f;
@@ -40,7 +41,7 @@ public class ResizeActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
                 seekBar.setProgress(progress);
-                Float x = Float.valueOf((float) (0.05 * progress));
+                float x = (float) (0.05 * progress);
                 textView.setText("" + x + "");
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);

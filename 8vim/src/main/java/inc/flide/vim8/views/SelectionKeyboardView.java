@@ -12,8 +12,6 @@ public class SelectionKeyboardView extends ButtonKeyboardView {
 
     private SelectionKeyboardActionListener actionListener;
 
-    private Keyboard keyboard;
-
     public SelectionKeyboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
@@ -26,7 +24,7 @@ public class SelectionKeyboardView extends ButtonKeyboardView {
 
     public void initialize(Context context){
         MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
-        keyboard = new Keyboard(context, R.layout.selection_keyboard_view);
+        Keyboard keyboard = new Keyboard(context, R.layout.selection_keyboard_view);
         this.setKeyboard(keyboard);
         setHapticFeedbackEnabled(true);
         actionListener = new SelectionKeyboardActionListener(mainInputMethodService, this);
