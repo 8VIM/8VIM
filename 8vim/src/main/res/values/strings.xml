@@ -52,4 +52,13 @@
     <string name="generic_yellow_text">Yellow</string>
     <string name="generic_blue_text">Blue</string>
     <string name="about_8vim">More than just a clone for now defunct 8Pen Application.</string>
+    <string name="about">About</string>
+    <string name="x_axis_label">X Axis : </string>
+    <string name="y_axis_label">Y Axis : </string>
+    <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>
+    <string name="tab_button_content_description">Tab button</string>
+    <string name="open_selection_keypad_button_content_description">Open Selection Keypad</string>
+    <string name="open_keyboard_settings_button_content_description">Open Keyboard Settings</string>
+    <string name="ctrl_button_content_description">Ctrl button</string>
+
 </resources>

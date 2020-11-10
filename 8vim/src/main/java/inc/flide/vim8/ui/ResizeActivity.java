@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Locale;
+
 import inc.flide.vim8.R;
 
 public class ResizeActivity extends AppCompatActivity {
@@ -32,7 +34,7 @@ public class ResizeActivity extends AppCompatActivity {
             currentRadius = spRadius;
         }
         seekBar.setProgress((int) (currentRadius * 20));
-        textView.setText("" + currentRadius + "");
+        textView.setText(String.format(Locale.US, "%.2f", currentRadius));
         seekBar.setMin(1);
         seekBar.setMax(10);
 
@@ -42,7 +44,8 @@ public class ResizeActivity extends AppCompatActivity {
 
                 seekBar.setProgress(progress);
                 float x = (float) (0.05 * progress);
-                textView.setText("" + x + "");
+
+                textView.setText(String.format(Locale.US, "%.2f", x));
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
@@ -60,7 +63,6 @@ public class ResizeActivity extends AppCompatActivity {
 
             }
         });
-
 
     }
 

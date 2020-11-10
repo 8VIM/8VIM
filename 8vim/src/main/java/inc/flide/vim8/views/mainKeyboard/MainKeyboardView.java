@@ -80,64 +80,45 @@ public class MainKeyboardView extends View{
     }
 
     private void setupCtrlKey() {
-        Button ctrlKeyButton = (Button) layout.findViewById(R.id.ctrlButton);
+        ImageButton ctrlKeyButton = layout.findViewById(R.id.ctrlButton);
 
-        ctrlKeyButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK);
-            }
-        });
+        ctrlKeyButton.setOnClickListener(view -> actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK));
     }
 
     private void setupGoToSettingsButton() {
-        ImageButton goToSettingsButton = (ImageButton) layout.findViewById(R.id.goToSettingsButton);
-        goToSettingsButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent vim8SettingsIntent = new Intent(getContext(),inc.flide.vim8.ui.LauncherActivity.class);
-                vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(vim8SettingsIntent);
-            }
+        ImageButton goToSettingsButton = layout.findViewById(R.id.goToSettingsButton);
+        goToSettingsButton.setOnClickListener(view -> {
+            Intent vim8SettingsIntent = new Intent(getContext(),inc.flide.vim8.ui.LauncherActivity.class);
+            vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(vim8SettingsIntent);
         });
     }
 
     private void setupTabKey() {
-        ImageButton tabKeyButton = (ImageButton) layout.findViewById(R.id.tabButton);
+        ImageButton tabKeyButton = layout.findViewById(R.id.tabButton);
 
-        tabKeyButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                actionListener.sendKey(KeyEvent.KEYCODE_TAB, 0);
-            }
-        });
+        tabKeyButton.setOnClickListener(view -> actionListener.sendKey(KeyEvent.KEYCODE_TAB, 0));
     }
 
     private void setupSwitchToSelectionKeyboardButton() {
-        ImageButton switchToSelectionKeyboardButton = (ImageButton) layout.findViewById(R.id.switchToSelectionKeyboard);
-        switchToSelectionKeyboardButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
-                        KeyboardActionType.INPUT_SPECIAL
-                        , InputSpecialKeyEventCode.SWITCH_TO_SELECTION_KEYBOARD.toString()
-                        , null, 0,0);
-                actionListener.handleSpecialInput(switchToSelectionKeyboard);
-            }
+        ImageButton switchToSelectionKeyboardButton = layout.findViewById(R.id.switchToSelectionKeyboard);
+        switchToSelectionKeyboardButton.setOnClickListener(view -> {
+            KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
+                    KeyboardActionType.INPUT_SPECIAL
+                    , InputSpecialKeyEventCode.SWITCH_TO_SELECTION_KEYBOARD.toString()
+                    , null, 0,0);
+            actionListener.handleSpecialInput(switchToSelectionKeyboard);
         });
     }
 
     private void setupSwitchToEmojiKeyboardButton() {
         ImageButton switchToEmojiKeyboardButton = layout.findViewById(R.id.switchToEmojiKeyboard);
-        switchToEmojiKeyboardButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
-                        KeyboardActionType.INPUT_SPECIAL
-                        , InputSpecialKeyEventCode.SWITCH_TO_EMOJI_KEYBOARD.toString()
-                        , null, 0,0);
-                actionListener.handleSpecialInput(switchToEmojiKeyboard);
-            }
+        switchToEmojiKeyboardButton.setOnClickListener(view -> {
+            KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
+                    KeyboardActionType.INPUT_SPECIAL
+                    , InputSpecialKeyEventCode.SWITCH_TO_EMOJI_KEYBOARD.toString()
+                    , null, 0,0);
+            actionListener.handleSpecialInput(switchToEmojiKeyboard);
         });
     }
 

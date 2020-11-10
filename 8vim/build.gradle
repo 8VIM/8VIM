@@ -26,8 +26,6 @@ android {
         htmlOutput file("lint-report.html")
         warningsAsErrors false
         abortOnError false
-        disable "UnsafeExperimentalUsageError",
-            "UnsafeExperimentalUsageWarning"
     }
 }
 

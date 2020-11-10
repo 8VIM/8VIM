@@ -41,6 +41,7 @@ public class XboardView extends View {
 
     private MainKeyboardActionListener actionListener;
 
+    private PointF circleCenter;
     private Circle circle;
     List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
     List<PointF> listOfPointsOfDisplay = new ArrayList<>();
@@ -51,6 +52,9 @@ public class XboardView extends View {
     GestureDetector gestureDetector;
     Paint backgroundPaint = new Paint();
     Paint foregroundPaint = new Paint();
+
+    private final int offset = 15;
+    private final int lengthOfLineDemarcatingSectors = 250;
 
     public XboardView(Context context) {
         super(context);
@@ -74,8 +78,22 @@ public class XboardView extends View {
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
 
-        backgroundPaint.setARGB(255, 255, 255, 255);
+        setBackgroundPaint();
+        setForegroundPaint();
 
+        circleCenter = new PointF();
+        circle = new Circle();
+
+        for (int i = 0; i < 4; i++) {
+            this.sectorDemarcatingLines.add(new LineSegment());
+        }
+    }
+
+    private void setBackgroundPaint() {
+        backgroundPaint.setARGB(255, 255, 255, 255);
+    }
+
+    private void setForegroundPaint() {
         foregroundPaint.setARGB(255, 0, 0, 0);
         foregroundPaint.setAntiAlias(true);
         foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
@@ -84,8 +102,6 @@ public class XboardView extends View {
                 "SF-UI-Display-Regular.otf");
         foregroundPaint.setTypeface(font);
     }
-
-    private final int offset = 15;
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -275,8 +291,6 @@ public class XboardView extends View {
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         // event when double tap occurs
-
-
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             float x = e.getX();
@@ -294,37 +308,37 @@ public class XboardView extends View {
 
     }
 
-        @SuppressLint("ClickableViewAccessibility")
-        @Override
-       public boolean onTouchEvent(MotionEvent e) {
-        PointF position = new PointF((int) e.getX(), (int) e.getY());
-        FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
-        switch (e.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                 actionListener.movementStarted(currentFingerPosition);
-                 path.moveTo(e.getX(),e.getY());
-                return true;
 
-            case MotionEvent.ACTION_MOVE:
-                actionListener.movementContinues(currentFingerPosition);
-                path.lineTo(e.getX(), e.getY());
-                break;
+   @SuppressLint("ClickableViewAccessibility")
+   @Override
+   public boolean onTouchEvent(MotionEvent e) {
+    PointF position = new PointF((int) e.getX(), (int) e.getY());
+    FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
+    switch (e.getAction()) {
+        case MotionEvent.ACTION_DOWN:
+             actionListener.movementStarted(currentFingerPosition);
+             path.moveTo(e.getX(),e.getY());
+            return true;
 
-            case MotionEvent.ACTION_UP:
-                actionListener.movementEnds();
-            case MotionEvent.ACTION_POINTER_DOWN:
-                 path.reset();
-                break;
-            default:
-                return false;
-        }
-        gestureDetector.onTouchEvent(e);
+        case MotionEvent.ACTION_MOVE:
+            actionListener.movementContinues(currentFingerPosition);
+            path.lineTo(e.getX(), e.getY());
+            break;
 
-        // Schedules a repaint.
-        invalidate();
-        return true;
+        case MotionEvent.ACTION_UP:
+            actionListener.movementEnds();
+        case MotionEvent.ACTION_POINTER_DOWN:
+             path.reset();
+            break;
+        default:
+            return false;
     }
+    gestureDetector.onTouchEvent(e);
 
+    // Schedules a repaint.
+    invalidate();
+    return true;
+    }
 
     @SuppressLint("DrawAllocation")
     @Override
@@ -346,22 +360,20 @@ public class XboardView extends View {
         float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key), 0.3f);
         float radius = (spRadiusValue * width) / 2;
 
+        circleCenter.x = (width / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
+        circleCenter.y = (height / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
 
-        @SuppressLint("DrawAllocation")
-        PointF centre = new PointF((width / 2), (height / 2));
-        centre.x = centre.x + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
-        centre.y = centre.y + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
+        circle.setCentre(circleCenter);
+        circle.setRadius(radius);
 
-        circle = new Circle(centre, radius);
         float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
         for (int i = 0; i < 4; i++) {
             int angle = 45 + (i * 90);
             PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
-            int lengthOfLineDemarcatingSectors = 250;
-            @SuppressLint("DrawAllocation")
-            LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
-            sectorDemarcatingLines.add(lineSegment);
-            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(lineSegment, 4, characterHeight));
+
+            sectorDemarcatingLines.get(i).setupLineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
+            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(sectorDemarcatingLines.get(i), 4, characterHeight));
+
         }
 
         setMeasuredDimension(width, height);

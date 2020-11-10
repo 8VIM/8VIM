@@ -6,28 +6,27 @@ import android.util.AttributeSet;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.keyboardActionListners.SymbolKeyboardActionListener;
+import inc.flide.vim8.keyboardActionListners.SelectionKeyboardActionListener;
 
-public class SymbolKeyboardView extends ButtonKeyboardView {
+public class SelectionKeypadView extends ButtonKeypadView {
 
-    private SymbolKeyboardActionListener actionListener;
-
-    public SymbolKeyboardView(Context context, AttributeSet attrs) {
+    public SelectionKeypadView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
     }
 
-    public SymbolKeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SelectionKeypadView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context);
     }
 
     public void initialize(Context context){
         MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
-        Keyboard keyboard = new Keyboard(context, R.layout.symbols_keyboard_view);
-        this.setKeyboard(keyboard);
+
+        this.setKeyboard(new Keyboard(context, R.layout.selection_keypad_view));
+
         setHapticFeedbackEnabled(true);
-        actionListener = new SymbolKeyboardActionListener(mainInputMethodService, this);
+        SelectionKeyboardActionListener actionListener = new SelectionKeyboardActionListener(mainInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
     }
 }

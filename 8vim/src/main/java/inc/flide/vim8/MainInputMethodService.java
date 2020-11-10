@@ -21,16 +21,16 @@ import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
 import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.views.mainKeyboard.MainKeyboardView;
-import inc.flide.vim8.views.NumberPadKeyboardView;
-import inc.flide.vim8.views.SelectionKeyboardView;
-import inc.flide.vim8.views.SymbolKeyboardView;
+import inc.flide.vim8.views.NumberKeypadView;
+import inc.flide.vim8.views.SelectionKeypadView;
+import inc.flide.vim8.views.SymbolKeypadView;
 
 public class MainInputMethodService extends InputMethodService {
 
     private MainKeyboardView mainKeyboardView;
-    private NumberPadKeyboardView numberPadKeyboardView;
-    private SelectionKeyboardView selectionKeyboardView;
-    private SymbolKeyboardView symbolKeyboardView;
+    private NumberKeypadView numberKeypadView;
+    private SelectionKeypadView selectionKeypadView;
+    private SymbolKeypadView symbolKeypadView;
     private View currentView;
 
     private int shiftLockFlag;
@@ -45,12 +45,12 @@ public class MainInputMethodService extends InputMethodService {
     @Override
     public View onCreateInputView() {
 
-        numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater()
-                                    .inflate(R.layout.numberpad_keyboard_layout, null);
-        selectionKeyboardView = (SelectionKeyboardView) getLayoutInflater()
-                                    .inflate(R.layout.selection_keyboard_layout, null);
-        symbolKeyboardView = (SymbolKeyboardView) getLayoutInflater()
-                                    .inflate(R.layout.symbols_keyboard_layout, null);
+        numberKeypadView = (NumberKeypadView)getLayoutInflater()
+                                    .inflate(R.layout.number_keypad_layout, null);
+        selectionKeypadView = (SelectionKeypadView) getLayoutInflater()
+                                    .inflate(R.layout.selection_keypad_layout, null);
+        symbolKeypadView = (SymbolKeypadView) getLayoutInflater()
+                                    .inflate(R.layout.symbols_keypad_layout, null);
         mainKeyboardView = (MainKeyboardView) getLayoutInflater()
                                     .inflate(R.layout.main_keyboard_layout, null);
         currentView = mainKeyboardView.getView();
@@ -191,7 +191,7 @@ public class MainInputMethodService extends InputMethodService {
                     switchToExternalEmoticonKeyboard();
                 break;
             case SWITCH_TO_NUMBER_PAD:
-                    currentView = numberPadKeyboardView;
+                    currentView = numberKeypadView;
                     setInputView(currentView);
                 break;
             case SWITCH_TO_MAIN_KEYBOARD:
@@ -199,7 +199,7 @@ public class MainInputMethodService extends InputMethodService {
                     setInputView(currentView);
                 break;
             case SWITCH_TO_SYMBOLS_KEYBOARD:
-                    currentView = symbolKeyboardView;
+                    currentView = symbolKeypadView;
                     setInputView(currentView);
                 break;
             case PASTE:
@@ -211,7 +211,7 @@ public class MainInputMethodService extends InputMethodService {
                 sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
                 break;
             case SWITCH_TO_SELECTION_KEYBOARD: {
-                    currentView = selectionKeyboardView;
+                    currentView = selectionKeypadView;
                     setInputView(currentView);
                 }
                 break;

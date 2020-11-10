@@ -91,7 +91,7 @@ end
 # compare previous error count with current error count
 if previous_results == true  &&
     current_issue_count > previous_issue_count
-    puts "FAIL: issue count increased from " + previous_issue_count.to_s + " to " + current_issue_count
+    puts ("FAIL: issue count increased from #{previous_issue_count} to #{current_issue_count}")
     puts "Please run './gradew clean lint' locally and fix lint issues"
     exit 1
 end
