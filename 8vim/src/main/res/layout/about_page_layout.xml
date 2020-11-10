@@ -10,8 +10,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:ignore="Overdraw">
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout_aboutus"
@@ -19,8 +18,7 @@
         android:layout_height="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/back_arrow"
@@ -32,8 +30,7 @@
             app:layout_constraintHorizontal_bias="0.074"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.4"
-            tools:ignore="ContentDescription,InvalidId,MissingConstraints" />
+            app:layout_constraintVertical_bias="0.4"/>
 
         <TextView
             android:id="@+id/textView2"
@@ -48,8 +45,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.25"
-            tools:ignore="HardcodedText,MissingConstraints" />
+            app:layout_constraintVertical_bias="0.25"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -62,8 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_aboutus"
-        app:layout_constraintVertical_bias="0.022"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintVertical_bias="0.022">
 
         <androidx.cardview.widget.CardView
             android:layout_width="100sp"
@@ -78,12 +73,11 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/app_logo_vd_vector"
+                android:src="@drawable/app_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.cardview.widget.CardView>
 
@@ -99,8 +93,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_applogo"
-        app:layout_constraintVertical_bias="0.002"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintVertical_bias="0.002">
 
         <TextView
             android:layout_width="wrap_content"
@@ -123,8 +116,7 @@
         android:layout_marginTop="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_appname"
-        tools:ignore="MissingConstraints,UnknownId">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_appname">
 
         <TextView
             android:layout_width="wrap_content"
@@ -135,8 +127,7 @@
             android:textColor="@color/black"
             android:paddingStart="5sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="RtlSymmetry" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -147,8 +138,7 @@
         android:layout_marginTop="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintlayout7"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toBottomOf="@+id/constraintlayout7">
 
         <TextView
             android:layout_width="wrap_content"
@@ -161,8 +151,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="0sp"
-            tools:ignore="HardcodedText,RtlSymmetry" />
+            tools:layout_editor_absoluteY="0sp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -173,8 +162,7 @@
         android:layout_marginTop="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7">
 
         <TextView
             android:id="@+id/textView4"
@@ -184,8 +172,7 @@
             android:text="Version name :"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            tools:ignore="HardcodedText,RtlSymmetry" />
+            android:textSize="16sp"/>
 
 
         <TextView
@@ -201,8 +188,7 @@
             app:layout_constraintHorizontal_bias="0.024"
             app:layout_constraintStart_toEndOf="@+id/textView4"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            tools:ignore="RtlHardcoded,RtlSymmetry" />
+            app:layout_constraintVertical_bias="0.0"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -215,15 +201,13 @@
         android:layout_marginTop="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_version"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_version">
 
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="0.5sp"
             android:background="@android:color/darker_gray"
-            tools:ignore="Autofill,LabelFor,TextFields"
             android:importantForAutofill="no" />
 
 
@@ -236,8 +220,7 @@
         android:layout_marginTop="10sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout10"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout10">
 
         <TextView
             android:layout_width="wrap_content"
@@ -245,8 +228,7 @@
             android:paddingStart="5sp"
             android:text="Connect with us"
             android:textAllCaps="false"
-            android:textSize="20sp"
-            tools:ignore="HardcodedText,RtlSymmetry" />
+            android:textSize="20sp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -257,8 +239,7 @@
         android:layout_marginTop="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_connectus"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_connectus">
 
         <ImageView
             android:id="@+id/imageView"
@@ -270,8 +251,7 @@
             app:layout_constraintEnd_toStartOf="@+id/textView7"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription,RtlHardcoded" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/textView7"
@@ -285,8 +265,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.478"
-            tools:layout_editor_absoluteX="200sp"
-            tools:ignore="HardcodedText,RtlHardcoded,UnknownId" />
+            tools:layout_editor_absoluteX="200sp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -297,14 +276,12 @@
         android:layout_marginTop="5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_github"
-        tools:ignore="MissingConstraints,UnknownId">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_github">
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="0.5sp"
-            android:background="@android:color/darker_gray"
-            tools:ignore="Autofill,LabelFor,TextFields"/>
+            android:background="@android:color/darker_gray"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -316,8 +293,7 @@
         android:layout_marginTop="5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout14"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout14">
 
         <ImageView
             android:id="@+id/imageView2"
@@ -331,8 +307,7 @@
             app:layout_constraintHorizontal_bias="0.065"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.481"
-            tools:ignore="ContentDescription,RtlHardcoded" />
+            app:layout_constraintVertical_bias="0.481"/>
 
         <TextView
             android:id="@+id/textView5"
@@ -346,8 +321,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.478"
-            tools:layout_editor_absoluteX="192sp"
-            tools:ignore="HardcodedText,RtlHardcoded" />
+            tools:layout_editor_absoluteX="192sp"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -358,14 +332,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5sp"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_website"
-        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="16sp">
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="0.5sp"
-            android:background="@android:color/darker_gray"
-            tools:ignore="Autofill,LabelFor,TextFields"/>
+            android:background="@android:color/darker_gray"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -377,8 +349,7 @@
         android:layout_marginTop="5sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout15"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout15">
 
         <ImageView
             android:layout_width="25sp"
@@ -389,8 +360,7 @@
             app:layout_constraintHorizontal_bias="0.125"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.466"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintVertical_bias="0.466"/>
 
         <TextView
             android:id="@+id/textView6"
@@ -404,8 +374,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.478"
-            tools:layout_editor_absoluteX="128sp"
-            tools:ignore="HardcodedText,RtlHardcoded" />
+            tools:layout_editor_absoluteX="128sp"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -417,14 +386,12 @@
         android:layout_marginTop="4sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_twitter"
-        tools:ignore="UnknownId">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_twitter">
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="0.5sp"
-            android:background="@android:color/darker_gray"
-            tools:ignore="Autofill,LabelFor,MissingConstraints,TextFields"/>
+            android:background="@android:color/darker_gray"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -436,8 +403,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_twitter"
-        app:layout_constraintVertical_bias="0.229"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintVertical_bias="0.229">
 
         <ImageView
             android:layout_width="25sp"
@@ -450,8 +416,7 @@
             app:layout_constraintHorizontal_bias="0.055"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.466"
-            tools:ignore="ContentDescription,RtlHardcoded" />
+            app:layout_constraintVertical_bias="0.466"/>
 
         <TextView
             android:id="@+id/textView8"
@@ -465,8 +430,7 @@
             app:layout_constraintHorizontal_bias="0.396"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.478"
-            tools:ignore="HardcodedText,RtlHardcoded" />
+            app:layout_constraintVertical_bias="0.478"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

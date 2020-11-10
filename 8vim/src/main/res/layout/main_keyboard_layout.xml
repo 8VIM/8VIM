@@ -4,5 +4,4 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_alignParentBottom="true"
-    android:keyPreviewLayout="@layout/preview"
-    tools:ignore="Overdraw" />
+    android:keyPreviewLayout="@layout/preview"/>

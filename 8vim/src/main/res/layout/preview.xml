@@ -6,6 +6,5 @@
     android:gravity="center"
     android:background="#ffffff"
     android:textStyle="bold"
-    android:textSize="30sp"
-    tools:ignore="Overdraw">
+    android:textSize="30sp">
 </TextView>
