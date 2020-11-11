@@ -44,7 +44,6 @@ public class MainKeyboardView extends View{
         initialize(context);
     }
 
-    @SuppressLint("InflateParams")
     public void initialize(Context context){
 
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);

@@ -40,8 +40,6 @@ public class MainInputMethodService extends InputMethodService {
     InputMethodServiceHelper inputMethodServiceHelper = new InputMethodServiceHelper();
     InputConnection inputConnection;
 
-
-    @SuppressLint("InflateParams")
     @Override
     public View onCreateInputView() {
 

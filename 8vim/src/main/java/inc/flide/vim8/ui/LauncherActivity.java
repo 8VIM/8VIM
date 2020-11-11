@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import com.google.android.material.navigation.NavigationView;
+
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -73,8 +75,7 @@ public class LauncherActivity extends AppCompatActivity
         Button rightButtonClick = findViewById(R.id.right_button);
         rightButtonClick.setOnClickListener(v -> switchSidebarPosition(getString(R.string.mainKeyboard_sidebar_position_preference_right_value)));
 
-        @SuppressLint("UseSwitchCompatOrMaterialCode")
-        Switch touch_trail_switch = findViewById(R.id.touch_trail);
+        SwitchCompat touch_trail_switch = findViewById(R.id.touch_trail);
 
         SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         touch_trail_switch.setChecked(sp.getBoolean(getString(R.string.user_preferred_typing_trail_visibility),true));
@@ -209,9 +210,7 @@ public class LauncherActivity extends AppCompatActivity
         }
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
-
     public boolean onNavigationItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {

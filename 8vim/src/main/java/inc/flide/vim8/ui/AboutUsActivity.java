@@ -21,8 +21,6 @@ public class AboutUsActivity extends AppCompatActivity {
     private ConstraintLayout website;
     private ConstraintLayout playstore;
 
-
-    @SuppressLint({"RestrictedApi", "ClickableViewAccessibility"})
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_page_layout);

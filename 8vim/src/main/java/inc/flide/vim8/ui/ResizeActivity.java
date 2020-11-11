@@ -19,7 +19,6 @@ public class ResizeActivity extends AppCompatActivity {
 
     private TextView textView;
 
-    @SuppressLint("SetTextI18n")
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
