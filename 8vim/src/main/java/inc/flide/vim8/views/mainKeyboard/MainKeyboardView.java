@@ -23,8 +23,6 @@ import inc.flide.vim8.structures.KeyboardActionType;
 
 public class MainKeyboardView extends View{
 
-
-
     private MainKeyboardActionListener actionListener;
 
     private View layout;

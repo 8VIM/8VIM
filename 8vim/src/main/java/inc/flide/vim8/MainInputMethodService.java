@@ -48,7 +48,6 @@ public class MainInputMethodService extends InputMethodService {
         symbolKeypadView = new SymbolKeypadView(this, null);
         mainKeyboardView = new MainKeyboardView(this, null);
         currentView = mainKeyboardView.getView();
-
         return currentView;
     }
 
