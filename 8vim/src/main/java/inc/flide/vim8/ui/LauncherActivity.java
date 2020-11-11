@@ -2,12 +2,24 @@ package inc.flide.vim8.ui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionManager;
@@ -15,6 +27,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -47,15 +60,11 @@ public class LauncherActivity extends AppCompatActivity
     private boolean isKeyboardEnabled;
 
     private ConstraintLayout constraintLayout_select_color;
-    private ConstraintLayout constraintLayout_display_icons;
-    private ConstraintLayout constraintLayout_touch_trail;
 
     private Button red_button;
     private Button green_button;
     private Button blue_button;
     private Button yellow_button;
-
-    private SwitchCompat display_icon_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +84,7 @@ public class LauncherActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        constraintLayout_select_color = findViewById(R.id.constraintlayout_colors);
+        constraintLayout_select_color = (ConstraintLayout) findViewById(R.id.constraintlayout_colors);
 
         Button switchToEmojiKeyboardButton = findViewById(R.id.emoji);
         switchToEmojiKeyboardButton.setOnClickListener(v -> askUserPreferredEmoticonKeyboard());
@@ -206,7 +215,6 @@ public class LauncherActivity extends AppCompatActivity
                 sharedPreferencesEditor.apply();
             }
         });
-
     }
 
     private void touchTrailPreferenceChangeListner(boolean isChecked) {
@@ -318,22 +326,29 @@ public class LauncherActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        if (item.getItemId() == R.id.share) {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
-            String shareMessage = "\nCheck out this awesome keyboard application\n\n";
-            shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n";
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-            startActivity(Intent.createChooser(shareIntent, "Share " + R.string.app_name));
-        } else if (item.getItemId() == R.id.help) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            Uri data = Uri.parse("mailto:flideravi@gmail.com?subject=" + "Feedback");
-            intent.setData(data);
-            startActivity(intent);
-        } else if (item.getItemId() == R.id.about) {
-            Intent intent_about = new Intent(LauncherActivity.this, AboutUsActivity.class);
-            startActivity(intent_about);
+        switch (item.getItemId()) {
+            case R.id.share:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
+                String shareMessage= "\nCheck out this awesome keyboard application\n\n";
+                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n";
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                startActivity(Intent.createChooser(shareIntent, "Share "+ R.string.app_name));
+                break;
+
+            case R.id.help:
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri data = Uri.parse("mailto:flideravi@gmail.com?subject=" + "Feedback");
+                intent.setData(data);
+                startActivity(intent);
+                break;
+
+            case R.id.about :
+                Intent intent_about = new Intent(LauncherActivity.this,AboutUsActivity.class);
+                startActivity(intent_about);
+                break;
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

@@ -145,14 +145,15 @@
                 <TextView
                     android:id="@+id/display_icons_textview"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/configurable_display_icon_button_text"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="120dp"
+                    android:text="@string/configurable_touch_trail_button_text"
                     android:textAllCaps="false"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.077"
+                    app:layout_constraintHorizontal_bias="0.131"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -164,14 +165,13 @@
                     android:layout_marginStart="250dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
+                    app:layout_constraintHorizontal_bias="0.766"
+                    app:layout_constraintStart_toEndOf="@+id/textView3"
+                    app:layout_constraintTop_toTopOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintlayout_touch_trail"
+                android:id="@+id/constraintlayout_colors"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -180,58 +180,22 @@
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/configurable_touch_trail_button_text"
+                    android:id="@+id/random"
+                    android:layout_height="wrap_content"
+                    android:text="@string/choose_the_color_for_touch_trail_label"
                     android:textAllCaps="false"
-                    android:textColor="@color/black"
+                    android:textColor="@android:color/darker_gray"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.062"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/touch_trail"
-                    style="@style/Custom_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="250dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintlayout_colors"
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:layout_marginTop="5dp"
-                android:layout_below="@id/constraintlayout_touch_trail">
-
-                <TextView
-                    android:id="@+id/random"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/choose_the_color_for_touch_trail_label"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.091"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.085" />
-
+                    app:layout_constraintTop_toTopOf="parent"/>
                 <Button
                     android:id="@+id/red_button"
                     android:layout_width="66dp"
                     android:layout_height="39dp"
-                    android:background="@drawable/red_rounded_button_unpressed"
+                    android:background="@drawable/red_button_color_change"
                     android:elevation="10dp"
                     android:text="@string/generic_red_text"
                     android:textAllCaps="false"
@@ -242,7 +206,7 @@
                     app:layout_constraintHorizontal_bias="0.085"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
+                    app:layout_constraintVertical_bias="0.307"/>
 
                 <Button
                     android:id="@+id/green_button"
@@ -259,7 +223,7 @@
                     app:layout_constraintHorizontal_bias="0.456"
                     app:layout_constraintStart_toEndOf="@+id/red_button"
                     app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
+                    app:layout_constraintVertical_bias="0.307"/>
 
                 <Button
                     android:id="@+id/yellow_button"
@@ -273,10 +237,10 @@
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.365"
+                    app:layout_constraintHorizontal_bias="0.349"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
+                    app:layout_constraintVertical_bias="0.307"/>
 
                 <Button
                     android:id="@+id/blue_button"
@@ -290,14 +254,11 @@
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.904"
+                    app:layout_constraintHorizontal_bias="0.907"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
-
-
+                    app:layout_constraintVertical_bias="0.307"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
         </RelativeLayout>
