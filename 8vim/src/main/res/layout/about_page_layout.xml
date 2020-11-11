@@ -25,6 +25,7 @@
             android:layout_width="25sp"
             android:layout_height="25sp"
             android:src="@drawable/ic_baseline_arrow_back_24"
+            android:contentDescription="@string/generic_back_button_content_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/textView2"
             app:layout_constraintHorizontal_bias="0.074"
@@ -37,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="204sp"
-            android:text="About Us"
+            android:text="@string/about_us_label"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -74,6 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/app_icon"
+                android:contentDescription="@string/app_name"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -105,7 +107,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="0sp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -121,13 +123,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/about_8vim"
+            android:text="@string/about_8vim_text"
             android:textSize="16sp"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:paddingStart="5sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -144,7 +147,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingStart="5sp"
-            android:text="Designed and Developed by Flide"
+            android:text="@string/owner_text"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -164,16 +167,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout7">
 
+
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingStart="5sp"
-            android:text="Version name :"
+            android:text="@string/version_name_label"
             android:textAllCaps="false"
             android:textColor="@color/black"
-            android:textSize="16sp"/>
-
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -203,13 +210,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_version">
 
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="0.5sp"
-            android:background="@android:color/darker_gray"
-            android:importantForAutofill="no" />
-
+        <TableRow
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/horizontal_divider" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -226,7 +230,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingStart="5sp"
-            android:text="Connect with us"
+            android:text="@string/connect_with_us_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:textAllCaps="false"
             android:textSize="20sp"/>
 
@@ -251,13 +257,14 @@
             app:layout_constraintEnd_toStartOf="@+id/textView7"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/github_icon_content_description" />
 
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Fork us on GitHub"
+            android:text="@string/connect_using_github_label"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:layout_marginLeft="50sp"
@@ -278,11 +285,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_github">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="0.5sp"
-            android:background="@android:color/darker_gray"/>
-
+        <TableRow
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/horizontal_divider" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -307,13 +313,14 @@
             app:layout_constraintHorizontal_bias="0.065"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.481"/>
+            app:layout_constraintVertical_bias="0.481"
+            android:contentDescription="@string/website_icon_content_description" />
 
         <TextView
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Visit our Website"
+            android:text="@string/connect_using_website_label"
             android:layout_marginLeft="50sp"
             app:layout_constraintLeft_toLeftOf="@+id/constraintLayout_website"
             android:textColor="@color/black"
@@ -334,11 +341,10 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_website"
         tools:layout_editor_absoluteX="16sp">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="0.5sp"
-            android:background="@android:color/darker_gray"/>
-
+        <TableRow
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/horizontal_divider" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -360,13 +366,14 @@
             app:layout_constraintHorizontal_bias="0.125"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.466"/>
+            app:layout_constraintVertical_bias="0.466"
+            android:contentDescription="@string/twitter_icon_content_description" />
 
         <TextView
             android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Follow us on Twitter"
+            android:text="@string/connect_using_twitter_label"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:layout_marginLeft="50sp"
@@ -388,10 +395,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout_twitter">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="0.5sp"
-            android:background="@android:color/darker_gray"/>
+        <TableRow
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/horizontal_divider" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -416,14 +423,15 @@
             app:layout_constraintHorizontal_bias="0.055"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.466"/>
+            app:layout_constraintVertical_bias="0.466"
+            android:contentDescription="@string/play_store_icon_content_description" />
 
         <TextView
             android:id="@+id/textView8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50sp"
-            android:text="Rate us on the Play Store"
+            android:text="@string/connect_using_google_play_store_label"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
