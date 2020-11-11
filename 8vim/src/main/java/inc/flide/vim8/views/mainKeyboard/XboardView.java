@@ -308,6 +308,7 @@ public class XboardView extends View {
 
     }
 
+   @SuppressLint("ClickableViewAccessibility")
    @Override
    public boolean onTouchEvent(MotionEvent e) {
     PointF position = new PointF((int) e.getX(), (int) e.getY());

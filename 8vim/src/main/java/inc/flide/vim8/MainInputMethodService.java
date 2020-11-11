@@ -43,14 +43,10 @@ public class MainInputMethodService extends InputMethodService {
     @Override
     public View onCreateInputView() {
 
-        numberKeypadView = (NumberKeypadView)getLayoutInflater()
-                                    .inflate(R.layout.number_keypad_layout, null);
-        selectionKeypadView = (SelectionKeypadView) getLayoutInflater()
-                                    .inflate(R.layout.selection_keypad_layout, null);
-        symbolKeypadView = (SymbolKeypadView) getLayoutInflater()
-                                    .inflate(R.layout.symbols_keypad_layout, null);
-        mainKeyboardView = (MainKeyboardView) getLayoutInflater()
-                                    .inflate(R.layout.main_keyboard_layout, null);
+        numberKeypadView = new NumberKeypadView(this, null);
+        selectionKeypadView = new SelectionKeypadView(this, null);
+        symbolKeypadView = new SymbolKeypadView(this, null);
+        mainKeyboardView = new MainKeyboardView(this, null);
         currentView = mainKeyboardView.getView();
 
         return currentView;
