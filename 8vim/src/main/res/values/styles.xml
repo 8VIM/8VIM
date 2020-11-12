@@ -7,6 +7,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@color/purple</item>
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
+        <item name="android:windowBackground">@null</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
@@ -14,6 +15,7 @@
 
     <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/black</item>
+        <item name="android:windowBackground">@null</item>
     </style>
 
     <style name="horizontal_divider">

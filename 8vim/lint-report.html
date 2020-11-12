@@ -176,7 +176,7 @@ document.getElementById(id).style.display = 'none';
       <span class="mdl-layout-title">Lint Report: 29 warnings</span>
       <div class="mdl-layout-spacer"></div>
       <nav class="mdl-navigation mdl-layout--large-screen-only">
-Check performed at Thu Nov 12 15:04:11 IST 2020      </nav>
+Check performed at Thu Nov 12 16:37:02 IST 2020      </nav>
     </div>
   </header>
   <div class="mdl-layout__drawer">
@@ -365,14 +365,14 @@ Dismiss</button>            </div>
 <span class="lineno"> 117 </span>      <span class="annotation">@Override</span>
 <span class="lineno"> 118 </span>      <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
 <span class="caretline"><span class="lineno"> 119 </span>          red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 120 </span>          red_button.setTextColor(Color.RED);
+<span class="lineno"> 120 </span>          red_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 121 </span>
 <span class="lineno"> 122 </span>          green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
 </pre>
 
 <span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:122</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
 <span class="lineno"> 119 </span>  red_button.setBackground(getDrawable(R.drawable.red_rounded_button_pressed));
-<span class="lineno"> 120 </span>  red_button.setTextColor(Color.RED);
+<span class="lineno"> 120 </span>  red_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 121 </span>
 <span class="caretline"><span class="lineno"> 122 </span>  green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_unpressed)</span>);&nbsp;</span>
 <span class="lineno"> 123 </span>  green_button.setTextColor(Color.WHITE);
@@ -405,7 +405,7 @@ Dismiss</button>            </div>
 <span class="lineno"> 140 </span>  <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
 <span class="lineno"> 141 </span>
 <span class="caretline"><span class="lineno"> 142 </span>      green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 143 </span>      green_button.setTextColor(Color.GREEN);
+<span class="lineno"> 143 </span>      green_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 144 </span>
 <span class="lineno"> 145 </span>      red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
 </pre>
@@ -414,7 +414,7 @@ Dismiss</button>            </div>
 <div id="UseCompatLoadingForDrawablesDiv" style="display: none">
 <span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:145</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
 <span class="lineno"> 142 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_pressed));
-<span class="lineno"> 143 </span>  green_button.setTextColor(Color.GREEN);
+<span class="lineno"> 143 </span>  green_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 144 </span>
 <span class="caretline"><span class="lineno"> 145 </span>  red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 <span class="lineno"> 146 </span>  red_button.setTextColor(Color.WHITE);
@@ -447,14 +447,14 @@ Dismiss</button>            </div>
 <span class="lineno"> 162 </span>      <span class="annotation">@Override</span>
 <span class="lineno"> 163 </span>      <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
 <span class="caretline"><span class="lineno"> 164 </span>          yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_rounded_button_pressed)</span>);&nbsp;</span>
-<span class="lineno"> 165 </span>          yellow_button.setTextColor(Color.YELLOW);
+<span class="lineno"> 165 </span>          yellow_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 166 </span>
 <span class="lineno"> 167 </span>          red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
 </pre>
 
 <span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:167</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
 <span class="lineno"> 164 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_pressed));
-<span class="lineno"> 165 </span>  yellow_button.setTextColor(Color.YELLOW);
+<span class="lineno"> 165 </span>  yellow_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 166 </span>
 <span class="caretline"><span class="lineno"> 167 </span>  red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 <span class="lineno"> 168 </span>  red_button.setTextColor(Color.WHITE);
@@ -487,14 +487,14 @@ Dismiss</button>            </div>
 <span class="lineno"> 184 </span>       <span class="annotation">@Override</span>
 <span class="lineno"> 185 </span>       <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
 <span class="caretline"><span class="lineno"> 186 </span>           blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 187 </span>           blue_button.setTextColor(Color.BLUE);
+<span class="lineno"> 187 </span>           blue_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 188 </span>
 <span class="lineno"> 189 </span>           red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
 </pre>
 
 <span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:189</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
 <span class="lineno"> 186 </span>  blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_pressed));
-<span class="lineno"> 187 </span>  blue_button.setTextColor(Color.BLUE);
+<span class="lineno"> 187 </span>  blue_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 188 </span>
 <span class="caretline"><span class="lineno"> 189 </span>  red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 <span class="lineno"> 190 </span>  red_button.setTextColor(Color.WHITE);
@@ -527,7 +527,7 @@ Dismiss</button>            </div>
 <span class="lineno"> 359 </span>        <span class="keyword">if</span>(current_color.equals(<span class="string">"Red"</span>))
 <span class="lineno"> 360 </span>        {
 <span class="caretline"><span class="lineno"> 361 </span>            red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 362 </span>            red_button.setTextColor(Color.RED);
+<span class="lineno"> 362 </span>            red_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 363 </span>
 <span class="lineno"> 364 </span>        }
 </pre>
@@ -537,7 +537,7 @@ Dismiss</button>            </div>
 <span class="lineno"> 365 </span>     <span class="keyword">else</span> <span class="keyword">if</span>(current_color.equals(<span class="string">"Green"</span>))
 <span class="lineno"> 366 </span>     {
 <span class="caretline"><span class="lineno"> 367 </span>         green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 368 </span>         green_button.setTextColor(Color.GREEN);
+<span class="lineno"> 368 </span>         green_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 369 </span>
 <span class="lineno"> 370 </span>     }
 </pre>
@@ -547,7 +547,7 @@ Dismiss</button>            </div>
 <span class="lineno"> 371 </span>      <span class="keyword">else</span> <span class="keyword">if</span>(current_color.equals(<span class="string">"Yellow"</span>))
 <span class="lineno"> 372 </span>      {
 <span class="caretline"><span class="lineno"> 373 </span>          yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_button_color_change)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 374 </span>          yellow_button.setTextColor(Color.YELLOW);
+<span class="lineno"> 374 </span>          yellow_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 375 </span>
 <span class="lineno"> 376 </span>      }
 </pre>
@@ -557,7 +557,7 @@ Dismiss</button>            </div>
 <span class="lineno"> 377 </span>       <span class="keyword">else</span> <span class="keyword">if</span>(current_color.equals(<span class="string">"Blue"</span>))
 <span class="lineno"> 378 </span>       {
 <span class="caretline"><span class="lineno"> 379 </span>           blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 380 </span>           blue_button.setTextColor(Color.BLUE);
+<span class="lineno"> 380 </span>           blue_button.setTextColor(Color.DKGRAY);
 <span class="lineno"> 381 </span>
 <span class="lineno"> 382 </span>       }
 </pre>

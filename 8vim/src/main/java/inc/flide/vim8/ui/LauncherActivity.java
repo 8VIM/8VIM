@@ -14,6 +14,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -305,33 +307,32 @@ public class LauncherActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case R.id.share:
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
-                String shareMessage= "\nCheck out this awesome keyboard application\n\n";
-                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n";
-                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-                startActivity(Intent.createChooser(shareIntent, "Share "+ R.string.app_name));
-                break;
-
-            case R.id.help:
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                Uri data = Uri.parse("mailto:flideravi@gmail.com?subject=" + "Feedback");
-                intent.setData(data);
-                startActivity(intent);
-                break;
-
-            case R.id.about :
-                Intent intent_about = new Intent(LauncherActivity.this,AboutUsActivity.class);
-                startActivity(intent_about);
-                break;
-
+        if(item.getItemId() == R.id.share)
+        {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
+            String shareMessage= "\nCheck out this awesome keyboard application\n\n";
+            shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID +"\n";
+            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+            startActivity(Intent.createChooser(shareIntent, "Share "+ R.string.app_name));
+        }
+        else if(item.getItemId() == R.id.help)
+        {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri data = Uri.parse("mailto:flideravi@gmail.com?subject=" + "Feedback");
+            intent.setData(data);
+            startActivity(intent);
+        }
+        else if(item.getItemId() == R.id.about)
+        {
+            Intent intent_about = new Intent(LauncherActivity.this,AboutUsActivity.class);
+            startActivity(intent_about);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
@@ -358,25 +359,25 @@ public class LauncherActivity extends AppCompatActivity
 
         if(current_color.equals("Red"))
         {
-            red_button.setBackground(getDrawable(R.drawable.red_rounded_button_pressed));
+            red_button.setBackground(ContextCompat.getDrawable(this,R.drawable.red_rounded_button_pressed));
             red_button.setTextColor(Color.DKGRAY);
 
         }
         else if(current_color.equals("Green"))
         {
-            green_button.setBackground(getDrawable(R.drawable.green_rounded_button_pressed));
+            green_button.setBackground(ContextCompat.getDrawable(this,R.drawable.green_rounded_button_pressed));
             green_button.setTextColor(Color.DKGRAY);
 
         }
         else if(current_color.equals("Yellow"))
         {
-            yellow_button.setBackground(getDrawable(R.drawable.yellow_button_color_change));
+            yellow_button.setBackground(ContextCompat.getDrawable(this,R.drawable.yellow_rounded_button_pressed));
             yellow_button.setTextColor(Color.DKGRAY);
 
         }
         else if(current_color.equals("Blue"))
         {
-            blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_pressed));
+            blue_button.setBackground(ContextCompat.getDrawable(this,R.drawable.blue_rounded_button_pressed));
             blue_button.setTextColor(Color.DKGRAY);
 
         }
