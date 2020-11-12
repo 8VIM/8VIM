@@ -57,11 +57,6 @@ public class MainKeyboardView extends View{
         } else{
             layout = inflater.inflate(R.layout.main_keyboard_left_sidebar_view, null);
         }
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
 
         setupButtonsOnSideBar();
         setHapticFeedbackEnabled(true);
