@@ -173,21 +173,18 @@ document.getElementById(id).style.display = 'none';
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
   <header class="mdl-layout__header">
     <div class="mdl-layout__header-row">
-      <span class="mdl-layout-title">Lint Report: 29 warnings</span>
+      <span class="mdl-layout-title">Lint Report: 17 warnings</span>
       <div class="mdl-layout-spacer"></div>
       <nav class="mdl-navigation mdl-layout--large-screen-only">
-Check performed at Thu Nov 12 16:37:02 IST 2020      </nav>
+Check performed at Thu Nov 12 17:21:10 IST 2020      </nav>
     </div>
   </header>
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">Issue Types</span>
     <nav class="mdl-navigation">
       <a class="mdl-navigation__link" href="#overview"><i class="material-icons">dashboard</i>Overview</a>
-      <a class="mdl-navigation__link" href="#InflateParams"><i class="material-icons warning-icon">warning</i>Layout Inflation without a Parent (2)</a>
-      <a class="mdl-navigation__link" href="#NonConstantResourceId"><i class="material-icons warning-icon">warning</i>Checks use of resource IDs in places requiring constants. (3)</a>
-      <a class="mdl-navigation__link" href="#UseCompatLoadingForDrawables"><i class="material-icons warning-icon">warning</i>Should not call <code>Context.getDrawable</code> or <code>Resources.getDrawable</code> directly (20)</a>
+      <a class="mdl-navigation__link" href="#UseCompatLoadingForDrawables"><i class="material-icons warning-icon">warning</i>Should not call <code>Context.getDrawable</code> or <code>Resources.getDrawable</code> directly (16)</a>
       <a class="mdl-navigation__link" href="#Overdraw"><i class="material-icons warning-icon">warning</i>Overdraw: Painting regions more than once (1)</a>
-      <a class="mdl-navigation__link" href="#UnusedResources"><i class="material-icons warning-icon">warning</i>Unused resources (3)</a>
     </nav>
   </div>
   <main class="mdl-layout__content">
@@ -203,22 +200,13 @@ Check performed at Thu Nov 12 16:37:02 IST 2020      </nav>
 <tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Correctness">Correctness</a>
 </td></tr>
 <tr>
-<td class="countColumn">2</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
-<a href="#InflateParams">InflateParams</a>: Layout Inflation without a Parent</td></tr>
-<tr>
-<td class="countColumn">3</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
-<a href="#NonConstantResourceId">NonConstantResourceId</a>: Checks use of resource IDs in places requiring constants.</td></tr>
-<tr>
-<td class="countColumn">20</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
+<td class="countColumn">16</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
 <a href="#UseCompatLoadingForDrawables">UseCompatLoadingForDrawables</a>: Should not call <code>Context.getDrawable</code> or <code>Resources.getDrawable</code> directly</td></tr>
 <tr><td class="countColumn"></td><td class="categoryColumn"><a href="#Performance">Performance</a>
 </td></tr>
 <tr>
 <td class="countColumn">1</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
 <a href="#Overdraw">Overdraw</a>: Overdraw: Painting regions more than once</td></tr>
-<tr>
-<td class="countColumn">3</td><td class="issueColumn"><i class="material-icons warning-icon">warning</i>
-<a href="#UnusedResources">UnusedResources</a>: Unused resources</td></tr>
 <tr><td></td><td class="categoryColumn"><a href="#MissingIssues">Disabled Checks (38)</a>
 </td></tr></table>
 <br/>              </div>
@@ -228,130 +216,7 @@ Dismiss</button>            </div>
             </div>
           </section>
 <a name="Correctness"></a>
-<a name="InflateParams"></a>
-<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="InflateParamsCard" style="display: block;">
-            <div class="mdl-card mdl-cell mdl-cell--12-col">
-  <div class="mdl-card__title">
-    <h2 class="mdl-card__title-text">Layout Inflation without a Parent</h2>
-  </div>
-              <div class="mdl-card__supporting-text">
-<div class="issue">
-<div class="warningslist">
-<span class="location"><a href="src/main/java/inc/flide/vim8/views/mainKeyboard/MainKeyboardView.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\views\mainKeyboard\MainKeyboardView.java</a>:56</span>: <span class="message">Avoid passing <code>null</code> as the view root (needed to resolve layout parameters on the inflated layout's root element)</span><br /><pre class="errorlines">
-<span class="lineno">  53 </span>          context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
-<span class="lineno">  54 </span>
-<span class="lineno">  55 </span>  <span class="keyword">if</span>(preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))){
-<span class="caretline"><span class="lineno">  56 </span>      layout = inflater.inflate(R.layout.main_keyboard_right_sidebar_view, <span class="warning"><span class="keyword">null</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno">  57 </span>  } <span class="keyword">else</span>{
-<span class="lineno">  58 </span>      layout = inflater.inflate(R.layout.main_keyboard_left_sidebar_view, <span class="keyword">null</span>);
-<span class="lineno">  59 </span>  }
-</pre>
-
-<span class="location"><a href="src/main/java/inc/flide/vim8/views/mainKeyboard/MainKeyboardView.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\views\mainKeyboard\MainKeyboardView.java</a>:58</span>: <span class="message">Avoid passing <code>null</code> as the view root (needed to resolve layout parameters on the inflated layout's root element)</span><br /><pre class="errorlines">
-<span class="lineno">  55 </span>  <span class="keyword">if</span>(preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))){
-<span class="lineno">  56 </span>      layout = inflater.inflate(R.layout.main_keyboard_right_sidebar_view, <span class="keyword">null</span>);
-<span class="lineno">  57 </span>  } <span class="keyword">else</span>{
-<span class="caretline"><span class="lineno">  58 </span>      layout = inflater.inflate(R.layout.main_keyboard_left_sidebar_view, <span class="warning"><span class="keyword">null</span></span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno">  59 </span>  }
-<span class="lineno">  60 </span>
-<span class="lineno">  61 </span>  setupButtonsOnSideBar();
-</pre>
-
-</div>
-<div class="metadata"><div class="explanation" id="explanationInflateParams" style="display: none;">
-When inflating a layout, avoid passing in null as the parent view, since otherwise any layout parameters on the root of the inflated layout will be ignored.<br/><div class="moreinfo">More info: <a href="http://www.doubleencore.com/2013/05/layout-inflation-as-intended">http://www.doubleencore.com/2013/05/layout-inflation-as-intended</a>
-</div>To suppress this error, use the issue id "InflateParams" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
-<br/></div>
-</div>
-</div>
-<div class="chips">
-<span class="mdl-chip">
-    <span class="mdl-chip__text">InflateParams</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Correctness</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Warning</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Priority 5/10</span>
-</span>
-</div>
-              </div>
-              <div class="mdl-card__actions mdl-card--border">
-<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationInflateParamsLink" onclick="reveal('explanationInflateParams');">
-Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="InflateParamsCardLink" onclick="hideid('InflateParamsCard');">
-Dismiss</button>            </div>
-            </div>
-          </section><a name="NonConstantResourceId"></a>
-<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="NonConstantResourceIdCard" style="display: block;">
-            <div class="mdl-card mdl-cell mdl-cell--12-col">
-  <div class="mdl-card__title">
-    <h2 class="mdl-card__title-text">Checks use of resource IDs in places requiring constants.</h2>
-  </div>
-              <div class="mdl-card__supporting-text">
-<div class="issue">
-<div class="warningslist">
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:309</span>: <span class="message">Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements</span><br /><pre class="errorlines">
-<span class="lineno"> 306 </span>    <span class="keyword">public</span> <span class="keyword">boolean</span> onNavigationItemSelected(MenuItem item) {
-<span class="lineno"> 307 </span>
-<span class="lineno"> 308 </span>        <span class="keyword">switch</span> (item.getItemId()) {
-<span class="caretline"><span class="lineno"> 309 </span>            <span class="keyword">case</span> <span class="warning">R.id.share</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 310 </span>                Intent shareIntent = <span class="keyword">new</span> Intent(Intent.ACTION_SEND);
-<span class="lineno"> 311 </span>                shareIntent.setType(<span class="string">"text/plain"</span>);
-<span class="lineno"> 312 </span>                shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
-</pre>
-
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:319</span>: <span class="message">Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements</span><br /><pre class="errorlines">
-<span class="lineno"> 316 </span>        startActivity(Intent.createChooser(shareIntent, <span class="string">"Share "</span>+ R.string.app_name));
-<span class="lineno"> 317 </span>        <span class="keyword">break</span>;
-<span class="lineno"> 318 </span>
-<span class="caretline"><span class="lineno"> 319 </span>    <span class="keyword">case</span> <span class="warning">R.id.help</span>:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 320 </span>        Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW);
-<span class="lineno"> 321 </span>        Uri data = Uri.parse(<span class="string">"mailto:flideravi@gmail.com?subject="</span> + <span class="string">"Feedback"</span>);
-<span class="lineno"> 322 </span>        intent.setData(data);
-</pre>
-
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:326</span>: <span class="message">Resource IDs will be non-final in Android Gradle Plugin version 5.0, avoid using them in switch case statements</span><br /><pre class="errorlines">
-<span class="lineno"> 323 </span>        startActivity(intent);
-<span class="lineno"> 324 </span>        <span class="keyword">break</span>;
-<span class="lineno"> 325 </span>
-<span class="caretline"><span class="lineno"> 326 </span>    <span class="keyword">case</span> <span class="warning">R.id.about</span> :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 327 </span>        Intent intent_about = <span class="keyword">new</span> Intent(LauncherActivity.<span class="keyword">this</span>,AboutUsActivity.<span class="keyword">class</span>);
-<span class="lineno"> 328 </span>        startActivity(intent_about);
-<span class="lineno"> 329 </span>        <span class="keyword">break</span>;
-</pre>
-
-</div>
-<div class="metadata"><div class="explanation" id="explanationNonConstantResourceId" style="display: none;">
-Avoid the usage of resource IDs where constant expressions are required.<br/>
-<br/>
-A future version of the Android Gradle Plugin will generate R classes with non-constant IDs in order to improve the performance of incremental compilation.<br/>To suppress this error, use the issue id "NonConstantResourceId" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
-<br/></div>
-</div>
-</div>
-<div class="chips">
-<span class="mdl-chip">
-    <span class="mdl-chip__text">NonConstantResourceId</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Correctness</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Warning</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Priority 5/10</span>
-</span>
-</div>
-              </div>
-              <div class="mdl-card__actions mdl-card--border">
-<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationNonConstantResourceIdLink" onclick="reveal('explanationNonConstantResourceId');">
-Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="NonConstantResourceIdCardLink" onclick="hideid('NonConstantResourceIdCard');">
-Dismiss</button>            </div>
-            </div>
-          </section><a name="UseCompatLoadingForDrawables"></a>
+<a name="UseCompatLoadingForDrawables"></a>
 <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="UseCompatLoadingForDrawablesCard" style="display: block;">
             <div class="mdl-card mdl-cell mdl-cell--12-col">
   <div class="mdl-card__title">
@@ -360,206 +225,166 @@ Dismiss</button>            </div>
               <div class="mdl-card__supporting-text">
 <div class="issue">
 <div class="warningslist">
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:119</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 116 </span>  red_button.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() {
-<span class="lineno"> 117 </span>      <span class="annotation">@Override</span>
-<span class="lineno"> 118 </span>      <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
-<span class="caretline"><span class="lineno"> 119 </span>          red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 120 </span>          red_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 121 </span>
-<span class="lineno"> 122 </span>          green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:121</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 118 </span>  red_button.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() {
+<span class="lineno"> 119 </span>      <span class="annotation">@Override</span>
+<span class="lineno"> 120 </span>      <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
+<span class="caretline"><span class="lineno"> 121 </span>          red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 122 </span>          red_button.setTextColor(Color.DKGRAY);
+<span class="lineno"> 123 </span>
+<span class="lineno"> 124 </span>          green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:122</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 119 </span>  red_button.setBackground(getDrawable(R.drawable.red_rounded_button_pressed));
-<span class="lineno"> 120 </span>  red_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 121 </span>
-<span class="caretline"><span class="lineno"> 122 </span>  green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_unpressed)</span>);&nbsp;</span>
-<span class="lineno"> 123 </span>  green_button.setTextColor(Color.WHITE);
-<span class="lineno"> 124 </span>
-<span class="lineno"> 125 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:124</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 121 </span>  red_button.setBackground(getDrawable(R.drawable.red_rounded_button_pressed));
+<span class="lineno"> 122 </span>  red_button.setTextColor(Color.DKGRAY);
+<span class="lineno"> 123 </span>
+<span class="caretline"><span class="lineno"> 124 </span>  green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_unpressed)</span>);&nbsp;</span>
+<span class="lineno"> 125 </span>  green_button.setTextColor(Color.WHITE);
+<span class="lineno"> 126 </span>
+<span class="lineno"> 127 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:125</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 122 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
-<span class="lineno"> 123 </span>  green_button.setTextColor(Color.WHITE);
-<span class="lineno"> 124 </span>
-<span class="caretline"><span class="lineno"> 125 </span>  yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_rounded_button_unpressed)</span>);</span>
-<span class="lineno"> 126 </span>  yellow_button.setTextColor(Color.WHITE);
-<span class="lineno"> 127 </span>
-<span class="lineno"> 128 </span>  blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:127</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 124 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
+<span class="lineno"> 125 </span>  green_button.setTextColor(Color.WHITE);
+<span class="lineno"> 126 </span>
+<span class="caretline"><span class="lineno"> 127 </span>  yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_rounded_button_unpressed)</span>);</span>
+<span class="lineno"> 128 </span>  yellow_button.setTextColor(Color.WHITE);
+<span class="lineno"> 129 </span>
+<span class="lineno"> 130 </span>  blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:128</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 125 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
-<span class="lineno"> 126 </span>  yellow_button.setTextColor(Color.WHITE);
-<span class="lineno"> 127 </span>
-<span class="caretline"><span class="lineno"> 128 </span>  blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 129 </span>  blue_button.setTextColor(Color.WHITE);
-<span class="lineno"> 130 </span>
-<span class="lineno"> 131 </span>  SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:130</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 127 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
+<span class="lineno"> 128 </span>  yellow_button.setTextColor(Color.WHITE);
+<span class="lineno"> 129 </span>
+<span class="caretline"><span class="lineno"> 130 </span>  blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 131 </span>  blue_button.setTextColor(Color.WHITE);
+<span class="lineno"> 132 </span>
+<span class="lineno"> 133 </span>  SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:142</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 139 </span>  <span class="annotation">@Override</span>
-<span class="lineno"> 140 </span>  <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
-<span class="lineno"> 141 </span>
-<span class="caretline"><span class="lineno"> 142 </span>      green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 143 </span>      green_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 144 </span>
-<span class="lineno"> 145 </span>      red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:144</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 141 </span>  <span class="annotation">@Override</span>
+<span class="lineno"> 142 </span>  <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
+<span class="lineno"> 143 </span>
+<span class="caretline"><span class="lineno"> 144 </span>      green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 145 </span>      green_button.setTextColor(Color.DKGRAY);
+<span class="lineno"> 146 </span>
+<span class="lineno"> 147 </span>      red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
 </pre>
 
-<button class="mdl-button mdl-js-button mdl-button--primary" id="UseCompatLoadingForDrawablesDivLink" onclick="reveal('UseCompatLoadingForDrawablesDiv');" />+ 15 More Occurrences...</button>
+<button class="mdl-button mdl-js-button mdl-button--primary" id="UseCompatLoadingForDrawablesDivLink" onclick="reveal('UseCompatLoadingForDrawablesDiv');" />+ 11 More Occurrences...</button>
 <div id="UseCompatLoadingForDrawablesDiv" style="display: none">
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:145</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 142 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_pressed));
-<span class="lineno"> 143 </span>  green_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 144 </span>
-<span class="caretline"><span class="lineno"> 145 </span>  red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 146 </span>  red_button.setTextColor(Color.WHITE);
-<span class="lineno"> 147 </span>
-<span class="lineno"> 148 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:147</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 144 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_pressed));
+<span class="lineno"> 145 </span>  green_button.setTextColor(Color.DKGRAY);
+<span class="lineno"> 146 </span>
+<span class="caretline"><span class="lineno"> 147 </span>  red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 148 </span>  red_button.setTextColor(Color.WHITE);
+<span class="lineno"> 149 </span>
+<span class="lineno"> 150 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:148</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 145 </span>  red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
-<span class="lineno"> 146 </span>  red_button.setTextColor(Color.WHITE);
-<span class="lineno"> 147 </span>
-<span class="caretline"><span class="lineno"> 148 </span>  yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_rounded_button_unpressed)</span>);</span>
-<span class="lineno"> 149 </span>  yellow_button.setTextColor(Color.WHITE);
-<span class="lineno"> 150 </span>
-<span class="lineno"> 151 </span>  blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:150</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 147 </span>  red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
+<span class="lineno"> 148 </span>  red_button.setTextColor(Color.WHITE);
+<span class="lineno"> 149 </span>
+<span class="caretline"><span class="lineno"> 150 </span>  yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_rounded_button_unpressed)</span>);</span>
+<span class="lineno"> 151 </span>  yellow_button.setTextColor(Color.WHITE);
+<span class="lineno"> 152 </span>
+<span class="lineno"> 153 </span>  blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:151</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 148 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
-<span class="lineno"> 149 </span>  yellow_button.setTextColor(Color.WHITE);
-<span class="lineno"> 150 </span>
-<span class="caretline"><span class="lineno"> 151 </span>  blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 152 </span>  blue_button.setTextColor(Color.WHITE);
-<span class="lineno"> 153 </span>
-<span class="lineno"> 154 </span>  SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:153</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 150 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
+<span class="lineno"> 151 </span>  yellow_button.setTextColor(Color.WHITE);
+<span class="lineno"> 152 </span>
+<span class="caretline"><span class="lineno"> 153 </span>  blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 154 </span>  blue_button.setTextColor(Color.WHITE);
+<span class="lineno"> 155 </span>
+<span class="lineno"> 156 </span>  SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:164</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 161 </span>  yellow_button.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() {
-<span class="lineno"> 162 </span>      <span class="annotation">@Override</span>
-<span class="lineno"> 163 </span>      <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
-<span class="caretline"><span class="lineno"> 164 </span>          yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_rounded_button_pressed)</span>);&nbsp;</span>
-<span class="lineno"> 165 </span>          yellow_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 166 </span>
-<span class="lineno"> 167 </span>          red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:166</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 163 </span>  yellow_button.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() {
+<span class="lineno"> 164 </span>      <span class="annotation">@Override</span>
+<span class="lineno"> 165 </span>      <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
+<span class="caretline"><span class="lineno"> 166 </span>          yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_rounded_button_pressed)</span>);&nbsp;</span>
+<span class="lineno"> 167 </span>          yellow_button.setTextColor(Color.DKGRAY);
+<span class="lineno"> 168 </span>
+<span class="lineno"> 169 </span>          red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:167</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 164 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_pressed));
-<span class="lineno"> 165 </span>  yellow_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 166 </span>
-<span class="caretline"><span class="lineno"> 167 </span>  red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 168 </span>  red_button.setTextColor(Color.WHITE);
-<span class="lineno"> 169 </span>
-<span class="lineno"> 170 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:169</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 166 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_pressed));
+<span class="lineno"> 167 </span>  yellow_button.setTextColor(Color.DKGRAY);
+<span class="lineno"> 168 </span>
+<span class="caretline"><span class="lineno"> 169 </span>  red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 170 </span>  red_button.setTextColor(Color.WHITE);
+<span class="lineno"> 171 </span>
+<span class="lineno"> 172 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:170</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 167 </span>  red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
-<span class="lineno"> 168 </span>  red_button.setTextColor(Color.WHITE);
-<span class="lineno"> 169 </span>
-<span class="caretline"><span class="lineno"> 170 </span>  green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_unpressed)</span>);&nbsp;</span>
-<span class="lineno"> 171 </span>  green_button.setTextColor(Color.WHITE);
-<span class="lineno"> 172 </span>
-<span class="lineno"> 173 </span>  blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:172</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 169 </span>  red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
+<span class="lineno"> 170 </span>  red_button.setTextColor(Color.WHITE);
+<span class="lineno"> 171 </span>
+<span class="caretline"><span class="lineno"> 172 </span>  green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_unpressed)</span>);&nbsp;</span>
+<span class="lineno"> 173 </span>  green_button.setTextColor(Color.WHITE);
+<span class="lineno"> 174 </span>
+<span class="lineno"> 175 </span>  blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:173</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 170 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
-<span class="lineno"> 171 </span>  green_button.setTextColor(Color.WHITE);
-<span class="lineno"> 172 </span>
-<span class="caretline"><span class="lineno"> 173 </span>  blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 174 </span>  blue_button.setTextColor(Color.WHITE);
-<span class="lineno"> 175 </span>
-<span class="lineno"> 176 </span>  SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:175</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 172 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
+<span class="lineno"> 173 </span>  green_button.setTextColor(Color.WHITE);
+<span class="lineno"> 174 </span>
+<span class="caretline"><span class="lineno"> 175 </span>  blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 176 </span>  blue_button.setTextColor(Color.WHITE);
+<span class="lineno"> 177 </span>
+<span class="lineno"> 178 </span>  SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:186</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 183 </span>   blue_button.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() {
-<span class="lineno"> 184 </span>       <span class="annotation">@Override</span>
-<span class="lineno"> 185 </span>       <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
-<span class="caretline"><span class="lineno"> 186 </span>           blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 187 </span>           blue_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 188 </span>
-<span class="lineno"> 189 </span>           red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:188</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 185 </span>   blue_button.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() {
+<span class="lineno"> 186 </span>       <span class="annotation">@Override</span>
+<span class="lineno"> 187 </span>       <span class="keyword">public</span> <span class="keyword">void</span> onClick(View v) {
+<span class="caretline"><span class="lineno"> 188 </span>           blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 189 </span>           blue_button.setTextColor(Color.DKGRAY);
+<span class="lineno"> 190 </span>
+<span class="lineno"> 191 </span>           red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:189</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 186 </span>  blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_pressed));
-<span class="lineno"> 187 </span>  blue_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 188 </span>
-<span class="caretline"><span class="lineno"> 189 </span>  red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 190 </span>  red_button.setTextColor(Color.WHITE);
-<span class="lineno"> 191 </span>
-<span class="lineno"> 192 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:191</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 188 </span>  blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_pressed));
+<span class="lineno"> 189 </span>  blue_button.setTextColor(Color.DKGRAY);
+<span class="lineno"> 190 </span>
+<span class="caretline"><span class="lineno"> 191 </span>  red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_unpressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span class="lineno"> 192 </span>  red_button.setTextColor(Color.WHITE);
+<span class="lineno"> 193 </span>
+<span class="lineno"> 194 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:192</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 189 </span>  red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
-<span class="lineno"> 190 </span>  red_button.setTextColor(Color.WHITE);
-<span class="lineno"> 191 </span>
-<span class="caretline"><span class="lineno"> 192 </span>  yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_rounded_button_unpressed)</span>);</span>
-<span class="lineno"> 193 </span>  yellow_button.setTextColor(Color.WHITE);
-<span class="lineno"> 194 </span>
-<span class="lineno"> 195 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:194</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 191 </span>  red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
+<span class="lineno"> 192 </span>  red_button.setTextColor(Color.WHITE);
+<span class="lineno"> 193 </span>
+<span class="caretline"><span class="lineno"> 194 </span>  yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_rounded_button_unpressed)</span>);</span>
+<span class="lineno"> 195 </span>  yellow_button.setTextColor(Color.WHITE);
+<span class="lineno"> 196 </span>
+<span class="lineno"> 197 </span>  green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
 </pre>
 
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:195</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 192 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
-<span class="lineno"> 193 </span>  yellow_button.setTextColor(Color.WHITE);
-<span class="lineno"> 194 </span>
-<span class="caretline"><span class="lineno"> 195 </span>  green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_unpressed)</span>);&nbsp;</span>
-<span class="lineno"> 196 </span>  green_button.setTextColor(Color.WHITE);
-<span class="lineno"> 197 </span>
-<span class="lineno"> 198 </span>  SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-</pre>
-
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:361</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 358 </span>
-<span class="lineno"> 359 </span>        <span class="keyword">if</span>(current_color.equals(<span class="string">"Red"</span>))
-<span class="lineno"> 360 </span>        {
-<span class="caretline"><span class="lineno"> 361 </span>            red_button.setBackground(<span class="warning">getDrawable(R.drawable.red_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 362 </span>            red_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 363 </span>
-<span class="lineno"> 364 </span>        }
-</pre>
-
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:367</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 364 </span>     }
-<span class="lineno"> 365 </span>     <span class="keyword">else</span> <span class="keyword">if</span>(current_color.equals(<span class="string">"Green"</span>))
-<span class="lineno"> 366 </span>     {
-<span class="caretline"><span class="lineno"> 367 </span>         green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 368 </span>         green_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 369 </span>
-<span class="lineno"> 370 </span>     }
-</pre>
-
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:373</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 370 </span>      }
-<span class="lineno"> 371 </span>      <span class="keyword">else</span> <span class="keyword">if</span>(current_color.equals(<span class="string">"Yellow"</span>))
-<span class="lineno"> 372 </span>      {
-<span class="caretline"><span class="lineno"> 373 </span>          yellow_button.setBackground(<span class="warning">getDrawable(R.drawable.yellow_button_color_change)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 374 </span>          yellow_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 375 </span>
-<span class="lineno"> 376 </span>      }
-</pre>
-
-<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:379</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
-<span class="lineno"> 376 </span>       }
-<span class="lineno"> 377 </span>       <span class="keyword">else</span> <span class="keyword">if</span>(current_color.equals(<span class="string">"Blue"</span>))
-<span class="lineno"> 378 </span>       {
-<span class="caretline"><span class="lineno"> 379 </span>           blue_button.setBackground(<span class="warning">getDrawable(R.drawable.blue_rounded_button_pressed)</span>);&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 380 </span>           blue_button.setTextColor(Color.DKGRAY);
-<span class="lineno"> 381 </span>
-<span class="lineno"> 382 </span>       }
+<span class="location"><a href="src/main/java/inc/flide/vim8/ui/LauncherActivity.java">C:\Users\Devam\Desktop\VI8\8vim\src\main\java\inc\flide\vim8\ui\LauncherActivity.java</a>:197</span>: <span class="message">Use <code>ContextCompat.getDrawable()</code></span><br /><pre class="errorlines">
+<span class="lineno"> 194 </span>  yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
+<span class="lineno"> 195 </span>  yellow_button.setTextColor(Color.WHITE);
+<span class="lineno"> 196 </span>
+<span class="caretline"><span class="lineno"> 197 </span>  green_button.setBackground(<span class="warning">getDrawable(R.drawable.green_rounded_button_unpressed)</span>);&nbsp;</span>
+<span class="lineno"> 198 </span>  green_button.setTextColor(Color.WHITE);
+<span class="lineno"> 199 </span>
+<span class="lineno"> 200 </span>  SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
 </pre>
 
 </div>
@@ -639,72 +464,6 @@ Of course it's possible that your custom drawable is translucent and you want it
               <div class="mdl-card__actions mdl-card--border">
 <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationOverdrawLink" onclick="reveal('explanationOverdraw');">
 Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="OverdrawCardLink" onclick="hideid('OverdrawCard');">
-Dismiss</button>            </div>
-            </div>
-          </section><a name="UnusedResources"></a>
-<section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" id="UnusedResourcesCard" style="display: block;">
-            <div class="mdl-card mdl-cell mdl-cell--12-col">
-  <div class="mdl-card__title">
-    <h2 class="mdl-card__title-text">Unused resources</h2>
-  </div>
-              <div class="mdl-card__supporting-text">
-<div class="issue">
-<div class="warningslist">
-<span class="location"><a href="src/main/res/drawable-anydpi/blue_button_color_change.xml">C:\Users\Devam\Desktop\VI8\8vim\src\main\res\drawable-anydpi\blue_button_color_change.xml</a>:2</span>: <span class="message">The resource <code>R.drawable.blue_button_color_change</code> appears to be unused</span><br /><pre class="errorlines">
-<span class="lineno"> 1 </span><span class="prologue">&lt;?xml version="1.0" encoding="utf-8"?></span>
-<span class="caretline"><span class="lineno"> 2 </span><span class="warning"><span class="tag">&lt;selector</span><span class="attribute"> </span><span class="prefix">xmlns:</span><span class="attribute">android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span> ></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3 </span>    <span class="tag">&lt;item</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">state_pressed</span>=<span class="value">"true"</span>  <span class="prefix">android:</span><span class="attribute">drawable</span>=<span class="value">"@drawable/blue_rounded_button_pressed"</span>>
-<span class="lineno"> 4 </span>    <span class="tag">&lt;/item></span>
-<span class="lineno"> 5 </span>    <span class="tag">&lt;item</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">drawable</span>=<span class="value">"@drawable/blue_rounded_button_unpressed"</span>>
-</pre>
-
-<span class="location"><a href="src/main/res/values/colors.xml">C:\Users\Devam\Desktop\VI8\8vim\src\main\res\values\colors.xml</a>:4</span>: <span class="message">The resource <code>R.color.red</code> appears to be unused</span><br /><pre class="errorlines">
-<span class="lineno"> 1 </span><span class="prologue">&lt;?xml version="1.0" encoding="utf-8"?></span>
-<span class="lineno"> 2 </span><span class="tag">&lt;resources></span>
-<span class="lineno"> 3 </span>
-<span class="caretline"><span class="lineno"> 4 </span>    <span class="tag">&lt;color</span><span class="attribute"> </span><span class="warning"><span class="attribute">name</span>=<span class="value">"red"</span></span>>#F44336<span class="tag">&lt;/color></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 5 </span>    <span class="tag">&lt;color</span><span class="attribute"> name</span>=<span class="value">"white"</span>>#FFFFFF<span class="tag">&lt;/color></span>
-<span class="lineno"> 6 </span>    <span class="tag">&lt;color</span><span class="attribute"> name</span>=<span class="value">"black"</span>>#222222<span class="tag">&lt;/color></span>
-<span class="lineno"> 7 </span>    <span class="tag">&lt;color</span><span class="attribute"> name</span>=<span class="value">"purple"</span>>#8186d5<span class="tag">&lt;/color></span>
-</pre>
-
-<span class="location"><a href="src/main/res/drawable-anydpi/green_button_color_change.xml">C:\Users\Devam\Desktop\VI8\8vim\src\main\res\drawable-anydpi\green_button_color_change.xml</a>:2</span>: <span class="message">The resource <code>R.drawable.green_button_color_change</code> appears to be unused</span><br /><pre class="errorlines">
-<span class="lineno"> 1 </span><span class="prologue">&lt;?xml version="1.0" encoding="utf-8"?></span>
-<span class="caretline"><span class="lineno"> 2 </span><span class="warning"><span class="tag">&lt;selector</span><span class="attribute"> </span><span class="prefix">xmlns:</span><span class="attribute">android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span> ></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-<span class="lineno"> 3 </span>    <span class="tag">&lt;item</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">state_pressed</span>=<span class="value">"true"</span>  <span class="prefix">android:</span><span class="attribute">drawable</span>=<span class="value">"@drawable/green_rounded_button_pressed"</span>>
-<span class="lineno"> 4 </span>    <span class="tag">&lt;/item></span>
-<span class="lineno"> 5 </span>    <span class="tag">&lt;item</span><span class="attribute"> </span><span class="prefix">android:</span><span class="attribute">drawable</span>=<span class="value">"@drawable/green_rounded_button_unpressed"</span>>
-</pre>
-
-</div>
-<div class="metadata"><div class="explanation" id="explanationUnusedResources" style="display: none;">
-Unused resources make applications larger and slow down builds.<br/>
-<br/>
-The unused resource check can ignore tests. If you want to include resources that are only referenced from tests, consider packaging them in a test source set instead.<br/>
-<br/>
-You can include test sources in the unused resource check by setting the system property lint.unused-resources.include-tests=true, and to exclude them (usually for performance reasons), use lint.unused-resources.exclude-tests=true.<br/>Note: This issue has an associated quickfix operation in Android Studio and IntelliJ IDEA.<br>
-To suppress this error, use the issue id "UnusedResources" as explained in the <a href="#SuppressInfo">Suppressing Warnings and Errors</a> section.<br/>
-<br/></div>
-</div>
-</div>
-<div class="chips">
-<span class="mdl-chip">
-    <span class="mdl-chip__text">UnusedResources</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Performance</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Warning</span>
-</span>
-<span class="mdl-chip">
-    <span class="mdl-chip__text">Priority 3/10</span>
-</span>
-</div>
-              </div>
-              <div class="mdl-card__actions mdl-card--border">
-<button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="explanationUnusedResourcesLink" onclick="reveal('explanationUnusedResources');">
-Explain</button><button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="UnusedResourcesCardLink" onclick="hideid('UnusedResourcesCard');">
 Dismiss</button>            </div>
             </div>
           </section>

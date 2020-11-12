@@ -118,16 +118,16 @@ public class LauncherActivity extends AppCompatActivity
         red_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                red_button.setBackground(getDrawable(R.drawable.red_rounded_button_pressed));
+                red_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.red_rounded_button_pressed));
                 red_button.setTextColor(Color.DKGRAY);
 
-                green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
+                green_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.green_rounded_button_unpressed));
                 green_button.setTextColor(Color.WHITE);
 
-                yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
+                yellow_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.yellow_rounded_button_unpressed));
                 yellow_button.setTextColor(Color.WHITE);
 
-                blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_unpressed));
+                blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.blue_rounded_button_unpressed));
                 blue_button.setTextColor(Color.WHITE);
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
@@ -141,16 +141,16 @@ public class LauncherActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
 
-                green_button.setBackground(getDrawable(R.drawable.green_rounded_button_pressed));
+                green_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.green_rounded_button_pressed));
                 green_button.setTextColor(Color.DKGRAY);
 
-                red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
+                red_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.red_rounded_button_unpressed));
                 red_button.setTextColor(Color.WHITE);
 
-                yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
+                yellow_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.yellow_rounded_button_unpressed));
                 yellow_button.setTextColor(Color.WHITE);
 
-                blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_unpressed));
+                blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.blue_rounded_button_unpressed));
                 blue_button.setTextColor(Color.WHITE);
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
@@ -163,16 +163,16 @@ public class LauncherActivity extends AppCompatActivity
         yellow_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_pressed));
+                yellow_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.yellow_rounded_button_pressed));
                 yellow_button.setTextColor(Color.DKGRAY);
 
-                red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
+                red_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.red_rounded_button_unpressed));
                 red_button.setTextColor(Color.WHITE);
 
-                green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
+                green_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.green_rounded_button_unpressed));
                 green_button.setTextColor(Color.WHITE);
 
-                blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_unpressed));
+                blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.blue_rounded_button_unpressed));
                 blue_button.setTextColor(Color.WHITE);
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
@@ -185,16 +185,16 @@ public class LauncherActivity extends AppCompatActivity
         blue_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_pressed));
+                blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.blue_rounded_button_pressed));
                 blue_button.setTextColor(Color.DKGRAY);
 
-                red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
+                red_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.red_rounded_button_unpressed));
                 red_button.setTextColor(Color.WHITE);
 
-                yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_unpressed));
+                yellow_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.yellow_rounded_button_unpressed));
                 yellow_button.setTextColor(Color.WHITE);
 
-                green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
+                green_button.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.green_rounded_button_unpressed));
                 green_button.setTextColor(Color.WHITE);
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
