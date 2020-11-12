@@ -27,6 +27,7 @@ android {
         warningsAsErrors false
         abortOnError false
         disable "ObsoleteLintCustomCheck"
+        disable "ClickableViewAccessibility"
     }
 }
 

@@ -1,12 +1,10 @@
 package inc.flide.vim8.ui;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -20,7 +18,6 @@ public class AboutUsActivity extends AppCompatActivity {
     private ConstraintLayout website;
     private ConstraintLayout googlePlayStore;
 
-    @SuppressLint("ClickableViewAccessibility")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_page_layout);

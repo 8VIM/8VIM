@@ -1,6 +1,5 @@
 package inc.flide.vim8.views.mainKeyboard;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -34,8 +33,6 @@ import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.utilities.Utilities;
-
-
 
 public class XboardView extends View {
 
@@ -308,7 +305,6 @@ public class XboardView extends View {
 
     }
 
-   @SuppressLint("ClickableViewAccessibility")
    @Override
    public boolean onTouchEvent(MotionEvent e) {
     PointF position = new PointF((int) e.getX(), (int) e.getY());
