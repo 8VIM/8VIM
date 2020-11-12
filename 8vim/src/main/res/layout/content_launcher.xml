@@ -162,10 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:textOff="@string/generic_off_text"
-                    android:textOn="@string/generic_on_text"
-                    android:thumb="@drawable/round_thumb"
-                    android:track="@drawable/round_track"
+                    style="@style/Custom_switch"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.766"
@@ -176,13 +173,13 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintlayout_colors"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
                 android:layout_below="@+id/constraintlayout5">
 
                 <TextView
-                    android:layout_width="wrap_content"
                     android:id="@+id/random"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/choose_the_color_for_touch_trail_label"
                     android:textAllCaps="false"
@@ -190,9 +187,11 @@
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.125"
+                    app:layout_constraintHorizontal_bias="0.1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.095" />
+
                 <Button
                     android:id="@+id/red_button"
                     android:layout_width="66dp"
@@ -208,7 +207,7 @@
                     app:layout_constraintHorizontal_bias="0.085"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.307"/>
+                    app:layout_constraintVertical_bias="0.483" />
 
                 <Button
                     android:id="@+id/green_button"
@@ -225,7 +224,7 @@
                     app:layout_constraintHorizontal_bias="0.456"
                     app:layout_constraintStart_toEndOf="@+id/red_button"
                     app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.307"/>
+                    app:layout_constraintVertical_bias="0.483" />
 
                 <Button
                     android:id="@+id/yellow_button"
@@ -239,10 +238,10 @@
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.349"
+                    app:layout_constraintHorizontal_bias="0.365"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.307"/>
+                    app:layout_constraintVertical_bias="0.483" />
 
                 <Button
                     android:id="@+id/blue_button"
@@ -256,10 +255,10 @@
                     android:textSize="13sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.907"
+                    app:layout_constraintHorizontal_bias="0.904"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.307"/>
+                    app:layout_constraintVertical_bias="0.483" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

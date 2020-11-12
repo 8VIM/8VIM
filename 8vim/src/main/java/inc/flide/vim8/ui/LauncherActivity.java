@@ -117,7 +117,7 @@ public class LauncherActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 red_button.setBackground(getDrawable(R.drawable.red_rounded_button_pressed));
-                red_button.setTextColor(Color.RED);
+                red_button.setTextColor(Color.DKGRAY);
 
                 green_button.setBackground(getDrawable(R.drawable.green_rounded_button_unpressed));
                 green_button.setTextColor(Color.WHITE);
@@ -140,7 +140,7 @@ public class LauncherActivity extends AppCompatActivity
             public void onClick(View v) {
 
                 green_button.setBackground(getDrawable(R.drawable.green_rounded_button_pressed));
-                green_button.setTextColor(Color.GREEN);
+                green_button.setTextColor(Color.DKGRAY);
 
                 red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
                 red_button.setTextColor(Color.WHITE);
@@ -162,7 +162,7 @@ public class LauncherActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 yellow_button.setBackground(getDrawable(R.drawable.yellow_rounded_button_pressed));
-                yellow_button.setTextColor(Color.YELLOW);
+                yellow_button.setTextColor(Color.DKGRAY);
 
                 red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
                 red_button.setTextColor(Color.WHITE);
@@ -184,7 +184,7 @@ public class LauncherActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_pressed));
-                blue_button.setTextColor(Color.BLUE);
+                blue_button.setTextColor(Color.DKGRAY);
 
                 red_button.setBackground(getDrawable(R.drawable.red_rounded_button_unpressed));
                 red_button.setTextColor(Color.WHITE);
@@ -359,25 +359,25 @@ public class LauncherActivity extends AppCompatActivity
         if(current_color.equals("Red"))
         {
             red_button.setBackground(getDrawable(R.drawable.red_rounded_button_pressed));
-            red_button.setTextColor(Color.RED);
+            red_button.setTextColor(Color.DKGRAY);
 
         }
         else if(current_color.equals("Green"))
         {
             green_button.setBackground(getDrawable(R.drawable.green_rounded_button_pressed));
-            green_button.setTextColor(Color.GREEN);
+            green_button.setTextColor(Color.DKGRAY);
 
         }
         else if(current_color.equals("Yellow"))
         {
             yellow_button.setBackground(getDrawable(R.drawable.yellow_button_color_change));
-            yellow_button.setTextColor(Color.YELLOW);
+            yellow_button.setTextColor(Color.DKGRAY);
 
         }
         else if(current_color.equals("Blue"))
         {
             blue_button.setBackground(getDrawable(R.drawable.blue_rounded_button_pressed));
-            blue_button.setTextColor(Color.BLUE);
+            blue_button.setTextColor(Color.DKGRAY);
 
         }
 
