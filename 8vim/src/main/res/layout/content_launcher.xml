@@ -196,7 +196,7 @@
                     android:id="@+id/red_button"
                     android:layout_width="66dp"
                     android:layout_height="39dp"
-                    android:background="@drawable/red_button_color_change"
+                    android:background="@drawable/red_rounded_button_unpressed"
                     android:elevation="10dp"
                     android:text="@string/generic_red_text"
                     android:textAllCaps="false"

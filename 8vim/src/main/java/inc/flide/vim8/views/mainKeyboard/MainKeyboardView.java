@@ -51,10 +51,10 @@ public class MainKeyboardView extends View {
                 context.getString(R.string.mainKeyboard_sidebar_position_preference_key),
                 context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
 
-        if (preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
-            layout = View.inflate(context, R.layout.main_keyboard_right_sidebar_view, null);
-        } else {
-            layout = View.inflate(context, R.layout.main_keyboard_left_sidebar_view, null);
+        if(preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))){
+            layout = View.inflate(context,R.layout.main_keyboard_right_sidebar_view, null);
+        } else{
+            layout = View.inflate(context,R.layout.main_keyboard_left_sidebar_view, null);
         }
 
         setupBackgroundColours();
