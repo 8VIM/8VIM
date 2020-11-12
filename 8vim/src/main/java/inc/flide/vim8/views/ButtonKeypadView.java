@@ -21,10 +21,16 @@ public abstract class ButtonKeypadView extends KeyboardView {
     private final Paint foregroundPaint = new Paint();
     public ButtonKeypadView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        initilize();
     }
 
     public ButtonKeypadView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initilize();
+    }
+
+    protected void initilize() {
+        setHapticFeedbackEnabled(true);
     }
 
     private void setupForegroundPaint() {

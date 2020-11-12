@@ -22,8 +22,9 @@ public class NumberKeypadView extends ButtonKeypadView {
 
     public void initialize(Context context){
         MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
+
         this.setKeyboard(new Keyboard(context, R.layout.number_keypad_view));
-        setHapticFeedbackEnabled(true);
+
         NumberPadKeyboardActionListener actionListener = new NumberPadKeyboardActionListener(mainInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
     }

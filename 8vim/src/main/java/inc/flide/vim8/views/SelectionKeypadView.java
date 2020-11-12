@@ -25,7 +25,6 @@ public class SelectionKeypadView extends ButtonKeypadView {
 
         this.setKeyboard(new Keyboard(context, R.layout.selection_keypad_view));
 
-        setHapticFeedbackEnabled(true);
         SelectionKeyboardActionListener actionListener = new SelectionKeyboardActionListener(mainInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
     }

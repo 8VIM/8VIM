@@ -27,7 +27,6 @@ public class SymbolKeypadView extends ButtonKeypadView {
 
         this.setKeyboard(new Keyboard(context, R.layout.symbols_keypad_view));
 
-        setHapticFeedbackEnabled(true);
         SymbolKeyboardActionListener actionListener = new SymbolKeyboardActionListener(mainInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
     }
