@@ -55,6 +55,8 @@ public class XboardView extends View {
     private final int offset = 15;
     private final int lengthOfLineDemarcatingSectors = 250;
 
+    private Dimention computedDimension = new Dimention();
+
     public XboardView(Context context) {
         super(context);
         initialize(context);
@@ -340,9 +342,8 @@ public class XboardView extends View {
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-        Dimention computedDimension = new Dimention(
-                                                    MeasureSpec.getSize(widthMeasureSpec),
-                                                    MeasureSpec.getSize(heightMeasureSpec));
+        computedDimension.setWidth(MeasureSpec.getSize(widthMeasureSpec));
+        computedDimension.setHeight(MeasureSpec.getSize(heightMeasureSpec));
 
         SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key),0.3f);
