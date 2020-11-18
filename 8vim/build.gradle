@@ -10,6 +10,7 @@ android {
         targetSdkVersion 29
         versionCode 4
         versionName "iteration-3"
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {

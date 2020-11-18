@@ -11,6 +11,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,7 @@ public class XboardView extends View{
     private MainKeyboardActionListener actionListener;
 
     private Circle circle;
+    private Object Bitmap;
 
     public XboardView(Context context) {
         super(context);
@@ -56,6 +59,7 @@ public class XboardView extends View{
     @Override
     public void onDraw(Canvas canvas) {
 
+
         Paint paint = new Paint();
         paint.setARGB(255, 255, 255, 255);
         paint.setStyle(Paint.Style.FILL);
@@ -70,15 +74,89 @@ public class XboardView extends View{
         //The centre circle
         canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), paint);
 
+
         //The lines demarcating the sectors
         List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
-        for(int i =0; i<4 ; i++) {
-            int angle = 45+(i*90);
+        for (int i = 0; i < 4; i++) {
+            int angle = 45 + (i * 90);
             PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
             LineSegment lineSegment = new LineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
+
             sectorDemarcatingLines.add(lineSegment);
+
             canvas.drawLine(lineSegment.getStartingPoint().x, lineSegment.getStartingPoint().y, lineSegment.getEndPoint().x, lineSegment.getEndPoint().y, paint);
+
+
         }
+
+        // Converting float value to int
+        int centre_x_value = (int) circle.getCentre().x;
+        int centre_y_value = (int) circle.getCentre().y;
+
+        //Number pad icon
+        int numberpad_icon_x_coordinates = centre_x_value - 310;
+        int numberpad_icon_y_coordinates = centre_y_value - 40;
+
+        int numberpad_icon_width = 70;
+        int numberpad_icon_height = 70;
+
+        VectorDrawableCompat numberpad_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.numericpad_vd_vector, null);
+        if (numberpad_icon_vectordrawable == null)
+        {
+            throw new AssertionError();
+        }
+        numberpad_icon_vectordrawable.setBounds(numberpad_icon_x_coordinates, numberpad_icon_y_coordinates, numberpad_icon_width + numberpad_icon_x_coordinates, numberpad_icon_height + numberpad_icon_y_coordinates);
+        numberpad_icon_vectordrawable.draw(canvas);
+
+
+        //for Backspace icon
+        int backspace_icon_x_coordinates = centre_x_value + 240;
+        int backspace_icon_y_coordinates = centre_y_value - 40;
+
+        int backspace_icon_width = 70;
+        int backspace_icon_height = 70;
+
+        VectorDrawableCompat backspace_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_baseline_keyboard_backspace_24,null);
+        if (backspace_icon_vectordrawable == null)
+        {
+            throw new AssertionError();
+        }
+
+        backspace_icon_vectordrawable.setBounds(backspace_icon_x_coordinates, backspace_icon_y_coordinates, backspace_icon_width + backspace_icon_x_coordinates, backspace_icon_height + backspace_icon_y_coordinates);
+        backspace_icon_vectordrawable.draw(canvas);
+
+        //for Enter icon
+        int enter_icon_x_coordinates = centre_x_value - 30;
+        int enter_icon_y_coordinates = centre_y_value + 240;
+
+        int enter_icon_width = 70;
+        int enter_icon_height = 70;
+
+        VectorDrawableCompat enter_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_baseline_keyboard_enter_24, null);
+        if (enter_icon_vectordrawable == null)
+           {
+            throw new AssertionError();
+           }
+
+        enter_icon_vectordrawable.setBounds(enter_icon_x_coordinates, enter_icon_y_coordinates, enter_icon_width + enter_icon_x_coordinates, enter_icon_height + enter_icon_y_coordinates);
+        enter_icon_vectordrawable.draw(canvas);
+
+        //for caps lock and shift icon
+        int shift_icon_x_coordinates = centre_x_value - 30;
+        int shift_icon_y_coordinates = centre_y_value - 310;
+
+        int shift_icon_width = 70;
+        int shift_icon_height = 70;
+
+        VectorDrawableCompat shift_icon_vectorDrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.shift_icon_vd_vector, null);
+        if (shift_icon_vectorDrawable == null)
+        {
+            throw new AssertionError();
+        }
+        shift_icon_vectorDrawable.setBounds(shift_icon_x_coordinates, shift_icon_y_coordinates, shift_icon_width + shift_icon_x_coordinates, shift_icon_height + shift_icon_y_coordinates);
+        shift_icon_vectorDrawable.draw(canvas);
+
+
 
         //the text along the lines
         paint.setTextSize(Constants.TEXT_SIZE);
@@ -93,7 +171,7 @@ public class XboardView extends View{
         float characterHeight = paint.getFontMetrics().descent - paint.getFontMetrics().ascent;
         String charactersToDisplay = getCharacterSetToDisplay();
         List<PointF> listOfPointsOfDisplay = new ArrayList<>();
-        for(int i=0; i<4; i++) {
+        for (int i = 0; i < 4; i++) {
             LineSegment currentLine = sectorDemarcatingLines.get(i);
             listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(currentLine, 4, characterHeight));
         }
@@ -131,9 +209,13 @@ public class XboardView extends View{
             pointsOfCharacterDisplay.add(displayPointInClockwiseDirection);
         }
         return pointsOfCharacterDisplay;
+
+
     }
 
     private float computeClockwiseYOffset(LineSegment lineSegment, float height) {
+
+
         double angle = lineSegment.getDirectionOfLineInDegree();
         boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
 
@@ -179,7 +261,6 @@ public class XboardView extends View{
             return circle.getSectorOfPoint(position);
         }
     }
-
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         PointF position = new PointF((int)e.getX(), (int)e.getY());
