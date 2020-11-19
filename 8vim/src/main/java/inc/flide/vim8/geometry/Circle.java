@@ -1,6 +1,8 @@
 package inc.flide.vim8.geometry;
 
 import android.graphics.PointF;
+import android.util.Log;
+import android.widget.ImageView;
 
 import inc.flide.vim8.structures.FingerPosition;
 
@@ -89,7 +91,6 @@ public class Circle{
         switch (baseQuadrant){
             case 0:
                 return FingerPosition.RIGHT;
-
             case 1:
                 return FingerPosition.TOP;
 
@@ -98,7 +99,6 @@ public class Circle{
 
             case 3 :
                 return FingerPosition.BOTTOM;
-
         }
         return null;
     }

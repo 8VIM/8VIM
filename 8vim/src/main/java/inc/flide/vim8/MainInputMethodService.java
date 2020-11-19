@@ -25,7 +25,8 @@ import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
 
-public class MainInputMethodService extends InputMethodService {
+public class
+MainInputMethodService extends InputMethodService {
 
     private MainKeyboardView mainKeyboardView;
     private NumberKeypadView numberKeypadView;
