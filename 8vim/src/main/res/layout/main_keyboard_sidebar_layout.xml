@@ -15,10 +15,11 @@
         android:background="@drawable/btn_background"
         android:scaleType="centerInside"
         android:src="@drawable/ic_emoji"
+        android:contentDescription="@string/open_emoticon_keyboard_button_content_description"
         app:layout_constraintBottom_toTopOf="@id/tabButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <ImageButton
         android:id="@+id/tabButton"
@@ -27,10 +28,11 @@
         android:background="@drawable/btn_background"
         android:scaleType="centerInside"
         android:src="@drawable/ic_keyboard_tab"
+        android:contentDescription="@string/tab_button_content_description"
         app:layout_constraintBottom_toTopOf="@id/switchToSelectionKeyboard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/switchToEmojiKeyboard" />
+        app:layout_constraintTop_toBottomOf="@id/switchToEmojiKeyboard"/>
 
     <ImageButton
         android:id="@+id/switchToSelectionKeyboard"
@@ -39,10 +41,11 @@
         android:background="@drawable/btn_background"
         android:scaleType="centerInside"
         android:src="@drawable/ic_open_with_black"
+        android:contentDescription="@string/open_selection_keypad_button_content_description"
         app:layout_constraintBottom_toTopOf="@id/goToSettingsButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tabButton" />
+        app:layout_constraintTop_toBottomOf="@id/tabButton"/>
 
     <ImageButton
         android:id="@+id/goToSettingsButton"
@@ -51,21 +54,23 @@
         android:background="@drawable/btn_background"
         android:scaleType="centerInside"
         android:src="@drawable/key_icon_settings"
+        android:contentDescription="@string/open_keyboard_settings_button_content_description"
         app:layout_constraintBottom_toTopOf="@id/ctrlButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/switchToSelectionKeyboard" />
+        app:layout_constraintTop_toBottomOf="@id/switchToSelectionKeyboard"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/ctrlButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/btn_background"
         android:scaleType="centerInside"
-        android:text="CTRL"
+        android:src="@drawable/ic_ctrl"
+        android:contentDescription="@string/ctrl_button_content_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton" />
+        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

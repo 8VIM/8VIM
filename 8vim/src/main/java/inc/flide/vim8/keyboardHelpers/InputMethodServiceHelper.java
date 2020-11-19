@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import inc.flide.vim8.R;
 import inc.flide.vim8.structures.FingerPosition;
 
 public class InputMethodServiceHelper {
@@ -19,7 +20,7 @@ public class InputMethodServiceHelper {
 
         InputStream inputStream = null;
         try{
-            inputStream = resources.openRawResource(resources.getIdentifier("raw/keyboard_actions", "raw", packageName));
+            inputStream = resources.openRawResource(R.raw.keyboard_actions);
             KeyboardActionXmlParser keyboardActionXmlParser = new KeyboardActionXmlParser(inputStream);
             keyboardActionMap = keyboardActionXmlParser.readKeyboardActionMap();
 

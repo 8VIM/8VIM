@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="MainKeyboard">&#x221E;</string>
-    <string name="cut">&#x2704;</string>
-    <string name="copy">&#x2398;</string>
-    <string name="paste">&#x1f4cb;</string>
-    <string name="selectAll">&#x2200;</string>
-    <string name="switchEnds">&#x1A1F;</string>
-    <string name="dpadLeft">&#x25c1;</string>
-    <string name="dpadRight">&#x25b7;</string>
-    <string name="dpadUp">&#x25B3;</string>
-    <string name="dpadDown">&#x25BD;</string>
-    <string name="dpadCenter">&#x25CB;</string>
     <string name="eraseToTheLeft">&#x232B;</string>
-    <string name="eraseToTheRight">&#x2326;</string>
-    <string name="delete">&#x2421;</string>
     <string name="enter">&#x21B5;</string>
     <string name="fullWidthLowLine">&#xFF3F;&#xFF3F;</string>
     <string name="rupeeSymbol">&#x20B9;</string>
@@ -27,7 +14,6 @@
     <string name="greaterThan">&#x003E;</string>
     <string name="invertedExclamationMark">&#x00A1;</string>
     <string name="divisionSign">&#x00F7;</string>
-    <string name="backslash">&#x005C;</string>
     <string name="notSign">&#x00AC;</string>
     <string name="crossProduct">&#x2A2F;</string>
     <string name="sectionSign">&#x00A7;</string>

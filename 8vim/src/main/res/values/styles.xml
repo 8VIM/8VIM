@@ -5,14 +5,30 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/purple</item>
+        <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
     </style>
-
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
         <item name="color">@color/black</item>
+    </style>
+
+    <style name="horizontal_divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">#444</item>
+    </style>
+
+
+
+    <style name="Custom_switch">
+        <item name="android:thumb">@drawable/round_thumb</item>
+        <item name="track">@drawable/round_track</item>
+        <item name="android:textOn">@string/generic_on_text</item>
+        <item name="android:textOff">@string/generic_off_text</item>
     </style>
 
 </resources>

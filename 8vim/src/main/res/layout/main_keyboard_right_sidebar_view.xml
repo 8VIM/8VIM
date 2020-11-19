@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_keyboard_sidebar_background"
     android:orientation="horizontal">
 
     <include
@@ -11,15 +10,16 @@
         layout="@layout/x_keyboard_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHorizontal_weight="5"
         app:layout_constraintBottom_toBottomOf="@+id/sidebarButtonsLayout"
         app:layout_constraintEnd_toStartOf="@id/sidebarButtonsLayout"
+        app:layout_constraintHorizontal_weight="5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sidebarButtonsLayout" />
+        app:layout_constraintTop_toTopOf="@+id/sidebarButtonsLayout"
+        app:layout_constraintVertical_bias="0.0" />
 
     <include
         android:id="@+id/sidebarButtonsLayout"
-        layout="@layout/main_keyboard_sidebar_view"
+        layout="@layout/main_keyboard_sidebar_layout"
         android:layout_width="0dp"
         android:layout_height="275dp"
         app:layout_constraintHorizontal_weight="1"

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE resources [
     <!ENTITY appname "8Vim">
-    <!ENTITY version_name "iteration 3">
+    <!ENTITY version_name "iteration 5">
     ]>
 <resources>
     <string name="app_name">&appname;</string>
     <string name="version_name">&version_name;</string>
+    <string name="version_name_label">Version : </string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="enable_ime_dialog_title">Please Enable IME</string>
@@ -16,21 +17,60 @@
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
 
-    <!--Preference Related Strings-->
-    <string name="basic_preference_file_name">inc.flide.&appname;.basicPreferences</string>
-    <string name="bp_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
+    <string name="color_selection">color_selection</string>
 
     <string name="keyboard_test_edit_text_hint">Test your keyboard here</string>
     <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
     <string name="share_app">Share &appname;</string>
+    <string name="select_preferred_emoticon_keyboard_dialog_title">Choose the input method</string>
+    <string name="generic_okay_text">OK</string>
 
-    <string name="select_prefered_emoji_keyboard_dialog_title">Choose the input method</string>
-    <string name="generic_okay_text">Ok</string>
+    <!--Preference Related Strings-->
+    <string name="basic_preference_file_name">inc.flide.&appname;.basicPreferences</string>
+
+    <string name="bp_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
 
     <string name="mainKeyboard_sidebar_position_preference_key">input keyboard value</string>
     <string name="mainKeyboard_sidebar_position_preference_left_value">sidebar_left_preferred</string>
     <string name="mainKeyboard_sidebar_position_preference_right_value">sidebar_right_preferred</string>
+
     <string name="x_board_circle_radius_size_factor_key">x_board_circle_radius_size_factor</string>
     <string name="x_board_circle_centre_x_offset_key">x_board_circle_centre_x_offset</string>
     <string name="x_board_circle_centre_y_offset_key">x_board_circle_centre_y_offset</string>
+
+    <string name="user_preferred_typing_trail_visibility">user_preferred_typing_trail_visibility</string>
+    <string name="select_emoji_keyboard_button_text">Select Emoji Keyboard</string>
+    <string name="resize_circle_button_text">Resize Circle</string>
+    <string name="set_circle_center_button_text">Set circle center</string>
+    <string name="Set_sidebar_left_button_text">Set Sidebar Left</string>
+    <string name="Set_sidebar_right_button_text">Set Sidebar Right</string>
+    <string name="configurable_touch_trail_button_text">Display Touch Trail</string>
+    <string name="generic_off_text">Off</string>
+    <string name="generic_on_text">On</string>
+    <string name="choose_the_color_for_touch_trail_label">Choose the color for Touch Trail :</string>
+    <string name="generic_red_text">Red</string>
+    <string name="generic_green_text">Green</string>
+    <string name="generic_yellow_text">Yellow</string>
+    <string name="generic_blue_text">Blue</string>
+    <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
+    <string name="about_us_label">About Us</string>
+    <string name="x_axis_label">X Axis : </string>
+    <string name="y_axis_label">Y Axis : </string>
+    <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>
+    <string name="tab_button_content_description">Tab button</string>
+    <string name="open_selection_keypad_button_content_description">Open Selection Keypad</string>
+    <string name="open_keyboard_settings_button_content_description">Open Keyboard Settings</string>
+    <string name="ctrl_button_content_description">Ctrl button</string>
+    <string name="generic_back_button_content_description">Go Back</string>
+    <string name="owner_text">Designed and Developed by flide</string>
+    <string name="connect_with_us_label">Connect with us</string>
+    <string name="github_icon_content_description">Github Icon</string>
+    <string name="connect_using_github_label">Fork us on GitHub</string>
+    <string name="play_store_icon_content_description">Google Play store icon</string>
+    <string name="twitter_icon_content_description">"Twitter icon "</string>
+    <string name="website_icon_content_description">Website icon</string>
+    <string name="connect_using_website_label">Visit our Website</string>
+    <string name="connect_using_twitter_label">Follow us on Twitter</string>
+    <string name="connect_using_google_play_store_label">Rate us on the Play Store</string>
+
 </resources>

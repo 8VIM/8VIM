@@ -7,14 +7,14 @@ import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.structures.SelectionKeyboardKeyCode;
-import inc.flide.vim8.views.SelectionKeyboardView;
+import inc.flide.vim8.views.SelectionKeypadView;
 
 public class SelectionKeyboardActionListener extends KeyboardActionListner {
 
     private boolean isSelectionOn = true;
 
     public SelectionKeyboardActionListener(MainInputMethodService inputMethodService
-                                            , SelectionKeyboardView view){
+                                            , SelectionKeypadView view){
         super(inputMethodService, view);
     }
 

@@ -1,5 +1,6 @@
 package inc.flide.vim8;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
@@ -20,17 +21,17 @@ import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
 import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.views.mainKeyboard.MainKeyboardView;
-import inc.flide.vim8.views.NumberPadKeyboardView;
-import inc.flide.vim8.views.SelectionKeyboardView;
-import inc.flide.vim8.views.SymbolKeyboardView;
+import inc.flide.vim8.views.NumberKeypadView;
+import inc.flide.vim8.views.SelectionKeypadView;
+import inc.flide.vim8.views.SymbolKeypadView;
 
 public class
 MainInputMethodService extends InputMethodService {
 
     private MainKeyboardView mainKeyboardView;
-    private NumberPadKeyboardView numberPadKeyboardView;
-    private SelectionKeyboardView selectionKeyboardView;
-    private SymbolKeyboardView symbolKeyboardView;
+    private NumberKeypadView numberKeypadView;
+    private SelectionKeypadView selectionKeypadView;
+    private SymbolKeypadView symbolKeypadView;
     private View currentView;
 
     private int shiftLockFlag;
@@ -40,19 +41,32 @@ MainInputMethodService extends InputMethodService {
     InputMethodServiceHelper inputMethodServiceHelper = new InputMethodServiceHelper();
     InputConnection inputConnection;
 
+    /**
+    Lifecycle of IME
+
+    01.  InputMethodService Starts
+    02.  onCreate()
+    03.  onCreateInputView()
+    04.  onCreateCandidateViews()
+    05.  onStartInputViews()
+    06.  Text input gets the current input method subtype
+    07.  InputMethodManager#getCurrentInputMethodSubtype()
+    08.  Text input has started
+    09.  onCurrentInputMethodSubtypeChanged()
+    10. Detect the current input method subtype has been changed -> can go to step 6
+    11. onFinishInput() -> cursor can Move to an additional field -> step 5
+    12. onDestroy()
+    13. InputMethodService stops
+     */
+
     @Override
     public View onCreateInputView() {
 
-        numberPadKeyboardView = (NumberPadKeyboardView)getLayoutInflater()
-                                    .inflate(R.layout.numberpad_keyboard_layout, null);
-        selectionKeyboardView = (SelectionKeyboardView) getLayoutInflater()
-                                    .inflate(R.layout.selection_keyboard_layout, null);
-        symbolKeyboardView = (SymbolKeyboardView) getLayoutInflater()
-                                    .inflate(R.layout.symbols_keyboard_layout, null);
-        mainKeyboardView = (MainKeyboardView) getLayoutInflater()
-                                    .inflate(R.layout.main_keyboard_layout, null);
+        numberKeypadView = new NumberKeypadView(this, null);
+        selectionKeypadView = new SelectionKeypadView(this, null);
+        symbolKeypadView = new SymbolKeypadView(this, null);
+        mainKeyboardView = new MainKeyboardView(this, null);
         currentView = mainKeyboardView.getView();
-
         return currentView;
     }
 
@@ -71,7 +85,7 @@ MainInputMethodService extends InputMethodService {
     public void onStartInputView (EditorInfo info, boolean restarting){
         super.onStartInputView(info, restarting);
         currentView.invalidate();
-        mainKeyboardView.invalidate();
+        mainKeyboardView.getView().invalidate();
 
     }
 
@@ -189,7 +203,7 @@ MainInputMethodService extends InputMethodService {
                     switchToExternalEmoticonKeyboard();
                 break;
             case SWITCH_TO_NUMBER_PAD:
-                    currentView = numberPadKeyboardView;
+                    currentView = numberKeypadView;
                     setInputView(currentView);
                 break;
             case SWITCH_TO_MAIN_KEYBOARD:
@@ -197,7 +211,7 @@ MainInputMethodService extends InputMethodService {
                     setInputView(currentView);
                 break;
             case SWITCH_TO_SYMBOLS_KEYBOARD:
-                    currentView = symbolKeyboardView;
+                    currentView = symbolKeypadView;
                     setInputView(currentView);
                 break;
             case PASTE:
@@ -209,7 +223,7 @@ MainInputMethodService extends InputMethodService {
                 sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
                 break;
             case SWITCH_TO_SELECTION_KEYBOARD: {
-                    currentView = selectionKeyboardView;
+                    currentView = selectionKeypadView;
                     setInputView(currentView);
                 }
                 break;
