@@ -16,22 +16,21 @@ public class InputMethodServiceHelper {
 
     public Map<List<FingerPosition>, KeyboardAction> initializeKeyboardActionMap(Resources resources, String packageName) {
 
-        Map<List<FingerPosition>, KeyboardAction> keyboardActionMap=null;
+        Map<List<FingerPosition>, KeyboardAction> keyboardActionMap = null;
 
         InputStream inputStream = null;
-        try{
+        try {
             inputStream = resources.openRawResource(R.raw.keyboard_actions);
             KeyboardActionXmlParser keyboardActionXmlParser = new KeyboardActionXmlParser(inputStream);
             keyboardActionMap = keyboardActionXmlParser.readKeyboardActionMap();
 
-        } catch (XmlPullParserException exception){
+        } catch (XmlPullParserException exception) {
             exception.printStackTrace();
-        } catch (IOException exception){
+        } catch (IOException exception) {
             exception.printStackTrace();
-        } catch(Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 inputStream.close();
             } catch (NullPointerException e) {

@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -22,10 +23,9 @@ public class AboutUsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_page_layout);
 
-        github = (ConstraintLayout) findViewById(R.id.constraintLayout_github);
+        github = findViewById(R.id.constraintLayout_github);
         github.setOnTouchListener((v, event) -> {
-            switch(event.getAction())
-            {
+            switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     github.setBackgroundColor(Color.LTGRAY);
                     break;
@@ -40,11 +40,10 @@ public class AboutUsActivity extends AppCompatActivity {
             return true;
         });
 
-        twitter = (ConstraintLayout) findViewById(R.id.constraintLayout_twitter);
+        twitter = findViewById(R.id.constraintLayout_twitter);
         twitter.setOnTouchListener((v, event) -> {
 
-            switch(event.getAction())
-            {
+            switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     twitter.setBackgroundColor(Color.LTGRAY);
                     break;
@@ -59,11 +58,10 @@ public class AboutUsActivity extends AppCompatActivity {
             return true;
         });
 
-        website = (ConstraintLayout) findViewById(R.id.constraintLayout_website);
+        website = findViewById(R.id.constraintLayout_website);
         website.setOnTouchListener((v, event) -> {
 
-            switch(event.getAction())
-            {
+            switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     website.setBackgroundColor(Color.LTGRAY);
                     break;
@@ -78,10 +76,9 @@ public class AboutUsActivity extends AppCompatActivity {
             return true;
         });
 
-        googlePlayStore = (ConstraintLayout) findViewById(R.id.constraintLayout_playstore);
+        googlePlayStore = findViewById(R.id.constraintLayout_playstore);
         googlePlayStore.setOnTouchListener((v, event) -> {
-            switch(event.getAction())
-            {
+            switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     googlePlayStore.setBackgroundColor(Color.LTGRAY);
                     break;
@@ -97,9 +94,9 @@ public class AboutUsActivity extends AppCompatActivity {
         });
 
 
-        ImageView back_arrow = (ImageView) findViewById(R.id.back_arrow);
+        ImageView back_arrow = findViewById(R.id.back_arrow);
         back_arrow.setOnClickListener(v -> {
-            Intent intent = new Intent(AboutUsActivity.this,LauncherActivity.class);
+            Intent intent = new Intent(AboutUsActivity.this, LauncherActivity.class);
             startActivity(intent);
         });
 

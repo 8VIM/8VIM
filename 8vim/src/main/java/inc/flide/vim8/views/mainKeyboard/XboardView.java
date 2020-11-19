@@ -17,9 +17,9 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-import androidx.core.graphics.ColorUtils;
 
+import androidx.core.graphics.ColorUtils;
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,36 +28,29 @@ import java.util.Random;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Circle;
+import inc.flide.vim8.geometry.Dimention;
 import inc.flide.vim8.geometry.GeometricUtilities;
 import inc.flide.vim8.geometry.LineSegment;
 import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
-import inc.flide.vim8.geometry.Dimention;
-import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.utilities.Utilities;
 
 public class XboardView extends View {
 
-    private MainKeyboardActionListener actionListener;
-
-    private PointF circleCenter;
-    private Circle circle;
-
+    private final int offset = 15;
+    private final int lengthOfLineDemarcatingSectors = 250;
     List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
     List<PointF> listOfPointsOfDisplay = new ArrayList<>();
-
     Path path = new Path();
     Context context;
-
     GestureDetector gestureDetector;
     Paint backgroundPaint = new Paint();
     Paint foregroundPaint = new Paint();
-
-    private final int offset = 15;
-    private final int lengthOfLineDemarcatingSectors = 250;
-
-    private Dimention computedDimension = new Dimention();
+    private MainKeyboardActionListener actionListener;
+    private PointF circleCenter;
+    private Circle circle;
+    private final Dimention computedDimension = new Dimention();
 
     public XboardView(Context context) {
         super(context);
@@ -67,7 +60,7 @@ public class XboardView extends View {
     public XboardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
-        gestureDetector = new GestureDetector(context,new GestureListener());
+        gestureDetector = new GestureDetector(context, new GestureListener());
         this.context = context;
     }
 
@@ -112,22 +105,21 @@ public class XboardView extends View {
         canvas.drawColor(backgroundPaint.getColor());
 
         SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        if(sp.getBoolean(this.getContext().getString(R.string.user_preferred_typing_trail_visibility),true))
-        {
+        if (sp.getBoolean(this.getContext().getString(R.string.user_preferred_typing_trail_visibility), true)) {
             paintTypingTrail(canvas);
 
         }
 
         foregroundPaint.setStrokeWidth(5);
         foregroundPaint.setStyle(Paint.Style.STROKE);
-      
+
         //The centre circle
         canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), foregroundPaint);
         //The lines demarcating the sectors
-        for (LineSegment lineSegment: sectorDemarcatingLines) {
+        for (LineSegment lineSegment : sectorDemarcatingLines) {
             canvas.drawLine(lineSegment.getStartingPoint().x, lineSegment.getStartingPoint().y, lineSegment.getEndPoint().x, lineSegment.getEndPoint().y, foregroundPaint);
-             }
-      
+        }
+
         // Converting float value to int
         int centre_x_value = (int) circle.getCentre().x;
         int centre_y_value = (int) circle.getCentre().y;
@@ -140,8 +132,7 @@ public class XboardView extends View {
         int numberpad_icon_height = 70;
 
         VectorDrawableCompat numberpad_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.numericpad_vd_vector, null);
-        if (numberpad_icon_vectordrawable == null)
-        {
+        if (numberpad_icon_vectordrawable == null) {
             throw new AssertionError();
         }
         numberpad_icon_vectordrawable.setBounds(numberpad_icon_x_coordinates, numberpad_icon_y_coordinates, numberpad_icon_width + numberpad_icon_x_coordinates, numberpad_icon_height + numberpad_icon_y_coordinates);
@@ -155,9 +146,8 @@ public class XboardView extends View {
         int backspace_icon_width = 70;
         int backspace_icon_height = 70;
 
-        VectorDrawableCompat backspace_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_baseline_keyboard_backspace_24,null);
-        if (backspace_icon_vectordrawable == null)
-        {
+        VectorDrawableCompat backspace_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_baseline_keyboard_backspace_24, null);
+        if (backspace_icon_vectordrawable == null) {
             throw new AssertionError();
         }
 
@@ -172,10 +162,9 @@ public class XboardView extends View {
         int enter_icon_height = 70;
 
         VectorDrawableCompat enter_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_baseline_keyboard_enter_24, null);
-        if (enter_icon_vectordrawable == null)
-           {
+        if (enter_icon_vectordrawable == null) {
             throw new AssertionError();
-           }
+        }
 
         enter_icon_vectordrawable.setBounds(enter_icon_x_coordinates, enter_icon_y_coordinates, enter_icon_width + enter_icon_x_coordinates, enter_icon_height + enter_icon_y_coordinates);
         enter_icon_vectordrawable.draw(canvas);
@@ -188,8 +177,7 @@ public class XboardView extends View {
         int shift_icon_height = 70;
 
         VectorDrawableCompat shift_icon_vectorDrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.shift_icon_vd_vector, null);
-        if (shift_icon_vectorDrawable == null)
-        {
+        if (shift_icon_vectorDrawable == null) {
             throw new AssertionError();
         }
         shift_icon_vectorDrawable.setBounds(shift_icon_x_coordinates, shift_icon_y_coordinates, shift_icon_width + shift_icon_x_coordinates, shift_icon_height + shift_icon_y_coordinates);
@@ -207,7 +195,7 @@ public class XboardView extends View {
     }
 
     private void paintTypingTrail(Canvas canvas) {
-        float[] pathPos =new float[2];
+        float[] pathPos = new float[2];
         Paint typingTrailPaint = new Paint();
 
         if (path != null) {
@@ -227,10 +215,9 @@ public class XboardView extends View {
                     final float y = pathPos[1] + random.nextFloat() - trailRadius;
 
                     SharedPreferences sharedPreferences = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-                    String color_choosed = sharedPreferences.getString(this.getContext().getString(R.string.color_selection),"Red");
+                    String color_choosed = sharedPreferences.getString(this.getContext().getString(R.string.color_selection), "Red");
 
-                    if(color_choosed.equals("Red"))
-                    {
+                    if (color_choosed.equals("Red")) {
                         typingTrailPaint.setShader(new RadialGradient(
                                 x,
                                 y,
@@ -239,9 +226,7 @@ public class XboardView extends View {
                                 Color.TRANSPARENT,
                                 Shader.TileMode.CLAMP
                         ));
-                    }
-                    else if(color_choosed.equals("Green"))
-                    {
+                    } else if (color_choosed.equals("Green")) {
                         typingTrailPaint.setShader(new RadialGradient(
                                 x,
                                 y,
@@ -250,9 +235,7 @@ public class XboardView extends View {
                                 Color.TRANSPARENT,
                                 Shader.TileMode.CLAMP
                         ));
-                    }
-                    else if(color_choosed.equals("Yellow"))
-                    {
+                    } else if (color_choosed.equals("Yellow")) {
                         typingTrailPaint.setShader(new RadialGradient(
                                 x,
                                 y,
@@ -261,8 +244,7 @@ public class XboardView extends View {
                                 Color.TRANSPARENT,
                                 Shader.TileMode.CLAMP
                         ));
-                    }
-                    else if(color_choosed.equals("Blue")){
+                    } else if (color_choosed.equals("Blue")) {
                         typingTrailPaint.setShader(new RadialGradient(
                                 x,
                                 y,
@@ -277,7 +259,7 @@ public class XboardView extends View {
                 }
             }
         }
-        canvas.drawPath(path,typingTrailPaint);
+        canvas.drawPath(path, typingTrailPaint);
     }
 
 
@@ -365,54 +347,34 @@ public class XboardView extends View {
         }
     }
 
-    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
-        // event when double tap occurs
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            float x = e.getX();
-            float y = e.getY();
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        PointF position = new PointF((int) e.getX(), (int) e.getY());
+        FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
+        switch (e.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                actionListener.movementStarted(currentFingerPosition);
+                path.moveTo(e.getX(), e.getY());
+                return true;
 
+            case MotionEvent.ACTION_MOVE:
+                actionListener.movementContinues(currentFingerPosition);
+                path.lineTo(e.getX(), e.getY());
+                break;
 
-            path.addCircle(x, y, 50, Path.Direction.CW);
-
-            // clean drawing area on double tap
-            path.reset();
-
-            Log.d("Double Tap", "Tapped at: (" + x + "," + y + ")");
-
-            return true;
+            case MotionEvent.ACTION_UP:
+                actionListener.movementEnds();
+            case MotionEvent.ACTION_POINTER_DOWN:
+                path.reset();
+                break;
+            default:
+                return false;
         }
+        gestureDetector.onTouchEvent(e);
 
-    }
-
-   @Override
-   public boolean onTouchEvent(MotionEvent e) {
-    PointF position = new PointF((int) e.getX(), (int) e.getY());
-    FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
-    switch (e.getAction()) {
-        case MotionEvent.ACTION_DOWN:
-             actionListener.movementStarted(currentFingerPosition);
-             path.moveTo(e.getX(),e.getY());
-            return true;
-
-        case MotionEvent.ACTION_MOVE:
-            actionListener.movementContinues(currentFingerPosition);
-            path.lineTo(e.getX(), e.getY());
-            break;
-
-        case MotionEvent.ACTION_UP:
-            actionListener.movementEnds();
-        case MotionEvent.ACTION_POINTER_DOWN:
-             path.reset();
-            break;
-        default:
-            return false;
-    }
-    gestureDetector.onTouchEvent(e);
-
-    // Schedules a repaint.
-    invalidate();
-    return true;
+        // Schedules a repaint.
+        invalidate();
+        return true;
     }
 
     @Override
@@ -422,7 +384,7 @@ public class XboardView extends View {
         computedDimension.setHeight(MeasureSpec.getSize(heightMeasureSpec));
 
         SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key),0.3f);
+        float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key), 0.3f);
         float radius = (spRadiusValue * computedDimension.getWidth()) / 2;
 
         circleCenter.x = (computedDimension.getWidth() / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
@@ -442,6 +404,26 @@ public class XboardView extends View {
         }
 
         setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
+    }
+
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        // event when double tap occurs
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            float x = e.getX();
+            float y = e.getY();
+
+
+            path.addCircle(x, y, 50, Path.Direction.CW);
+
+            // clean drawing area on double tap
+            path.reset();
+
+            Log.d("Double Tap", "Tapped at: (" + x + "," + y + ")");
+
+            return true;
+        }
+
     }
 
 }

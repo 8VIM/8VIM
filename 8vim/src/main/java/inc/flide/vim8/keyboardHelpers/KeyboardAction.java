@@ -6,13 +6,13 @@ import inc.flide.vim8.structures.KeyboardActionType;
 
 public class KeyboardAction {
 
-    private KeyboardActionType keyboardActionType;
-    private String text;
+    private final KeyboardActionType keyboardActionType;
+    private final String text;
     private String capsLockText;
-    private int keyEventCode;
-    private int keyFlags;
+    private final int keyEventCode;
+    private final int keyFlags;
 
-    public KeyboardAction(KeyboardActionType keyboardActionType, String text, String capsLockText, int keyEventCode ,int keyFlags) {
+    public KeyboardAction(KeyboardActionType keyboardActionType, String text, String capsLockText, int keyEventCode, int keyFlags) {
         this.keyboardActionType = keyboardActionType;
         this.text = text;
         this.keyEventCode = keyEventCode;
@@ -20,15 +20,9 @@ public class KeyboardAction {
         this.keyFlags = keyFlags;
     }
 
-    private void setCapsLockText(String capsLockText) {
-        if((capsLockText==null || capsLockText.length()==0) && this.text!=null){
-            this.capsLockText = this.text.toUpperCase(Locale.getDefault());
-        } else{
-            this.capsLockText = capsLockText;
-        }
+    public int getKeyFlags() {
+        return keyFlags;
     }
-
-    public int getKeyFlags() { return keyFlags; }
 
     public String getText() {
         return text;
@@ -42,5 +36,15 @@ public class KeyboardAction {
         return keyboardActionType;
     }
 
-    public String getCapsLockText() { return capsLockText; }
+    public String getCapsLockText() {
+        return capsLockText;
+    }
+
+    private void setCapsLockText(String capsLockText) {
+        if ((capsLockText == null || capsLockText.length() == 0) && this.text != null) {
+            this.capsLockText = this.text.toUpperCase(Locale.getDefault());
+        } else {
+            this.capsLockText = capsLockText;
+        }
+    }
 }

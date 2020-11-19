@@ -22,7 +22,7 @@ public class SymbolKeypadView extends ButtonKeypadView {
         initialize(context);
     }
 
-    public void initialize(Context context){
+    public void initialize(Context context) {
         MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
 
         this.setKeyboard(new Keyboard(context, R.layout.symbols_keypad_view));

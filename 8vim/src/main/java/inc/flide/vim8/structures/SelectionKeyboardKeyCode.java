@@ -18,7 +18,7 @@ public enum SelectionKeyboardKeyCode {
 
     private final int value;
 
-    SelectionKeyboardKeyCode(final int value){
+    SelectionKeyboardKeyCode(final int value) {
         this.value = value;
     }
 

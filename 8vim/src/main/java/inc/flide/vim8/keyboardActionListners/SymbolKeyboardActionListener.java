@@ -11,7 +11,7 @@ import inc.flide.vim8.views.SymbolKeypadView;
 public class SymbolKeyboardActionListener extends KeyboardActionListner {
 
     public SymbolKeyboardActionListener(MainInputMethodService inputMethodService
-                                            , SymbolKeypadView view){
+            , SymbolKeypadView view) {
         super(inputMethodService, view);
     }
 

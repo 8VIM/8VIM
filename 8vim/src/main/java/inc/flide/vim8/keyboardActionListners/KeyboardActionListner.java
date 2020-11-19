@@ -33,7 +33,7 @@ public abstract class KeyboardActionListner implements KeyboardView.OnKeyboardAc
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
 
-        switch(primaryCode){
+        switch (primaryCode) {
             case KeyEvent.KEYCODE_EISU:
                 KeyboardAction switchToMainKeyboardView = new KeyboardAction(
                         KeyboardActionType.INPUT_SPECIAL
@@ -41,7 +41,7 @@ public abstract class KeyboardActionListner implements KeyboardView.OnKeyboardAc
                         , null, 0, 0);
                 mainInputMethodService.handleSpecialInput(switchToMainKeyboardView);
                 break;
-            case KeyEvent.KEYCODE_DEL  :
+            case KeyEvent.KEYCODE_DEL:
             case KeyEvent.KEYCODE_ENTER:
                 mainInputMethodService.sendKey(primaryCode, 0);
                 break;

@@ -1,12 +1,10 @@
 package inc.flide.vim8.geometry;
 
 import android.graphics.PointF;
-import android.util.Log;
-import android.widget.ImageView;
 
 import inc.flide.vim8.structures.FingerPosition;
 
-public class Circle{
+public class Circle {
     private PointF centre;
     private float radius;
 
@@ -49,24 +47,25 @@ public class Circle{
         return (dSquare - rSquare);
     }
 
-    public boolean isPointInsideCircle(PointF point){
+    public boolean isPointInsideCircle(PointF point) {
         return (getPowerOfPoint(point) < 0);
     }
 
-    public PointF getPointOnCircumferenceAtDegreeAngle(int angleInDegree){
+    public PointF getPointOnCircumferenceAtDegreeAngle(int angleInDegree) {
         double angleInRadians = Math.toRadians(angleInDegree);
         return getPointOnCircumferenceAtRadianAngle(angleInRadians);
     }
 
-    private PointF getPointOnCircumferenceAtRadianAngle(double angleInRadians){
+    private PointF getPointOnCircumferenceAtRadianAngle(double angleInRadians) {
         float x = (float) (centre.x + (radius * Math.cos(angleInRadians)));
         float y = (float) (centre.y + (radius * Math.sin(angleInRadians)));
-        return new PointF(x,y);
+        return new PointF(x, y);
     }
 
-    /** Gets the angle of point p relative to the center */
-    private double getAngleInRadiansOfPointWithRespectToCentreOfCircle(PointF point)
-    {
+    /**
+     * Gets the angle of point p relative to the center
+     */
+    private double getAngleInRadiansOfPointWithRespectToCentreOfCircle(PointF point) {
         // Get difference of coordinates
         double x = point.x - centre.x;
         double y = centre.y - point.y;
@@ -74,30 +73,33 @@ public class Circle{
         // Calculate angle with special atan (calculates the correct angle in all quadrants)
         double angle = Math.atan2(y, x);
         // Make all angles positive
-        if(angle < 0) {
+        if (angle < 0) {
             angle = Math.PI * 2 + angle;
         }
         return angle;
     }
 
-    /** Get the number of the sector that point p is in
-     *  @return 0: right, 1: top, 2: left, 3: bottom */
+    /**
+     * Get the number of the sector that point p is in
+     *
+     * @return 0: right, 1: top, 2: left, 3: bottom
+     */
     public FingerPosition getSectorOfPoint(PointF p) {
         double angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p);
-        double angleToSectorValue = angleDouble/ (Math.PI / 2);
-        int quadrantCyclic = (int)Math.round(angleToSectorValue);
+        double angleToSectorValue = angleDouble / (Math.PI / 2);
+        int quadrantCyclic = (int) Math.round(angleToSectorValue);
         int baseQuadrant = GeometricUtilities.getBaseQuadrant(quadrantCyclic);
 
-        switch (baseQuadrant){
+        switch (baseQuadrant) {
             case 0:
                 return FingerPosition.RIGHT;
             case 1:
                 return FingerPosition.TOP;
 
-            case 2 :
+            case 2:
                 return FingerPosition.LEFT;
 
-            case 3 :
+            case 3:
                 return FingerPosition.BOTTOM;
         }
         return null;

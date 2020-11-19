@@ -8,6 +8,24 @@ public class LineSegment {
     private double length;
     private double directionOfLineInDegree;
 
+    public LineSegment(PointF startingPoint, PointF endPoint) {
+        this.startingPoint = startingPoint;
+        this.endPoint = endPoint;
+        this.length = computeLengthOfLineSegment();
+        this.directionOfLineInDegree = computeAngleOfLineSegment();
+    }
+
+    public LineSegment() {
+        this.startingPoint = new PointF();
+        this.endPoint = new PointF();
+        this.length = 0;
+        this.directionOfLineInDegree = 0;
+    }
+
+    public LineSegment(PointF startingPoint, double directionalAngleInDegree, double length) {
+        setupLineSegment(startingPoint, directionalAngleInDegree, length);
+    }
+
     public double getLength() {
         return length;
     }
@@ -32,15 +50,8 @@ public class LineSegment {
         return startingPoint;
     }
 
-    public LineSegment(PointF startingPoint, PointF endPoint){
-        this.startingPoint = startingPoint;
-        this.endPoint = endPoint;
-        this.length = computeLengthOfLineSegment();
-        this.directionOfLineInDegree = computeAngleOfLineSegment();
-    }
-
     private double computeAngleOfLineSegment() {
-        double slope = (startingPoint.y - endPoint.y)/(startingPoint.x - endPoint.x);
+        double slope = (startingPoint.y - endPoint.y) / (startingPoint.x - endPoint.x);
         double angleOfDirectionInRadians = Math.atan(slope);
         return Math.toDegrees(angleOfDirectionInRadians);
     }
@@ -49,26 +60,15 @@ public class LineSegment {
         return Math.sqrt(GeometricUtilities.getSquaredDistanceBetweenPoints(startingPoint, endPoint));
     }
 
-    public LineSegment () {
-        this.startingPoint = new PointF();
-        this.endPoint = new PointF();
-        this.length = 0;
-        this.directionOfLineInDegree = 0;
-    }
-
-    public LineSegment(PointF startingPoint, double directionalAngleInDegree, double length){
-        setupLineSegment(startingPoint, directionalAngleInDegree,length);
-    }
-
-    public void setupLineSegment(PointF startingPoint, double directionalAngleInDegree, double length){
+    public void setupLineSegment(PointF startingPoint, double directionalAngleInDegree, double length) {
         this.startingPoint = startingPoint;
         this.endPoint = GeometricUtilities.findPointSpecifiedDistanceAwayInGivenDirection(startingPoint, directionalAngleInDegree, length);
         this.length = length;
         this.directionOfLineInDegree = directionalAngleInDegree;
     }
 
-    public boolean isSlopePositive(){
-        double slope = (startingPoint.y - endPoint.y)/(startingPoint.x - endPoint.x);
+    public boolean isSlopePositive() {
+        double slope = (startingPoint.y - endPoint.y) / (startingPoint.x - endPoint.x);
         return (slope >= 0);
     }
 }

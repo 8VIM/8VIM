@@ -5,7 +5,7 @@ public class Dimention {
     private int height;
 
     public Dimention() {
-        this(0,0);
+        this(0, 0);
     }
 
     public Dimention(int width, int height) {

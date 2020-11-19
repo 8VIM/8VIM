@@ -3,15 +3,15 @@ package inc.flide.vim8.keyboardActionListners;
 import android.view.KeyEvent;
 
 import inc.flide.vim8.MainInputMethodService;
-import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
+import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.views.NumberKeypadView;
 
 public class NumberPadKeyboardActionListener extends KeyboardActionListner {
 
     public NumberPadKeyboardActionListener(MainInputMethodService inputMethodService
-                                            , NumberKeypadView view){
+            , NumberKeypadView view) {
         super(inputMethodService, view);
     }
 

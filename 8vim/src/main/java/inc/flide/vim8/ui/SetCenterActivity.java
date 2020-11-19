@@ -1,6 +1,5 @@
 package inc.flide.vim8.ui;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -31,11 +30,11 @@ public class SetCenterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setcenter_activity);
 
-        textView_x_Value = (TextView) findViewById(R.id.x_value);
-        seekBar_x = (SeekBar) findViewById(R.id.seekbar_x);
+        textView_x_Value = findViewById(R.id.x_value);
+        seekBar_x = findViewById(R.id.seekbar_x);
 
         SharedPreferences sp_x = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        int offset_x = sp_x.getInt(getString(R.string.x_board_circle_centre_x_offset_key),0);
+        int offset_x = sp_x.getInt(getString(R.string.x_board_circle_centre_x_offset_key), 0);
 
         int current_x_Value = 0;
         if (!(offset_x == 0)) {
@@ -58,7 +57,7 @@ public class SetCenterActivity extends AppCompatActivity {
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putInt(getString(R.string.x_board_circle_centre_x_offset_key),progress);
+                sharedPreferencesEditor.putInt(getString(R.string.x_board_circle_centre_x_offset_key), progress);
                 sharedPreferencesEditor.apply();
             }
 
@@ -73,12 +72,12 @@ public class SetCenterActivity extends AppCompatActivity {
             }
         });
 
-        textView_y_value = (TextView) findViewById(R.id.y_value);
-        seekBar_y = (SeekBar) findViewById(R.id.seekbar_y);
+        textView_y_value = findViewById(R.id.y_value);
+        seekBar_y = findViewById(R.id.seekbar_y);
 
 
         SharedPreferences sp_y = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        int offset_y = sp_y.getInt(getString(R.string.x_board_circle_centre_y_offset_key),0);
+        int offset_y = sp_y.getInt(getString(R.string.x_board_circle_centre_y_offset_key), 0);
 
         int current_y_Value = 0;
         if (!(offset_y == 0)) {
@@ -100,7 +99,7 @@ public class SetCenterActivity extends AppCompatActivity {
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putInt(getString(R.string.x_board_circle_centre_y_offset_key),progress);
+                sharedPreferencesEditor.putInt(getString(R.string.x_board_circle_centre_y_offset_key), progress);
                 sharedPreferencesEditor.apply();
 
             }
@@ -117,10 +116,7 @@ public class SetCenterActivity extends AppCompatActivity {
         });
 
 
-
     }
-
-
 
 
 }

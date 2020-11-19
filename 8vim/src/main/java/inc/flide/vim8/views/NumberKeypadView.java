@@ -20,7 +20,7 @@ public class NumberKeypadView extends ButtonKeypadView {
         initialize(context);
     }
 
-    public void initialize(Context context){
+    public void initialize(Context context) {
         MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
 
         this.setKeyboard(new Keyboard(context, R.layout.number_keypad_view));

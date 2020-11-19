@@ -29,7 +29,7 @@ class KeyboardActionXmlParser {
     private static final String INPUT_KEY_FLAGS_TAG = "flags";
     private static final String INPUT_KEY_FLAG_TAG = "flag";
 
-    private XmlPullParser parser;
+    private final XmlPullParser parser;
 
     KeyboardActionXmlParser(InputStream inputStream) throws XmlPullParserException, IOException {
         parser = Xml.newPullParser();
@@ -40,14 +40,14 @@ class KeyboardActionXmlParser {
 
     Map<List<FingerPosition>, KeyboardAction> readKeyboardActionMap() throws IOException, XmlPullParserException {
         Map<List<FingerPosition>, KeyboardAction> keyboardActionMap = new HashMap<>();
-        
+
         parser.require(XmlPullParser.START_TAG, null, KEYBOARD_ACTION_MAP_TAG);
-        while (parser.next() != XmlPullParser.END_TAG){
+        while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String tagName = parser.getName();
-            if(tagName.equals(KEYBOARD_ACTION_TAG)){
+            if (tagName.equals(KEYBOARD_ACTION_TAG)) {
                 Map.Entry<List<FingerPosition>, KeyboardAction> keyboardAction = readKeyboardAction();
                 keyboardActionMap.put(keyboardAction.getKey(), keyboardAction.getValue());
             }
@@ -117,11 +117,11 @@ class KeyboardActionXmlParser {
                     //Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
             }
         }
-        return flags ;
+        return flags;
     }
 
     private int readInputFlag() throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG,null, INPUT_KEY_FLAG_TAG);
+        parser.require(XmlPullParser.START_TAG, null, INPUT_KEY_FLAG_TAG);
         String inputKeyString = readText();
         parser.require(XmlPullParser.END_TAG, null, INPUT_KEY_FLAG_TAG);
 
@@ -129,7 +129,7 @@ class KeyboardActionXmlParser {
     }
 
     private int readInputKey() throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG,null, INPUT_KEY_TAG);
+        parser.require(XmlPullParser.START_TAG, null, INPUT_KEY_TAG);
         String inputKeyString = readText();
         parser.require(XmlPullParser.END_TAG, null, INPUT_KEY_TAG);
 
@@ -138,7 +138,7 @@ class KeyboardActionXmlParser {
     }
 
     private String readInputString() throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG,null, INPUT_STRING_TAG);
+        parser.require(XmlPullParser.START_TAG, null, INPUT_STRING_TAG);
         String inputString = readText();
         parser.require(XmlPullParser.END_TAG, null, INPUT_STRING_TAG);
 
@@ -146,7 +146,7 @@ class KeyboardActionXmlParser {
     }
 
     private String readInputCapsLockString() throws IOException, XmlPullParserException {
-        parser.require(XmlPullParser.START_TAG,null, INPUT_CAPSLOCK_STRING_TAG);
+        parser.require(XmlPullParser.START_TAG, null, INPUT_CAPSLOCK_STRING_TAG);
         String inputString = readText();
         parser.require(XmlPullParser.END_TAG, null, INPUT_CAPSLOCK_STRING_TAG);
 
@@ -159,9 +159,9 @@ class KeyboardActionXmlParser {
         String movementSequenceString = readText();
         parser.require(XmlPullParser.END_TAG, null, MOVEMENT_SEQUENCE_TAG);
 
-        List<String> movementSequenceList = Arrays.asList(movementSequenceString.split("\\s*;\\s*"));
+        String[] movementSequenceList = movementSequenceString.split("\\s*;\\s*");
         List<FingerPosition> movementSequence = new ArrayList<>();
-        for (String movement :movementSequenceList) {
+        for (String movement : movementSequenceList) {
             movementSequence.add(FingerPosition.valueOf(movement));
         }
         return movementSequence;
