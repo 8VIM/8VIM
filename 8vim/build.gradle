@@ -30,6 +30,7 @@ android {
         abortOnError false
         disable "ObsoleteLintCustomCheck"
         disable "ClickableViewAccessibility"
+        disable "VectorPath"
     }
 }
 
