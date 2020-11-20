@@ -129,69 +129,7 @@ public class XpadView extends View {
         int centre_x_value = (int) circle.getCentre().x;
         int centre_y_value = (int) circle.getCentre().y;
 
-        //Number pad icon
-        int numberpad_icon_x_coordinates = centre_x_value - 310;
-        int numberpad_icon_y_coordinates = centre_y_value - 40;
-
-        int numberpad_icon_width = 70;
-        int numberpad_icon_height = 70;
-
-        VectorDrawableCompat numberpad_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.numericpad_vd_vector, null);
-        if (numberpad_icon_vectordrawable == null) {
-            throw new AssertionError();
-        }
-        numberpad_icon_vectordrawable.setBounds(numberpad_icon_x_coordinates, numberpad_icon_y_coordinates, numberpad_icon_width + numberpad_icon_x_coordinates, numberpad_icon_height + numberpad_icon_y_coordinates);
-        numberpad_icon_vectordrawable.draw(canvas);
-
-
-        //for Backspace icon
-        int backspace_icon_x_coordinates = centre_x_value + 240;
-        int backspace_icon_y_coordinates = centre_y_value - 40;
-
-        int backspace_icon_width = 70;
-        int backspace_icon_height = 70;
-
-        VectorDrawableCompat backspace_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_backspace, null);
-        if (backspace_icon_vectordrawable == null) {
-            throw new AssertionError();
-        }
-
-        backspace_icon_vectordrawable.setBounds(backspace_icon_x_coordinates, backspace_icon_y_coordinates, backspace_icon_width + backspace_icon_x_coordinates, backspace_icon_height + backspace_icon_y_coordinates);
-        backspace_icon_vectordrawable.draw(canvas);
-
-        //for Enter icon
-        int enter_icon_x_coordinates = centre_x_value - 30;
-        int enter_icon_y_coordinates = centre_y_value + 240;
-
-        int enter_icon_width = 70;
-        int enter_icon_height = 70;
-
-        VectorDrawableCompat enter_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_baseline_keyboard_enter_24, null);
-        if (enter_icon_vectordrawable == null) {
-            throw new AssertionError();
-        }
-
-        enter_icon_vectordrawable.setBounds(enter_icon_x_coordinates,
-                enter_icon_y_coordinates,
-                enter_icon_width + enter_icon_x_coordinates,
-                enter_icon_height + enter_icon_y_coordinates);
-        enter_icon_vectordrawable.draw(canvas);
-
-        //for caps lock and shift icon
-        int shift_icon_x_coordinates = centre_x_value - 30;
-        int shift_icon_y_coordinates = centre_y_value - 310;
-
-        int shift_icon_width = 70;
-        int shift_icon_height = 70;
-
-        VectorDrawableCompat shift_icon_vectorDrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.shift_icon_vd_vector, null);
-        if (shift_icon_vectorDrawable == null) {
-            throw new AssertionError();
-        }
-        shift_icon_vectorDrawable.setBounds(shift_icon_x_coordinates, shift_icon_y_coordinates, shift_icon_width + shift_icon_x_coordinates, shift_icon_height + shift_icon_y_coordinates);
-        shift_icon_vectorDrawable.draw(canvas);
-
-
+        setSectorIcons(centre_x_value, centre_y_value, canvas);
         //the text along the lines
         foregroundPaint.setStrokeWidth(2);
         foregroundPaint.setStyle(Paint.Style.FILL);
@@ -200,6 +138,74 @@ public class XpadView extends View {
         float[] pointsOfDisplay = Utilities.convertPointFListToPrimitiveFloatArray(listOfPointsOfDisplay);
         canvas.drawPosText(charactersToDisplay, pointsOfDisplay, foregroundPaint);
 
+    }
+
+    private void setSectorIcons(int centre_x_value, int centre_y_value, Canvas canvas) {
+
+        //Number pad icon
+        int numberpad_icon_x_coordinates = centre_x_value - 310;
+        int numberpad_icon_y_coordinates = centre_y_value - 40;
+
+        int icon_width = 70;
+        int icon_height = 70;
+
+        VectorDrawableCompat numberpad_icon_vectordrawable = VectorDrawableCompat
+                .create(getContext().getResources(), R.drawable.numericpad_vd_vector, null);
+        if (numberpad_icon_vectordrawable == null) {
+            throw new AssertionError();
+        }
+        numberpad_icon_vectordrawable.setBounds(numberpad_icon_x_coordinates,
+                numberpad_icon_y_coordinates,
+                icon_width + numberpad_icon_x_coordinates,
+                icon_height + numberpad_icon_y_coordinates);
+        numberpad_icon_vectordrawable.draw(canvas);
+
+        //for Backspace icon
+        int backspace_icon_x_coordinates = centre_x_value + 240;
+        int backspace_icon_y_coordinates = centre_y_value - 40;
+
+        VectorDrawableCompat backspace_icon_vectordrawable = VectorDrawableCompat
+                .create(getContext().getResources(), R.drawable.ic_backspace, null);
+        if (backspace_icon_vectordrawable == null) {
+            throw new AssertionError();
+        }
+
+        backspace_icon_vectordrawable.setBounds(backspace_icon_x_coordinates,
+                backspace_icon_y_coordinates,
+                icon_width + backspace_icon_x_coordinates,
+                icon_height + backspace_icon_y_coordinates);
+        backspace_icon_vectordrawable.draw(canvas);
+
+        //for Enter icon
+        int enter_icon_x_coordinates = centre_x_value - 30;
+        int enter_icon_y_coordinates = centre_y_value + 240;
+
+        VectorDrawableCompat enter_icon_vectordrawable = VectorDrawableCompat
+                .create(getContext().getResources(), R.drawable.ic_keyboard_return, null);
+        if (enter_icon_vectordrawable == null) {
+            throw new AssertionError();
+        }
+
+        enter_icon_vectordrawable.setBounds(enter_icon_x_coordinates,
+                enter_icon_y_coordinates,
+                icon_width + enter_icon_x_coordinates,
+                icon_height + enter_icon_y_coordinates);
+        enter_icon_vectordrawable.draw(canvas);
+
+        //for caps lock and shift icon
+        int shift_icon_x_coordinates = centre_x_value - 30;
+        int shift_icon_y_coordinates = centre_y_value - 310;
+
+        VectorDrawableCompat shift_icon_vectorDrawable = VectorDrawableCompat
+                .create(getContext().getResources(), R.drawable.shift_icon_vd_vector, null);
+        if (shift_icon_vectorDrawable == null) {
+            throw new AssertionError();
+        }
+        shift_icon_vectorDrawable.setBounds(shift_icon_x_coordinates,
+                shift_icon_y_coordinates,
+                icon_width + shift_icon_x_coordinates,
+                icon_height + shift_icon_y_coordinates);
+        shift_icon_vectorDrawable.draw(canvas);
     }
 
     private void paintTypingTrail(Canvas canvas) {
