@@ -36,7 +36,7 @@ import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.utilities.Utilities;
 
-public class XboardView extends View {
+public class XpadView extends View {
 
     private final int offset = 15;
     private final int lengthOfLineDemarcatingSectors = 250;
@@ -52,12 +52,12 @@ public class XboardView extends View {
     private Circle circle;
     private final Dimention computedDimension = new Dimention();
 
-    public XboardView(Context context) {
+    public XpadView(Context context) {
         super(context);
         initialize(context);
     }
 
-    public XboardView(Context context, AttributeSet attrs) {
+    public XpadView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
         gestureDetector = new GestureDetector(context, new GestureListener());
@@ -65,7 +65,7 @@ public class XboardView extends View {
     }
 
 
-    public XboardView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public XpadView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context);
     }
@@ -104,7 +104,8 @@ public class XboardView extends View {
 
         canvas.drawColor(backgroundPaint.getColor());
 
-        SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        SharedPreferences sp = this.getContext()
+                .getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         if (sp.getBoolean(this.getContext().getString(R.string.user_preferred_typing_trail_visibility), true)) {
             paintTypingTrail(canvas);
 
@@ -117,7 +118,11 @@ public class XboardView extends View {
         canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), foregroundPaint);
         //The lines demarcating the sectors
         for (LineSegment lineSegment : sectorDemarcatingLines) {
-            canvas.drawLine(lineSegment.getStartingPoint().x, lineSegment.getStartingPoint().y, lineSegment.getEndPoint().x, lineSegment.getEndPoint().y, foregroundPaint);
+            canvas.drawLine(lineSegment.getStartingPoint().x,
+                    lineSegment.getStartingPoint().y,
+                    lineSegment.getEndPoint().x,
+                    lineSegment.getEndPoint().y,
+                    foregroundPaint);
         }
 
         // Converting float value to int
@@ -166,7 +171,10 @@ public class XboardView extends View {
             throw new AssertionError();
         }
 
-        enter_icon_vectordrawable.setBounds(enter_icon_x_coordinates, enter_icon_y_coordinates, enter_icon_width + enter_icon_x_coordinates, enter_icon_height + enter_icon_y_coordinates);
+        enter_icon_vectordrawable.setBounds(enter_icon_x_coordinates,
+                enter_icon_y_coordinates,
+                enter_icon_width + enter_icon_x_coordinates,
+                enter_icon_height + enter_icon_y_coordinates);
         enter_icon_vectordrawable.draw(canvas);
 
         //for caps lock and shift icon

@@ -24,8 +24,7 @@ import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainKeyboard.MainKeyboardView;
 
-public class
-MainInputMethodService extends InputMethodService {
+public class MainInputMethodService extends InputMethodService {
 
     InputMethodServiceHelper inputMethodServiceHelper = new InputMethodServiceHelper();
     InputConnection inputConnection;
@@ -169,7 +168,7 @@ MainInputMethodService extends InputMethodService {
     }
 
     public void sendKey(int keyEventCode, int flags) {
-        sendDownAndUpKeyEvent(keyEventCode, (getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags));
+        sendDownAndUpKeyEvent(keyEventCode, getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags);
         clearModifierFlags();
     }
 
@@ -220,10 +219,9 @@ MainInputMethodService extends InputMethodService {
                 sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, 0);
                 sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
                 break;
-            case SWITCH_TO_SELECTION_KEYBOARD: {
+            case SWITCH_TO_SELECTION_KEYBOARD:
                 currentView = selectionKeypadView;
                 setInputView(currentView);
-            }
             break;
             case HIDE_KEYBOARD:
                 hideKeyboard();
