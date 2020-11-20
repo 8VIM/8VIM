@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 
 import java.util.List;
 
+import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimention;
 import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
 import inc.flide.vim8.structures.Constants;
@@ -30,10 +31,13 @@ public abstract class ButtonKeypadView extends KeyboardView {
     }
 
     protected void initilize() {
-        setHapticFeedbackEnabled(true);
+        this.setHapticFeedbackEnabled(true);
+        this.setBackgroundColor(getResources().getColor(R.color.primaryBackground));
+        setupForegroundPaint();
     }
 
     private void setupForegroundPaint() {
+        foregroundPaint.setColor(getResources().getColor(R.color.primaryText));
         foregroundPaint.setTextAlign(Paint.Align.CENTER);
         foregroundPaint.setTextSize(Constants.TEXT_SIZE);
         Typeface font = Typeface.createFromAsset(getContext().getAssets(),
@@ -62,7 +66,6 @@ public abstract class ButtonKeypadView extends KeyboardView {
 
     @Override
     public void onDraw(Canvas canvas) {
-        setupForegroundPaint();
         List<Keyboard.Key> keys = getKeyboard().getKeys();
         for (Keyboard.Key key : keys) {
             if (key.label != null)

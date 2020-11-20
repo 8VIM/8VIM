@@ -57,8 +57,14 @@ public class MainKeyboardView extends View {
             layout = View.inflate(context, R.layout.main_keyboard_left_sidebar_view, null);
         }
 
+        setupBackgroundColours();
         setupButtonsOnSideBar();
         setHapticFeedbackEnabled(true);
+    }
+
+    private void setupBackgroundColours() {
+        View sidebar = layout.findViewById(R.id.sidebarButtonsLayout);
+        sidebar.setBackgroundColor(getResources().getColor(R.color.secondaryBackground));
     }
 
     private void setupButtonsOnSideBar() {

@@ -86,11 +86,11 @@ public class XpadView extends View {
     }
 
     private void setBackgroundPaint() {
-        backgroundPaint.setARGB(255, 255, 255, 255);
+        backgroundPaint.setColor(getResources().getColor(R.color.primaryBackground));
     }
 
     private void setForegroundPaint() {
-        foregroundPaint.setARGB(255, 0, 0, 0);
+        foregroundPaint.setColor(getResources().getColor(R.color.primaryText));
         foregroundPaint.setAntiAlias(true);
         foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
         foregroundPaint.setTextSize(Constants.TEXT_SIZE);
@@ -151,7 +151,7 @@ public class XpadView extends View {
         int backspace_icon_width = 70;
         int backspace_icon_height = 70;
 
-        VectorDrawableCompat backspace_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_baseline_keyboard_backspace_24, null);
+        VectorDrawableCompat backspace_icon_vectordrawable = VectorDrawableCompat.create(getContext().getResources(), R.drawable.ic_backspace, null);
         if (backspace_icon_vectordrawable == null) {
             throw new AssertionError();
         }
