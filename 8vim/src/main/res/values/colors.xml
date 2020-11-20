@@ -5,7 +5,7 @@
     <color name="black">#222222</color>
     <color name="purple">#8186d5</color>
 
-    <color name="primaryBackground">#F7F0F5</color>
-    <color name="secondaryBackground">#DECBB7</color>
-    <color name="primaryText">#03191E</color>
+    <color name="primaryBackground">#E1D7DD</color>
+    <color name="secondaryBackground">#CDC1CA</color>
+    <color name="primaryText">#3F334D</color>
 </resources>
