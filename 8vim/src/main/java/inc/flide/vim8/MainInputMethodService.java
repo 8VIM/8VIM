@@ -222,7 +222,7 @@ public class MainInputMethodService extends InputMethodService {
             case SWITCH_TO_SELECTION_KEYBOARD:
                 currentView = selectionKeypadView;
                 setInputView(currentView);
-            break;
+                break;
             case HIDE_KEYBOARD:
                 hideKeyboard();
                 break;
