@@ -67,6 +67,7 @@ public abstract class ButtonKeypadView extends KeyboardView {
                 if (key.width < key.height) {
                     side = key.width;
                 }
+                key.icon.setTint(getResources().getColor(R.color.primaryIcon));
                 key.icon.setBounds(key.x + (side / 4), key.y + (side / 4), key.x + (side * 3 / 4), key.y + (side * 3 / 4));
                 key.icon.draw(canvas);
             }
