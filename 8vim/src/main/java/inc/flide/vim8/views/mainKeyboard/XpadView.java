@@ -158,6 +158,7 @@ public class XpadView extends View {
                 numberpad_icon_y_coordinates,
                 icon_width + numberpad_icon_x_coordinates,
                 icon_height + numberpad_icon_y_coordinates);
+        numberpad_icon_vectordrawable.setTint(getResources().getColor(R.color.primaryIcon));
         numberpad_icon_vectordrawable.draw(canvas);
 
         //for Backspace icon
@@ -174,6 +175,7 @@ public class XpadView extends View {
                 backspace_icon_y_coordinates,
                 icon_width + backspace_icon_x_coordinates,
                 icon_height + backspace_icon_y_coordinates);
+        backspace_icon_vectordrawable.setTint(getResources().getColor(R.color.primaryIcon));
         backspace_icon_vectordrawable.draw(canvas);
 
         //for Enter icon
@@ -190,6 +192,7 @@ public class XpadView extends View {
                 enter_icon_y_coordinates,
                 icon_width + enter_icon_x_coordinates,
                 icon_height + enter_icon_y_coordinates);
+        enter_icon_vectordrawable.setTint(getResources().getColor(R.color.primaryIcon));
         enter_icon_vectordrawable.draw(canvas);
 
         //for caps lock and shift icon
@@ -205,6 +208,7 @@ public class XpadView extends View {
                 shift_icon_y_coordinates,
                 icon_width + shift_icon_x_coordinates,
                 icon_height + shift_icon_y_coordinates);
+        shift_icon_vectorDrawable.setTint(getResources().getColor(R.color.primaryIcon));
         shift_icon_vectorDrawable.draw(canvas);
     }
 
