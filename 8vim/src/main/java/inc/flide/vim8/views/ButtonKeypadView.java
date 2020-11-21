@@ -53,14 +53,6 @@ public abstract class ButtonKeypadView extends KeyboardView {
                 MeasureSpec.getSize(heightMeasureSpec),
                 getResources().getConfiguration().orientation);
 
-        if (getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
-            //Landscape is just un-usable right now.
-            // TODO: Landscape mode requires more clarity, what exactly do you want to do?
-            computedDimension.setWidth(Math.round(1.33f * computedDimension.getHeight()));
-        } else  // Portrait mode
-        {
-            computedDimension.setHeight(Math.round(0.8f * (computedDimension.getWidth() - (60 * 3))));
-        }
         setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
     }
 
