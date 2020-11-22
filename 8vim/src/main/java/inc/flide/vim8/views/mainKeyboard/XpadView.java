@@ -28,7 +28,7 @@ import java.util.Random;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Circle;
-import inc.flide.vim8.geometry.Dimention;
+import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.geometry.GeometricUtilities;
 import inc.flide.vim8.geometry.LineSegment;
 import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
@@ -38,19 +38,20 @@ import inc.flide.vim8.utilities.Utilities;
 
 public class XpadView extends View {
 
-    private final int offset = 15;
+    private final int characterCoordinateOffsetDistance = 15;
     private final int lengthOfLineDemarcatingSectors = 250;
-    List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
-    List<PointF> listOfPointsOfDisplay = new ArrayList<>();
-    Path path = new Path();
-    Context context;
+    private final Dimension iconDimension = new Dimension(70, 70);
+
+    private final List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
+    private final List<PointF> listOfPointsOfDisplay = new ArrayList<>();
+    private final Path typingTrailPath = new Path();
     GestureDetector gestureDetector;
     Paint backgroundPaint = new Paint();
     Paint foregroundPaint = new Paint();
     private MainKeyboardActionListener actionListener;
     private PointF circleCenter;
     private Circle circle;
-    private final Dimention computedDimension = new Dimention();
+    private final Dimension keypadDimension = new Dimension();
 
     public XpadView(Context context) {
         super(context);
@@ -61,7 +62,6 @@ public class XpadView extends View {
         super(context, attrs);
         initialize(context);
         gestureDetector = new GestureDetector(context, new GestureListener());
-        this.context = context;
     }
 
 
@@ -175,16 +175,14 @@ public class XpadView extends View {
                 R.drawable.shift_icon_vd_vector);
     }
 
-    private void drawIconInSector(int icon_x_coordinates, int icon_y_coordinates, Canvas canvas, int resourceId){
-        int icon_width = 70;
-        int icon_height = 70;
+    private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId){
 
         VectorDrawableCompat icon_vectorDrawable = VectorDrawableCompat
                 .create(getContext().getResources(), resourceId, null);
-        icon_vectorDrawable.setBounds(icon_x_coordinates,
-                icon_y_coordinates,
-                icon_width + icon_x_coordinates,
-                icon_height + icon_y_coordinates);
+        icon_vectorDrawable.setBounds(coordinateX,
+                coordinateY,
+                coordinateX + iconDimension.getWidth(),
+                coordinateY + iconDimension.getHeight());
         icon_vectorDrawable.setTint(getResources().getColor(R.color.primaryIcon));
         icon_vectorDrawable.draw(canvas);
     }
@@ -193,12 +191,12 @@ public class XpadView extends View {
         float[] pathPos = new float[2];
         Paint typingTrailPaint = new Paint();
 
-        if (path != null) {
+        if (typingTrailPath != null) {
             final short steps = 150;
             final byte stepDistance = 5;
             final byte maxTrailRadius = 14;
             PathMeasure pathMeasure = new PathMeasure();
-            pathMeasure.setPath(path, false);
+            pathMeasure.setPath(typingTrailPath, false);
             Random random = new Random();
             final float pathLength = pathMeasure.getLength();
             for (short i = 1; i <= steps; i++) {
@@ -254,7 +252,7 @@ public class XpadView extends View {
                 }
             }
         }
-        canvas.drawPath(path, typingTrailPaint);
+        canvas.drawPath(typingTrailPath, typingTrailPaint);
     }
 
 
@@ -292,16 +290,12 @@ public class XpadView extends View {
     }
 
     private float computeClockwiseYOffset(LineSegment lineSegment, float height) {
-
-
         double angle = lineSegment.getDirectionOfLineInDegree();
         boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
 
         if (lineSegment.isSlopePositive()) {
-            return offset + (isXDirectionPositive ? height : -height);
+            return characterCoordinateOffsetDistance + (isXDirectionPositive ? height : -height);
         }
-
-
         return 0;
     }
 
@@ -309,7 +303,7 @@ public class XpadView extends View {
         double angle = lineSegment.getDirectionOfLineInDegree();
         boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
         if (lineSegment.isSlopePositive()) {
-            return offset;
+            return characterCoordinateOffsetDistance;
         }
         return isXDirectionPositive ? -height : height;
     }
@@ -349,18 +343,18 @@ public class XpadView extends View {
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 actionListener.movementStarted(currentFingerPosition);
-                path.moveTo(e.getX(), e.getY());
+                typingTrailPath.moveTo(e.getX(), e.getY());
                 return true;
 
             case MotionEvent.ACTION_MOVE:
                 actionListener.movementContinues(currentFingerPosition);
-                path.lineTo(e.getX(), e.getY());
+                typingTrailPath.lineTo(e.getX(), e.getY());
                 break;
 
             case MotionEvent.ACTION_UP:
                 actionListener.movementEnds();
             case MotionEvent.ACTION_POINTER_DOWN:
-                path.reset();
+                typingTrailPath.reset();
                 break;
             default:
                 return false;
@@ -375,15 +369,15 @@ public class XpadView extends View {
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-        computedDimension.setWidth(MeasureSpec.getSize(widthMeasureSpec));
-        computedDimension.setHeight(MeasureSpec.getSize(heightMeasureSpec));
+        keypadDimension.setWidth(MeasureSpec.getSize(widthMeasureSpec));
+        keypadDimension.setHeight(MeasureSpec.getSize(heightMeasureSpec));
 
         SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key), 0.3f);
-        float radius = (spRadiusValue * computedDimension.getWidth()) / 2;
+        float radius = (spRadiusValue * keypadDimension.getWidth()) / 2;
 
-        circleCenter.x = (computedDimension.getWidth() / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
-        circleCenter.y = (computedDimension.getHeight() / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
+        circleCenter.x = (keypadDimension.getWidth() / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
+        circleCenter.y = (keypadDimension.getHeight() / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
 
         circle.setCentre(circleCenter);
         circle.setRadius(radius);
@@ -398,7 +392,7 @@ public class XpadView extends View {
 
         }
 
-        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
+        setMeasuredDimension(keypadDimension.getWidth(), keypadDimension.getHeight());
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -409,10 +403,10 @@ public class XpadView extends View {
             float y = e.getY();
 
 
-            path.addCircle(x, y, 50, Path.Direction.CW);
+            typingTrailPath.addCircle(x, y, 50, Path.Direction.CW);
 
             // clean drawing area on double tap
-            path.reset();
+            typingTrailPath.reset();
 
             Log.d("Double Tap", "Tapped at: (" + x + "," + y + ")");
 

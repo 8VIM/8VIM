@@ -1,9 +1,9 @@
 package inc.flide.vim8.keyboardHelpers;
 
-import inc.flide.vim8.geometry.Dimention;
+import inc.flide.vim8.geometry.Dimension;
 
 public class InputMethodViewHelper {
-    public static Dimention onMeasureHelper(int width, int height, int orientation) {
+    public static Dimension onMeasureHelper(int width, int height, int orientation) {
 
         if (orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
             //Landscape is just un-usable right now.
@@ -14,7 +14,7 @@ public class InputMethodViewHelper {
             height = Math.round(0.8f * (width - (60 * 3)));
             //height = Math.round(0.8f * (width));
         }
-        return new Dimention(width, height);
+        return new Dimension(width, height);
     }
 
 }

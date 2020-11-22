@@ -1,14 +1,14 @@
 package inc.flide.vim8.geometry;
 
-public class Dimention {
+public class Dimension {
     private int width;
     private int height;
 
-    public Dimention() {
+    public Dimension() {
         this(0, 0);
     }
 
-    public Dimention(int width, int height) {
+    public Dimension(int width, int height) {
         this.width = width;
         this.height = height;
     }
