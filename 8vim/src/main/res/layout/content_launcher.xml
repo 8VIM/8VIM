@@ -113,7 +113,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.378"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginRight="180dp" />
 
                 <Button
                     android:id="@+id/right_button"
@@ -298,9 +299,9 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
