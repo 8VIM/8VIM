@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import java.util.List;
 
 import inc.flide.vim8.R;
-import inc.flide.vim8.geometry.Dimention;
+import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
 import inc.flide.vim8.structures.Constants;
 
@@ -48,7 +48,7 @@ public abstract class ButtonKeypadView extends KeyboardView {
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-        Dimention computedDimension = InputMethodViewHelper.onMeasureHelper(
+        Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
                 MeasureSpec.getSize(widthMeasureSpec),
                 MeasureSpec.getSize(heightMeasureSpec),
                 getResources().getConfiguration().orientation);
