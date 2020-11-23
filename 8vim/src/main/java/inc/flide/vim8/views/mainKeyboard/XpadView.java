@@ -108,7 +108,6 @@ public class XpadView extends View {
                 .getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         if (sp.getBoolean(this.getContext().getString(R.string.user_preferred_typing_trail_visibility), true)) {
             paintTypingTrail(canvas);
-
         }
 
         foregroundPaint.setStrokeWidth(5);
@@ -199,6 +198,9 @@ public class XpadView extends View {
             pathMeasure.setPath(typingTrailPath, false);
             Random random = new Random();
             final float pathLength = pathMeasure.getLength();
+
+            int trailColour = getTrailColor();
+
             for (short i = 1; i <= steps; i++) {
                 final float distance = pathLength - i * stepDistance;
                 if (distance >= 0) {
@@ -207,46 +209,14 @@ public class XpadView extends View {
                     final float x = pathPos[0] + random.nextFloat() - trailRadius;
                     final float y = pathPos[1] + random.nextFloat() - trailRadius;
 
-                    SharedPreferences sharedPreferences = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-                    String color_choosed = sharedPreferences.getString(this.getContext().getString(R.string.color_selection), "Red");
-
-                    if (color_choosed.equals("Red")) {
-                        typingTrailPaint.setShader(new RadialGradient(
+                    typingTrailPaint.setShader(
+                            new RadialGradient(
                                 x,
                                 y,
                                 trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(Color.RED, random.nextInt(0xff)),
-                                Color.TRANSPARENT,
-                                Shader.TileMode.CLAMP
-                        ));
-                    } else if (color_choosed.equals("Green")) {
-                        typingTrailPaint.setShader(new RadialGradient(
-                                x,
-                                y,
-                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(Color.GREEN, random.nextInt(0xff)),
-                                Color.TRANSPARENT,
-                                Shader.TileMode.CLAMP
-                        ));
-                    } else if (color_choosed.equals("Yellow")) {
-                        typingTrailPaint.setShader(new RadialGradient(
-                                x,
-                                y,
-                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(Color.YELLOW, random.nextInt(0xff)),
-                                Color.TRANSPARENT,
-                                Shader.TileMode.CLAMP
-                        ));
-                    } else if (color_choosed.equals("Blue")) {
-                        typingTrailPaint.setShader(new RadialGradient(
-                                x,
-                                y,
-                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(Color.BLUE, random.nextInt(0xff)),
-                                Color.TRANSPARENT,
-                                Shader.TileMode.CLAMP
-                        ));
-                    }
+                                ColorUtils.setAlphaComponent(trailColour, random.nextInt(0xff)),
+                            Color.TRANSPARENT,
+                            Shader.TileMode.CLAMP));
 
                     canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
                 }
@@ -255,6 +225,11 @@ public class XpadView extends View {
         canvas.drawPath(typingTrailPath, typingTrailPaint);
     }
 
+    private int getTrailColor() {
+        SharedPreferences sharedPreferences = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        int trailColor = sharedPreferences.getInt(this.getContext().getString(R.string.color_selection), Color.YELLOW);
+        return trailColor;
+    }
 
     private String getCharacterSetToDisplay() {
         String characterSetSmall = "nomufv!weilhkj@,tscdzg.'yabrpxq?";
