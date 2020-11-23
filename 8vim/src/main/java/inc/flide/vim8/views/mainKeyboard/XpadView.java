@@ -128,7 +128,11 @@ public class XpadView extends View {
         int centre_x_value = (int) circle.getCentre().x;
         int centre_y_value = (int) circle.getCentre().y;
 
-        setupSectorIcons(centre_x_value, centre_y_value, canvas);
+        SharedPreferences sp_sector_icons = this.getContext()
+                .getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        if (sp_sector_icons.getBoolean(this.getContext().getString(R.string.user_preferred_display_icons_for_sectors), true)) {
+            setupSectorIcons(centre_x_value, centre_y_value, canvas);
+        }
         //the text along the lines
         foregroundPaint.setStrokeWidth(2);
         foregroundPaint.setStyle(Paint.Style.FILL);
