@@ -121,7 +121,7 @@ public class LauncherActivity extends AppCompatActivity
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putString(getString(R.string.color_selection), "Red");
+                sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.RED);
                 sharedPreferencesEditor.apply();
             }
         });
@@ -144,7 +144,7 @@ public class LauncherActivity extends AppCompatActivity
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putString(getString(R.string.color_selection), "Green");
+                sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.GREEN);
                 sharedPreferencesEditor.apply();
             }
         });
@@ -166,7 +166,7 @@ public class LauncherActivity extends AppCompatActivity
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putString(getString(R.string.color_selection), "Yellow");
+                sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.YELLOW);
                 sharedPreferencesEditor.apply();
             }
         });
@@ -188,7 +188,7 @@ public class LauncherActivity extends AppCompatActivity
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putString(getString(R.string.color_selection), "Blue");
+                sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.BLUE);
                 sharedPreferencesEditor.apply();
             }
         });
@@ -337,21 +337,21 @@ public class LauncherActivity extends AppCompatActivity
         super.onResume();
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        String current_color = sharedPreferences.getString(getString(R.string.color_selection), "Red");
+        int currentColor = sharedPreferences.getInt(getString(R.string.color_selection), Color.YELLOW);
 
-        if (current_color.equals("Red")) {
+        if (currentColor == Color.RED) {
             red_button.setBackground(ContextCompat.getDrawable(this, R.drawable.red_rounded_button_pressed));
             red_button.setTextColor(Color.DKGRAY);
 
-        } else if (current_color.equals("Green")) {
+        } else if (currentColor == Color.GREEN) {
             green_button.setBackground(ContextCompat.getDrawable(this, R.drawable.green_rounded_button_pressed));
             green_button.setTextColor(Color.DKGRAY);
 
-        } else if (current_color.equals("Yellow")) {
+        } else if (currentColor == Color.YELLOW) {
             yellow_button.setBackground(ContextCompat.getDrawable(this, R.drawable.yellow_rounded_button_pressed));
             yellow_button.setTextColor(Color.DKGRAY);
 
-        } else if (current_color.equals("Blue")) {
+        } else if (currentColor == Color.BLUE) {
             blue_button.setBackground(ContextCompat.getDrawable(this, R.drawable.blue_rounded_button_pressed));
             blue_button.setTextColor(Color.DKGRAY);
 
