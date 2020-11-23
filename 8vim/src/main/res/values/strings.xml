@@ -39,12 +39,14 @@
     <string name="x_board_circle_centre_y_offset_key">x_board_circle_centre_y_offset</string>
 
     <string name="user_preferred_typing_trail_visibility">user_preferred_typing_trail_visibility</string>
+    <string name="user_preferred_display_icons_for_sectors">user_preferred_display_icons_for_sectors</string>
     <string name="select_emoji_keyboard_button_text">Select Emoji Keyboard</string>
     <string name="resize_circle_button_text">Resize Circle</string>
     <string name="set_circle_center_button_text">Set circle center</string>
     <string name="Set_sidebar_left_button_text">Set Sidebar Left</string>
     <string name="Set_sidebar_right_button_text">Set Sidebar Right</string>
     <string name="configurable_touch_trail_button_text">Display Touch Trail</string>
+    <string name="configurable_display_icon_button_text">Display icons in the sector</string>
     <string name="generic_off_text">Off</string>
     <string name="generic_on_text">On</string>
     <string name="choose_the_color_for_touch_trail_label">Choose the color for Touch Trail :</string>

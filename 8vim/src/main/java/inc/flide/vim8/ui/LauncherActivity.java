@@ -11,11 +11,14 @@ import android.provider.Settings;
 import android.transition.Fade;
 import android.transition.Transition;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.Switch;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,11 +47,15 @@ public class LauncherActivity extends AppCompatActivity
     private boolean isKeyboardEnabled;
 
     private ConstraintLayout constraintLayout_select_color;
+    private ConstraintLayout constraintLayout_display_icons;
+    private ConstraintLayout constraintLayout_touch_trail;
 
     private Button red_button;
     private Button green_button;
     private Button blue_button;
     private Button yellow_button;
+
+    private SwitchCompat display_icon_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +105,13 @@ public class LauncherActivity extends AppCompatActivity
         } else {
             constraintLayout_select_color.setVisibility(View.INVISIBLE);
         }
+
+        // for display icons in the sector
+
+        display_icon_button = findViewById(R.id.display_icons_switch);
+
+        display_icon_button.setChecked(sp.getBoolean(getString(R.string.user_preferred_display_icons_for_sectors), true));
+        display_icon_button.setOnCheckedChangeListener((buttonView, isChecked) -> displayIconsPreferenceChangeListner(isChecked));
 
         red_button = findViewById(R.id.red_button);
         green_button = findViewById(R.id.green_button);
@@ -192,6 +206,7 @@ public class LauncherActivity extends AppCompatActivity
                 sharedPreferencesEditor.apply();
             }
         });
+
     }
 
     private void touchTrailPreferenceChangeListner(boolean isChecked) {
@@ -218,7 +233,16 @@ public class LauncherActivity extends AppCompatActivity
 
     }
 
-    private void switchSidebarPosition(String userPreferredPositionForSidebar) {
+    private void displayIconsPreferenceChangeListner(boolean isChecked) {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+        sharedPreferencesEditor.putBoolean(getString(R.string.user_preferred_display_icons_for_sectors), isChecked);
+        sharedPreferencesEditor.apply();
+
+    }
+
+
+        private void switchSidebarPosition(String userPreferredPositionForSidebar) {
         if (userPreferredPositionForSidebar.equals(getString(R.string.mainKeyboard_sidebar_position_preference_left_value)) ||
                 userPreferredPositionForSidebar.equals(getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
 
