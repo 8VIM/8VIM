@@ -17,8 +17,6 @@
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
 
-    <string name="color_selection">color_selection</string>
-
     <string name="keyboard_test_edit_text_hint">Test your keyboard here</string>
     <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
     <string name="share_app">Share &appname;</string>
@@ -27,7 +25,6 @@
 
     <!--Preference Related Strings-->
     <string name="basic_preference_file_name">inc.flide.&appname;.basicPreferences</string>
-
     <string name="bp_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
 
     <string name="mainKeyboard_sidebar_position_preference_key">input keyboard value</string>
@@ -37,6 +34,28 @@
     <string name="x_board_circle_radius_size_factor_key">x_board_circle_radius_size_factor</string>
     <string name="x_board_circle_centre_x_offset_key">x_board_circle_centre_x_offset</string>
     <string name="x_board_circle_centre_y_offset_key">x_board_circle_centre_y_offset</string>
+
+
+<!--    Heading-->
+    <string name="touch_trail_setting_text">Touch Trail Settings</string>
+
+<!--    ColorCode for seekbar-->
+    <string name="storing_colorCode_value_in_sharedPreference">storing_colorCode_value_in_sharedPreference</string>
+
+<!--    Trail color setting-->
+    <string name="select_color_for_trail">Select color for trail :</string>
+    <string name="storing_colorbar_value_in_sharedPreference">storing_colorbar_value_in_sharedPreference</string>
+
+<!--    Trail thickness setting-->
+    <string name="set_thickness_for_trail_text">Set thickness for trail :</string>
+    <string name="storing_thickness_value_in_sharedPreference">storing_thickness_value_in_sharedPreference</string>
+    <string name="seekbar_thickness_text_value">1</string>
+
+<!--    Trail opacity setting-->
+    <string name="set_opacity_for_trail">Set opacity for trail :</string>
+    <string name="storing_opacity_value_in_sharedPreference">storing_opacity_value_in_sharedPreference</string>
+    <string name="seekbar_opacity_text_value">1</string>
+
 
     <string name="user_preferred_typing_trail_visibility">user_preferred_typing_trail_visibility</string>
     <string name="user_preferred_display_icons_for_sectors">user_preferred_display_icons_for_sectors</string>
@@ -49,13 +68,11 @@
     <string name="configurable_display_icon_button_text">Display icons in the sector</string>
     <string name="generic_off_text">Off</string>
     <string name="generic_on_text">On</string>
-    <string name="choose_the_color_for_touch_trail_label">Choose the color for Touch Trail :</string>
-    <string name="generic_red_text">Red</string>
-    <string name="generic_green_text">Green</string>
-    <string name="generic_yellow_text">Yellow</string>
-    <string name="generic_blue_text">Blue</string>
+
+
     <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
     <string name="about_us_label">About Us</string>
+    <string name="touch_trail_settings">Touch Trail Settings</string>
     <string name="x_axis_label">X Axis : </string>
     <string name="y_axis_label">Y Axis : </string>
     <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>
