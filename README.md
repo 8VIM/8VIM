@@ -21,15 +21,15 @@ So, what capablities does 8Vim have?
 ##### Basic Stuff
 
 - right sector acts as a Backspace key.
-- bottom sector acts as an Enter Key.
+- bottom sector acts as an Enter key.
 - top sector acts as a combo of Shift and Caps Lock key (i.e., press once to activate Shift. Press again for Caps Lock. Press once more and everything is back to normal.)
-- Left Sector acts as the button that takes you to the number pad.
+- left sector acts as a button that takes you to the number pad.
 
 ##### Cursor Movements
-If you move your finger from within the circle to any sector, the cursor will move one character in the direction of the sector. For example, if you swipe from the circle to the right sector, the cursor will move to the right once. If hold on the sector, the cursor will move as long as the sector is pressed.
+If you move your finger from within the circle to any sector, the cursor will move one character in the direction of the sector. For example, if you swipe from the circle to the right sector and then raise your finger, the cursor will move to the right once. If you don't lift up your finger but instead keep pressing on the sector, the cursor will move as long as the sector is pressed.
 
 ##### Selection
-There is a selection mode built into the keyboard. If you move your finger from the right sector to the circle and hold, the cursor will start moving left and selecting everything in its path until you lift your finger. Once you release, the selection mode keyboard will open and show different actions that can then be done with your selection. (i.e. right-sector->circle->hold->lift-finger)
+There is a selection mode built into the keyboard. If you move your finger from the right sector to the circle and hold, the cursor will start moving left while selecting everything in its path, until you lift your finger. Once you release, the selection mode keyboard will open and show different actions that can then be applied to your selection. (i.e. right-sector->circle->hold->lift-finger)
 
 ##### Paste Functionality
 Moving your finger from the left sector to the circle center will paste your clipboard content. (i.e. left-sector->circle->lift-finger)
@@ -42,7 +42,7 @@ The 8vim draws inspiration from handwriting. By mimicking the way our hand moves
 The layout is optimised for fast writing, by allowing for the most common letter sequences to be produced with swift, fluid gestures. Once familiar with the layout, you can reach speeds of over 40 words per minute!
 
 ###### Typos, goodbye
-The simplicity of the gestures used to enter words allow for true blind typing and virtually eliminate typos, regardless of whether you have small or big fingers. Word suggestions become an optimisation, not a dependency.
+The simplicity of the gestures used to enter words, allow for true blind typing and virtually eliminate typos. Regardless of whether you have small or big fingers. Word suggestions become an optimisation, not a dependency.
 
 ## Extended Idea
 
