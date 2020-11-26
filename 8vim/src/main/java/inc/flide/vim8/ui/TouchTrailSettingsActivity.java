@@ -22,15 +22,15 @@ import inc.flide.vim8.R;
 public class TouchTrailSettingsActivity extends AppCompatActivity {
 
     private View colorseekbar_view;
-    private ColorSeekBar colorSeekBar;
+    ColorSeekBar colorSeekBar;
 
-    private SeekBar seekBar_thickness_position;
+    SeekBar seekBar_thickness_position;
     private TextView trail_thickness_textview_value;
 
     private SeekBar seekbar_opacity_position;
     private TextView trail_opacity_textview_value;
 
-    private ImageView back_arrow;
+    ImageView back_arrow;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +87,8 @@ public class TouchTrailSettingsActivity extends AppCompatActivity {
 
         int seekbar_current_value = max_trail_radius - 10;
 
-        trail_thickness_textview_value.setText("" + seekbar_current_value + "");
+        trail_thickness_textview_value.setText(String.format(Locale.US, "%d", seekbar_current_value));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             seekBar_thickness_position.setMin(1);
         }
@@ -97,7 +98,7 @@ public class TouchTrailSettingsActivity extends AppCompatActivity {
         seekBar_thickness_position.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                trail_thickness_textview_value.setText("" + progress + "");
+                trail_thickness_textview_value.setText(String.format(Locale.US, "%d", progress));
                 seekBar.setProgress(progress);
 
                 int i = 10;
@@ -129,7 +130,7 @@ public class TouchTrailSettingsActivity extends AppCompatActivity {
 
         int current_seekbar_text_value = (current_opacity_value - 40)/10;
 
-        trail_opacity_textview_value.setText("" + current_seekbar_text_value + "");
+        trail_opacity_textview_value.setText(String.format(Locale.US, "%d", current_seekbar_text_value));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             seekbar_opacity_position.setMin(1);
@@ -143,7 +144,7 @@ public class TouchTrailSettingsActivity extends AppCompatActivity {
 
                 seekbar_opacity_position.setProgress(progress);
 
-                trail_opacity_textview_value.setText("" + progress + "");
+                trail_opacity_textview_value.setText(String.format(Locale.US, "%d", progress));
 
                 int i = progress * 10;
                 int opacity_value = 40 + i;
