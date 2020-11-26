@@ -173,92 +173,25 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintlayout_colors"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="10dp"
                 android:layout_below="@+id/constraintlayout5">
 
-                <TextView
-                    android:id="@+id/random"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/choose_the_color_for_touch_trail_label"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/darker_gray"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.095" />
-
                 <Button
-                    android:id="@+id/red_button"
-                    android:layout_width="66dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/red_rounded_button_unpressed"
-                    android:elevation="10dp"
-                    android:text="@string/generic_red_text"
+                    android:id="@+id/touchtrail_setting_button"
+                    android:layout_width="330dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/button_background"
+                    android:text="@string/touch_trail_setting_text"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="13sp"
+                    android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.085"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
-                <Button
-                    android:id="@+id/green_button"
-                    android:layout_width="66dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/green_rounded_button_unpressed"
-                    android:elevation="10dp"
-                    android:text="@string/generic_green_text"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.456"
-                    app:layout_constraintStart_toEndOf="@+id/red_button"
-                    app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
 
-                <Button
-                    android:id="@+id/yellow_button"
-                    android:layout_width="66dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/yellow_rounded_button_unpressed"
-                    android:elevation="10dp"
-                    android:text="@string/generic_yellow_text"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.365"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
-
-                <Button
-                    android:id="@+id/blue_button"
-                    android:layout_width="66dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/blue_rounded_button_unpressed"
-                    android:elevation="10dp"
-                    android:text="@string/generic_blue_text"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.904"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -139,10 +139,12 @@ public class XboardView extends View {
         float[] pathPos =new float[2];
         Paint typingTrailPaint = new Paint();
 
+        SharedPreferences sp_thickness_value = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        byte max_trail_radius = (byte) sp_thickness_value.getInt(this.getContext().getString(R.string.storing_thickness_value_in_sharedPreference),0);
+
         if (path != null) {
             final short steps = 150;
             final byte stepDistance = 5;
-            final byte maxTrailRadius = 14;
             PathMeasure pathMeasure = new PathMeasure();
             pathMeasure.setPath(path, false);
             Random random = new Random();
@@ -150,64 +152,32 @@ public class XboardView extends View {
             for (short i = 1; i <= steps; i++) {
                 final float distance = pathLength - i * stepDistance;
                 if (distance >= 0) {
-                    final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
+                    final float trailRadius = max_trail_radius * (1 - (float) i / steps);
                     pathMeasure.getPosTan(distance, pathPos, null);
                     final float x = pathPos[0] + random.nextFloat() - trailRadius;
                     final float y = pathPos[1] + random.nextFloat() - trailRadius;
 
-                    SharedPreferences sharedPreferences = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-                    String color_choosed = sharedPreferences.getString(this.getContext().getString(R.string.color_selection),"Red");
+                    SharedPreferences sp_colorCode = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                    int current_colorCode_value = sp_colorCode.getInt(this.getContext().getString(R.string.storing_colorCode_value_in_sharedPreference),0);
 
-                    if(color_choosed.equals("Red"))
-                    {
-                        typingTrailPaint.setShader(new RadialGradient(
-                                x,
-                                y,
-                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(Color.RED, random.nextInt(0xff)),
-                                Color.TRANSPARENT,
-                                Shader.TileMode.CLAMP
-                        ));
-                    }
-                    else if(color_choosed.equals("Green"))
-                    {
-                        typingTrailPaint.setShader(new RadialGradient(
-                                x,
-                                y,
-                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(Color.GREEN, random.nextInt(0xff)),
-                                Color.TRANSPARENT,
-                                Shader.TileMode.CLAMP
-                        ));
-                    }
-                    else if(color_choosed.equals("Yellow"))
-                    {
-                        typingTrailPaint.setShader(new RadialGradient(
-                                x,
-                                y,
-                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(Color.YELLOW, random.nextInt(0xff)),
-                                Color.TRANSPARENT,
-                                Shader.TileMode.CLAMP
-                        ));
-                    }
-                    else if(color_choosed.equals("Blue")){
-                        typingTrailPaint.setShader(new RadialGradient(
-                                x,
-                                y,
-                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(Color.BLUE, random.nextInt(0xff)),
-                                Color.TRANSPARENT,
-                                Shader.TileMode.CLAMP
-                        ));
-                    }
+                    typingTrailPaint.setShader(new RadialGradient(
+                            x,
+                            y,
+                            trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
+                            ColorUtils.setAlphaComponent(current_colorCode_value, random.nextInt(0xff)),
+                            Color.TRANSPARENT,
+                            Shader.TileMode.CLAMP));
+                            SharedPreferences sp_opacity_value = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                            int opacity_value = sp_opacity_value.getInt(this.getContext().getString(R.string.storing_opacity_value_in_sharedPreference),0);
 
-                    canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
+                         typingTrailPaint.setAlpha(opacity_value);
+                         canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
+
+                    }
                 }
             }
-        }
         canvas.drawPath(path,typingTrailPaint);
-    }
+        }
 
 
     private String getCharacterSetToDisplay() {
@@ -298,11 +268,8 @@ public class XboardView extends View {
             float y = e.getY();
 
             path.addCircle(x, y, 50, Path.Direction.CW);
-
             // clean drawing area on double tap
             path.reset();
-
-            Log.d("Double Tap", "Tapped at: (" + x + "," + y + ")");
 
             return true;
         }
