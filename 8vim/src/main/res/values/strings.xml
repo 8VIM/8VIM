@@ -75,4 +75,24 @@
     <string name="connect_using_twitter_label">Follow us on Twitter</string>
     <string name="connect_using_google_play_store_label">Rate us on the Play Store</string>
 
+    <string name="fork_us_on_github">Fork us on GitHub</string>
+    <string name="visit_our_website">Visit our Website</string>
+    <string name="follow_us_on_twitter">Follow us on Twitter</string>
+    <string name="rate_us_on_the_play_store">Rate us on Play Store</string>
+    <string name="join_us_on_matrix">Join us on Matrix</string>
+
+    <string name="app_logo">App logo</string>
+    <string name="back_arrow_button">Back arrow button</string>
+    <string name="about_us">About us</string>
+    <string name="version_name_text">Version name :</string>
+    <string name="connect_with_us">Connect with us</string>
+
+    <string name="github_logo">Github Logo</string>
+    <string name="website_logo">Website Logo</string>
+    <string name="twitter_logo">Twitter Logo</string>
+    <string name="playstore_logo">Play Store Logo</string>
+    <string name="matrix_logo">Matrix Logo</string>
+
+    <string name="designed_and_developed_by_flide">Designed and Developed by Flide</string>
+
 </resources>

@@ -17,7 +17,8 @@ public class AboutUsActivity extends AppCompatActivity {
     private ConstraintLayout github;
     private ConstraintLayout twitter;
     private ConstraintLayout website;
-    private ConstraintLayout googlePlayStore;
+    private ConstraintLayout playstore;
+    private ConstraintLayout matrix;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,11 +94,37 @@ public class AboutUsActivity extends AppCompatActivity {
             return true;
         });
 
+        //for Matrix
 
-        ImageView back_arrow = findViewById(R.id.back_arrow);
-        back_arrow.setOnClickListener(v -> {
-            Intent intent = new Intent(AboutUsActivity.this, LauncherActivity.class);
-            startActivity(intent);
+        matrix = (ConstraintLayout) findViewById(R.id.constraintLayout_matrix);
+        matrix.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch(event.getAction())
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        matrix.setBackgroundColor(Color.LTGRAY);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        matrix.setBackgroundColor(Color.WHITE);
+                        Uri uri = Uri.parse("https://app.element.io/#/room/#8vim/lobby:matrix.org"); // missing 'http://' will cause crashed
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(intent);
+                        break;
+                }
+
+                return true;
+            }
+        });
+
+
+        ImageView back_arrow = (ImageView) findViewById(R.id.back_arrow);
+        back_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AboutUsActivity.this,LauncherActivity.class);
+                startActivity(intent);
+            }
         });
 
     }
