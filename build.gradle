@@ -4,6 +4,7 @@ buildscript {
     repositories {
         jcenter()
         google()
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.1'
@@ -18,6 +19,7 @@ allprojects {
     repositories {
         jcenter()
         google()
+        maven { url "https://jitpack.io" }
     }
     task checkstyle(type: Checkstyle) {
         showViolations = true

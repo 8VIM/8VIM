@@ -130,6 +130,7 @@ public class XpadView extends View {
 
         SharedPreferences sp_sector_icons = this.getContext()
                 .getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+
         if (sp_sector_icons.getBoolean(this.getContext().getString(R.string.user_preferred_display_icons_for_sectors), true)) {
             setupSectorIcons(centre_x_value, centre_y_value, canvas);
         }
@@ -178,7 +179,7 @@ public class XpadView extends View {
                 R.drawable.shift_icon_vd_vector);
     }
 
-    private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId){
+    private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId) {
 
         VectorDrawableCompat icon_vectorDrawable = VectorDrawableCompat
                 .create(getContext().getResources(), resourceId, null);
@@ -193,46 +194,47 @@ public class XpadView extends View {
     private void paintTypingTrail(Canvas canvas) {
         float[] pathPos = new float[2];
         Paint typingTrailPaint = new Paint();
-
         if (typingTrailPath != null) {
+
+            SharedPreferences sp_thickness_value = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+            byte max_trail_radius = (byte) sp_thickness_value.getInt(this.getContext().getString(R.string.storing_thickness_value_in_sharedPreference), 0);
+
             final short steps = 150;
             final byte stepDistance = 5;
-            final byte maxTrailRadius = 14;
             PathMeasure pathMeasure = new PathMeasure();
             pathMeasure.setPath(typingTrailPath, false);
             Random random = new Random();
             final float pathLength = pathMeasure.getLength();
 
-            int trailColour = getTrailColor();
-
             for (short i = 1; i <= steps; i++) {
                 final float distance = pathLength - i * stepDistance;
                 if (distance >= 0) {
-                    final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
+                    final float trailRadius = max_trail_radius * (1 - (float) i / steps);
                     pathMeasure.getPosTan(distance, pathPos, null);
                     final float x = pathPos[0] + random.nextFloat() - trailRadius;
                     final float y = pathPos[1] + random.nextFloat() - trailRadius;
 
-                    typingTrailPaint.setShader(
-                            new RadialGradient(
-                                x,
-                                y,
-                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(trailColour, random.nextInt(0xff)),
+                    SharedPreferences sp_colorCode = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                    int current_colorCode_value = sp_colorCode.getInt(this.getContext().getString(R.string.storing_colorCode_value_in_sharedPreference), 0);
+
+                    typingTrailPaint.setShader(new RadialGradient(
+                            x,
+                            y,
+                            trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
+                            ColorUtils.setAlphaComponent(current_colorCode_value, random.nextInt(0xff)),
                             Color.TRANSPARENT,
                             Shader.TileMode.CLAMP));
+                    SharedPreferences sp_opacity_value = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                    int opacity_value = sp_opacity_value.getInt(this.getContext().getString(R.string.storing_opacity_value_in_sharedPreference), 0);
 
+                    typingTrailPaint.setAlpha(opacity_value);
                     canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
+
                 }
             }
         }
-        canvas.drawPath(typingTrailPath, typingTrailPaint);
-    }
 
-    private int getTrailColor() {
-        SharedPreferences sharedPreferences = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        int trailColor = sharedPreferences.getInt(this.getContext().getString(R.string.color_selection), Color.YELLOW);
-        return trailColor;
+        canvas.drawPath(typingTrailPath, typingTrailPaint);
     }
 
     private String getCharacterSetToDisplay() {
@@ -342,6 +344,7 @@ public class XpadView extends View {
 
         // Schedules a repaint.
         invalidate();
+
         return true;
     }
 
@@ -381,7 +384,6 @@ public class XpadView extends View {
             float x = e.getX();
             float y = e.getY();
 
-
             typingTrailPath.addCircle(x, y, 50, Path.Direction.CW);
 
             // clean drawing area on double tap
@@ -395,3 +397,4 @@ public class XpadView extends View {
     }
 
 }
+
