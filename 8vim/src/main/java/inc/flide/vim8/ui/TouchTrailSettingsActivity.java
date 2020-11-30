@@ -51,7 +51,7 @@ public class TouchTrailSettingsActivity extends AppCompatActivity {
         colorseekbar_view = findViewById(R.id.view);
         colorSeekBar = findViewById(R.id.color_seek_bar);
 
-//        colorSeekBar.setColorSeeds(R.array.material_colors); // material_colors is defalut included in res/color,just use it.
+        colorSeekBar.setColorSeeds(R.array.material_colors); // material_colors is defalut included in res/color,just use it.
         colorSeekBar.setMaxPosition(100);
         colorSeekBar.setColorBarPosition(0);
         colorSeekBar.setAlphaBarPosition(0);
