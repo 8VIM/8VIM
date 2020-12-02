@@ -37,6 +37,12 @@ public class MainInputMethodService extends InputMethodService {
     private int capsLockFlag;
     private int modifierFlags;
 
+    private void setCurrentView(View view){
+        this.currentView = view;
+        currentView.invalidate();
+        setInputView(currentView);
+    }
+
     /**
      * Lifecycle of IME
      * <p>
@@ -57,12 +63,11 @@ public class MainInputMethodService extends InputMethodService {
 
     @Override
     public View onCreateInputView() {
-
         numberKeypadView = new NumberKeypadView(this, null);
         selectionKeypadView = new SelectionKeypadView(this, null);
         symbolKeypadView = new SymbolKeypadView(this, null);
         mainKeyboardView = new MainKeyboardView(this, null);
-        currentView = mainKeyboardView.getView();
+        setCurrentView(mainKeyboardView.getView());
         return currentView;
     }
 
@@ -200,16 +205,13 @@ public class MainInputMethodService extends InputMethodService {
                 switchToExternalEmoticonKeyboard();
                 break;
             case SWITCH_TO_NUMBER_PAD:
-                currentView = numberKeypadView;
-                setInputView(currentView);
+                setCurrentView(numberKeypadView);
                 break;
             case SWITCH_TO_MAIN_KEYBOARD:
-                currentView = mainKeyboardView.getView();
-                setInputView(currentView);
+                setCurrentView(mainKeyboardView.getView());
                 break;
             case SWITCH_TO_SYMBOLS_KEYBOARD:
-                currentView = symbolKeypadView;
-                setInputView(currentView);
+                setCurrentView(symbolKeypadView);
                 break;
             case PASTE:
                 paste();
@@ -220,8 +222,7 @@ public class MainInputMethodService extends InputMethodService {
                 sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
                 break;
             case SWITCH_TO_SELECTION_KEYBOARD:
-                currentView = selectionKeypadView;
-                setInputView(currentView);
+                setCurrentView(selectionKeypadView);
                 break;
             case HIDE_KEYBOARD:
                 hideKeyboard();
