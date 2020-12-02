@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:padding="10dp">
+    android:padding="10sp">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -20,13 +20,13 @@
                 android:id="@+id/constraintlayout1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp">
+                android:padding="5sp">
 
                 <Button
                     android:id="@+id/emoji"
-                    android:layout_width="330dp"
-                    android:layout_height="110dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="330sp"
+                    android:layout_height="110sp"
+                    android:layout_marginTop="10sp"
                     android:background="@drawable/button_background"
                     android:text="@string/select_emoji_keyboard_button_text"
                     android:textAllCaps="false"
@@ -44,14 +44,14 @@
                 android:id="@+id/constraintlayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:padding="5sp"
                 android:layout_below="@+id/constraintlayout1"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10sp">
 
                 <Button
                     android:id="@+id/resize_button"
-                    android:layout_width="330dp"
-                    android:layout_height="110dp"
+                    android:layout_width="330sp"
+                    android:layout_height="110sp"
                     android:background="@drawable/button_background"
                     android:text="@string/resize_circle_button_text"
                     android:textAllCaps="false"
@@ -69,14 +69,14 @@
                 android:id="@+id/constraintlayout3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:padding="5sp"
                 android:layout_below="@+id/constraintlayout2"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10sp">
 
                 <Button
                     android:id="@+id/setcenter_button"
-                    android:layout_width="330dp"
-                    android:layout_height="110dp"
+                    android:layout_width="330sp"
+                    android:layout_height="110sp"
                     android:background="@drawable/button_background"
                     android:text="@string/set_circle_center_button_text"
                     android:textAllCaps="false"
@@ -94,21 +94,21 @@
                 android:id="@+id/constraintlayout4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="5dp"
+                android:padding="5sp"
                 android:layout_below="@+id/constraintlayout3"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10sp">
 
 
                 <Button
                     android:id="@+id/left_button"
-                    android:layout_width="150dp"
-                    android:layout_height="110dp"
+                    android:layout_width="150sp"
+                    android:layout_height="110sp"
                     android:background="@drawable/button_background"
                     android:text="@string/Set_sidebar_left_button_text"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="15sp"
-                    android:layout_marginEnd="180dp"
+                    android:layout_marginEnd="180sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.378"
@@ -117,14 +117,14 @@
 
                 <Button
                     android:id="@+id/right_button"
-                    android:layout_width="150dp"
-                    android:layout_height="110dp"
+                    android:layout_width="150sp"
+                    android:layout_height="110sp"
                     android:background="@drawable/button_background"
                     android:text="@string/Set_sidebar_right_button_text"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="15sp"
-                    android:layout_marginStart="180dp"
+                    android:layout_marginStart="180sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.621"
@@ -139,7 +139,7 @@
                 android:id="@+id/constraintlayout_display_icons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="15sp"
                 android:layout_below="@+id/constraintlayout4">
 
                 <TextView
@@ -161,7 +161,7 @@
                     style="@style/Custom_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="250dp"
+                    android:layout_marginStart="250sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -174,7 +174,7 @@
                 android:id="@+id/constraintlayout_touch_trail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="15sp"
                 android:layout_below="@id/constraintlayout_display_icons">
 
                 <TextView
@@ -196,7 +196,7 @@
                     style="@style/Custom_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="250dp"
+                    android:layout_marginStart="250sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -205,95 +205,25 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintlayout_colors"
+                android:id="@+id/constraintLayout_colors"
                 android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:layout_marginTop="5dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15sp"
                 android:layout_below="@id/constraintlayout_touch_trail">
 
-                <TextView
-                    android:id="@+id/random"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="@string/choose_the_color_for_touch_trail_label"
+                <Button
+                    android:id="@+id/touch_trail_settings_button"
+                    android:layout_width="300sp"
+                    android:layout_height="40sp"
+                    android:text="@string/touch_trail_settings_button_text"
+                    android:textColor="@color/white"
                     android:textAllCaps="false"
-                    android:textColor="@android:color/darker_gray"
                     android:textSize="15sp"
+                    android:background="@drawable/button_background"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.091"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.085" />
-
-                <Button
-                    android:id="@+id/red_button"
-                    android:layout_width="66dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/red_rounded_button_unpressed"
-                    android:elevation="10dp"
-                    android:text="@string/generic_red_text"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.085"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
-
-                <Button
-                    android:id="@+id/green_button"
-                    android:layout_width="66dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/green_rounded_button_unpressed"
-                    android:elevation="10dp"
-                    android:text="@string/generic_green_text"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.456"
-                    app:layout_constraintStart_toEndOf="@+id/red_button"
-                    app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
-
-                <Button
-                    android:id="@+id/yellow_button"
-                    android:layout_width="66dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/yellow_rounded_button_unpressed"
-                    android:elevation="10dp"
-                    android:text="@string/generic_yellow_text"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.365"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
-
-                <Button
-                    android:id="@+id/blue_button"
-                    android:layout_width="66dp"
-                    android:layout_height="39dp"
-                    android:background="@drawable/blue_rounded_button_unpressed"
-                    android:elevation="10dp"
-                    android:text="@string/generic_blue_text"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.904"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/random"
-                    app:layout_constraintVertical_bias="0.483" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
