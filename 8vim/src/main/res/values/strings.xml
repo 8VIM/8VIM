@@ -66,13 +66,28 @@
     <string name="generic_back_button_content_description">Go Back</string>
     <string name="owner_text">Designed and Developed by flide</string>
     <string name="connect_with_us_label">Connect with us</string>
+
+<!--    github-->
     <string name="github_icon_content_description">Github Icon</string>
     <string name="connect_using_github_label">Fork us on GitHub</string>
-    <string name="play_store_icon_content_description">Google Play store icon</string>
-    <string name="twitter_icon_content_description">"Twitter icon "</string>
+
+<!--    matrix-->
+    <string name="matrix_icon_content_description">Matrix Icon</string>
+    <string name="join_us_on_matrix_label">Join us on Matrix</string>
+
+    <!--    website-->
     <string name="website_icon_content_description">Website icon</string>
     <string name="connect_using_website_label">Visit our Website</string>
-    <string name="connect_using_twitter_label">Follow us on Twitter</string>
+
+    <!--    play store-->
+    <string name="play_store_icon_content_description">Google Play store icon</string>
     <string name="connect_using_google_play_store_label">Rate us on the Play Store</string>
+
+<!--    twitter-->
+    <string name="twitter_icon_content_description">"Twitter icon "</string>
+    <string name="connect_using_twitter_label">Follow us on Twitter</string>
+
+
+
 
 </resources>
