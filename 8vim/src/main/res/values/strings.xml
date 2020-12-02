@@ -75,4 +75,6 @@
     <string name="connect_using_twitter_label">Follow us on Twitter</string>
     <string name="connect_using_google_play_store_label">Rate us on the Play Store</string>
 
+    <string name="choose_the_8vim">Choose 8Vim above.We will NEVER collect any personal data.</string>
+
 </resources>
