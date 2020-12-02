@@ -5,9 +5,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import inc.flide.vim8.R;
@@ -15,9 +17,12 @@ import inc.flide.vim8.R;
 public class AboutUsActivity extends AppCompatActivity {
 
     private ConstraintLayout github;
-    private ConstraintLayout twitter;
+    private ConstraintLayout matrix;
     private ConstraintLayout website;
+    private ConstraintLayout twitter;
     private ConstraintLayout googlePlayStore;
+
+    CardView cardView_back_arrow;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,16 +45,15 @@ public class AboutUsActivity extends AppCompatActivity {
             return true;
         });
 
-        twitter = findViewById(R.id.constraintLayout_twitter);
-        twitter.setOnTouchListener((v, event) -> {
-
+        matrix = findViewById(R.id.constraintLayout_matrix);
+        matrix.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    twitter.setBackgroundColor(Color.LTGRAY);
+                    matrix.setBackgroundColor(Color.LTGRAY);
                     break;
                 case MotionEvent.ACTION_UP:
-                    twitter.setBackgroundColor(Color.WHITE);
-                    Uri uri = Uri.parse("https://twitter.com/8vim_?s=09");
+                    matrix.setBackgroundColor(Color.WHITE);
+                    Uri uri = Uri.parse("https://app.element.io/#/room/#8vim/lobby:matrix.org");
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
                     break;
@@ -76,6 +80,23 @@ public class AboutUsActivity extends AppCompatActivity {
             return true;
         });
 
+        twitter = findViewById(R.id.constraintLayout_twitter);
+        twitter.setOnTouchListener((v, event) -> {
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    twitter.setBackgroundColor(Color.LTGRAY);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    twitter.setBackgroundColor(Color.WHITE);
+                    Uri uri = Uri.parse("https://twitter.com/8vim_?s=09");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                    break;
+            }
+            return true;
+        });
+
         googlePlayStore = findViewById(R.id.constraintLayout_playstore);
         googlePlayStore.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
@@ -95,9 +116,22 @@ public class AboutUsActivity extends AppCompatActivity {
 
 
         ImageView back_arrow = findViewById(R.id.back_arrow);
-        back_arrow.setOnClickListener(v -> {
-            Intent intent = new Intent(AboutUsActivity.this, LauncherActivity.class);
-            startActivity(intent);
+
+        back_arrow.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    back_arrow.setBackgroundColor(Color.LTGRAY);
+                }
+                if(motionEvent.getAction() == MotionEvent.ACTION_UP)
+                {
+                    back_arrow.setBackgroundColor(Color.WHITE);
+                    Intent intent = new Intent(AboutUsActivity.this,LauncherActivity.class);
+                    startActivity(intent);
+                }
+                return true;
+            }
         });
 
     }
