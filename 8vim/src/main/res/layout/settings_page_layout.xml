@@ -15,7 +15,7 @@
 
         <include
             android:id="@+id/app_bar_launcher"
-            layout="@layout/app_bar_launcher"
+            layout="@layout/app_bar_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/content_launcher_view"
@@ -25,7 +25,7 @@
 
         <include
             android:id="@+id/content_launcher_view"
-            layout="@layout/content_launcher"
+            layout="@layout/settings_view"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"

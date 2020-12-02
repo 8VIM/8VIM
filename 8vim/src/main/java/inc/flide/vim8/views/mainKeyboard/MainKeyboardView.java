@@ -18,6 +18,7 @@ import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.structures.KeyboardActionType;
+import inc.flide.vim8.ui.SettingsActivity;
 
 
 public class MainKeyboardView extends View {
@@ -86,7 +87,7 @@ public class MainKeyboardView extends View {
     private void setupGoToSettingsButton() {
         ImageButton goToSettingsButton = layout.findViewById(R.id.goToSettingsButton);
         goToSettingsButton.setOnClickListener(view -> {
-            Intent vim8SettingsIntent = new Intent(getContext(), inc.flide.vim8.ui.LauncherActivity.class);
+            Intent vim8SettingsIntent = new Intent(getContext(), SettingsActivity.class);
             vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getContext().startActivity(vim8SettingsIntent);
         });

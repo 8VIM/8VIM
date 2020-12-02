@@ -28,7 +28,7 @@ public class SetCenterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.setcenter_activity);
+        setContentView(R.layout.set_center_activity_layout);
 
         textView_x_Value = findViewById(R.id.x_value);
         seekBar_x = findViewById(R.id.seekbar_x);

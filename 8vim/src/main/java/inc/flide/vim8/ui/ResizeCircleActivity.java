@@ -14,14 +14,14 @@ import java.util.Locale;
 
 import inc.flide.vim8.R;
 
-public class ResizeActivity extends AppCompatActivity {
+public class ResizeCircleActivity extends AppCompatActivity {
 
     private TextView textView;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.resize_activity);
+        setContentView(R.layout.resize_circle_activty_layout);
 
         textView = findViewById(R.id.textView);
         SeekBar seekBar = findViewById(R.id.seekBar);

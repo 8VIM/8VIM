@@ -20,7 +20,7 @@
         </service>
 
         <activity
-            android:name="inc.flide.vim8.ui.LauncherActivity"
+            android:name="inc.flide.vim8.ui.SettingsActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme.NoActionBar">
@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.ResizeActivity"
+        <activity android:name=".ui.ResizeCircleActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity android:name=".ui.SetCenterActivity"
