@@ -8,7 +8,10 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -21,11 +24,9 @@ import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.ui.SettingsActivity;
 
 
-public class MainKeyboardView extends View {
+public class MainKeyboardView extends ConstraintLayout {
 
     private MainKeyboardActionListener actionListener;
-
-    private View layout;
 
     public MainKeyboardView(Context context) {
         super(context);
@@ -53,9 +54,9 @@ public class MainKeyboardView extends View {
                 context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
 
         if (preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
-            layout = View.inflate(context, R.layout.main_keyboard_right_sidebar_view, null);
+            inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);
         } else {
-            layout = View.inflate(context, R.layout.main_keyboard_left_sidebar_view, null);
+            inflater.inflate(R.layout.main_keyboard_left_sidebar_view, this, true);
         }
 
         setupBackgroundColours();
@@ -64,7 +65,7 @@ public class MainKeyboardView extends View {
     }
 
     private void setupBackgroundColours() {
-        View sidebar = layout.findViewById(R.id.sidebarButtonsLayout);
+        View sidebar = findViewById(R.id.sidebarButtonsLayout);
         sidebar.setBackgroundColor(getResources().getColor(R.color.secondaryBackground));
     }
 
@@ -79,13 +80,13 @@ public class MainKeyboardView extends View {
     }
 
     private void setupCtrlKey() {
-        ImageButton ctrlKeyButton = layout.findViewById(R.id.ctrlButton);
+        ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
 
         ctrlKeyButton.setOnClickListener(view -> actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK));
     }
 
     private void setupGoToSettingsButton() {
-        ImageButton goToSettingsButton = layout.findViewById(R.id.goToSettingsButton);
+        ImageButton goToSettingsButton = findViewById(R.id.goToSettingsButton);
         goToSettingsButton.setOnClickListener(view -> {
             Intent vim8SettingsIntent = new Intent(getContext(), SettingsActivity.class);
             vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -94,13 +95,13 @@ public class MainKeyboardView extends View {
     }
 
     private void setupTabKey() {
-        ImageButton tabKeyButton = layout.findViewById(R.id.tabButton);
+        ImageButton tabKeyButton = findViewById(R.id.tabButton);
 
         tabKeyButton.setOnClickListener(view -> actionListener.sendKey(KeyEvent.KEYCODE_TAB, 0));
     }
 
     private void setupSwitchToSelectionKeyboardButton() {
-        ImageButton switchToSelectionKeyboardButton = layout.findViewById(R.id.switchToSelectionKeyboard);
+        ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
         switchToSelectionKeyboardButton.setOnClickListener(view -> {
             KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
                     KeyboardActionType.INPUT_SPECIAL
@@ -111,7 +112,7 @@ public class MainKeyboardView extends View {
     }
 
     private void setupSwitchToEmojiKeyboardButton() {
-        ImageButton switchToEmojiKeyboardButton = layout.findViewById(R.id.switchToEmojiKeyboard);
+        ImageButton switchToEmojiKeyboardButton = findViewById(R.id.switchToEmojiKeyboard);
         switchToEmojiKeyboardButton.setOnClickListener(view -> {
             KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
                     KeyboardActionType.INPUT_SPECIAL
@@ -121,13 +122,9 @@ public class MainKeyboardView extends View {
         });
     }
 
-    public View getView() {
-        return layout;
-    }
-
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
                 MeasureSpec.getSize(widthMeasureSpec),
                 MeasureSpec.getSize(heightMeasureSpec),

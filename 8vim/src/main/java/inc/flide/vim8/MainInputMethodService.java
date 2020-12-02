@@ -67,7 +67,7 @@ public class MainInputMethodService extends InputMethodService {
         selectionKeypadView = new SelectionKeypadView(this, null);
         symbolKeypadView = new SymbolKeypadView(this, null);
         mainKeyboardView = new MainKeyboardView(this, null);
-        setCurrentKeypadView(mainKeyboardView.getView());
+        setCurrentKeypadView(mainKeyboardView);
         return currentKeypadView;
     }
 
@@ -85,7 +85,7 @@ public class MainInputMethodService extends InputMethodService {
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        setCurrentKeypadView(mainKeyboardView.getView());
+        setCurrentKeypadView(mainKeyboardView);
     }
 
     @Override
@@ -206,7 +206,7 @@ public class MainInputMethodService extends InputMethodService {
                 setCurrentKeypadView(numberKeypadView);
                 break;
             case SWITCH_TO_MAIN_KEYBOARD:
-                setCurrentKeypadView(mainKeyboardView.getView());
+                setCurrentKeypadView(mainKeyboardView);
                 break;
             case SWITCH_TO_SYMBOLS_KEYBOARD:
                 setCurrentKeypadView(symbolKeypadView);

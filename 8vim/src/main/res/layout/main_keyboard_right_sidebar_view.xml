@@ -14,8 +14,7 @@
         app:layout_constraintEnd_toStartOf="@id/sidebarButtonsLayout"
         app:layout_constraintHorizontal_weight="5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/sidebarButtonsLayout"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/sidebarButtonsLayout" />
 
     <include
         android:id="@+id/sidebarButtonsLayout"
