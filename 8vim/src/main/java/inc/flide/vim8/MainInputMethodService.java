@@ -32,15 +32,15 @@ public class MainInputMethodService extends InputMethodService {
     private NumberKeypadView numberKeypadView;
     private SelectionKeypadView selectionKeypadView;
     private SymbolKeypadView symbolKeypadView;
-    private View currentView;
+    private View currentKeypadView;
     private int shiftLockFlag;
     private int capsLockFlag;
     private int modifierFlags;
 
-    private void setCurrentView(View view){
-        this.currentView = view;
-        currentView.invalidate();
-        setInputView(currentView);
+    private void setCurrentKeypadView(View view){
+        this.currentKeypadView = view;
+        currentKeypadView.invalidate();
+        setInputView(currentKeypadView);
     }
 
     /**
@@ -67,8 +67,8 @@ public class MainInputMethodService extends InputMethodService {
         selectionKeypadView = new SelectionKeypadView(this, null);
         symbolKeypadView = new SymbolKeypadView(this, null);
         mainKeyboardView = new MainKeyboardView(this, null);
-        setCurrentView(mainKeyboardView.getView());
-        return currentView;
+        setCurrentKeypadView(mainKeyboardView.getView());
+        return currentKeypadView;
     }
 
     @Override
@@ -85,7 +85,7 @@ public class MainInputMethodService extends InputMethodService {
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        setCurrentView(mainKeyboardView.getView());
+        setCurrentKeypadView(mainKeyboardView.getView());
     }
 
     @Override
@@ -203,13 +203,13 @@ public class MainInputMethodService extends InputMethodService {
                 switchToExternalEmoticonKeyboard();
                 break;
             case SWITCH_TO_NUMBER_PAD:
-                setCurrentView(numberKeypadView);
+                setCurrentKeypadView(numberKeypadView);
                 break;
             case SWITCH_TO_MAIN_KEYBOARD:
-                setCurrentView(mainKeyboardView.getView());
+                setCurrentKeypadView(mainKeyboardView.getView());
                 break;
             case SWITCH_TO_SYMBOLS_KEYBOARD:
-                setCurrentView(symbolKeypadView);
+                setCurrentKeypadView(symbolKeypadView);
                 break;
             case PASTE:
                 paste();
@@ -220,7 +220,7 @@ public class MainInputMethodService extends InputMethodService {
                 sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
                 break;
             case SWITCH_TO_SELECTION_KEYBOARD:
-                setCurrentView(selectionKeypadView);
+                setCurrentKeypadView(selectionKeypadView);
                 break;
             case HIDE_KEYBOARD:
                 hideKeyboard();
