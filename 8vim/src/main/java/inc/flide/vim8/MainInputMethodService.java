@@ -85,9 +85,7 @@ public class MainInputMethodService extends InputMethodService {
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        currentView.invalidate();
-        mainKeyboardView.getView().invalidate();
-
+        setCurrentView(mainKeyboardView.getView());
     }
 
     @Override
