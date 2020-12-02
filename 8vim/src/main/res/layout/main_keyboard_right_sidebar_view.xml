@@ -19,7 +19,7 @@
 
     <include
         android:id="@+id/sidebarButtonsLayout"
-        layout="@layout/main_keyboard_sidebar_layout"
+        layout="@layout/sidebar_view"
         android:layout_width="0dp"
         android:layout_height="275dp"
         app:layout_constraintHorizontal_weight="1"
