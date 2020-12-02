@@ -29,4 +29,8 @@
         <item name="android:textOff">@string/generic_off_text</item>
     </style>
 
+    <style name="switchTheme">
+        <item name="android:color">@color/switchColor</item>
+    </style>
+
 </resources>

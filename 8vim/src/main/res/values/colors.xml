@@ -9,4 +9,6 @@
     <color name="secondaryBackground">#CDC1CA</color>
     <color name="primaryText">#3F334D</color>
     <color name="primaryIcon">#D1462F</color>
+
+    <color name="switchColor">#00c853</color>
 </resources>
