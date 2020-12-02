@@ -124,11 +124,21 @@ public class MainKeyboardView extends ConstraintLayout {
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
                 MeasureSpec.getSize(widthMeasureSpec),
                 MeasureSpec.getSize(heightMeasureSpec),
                 getResources().getConfiguration().orientation);
+
+        super.onMeasure(
+                MeasureSpec.makeMeasureSpec(
+                        computedDimension.getWidth(),
+                        MeasureSpec.getMode(widthMeasureSpec)
+                ),
+                MeasureSpec.makeMeasureSpec(
+                        computedDimension.getHeight(),
+                        MeasureSpec.getMode(heightMeasureSpec)
+                )
+        );
 
         setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
     }
