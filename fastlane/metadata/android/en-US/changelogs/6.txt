@@ -1,0 +1,11 @@
+- New Look for the keyboard
+- Setup About Us Page
+- X-pad will be opened always for new input
+- Make heights for all keypads consistent
+- Easier visibility for selected trail color
+- Indicative symbols in the x-pad sectors
+- Indicative symbols can be hidden using settings
+- Performance Optimizations
+- Reduced application size
+- Improved "Readme" : Thanks to Martin Rey
+- Minimum Android Version update to 21
