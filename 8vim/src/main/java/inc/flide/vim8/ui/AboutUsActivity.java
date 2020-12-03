@@ -127,7 +127,7 @@ public class AboutUsActivity extends AppCompatActivity {
                 if(motionEvent.getAction() == MotionEvent.ACTION_UP)
                 {
                     back_arrow.setBackgroundColor(Color.WHITE);
-                    Intent intent = new Intent(AboutUsActivity.this,LauncherActivity.class);
+                    Intent intent = new Intent(AboutUsActivity.this, SettingsActivity.class);
                     startActivity(intent);
                 }
                 return true;
