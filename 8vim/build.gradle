@@ -40,9 +40,11 @@ android {
 
 
 dependencies {
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'com.google.android.material:material:1.2.1'
-    implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    implementation "com.github.duanhong169:colorpicker:1.1.6"
     implementation 'com.orhanobut:logger:2.2.0'
     api 'com.afollestad.material-dialogs:core:0.9.2.3'
+
 }

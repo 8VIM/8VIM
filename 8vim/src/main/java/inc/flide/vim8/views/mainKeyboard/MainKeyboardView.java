@@ -53,6 +53,7 @@ public class MainKeyboardView extends ConstraintLayout {
                 context.getString(R.string.mainKeyboard_sidebar_position_preference_key),
                 context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
 
+        if(preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))){
         if (preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
             inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);
         } else {
