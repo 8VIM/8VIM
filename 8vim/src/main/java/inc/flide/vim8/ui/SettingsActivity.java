@@ -49,11 +49,6 @@ public class SettingsActivity extends AppCompatActivity
 
     private ConstraintLayout constraintLayout_select_color;
 
-    private Button red_button;
-    private Button green_button;
-    private Button blue_button;
-    private Button yellow_button;
-
     boolean press_back_twice;
 
     boolean isActivityRestarting;
@@ -76,7 +71,7 @@ public class SettingsActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        constraintLayout_select_color = findViewById(R.id.constraintlayout_colors);
+        constraintLayout_select_color = findViewById(R.id.constraintLayout_colors);
 
         Button switchToEmojiKeyboardButton = findViewById(R.id.emoji);
         switchToEmojiKeyboardButton.setOnClickListener(v -> askUserPreferredEmoticonKeyboard());
@@ -114,87 +109,6 @@ public class SettingsActivity extends AppCompatActivity
         display_icon_button.setChecked(sp.getBoolean(getString(R.string.user_preferred_display_icons_for_sectors), true));
         display_icon_button.setOnCheckedChangeListener((buttonView, isChecked) -> displayIconsPreferenceChangeListner(isChecked));
 
-        red_button = findViewById(R.id.red_button);
-        green_button = findViewById(R.id.green_button);
-        blue_button = findViewById(R.id.blue_button);
-        yellow_button = findViewById(R.id.yellow_button);
-
-        red_button.setOnClickListener(v -> {
-            red_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.red_rounded_button_pressed));
-            red_button.setTextColor(Color.DKGRAY);
-
-            green_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_rounded_button_unpressed));
-            green_button.setTextColor(Color.WHITE);
-
-            yellow_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.yellow_rounded_button_unpressed));
-            yellow_button.setTextColor(Color.WHITE);
-
-            blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.blue_rounded_button_unpressed));
-            blue_button.setTextColor(Color.WHITE);
-
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-            SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.RED);
-            sharedPreferencesEditor.apply();
-        });
-
-        green_button.setOnClickListener(v -> {
-
-            green_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_rounded_button_pressed));
-            green_button.setTextColor(Color.DKGRAY);
-
-            red_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.red_rounded_button_unpressed));
-            red_button.setTextColor(Color.WHITE);
-
-            yellow_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.yellow_rounded_button_unpressed));
-            yellow_button.setTextColor(Color.WHITE);
-
-            blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.blue_rounded_button_unpressed));
-            blue_button.setTextColor(Color.WHITE);
-
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-            SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.GREEN);
-            sharedPreferencesEditor.apply();
-        });
-
-        yellow_button.setOnClickListener(v -> {
-            yellow_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.yellow_rounded_button_pressed));
-            yellow_button.setTextColor(Color.DKGRAY);
-
-            red_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.red_rounded_button_unpressed));
-            red_button.setTextColor(Color.WHITE);
-
-            green_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_rounded_button_unpressed));
-            green_button.setTextColor(Color.WHITE);
-
-            blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.blue_rounded_button_unpressed));
-            blue_button.setTextColor(Color.WHITE);
-
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-            SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.YELLOW);
-            sharedPreferencesEditor.apply();
-        });
-
-        blue_button.setOnClickListener(v -> {
-            blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.blue_rounded_button_pressed));
-            blue_button.setTextColor(Color.DKGRAY);
-
-            red_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.red_rounded_button_unpressed));
-            red_button.setTextColor(Color.WHITE);
-
-            yellow_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.yellow_rounded_button_unpressed));
-            yellow_button.setTextColor(Color.WHITE);
-
-            green_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_rounded_button_unpressed));
-            green_button.setTextColor(Color.WHITE);
-
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-            SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.BLUE);
-            sharedPreferencesEditor.apply();
-        });
 
     }
 
@@ -207,14 +121,14 @@ public class SettingsActivity extends AppCompatActivity
         if (isChecked) {
             Transition transition = new Fade();
             transition.setDuration(600);
-            transition.addTarget(R.id.constraintlayout_colors);
+            transition.addTarget(R.id.constraintLayout_colors);
 
             TransitionManager.beginDelayedTransition(constraintLayout_select_color, transition);
             constraintLayout_select_color.setVisibility(View.VISIBLE);
         } else {
             Transition transition = new Fade();
             transition.setDuration(600);
-            transition.addTarget(R.id.constraintlayout_colors);
+            transition.addTarget(R.id.constraintLayout_colors);
 
             TransitionManager.beginDelayedTransition(constraintLayout_select_color, transition);
             constraintLayout_select_color.setVisibility(View.INVISIBLE);
@@ -371,28 +285,6 @@ public class SettingsActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        int currentColor = sharedPreferences.getInt(getString(R.string.color_selection), Color.YELLOW);
-
-        if (currentColor == Color.RED) {
-            red_button.setBackground(ContextCompat.getDrawable(this, R.drawable.red_rounded_button_pressed));
-            red_button.setTextColor(Color.DKGRAY);
-
-        } else if (currentColor == Color.GREEN) {
-            green_button.setBackground(ContextCompat.getDrawable(this, R.drawable.green_rounded_button_pressed));
-            green_button.setTextColor(Color.DKGRAY);
-
-        } else if (currentColor == Color.YELLOW) {
-            yellow_button.setBackground(ContextCompat.getDrawable(this, R.drawable.yellow_rounded_button_pressed));
-            yellow_button.setTextColor(Color.DKGRAY);
-
-        } else if (currentColor == Color.BLUE) {
-            blue_button.setBackground(ContextCompat.getDrawable(this, R.drawable.blue_rounded_button_pressed));
-            blue_button.setTextColor(Color.DKGRAY);
-
-        }
-
         // Ask user to enable the IME if it is not enabled yet
         if (!isKeyboardEnabled) {
             enableInputMethodDialog();

@@ -53,95 +53,99 @@ public class MainKeyboardView extends ConstraintLayout {
                 context.getString(R.string.mainKeyboard_sidebar_position_preference_key),
                 context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
 
-        if(preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))){
         if (preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
-            inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);
-        } else {
-            inflater.inflate(R.layout.main_keyboard_left_sidebar_view, this, true);
+            if (preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
+                inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);
+            } else {
+                inflater.inflate(R.layout.main_keyboard_left_sidebar_view, this, true);
+            }
+
+            setupBackgroundColours();
+            setupButtonsOnSideBar();
+            setHapticFeedbackEnabled(true);
         }
 
-        setupBackgroundColours();
-        setupButtonsOnSideBar();
-        setHapticFeedbackEnabled(true);
+        private void setupBackgroundColours() {
+        }
+
+
+        private void setupButtonsOnSideBar () {
+
+            setupSwitchToEmojiKeyboardButton();
+            setupSwitchToSelectionKeyboardButton();
+            setupTabKey();
+            setupGoToSettingsButton();
+            setupCtrlKey();
+
+        }
+
+        private void setupCtrlKey () {
+            ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
+
+            ctrlKeyButton.setOnClickListener(view -> actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK));
+        }
+
+        private void setupGoToSettingsButton () {
+            ImageButton goToSettingsButton = findViewById(R.id.goToSettingsButton);
+            goToSettingsButton.setOnClickListener(view -> {
+                Intent vim8SettingsIntent = new Intent(getContext(), SettingsActivity.class);
+                vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(vim8SettingsIntent);
+            });
+        }
+
+        private void setupTabKey () {
+            ImageButton tabKeyButton = findViewById(R.id.tabButton);
+
+            tabKeyButton.setOnClickListener(view -> actionListener.sendKey(KeyEvent.KEYCODE_TAB, 0));
+        }
+
+        private void setupSwitchToSelectionKeyboardButton () {
+            ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
+            switchToSelectionKeyboardButton.setOnClickListener(view -> {
+                KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
+                        KeyboardActionType.INPUT_SPECIAL
+                        , InputSpecialKeyEventCode.SWITCH_TO_SELECTION_KEYBOARD.toString()
+                        , null, 0, 0);
+                actionListener.handleSpecialInput(switchToSelectionKeyboard);
+            });
+        }
+
+        private void setupSwitchToEmojiKeyboardButton () {
+            ImageButton switchToEmojiKeyboardButton = findViewById(R.id.switchToEmojiKeyboard);
+            switchToEmojiKeyboardButton.setOnClickListener(view -> {
+                KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
+                        KeyboardActionType.INPUT_SPECIAL
+                        , InputSpecialKeyEventCode.SWITCH_TO_EMOJI_KEYBOARD.toString()
+                        , null, 0, 0);
+                actionListener.handleSpecialInput(switchToEmojiKeyboard);
+            });
+        }
+
+        @Override
+        public void onMeasure ( int widthMeasureSpec, int heightMeasureSpec){
+            Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
+                    MeasureSpec.getSize(widthMeasureSpec),
+                    MeasureSpec.getSize(heightMeasureSpec),
+                    getResources().getConfiguration().orientation);
+
+            super.onMeasure(
+                    MeasureSpec.makeMeasureSpec(
+                            computedDimension.getWidth(),
+                            MeasureSpec.getMode(widthMeasureSpec)
+                    ),
+                    MeasureSpec.makeMeasureSpec(
+                            computedDimension.getHeight(),
+                            MeasureSpec.getMode(heightMeasureSpec)
+                    )
+            );
+
+            setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
+        }
+
     }
-
-    private void setupBackgroundColours() {
-        View sidebar = findViewById(R.id.sidebarButtonsLayout);
-        sidebar.setBackgroundColor(getResources().getColor(R.color.secondaryBackground));
-    }
-
-    private void setupButtonsOnSideBar() {
-
-        setupSwitchToEmojiKeyboardButton();
-        setupSwitchToSelectionKeyboardButton();
-        setupTabKey();
-        setupGoToSettingsButton();
-        setupCtrlKey();
-
-    }
-
-    private void setupCtrlKey() {
-        ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
-
-        ctrlKeyButton.setOnClickListener(view -> actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK));
-    }
-
-    private void setupGoToSettingsButton() {
-        ImageButton goToSettingsButton = findViewById(R.id.goToSettingsButton);
-        goToSettingsButton.setOnClickListener(view -> {
-            Intent vim8SettingsIntent = new Intent(getContext(), SettingsActivity.class);
-            vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getContext().startActivity(vim8SettingsIntent);
-        });
-    }
-
-    private void setupTabKey() {
-        ImageButton tabKeyButton = findViewById(R.id.tabButton);
-
-        tabKeyButton.setOnClickListener(view -> actionListener.sendKey(KeyEvent.KEYCODE_TAB, 0));
-    }
-
-    private void setupSwitchToSelectionKeyboardButton() {
-        ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
-        switchToSelectionKeyboardButton.setOnClickListener(view -> {
-            KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
-                    KeyboardActionType.INPUT_SPECIAL
-                    , InputSpecialKeyEventCode.SWITCH_TO_SELECTION_KEYBOARD.toString()
-                    , null, 0, 0);
-            actionListener.handleSpecialInput(switchToSelectionKeyboard);
-        });
-    }
-
-    private void setupSwitchToEmojiKeyboardButton() {
-        ImageButton switchToEmojiKeyboardButton = findViewById(R.id.switchToEmojiKeyboard);
-        switchToEmojiKeyboardButton.setOnClickListener(view -> {
-            KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
-                    KeyboardActionType.INPUT_SPECIAL
-                    , InputSpecialKeyEventCode.SWITCH_TO_EMOJI_KEYBOARD.toString()
-                    , null, 0, 0);
-            actionListener.handleSpecialInput(switchToEmojiKeyboard);
-        });
-    }
-
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
-                MeasureSpec.getSize(widthMeasureSpec),
-                MeasureSpec.getSize(heightMeasureSpec),
-                getResources().getConfiguration().orientation);
-
-        super.onMeasure(
-                MeasureSpec.makeMeasureSpec(
-                        computedDimension.getWidth(),
-                        MeasureSpec.getMode(widthMeasureSpec)
-                ),
-                MeasureSpec.makeMeasureSpec(
-                        computedDimension.getHeight(),
-                        MeasureSpec.getMode(heightMeasureSpec)
-                )
-        );
-
-        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
-    }
-
 }
+
+
+
+
