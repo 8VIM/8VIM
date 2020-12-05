@@ -54,8 +54,9 @@ public class LauncherActivity extends AppCompatActivity
 
     private ConstraintLayout constraintLayout_select_color;
 
-    private Button touch_trail_settings_button;
+    private SwitchCompat display_icon_button;
 
+    private Button touch_trail_settings_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,8 @@ public class LauncherActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        constraintLayout_select_color = (ConstraintLayout) findViewById(R.id.constraintlayout_colors);
+
+        constraintLayout_select_color = findViewById(R.id.constraintLayout_colors);
 
         Button switchToEmojiKeyboardButton = findViewById(R.id.emoji);
         switchToEmojiKeyboardButton.setOnClickListener(v -> askUserPreferredEmoticonKeyboard());
@@ -106,11 +108,18 @@ public class LauncherActivity extends AppCompatActivity
             constraintLayout_select_color.setVisibility(View.INVISIBLE);
         }
 
-        touch_trail_settings_button = findViewById(R.id.touchtrail_setting_button);
+        // for display icons in the sector
+
+        display_icon_button = findViewById(R.id.display_icons_switch);
+
+        display_icon_button.setChecked(sp.getBoolean(getString(R.string.user_preferred_display_icons_for_sectors), true));
+        display_icon_button.setOnCheckedChangeListener((buttonView, isChecked) -> displayIconsPreferenceChangeListner(isChecked));
+
+        touch_trail_settings_button = findViewById(R.id.touch_trail_settings_button);
         touch_trail_settings_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LauncherActivity.this, TouchTrailSettingsActivity.class);
+                Intent intent = new Intent(LauncherActivity.this,TouchTrailSettingsActivity.class);
                 startActivity(intent);
             }
         });
@@ -126,14 +135,14 @@ public class LauncherActivity extends AppCompatActivity
         if (isChecked) {
             Transition transition = new Fade();
             transition.setDuration(600);
-            transition.addTarget(R.id.constraintlayout_colors);
+            transition.addTarget(R.id.constraintLayout_colors);
 
             TransitionManager.beginDelayedTransition(constraintLayout_select_color, transition);
             constraintLayout_select_color.setVisibility(View.VISIBLE);
         } else {
             Transition transition = new Fade();
             transition.setDuration(600);
-            transition.addTarget(R.id.constraintlayout_colors);
+            transition.addTarget(R.id.constraintLayout_colors);
 
             TransitionManager.beginDelayedTransition(constraintLayout_select_color, transition);
             constraintLayout_select_color.setVisibility(View.INVISIBLE);
