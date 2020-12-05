@@ -130,6 +130,7 @@ public class XpadView extends View {
 
         SharedPreferences sp_sector_icons = this.getContext()
                 .getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+
         if (sp_sector_icons.getBoolean(this.getContext().getString(R.string.user_preferred_display_icons_for_sectors), true)) {
             setupSectorIcons(centre_x_value, centre_y_value, canvas);
         }
@@ -178,7 +179,7 @@ public class XpadView extends View {
                 R.drawable.shift_icon_vd_vector);
     }
 
-    private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId){
+    private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId) {
 
         VectorDrawableCompat icon_vectorDrawable = VectorDrawableCompat
                 .create(getContext().getResources(), resourceId, null);
@@ -193,6 +194,7 @@ public class XpadView extends View {
     private void paintTypingTrail(Canvas canvas) {
         float[] pathPos = new float[2];
         Paint typingTrailPaint = new Paint();
+        if (typingTrailPath != null) {
 
         SharedPreferences sharedPreferences_thickness = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         int max_trail_radius = sharedPreferences_thickness.getInt(getContext().getString(R.string.storing_thickness_value_in_sharedPreference),0);
@@ -209,7 +211,7 @@ public class XpadView extends View {
             for (short i = 1; i <= steps; i++) {
                 final float distance = pathLength - i * stepDistance;
                 if (distance >= 0) {
-                    final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
+                    final float trailRadius = max_trail_radius * (1 - (float) i / steps);
                     pathMeasure.getPosTan(distance, pathPos, null);
                     final float x = pathPos[0] + random.nextFloat() - trailRadius;
                     final float y = pathPos[1] + random.nextFloat() - trailRadius;
@@ -224,15 +226,19 @@ public class XpadView extends View {
                                 ColorUtils.setAlphaComponent(colorCode, random.nextInt(0xff)),
                             Color.TRANSPARENT,
                             Shader.TileMode.CLAMP));
+                    SharedPreferences sp_opacity_value = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+                    int opacity_value = sp_opacity_value.getInt(this.getContext().getString(R.string.storing_opacity_value_in_sharedPreference), 0);
 
                     SharedPreferences sp_opacity_value = getContext().getSharedPreferences(getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                     int current_opacity_value = sp_opacity_value.getInt(getContext().getString(R.string.storing_opacity_value_in_sharedPreference),0);
 
                     typingTrailPaint.setAlpha(current_opacity_value);
                     canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
+
                 }
             }
         }
+
         canvas.drawPath(typingTrailPath, typingTrailPaint);
     }
 
@@ -350,6 +356,7 @@ public class XpadView extends View {
 
         // Schedules a repaint.
         invalidate();
+
         return true;
     }
 
@@ -389,7 +396,6 @@ public class XpadView extends View {
             float x = e.getX();
             float y = e.getY();
 
-
             typingTrailPath.addCircle(x, y, 50, Path.Direction.CW);
 
             // clean drawing area on double tap
@@ -403,3 +409,4 @@ public class XpadView extends View {
     }
 
 }
+
