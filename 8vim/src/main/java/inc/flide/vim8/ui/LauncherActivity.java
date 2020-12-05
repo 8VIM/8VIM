@@ -26,24 +26,13 @@ import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.material.navigation.NavigationView;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
 import inc.flide.vim8.structures.Constants;
 
@@ -100,6 +89,7 @@ public class LauncherActivity extends AppCompatActivity
         touch_trail_switch.setChecked(sp.getBoolean(getString(R.string.user_preferred_typing_trail_visibility), true));
         touch_trail_switch.setOnCheckedChangeListener((buttonView, isChecked) -> touchTrailPreferenceChangeListner(isChecked));
 
+
         boolean touch_trail_visibility = sp.getBoolean(getString(R.string.user_preferred_typing_trail_visibility), true);
 
         if (touch_trail_visibility) {
@@ -109,7 +99,6 @@ public class LauncherActivity extends AppCompatActivity
         }
 
         // for display icons in the sector
-
         display_icon_button = findViewById(R.id.display_icons_switch);
 
         display_icon_button.setChecked(sp.getBoolean(getString(R.string.user_preferred_display_icons_for_sectors), true));
@@ -182,7 +171,9 @@ public class LauncherActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+
     private void askUserPreferredEmoticonKeyboard() {
+
         InputMethodManager imeManager = (InputMethodManager) getApplicationContext().getSystemService(INPUT_METHOD_SERVICE);
         List<InputMethodInfo> inputMethods = imeManager.getEnabledInputMethodList();
 
@@ -208,6 +199,7 @@ public class LauncherActivity extends AppCompatActivity
                 .title(R.string.select_preferred_emoticon_keyboard_dialog_title)
                 .items(inputMethodsNameAndId.keySet())
                 .itemsCallbackSingleChoice(selectedKeyboardIndex, (dialog, itemView, which, text) -> {
+
 
                     if (which != -1) {
                         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
@@ -309,7 +301,6 @@ public class LauncherActivity extends AppCompatActivity
 
         enableInputMethodNotificationDialog.show();
     }
-
 
     private void activateInputMethodDialog() {
         final MaterialDialog activateInputMethodNotificationDialog = new MaterialDialog.Builder(this)
