@@ -12,3 +12,7 @@
 Store Assets/
 Security files/
 /8vim/lint-report.html
+
+8vim/release/8vim-release.apk
+
+8vim/release/output-metadata.json
