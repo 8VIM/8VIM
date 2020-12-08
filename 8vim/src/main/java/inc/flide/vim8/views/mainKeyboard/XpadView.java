@@ -109,8 +109,6 @@ public class XpadView extends View {
         keypadDimension.setWidth(MeasureSpec.getSize(widthMeasureSpec));
         keypadDimension.setHeight(MeasureSpec.getSize(heightMeasureSpec));
 
-        computeComponentPositions();
-
         setMeasuredDimension(keypadDimension.getWidth(), keypadDimension.getHeight());
     }
 
