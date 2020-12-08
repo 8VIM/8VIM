@@ -1,8 +1,6 @@
 package inc.flide.vim8.views.mainKeyboard;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,7 +11,6 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +29,7 @@ import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.geometry.GeometricUtilities;
 import inc.flide.vim8.geometry.LineSegment;
 import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
+import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.utilities.Utilities;
@@ -85,28 +83,46 @@ public class XpadView extends View {
         }
     }
 
-    private void setBackgroundPaint() {
-        backgroundPaint.setColor(getResources().getColor(R.color.primaryBackground));
+    private void computeComponentPositions() {
+        float spRadiusValue = SharedPreferenceHelper.getInstance(getContext()).getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key), 0.3f);
+        float radius = (spRadiusValue * keypadDimension.getWidth()) / 2;
+
+        circleCenter.x = (keypadDimension.getWidth() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
+        circleCenter.y = (keypadDimension.getHeight() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
+
+        circle.setCentre(circleCenter);
+        circle.setRadius(radius);
+
+        float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
+        listOfPointsOfDisplay.clear();
+        for (int i = 0; i < 4; i++) {
+            int angle = 45 + (i * 90);
+            PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
+            sectorDemarcatingLines.get(i).setupLineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
+            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(sectorDemarcatingLines.get(i), 4, characterHeight));
+        }
     }
 
-    private void setForegroundPaint() {
-        foregroundPaint.setColor(getResources().getColor(R.color.primaryText));
-        foregroundPaint.setAntiAlias(true);
-        foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
-        foregroundPaint.setTextSize(Constants.TEXT_SIZE);
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
-                "SF-UI-Display-Regular.otf");
-        foregroundPaint.setTypeface(font);
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        keypadDimension.setWidth(MeasureSpec.getSize(widthMeasureSpec));
+        keypadDimension.setHeight(MeasureSpec.getSize(heightMeasureSpec));
+
+        computeComponentPositions();
+
+        setMeasuredDimension(keypadDimension.getWidth(), keypadDimension.getHeight());
     }
 
     @Override
     public void onDraw(Canvas canvas) {
 
+        computeComponentPositions();
+
         canvas.drawColor(backgroundPaint.getColor());
 
-        SharedPreferences sp = this.getContext()
-                .getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        if (sp.getBoolean(this.getContext().getString(R.string.user_preferred_typing_trail_visibility), true)) {
+        boolean userPrefersTypingTrail = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.user_preferred_typing_trail_visibility), true);
+        if (userPrefersTypingTrail) {
             paintTypingTrail(canvas);
         }
 
@@ -128,9 +144,8 @@ public class XpadView extends View {
         int centre_x_value = (int) circle.getCentre().x;
         int centre_y_value = (int) circle.getCentre().y;
 
-        SharedPreferences sp_sector_icons = this.getContext()
-                .getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        if (sp_sector_icons.getBoolean(this.getContext().getString(R.string.user_preferred_display_icons_for_sectors), true)) {
+        boolean userPrefersSectorIcons = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.user_preferred_display_icons_for_sectors), true);
+        if (userPrefersSectorIcons) {
             setupSectorIcons(centre_x_value, centre_y_value, canvas);
         }
         //the text along the lines
@@ -141,6 +156,20 @@ public class XpadView extends View {
         float[] pointsOfDisplay = Utilities.convertPointFListToPrimitiveFloatArray(listOfPointsOfDisplay);
         canvas.drawPosText(charactersToDisplay, pointsOfDisplay, foregroundPaint);
 
+    }
+
+    private void setBackgroundPaint() {
+        backgroundPaint.setColor(getResources().getColor(R.color.primaryBackground));
+    }
+
+    private void setForegroundPaint() {
+        foregroundPaint.setColor(getResources().getColor(R.color.primaryText));
+        foregroundPaint.setAntiAlias(true);
+        foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
+        foregroundPaint.setTextSize(Constants.TEXT_SIZE);
+        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
+                "SF-UI-Display-Regular.otf");
+        foregroundPaint.setTypeface(font);
     }
 
     private void setupSectorIcons(int centre_x_value, int centre_y_value, Canvas canvas) {
@@ -230,8 +259,9 @@ public class XpadView extends View {
     }
 
     private int getTrailColor() {
-        SharedPreferences sharedPreferences = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        int trailColor = sharedPreferences.getInt(this.getContext().getString(R.string.color_selection), Color.YELLOW);
+        int trailColor = SharedPreferenceHelper
+                .getInstance(this.getContext())
+                .getInt(this.getContext().getString(R.string.color_selection), Color.YELLOW);
         return trailColor;
     }
 
@@ -345,35 +375,6 @@ public class XpadView extends View {
         return true;
     }
 
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        keypadDimension.setWidth(MeasureSpec.getSize(widthMeasureSpec));
-        keypadDimension.setHeight(MeasureSpec.getSize(heightMeasureSpec));
-
-        SharedPreferences sp = this.getContext().getSharedPreferences(this.getContext().getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        float spRadiusValue = sp.getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key), 0.3f);
-        float radius = (spRadiusValue * keypadDimension.getWidth()) / 2;
-
-        circleCenter.x = (keypadDimension.getWidth() / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
-        circleCenter.y = (keypadDimension.getHeight() / 2f) + ((sp.getInt(this.getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
-
-        circle.setCentre(circleCenter);
-        circle.setRadius(radius);
-
-        float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
-        for (int i = 0; i < 4; i++) {
-            int angle = 45 + (i * 90);
-            PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
-
-            sectorDemarcatingLines.get(i).setupLineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
-            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(sectorDemarcatingLines.get(i), 4, characterHeight));
-
-        }
-
-        setMeasuredDimension(keypadDimension.getWidth(), keypadDimension.getHeight());
-    }
-
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         // event when double tap occurs
         @Override
@@ -386,8 +387,6 @@ public class XpadView extends View {
 
             // clean drawing area on double tap
             typingTrailPath.reset();
-
-            Log.d("Double Tap", "Tapped at: (" + x + "," + y + ")");
 
             return true;
         }
