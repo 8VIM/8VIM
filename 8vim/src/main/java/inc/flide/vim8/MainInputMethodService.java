@@ -1,7 +1,6 @@
 package inc.flide.vim8;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -17,6 +16,7 @@ import java.util.Map;
 
 import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
+import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.views.NumberKeypadView;
@@ -155,9 +155,9 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     private String getSelectedEmoticonKeyboardId() {
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(
-                getString(R.string.basic_preference_file_name), Context.MODE_PRIVATE);
-        String emoticonKeyboardId = sharedPreferences.getString(getString(R.string.bp_selected_emoticon_keyboard), "");
+        String emoticonKeyboardId = SharedPreferenceHelper
+                .getInstance(getApplicationContext())
+                .getString(getString(R.string.bp_selected_emoticon_keyboard), "");
 
         // Before returning verify that this keyboard Id we have does exist in the system.
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

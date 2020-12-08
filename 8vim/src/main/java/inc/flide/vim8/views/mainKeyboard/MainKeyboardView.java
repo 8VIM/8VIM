@@ -1,14 +1,11 @@
 package inc.flide.vim8.views.mainKeyboard;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -19,6 +16,7 @@ import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
 import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
+import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.ui.SettingsActivity;
@@ -48,10 +46,11 @@ public class MainKeyboardView extends ConstraintLayout {
         actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(context.getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        String preferredSidebarPositionOnMainKeyboard = sharedPreferences.getString(
-                context.getString(R.string.mainKeyboard_sidebar_position_preference_key),
-                context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
+        String preferredSidebarPositionOnMainKeyboard = SharedPreferenceHelper
+                .getInstance(context)
+                .getString(
+                        context.getString(R.string.mainKeyboard_sidebar_position_preference_key),
+                        context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
 
         if (preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
             inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);

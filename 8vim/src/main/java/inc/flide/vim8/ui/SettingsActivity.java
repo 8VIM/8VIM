@@ -40,6 +40,7 @@ import java.util.Map;
 
 import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
+import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 
 public class SettingsActivity extends AppCompatActivity
@@ -95,11 +96,11 @@ public class SettingsActivity extends AppCompatActivity
 
         SwitchCompat touch_trail_switch = findViewById(R.id.touch_trail);
 
-        SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        touch_trail_switch.setChecked(sp.getBoolean(getString(R.string.user_preferred_typing_trail_visibility), true));
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        touch_trail_switch.setChecked(SharedPreferenceHelper.getInstance(getApplicationContext()).getBoolean(getString(R.string.user_preferred_typing_trail_visibility), true));
         touch_trail_switch.setOnCheckedChangeListener((buttonView, isChecked) -> touchTrailPreferenceChangeListner(isChecked));
 
-        boolean touch_trail_visibility = sp.getBoolean(getString(R.string.user_preferred_typing_trail_visibility), true);
+        boolean touch_trail_visibility = SharedPreferenceHelper.getInstance(getApplicationContext()).getBoolean(getString(R.string.user_preferred_typing_trail_visibility), true);
 
         if (touch_trail_visibility) {
             constraintLayout_select_color.setVisibility(View.VISIBLE);
@@ -111,7 +112,7 @@ public class SettingsActivity extends AppCompatActivity
 
         SwitchCompat display_icon_button = findViewById(R.id.display_icons_switch);
 
-        display_icon_button.setChecked(sp.getBoolean(getString(R.string.user_preferred_display_icons_for_sectors), true));
+        display_icon_button.setChecked(SharedPreferenceHelper.getInstance(getApplicationContext()).getBoolean(getString(R.string.user_preferred_display_icons_for_sectors), true));
         display_icon_button.setOnCheckedChangeListener((buttonView, isChecked) -> displayIconsPreferenceChangeListner(isChecked));
 
         red_button = findViewById(R.id.red_button);
@@ -132,7 +133,6 @@ public class SettingsActivity extends AppCompatActivity
             blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.blue_rounded_button_unpressed));
             blue_button.setTextColor(Color.WHITE);
 
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
             sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.RED);
             sharedPreferencesEditor.apply();
@@ -152,7 +152,6 @@ public class SettingsActivity extends AppCompatActivity
             blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.blue_rounded_button_unpressed));
             blue_button.setTextColor(Color.WHITE);
 
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
             sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.GREEN);
             sharedPreferencesEditor.apply();
@@ -171,7 +170,6 @@ public class SettingsActivity extends AppCompatActivity
             blue_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.blue_rounded_button_unpressed));
             blue_button.setTextColor(Color.WHITE);
 
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
             sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.YELLOW);
             sharedPreferencesEditor.apply();
@@ -190,7 +188,6 @@ public class SettingsActivity extends AppCompatActivity
             green_button.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.green_rounded_button_unpressed));
             green_button.setTextColor(Color.WHITE);
 
-            SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
             sharedPreferencesEditor.putInt(getString(R.string.color_selection), Color.BLUE);
             sharedPreferencesEditor.apply();
@@ -266,14 +263,18 @@ public class SettingsActivity extends AppCompatActivity
         }
         ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
 
-        SharedPreferences sp = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        String selectedKeyboardId = sp.getString(getString(R.string.bp_selected_emoticon_keyboard), "");
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        String selectedKeyboardId = SharedPreferenceHelper
+                .getInstance(getApplicationContext())
+                .getString(
+                        getString(R.string.bp_selected_emoticon_keyboard),
+                        "");
         int selectedKeyboardIndex = -1;
         if (!selectedKeyboardId.isEmpty()) {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
             if (selectedKeyboardIndex == -1) {
                 // seems like we have a stale selection, it should be removed.
-                sp.edit().remove(getString(R.string.bp_selected_emoticon_keyboard)).apply();
+                sharedPreferences.edit().remove(getString(R.string.bp_selected_emoticon_keyboard)).apply();
             }
         }
         new MaterialDialog.Builder(this)
@@ -282,7 +283,6 @@ public class SettingsActivity extends AppCompatActivity
                 .itemsCallbackSingleChoice(selectedKeyboardIndex, (dialog, itemView, which, text) -> {
 
                     if (which != -1) {
-                        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
                         sharedPreferencesEditor.putString(getString(R.string.bp_selected_emoticon_keyboard), keyboardIds.get(which));
                         sharedPreferencesEditor.apply();
@@ -372,8 +372,9 @@ public class SettingsActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        int currentColor = sharedPreferences.getInt(getString(R.string.color_selection), Color.YELLOW);
+        int currentColor = SharedPreferenceHelper
+                .getInstance(getApplicationContext())
+                .getInt(getString(R.string.color_selection), Color.YELLOW);
 
         if (currentColor == Color.RED) {
             red_button.setBackground(ContextCompat.getDrawable(this, R.drawable.red_rounded_button_pressed));

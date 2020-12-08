@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Locale;
 
 import inc.flide.vim8.R;
+import inc.flide.vim8.preferences.SharedPreferenceHelper;
 
 public class SetCenterActivity extends AppCompatActivity {
 
@@ -33,8 +34,9 @@ public class SetCenterActivity extends AppCompatActivity {
         textView_x_Value = findViewById(R.id.x_value);
         seekBar_x = findViewById(R.id.seekbar_x);
 
-        SharedPreferences sp_x = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        int offset_x = sp_x.getInt(getString(R.string.x_board_circle_centre_x_offset_key), 0);
+        int offset_x = SharedPreferenceHelper
+                .getInstance(getApplicationContext())
+                .getInt(getString(R.string.x_board_circle_centre_x_offset_key), 0);
 
         int current_x_Value = 0;
         if (!(offset_x == 0)) {
@@ -75,9 +77,9 @@ public class SetCenterActivity extends AppCompatActivity {
         textView_y_value = findViewById(R.id.y_value);
         seekBar_y = findViewById(R.id.seekbar_y);
 
-
-        SharedPreferences sp_y = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        int offset_y = sp_y.getInt(getString(R.string.x_board_circle_centre_y_offset_key), 0);
+        int offset_y = SharedPreferenceHelper
+                .getInstance(getApplicationContext())
+                .getInt(getString(R.string.x_board_circle_centre_y_offset_key), 0);
 
         int current_y_Value = 0;
         if (!(offset_y == 0)) {
