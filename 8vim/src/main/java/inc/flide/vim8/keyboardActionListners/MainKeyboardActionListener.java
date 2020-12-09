@@ -83,6 +83,13 @@ public class MainKeyboardActionListener {
         currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT;
     }
 
+    public void movementCanceled(){
+        longPressHandler.removeCallbacks(longPressRunnable);
+        isLongPressCallbackSet = false;
+        movementSequence.clear();
+        currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT;
+    }
+
     private void initiateLongPressDetection() {
         isLongPressCallbackSet = true;
         longPressHandler.postDelayed(longPressRunnable, Constants.DELAY_MILLIS_LONG_PRESS_INITIATION);

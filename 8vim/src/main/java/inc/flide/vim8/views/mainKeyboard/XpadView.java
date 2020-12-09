@@ -345,7 +345,7 @@ public class XpadView extends View {
         PointF position = new PointF((int) e.getX(), (int) e.getY());
         FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
         invalidate();
-        switch (e.getAction()) {
+        switch (e.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 actionListener.movementStarted(currentFingerPosition);
                 typingTrailPath.reset();
@@ -360,6 +360,11 @@ public class XpadView extends View {
             case MotionEvent.ACTION_UP:
                 typingTrailPath.reset();
                 actionListener.movementEnds();
+                return true;
+
+            case MotionEvent.ACTION_CANCEL:
+                typingTrailPath.reset();
+                actionListener.movementCanceled();
                 return true;
 
             default:
