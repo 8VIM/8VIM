@@ -8,39 +8,48 @@
     <Row>
         <Key
             android:keyOutputText="#"
+            android:isRepeatable="true"
             android:keyLabel="#"
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />
         <Key
             android:keyOutputText="@string/rupeeSymbol"
+            android:isRepeatable="true"
             android:keyLabel="@string/rupeeSymbol"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="&amp;"
+            android:isRepeatable="true"
             android:keyLabel="&amp;"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="_"
+            android:isRepeatable="true"
             android:keyLabel="_"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="-"
+            android:isRepeatable="true"
             android:keyLabel="-"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="1"
+            android:isRepeatable="true"
             android:keyLabel="1"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="2"
+            android:isRepeatable="true"
             android:keyLabel="2"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="3"
+            android:isRepeatable="true"
             android:keyLabel="3"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="\?"
+            android:isRepeatable="true"
             android:keyLabel="\?"
             android:keyWidth="25%p"
             android:keyEdgeFlags="right"/>
@@ -48,39 +57,48 @@
     <Row>
         <Key
             android:keyOutputText="\@"
+            android:isRepeatable="true"
             android:keyLabel="\@"
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />
         <Key
             android:keyOutputText="("
+            android:isRepeatable="true"
             android:keyLabel="("
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText=")"
+            android:isRepeatable="true"
             android:keyLabel=")"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="="
+            android:isRepeatable="true"
             android:keyLabel="="
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="+"
+            android:isRepeatable="true"
             android:keyLabel="+"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="4"
+            android:isRepeatable="true"
             android:keyLabel="4"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="5"
+            android:isRepeatable="true"
             android:keyLabel="5"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="6"
+            android:isRepeatable="true"
             android:keyLabel="6"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="!"
+            android:isRepeatable="true"
             android:keyLabel="!"
             android:keyWidth="25%p"
             android:keyEdgeFlags="right"/>
@@ -93,37 +111,44 @@
             android:keyEdgeFlags="left" />
         <Key
             android:keyOutputText="'"
+            android:isRepeatable="true"
             android:keyLabel="'"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText=":"
+            android:isRepeatable="true"
             android:keyLabel=":"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="%"
+            android:isRepeatable="true"
             android:keyLabel="%"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="/"
+            android:isRepeatable="true"
             android:keyLabel="/"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="7"
+            android:isRepeatable="true"
             android:keyLabel="7"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="8"
+            android:isRepeatable="true"
             android:keyLabel="8"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="9"
+            android:isRepeatable="true"
             android:keyLabel="9"
             android:keyWidth="25%p"/>
         <Key
             android:codes="@integer/KEYCODE_DEL"
-            android:keyLabel="@string/eraseToTheLeft"
-            android:keyWidth="25%p"
             android:isRepeatable="true"
+            android:keyIcon="@drawable/ic_backspace"
+            android:keyWidth="25%p"
             android:keyEdgeFlags="right"/>
     </Row>
     <Row>
@@ -134,30 +159,37 @@
             android:keyEdgeFlags="left" />
         <Key
             android:keyOutputText="&quot;"
+            android:isRepeatable="true"
             android:keyLabel="&quot;"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText=" "
+            android:isRepeatable="true"
             android:keyLabel="@string/fullWidthLowLine"
             android:keyWidth="40%p"/>
         <Key
             android:keyOutputText="*"
+            android:isRepeatable="true"
             android:keyLabel="*" />
         <Key
             android:keyOutputText=","
+            android:isRepeatable="true"
             android:keyLabel=","
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="0"
+            android:isRepeatable="true"
             android:keyLabel="0"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="."
+            android:isRepeatable="true"
             android:keyLabel="."
             android:keyWidth="25%p"/>
         <Key
             android:codes="@integer/KEYCODE_ENTER"
-            android:keyLabel="@string/enter"
+            android:isRepeatable="true"
+            android:keyIcon="@drawable/ic_keyboard_return"
             android:keyWidth="25%p"
             android:keyEdgeFlags="right" />
     </Row>
