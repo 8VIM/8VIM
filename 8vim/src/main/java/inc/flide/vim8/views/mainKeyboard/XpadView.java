@@ -43,7 +43,6 @@ public class XpadView extends View {
     private final List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
     private final List<PointF> listOfPointsOfDisplay = new ArrayList<>();
     private final Path typingTrailPath = new Path();
-    GestureDetector gestureDetector;
     Paint backgroundPaint = new Paint();
     Paint foregroundPaint = new Paint();
     private MainKeyboardActionListener actionListener;
@@ -59,9 +58,7 @@ public class XpadView extends View {
     public XpadView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
-        gestureDetector = new GestureDetector(context, new GestureListener());
     }
-
 
     public XpadView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -347,48 +344,27 @@ public class XpadView extends View {
     public boolean onTouchEvent(MotionEvent e) {
         PointF position = new PointF((int) e.getX(), (int) e.getY());
         FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
+        invalidate();
         switch (e.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 actionListener.movementStarted(currentFingerPosition);
+                typingTrailPath.reset();
                 typingTrailPath.moveTo(e.getX(), e.getY());
                 return true;
 
             case MotionEvent.ACTION_MOVE:
                 actionListener.movementContinues(currentFingerPosition);
                 typingTrailPath.lineTo(e.getX(), e.getY());
-                break;
+                return true;
 
             case MotionEvent.ACTION_UP:
-                actionListener.movementEnds();
-            case MotionEvent.ACTION_POINTER_DOWN:
                 typingTrailPath.reset();
-                break;
+                actionListener.movementEnds();
+                return true;
+
             default:
                 return false;
         }
-        gestureDetector.onTouchEvent(e);
-
-        // Schedules a repaint.
-        invalidate();
-        return true;
-    }
-
-    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
-        // event when double tap occurs
-        @Override
-        public boolean onDoubleTap(MotionEvent e) {
-            float x = e.getX();
-            float y = e.getY();
-
-
-            typingTrailPath.addCircle(x, y, 50, Path.Direction.CW);
-
-            // clean drawing area on double tap
-            typingTrailPath.reset();
-
-            return true;
-        }
-
     }
 
 }
