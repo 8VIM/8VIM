@@ -14,7 +14,7 @@ import inc.flide.vim8.structures.FingerPosition;
 
 public class InputMethodServiceHelper {
 
-    public Map<List<FingerPosition>, KeyboardAction> initializeKeyboardActionMap(Resources resources, String packageName) {
+    public static Map<List<FingerPosition>, KeyboardAction> initializeKeyboardActionMap(Resources resources) {
 
         Map<List<FingerPosition>, KeyboardAction> keyboardActionMap = null;
 

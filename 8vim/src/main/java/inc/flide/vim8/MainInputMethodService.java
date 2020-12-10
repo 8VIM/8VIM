@@ -26,7 +26,6 @@ import inc.flide.vim8.views.mainKeyboard.MainKeyboardView;
 
 public class MainInputMethodService extends InputMethodService {
 
-    InputMethodServiceHelper inputMethodServiceHelper = new InputMethodServiceHelper();
     InputConnection inputConnection;
     private MainKeyboardView mainKeyboardView;
     private NumberKeypadView numberKeypadView;
@@ -98,8 +97,7 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public Map<List<FingerPosition>, KeyboardAction> buildKeyboardActionMap() {
-        return inputMethodServiceHelper
-                .initializeKeyboardActionMap(getResources(), getPackageName());
+        return InputMethodServiceHelper.initializeKeyboardActionMap(getResources());
     }
 
     public void sendText(String text) {
