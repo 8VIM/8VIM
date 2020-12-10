@@ -27,13 +27,13 @@ public class SelectionKeyboardActionListener extends KeyboardActionListner {
 
         switch (selectionKeyboardKeyCode) {
             case CUT:
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_X, KeyEvent.META_CTRL_ON);
+                mainInputMethodService.cut();
                 return true;
             case COPY:
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_C, KeyEvent.META_CTRL_ON);
+                mainInputMethodService.copy();
                 return true;
             case PASTE:
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_V, KeyEvent.META_CTRL_ON);
+                mainInputMethodService.paste();
                 return true;
             case SELECT_ALL:
                 mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
