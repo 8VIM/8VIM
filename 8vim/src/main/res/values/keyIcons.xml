@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="eraseToTheLeft">&#x232B;</string>
-    <string name="enter">&#x21B5;</string>
     <string name="fullWidthLowLine">&#xFF3F;&#xFF3F;</string>
     <string name="rupeeSymbol">&#x20B9;</string>
     <string name="poundSign">&#x00A3;</string>
@@ -22,5 +20,4 @@
     <string name="pilcrowSign">&#x00B6;</string>
     <string name="brokenBar">&#x00A6;</string>
     <string name="verticalLine">&#x007C;</string>
-    <string name="rightwardsArrowToBar">&#x21E5;</string>
 </resources>
