@@ -2,6 +2,7 @@ package inc.flide.vim8.keyboardActionListners;
 
 import android.os.Handler;
 import android.view.HapticFeedbackConstants;
+import android.view.KeyEvent;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -155,5 +156,13 @@ public class MainKeyboardActionListener {
 
     public void handleSpecialInput(KeyboardAction keyboardAction) {
         this.mainInputMethodService.handleSpecialInput(keyboardAction);
+    }
+
+    public boolean isShiftSet() {
+        return mainInputMethodService.getShiftLockFlag() == KeyEvent.META_SHIFT_ON ;
+    }
+
+    public boolean isCapsLockSet() {
+        return mainInputMethodService.getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
     }
 }

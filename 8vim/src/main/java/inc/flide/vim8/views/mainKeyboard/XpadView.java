@@ -196,10 +196,17 @@ public class XpadView extends View {
         //for caps lock and shift icon
         int shift_icon_x_coordinates = centre_x_value - 30;
         int shift_icon_y_coordinates = centre_y_value - 310;
+        int shift_icon_to_display = R.drawable.ic_no_capslock;
+        if (actionListener.isShiftSet()) {
+            shift_icon_to_display = R.drawable.ic_shift_engaged;
+        }
+        if (actionListener.isCapsLockSet()) {
+            shift_icon_to_display = R.drawable.ic_capslock_engaged;
+        }
         drawIconInSector(shift_icon_x_coordinates,
                 shift_icon_y_coordinates,
                 canvas,
-                R.drawable.shift_icon_vd_vector);
+                shift_icon_to_display);
     }
 
     private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId){
