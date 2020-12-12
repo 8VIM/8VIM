@@ -54,9 +54,6 @@ public class SelectionKeyboardActionListener extends KeyboardActionListner {
             case TOOGLE_SELECTION_MODE:
                 isSelectionOn = !isSelectionOn;
                 return true;
-            case DELETE_SELECTION:
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_FORWARD_DEL, 0);
-                return true;
             case MOVE_CURRENT_END_POINT_LEFT:
                 moveSelection(KeyEvent.KEYCODE_DPAD_LEFT);
                 return true;
@@ -68,12 +65,6 @@ public class SelectionKeyboardActionListener extends KeyboardActionListner {
                 return true;
             case MOVE_CURRENT_END_POINT_UP:
                 moveSelection(KeyEvent.KEYCODE_DPAD_UP);
-                return true;
-            case BACKSPACE:
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DEL, 0);
-                return true;
-            case ENTER:
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0);
                 return true;
         }
 

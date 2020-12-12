@@ -10,13 +10,13 @@
             android:keyIcon="@drawable/ic_content_cut" />
         <Key android:codes="@integer/COPY"
             android:keyIcon="@drawable/ic_content_copy" />
-        <Key android:codes="@integer/DELETE_SELECTION"
+        <Key android:codes="@integer/KEYCODE_FORWARD_DEL"
             android:keyIcon="@drawable/ic_delete"
             android:isRepeatable="true"/>
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_UP"
             android:keyIcon="@drawable/ic_keyboard_arrow_up"
             android:isRepeatable="true" />
-        <Key android:codes="@integer/BACKSPACE"
+        <Key android:codes="@integer/KEYCODE_DEL"
             android:keyIcon="@drawable/ic_backspace"
             android:isRepeatable="true" />
     </Row>
@@ -46,8 +46,10 @@
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_DOWN"
             android:keyIcon="@drawable/ic_keyboard_arrow_down"
             android:isRepeatable="true" />
-        <Key android:codes="@integer/ENTER"
+        <Key
+            android:codes="@integer/KEYCODE_ENTER"
+            android:isRepeatable="true"
             android:keyIcon="@drawable/ic_keyboard_return"
-            android:isRepeatable="true"/>
+            android:keyEdgeFlags="right" />
     </Row>
 </Keyboard>

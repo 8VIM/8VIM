@@ -26,12 +26,15 @@ import inc.flide.vim8.views.mainKeyboard.MainKeyboardView;
 
 public class MainInputMethodService extends InputMethodService {
 
-    InputConnection inputConnection;
+    private InputConnection inputConnection;
+    private EditorInfo editorInfo;
+
     private MainKeyboardView mainKeyboardView;
     private NumberKeypadView numberKeypadView;
     private SelectionKeypadView selectionKeypadView;
     private SymbolKeypadView symbolKeypadView;
     private View currentKeypadView;
+
     private int shiftLockFlag;
     private int capsLockFlag;
     private int modifierFlags;
@@ -73,7 +76,7 @@ public class MainInputMethodService extends InputMethodService {
     @Override
     public void onStartInput(EditorInfo attribute, boolean restarting) {
         super.onStartInput(attribute, restarting);
-        inputConnection = getCurrentInputConnection();
+        this.inputConnection = getCurrentInputConnection();
     }
 
     @Override
@@ -85,6 +88,7 @@ public class MainInputMethodService extends InputMethodService {
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
         setCurrentKeypadView(mainKeyboardView);
+        this.editorInfo = info;
     }
 
     @Override
@@ -224,7 +228,6 @@ public class MainInputMethodService extends InputMethodService {
                 hideKeyboard();
                 break;
             default:
-                //Logger.Warn(this, "Special Event undefined for keyCode : " + keyboardAction.getText());
                 break;
         }
     }
@@ -288,4 +291,40 @@ public class MainInputMethodService extends InputMethodService {
         this.capsLockFlag = capsLockFlag;
     }
 
+    /*
+     * |-------|-------|-------|-------|
+             *                              1111 IME_MASK_ACTION
+     * |-------|-------|-------|-------|
+     *                                   IME_ACTION_UNSPECIFIED
+     *                                 1 IME_ACTION_NONE
+     *                                1  IME_ACTION_GO
+     *                                11 IME_ACTION_SEARCH
+     *                               1   IME_ACTION_SEND
+     *                               1 1 IME_ACTION_NEXT
+     *                               11  IME_ACTION_DONE
+     *                               111 IME_ACTION_PREVIOUS
+     *         1                         IME_FLAG_NO_PERSONALIZED_LEARNING
+     *        1                          IME_FLAG_NO_FULLSCREEN
+     *       1                           IME_FLAG_NAVIGATE_PREVIOUS
+     *      1                            IME_FLAG_NAVIGATE_NEXT
+     *     1                             IME_FLAG_NO_EXTRACT_UI
+     *    1                              IME_FLAG_NO_ACCESSORY_ACTION
+     *   1                               IME_FLAG_NO_ENTER_ACTION
+     *  1                                IME_FLAG_FORCE_ASCII
+     * |-------|-------|-------|-------|
+     */
+    public void commitImeOptionsBasedEnter() {
+        switch(this.editorInfo.imeOptions & EditorInfo.IME_MASK_ACTION) {
+            case EditorInfo.IME_ACTION_UNSPECIFIED:
+            case EditorInfo.IME_ACTION_NONE:
+            case EditorInfo.IME_ACTION_GO:
+            case EditorInfo.IME_ACTION_SEARCH:
+            case EditorInfo.IME_ACTION_SEND:
+            case EditorInfo.IME_ACTION_NEXT:
+            case EditorInfo.IME_ACTION_DONE:
+            case EditorInfo.IME_ACTION_PREVIOUS:
+            default:
+                sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0);
+        }
+    }
 }

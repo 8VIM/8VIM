@@ -42,8 +42,12 @@ public abstract class KeyboardActionListner implements KeyboardView.OnKeyboardAc
                 mainInputMethodService.handleSpecialInput(switchToMainKeyboardView);
                 break;
             case KeyEvent.KEYCODE_DEL:
-            case KeyEvent.KEYCODE_ENTER:
+            case KeyEvent.KEYCODE_FORWARD_DEL:
+            case KeyEvent.KEYCODE_TAB:
                 mainInputMethodService.sendKey(primaryCode, 0);
+                break;
+            case KeyEvent.KEYCODE_ENTER:
+                mainInputMethodService.commitImeOptionsBasedEnter();
                 break;
             default:
                 if (!ExtendedOnKey(primaryCode, keyCodes)) {
