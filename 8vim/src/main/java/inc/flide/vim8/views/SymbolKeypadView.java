@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.keyboardActionListners.SymbolKeyboardActionListener;
+import inc.flide.vim8.keyboardActionListners.KeypadActionListener;
 
 public class SymbolKeypadView extends ButtonKeypadView {
 
@@ -27,7 +27,7 @@ public class SymbolKeypadView extends ButtonKeypadView {
 
         this.setKeyboard(new Keyboard(context, R.layout.symbols_keypad_view));
 
-        SymbolKeyboardActionListener actionListener = new SymbolKeyboardActionListener(mainInputMethodService, this);
+        KeypadActionListener actionListener = new KeypadActionListener(mainInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
     }
 }

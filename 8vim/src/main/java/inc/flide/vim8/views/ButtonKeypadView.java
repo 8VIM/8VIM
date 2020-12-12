@@ -22,15 +22,16 @@ public abstract class ButtonKeypadView extends KeyboardView {
 
     public ButtonKeypadView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initilize();
+        initialize();
     }
 
     public ButtonKeypadView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initilize();
+        initialize();
     }
 
-    protected void initilize() {
+    protected void initialize() {
+        //this.setOnKeyboardActionListener(new KeyboardActionListener((MainInputMethodService) context, this));
         this.setHapticFeedbackEnabled(true);
         this.setBackgroundColor(getResources().getColor(R.color.primaryBackground));
         setupForegroundPaint();

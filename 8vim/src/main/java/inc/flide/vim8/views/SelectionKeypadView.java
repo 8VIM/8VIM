@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.keyboardActionListners.SelectionKeyboardActionListener;
+import inc.flide.vim8.keyboardActionListners.KeypadActionListener;
 
 public class SelectionKeypadView extends ButtonKeypadView {
 
@@ -25,7 +25,7 @@ public class SelectionKeypadView extends ButtonKeypadView {
 
         this.setKeyboard(new Keyboard(context, R.layout.selection_keypad_view));
 
-        SelectionKeyboardActionListener actionListener = new SelectionKeyboardActionListener(mainInputMethodService, this);
+        KeypadActionListener actionListener = new KeypadActionListener(mainInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
     }
 }

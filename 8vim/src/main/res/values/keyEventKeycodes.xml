@@ -6,18 +6,16 @@
     <integer name="KEYCODE_DEL">67</integer>
     <integer name="KEYCODE_FORWARD_DEL">112</integer>
     <integer name="KEYCODE_TAB">61</integer>
+    <integer name="KEYCODE_CUT">277</integer>
+    <integer name="KEYCODE_COPY">278</integer>
+    <integer name="KEYCODE_PASTE">279</integer>
 
 <!--Selection Keypad specific keycodes-->
     <integer name="MOVE_CURRENT_END_POINT_LEFT">0</integer>
     <integer name="MOVE_CURRENT_END_POINT_RIGHT">1</integer>
     <integer name="MOVE_CURRENT_END_POINT_UP">2</integer>
     <integer name="MOVE_CURRENT_END_POINT_DOWN">3</integer>
-    <integer name="CUT">5</integer>
-    <integer name="COPY">6</integer>
-    <integer name="PASTE">7</integer>
+    <integer name="SWITCH_TO_SYMBOLS_KEYPAD">4</integer>
     <integer name="SELECT_ALL">8</integer>
     <integer name="TOGGLE_SELECTION_MODE">9</integer>
-    <integer name="DELETE_SELECTION">10</integer>
-    <integer name="BACKSPACE">11</integer>
-    <integer name="ENTER">12</integer>
 </resources>

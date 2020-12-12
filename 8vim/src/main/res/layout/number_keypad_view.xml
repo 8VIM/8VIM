@@ -105,7 +105,7 @@
     </Row>
     <Row>
         <Key
-            android:codes="@integer/KEYCODE_NUM_LOCK"
+            android:codes="@integer/SWITCH_TO_SYMBOLS_KEYPAD"
             android:keyLabel="{+="
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />

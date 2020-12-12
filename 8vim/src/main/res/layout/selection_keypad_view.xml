@@ -6,9 +6,9 @@
     android:layout_width="match_parent">
 
     <Row>
-        <Key android:codes="@integer/CUT"
+        <Key android:codes="@integer/KEYCODE_CUT"
             android:keyIcon="@drawable/ic_content_cut" />
-        <Key android:codes="@integer/COPY"
+        <Key android:codes="@integer/KEYCODE_COPY"
             android:keyIcon="@drawable/ic_content_copy" />
         <Key android:codes="@integer/KEYCODE_FORWARD_DEL"
             android:keyIcon="@drawable/ic_delete"
@@ -21,7 +21,7 @@
             android:isRepeatable="true" />
     </Row>
     <Row>
-        <Key android:codes="@integer/PASTE"
+        <Key android:codes="@integer/KEYCODE_PASTE"
             android:keyIcon="@drawable/ic_content_paste"
             android:isRepeatable="true"/>
         <Key android:keyOutputText=""
