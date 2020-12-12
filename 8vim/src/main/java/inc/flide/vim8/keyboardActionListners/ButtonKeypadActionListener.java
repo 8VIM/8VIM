@@ -11,13 +11,13 @@ import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.structures.SelectionKeyboardKeyCode;
 
-public class KeypadActionListener implements KeyboardView.OnKeyboardActionListener {
+public class ButtonKeypadActionListener implements KeyboardView.OnKeyboardActionListener {
 
     protected MainInputMethodService mainInputMethodService;
     protected View view;
     private boolean isSelectionOn = true;
 
-    public KeypadActionListener(MainInputMethodService mainInputMethodService, View view) {
+    public ButtonKeypadActionListener(MainInputMethodService mainInputMethodService, View view) {
         this.mainInputMethodService = mainInputMethodService;
         this.view = view;
     }
