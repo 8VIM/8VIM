@@ -314,15 +314,23 @@ public class MainInputMethodService extends InputMethodService {
      * |-------|-------|-------|-------|
      */
     public void commitImeOptionsBasedEnter() {
-        switch(this.editorInfo.imeOptions & EditorInfo.IME_MASK_ACTION) {
-            case EditorInfo.IME_ACTION_UNSPECIFIED:
-            case EditorInfo.IME_ACTION_NONE:
+        int imeAction = this.editorInfo.imeOptions & EditorInfo.IME_MASK_ACTION;
+        switch(imeAction) {
             case EditorInfo.IME_ACTION_GO:
             case EditorInfo.IME_ACTION_SEARCH:
             case EditorInfo.IME_ACTION_SEND:
             case EditorInfo.IME_ACTION_NEXT:
             case EditorInfo.IME_ACTION_DONE:
             case EditorInfo.IME_ACTION_PREVIOUS:
+                int imeNoEnterFlag = this.editorInfo.imeOptions & EditorInfo.IME_FLAG_NO_ENTER_ACTION;
+                if (imeNoEnterFlag == EditorInfo.IME_FLAG_NO_ENTER_ACTION) {
+                    sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0);
+                } else {
+                    inputConnection.performEditorAction(imeAction);
+                }
+                break;
+            case EditorInfo.IME_ACTION_UNSPECIFIED:
+            case EditorInfo.IME_ACTION_NONE:
             default:
                 sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0);
         }
