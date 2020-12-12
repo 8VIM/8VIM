@@ -144,7 +144,7 @@ public class MainInputMethodService extends InputMethodService {
         sendUpKeyEvent(keyEventCode, flags);
     }
 
-    private void switchToExternalEmoticonKeyboard() {
+    public void switchToExternalEmoticonKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         IBinder iBinder = this.getWindow().getWindow().getAttributes().token;
         String keyboardId = getSelectedEmoticonKeyboardId();
@@ -177,60 +177,14 @@ public class MainInputMethodService extends InputMethodService {
         clearModifierFlags();
     }
 
-    public void handleInputText(KeyboardAction keyboardAction) {
-        if (keyboardAction.getText().length() == 1
-                && (getShiftLockFlag() == KeyEvent.META_SHIFT_ON
-                || getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON)) {
-            sendText(keyboardAction.getCapsLockText());
-            setShiftLockFlag(0);
-        } else {
-            sendText(keyboardAction.getText());
-        }
-    }
 
-    public void handleInputKey(KeyboardAction keyboardAction) {
-        sendKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
-        setShiftLockFlag(0);
-    }
+    public void switchToSelectionKeypad() { setCurrentKeypadView(selectionKeypadView); }
 
-    public void handleSpecialInput(KeyboardAction keyboardAction) {
+    public void switchToSymbolsKeypad() { setCurrentKeypadView(symbolKeypadView); }
 
-        InputSpecialKeyEventCode keyeventCode = InputSpecialKeyEventCode.valueOf(keyboardAction.getText());
+    public void switchToMainKeypad() { setCurrentKeypadView(mainKeyboardView); }
 
-        switch (keyeventCode) {
-            case SHIFT_TOOGLE:
-                performShiftToogle();
-                break;
-            case SWITCH_TO_EMOJI_KEYBOARD:
-                switchToExternalEmoticonKeyboard();
-                break;
-            case SWITCH_TO_NUMBER_PAD:
-                setCurrentKeypadView(numberKeypadView);
-                break;
-            case SWITCH_TO_MAIN_KEYBOARD:
-                setCurrentKeypadView(mainKeyboardView);
-                break;
-            case SWITCH_TO_SYMBOLS_KEYBOARD:
-                setCurrentKeypadView(symbolKeypadView);
-                break;
-            case PASTE:
-                paste();
-                break;
-            case SELECTION_START:
-                sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-                sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, 0);
-                sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-                break;
-            case SWITCH_TO_SELECTION_KEYBOARD:
-                setCurrentKeypadView(selectionKeypadView);
-                break;
-            case HIDE_KEYBOARD:
-                hideKeyboard();
-                break;
-            default:
-                break;
-        }
-    }
+    public void switchToNumberPad() { setCurrentKeypadView(numberKeypadView); }
 
     public void cut() {
         inputConnection.performContextMenuAction(android.R.id.cut);
@@ -248,7 +202,7 @@ public class MainInputMethodService extends InputMethodService {
         this.requestHideSelf(InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    private void performShiftToogle() {
+    public void performShiftToggle() {
         //single press locks the shift key,
         //double press locks the caps key
         //a third press unlocks both.

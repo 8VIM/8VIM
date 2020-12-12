@@ -15,16 +15,16 @@ import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.MovementSequenceType;
 
-public class MainKeyboardActionListener {
+public class MainKeyboardActionListener extends KeypadActionListener{
 
     private final Handler longPressHandler = new Handler();
-    private final MainInputMethodService mainInputMethodService;
     private final View mainKeyboardView;
     private final Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
     private final List<FingerPosition> movementSequence;
     private FingerPosition currentFingerPosition;
     private boolean isLongPressCallbackSet;
     private MovementSequenceType currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT;
+
     private final Runnable longPressRunnable = new Runnable() {
         @Override
         public void run() {
@@ -35,9 +35,8 @@ public class MainKeyboardActionListener {
         }
     };
 
-    public MainKeyboardActionListener(MainInputMethodService inputMethodService,
-                                      View view) {
-        this.mainInputMethodService = inputMethodService;
+    public MainKeyboardActionListener(MainInputMethodService inputMethodService, View view) {
+        super(inputMethodService, view);
         this.mainKeyboardView = view;
 
         keyboardActionMap = mainInputMethodService.buildKeyboardActionMap();
@@ -122,14 +121,13 @@ public class MainKeyboardActionListener {
 
         switch (keyboardAction.getKeyboardActionType()) {
             case INPUT_TEXT:
-                mainInputMethodService.handleInputText(keyboardAction);
-                processPredictiveTextCandidates();
+                handleInputText(keyboardAction);
                 break;
             case INPUT_KEY:
-                mainInputMethodService.handleInputKey(keyboardAction);
+                handleInputKey(keyboardAction);
                 break;
             case INPUT_SPECIAL:
-                mainInputMethodService.handleSpecialInput(keyboardAction);
+                handleSpecialInput(keyboardAction);
                 break;
             default:
                 isMovementValid = false;
@@ -139,30 +137,4 @@ public class MainKeyboardActionListener {
         }
     }
 
-    private void processPredictiveTextCandidates() {
-    }
-
-    public boolean areCharactersCapitalized() {
-        return mainInputMethodService.areCharactersCapitalized();
-    }
-
-    public void setModifierFlags(int modifierFlags) {
-        this.mainInputMethodService.setModifierFlags(modifierFlags);
-    }
-
-    public void sendKey(int keycode, int flags) {
-        this.mainInputMethodService.sendKey(keycode, flags);
-    }
-
-    public void handleSpecialInput(KeyboardAction keyboardAction) {
-        this.mainInputMethodService.handleSpecialInput(keyboardAction);
-    }
-
-    public boolean isShiftSet() {
-        return mainInputMethodService.getShiftLockFlag() == KeyEvent.META_SHIFT_ON ;
-    }
-
-    public boolean isCapsLockSet() {
-        return mainInputMethodService.getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
-    }
 }
