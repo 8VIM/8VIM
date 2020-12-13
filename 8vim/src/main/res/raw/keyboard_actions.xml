@@ -478,18 +478,6 @@
         <inputString>,</inputString>
         <inputCapsLockString>_</inputCapsLockString>
     </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
-        <inputString>@</inputString>
-        <inputCapsLockString>@gmail.com</inputCapsLockString>
-    </keyboardAction>
-
-    <keyboardAction>
-        <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>!</inputString>
-    </keyboardAction>
 
     <!--Space-->
     <keyboardAction>
