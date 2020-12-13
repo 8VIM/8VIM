@@ -13,7 +13,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
-import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
+import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
 import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
@@ -24,7 +24,7 @@ import inc.flide.vim8.ui.SettingsActivity;
 
 public class MainKeyboardView extends ConstraintLayout {
 
-    private MainKeyboardActionListener actionListener;
+    private MainKeypadActionListener actionListener;
 
     public MainKeyboardView(Context context) {
         super(context);
@@ -43,7 +43,7 @@ public class MainKeyboardView extends ConstraintLayout {
 
     public void initialize(Context context) {
 
-        actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
+        actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         String preferredSidebarPositionOnMainKeyboard = SharedPreferenceHelper

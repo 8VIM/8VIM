@@ -15,7 +15,7 @@ import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.MovementSequenceType;
 
-public class MainKeyboardActionListener extends KeypadActionListener{
+public class MainKeypadActionListener extends KeypadActionListener{
 
     private final Handler longPressHandler = new Handler();
     private final View mainKeyboardView;
@@ -35,7 +35,7 @@ public class MainKeyboardActionListener extends KeypadActionListener{
         }
     };
 
-    public MainKeyboardActionListener(MainInputMethodService inputMethodService, View view) {
+    public MainKeypadActionListener(MainInputMethodService inputMethodService, View view) {
         super(inputMethodService, view);
         this.mainKeyboardView = view;
 

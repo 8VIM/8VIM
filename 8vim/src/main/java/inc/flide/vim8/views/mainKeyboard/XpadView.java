@@ -11,7 +11,6 @@ import android.graphics.RadialGradient;
 import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -28,7 +27,7 @@ import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.geometry.GeometricUtilities;
 import inc.flide.vim8.geometry.LineSegment;
-import inc.flide.vim8.keyboardActionListners.MainKeyboardActionListener;
+import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
@@ -45,7 +44,7 @@ public class XpadView extends View {
     private final Path typingTrailPath = new Path();
     Paint backgroundPaint = new Paint();
     Paint foregroundPaint = new Paint();
-    private MainKeyboardActionListener actionListener;
+    private MainKeypadActionListener actionListener;
     private PointF circleCenter;
     private Circle circle;
     private final Dimension keypadDimension = new Dimension();
@@ -66,7 +65,7 @@ public class XpadView extends View {
     }
 
     private void initialize(Context context) {
-        actionListener = new MainKeyboardActionListener((MainInputMethodService) context, this);
+        actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
 
         setBackgroundPaint();
