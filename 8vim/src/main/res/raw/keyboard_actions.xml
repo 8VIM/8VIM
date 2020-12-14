@@ -427,14 +427,14 @@
     <keyboardAction>
         <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
         <movementSequence>TOP;NO_TOUCH;</movementSequence>
-        <inputString>SHIFT_TOOGLE</inputString>
+        <inputString>SHIFT_TOGGLE</inputString>
     </keyboardAction>
 
     <!-- Switch to Numpad-->
     <keyboardAction>
         <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
         <movementSequence>LEFT;NO_TOUCH;</movementSequence>
-        <inputString>SWITCH_TO_NUMBER_PAD</inputString>
+        <inputString>SWITCH_TO_NUMBER_KEYPAD</inputString>
     </keyboardAction>
 
     <!--Selection Mode Sequence-->
@@ -451,7 +451,7 @@
     <keyboardAction>
         <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
         <movementSequence>RIGHT;INSIDE_CIRCLE;LONG_PRESS_END;</movementSequence>
-        <inputString>SWITCH_TO_SELECTION_KEYBOARD</inputString>
+        <inputString>SWITCH_TO_SELECTION_KEYPAD</inputString>
     </keyboardAction>
     
     <keyboardAction>

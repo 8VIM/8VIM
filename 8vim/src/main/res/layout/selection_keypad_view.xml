@@ -37,7 +37,7 @@
             android:isRepeatable="true"/>
     </Row>
     <Row>
-        <Key android:codes="@integer/KEYCODE_EISU"
+        <Key android:codes="@integer/SWITCH_TO_MAIN_KEYPAD"
             android:keyIcon="@drawable/ic_viii"/>
         <Key android:codes="@integer/SELECT_ALL"
             android:keyIcon="@drawable/ic_select_all"/>

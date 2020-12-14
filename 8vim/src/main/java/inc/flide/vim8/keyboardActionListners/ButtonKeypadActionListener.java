@@ -18,7 +18,7 @@ public class ButtonKeypadActionListener extends KeypadActionListener implements 
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
-        super.onKey(primaryCode, keyCodes);
+        super.handleInputKey(primaryCode, 0);
     }
 
     @Override

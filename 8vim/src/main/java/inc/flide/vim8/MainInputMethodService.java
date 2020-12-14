@@ -18,7 +18,6 @@ import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.InputSpecialKeyEventCode;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
@@ -289,4 +288,5 @@ public class MainInputMethodService extends InputMethodService {
                 sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0);
         }
     }
+
 }

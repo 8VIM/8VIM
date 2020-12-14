@@ -2,7 +2,6 @@ package inc.flide.vim8.keyboardActionListners;
 
 import android.os.Handler;
 import android.view.HapticFeedbackConstants;
-import android.view.KeyEvent;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.Map;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.MovementSequenceType;
 
@@ -127,7 +127,8 @@ public class MainKeypadActionListener extends KeypadActionListener{
                 handleInputKey(keyboardAction);
                 break;
             case INPUT_SPECIAL:
-                handleSpecialInput(keyboardAction);
+                CustomKeycode x = CustomKeycode.valueOf(keyboardAction.getText());
+                handleInputKey(x.getKeyCode(), 0);
                 break;
             default:
                 isMovementValid = false;

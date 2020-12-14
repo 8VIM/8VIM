@@ -6,9 +6,7 @@ import android.view.View;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
-import inc.flide.vim8.structures.InputSpecialKeyEventCode;
-import inc.flide.vim8.structures.KeyboardActionType;
-import inc.flide.vim8.structures.SelectionKeyboardKeyCode;
+import inc.flide.vim8.structures.CustomKeycode;
 
 public class KeypadActionListener {
 
@@ -21,86 +19,122 @@ public class KeypadActionListener {
         this.view = view;
     }
 
-    public void onKey(int primaryCode, int[] keyCodes) {
+    private boolean keyCodeIsValid(int keyCode) {
+        return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KeyEvent.KEYCODE_PROFILE_SWITCH;
+    }
 
-        switch (primaryCode) {
-            case KeyEvent.KEYCODE_EISU:
-                KeyboardAction switchToMainKeyboardView = new KeyboardAction(
-                        KeyboardActionType.INPUT_SPECIAL
-                        , InputSpecialKeyEventCode.SWITCH_TO_MAIN_KEYBOARD.toString()
-                        , null, 0, 0);
-                handleSpecialInput(switchToMainKeyboardView);
-                break;
-            case KeyEvent.KEYCODE_NUM_LOCK:
-                KeyboardAction switchToNumberPadKeyboardView = new KeyboardAction(
-                        KeyboardActionType.INPUT_SPECIAL
-                        , InputSpecialKeyEventCode.SWITCH_TO_NUMBER_PAD.toString()
-                        , null, 0, 0);
-                handleSpecialInput(switchToNumberPadKeyboardView);
-                break;
-            case KeyEvent.KEYCODE_CUT:
-                mainInputMethodService.cut();
-                break;
-            case KeyEvent.KEYCODE_COPY:
-                mainInputMethodService.copy();
-                break;
-            case KeyEvent.KEYCODE_PASTE:
-                mainInputMethodService.paste();
-                break;
-            case KeyEvent.KEYCODE_DEL:
-            case KeyEvent.KEYCODE_FORWARD_DEL:
-            case KeyEvent.KEYCODE_TAB:
-                mainInputMethodService.sendKey(primaryCode, 0);
-                break;
-            case KeyEvent.KEYCODE_ENTER:
-                mainInputMethodService.commitImeOptionsBasedEnter();
-                break;
-            default:
-                if (!ExtendedOnKey(primaryCode, keyCodes)) {
-                    mainInputMethodService.sendText(String.valueOf((char) primaryCode));
-                }
+    private boolean customKeyCodeIsValid(int keyCode) {
+        return keyCode <= KeyEvent.KEYCODE_UNKNOWN;
+    }
+
+    public void handleInputKey(KeyboardAction keyboardAction) {
+        handleInputKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
+    }
+
+    public void handleInputKey(int keyCode, int keyFlags) {
+
+        boolean actionHandled = handleKeyEventKeyCodes(keyCode, keyFlags);
+        if (!actionHandled) {
+            actionHandled = handleCustomKeyCodes(keyCode, keyFlags);
         }
-
+        if (!actionHandled) {
+            onText(String.valueOf((char) keyCode));
+        }
         view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
                 HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
     }
 
-    private boolean ExtendedOnKey(int primaryCode, int[] keyCodes) {
-
-        SelectionKeyboardKeyCode selectionKeyboardKeyCode = SelectionKeyboardKeyCode.getAssociatedSelectionKeyCode(primaryCode);
-        if (selectionKeyboardKeyCode == null) {
-            return false;
-        }
-
-        switch (selectionKeyboardKeyCode) {
-            case SELECT_ALL:
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
-                return true;
-            case TOGGLE_SELECTION_MODE:
-                isSelectionOn = !isSelectionOn;
-                return true;
+    private boolean handleCustomKeyCodes(int customKeyEventCode, int keyFlags) {
+        switch (CustomKeycode.fromIntValue(customKeyEventCode)) {
             case MOVE_CURRENT_END_POINT_LEFT:
                 moveSelection(KeyEvent.KEYCODE_DPAD_LEFT);
-                return true;
+                break;
             case MOVE_CURRENT_END_POINT_RIGHT:
                 moveSelection(KeyEvent.KEYCODE_DPAD_RIGHT);
-                return true;
-            case MOVE_CURRENT_END_POINT_DOWN:
-                moveSelection(KeyEvent.KEYCODE_DPAD_DOWN);
-                return true;
+                break;
             case MOVE_CURRENT_END_POINT_UP:
                 moveSelection(KeyEvent.KEYCODE_DPAD_UP);
-                return true;
+                break;
+            case MOVE_CURRENT_END_POINT_DOWN:
+                moveSelection(KeyEvent.KEYCODE_DPAD_DOWN);
+                break;
+            case SELECTION_START:
+                mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, 0);
+                mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+                break;
+            case SELECT_ALL:
+                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
+                break;
+            case TOGGLE_SELECTION_MODE:
+                isSelectionOn = !isSelectionOn;
+                break;
+            case SHIFT_TOGGLE:
+                mainInputMethodService.performShiftToggle();
+                break;
+            case SWITCH_TO_MAIN_KEYPAD:
+                mainInputMethodService.switchToMainKeypad();
+                break;
+            case SWITCH_TO_NUMBER_KEYPAD:
+                mainInputMethodService.switchToNumberPad();
+                break;
             case SWITCH_TO_SYMBOLS_KEYPAD:
-                KeyboardAction switchToSymbolsKeyboard = new KeyboardAction(
-                        KeyboardActionType.INPUT_SPECIAL
-                        , InputSpecialKeyEventCode.SWITCH_TO_SYMBOLS_KEYBOARD.toString()
-                        , null, 0, 0);
-                handleSpecialInput(switchToSymbolsKeyboard);
-                return true;
+                mainInputMethodService.switchToSymbolsKeypad();
+                break;
+            case SWITCH_TO_SELECTION_KEYPAD:
+                mainInputMethodService.switchToSelectionKeypad();
+                break;
+            case SWITCH_TO_EMOTICON_KEYBOARD:
+                mainInputMethodService.switchToExternalEmoticonKeyboard();
+                break;
+            case HIDE_KEYBOARD:
+                mainInputMethodService.hideKeyboard();
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
+
+    public boolean handleKeyEventKeyCodes(int primaryCode, int keyFlags) {
+        if (keyCodeIsValid(primaryCode)) {
+            switch (primaryCode) {
+                case KeyEvent.KEYCODE_CUT:
+                    mainInputMethodService.cut();
+                    break;
+                case KeyEvent.KEYCODE_COPY:
+                    mainInputMethodService.copy();
+                    break;
+                case KeyEvent.KEYCODE_PASTE:
+                    mainInputMethodService.paste();
+                    break;
+                case KeyEvent.KEYCODE_ENTER:
+                    mainInputMethodService.commitImeOptionsBasedEnter();
+                    break;
+                default:
+                    mainInputMethodService.sendKey(primaryCode, keyFlags);
+                    mainInputMethodService.setShiftLockFlag(0);
+            }
+            return true;
         }
 
         return false;
+    }
+
+    public void onText(CharSequence text) {
+        mainInputMethodService.sendText(text.toString());
+        mainInputMethodService.setShiftLockFlag(0);
+        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
+                HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+    }
+
+    public void handleInputText(KeyboardAction keyboardAction) {
+        if (keyboardAction.getText().length() == 1
+                && (isShiftSet() || isCapsLockSet())) {
+            onText(keyboardAction.getCapsLockText());
+        } else {
+            onText(keyboardAction.getText());
+        }
     }
 
     private void moveSelection(int dpad_keyCode) {
@@ -113,65 +147,6 @@ public class KeypadActionListener {
         }
     }
 
-    public void onText(CharSequence text) {
-        mainInputMethodService.sendText(text.toString());
-        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
-                HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-    }
-
-    public void handleInputText(KeyboardAction keyboardAction) {
-        if (keyboardAction.getText().length() == 1
-                && (isShiftSet() || isCapsLockSet())) {
-            mainInputMethodService.sendText(keyboardAction.getCapsLockText());
-            mainInputMethodService.setShiftLockFlag(0);
-        } else {
-            mainInputMethodService.sendText(keyboardAction.getText());
-        }
-    }
-
-    public void handleInputKey(KeyboardAction keyboardAction) {
-        sendKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
-        mainInputMethodService.setShiftLockFlag(0);
-    }
-
-    public void handleSpecialInput(KeyboardAction keyboardAction) {
-
-        InputSpecialKeyEventCode keyeventCode = InputSpecialKeyEventCode.valueOf(keyboardAction.getText());
-
-        switch (keyeventCode) {
-            case SHIFT_TOOGLE:
-                mainInputMethodService.performShiftToggle();
-                break;
-            case SWITCH_TO_EMOJI_KEYBOARD:
-                mainInputMethodService.switchToExternalEmoticonKeyboard();
-                break;
-            case SWITCH_TO_NUMBER_PAD:
-                mainInputMethodService.switchToNumberPad();
-                break;
-            case SWITCH_TO_MAIN_KEYBOARD:
-                mainInputMethodService.switchToMainKeypad();
-                break;
-            case SWITCH_TO_SYMBOLS_KEYBOARD:
-                mainInputMethodService.switchToSymbolsKeypad();
-                break;
-            case PASTE:
-                mainInputMethodService.paste();
-                break;
-            case SELECTION_START:
-                mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, 0);
-                mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-                break;
-            case SWITCH_TO_SELECTION_KEYBOARD:
-                mainInputMethodService.switchToSelectionKeypad();
-                break;
-            case HIDE_KEYBOARD:
-                mainInputMethodService.hideKeyboard();
-                break;
-            default:
-                break;
-        }
-    }
     public boolean areCharactersCapitalized() {
         return mainInputMethodService.areCharactersCapitalized();
     }

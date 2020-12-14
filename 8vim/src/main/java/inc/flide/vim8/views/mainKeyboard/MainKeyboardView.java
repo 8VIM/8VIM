@@ -17,7 +17,7 @@ import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
 import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import inc.flide.vim8.structures.InputSpecialKeyEventCode;
+import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.ui.SettingsActivity;
 
@@ -96,17 +96,17 @@ public class MainKeyboardView extends ConstraintLayout {
     private void setupTabKey() {
         ImageButton tabKeyButton = findViewById(R.id.tabButton);
 
-        tabKeyButton.setOnClickListener(view -> actionListener.sendKey(KeyEvent.KEYCODE_TAB, 0));
+        tabKeyButton.setOnClickListener(view -> actionListener.handleInputKey(KeyEvent.KEYCODE_TAB, 0));
     }
 
     private void setupSwitchToSelectionKeyboardButton() {
         ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
         switchToSelectionKeyboardButton.setOnClickListener(view -> {
             KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
-                    KeyboardActionType.INPUT_SPECIAL
-                    , InputSpecialKeyEventCode.SWITCH_TO_SELECTION_KEYBOARD.toString()
-                    , null, 0, 0);
-            actionListener.handleSpecialInput(switchToSelectionKeyboard);
+                    KeyboardActionType.INPUT_KEY
+                    , "" , null
+                    , CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(), 0);
+            actionListener.handleInputKey(switchToSelectionKeyboard);
         });
     }
 
@@ -114,10 +114,10 @@ public class MainKeyboardView extends ConstraintLayout {
         ImageButton switchToEmojiKeyboardButton = findViewById(R.id.switchToEmojiKeyboard);
         switchToEmojiKeyboardButton.setOnClickListener(view -> {
             KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
-                    KeyboardActionType.INPUT_SPECIAL
-                    , InputSpecialKeyEventCode.SWITCH_TO_EMOJI_KEYBOARD.toString()
-                    , null, 0, 0);
-            actionListener.handleSpecialInput(switchToEmojiKeyboard);
+                    KeyboardActionType.INPUT_KEY
+                    , "" , null
+                    , CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(), 0);
+            actionListener.handleInputKey(switchToEmojiKeyboard);
         });
     }
 

@@ -153,7 +153,7 @@
     </Row>
     <Row>
         <Key
-            android:codes="@integer/KEYCODE_EISU"
+            android:codes="@integer/SWITCH_TO_MAIN_KEYPAD"
             android:keyIcon="@drawable/ic_viii"
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />
