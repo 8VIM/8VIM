@@ -20,7 +20,8 @@ public class KeypadActionListener {
     }
 
     private boolean keyCodeIsValid(int keyCode) {
-        return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KeyEvent.KEYCODE_PROFILE_SWITCH;
+        //return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KeyEvent.KEYCODE_PROFILE_SWITCH;
+        return keyCode >= 0 && keyCode <= 288;
     }
 
     private boolean customKeyCodeIsValid(int keyCode) {
