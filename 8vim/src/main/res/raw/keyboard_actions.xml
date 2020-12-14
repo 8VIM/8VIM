@@ -418,9 +418,9 @@
 
     <!--Paste Sequence-->
     <keyboardAction>
-        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>LEFT;INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
-        <inputString>PASTE</inputString>
+        <inputKey>KEYCODE_PASTE</inputKey>
     </keyboardAction>
 
     <!--Shift-->
