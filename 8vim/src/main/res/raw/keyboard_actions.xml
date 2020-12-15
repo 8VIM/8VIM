@@ -425,33 +425,33 @@
 
     <!--Shift-->
     <keyboardAction>
-        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>TOP;NO_TOUCH;</movementSequence>
-        <inputString>SHIFT_TOGGLE</inputString>
+        <inputKey>SHIFT_TOGGLE</inputKey>
     </keyboardAction>
 
     <!-- Switch to Numpad-->
     <keyboardAction>
-        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>LEFT;NO_TOUCH;</movementSequence>
-        <inputString>SWITCH_TO_NUMBER_KEYPAD</inputString>
+        <inputKey>SWITCH_TO_NUMBER_KEYPAD</inputKey>
     </keyboardAction>
 
     <!--Selection Mode Sequence-->
     <keyboardAction>
-        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>RIGHT;INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
-        <inputString>SELECTION_START</inputString>
+        <inputKey>SELECTION_START</inputKey>
     </keyboardAction>
     <keyboardAction>
-        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>RIGHT;INSIDE_CIRCLE;LONG_PRESS;</movementSequence>
-        <inputString>SELECTION_START</inputString>
+        <inputKey>SELECTION_START</inputKey>
     </keyboardAction>
     <keyboardAction>
-        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>RIGHT;INSIDE_CIRCLE;LONG_PRESS_END;</movementSequence>
-        <inputString>SWITCH_TO_SELECTION_KEYPAD</inputString>
+        <inputKey>SWITCH_TO_SELECTION_KEYPAD</inputKey>
     </keyboardAction>
     
     <keyboardAction>
@@ -592,9 +592,9 @@
 
     <!-- Hide keyboard -->
     <keyboardAction>
-        <keyboardActionType>INPUT_SPECIAL</keyboardActionType>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>TOP;INSIDE_CIRCLE;NO_TOUCH</movementSequence>
-        <inputString>HIDE_KEYBOARD</inputString>
+        <inputKey>HIDE_KEYBOARD</inputKey>
     </keyboardAction>
 
 </keyboardActionMap>

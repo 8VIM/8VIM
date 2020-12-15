@@ -126,10 +126,6 @@ public class MainKeypadActionListener extends KeypadActionListener{
             case INPUT_KEY:
                 handleInputKey(keyboardAction);
                 break;
-            case INPUT_SPECIAL:
-                CustomKeycode x = CustomKeycode.valueOf(keyboardAction.getText());
-                handleInputKey(x.getKeyCode(), 0);
-                break;
             default:
                 isMovementValid = false;
         }

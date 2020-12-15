@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardActionType;
 
@@ -134,7 +135,17 @@ class KeyboardActionXmlParser {
         parser.require(XmlPullParser.END_TAG, null, INPUT_KEY_TAG);
 
         //Strictly the inputKey has to has to be a Keycode from the KeyEvent class
-        return KeyEvent.keyCodeFromString(inputKeyString);
+        //Or it needs to be one of the customKeyCodes
+        int keyCode = KeyEvent.keyCodeFromString(inputKeyString);
+        if ( keyCode == KeyEvent.KEYCODE_UNKNOWN) {
+            try {
+                keyCode = CustomKeycode.valueOf(inputKeyString).getKeyCode();
+            } catch (IllegalArgumentException error) {
+                keyCode = KeyEvent.KEYCODE_UNKNOWN;
+            }
+        }
+
+        return keyCode;
     }
 
     private String readInputString() throws IOException, XmlPullParserException {
