@@ -115,6 +115,20 @@ public class SettingsActivity extends AppCompatActivity
         display_icon_button.setChecked(SharedPreferenceHelper.getInstance(getApplicationContext()).getBoolean(getString(R.string.user_preferred_display_icons_for_sectors), true));
         display_icon_button.setOnCheckedChangeListener((buttonView, isChecked) -> displayIconsPreferenceChangeListner(isChecked));
 
+        // For user preference on haptic feedback
+
+        SwitchCompat enableHapticFeedbackSwitch = findViewById(R.id.enable_haptic_feedback_switch);
+
+        enableHapticFeedbackSwitch.setChecked(
+                SharedPreferenceHelper
+                        .getInstance(getApplicationContext())
+                        .getBoolean(
+                                getString(R.string.user_preferred_haptic_feedback_enabled),
+                                true)
+        );
+
+        enableHapticFeedbackSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> enableHapticFeedbackPreferenceChangeListener(isChecked));
+
         red_button = findViewById(R.id.red_button);
         green_button = findViewById(R.id.green_button);
         blue_button = findViewById(R.id.blue_button);
@@ -227,6 +241,12 @@ public class SettingsActivity extends AppCompatActivity
 
     }
 
+    private void enableHapticFeedbackPreferenceChangeListener(boolean isChecked) {
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+        sharedPreferencesEditor.putBoolean(getString(R.string.user_preferred_haptic_feedback_enabled), isChecked);
+        sharedPreferencesEditor.apply();
+    }
 
     private void switchSidebarPosition(String userPreferredPositionForSidebar) {
         if (userPreferredPositionForSidebar.equals(getString(R.string.mainKeyboard_sidebar_position_preference_left_value)) ||

@@ -5,7 +5,9 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import inc.flide.vim8.MainInputMethodService;
+import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
+import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.CustomKeycode;
 
 public class KeypadActionListener {
@@ -41,8 +43,21 @@ public class KeypadActionListener {
         if (!actionHandled) {
             onText(String.valueOf((char) keyCode));
         }
-        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
-                HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        if (actionHandled) {
+            performInputAcceptedFeedback();
+        }
+    }
+
+    private void performInputAcceptedFeedback() {
+        boolean user_enabled_haptic_feedback = SharedPreferenceHelper
+                .getInstance(mainInputMethodService)
+                .getBoolean(
+                        mainInputMethodService.getString(R.string.user_preferred_haptic_feedback_enabled),
+                        true);
+        if (user_enabled_haptic_feedback) {
+            view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
+                    HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        }
     }
 
     private boolean handleCustomKeyCodes(int customKeyEventCode, int keyFlags) {
@@ -125,8 +140,7 @@ public class KeypadActionListener {
     public void onText(CharSequence text) {
         mainInputMethodService.sendText(text.toString());
         mainInputMethodService.setShiftLockFlag(0);
-        view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
-                HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        performInputAcceptedFeedback();
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
@@ -154,10 +168,6 @@ public class KeypadActionListener {
 
     public void setModifierFlags(int modifierFlags) {
         this.mainInputMethodService.setModifierFlags(modifierFlags);
-    }
-
-    public void sendKey(int keycode, int flags) {
-        this.mainInputMethodService.sendKey(keycode, flags);
     }
 
     public boolean isShiftSet() {

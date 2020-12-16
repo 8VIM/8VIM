@@ -113,7 +113,6 @@ public class MainKeypadActionListener extends KeypadActionListener{
             keyboardAction = keyboardActionMap.get(modifiedMovementSequence);
         }
 
-        boolean isMovementValid = true;
         if (keyboardAction == null) {
             movementSequence.clear();
             return;
@@ -126,11 +125,6 @@ public class MainKeypadActionListener extends KeypadActionListener{
             case INPUT_KEY:
                 handleInputKey(keyboardAction);
                 break;
-            default:
-                isMovementValid = false;
-        }
-        if (isMovementValid) {
-            mainKeyboardView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
     }
 
