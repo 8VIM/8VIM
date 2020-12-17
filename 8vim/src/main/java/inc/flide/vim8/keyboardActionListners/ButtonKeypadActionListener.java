@@ -28,7 +28,9 @@ public class ButtonKeypadActionListener extends KeypadActionListener implements 
     public void swipeRight() { }
 
     @Override
-    public void swipeDown() { }
+    public void swipeDown() {
+        mainInputMethodService.hideKeyboard();
+    }
 
     @Override
     public void swipeUp() { }
