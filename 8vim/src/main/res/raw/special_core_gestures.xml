@@ -1,0 +1,34 @@
+<keyboardActionMap>
+
+    <!-- Hide keyboard -->
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>TOP;INSIDE_CIRCLE;NO_TOUCH</movementSequence>
+        <inputKey>HIDE_KEYBOARD</inputKey>
+    </keyboardAction>
+
+    <!--Paste Sequence-->
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>LEFT;INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
+        <inputKey>KEYCODE_PASTE</inputKey>
+    </keyboardAction>
+
+    <!--Selection Mode Sequence-->
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>RIGHT;INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
+        <inputKey>SELECTION_START</inputKey>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>RIGHT;INSIDE_CIRCLE;LONG_PRESS;</movementSequence>
+        <inputKey>SELECTION_START</inputKey>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>RIGHT;INSIDE_CIRCLE;LONG_PRESS_END;</movementSequence>
+        <inputKey>SWITCH_TO_SELECTION_KEYPAD</inputKey>
+    </keyboardAction>
+
+</keyboardActionMap>

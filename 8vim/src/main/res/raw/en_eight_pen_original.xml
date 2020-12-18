@@ -416,44 +416,7 @@
         <inputString>!</inputString>
     </keyboardAction>
 
-    <!--Paste Sequence-->
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>LEFT;INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_PASTE</inputKey>
-    </keyboardAction>
 
-    <!--Shift-->
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>TOP;NO_TOUCH;</movementSequence>
-        <inputKey>SHIFT_TOGGLE</inputKey>
-    </keyboardAction>
-
-    <!-- Switch to Numpad-->
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>LEFT;NO_TOUCH;</movementSequence>
-        <inputKey>SWITCH_TO_NUMBER_KEYPAD</inputKey>
-    </keyboardAction>
-
-    <!--Selection Mode Sequence-->
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>RIGHT;INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
-        <inputKey>SELECTION_START</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>RIGHT;INSIDE_CIRCLE;LONG_PRESS;</movementSequence>
-        <inputKey>SELECTION_START</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>RIGHT;INSIDE_CIRCLE;LONG_PRESS_END;</movementSequence>
-        <inputKey>SWITCH_TO_SELECTION_KEYPAD</inputKey>
-    </keyboardAction>
-    
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
@@ -479,78 +442,6 @@
         <inputCapsLockString>_</inputCapsLockString>
     </keyboardAction>
 
-    <!--Space-->
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_SPACE</inputKey>
-    </keyboardAction>
-   
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>BOTTOM;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_ENTER</inputKey>
-    </keyboardAction>
-
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>BOTTOM;LONG_PRESS;</movementSequence>
-        <inputKey>KEYCODE_ENTER</inputKey>
-    </keyboardAction>
-    
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>RIGHT;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_DEL</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>RIGHT;LONG_PRESS;</movementSequence>
-        <inputKey>KEYCODE_DEL</inputKey>
-    </keyboardAction>
-    
-    <!--D_Pad key-->
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;TOP;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_DPAD_UP</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;BOTTOM;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_DPAD_DOWN</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;LEFT;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_DPAD_LEFT</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;RIGHT;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_DPAD_RIGHT</inputKey>
-    </keyboardAction>
-    <!--Long press configuration-->
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;TOP;LONG_PRESS;</movementSequence>
-        <inputKey>KEYCODE_DPAD_UP</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;BOTTOM;LONG_PRESS;</movementSequence>
-        <inputKey>KEYCODE_DPAD_DOWN</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;LEFT;LONG_PRESS;</movementSequence>
-        <inputKey>KEYCODE_DPAD_LEFT</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;RIGHT;LONG_PRESS;</movementSequence>
-        <inputKey>KEYCODE_DPAD_RIGHT</inputKey>
-    </keyboardAction>
 
     <!--Esperanto Characters -->
     <keyboardAction>
@@ -588,13 +479,6 @@
         <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
         <inputString>ŭ</inputString>
         <inputCapsLockString>Ŭ</inputCapsLockString>
-    </keyboardAction>
-
-    <!-- Hide keyboard -->
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>TOP;INSIDE_CIRCLE;NO_TOUCH</movementSequence>
-        <inputKey>HIDE_KEYBOARD</inputKey>
     </keyboardAction>
 
 </keyboardActionMap>

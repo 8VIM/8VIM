@@ -7,9 +7,12 @@ import inc.flide.vim8.R;
 
 public class SharedPreferenceHelper {
     private SharedPreferences sharedPreferences;
-    private static SharedPreferenceHelper singleton;
+    private static SharedPreferenceHelper singleton = null;
 
     public static SharedPreferenceHelper getInstance(Context context){
+        if (context == null) {
+            return singleton;
+        }
         if(singleton == null){
             SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.basic_preference_file_name), Context.MODE_PRIVATE);
             singleton = new SharedPreferenceHelper(sp);

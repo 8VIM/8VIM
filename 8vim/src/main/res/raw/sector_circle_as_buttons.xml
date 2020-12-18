@@ -1,0 +1,44 @@
+<keyboardActionMap>
+
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>TOP;NO_TOUCH;</movementSequence>
+        <inputKey>SHIFT_TOGGLE</inputKey>
+    </keyboardAction>
+
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>LEFT;NO_TOUCH;</movementSequence>
+        <inputKey>SWITCH_TO_NUMBER_KEYPAD</inputKey>
+    </keyboardAction>
+
+    <!--Space-->
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
+        <inputKey>KEYCODE_SPACE</inputKey>
+    </keyboardAction>
+
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>BOTTOM;NO_TOUCH;</movementSequence>
+        <inputKey>KEYCODE_ENTER</inputKey>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>BOTTOM;LONG_PRESS;</movementSequence>
+        <inputKey>KEYCODE_ENTER</inputKey>
+    </keyboardAction>
+
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>RIGHT;NO_TOUCH;</movementSequence>
+        <inputKey>KEYCODE_DEL</inputKey>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_KEY</keyboardActionType>
+        <movementSequence>RIGHT;LONG_PRESS;</movementSequence>
+        <inputKey>KEYCODE_DEL</inputKey>
+    </keyboardAction>
+
+</keyboardActionMap>
