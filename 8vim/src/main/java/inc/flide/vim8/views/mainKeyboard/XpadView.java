@@ -14,6 +14,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.ColorUtils;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
@@ -102,8 +103,12 @@ public class XpadView extends View {
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
-        keypadDimension.setWidth(MeasureSpec.getSize(widthMeasureSpec));
-        keypadDimension.setHeight(MeasureSpec.getSize(heightMeasureSpec));
+        int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
+        int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
+        ConstraintLayout.LayoutParams xPadLayoutParams = new ConstraintLayout.LayoutParams((parentWidth/6) *5, parentHeight);
+
+        keypadDimension.setWidth(xPadLayoutParams.width);
+        keypadDimension.setHeight(xPadLayoutParams.height);
 
         setMeasuredDimension(keypadDimension.getWidth(), keypadDimension.getHeight());
     }
