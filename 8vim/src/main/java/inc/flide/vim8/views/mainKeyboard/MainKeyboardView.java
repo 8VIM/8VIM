@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import androidx.constraintlayout.widget.ConstraintSet;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
@@ -44,7 +45,14 @@ public class MainKeyboardView extends ConstraintLayout {
     public void initialize(Context context) {
 
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        setupMainKeyboardView(context);
+        setupBackgroundColours();
+        setupButtonsOnSideBar();
+        setHapticFeedbackEnabled(true);
+    }
+
+    private void setupMainKeyboardView(Context context) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         String preferredSidebarPositionOnMainKeyboard = SharedPreferenceHelper
                 .getInstance(context)
@@ -57,10 +65,6 @@ public class MainKeyboardView extends ConstraintLayout {
         } else {
             inflater.inflate(R.layout.main_keyboard_left_sidebar_view, this, true);
         }
-
-        setupBackgroundColours();
-        setupButtonsOnSideBar();
-        setHapticFeedbackEnabled(true);
     }
 
     private void setupBackgroundColours() {
