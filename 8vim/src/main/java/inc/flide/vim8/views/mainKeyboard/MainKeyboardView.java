@@ -132,6 +132,8 @@ public class MainKeyboardView extends ConstraintLayout {
                 MeasureSpec.getSize(heightMeasureSpec),
                 getResources().getConfiguration().orientation);
 
+        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
+
         super.onMeasure(
                 MeasureSpec.makeMeasureSpec(
                         computedDimension.getWidth(),
@@ -142,8 +144,6 @@ public class MainKeyboardView extends ConstraintLayout {
                         MeasureSpec.getMode(heightMeasureSpec)
                 )
         );
-
-        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
     }
 
 }
