@@ -137,11 +137,11 @@ public class MainKeyboardView extends ConstraintLayout {
         super.onMeasure(
                 MeasureSpec.makeMeasureSpec(
                         computedDimension.getWidth(),
-                        MeasureSpec.getMode(widthMeasureSpec)
+                        MeasureSpec.EXACTLY
                 ),
                 MeasureSpec.makeMeasureSpec(
                         computedDimension.getHeight(),
-                        MeasureSpec.getMode(heightMeasureSpec)
+                        MeasureSpec.EXACTLY
                 )
         );
     }
