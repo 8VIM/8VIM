@@ -10,6 +10,8 @@ public class SharedPreferenceHelper {
     private static SharedPreferenceHelper singleton = null;
 
     public static SharedPreferenceHelper getInstance(Context context){
+        //These two ifs should be probably swapped as it can still return null
+        //when singleton is null.
         if (context == null) {
             return singleton;
         }
