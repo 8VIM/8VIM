@@ -1,5 +1,6 @@
 package inc.flide.vim8.keyboardHelpers;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.renderscript.ScriptGroup;
 
@@ -18,7 +19,7 @@ import inc.flide.vim8.structures.FingerPosition;
 
 public class InputMethodServiceHelper {
 
-    public static Map<List<FingerPosition>, KeyboardAction> initializeKeyboardActionMap(Resources resources) {
+    public static Map<List<FingerPosition>, KeyboardAction> initializeKeyboardActionMap(Resources resources, Context context) {
 
         Map<List<FingerPosition>, KeyboardAction> mainKeyboardActionsMap = new HashMap<>();
         mainKeyboardActionsMap = addToKeyboardActionsMap(
@@ -34,7 +35,7 @@ public class InputMethodServiceHelper {
                 resources,
                 R.raw.special_core_gestures);
 
-        int languageLayoutResourceId = loadTheSelectedLanguageLayout(resources);
+        int languageLayoutResourceId = loadTheSelectedLanguageLayout(resources, context);
         mainKeyboardActionsMap = addToKeyboardActionsMap(
                 mainKeyboardActionsMap,
                 resources,
@@ -43,8 +44,8 @@ public class InputMethodServiceHelper {
         return mainKeyboardActionsMap;
     }
 
-    private static int loadTheSelectedLanguageLayout(Resources resources) {
-        String currentLanguageLayout = SharedPreferenceHelper.getInstance(null).getString("current_language_layout", resources.getResourceName(R.raw.en_eight_pen_original));
+    private static int loadTheSelectedLanguageLayout(Resources resources, Context context) {
+        String currentLanguageLayout = SharedPreferenceHelper.getInstance(context).getString("current_language_layout", resources.getResourceName(R.raw.en_eight_pen_original));
 
         String packageName = currentLanguageLayout.substring(0, currentLanguageLayout.indexOf(':'));
         String defType = currentLanguageLayout.substring(currentLanguageLayout.indexOf(':')+1, currentLanguageLayout.indexOf('/'));

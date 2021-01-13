@@ -100,7 +100,7 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public Map<List<FingerPosition>, KeyboardAction> buildKeyboardActionMap() {
-        return InputMethodServiceHelper.initializeKeyboardActionMap(getResources());
+        return InputMethodServiceHelper.initializeKeyboardActionMap(getResources(), getApplicationContext());
     }
 
     public void sendText(String text) {
