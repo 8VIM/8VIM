@@ -33,10 +33,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
@@ -80,7 +77,7 @@ public class SettingsActivity extends AppCompatActivity
         constraintLayout_select_color = findViewById(R.id.constraintlayout_colors);
 
         Button switchToEmojiKeyboardButton = findViewById(R.id.emoji);
-        switchToEmojiKeyboardButton.setOnClickListener(v -> askUserPreferredEmoticonKeyboard());
+//        switchToEmojiKeyboardButton.setOnClickListener(v -> askUserPreferredEmoticonKeyboard());
 
         Button resizeButton = findViewById(R.id.resize_button);
         resizeButton.setOnClickListener(v -> allowUserToResizeCircle());
@@ -207,6 +204,9 @@ public class SettingsActivity extends AppCompatActivity
             sharedPreferencesEditor.apply();
         });
 
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.settings_fragment, new SettingsFragment())
+                .commit();
     }
 
     private void touchTrailPreferenceChangeListner(boolean isChecked) {
@@ -271,47 +271,6 @@ public class SettingsActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private void askUserPreferredEmoticonKeyboard() {
-        InputMethodManager imeManager = (InputMethodManager) getApplicationContext().getSystemService(INPUT_METHOD_SERVICE);
-        List<InputMethodInfo> inputMethods = imeManager.getEnabledInputMethodList();
-
-        Map<String, String> inputMethodsNameAndId = new HashMap<>();
-        for (InputMethodInfo inputMethodInfo : inputMethods) {
-            if (inputMethodInfo.getId().compareTo(Constants.SELF_KEYBOARD_ID) != 0) {
-                inputMethodsNameAndId.put(inputMethodInfo.loadLabel(getPackageManager()).toString(), inputMethodInfo.getId());
-            }
-        }
-        ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
-
-        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        String selectedKeyboardId = SharedPreferenceHelper
-                .getInstance(getApplicationContext())
-                .getString(
-                        getString(R.string.bp_selected_emoticon_keyboard),
-                        "");
-        int selectedKeyboardIndex = -1;
-        if (!selectedKeyboardId.isEmpty()) {
-            selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
-            if (selectedKeyboardIndex == -1) {
-                // seems like we have a stale selection, it should be removed.
-                sharedPreferences.edit().remove(getString(R.string.bp_selected_emoticon_keyboard)).apply();
-            }
-        }
-        new MaterialDialog.Builder(this)
-                .title(R.string.select_preferred_emoticon_keyboard_dialog_title)
-                .items(inputMethodsNameAndId.keySet())
-                .itemsCallbackSingleChoice(selectedKeyboardIndex, (dialog, itemView, which, text) -> {
-
-                    if (which != -1) {
-                        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                        sharedPreferencesEditor.putString(getString(R.string.bp_selected_emoticon_keyboard), keyboardIds.get(which));
-                        sharedPreferencesEditor.apply();
-                    }
-                    return true;
-                })
-                .positiveText(R.string.generic_okay_text)
-                .show();
-    }
 
     @Override
     public void onBackPressed() {

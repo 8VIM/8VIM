@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="General">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="select_emoji_keyboard"
+            app:summary="Select keyboard for emoji input"
+            app:title="@string/select_emoji_keyboard_button_text" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Ergonomics">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="resize_circle_keyboard"
+            app:summary="Resize circle according to your needs"
+            app:title="@string/resize_circle_button_text" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="set_circle_center"
+            app:summary="Center circle to desired position"
+            app:title="@string/set_circle_center_button_text" />
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="sidebar_left"
+            app:summaryOff="Sidebar is currently on the right"
+            app:summaryOn="Sidebar is currently on the left"
+            app:title="@string/Set_sidebar_left_button_text" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="Look and Feel">
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/user_preferred_display_icons_for_sectors"
+            app:summaryOff="Icons will not be show"
+            app:summaryOn="Icons will be shown"
+            app:title="@string/configurable_display_icon_button_text" />
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/user_preferred_typing_trail_visibility"
+            app:summaryOff="Trail will be disabled"
+            app:summaryOn="Trail will be shown"
+            app:title="@string/configurable_touch_trail_button_text" />
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/user_preferred_haptic_feedback_enabled"
+            app:summaryOff="Haptic feedback is OFF"
+            app:summaryOn="Haptic feedback is ON"
+            app:title="@string/haptic_feedback_setting_text" />
+    </PreferenceCategory>
+</PreferenceScreen>

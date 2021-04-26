@@ -41,6 +41,7 @@ android {
 
 dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation "androidx.preference:preference:1.1.1"
     implementation 'com.google.android.material:material:1.2.1'
     api 'com.afollestad.material-dialogs:core:0.9.2.3'
 }
