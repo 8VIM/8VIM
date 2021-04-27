@@ -37,7 +37,7 @@
     <!--    preferences shown in gui UI-->
     <string name="pref_select_emoji_keyboard_key">select_emoji_keyboard</string>
     <string name="pref_select_emoji_keyboard_title">Select emoji keyboard</string>
-    <string name="pref_select_emoji_keyboard_summary">Select </string>
+    <string name="pref_select_emoji_keyboard_summary">Chosen keyboard will be accessible through keyboard\'s emoji icon </string>
 
     <string name="pref_circle_scale_factor">x_board_circle_radius_size_factor</string>
     <string name="pref_circle_scale_factor_title">Circle size</string>
