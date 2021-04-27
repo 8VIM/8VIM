@@ -54,13 +54,13 @@ public class MainKeyboardView extends ConstraintLayout {
     private void setupMainKeyboardView(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        String preferredSidebarPositionOnMainKeyboard = SharedPreferenceHelper
+        boolean preferredSidebarLeft = SharedPreferenceHelper
                 .getInstance(context)
-                .getString(
-                        context.getString(R.string.mainKeyboard_sidebar_position_preference_key),
-                        context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
+                .getBoolean(
+                        context.getString(R.string.pref_sidebar_left_key),
+                        true);
 
-        if (preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
+        if (preferredSidebarLeft) {
             inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);
         } else {
             inflater.inflate(R.layout.main_keyboard_left_sidebar_view, this, true);

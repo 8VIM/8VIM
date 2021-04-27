@@ -10,11 +10,8 @@ import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
 import androidx.preference.SeekBarPreference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -35,9 +32,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.prefs_general, rootKey);
+        setPreferencesFromResource(R.xml.prefs, rootKey);
 
-        Preference emojiKeyboardPref = findPreference(getString(R.string.select_emoji_keyboard_pref_key));
+        Preference emojiKeyboardPref = findPreference(getString(R.string.pref_select_emoji_keyboard_key));
         assert emojiKeyboardPref != null;
 
         emojiKeyboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -76,14 +73,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
         String selectedKeyboardId = SharedPreferenceHelper
                 .getInstance(context.getApplicationContext())
                 .getString(
-                        getString(R.string.bp_selected_emoticon_keyboard),
+                        getString(R.string.pref_selected_emoticon_keyboard),
                         "");
         int selectedKeyboardIndex = -1;
         if (!selectedKeyboardId.isEmpty()) {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
             if (selectedKeyboardIndex == -1) {
                 // seems like we have a stale selection, it should be removed.
-                sharedPreferences.edit().remove(getString(R.string.bp_selected_emoticon_keyboard)).apply();
+                sharedPreferences.edit().remove(getString(R.string.pref_selected_emoticon_keyboard)).apply();
             }
         }
         new MaterialDialog.Builder(context)
@@ -93,7 +90,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
                     if (which != -1) {
                         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                        sharedPreferencesEditor.putString(getString(R.string.bp_selected_emoticon_keyboard), keyboardIds.get(which));
+                        sharedPreferencesEditor.putString(getString(R.string.pref_selected_emoticon_keyboard), keyboardIds.get(which));
                         sharedPreferencesEditor.apply();
                     }
                     return true;
@@ -101,15 +98,4 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 .positiveText(R.string.generic_okay_text)
                 .show();
     }
-
-    private void allowUserToResizeCircle() {
-        Intent intent = new Intent(getContext(), ResizeCircleActivity.class);
-        startActivity(intent);
-    }
-
-    private void allowUserToSetCentreForCircle() {
-        Intent intent = new Intent(getContext(), SetCenterActivity.class);
-        startActivity(intent);
-    }
-
 }

@@ -1,8 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE resources [
-    <!ENTITY appname "8Vim">
-    <!ENTITY version_name "iteration 6">
-    ]>
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY appname "8Vim"><!ENTITY version_name "iteration 6">]>
 <resources>
     <string name="app_name">&appname;</string>
     <string name="version_name">&version_name;</string>
@@ -10,10 +6,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="enable_ime_dialog_title">Please Enable IME</string>
-    <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "&appname; Keyboard" there.</string>
+    <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "&appname;
+        Keyboard" there.</string>
     <string name="enable_ime_dialog_neutral_button_text">Enable</string>
     <string name="activate_ime_dialog_title">Please Activate IME</string>
-    <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname; Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
+    <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname;
+        Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
 
@@ -28,51 +26,57 @@
     <!--Preference Related Strings-->
     <string name="basic_preference_file_name">inc.flide.&appname;.basicPreferences</string>
 
-    <string name="bp_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
-
-    <string name="mainKeyboard_sidebar_position_preference_key">input keyboard value</string>
-    <string name="mainKeyboard_sidebar_position_preference_left_value">sidebar_left_preferred</string>
-    <string name="mainKeyboard_sidebar_position_preference_right_value">sidebar_right_preferred</string>
-
     <!--   preferences categories -->
     <string name="pref_category_general">General</string>
     <string name="pref_category_ergonomics">Ergonomics</string>
     <string name="pref_category_look_and_feel">Look &amp; Feel</string>
-    <!--    preference keys-->
-    <string name="select_emoji_keyboard_pref_key">select_emoji_keyboard</string>
-    <string name="board_circle_radius_size_factor_key">x_board_circle_radius_size_factor</string>
-    <string name="board_circle_centre_x_offset_key">x_board_circle_centre_x_offset</string>
-    <string name="board_circle_centre_y_offset_key">x_board_circle_centre_y_offset</string>
-    <string name="user_preferred_typing_trail_visibility_key">user_preferred_typing_trail_visibility</string>
-    <string name="user_preferred_haptic_feedback_enabled_key">user_preferred_haptic_feedback_enabled</string>
-    <string name="user_preferred_display_icons_for_sectors_key">user_preferred_display_icons_for_sectors</string>
-    <string name="user_preferred_sidebar_left_key">user_preferred_sidebar_left</string>
-    <!--    preferences UI-->
-    <string name="select_emoji_keyboard_pref_title">Select emoji keyboard</string>
-    <string name="select_emoji_keyboard_pref_summary">Select </string>
-    <string name="circle_size_pref_title">Circle size</string>
-    <string name="circle_size_pref_summary">Resize circle according to your needs</string>
-    <string name="circle_x_offset_pref_title">Circle offset X axis</string>
-    <string name="circle_y_offset_pref_title">Circle offset Y axis</string>
-    <string name="sidebar_left_pref_title">Sidebar on the left</string>
-    <string name="sidebar_left_pref_summary_on">Sidebar is currently on the left</string>
-    <string name="sidebar_left_pref_summary_off">Sidebar is currently on the right</string>
-    <string name="show_display_icons_pref_title">Display icons in the sector</string>
 
+    <!--    hidden/internal preferences-->
+    <string name="pref_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
 
-    <string name="configurable_touch_trail_button_text">Display Touch Trail</string>
-    <string name="haptic_feedback_setting_text">Enable haptic feedback for input</string>
-    <string name="generic_off_text">Off</string>
-    <string name="generic_on_text">On</string>
+    <!--    preferences shown in gui UI-->
+    <string name="pref_select_emoji_keyboard_key">select_emoji_keyboard</string>
+    <string name="pref_select_emoji_keyboard_title">Select emoji keyboard</string>
+    <string name="pref_select_emoji_keyboard_summary">Select </string>
+
+    <string name="pref_circle_scale_factor">x_board_circle_radius_size_factor</string>
+    <string name="pref_circle_scale_factor_title">Circle size</string>
+    <string name="pref_circle_scale_factor_summary">Resize circle according to your needs</string>
+
+    <string name="pref_circle_x_offset_key">x_board_circle_centre_x_offset</string>
+    <string name="pref_circle_x_offset_title">Circle offset X axis</string>
+
+    <string name="pref_circle_y_offset_key">x_board_circle_centre_y_offset</string>
+    <string name="pref_circle_y_offset_title">Circle offset Y axis</string>
+
+    <string name="pref_sidebar_left_key">user_preferred_sidebar_left</string>
+    <string name="pref_sidebar_left_title">Sidebar on the left</string>
+    <string name="pref_sidebar_left_summary_on">Sidebar is currently on the left</string>
+    <string name="pref_sidebar_left_summary_off">Sidebar is currently on the right</string>
+
+    <string name="pref_display_sector_icons_key">user_preferred_display_icons_in</string>
+    <string name="pref_display_sector_icons_title">Display sector icons</string>
+    <string name="pref_display_sector_icons_summary_on">Sector icons are enabled</string>
+    <string name="pref_display_sector_icons_summary_off">Sector icons are disabled</string>
+
+    <string name="pref_typing_trail_visibility_key">user_preferred_typing_trail_visibility</string>
+    <string name="pref_typing_trail_visibility_title">Display touch trail</string>
+    <string name="pref_typing_trail_visibility_summary_on">Trail will be visible when typing</string>
+    <string name="pref_typing_trail_visibility_summary_off">No trail will be shown when typing</string>
+
+    <string name="pref_haptic_feedback_key">user_preferred_haptic_feedback_enabled</string>
+    <string name="pref_haptic_feedback_title">Enable input haptic feedback</string>
+    <string name="pref_haptic_feedback_summary_on">Haptic feedback is enabled</string>
+    <string name="pref_haptic_feedback_summary_off">Haptic feedback is disabled</string>
+
     <string name="choose_the_color_for_touch_trail_label">Choose the color for Touch Trail :</string>
     <string name="generic_red_text">Red</string>
     <string name="generic_green_text">Green</string>
     <string name="generic_yellow_text">Yellow</string>
     <string name="generic_blue_text">Blue</string>
+
     <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
     <string name="about_us_label">About Us</string>
-    <string name="x_axis_label">X Axis : </string>
-    <string name="y_axis_label">Y Axis : </string>
     <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>
     <string name="tab_button_content_description">Tab button</string>
     <string name="open_selection_keypad_button_content_description">Open Selection Keypad</string>
@@ -82,11 +86,11 @@
     <string name="owner_text">Designed and Developed by flide</string>
     <string name="connect_with_us_label">Connect with us</string>
 
-<!--    github-->
+    <!--    github-->
     <string name="github_icon_content_description">Github Icon</string>
     <string name="connect_using_github_label">Fork us on GitHub</string>
 
-<!--    matrix-->
+    <!--    matrix-->
     <string name="matrix_icon_content_description">Matrix Icon</string>
     <string name="join_us_on_matrix_label">Join us on Matrix</string>
 
@@ -98,7 +102,7 @@
     <string name="play_store_icon_content_description">Google Play store icon</string>
     <string name="connect_using_google_play_store_label">Rate us on the Play Store</string>
 
-<!--    twitter-->
+    <!--    twitter-->
     <string name="twitter_icon_content_description">"Twitter icon "</string>
     <string name="connect_using_twitter_label">Follow us on Twitter</string>
 

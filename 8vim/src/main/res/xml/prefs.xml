@@ -8,9 +8,9 @@
 
         <Preference
             app:iconSpaceReserved="false"
-            app:key="@string/select_emoji_keyboard_pref_key"
-            app:summary="@string/select_emoji_keyboard_pref_summary"
-            app:title="@string/select_emoji_keyboard_pref_title" />
+            app:key="@string/pref_select_emoji_keyboard_key"
+            app:summary="@string/pref_select_emoji_keyboard_summary"
+            app:title="@string/pref_select_emoji_keyboard_title" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -21,37 +21,37 @@
             app:iconSpaceReserved="false"
             android:max="10"
             app:defaultValue="1"
-            app:key="@string/board_circle_radius_size_factor_key"
+            app:key="@string/pref_circle_scale_factor"
             app:min="1"
             app:showSeekBarValue="true"
-            app:summary="@string/circle_size_pref_summary"
-            app:title="@string/circle_size_pref_title" />
+            app:summary="@string/pref_circle_scale_factor_summary"
+            app:title="@string/pref_circle_scale_factor_title" />
 
         <SeekBarPreference
             android:max="5"
             app:defaultValue="0"
             app:iconSpaceReserved="false"
-            app:key="@string/board_circle_centre_x_offset_key"
+            app:key="@string/pref_circle_x_offset_key"
             app:min="-5"
             app:showSeekBarValue="true"
-            app:title="@string/circle_x_offset_pref_title" />
+            app:title="@string/pref_circle_x_offset_title" />
 
         <SeekBarPreference
             android:max="5"
             app:defaultValue="0"
             app:iconSpaceReserved="false"
-            app:key="@string/board_circle_centre_y_offset_key"
+            app:key="@string/pref_circle_y_offset_key"
             app:min="-5"
             app:showSeekBarValue="true"
-            app:title="@string/circle_y_offset_pref_title" />
+            app:title="@string/pref_circle_y_offset_title" />
 
         <SwitchPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="sidebar"
-            app:summaryOff="@string/sidebar_left_pref_summary_off"
-            app:summaryOn="@string/sidebar_left_pref_summary_on"
-            app:title="@string/sidebar_left_pref_title" />
+            app:summaryOff="@string/pref_sidebar_left_summary_off"
+            app:summaryOn="@string/pref_sidebar_left_summary_on"
+            app:title="@string/pref_sidebar_left_title" />
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -61,25 +61,25 @@
         <SwitchPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
-            app:key="@string/user_preferred_display_icons_for_sectors_key"
-            app:summaryOff="Icons will not be show"
-            app:summaryOn="Icons will be shown"
-            app:title="@string/show_display_icons_pref_title" />
+            app:key="@string/pref_display_sector_icons_key"
+            app:summaryOff="@string/pref_display_sector_icons_summary_on"
+            app:summaryOn="@string/pref_display_sector_icons_summary_off"
+            app:title="@string/pref_display_sector_icons_title" />
 
         <SwitchPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
-            app:key="@string/user_preferred_typing_trail_visibility_key"
-            app:summaryOff="Trail will be disabled"
-            app:summaryOn="Trail will be shown"
-            app:title="@string/configurable_touch_trail_button_text" />
+            app:key="@string/pref_typing_trail_visibility_key"
+            app:summaryOff="@string/pref_typing_trail_visibility_summary_off"
+            app:summaryOn="@string/pref_typing_trail_visibility_summary_on"
+            app:title="@string/pref_typing_trail_visibility_title" />
 
         <SwitchPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
-            app:key="@string/user_preferred_haptic_feedback_enabled_key"
+            app:key="@string/pref_haptic_feedback_key"
             app:summaryOff="Haptic feedback is OFF"
             app:summaryOn="Haptic feedback is ON"
-            app:title="@string/haptic_feedback_setting_text" />
+            app:title="@string/pref_haptic_feedback_title" />
     </PreferenceCategory>
 </PreferenceScreen>
