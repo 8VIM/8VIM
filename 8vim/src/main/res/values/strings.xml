@@ -34,21 +34,34 @@
     <string name="mainKeyboard_sidebar_position_preference_left_value">sidebar_left_preferred</string>
     <string name="mainKeyboard_sidebar_position_preference_right_value">sidebar_right_preferred</string>
 
-    <string name="x_board_circle_radius_size_factor_key">x_board_circle_radius_size_factor</string>
-    <string name="x_board_circle_centre_x_offset_key">x_board_circle_centre_x_offset</string>
-    <string name="x_board_circle_centre_y_offset_key">x_board_circle_centre_y_offset</string>
+    <!--   preferences categories -->
+    <string name="pref_category_general">General</string>
+    <string name="pref_category_ergonomics">Ergonomics</string>
+    <string name="pref_category_look_and_feel">Look &amp; Feel</string>
+    <!--    preference keys-->
+    <string name="select_emoji_keyboard_pref_key">select_emoji_keyboard</string>
+    <string name="board_circle_radius_size_factor_key">x_board_circle_radius_size_factor</string>
+    <string name="board_circle_centre_x_offset_key">x_board_circle_centre_x_offset</string>
+    <string name="board_circle_centre_y_offset_key">x_board_circle_centre_y_offset</string>
+    <string name="user_preferred_typing_trail_visibility_key">user_preferred_typing_trail_visibility</string>
+    <string name="user_preferred_haptic_feedback_enabled_key">user_preferred_haptic_feedback_enabled</string>
+    <string name="user_preferred_display_icons_for_sectors_key">user_preferred_display_icons_for_sectors</string>
+    <string name="user_preferred_sidebar_left_key">user_preferred_sidebar_left</string>
+    <!--    preferences UI-->
+    <string name="select_emoji_keyboard_pref_title">Select emoji keyboard</string>
+    <string name="select_emoji_keyboard_pref_summary">Select </string>
+    <string name="circle_size_pref_title">Circle size</string>
+    <string name="circle_size_pref_summary">Resize circle according to your needs</string>
+    <string name="circle_x_offset_pref_title">Circle offset X axis</string>
+    <string name="circle_y_offset_pref_title">Circle offset Y axis</string>
+    <string name="sidebar_left_pref_title">Sidebar on the left</string>
+    <string name="sidebar_left_pref_summary_on">Sidebar is currently on the left</string>
+    <string name="sidebar_left_pref_summary_off">Sidebar is currently on the right</string>
+    <string name="show_display_icons_pref_title">Display icons in the sector</string>
 
-    <string name="user_preferred_typing_trail_visibility">user_preferred_typing_trail_visibility</string>
-    <string name="user_preferred_haptic_feedback_enabled">user_preferred_haptic_feedback_enabled</string>
-    <string name="user_preferred_display_icons_for_sectors">user_preferred_display_icons_for_sectors</string>
-    <string name="select_emoji_keyboard_button_text">Select Emoji Keyboard</string>
-    <string name="resize_circle_button_text">Resize Circle</string>
-    <string name="set_circle_center_button_text">Set circle center</string>
-    <string name="Set_sidebar_left_button_text">Set Sidebar Left</string>
-    <string name="Set_sidebar_right_button_text">Set Sidebar Right</string>
+
     <string name="configurable_touch_trail_button_text">Display Touch Trail</string>
     <string name="haptic_feedback_setting_text">Enable haptic feedback for input</string>
-    <string name="configurable_display_icon_button_text">Display icons in the sector</string>
     <string name="generic_off_text">Off</string>
     <string name="generic_on_text">On</string>
     <string name="choose_the_color_for_touch_trail_label">Choose the color for Touch Trail :</string>

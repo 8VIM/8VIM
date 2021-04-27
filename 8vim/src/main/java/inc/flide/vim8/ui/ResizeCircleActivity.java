@@ -26,7 +26,7 @@ public class ResizeCircleActivity extends AppCompatActivity {
 
         textView = findViewById(R.id.textView);
         SeekBar seekBar = findViewById(R.id.seekBar);
-        float spRadius = SharedPreferenceHelper.getInstance(getApplicationContext()).getFloat(getString(R.string.x_board_circle_radius_size_factor_key), 0);
+        float spRadius = SharedPreferenceHelper.getInstance(getApplicationContext()).getFloat(getString(R.string.board_circle_radius_size_factor_key), 0);
         float currentRadius = 0.1f;
         if (!(spRadius == 0)) {
             currentRadius = spRadius;
@@ -47,7 +47,7 @@ public class ResizeCircleActivity extends AppCompatActivity {
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putFloat(getString(R.string.x_board_circle_radius_size_factor_key), x);
+                sharedPreferencesEditor.putFloat(getString(R.string.board_circle_radius_size_factor_key), x);
                 sharedPreferencesEditor.apply();
             }
 

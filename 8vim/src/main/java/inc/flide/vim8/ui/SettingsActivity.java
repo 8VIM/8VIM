@@ -94,10 +94,10 @@ public class SettingsActivity extends AppCompatActivity
         SwitchCompat touch_trail_switch = findViewById(R.id.touch_trail);
 
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
-        touch_trail_switch.setChecked(SharedPreferenceHelper.getInstance(getApplicationContext()).getBoolean(getString(R.string.user_preferred_typing_trail_visibility), true));
+        touch_trail_switch.setChecked(SharedPreferenceHelper.getInstance(getApplicationContext()).getBoolean(getString(R.string.user_preferred_typing_trail_visibility_key), true));
         touch_trail_switch.setOnCheckedChangeListener((buttonView, isChecked) -> touchTrailPreferenceChangeListner(isChecked));
 
-        boolean touch_trail_visibility = SharedPreferenceHelper.getInstance(getApplicationContext()).getBoolean(getString(R.string.user_preferred_typing_trail_visibility), true);
+        boolean touch_trail_visibility = SharedPreferenceHelper.getInstance(getApplicationContext()).getBoolean(getString(R.string.user_preferred_typing_trail_visibility_key), true);
 
         if (touch_trail_visibility) {
             constraintLayout_select_color.setVisibility(View.VISIBLE);
@@ -109,7 +109,7 @@ public class SettingsActivity extends AppCompatActivity
 
         SwitchCompat display_icon_button = findViewById(R.id.display_icons_switch);
 
-        display_icon_button.setChecked(SharedPreferenceHelper.getInstance(getApplicationContext()).getBoolean(getString(R.string.user_preferred_display_icons_for_sectors), true));
+        display_icon_button.setChecked(SharedPreferenceHelper.getInstance(getApplicationContext()).getBoolean(getString(R.string.user_preferred_display_icons_for_sectors_key), true));
         display_icon_button.setOnCheckedChangeListener((buttonView, isChecked) -> displayIconsPreferenceChangeListner(isChecked));
 
         // For user preference on haptic feedback
@@ -120,7 +120,7 @@ public class SettingsActivity extends AppCompatActivity
                 SharedPreferenceHelper
                         .getInstance(getApplicationContext())
                         .getBoolean(
-                                getString(R.string.user_preferred_haptic_feedback_enabled),
+                                getString(R.string.user_preferred_haptic_feedback_enabled_key),
                                 true)
         );
 
@@ -212,7 +212,7 @@ public class SettingsActivity extends AppCompatActivity
     private void touchTrailPreferenceChangeListner(boolean isChecked) {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-        sharedPreferencesEditor.putBoolean(getString(R.string.user_preferred_typing_trail_visibility), isChecked);
+        sharedPreferencesEditor.putBoolean(getString(R.string.user_preferred_typing_trail_visibility_key), isChecked);
         sharedPreferencesEditor.apply();
 
         if (isChecked) {
@@ -236,7 +236,7 @@ public class SettingsActivity extends AppCompatActivity
     private void displayIconsPreferenceChangeListner(boolean isChecked) {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-        sharedPreferencesEditor.putBoolean(getString(R.string.user_preferred_display_icons_for_sectors), isChecked);
+        sharedPreferencesEditor.putBoolean(getString(R.string.user_preferred_display_icons_for_sectors_key), isChecked);
         sharedPreferencesEditor.apply();
 
     }
@@ -244,7 +244,7 @@ public class SettingsActivity extends AppCompatActivity
     private void enableHapticFeedbackPreferenceChangeListener(boolean isChecked) {
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-        sharedPreferencesEditor.putBoolean(getString(R.string.user_preferred_haptic_feedback_enabled), isChecked);
+        sharedPreferencesEditor.putBoolean(getString(R.string.user_preferred_haptic_feedback_enabled_key), isChecked);
         sharedPreferencesEditor.apply();
     }
 

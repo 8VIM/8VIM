@@ -36,7 +36,7 @@ public class SetCenterActivity extends AppCompatActivity {
 
         int offset_x = SharedPreferenceHelper
                 .getInstance(getApplicationContext())
-                .getInt(getString(R.string.x_board_circle_centre_x_offset_key), 0);
+                .getInt(getString(R.string.board_circle_centre_x_offset_key), 0);
 
         int current_x_Value = 0;
         if (!(offset_x == 0)) {
@@ -59,7 +59,7 @@ public class SetCenterActivity extends AppCompatActivity {
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putInt(getString(R.string.x_board_circle_centre_x_offset_key), progress);
+                sharedPreferencesEditor.putInt(getString(R.string.board_circle_centre_x_offset_key), progress);
                 sharedPreferencesEditor.apply();
             }
 
@@ -79,7 +79,7 @@ public class SetCenterActivity extends AppCompatActivity {
 
         int offset_y = SharedPreferenceHelper
                 .getInstance(getApplicationContext())
-                .getInt(getString(R.string.x_board_circle_centre_y_offset_key), 0);
+                .getInt(getString(R.string.board_circle_centre_y_offset_key), 0);
 
         int current_y_Value = 0;
         if (!(offset_y == 0)) {
@@ -101,7 +101,7 @@ public class SetCenterActivity extends AppCompatActivity {
 
                 SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
                 SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                sharedPreferencesEditor.putInt(getString(R.string.x_board_circle_centre_y_offset_key), progress);
+                sharedPreferencesEditor.putInt(getString(R.string.board_circle_centre_y_offset_key), progress);
                 sharedPreferencesEditor.apply();
 
             }

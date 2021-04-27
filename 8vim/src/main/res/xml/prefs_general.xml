@@ -1,58 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="General">
+        app:title="@string/pref_category_general">
 
         <Preference
             app:iconSpaceReserved="false"
-            app:key="select_emoji_keyboard"
-            app:summary="Select keyboard for emoji input"
-            app:title="@string/select_emoji_keyboard_button_text" />
+            app:key="@string/select_emoji_keyboard_pref_key"
+            app:summary="@string/select_emoji_keyboard_pref_summary"
+            app:title="@string/select_emoji_keyboard_pref_title" />
     </PreferenceCategory>
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="Ergonomics">
+        app:title="@string/pref_category_ergonomics">
 
-        <Preference
+        <SeekBarPreference
             app:iconSpaceReserved="false"
-            app:key="resize_circle_keyboard"
-            app:summary="Resize circle according to your needs"
-            app:title="@string/resize_circle_button_text" />
+            android:max="10"
+            app:defaultValue="1"
+            app:key="@string/board_circle_radius_size_factor_key"
+            app:min="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/circle_size_pref_summary"
+            app:title="@string/circle_size_pref_title" />
 
-        <Preference
+        <SeekBarPreference
+            android:max="5"
+            app:defaultValue="0"
             app:iconSpaceReserved="false"
-            app:key="set_circle_center"
-            app:summary="Center circle to desired position"
-            app:title="@string/set_circle_center_button_text" />
+            app:key="@string/board_circle_centre_x_offset_key"
+            app:min="-5"
+            app:showSeekBarValue="true"
+            app:title="@string/circle_x_offset_pref_title" />
+
+        <SeekBarPreference
+            android:max="5"
+            app:defaultValue="0"
+            app:iconSpaceReserved="false"
+            app:key="@string/board_circle_centre_y_offset_key"
+            app:min="-5"
+            app:showSeekBarValue="true"
+            app:title="@string/circle_y_offset_pref_title" />
 
         <SwitchPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
-            app:key="sidebar_left"
-            app:summaryOff="Sidebar is currently on the right"
-            app:summaryOn="Sidebar is currently on the left"
-            app:title="@string/Set_sidebar_left_button_text" />
+            app:key="sidebar"
+            app:summaryOff="@string/sidebar_left_pref_summary_off"
+            app:summaryOn="@string/sidebar_left_pref_summary_on"
+            app:title="@string/sidebar_left_pref_title" />
     </PreferenceCategory>
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="Look and Feel">
+        app:title="@string/pref_category_look_and_feel">
 
         <SwitchPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
-            app:key="@string/user_preferred_display_icons_for_sectors"
+            app:key="@string/user_preferred_display_icons_for_sectors_key"
             app:summaryOff="Icons will not be show"
             app:summaryOn="Icons will be shown"
-            app:title="@string/configurable_display_icon_button_text" />
+            app:title="@string/show_display_icons_pref_title" />
 
         <SwitchPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
-            app:key="@string/user_preferred_typing_trail_visibility"
+            app:key="@string/user_preferred_typing_trail_visibility_key"
             app:summaryOff="Trail will be disabled"
             app:summaryOn="Trail will be shown"
             app:title="@string/configurable_touch_trail_button_text" />
@@ -60,7 +77,7 @@
         <SwitchPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
-            app:key="@string/user_preferred_haptic_feedback_enabled"
+            app:key="@string/user_preferred_haptic_feedback_enabled_key"
             app:summaryOff="Haptic feedback is OFF"
             app:summaryOn="Haptic feedback is ON"
             app:title="@string/haptic_feedback_setting_text" />

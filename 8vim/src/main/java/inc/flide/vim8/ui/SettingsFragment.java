@@ -15,6 +15,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.preference.SeekBarPreference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -36,7 +37,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.prefs_general, rootKey);
 
-        Preference emojiKeyboardPref = findPreference("select_emoji_keyboard");
+        Preference emojiKeyboardPref = findPreference(getString(R.string.select_emoji_keyboard_pref_key));
+        assert emojiKeyboardPref != null;
+
         emojiKeyboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 askUserPreferredEmoticonKeyboard();
@@ -44,40 +47,13 @@ public class SettingsFragment extends PreferenceFragmentCompat
             }
         });
 
-        Preference resizeCirclePref = findPreference("resize_circle_keyboard");
-        resizeCirclePref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                allowUserToResizeCircle();
-                return true;
-            }
-        });
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-    }
-
-    private void bindPreferenceSummaryToValue(Preference preference) {
-        preference.setOnPreferenceChangeListener(this);
-
-        onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        String stringValue = newValue.toString();
-
-        if (preference instanceof ListPreference) {
-            ListPreference listPreference = (ListPreference) preference;
-            int prefIndex = listPreference.findIndexOfValue(stringValue);
-            if (prefIndex >= 0) {
-                preference.setSummary(listPreference.getEntries()[prefIndex]);
-            }
+        Toast.makeText(getContext(),"test"+newValue.toString(),Toast.LENGTH_LONG).show();
+        if (preference instanceof SeekBarPreference) {
+            Toast.makeText(getContext(),"test"+newValue.toString(),Toast.LENGTH_LONG).show();
         }
 
         return true;

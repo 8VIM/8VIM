@@ -81,11 +81,11 @@ public class XpadView extends View {
     }
 
     private void computeComponentPositions() {
-        float spRadiusValue = SharedPreferenceHelper.getInstance(getContext()).getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key), 0.3f);
+        float spRadiusValue = SharedPreferenceHelper.getInstance(getContext()).getFloat(this.getContext().getString(R.string.board_circle_radius_size_factor_key), 0.3f);
         float radius = (spRadiusValue * keypadDimension.getWidth()) / 2;
 
-        circleCenter.x = (keypadDimension.getWidth() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
-        circleCenter.y = (keypadDimension.getHeight() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
+        circleCenter.x = (keypadDimension.getWidth() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.board_circle_centre_x_offset_key), 0)) * 26);
+        circleCenter.y = (keypadDimension.getHeight() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.board_circle_centre_y_offset_key), 0)) * 26);
 
         circle.setCentre(circleCenter);
         circle.setRadius(radius);
@@ -120,7 +120,7 @@ public class XpadView extends View {
 
         canvas.drawColor(backgroundPaint.getColor());
 
-        boolean userPrefersTypingTrail = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.user_preferred_typing_trail_visibility), true);
+        boolean userPrefersTypingTrail = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.user_preferred_typing_trail_visibility_key), true);
         if (userPrefersTypingTrail) {
             paintTypingTrail(canvas);
         }
@@ -143,7 +143,7 @@ public class XpadView extends View {
         int centre_x_value = (int) circle.getCentre().x;
         int centre_y_value = (int) circle.getCentre().y;
 
-        boolean userPrefersSectorIcons = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.user_preferred_display_icons_for_sectors), true);
+        boolean userPrefersSectorIcons = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.user_preferred_display_icons_for_sectors_key), true);
         if (userPrefersSectorIcons) {
             setupSectorIcons(centre_x_value, centre_y_value, canvas);
         }
