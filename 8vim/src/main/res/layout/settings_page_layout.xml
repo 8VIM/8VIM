@@ -40,18 +40,6 @@
                 android:layout_height="match_parent" />
         </LinearLayout>
 
-        <include
-            android:id="@+id/content_launcher_view"
-            layout="@layout/settings_view"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/keyboard_text_test_layout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/app_bar_launcher" />
-
         <LinearLayout
             android:id="@+id/keyboard_text_test_layout"
             android:layout_width="match_parent"
