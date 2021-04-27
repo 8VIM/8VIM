@@ -5,7 +5,9 @@
     <color name="accent">#304ffe</color>
 
     <color name="white">#FAFAFA</color>
+    <color name="ripple_color">#40444444</color>
     <color name="black">#212121</color>
+    <color name="transluscent">#50000000</color>
 
     <color name="defaultBoardBg">#FAFAFA</color>
     <color name="defaultBoardFg">#212121</color>
