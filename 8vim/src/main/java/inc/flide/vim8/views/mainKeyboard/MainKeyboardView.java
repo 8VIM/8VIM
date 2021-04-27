@@ -55,7 +55,7 @@ public class MainKeyboardView extends ConstraintLayout {
 
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setupMainKeyboardView(context);
-        setupBackgroundColours(backgroundColor);
+        setBackgroundColor(backgroundColor);
         setupButtonsOnSideBar(foregroundColor);
         setHapticFeedbackEnabled(true);
     }

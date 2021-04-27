@@ -241,6 +241,8 @@ public class XpadView extends View {
                 coordinateY,
                 coordinateX + iconDimension.getWidth(),
                 coordinateY + iconDimension.getHeight());
+        icon_vectorDrawable.setTint(foregroundColor);
+        icon_vectorDrawable.setAlpha(55);
         icon_vectorDrawable.draw(canvas);
     }
 
