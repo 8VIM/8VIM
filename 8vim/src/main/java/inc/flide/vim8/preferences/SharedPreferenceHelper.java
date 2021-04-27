@@ -3,6 +3,8 @@ package inc.flide.vim8.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.preference.PreferenceManager;
+
 import inc.flide.vim8.R;
 
 public class SharedPreferenceHelper {
@@ -16,7 +18,7 @@ public class SharedPreferenceHelper {
             return singleton;
         }
         if(singleton == null){
-            SharedPreferences sp = context.getSharedPreferences(context.getString(R.string.basic_preference_file_name), Context.MODE_PRIVATE);
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
             singleton = new SharedPreferenceHelper(sp);
         }
         return singleton;
