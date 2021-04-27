@@ -3,25 +3,20 @@ package inc.flide.vim8.views.mainKeyboard;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.PointF;
-import android.graphics.RadialGradient;
-import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.graphics.ColorUtils;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -256,7 +251,6 @@ public class XpadView extends View {
             final byte maxTrailRadius = 14;
             PathMeasure pathMeasure = new PathMeasure();
             pathMeasure.setPath(typingTrailPath, false);
-            Random random = new Random();
             final float pathLength = pathMeasure.getLength();
 
             for (short i = 1; i <= steps; i++) {
@@ -264,23 +258,14 @@ public class XpadView extends View {
                 if (distance >= 0) {
                     final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
                     pathMeasure.getPosTan(distance, pathPos, null);
-                    final float x = pathPos[0] + random.nextFloat() - trailRadius;
-                    final float y = pathPos[1] + random.nextFloat() - trailRadius;
+                    final float x = pathPos[0];
+                    final float y = pathPos[1];
 
-                    typingTrailPaint.setShader(
-                            new RadialGradient(
-                                    x,
-                                    y,
-                                    trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                    ColorUtils.setAlphaComponent(trailColor, random.nextInt(0xff)),
-                                    Color.TRANSPARENT,
-                                    Shader.TileMode.CLAMP));
-
+                    typingTrailPaint.setColor(trailColor);
                     canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
                 }
             }
         }
-        canvas.drawPath(typingTrailPath, typingTrailPaint);
     }
 
     private String getCharacterSetToDisplay() {
