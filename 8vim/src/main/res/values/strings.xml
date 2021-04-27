@@ -78,12 +78,6 @@
     <string name="pref_trail_color_key">trail_color</string>
     <string name="pref_trail_color_title">Touch trail color</string>
 
-    <string name="choose_the_color_for_touch_trail_label">Choose the color for Touch Trail :</string>
-    <string name="generic_red_text">Red</string>
-    <string name="generic_green_text">Green</string>
-    <string name="generic_yellow_text">Yellow</string>
-    <string name="generic_blue_text">Blue</string>
-
     <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
     <string name="about_us_label">About Us</string>
     <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>

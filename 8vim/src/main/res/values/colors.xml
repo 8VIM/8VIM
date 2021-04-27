@@ -7,11 +7,6 @@
     <color name="white">#FAFAFA</color>
     <color name="black">#212121</color>
 
-    <color name="primaryBackground">#E1D7DD</color>
-    <color name="secondaryBackground">#CDC1CA</color>
-    <color name="primaryText">#3F334D</color>
-    <color name="primaryIcon">#D1462F</color>
-
     <color name="defaultBoardBg">#FAFAFA</color>
     <color name="defaultBoardFg">#212121</color>
     <color name="defaultTrail">#304ffe</color>
