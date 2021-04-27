@@ -47,7 +47,7 @@
             android:background="@color/cardview_light_background"
             android:clipToPadding="false"
             android:elevation="8dp"
-            android:padding="8dp"
+            android:padding="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -58,12 +58,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/test_input_background"
-                android:elevation="40dp"
                 android:hint="@string/keyboard_test_edit_text_hint"
                 android:importantForAutofill="no"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="6"
-                android:padding="8dp"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:textSize="18sp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
