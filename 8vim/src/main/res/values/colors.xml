@@ -11,4 +11,35 @@
     <color name="secondaryBackground">#CDC1CA</color>
     <color name="primaryText">#3F334D</color>
     <color name="primaryIcon">#D1462F</color>
+
+    <color name="defaultBoardBg">#FAFAFA</color>
+    <color name="defaultBoardFg">#212121</color>
+    <color name="defaultTrail">#304ffe</color>
+
+    <string-array name="background_colors">
+        <item>#FAFAFA</item>
+        <item>#eeeeee</item>
+        <item>#616161</item>
+        <item>#455a64</item>
+        <item>#212121</item>
+        <item>#ffab91</item>
+    </string-array>
+
+    <string-array name="foreground_colors">
+        <item>#FAFAFA</item>
+        <item>#eeeeee</item>
+        <item>#455a64</item>
+        <item>#212121</item>
+        <item>#ff5722</item>
+        <item>#304ffe</item>
+    </string-array>
+
+    <string-array name="trail_colors">
+        <item>#FAFAFA</item>
+        <item>#eeeeee</item>
+        <item>#455a64</item>
+        <item>#212121</item>
+        <item>#ff5722</item>
+        <item>#304ffe</item>
+    </string-array>
 </resources>

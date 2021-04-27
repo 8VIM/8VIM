@@ -18,9 +18,9 @@
         app:title="@string/pref_category_ergonomics">
 
         <SeekBarPreference
-            app:iconSpaceReserved="false"
             android:max="10"
             app:defaultValue="1"
+            app:iconSpaceReserved="false"
             app:key="@string/pref_circle_scale_factor"
             app:min="1"
             app:showSeekBarValue="true"
@@ -78,8 +78,41 @@
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/pref_haptic_feedback_key"
-            app:summaryOff="Haptic feedback is OFF"
-            app:summaryOn="Haptic feedback is ON"
+            app:summaryOff="@string/pref_haptic_feedback_summary_off"
+            app:summaryOn="@string/pref_haptic_feedback_summary_on"
             app:title="@string/pref_haptic_feedback_title" />
+
+        <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+            app:defaultValue="@color/defaultBoardBg"
+            app:key="@string/pref_board_bg_color_key"
+            app:title="@string/pref_board_bg_color_title"
+            app:iconSpaceReserved="false"
+            app:colorShape="circle"
+            app:colorChoices="@array/background_colors"
+            app:viewSize="large"
+            app:numColumns="5"
+            app:showDialog="true" />
+
+        <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+            app:defaultValue="@color/defaultBoardFg"
+            app:key="@string/pref_board_fg_color_key"
+            app:title="@string/pref_board_fg_color_title"
+            app:iconSpaceReserved="false"
+            app:colorShape="circle"
+            app:colorChoices="@array/foreground_colors"
+            app:viewSize="large"
+            app:numColumns="5"
+            app:showDialog="true" />
+
+        <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+            app:defaultValue="@color/defaultTrail"
+            app:key="@string/pref_trail_color_key"
+            app:title="@string/pref_trail_color_title"
+            app:iconSpaceReserved="false"
+            app:colorShape="circle"
+            app:colorChoices="@array/trail_colors"
+            app:viewSize="large"
+            app:numColumns="5"
+            app:showDialog="true" />
     </PreferenceCategory>
 </PreferenceScreen>
