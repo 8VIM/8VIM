@@ -19,7 +19,7 @@
 
         <SeekBarPreference
             android:max="10"
-            app:defaultValue="1"
+            app:defaultValue="3"
             app:iconSpaceReserved="false"
             app:key="@string/pref_circle_scale_factor"
             app:min="1"
