@@ -45,7 +45,6 @@ public class XpadView extends View {
     private PointF circleCenter;
     private Circle circle;
     private final Dimension keypadDimension = new Dimension();
-    private ConstraintLayout.LayoutParams xPadLayoutParams;
 
     private int backgroundColor;
     private int foregroundColor;
@@ -128,16 +127,8 @@ public class XpadView extends View {
         int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
         int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-        int width = (parentWidth / 6) * 5;
-        if (xPadLayoutParams == null) {
-            xPadLayoutParams = new ConstraintLayout.LayoutParams(width, parentHeight);
-        } else {
-            xPadLayoutParams.width = width;
-            xPadLayoutParams.height = parentHeight;
-        }
-
-        keypadDimension.setWidth(xPadLayoutParams.width);
-        keypadDimension.setHeight(xPadLayoutParams.height);
+        keypadDimension.setWidth((parentWidth/6) *5);
+        keypadDimension.setHeight(parentHeight);
 
         setMeasuredDimension(keypadDimension.getWidth(), keypadDimension.getHeight());
     }
