@@ -4,6 +4,8 @@ import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.service.autofill.CharSequenceTransformation;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -174,6 +176,15 @@ public class MainInputMethodService extends InputMethodService {
     public void sendKey(int keyEventCode, int flags) {
         sendDownAndUpKeyEvent(keyEventCode, getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags);
         clearModifierFlags();
+    }
+
+    public void delete() {
+        CharSequence sel = inputConnection.getSelectedText(0);
+        if (TextUtils.isEmpty(sel)) {
+            inputConnection.deleteSurroundingText(1, 0);
+        } else {
+            inputConnection.commitText("", 0);
+        }
     }
 
 
