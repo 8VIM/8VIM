@@ -88,9 +88,9 @@
             app:title="@string/pref_board_bg_color_title"
             app:iconSpaceReserved="false"
             app:colorShape="circle"
-            app:colorChoices="@array/background_colors"
+            app:colorChoices="@array/color_palette"
             app:viewSize="large"
-            app:numColumns="5"
+            app:numColumns="6"
             app:showDialog="true" />
 
         <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
@@ -99,9 +99,9 @@
             app:title="@string/pref_board_fg_color_title"
             app:iconSpaceReserved="false"
             app:colorShape="circle"
-            app:colorChoices="@array/foreground_colors"
+            app:colorChoices="@array/color_palette"
             app:viewSize="large"
-            app:numColumns="5"
+            app:numColumns="6"
             app:showDialog="true" />
 
         <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
@@ -110,9 +110,9 @@
             app:title="@string/pref_trail_color_title"
             app:iconSpaceReserved="false"
             app:colorShape="circle"
-            app:colorChoices="@array/trail_colors"
+            app:colorChoices="@array/color_palette"
             app:viewSize="large"
-            app:numColumns="5"
+            app:numColumns="6"
             app:showDialog="true" />
     </PreferenceCategory>
 </PreferenceScreen>
