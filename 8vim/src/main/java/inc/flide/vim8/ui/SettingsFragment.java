@@ -1,9 +1,7 @@
 package inc.flide.vim8.ui;
 
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodInfo;
@@ -12,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 import androidx.preference.SeekBarPreference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -48,9 +47,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Toast.makeText(getContext(),"test"+newValue.toString(),Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "test" + newValue.toString(), Toast.LENGTH_LONG).show();
         if (preference instanceof SeekBarPreference) {
-            Toast.makeText(getContext(),"test"+newValue.toString(),Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "test" + newValue.toString(), Toast.LENGTH_LONG).show();
         }
 
         return true;
@@ -69,7 +68,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         }
         ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
 
-        SharedPreferences sharedPreferences = context.getSharedPreferences(getString(R.string.basic_preference_file_name), Activity.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String selectedKeyboardId = SharedPreferenceHelper
                 .getInstance(context.getApplicationContext())
                 .getString(
