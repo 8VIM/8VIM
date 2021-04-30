@@ -158,7 +158,7 @@ public class MainInputMethodService extends InputMethodService {
     private String getSelectedEmoticonKeyboardId() {
         String emoticonKeyboardId = SharedPreferenceHelper
                 .getInstance(getApplicationContext())
-                .getString(getString(R.string.bp_selected_emoticon_keyboard), "");
+                .getString(getString(R.string.pref_selected_emoticon_keyboard), "");
 
         // Before returning verify that this keyboard Id we have does exist in the system.
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

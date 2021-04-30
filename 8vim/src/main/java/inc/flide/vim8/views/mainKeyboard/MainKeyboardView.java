@@ -2,6 +2,7 @@ package inc.flide.vim8.views.mainKeyboard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import android.widget.ImageButton;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import androidx.constraintlayout.widget.ConstraintSet;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
@@ -43,53 +43,63 @@ public class MainKeyboardView extends ConstraintLayout {
     }
 
     public void initialize(Context context) {
+        Resources resources = getResources();
+
+        int backgroundColor = SharedPreferenceHelper.getInstance(getContext()).getInt(
+                resources.getString(R.string.pref_board_bg_color_key),
+                resources.getColor(R.color.defaultBoardBg));
+
+        int foregroundColor = SharedPreferenceHelper.getInstance(getContext()).getInt(
+                resources.getString(R.string.pref_board_fg_color_key),
+                resources.getColor(R.color.defaultBoardFg));
 
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setupMainKeyboardView(context);
-        setupBackgroundColours();
-        setupButtonsOnSideBar();
+        setBackgroundColor(backgroundColor);
+        setupButtonsOnSideBar(foregroundColor);
         setHapticFeedbackEnabled(true);
     }
 
     private void setupMainKeyboardView(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        String preferredSidebarPositionOnMainKeyboard = SharedPreferenceHelper
+        boolean preferredSidebarLeft = SharedPreferenceHelper
                 .getInstance(context)
-                .getString(
-                        context.getString(R.string.mainKeyboard_sidebar_position_preference_key),
-                        context.getString(R.string.mainKeyboard_sidebar_position_preference_left_value));
+                .getBoolean(
+                        context.getString(R.string.pref_sidebar_left_key),
+                        true);
 
-        if (preferredSidebarPositionOnMainKeyboard.equals(context.getString(R.string.mainKeyboard_sidebar_position_preference_right_value))) {
-            inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);
-        } else {
+        if (preferredSidebarLeft) {
             inflater.inflate(R.layout.main_keyboard_left_sidebar_view, this, true);
+        } else {
+            inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);
         }
     }
 
-    private void setupBackgroundColours() {
+    private void setupBackgroundColours(int backgroundColor) {
         View sidebar = findViewById(R.id.sidebarButtonsLayout);
-        sidebar.setBackgroundColor(getResources().getColor(R.color.secondaryBackground));
+        sidebar.setBackgroundColor(backgroundColor);
     }
 
-    private void setupButtonsOnSideBar() {
-
-        setupSwitchToEmojiKeyboardButton();
-        setupSwitchToSelectionKeyboardButton();
-        setupTabKey();
-        setupGoToSettingsButton();
-        setupCtrlKey();
-
+    private void setupButtonsOnSideBar(int tintColor) {
+        setupSwitchToEmojiKeyboardButton(tintColor);
+        setupSwitchToSelectionKeyboardButton(tintColor);
+        setupTabKey(tintColor);
+        setupGoToSettingsButton(tintColor);
+        setupCtrlKey(tintColor);
     }
 
-    private void setupCtrlKey() {
+    private void setupCtrlKey(int color) {
         ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
+        ctrlKeyButton.setColorFilter(color);
 
         ctrlKeyButton.setOnClickListener(view -> actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK));
     }
 
-    private void setupGoToSettingsButton() {
+    private void setupGoToSettingsButton(int color) {
         ImageButton goToSettingsButton = findViewById(R.id.goToSettingsButton);
+        goToSettingsButton.setColorFilter(color);
+
         goToSettingsButton.setOnClickListener(view -> {
             Intent vim8SettingsIntent = new Intent(getContext(), SettingsActivity.class);
             vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -97,29 +107,32 @@ public class MainKeyboardView extends ConstraintLayout {
         });
     }
 
-    private void setupTabKey() {
+    private void setupTabKey(int color) {
         ImageButton tabKeyButton = findViewById(R.id.tabButton);
+        tabKeyButton.setColorFilter(color);
 
         tabKeyButton.setOnClickListener(view -> actionListener.handleInputKey(KeyEvent.KEYCODE_TAB, 0));
     }
 
-    private void setupSwitchToSelectionKeyboardButton() {
+    private void setupSwitchToSelectionKeyboardButton(int color) {
         ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
+        switchToSelectionKeyboardButton.setColorFilter(color);
         switchToSelectionKeyboardButton.setOnClickListener(view -> {
             KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
                     KeyboardActionType.INPUT_KEY
-                    , "" , null
+                    , "", null
                     , CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(), 0);
             actionListener.handleInputKey(switchToSelectionKeyboard);
         });
     }
 
-    private void setupSwitchToEmojiKeyboardButton() {
+    private void setupSwitchToEmojiKeyboardButton(int color) {
         ImageButton switchToEmojiKeyboardButton = findViewById(R.id.switchToEmojiKeyboard);
+        switchToEmojiKeyboardButton.setColorFilter(color);
         switchToEmojiKeyboardButton.setOnClickListener(view -> {
             KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
                     KeyboardActionType.INPUT_KEY
-                    , "" , null
+                    , "", null
                     , CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(), 0);
             actionListener.handleInputKey(switchToEmojiKeyboard);
         });

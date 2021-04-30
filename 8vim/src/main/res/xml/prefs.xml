@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/pref_category_general">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_select_emoji_keyboard_key"
+            app:summary="@string/pref_select_emoji_keyboard_summary"
+            app:title="@string/pref_select_emoji_keyboard_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/pref_category_ergonomics">
+
+        <SeekBarPreference
+            android:max="40"
+            app:defaultValue="12"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_circle_scale_factor"
+            app:min="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/pref_circle_scale_factor_summary"
+            app:title="@string/pref_circle_scale_factor_title" />
+
+        <SeekBarPreference
+            android:max="5"
+            app:defaultValue="0"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_circle_x_offset_key"
+            app:min="-5"
+            app:showSeekBarValue="true"
+            app:title="@string/pref_circle_x_offset_title" />
+
+        <SeekBarPreference
+            android:max="5"
+            app:defaultValue="0"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_circle_y_offset_key"
+            app:min="-5"
+            app:showSeekBarValue="true"
+            app:title="@string/pref_circle_y_offset_title" />
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_sidebar_left_key"
+            app:summaryOff="@string/pref_sidebar_left_summary_off"
+            app:summaryOn="@string/pref_sidebar_left_summary_on"
+            app:title="@string/pref_sidebar_left_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/pref_category_look_and_feel">
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_display_sector_icons_key"
+            app:summaryOff="@string/pref_display_sector_icons_summary_on"
+            app:summaryOn="@string/pref_display_sector_icons_summary_off"
+            app:title="@string/pref_display_sector_icons_title" />
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_typing_trail_visibility_key"
+            app:summaryOff="@string/pref_typing_trail_visibility_summary_off"
+            app:summaryOn="@string/pref_typing_trail_visibility_summary_on"
+            app:title="@string/pref_typing_trail_visibility_title" />
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_haptic_feedback_key"
+            app:summaryOff="@string/pref_haptic_feedback_summary_off"
+            app:summaryOn="@string/pref_haptic_feedback_summary_on"
+            app:title="@string/pref_haptic_feedback_title" />
+
+        <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+            app:defaultValue="@color/defaultBoardBg"
+            app:key="@string/pref_board_bg_color_key"
+            app:title="@string/pref_board_bg_color_title"
+            app:iconSpaceReserved="false"
+            app:colorShape="circle"
+            app:colorChoices="@array/color_palette"
+            app:viewSize="large"
+            app:numColumns="6"
+            app:showDialog="true" />
+
+        <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+            app:defaultValue="@color/defaultBoardFg"
+            app:key="@string/pref_board_fg_color_key"
+            app:title="@string/pref_board_fg_color_title"
+            app:iconSpaceReserved="false"
+            app:colorShape="circle"
+            app:colorChoices="@array/color_palette"
+            app:viewSize="large"
+            app:numColumns="6"
+            app:showDialog="true" />
+
+        <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+            app:defaultValue="@color/defaultTrail"
+            app:key="@string/pref_trail_color_key"
+            app:title="@string/pref_trail_color_title"
+            app:iconSpaceReserved="false"
+            app:colorShape="circle"
+            app:colorChoices="@array/color_palette"
+            app:viewSize="large"
+            app:numColumns="6"
+            app:showDialog="true" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -1,26 +1,22 @@
 package inc.flide.vim8.views.mainKeyboard;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.PointF;
-import android.graphics.RadialGradient;
-import android.graphics.Shader;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.graphics.ColorUtils;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -49,6 +45,11 @@ public class XpadView extends View {
     private PointF circleCenter;
     private Circle circle;
     private final Dimension keypadDimension = new Dimension();
+    private ConstraintLayout.LayoutParams xPadLayoutParams;
+
+    private int backgroundColor;
+    private int foregroundColor;
+    private int trailColor;
 
     public XpadView(Context context) {
         super(context);
@@ -65,12 +66,33 @@ public class XpadView extends View {
         initialize(context);
     }
 
+    private void updateColors(Context context) {
+        Resources resources = getResources();
+        SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
+
+        backgroundColor = sharedPreferenceHelper.getInt(
+                resources.getString(R.string.pref_board_bg_color_key),
+                resources.getColor(R.color.defaultBoardBg));
+
+        foregroundColor = sharedPreferenceHelper.getInt(
+                resources.getString(R.string.pref_board_fg_color_key),
+                resources.getColor(R.color.defaultBoardFg));
+
+        trailColor = sharedPreferenceHelper.getInt(
+                resources.getString(R.string.pref_trail_color_key),
+                resources.getColor(R.color.defaultTrail));
+
+        backgroundPaint.setColor(backgroundColor);
+        foregroundPaint.setColor(foregroundColor);
+    }
+
     private void initialize(Context context) {
+        updateColors(context);
+        setForegroundPaint();
+
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
 
-        setBackgroundPaint();
-        setForegroundPaint();
 
         circleCenter = new PointF();
         circle = new Circle();
@@ -81,11 +103,12 @@ public class XpadView extends View {
     }
 
     private void computeComponentPositions() {
-        float spRadiusValue = SharedPreferenceHelper.getInstance(getContext()).getFloat(this.getContext().getString(R.string.x_board_circle_radius_size_factor_key), 0.3f);
-        float radius = (spRadiusValue * keypadDimension.getWidth()) / 2;
+        float spRadiusValue = SharedPreferenceHelper.getInstance(getContext()).getInt(this.getContext().getString(R.string.pref_circle_scale_factor), 3);
+        // TODO: Store constant in .xml file (but where?)
+        float radius = (spRadiusValue / 40.f * keypadDimension.getWidth()) / 2;
 
-        circleCenter.x = (keypadDimension.getWidth() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.x_board_circle_centre_x_offset_key), 0)) * 26);
-        circleCenter.y = (keypadDimension.getHeight() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.x_board_circle_centre_y_offset_key), 0)) * 26);
+        circleCenter.x = (keypadDimension.getWidth() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.pref_circle_x_offset_key), 0)) * 26);
+        circleCenter.y = (keypadDimension.getHeight() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.pref_circle_y_offset_key), 0)) * 26);
 
         circle.setCentre(circleCenter);
         circle.setRadius(radius);
@@ -102,10 +125,16 @@ public class XpadView extends View {
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
         int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
         int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
-        ConstraintLayout.LayoutParams xPadLayoutParams = new ConstraintLayout.LayoutParams((parentWidth/6) *5, parentHeight);
+
+        int width = (parentWidth / 6) * 5;
+        if (xPadLayoutParams == null) {
+            xPadLayoutParams = new ConstraintLayout.LayoutParams(width, parentHeight);
+        } else {
+            xPadLayoutParams.width = width;
+            xPadLayoutParams.height = parentHeight;
+        }
 
         keypadDimension.setWidth(xPadLayoutParams.width);
         keypadDimension.setHeight(xPadLayoutParams.height);
@@ -115,12 +144,11 @@ public class XpadView extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
-
         computeComponentPositions();
 
         canvas.drawColor(backgroundPaint.getColor());
 
-        boolean userPrefersTypingTrail = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.user_preferred_typing_trail_visibility), true);
+        boolean userPrefersTypingTrail = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.pref_typing_trail_visibility_key), true);
         if (userPrefersTypingTrail) {
             paintTypingTrail(canvas);
         }
@@ -143,7 +171,7 @@ public class XpadView extends View {
         int centre_x_value = (int) circle.getCentre().x;
         int centre_y_value = (int) circle.getCentre().y;
 
-        boolean userPrefersSectorIcons = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.user_preferred_display_icons_for_sectors), true);
+        boolean userPrefersSectorIcons = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.pref_display_sector_icons_key), true);
         if (userPrefersSectorIcons) {
             setupSectorIcons(centre_x_value, centre_y_value, canvas);
         }
@@ -157,12 +185,7 @@ public class XpadView extends View {
 
     }
 
-    private void setBackgroundPaint() {
-        backgroundPaint.setColor(getResources().getColor(R.color.primaryBackground));
-    }
-
     private void setForegroundPaint() {
-        foregroundPaint.setColor(getResources().getColor(R.color.primaryText));
         foregroundPaint.setAntiAlias(true);
         foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
         foregroundPaint.setTextSize(Constants.TEXT_SIZE);
@@ -213,7 +236,7 @@ public class XpadView extends View {
                 shift_icon_to_display);
     }
 
-    private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId){
+    private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId) {
 
         VectorDrawableCompat icon_vectorDrawable = VectorDrawableCompat
                 .create(getContext().getResources(), resourceId, null);
@@ -221,7 +244,9 @@ public class XpadView extends View {
                 coordinateY,
                 coordinateX + iconDimension.getWidth(),
                 coordinateY + iconDimension.getHeight());
-        icon_vectorDrawable.setTint(getResources().getColor(R.color.primaryIcon));
+        icon_vectorDrawable.setTint(foregroundColor);
+        // TODO: define in .xml (don't know in which file)
+        icon_vectorDrawable.setAlpha(85);
         icon_vectorDrawable.draw(canvas);
     }
 
@@ -235,40 +260,21 @@ public class XpadView extends View {
             final byte maxTrailRadius = 14;
             PathMeasure pathMeasure = new PathMeasure();
             pathMeasure.setPath(typingTrailPath, false);
-            Random random = new Random();
             final float pathLength = pathMeasure.getLength();
-
-            int trailColour = getTrailColor();
 
             for (short i = 1; i <= steps; i++) {
                 final float distance = pathLength - i * stepDistance;
                 if (distance >= 0) {
                     final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
                     pathMeasure.getPosTan(distance, pathPos, null);
-                    final float x = pathPos[0] + random.nextFloat() - trailRadius;
-                    final float y = pathPos[1] + random.nextFloat() - trailRadius;
+                    final float x = pathPos[0];
+                    final float y = pathPos[1];
 
-                    typingTrailPaint.setShader(
-                            new RadialGradient(
-                                x,
-                                y,
-                                trailRadius > 0 ? trailRadius : Float.MIN_VALUE,
-                                ColorUtils.setAlphaComponent(trailColour, random.nextInt(0xff)),
-                            Color.TRANSPARENT,
-                            Shader.TileMode.CLAMP));
-
+                    typingTrailPaint.setColor(trailColor);
                     canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
                 }
             }
         }
-        canvas.drawPath(typingTrailPath, typingTrailPaint);
-    }
-
-    private int getTrailColor() {
-        int trailColor = SharedPreferenceHelper
-                .getInstance(this.getContext())
-                .getInt(this.getContext().getString(R.string.color_selection), Color.YELLOW);
-        return trailColor;
     }
 
     private String getCharacterSetToDisplay() {

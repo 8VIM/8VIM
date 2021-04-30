@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <include
@@ -18,40 +18,56 @@
             layout="@layout/app_bar_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/content_launcher_view"
+            app:layout_constraintBottom_toTopOf="@id/prefs_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            android:id="@+id/content_launcher_view"
-            layout="@layout/settings_view"
+
+        <LinearLayout
+            android:id="@+id/prefs_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@id/keyboard_text_test_view"
+            app:layout_constraintBottom_toTopOf="@id/keyboard_text_test_layout"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/app_bar_launcher" />
+            app:layout_constraintTop_toBottomOf="@id/app_bar_launcher" >
 
-        <EditText
-            android:id="@+id/keyboard_text_test_view"
-            android:layout_width="0dp"
+            <FrameLayout
+                android:id="@+id/settings_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/keyboard_text_test_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="13dp"
-            android:background="@drawable/textview_background"
-            android:hint="@string/keyboard_test_edit_text_hint"
-            android:inputType="textCapSentences|textMultiLine"
-            android:maxLines="6"
-            android:padding="5dp"
-            android:textSize="20sp"
+            android:background="@color/cardview_light_background"
+            android:clipToPadding="false"
+            android:elevation="8dp"
+            android:padding="6dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content_launcher_view"
-            android:importantForAutofill="no" />
+            app:layout_constraintTop_toBottomOf="@id/prefs_layout">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/keyboard_text_test_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/test_input_background"
+                android:hint="@string/keyboard_test_edit_text_hint"
+                android:importantForAutofill="no"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="6"
+                android:paddingLeft="18dp"
+                android:paddingRight="18dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textSize="18sp" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView

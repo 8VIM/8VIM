@@ -1,6 +1,7 @@
 package inc.flide.vim8.views;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -13,10 +14,10 @@ import java.util.List;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
+import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 
 public abstract class ButtonKeypadView extends KeyboardView {
-
 
     private final Paint foregroundPaint = new Paint();
 
@@ -31,14 +32,26 @@ public abstract class ButtonKeypadView extends KeyboardView {
     }
 
     protected void initialize() {
+        Resources resources = getResources();
+        SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(getContext());
+
+        String bgColorKeyId = resources.getString(R.string.pref_board_bg_color_key);
+        int defaultBackgroundColor = resources.getColor(R.color.defaultBoardBg);
+
+        String fgColorKeyId = resources.getString(R.string.pref_board_fg_color_key);
+        int defaultForegroundColor = resources.getColor(R.color.defaultBoardFg);
+
+        int backgroundColor = sharedPreferenceHelper.getInt(bgColorKeyId, defaultBackgroundColor);
+        int foregroundColor = sharedPreferenceHelper.getInt(fgColorKeyId, defaultForegroundColor);
+
         //this.setOnKeyboardActionListener(new KeyboardActionListener((MainInputMethodService) context, this));
         this.setHapticFeedbackEnabled(true);
-        this.setBackgroundColor(getResources().getColor(R.color.primaryBackground));
-        setupForegroundPaint();
+        this.setBackgroundColor(backgroundColor);
+        setupForegroundPaint(foregroundColor);
     }
 
-    private void setupForegroundPaint() {
-        foregroundPaint.setColor(getResources().getColor(R.color.primaryText));
+    private void setupForegroundPaint(int color) {
+        foregroundPaint.setColor(color);
         foregroundPaint.setTextAlign(Paint.Align.CENTER);
         foregroundPaint.setTextSize(Constants.TEXT_SIZE);
         Typeface font = Typeface.createFromAsset(getContext().getAssets(),
@@ -68,11 +81,9 @@ public abstract class ButtonKeypadView extends KeyboardView {
                 if (key.width < key.height) {
                     side = key.width;
                 }
-                key.icon.setTint(getResources().getColor(R.color.primaryIcon));
                 key.icon.setBounds(key.x + (side / 4), key.y + (side / 4), key.x + (side * 3 / 4), key.y + (side * 3 / 4));
                 key.icon.draw(canvas);
             }
         }
     }
-
 }
