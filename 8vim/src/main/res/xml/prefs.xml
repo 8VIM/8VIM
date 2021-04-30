@@ -18,8 +18,8 @@
         app:title="@string/pref_category_ergonomics">
 
         <SeekBarPreference
-            android:max="20"
-            app:defaultValue="6"
+            android:max="40"
+            app:defaultValue="12"
             app:iconSpaceReserved="false"
             app:key="@string/pref_circle_scale_factor"
             app:min="1"

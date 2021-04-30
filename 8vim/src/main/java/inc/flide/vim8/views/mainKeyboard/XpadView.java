@@ -105,7 +105,7 @@ public class XpadView extends View {
     private void computeComponentPositions() {
         float spRadiusValue = SharedPreferenceHelper.getInstance(getContext()).getInt(this.getContext().getString(R.string.pref_circle_scale_factor), 3);
         // TODO: Store constant in .xml file (but where?)
-        float radius = (spRadiusValue / 20.f * keypadDimension.getWidth()) / 2;
+        float radius = (spRadiusValue / 40.f * keypadDimension.getWidth()) / 2;
 
         circleCenter.x = (keypadDimension.getWidth() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.pref_circle_x_offset_key), 0)) * 26);
         circleCenter.y = (keypadDimension.getHeight() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.pref_circle_y_offset_key), 0)) * 26);
