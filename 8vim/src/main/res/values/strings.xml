@@ -21,9 +21,6 @@
     <string name="select_preferred_emoticon_keyboard_dialog_title">Choose the input method</string>
     <string name="generic_okay_text">OK</string>
 
-    <!--Preference Related Strings-->
-    <string name="basic_preference_file_name">inc.flide.&appname;.basicPreferences</string>
-
     <!--   preferences categories -->
     <string name="pref_category_general">General</string>
     <string name="pref_category_ergonomics">Ergonomics</string>
