@@ -100,11 +100,4 @@
         <!--deeporangeA700-->
         <item>#dd2c00</item>
     </string-array>
-
-    <string-array name="test">
-        <item>#455a64</item>
-        <item>#ffab91</item>
-        <item>#ff5722</item>
-        <item>#304ffe</item>
-    </string-array>
 </resources>
