@@ -48,7 +48,7 @@
         <SwitchPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
-            app:key="sidebar"
+            app:key="@string/pref_sidebar_left_key"
             app:summaryOff="@string/pref_sidebar_left_summary_off"
             app:summaryOn="@string/pref_sidebar_left_summary_on"
             app:title="@string/pref_sidebar_left_title" />
