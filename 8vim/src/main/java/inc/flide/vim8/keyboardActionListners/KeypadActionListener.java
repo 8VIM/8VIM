@@ -1,5 +1,7 @@
 package inc.flide.vim8.keyboardActionListners;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,10 +17,12 @@ public class KeypadActionListener {
     protected MainInputMethodService mainInputMethodService;
     protected View view;
     private boolean isSelectionOn = true;
+    private AudioManager audioManager;
 
     public KeypadActionListener(MainInputMethodService mainInputMethodService, View view) {
         this.mainInputMethodService = mainInputMethodService;
         this.view = view;
+        this.audioManager = (AudioManager) view.getContext().getSystemService(Context.AUDIO_SERVICE);
     }
 
     private boolean keyCodeIsValid(int keyCode) {
@@ -44,19 +48,38 @@ public class KeypadActionListener {
             onText(String.valueOf((char) keyCode));
         }
         if (actionHandled) {
-            performInputAcceptedFeedback();
+            performInputAcceptedFeedback(keySound(keyCode));
         }
     }
 
-    private void performInputAcceptedFeedback() {
-        boolean user_enabled_haptic_feedback = SharedPreferenceHelper
-                .getInstance(mainInputMethodService)
-                .getBoolean(
+    private int keySound(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_ENTER:
+                return AudioManager.FX_KEYPRESS_RETURN;
+            case KeyEvent.KEYCODE_DEL:
+            case KeyEvent.KEYCODE_FORWARD_DEL:
+                return AudioManager.FX_KEYPRESS_DELETE;
+            case KeyEvent.KEYCODE_SPACE:
+                return AudioManager.FX_KEYPRESS_SPACEBAR;
+        }
+        return AudioManager.FX_KEYPRESS_STANDARD;
+    }
+    private void performInputAcceptedFeedback(int keySound) {
+        SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(mainInputMethodService);
+        boolean user_enabled_haptic_feedback =
+                pref.getBoolean(
                         mainInputMethodService.getString(R.string.pref_haptic_feedback_key),
                         true);
         if (user_enabled_haptic_feedback) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
                     HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        }
+        boolean user_enabled_sound_feedback = pref
+                .getBoolean(
+                        mainInputMethodService.getString(R.string.pref_sound_feedback_key),
+                        true);
+        if (user_enabled_sound_feedback) {
+            audioManager.playSoundEffect(keySound);
         }
     }
 
@@ -143,7 +166,7 @@ public class KeypadActionListener {
     public void onText(CharSequence text) {
         mainInputMethodService.sendText(text.toString());
         mainInputMethodService.setShiftLockFlag(0);
-        performInputAcceptedFeedback();
+        performInputAcceptedFeedback(AudioManager.FX_KEYPRESS_STANDARD);
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
