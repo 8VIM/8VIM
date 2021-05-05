@@ -90,6 +90,14 @@
             app:summaryOn="@string/pref_haptic_feedback_summary_on"
             app:title="@string/pref_haptic_feedback_title" />
 
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_sound_feedback_key"
+            app:summaryOff="@string/pref_sound_feedback_summary_off"
+            app:summaryOn="@string/pref_sound_feedback_summary_on"
+            app:title="@string/pref_sound_feedback_title" />
+
         <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
             app:defaultValue="@color/defaultBoardBg"
             app:key="@string/pref_board_bg_color_key"
