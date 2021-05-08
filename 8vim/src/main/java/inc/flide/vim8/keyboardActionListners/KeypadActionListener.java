@@ -3,6 +3,7 @@ package inc.flide.vim8.keyboardActionListners;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputConnection;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -126,6 +127,9 @@ public class KeypadActionListener {
                     break;
                 case KeyEvent.KEYCODE_ENTER:
                     mainInputMethodService.commitImeOptionsBasedEnter();
+                    break;
+                case KeyEvent.KEYCODE_DEL:
+                    mainInputMethodService.delete();
                     break;
                 default:
                     mainInputMethodService.sendKey(primaryCode, keyFlags);
