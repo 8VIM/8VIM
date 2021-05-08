@@ -15,7 +15,7 @@
     <integer name="MOVE_CURRENT_END_POINT_DOWN">-4</integer>
     <!-- <integer name="SELECTION_START">-5</integer> -->
     <integer name="SELECT_ALL">-6</integer>
-    <integer name="TOGGLE_SELECTION_MODE">-7</integer>
+    <integer name="TOGGLE_SELECTION_ANCHOR">-7</integer>
     <!-- <integer name="SHIFT_TOGGLE">-8</integer> -->
     <integer name="SWITCH_TO_MAIN_KEYPAD">-9</integer>
     <integer name="SWITCH_TO_NUMBER_KEYPAD">-10</integer>

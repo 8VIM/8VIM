@@ -4,11 +4,12 @@ import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.service.autofill.CharSequenceTransformation;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.ExtractedText;
+import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -185,6 +186,13 @@ public class MainInputMethodService extends InputMethodService {
         } else {
             inputConnection.commitText("", 0);
         }
+    }
+
+    public void switchAnchor() {
+        ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), InputConnection.GET_EXTRACTED_TEXT_MONITOR);
+        int start = extractedText.selectionStart;
+        int end = extractedText.selectionEnd;
+        inputConnection.setSelection(end, start);
     }
 
 

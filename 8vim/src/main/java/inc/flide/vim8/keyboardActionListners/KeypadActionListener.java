@@ -3,7 +3,6 @@ package inc.flide.vim8.keyboardActionListners;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.InputConnection;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -83,8 +82,8 @@ public class KeypadActionListener {
             case SELECT_ALL:
                 mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
                 break;
-            case TOGGLE_SELECTION_MODE:
-                isSelectionOn = !isSelectionOn;
+            case TOGGLE_SELECTION_ANCHOR:
+                mainInputMethodService.switchAnchor();
                 break;
             case SHIFT_TOGGLE:
                 mainInputMethodService.performShiftToggle();
