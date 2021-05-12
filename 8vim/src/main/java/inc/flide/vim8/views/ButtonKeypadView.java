@@ -53,7 +53,7 @@ public abstract class ButtonKeypadView extends KeyboardView {
     private void setupForegroundPaint(int color) {
         foregroundPaint.setColor(color);
         foregroundPaint.setTextAlign(Paint.Align.CENTER);
-        foregroundPaint.setTextSize(Constants.TEXT_SIZE);
+        foregroundPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
         Typeface font = Typeface.createFromAsset(getContext().getAssets(),
                 "SF-UI-Display-Regular.otf");
         foregroundPaint.setTypeface(font);

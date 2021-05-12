@@ -51,17 +51,6 @@ public class Circle {
         return (getPowerOfPoint(point) < 0);
     }
 
-    public PointF getPointOnCircumferenceAtDegreeAngle(int angleInDegree) {
-        double angleInRadians = Math.toRadians(angleInDegree);
-        return getPointOnCircumferenceAtRadianAngle(angleInRadians);
-    }
-
-    private PointF getPointOnCircumferenceAtRadianAngle(double angleInRadians) {
-        float x = (float) (centre.x + (radius * Math.cos(angleInRadians)));
-        float y = (float) (centre.y + (radius * Math.sin(angleInRadians)));
-        return new PointF(x, y);
-    }
-
     /**
      * Gets the angle of point p relative to the center
      */
