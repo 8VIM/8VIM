@@ -3,41 +3,29 @@ package inc.flide.vim8.views.mainKeyboard;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.PointF;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
-import inc.flide.vim8.geometry.GeometricUtilities;
-import inc.flide.vim8.geometry.LineSegment;
 import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.utilities.Utilities;
 
 public class XpadView extends View {
-
-    private final int characterCoordinateOffsetDistance = 15;
-    private final int lengthOfLineDemarcatingSectors = 250;
-    private final Dimension iconDimension = new Dimension(70, 70);
-
-    private final List<LineSegment> sectorDemarcatingLines = new ArrayList<>();
-    private final List<PointF> listOfPointsOfDisplay = new ArrayList<>();
     private final Path typingTrailPath = new Path();
     Paint backgroundPaint = new Paint();
     Paint foregroundPaint = new Paint();
@@ -45,6 +33,13 @@ public class XpadView extends View {
     private PointF circleCenter;
     private Circle circle;
     private final Dimension keypadDimension = new Dimension();
+
+    private final Matrix xformMatrix = new Matrix();
+    // There are 4 sectors, each has 4 letters above, and 4 below.
+    // Finally, each letter position has an x & y co-ordinate.
+    private final float[] letterPositions = new float[4*2*4*2];
+    private final Path sectorLines = new Path();
+    private final RectF sectorLineBounds = new RectF();
 
     private int backgroundColor;
     private int foregroundColor;
@@ -95,31 +90,77 @@ public class XpadView extends View {
 
         circleCenter = new PointF();
         circle = new Circle();
-
-        for (int i = 0; i < 4; i++) {
-            this.sectorDemarcatingLines.add(new LineSegment());
-        }
     }
 
     private void computeComponentPositions() {
-        float spRadiusValue = SharedPreferenceHelper.getInstance(getContext()).getInt(this.getContext().getString(R.string.pref_circle_scale_factor), 3);
+        Context context = getContext();
+        SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(context);
+        float spRadiusValue = pref.getInt(context.getString(R.string.pref_circle_scale_factor), 3);
         // TODO: Store constant in .xml file (but where?)
         float radius = (spRadiusValue / 40.f * keypadDimension.getWidth()) / 2;
 
-        circleCenter.x = (keypadDimension.getWidth() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.pref_circle_x_offset_key), 0)) * 26);
-        circleCenter.y = (keypadDimension.getHeight() / 2f) + ((SharedPreferenceHelper.getInstance(getContext()).getInt(getContext().getString(R.string.pref_circle_y_offset_key), 0)) * 26);
+        int xOffset = ((pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0)) * 26);
+        int yOffset = ((pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0)) * 26);
+        circleCenter.x = (keypadDimension.getWidth() / 2f) + xOffset;
+        circleCenter.y = (keypadDimension.getHeight() / 2f) + yOffset;
 
         circle.setCentre(circleCenter);
         circle.setRadius(radius);
 
         float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
-        listOfPointsOfDisplay.clear();
+        // We chop off a bit of the right side of the view width from the keypadDimension (see onMeasure),
+        // this introduces a bit of asymmetry which we have to compensate for here.
+        int keypadXOffset = getWidth() - keypadDimension.getWidth();
+        // If the xOffset is to the right, we can spread into the extra padding space.
+        int smallDim = Math.min(xOffset > 0? getWidth()/2 - xOffset + keypadXOffset
+                // If xOffset goes to the left, restrict to keypadDimension.
+                : keypadDimension.getWidth()/2 + xOffset,
+                getHeight()/2 - Math.abs(yOffset));
+        // Compute the length of sector lines, such that they stop a little before hitting the edge of the view.
+        float lengthOfLineDemarcatingSectors = (float) Math.hypot(smallDim, smallDim)
+                - radius - characterHeight;
+
+        // Compute sector demarcation lines as if they were all going orthogonal (like a "+").
+        // This is easier to compute.  Later we apply rotation to orient the lines properly (like an "x").
+        sectorLines.rewind();
+        sectorLines.moveTo(circleCenter.x + radius, circleCenter.y);
+        sectorLines.rLineTo(lengthOfLineDemarcatingSectors, 0);
+        sectorLines.moveTo(circleCenter.x - radius, circleCenter.y);
+        sectorLines.rLineTo(-lengthOfLineDemarcatingSectors, 0);
+        sectorLines.moveTo(circleCenter.x, circleCenter.y + radius);
+        sectorLines.rLineTo(0, lengthOfLineDemarcatingSectors);
+        sectorLines.moveTo(circleCenter.x, circleCenter.y - radius);
+        sectorLines.rLineTo(0, -lengthOfLineDemarcatingSectors);
+
+        // Compute the first set of points going straight to the "east" (aka, rightwards).
+        // Then apply repeated rotation (45, then 90 x4) to get the final positions.
+        float eastEdge = circleCenter.x + circle.getRadius() + characterHeight/2;
         for (int i = 0; i < 4; i++) {
-            int angle = 45 + (i * 90);
-            PointF startingPoint = circle.getPointOnCircumferenceAtDegreeAngle(angle);
-            sectorDemarcatingLines.get(i).setupLineSegment(startingPoint, angle, lengthOfLineDemarcatingSectors);
-            listOfPointsOfDisplay.addAll(getCharacterDisplayPointsOnTheLineSegment(sectorDemarcatingLines.get(i), 4, characterHeight));
+            float dx = (float)( i * lengthOfLineDemarcatingSectors / 4);
+            letterPositions[4*i+0] = eastEdge + dx;
+            letterPositions[4*i+1] = circleCenter.y - characterHeight/2; // upper letter
+            letterPositions[4*i+2] = eastEdge + dx;
+            letterPositions[4*i+3] = circleCenter.y + characterHeight/2; // lower letter
         }
+
+        xformMatrix.reset();
+        xformMatrix.postRotate(45, circleCenter.x, circleCenter.y);
+        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, 8);
+        sectorLines.transform(xformMatrix);
+
+        xformMatrix.reset();
+        xformMatrix.postRotate(90, circleCenter.x, circleCenter.y);
+        for (int i = 1; i < 4; i++) {
+            xformMatrix.mapPoints(letterPositions, 4*4*i, letterPositions, 4*4*(i-1), 8);
+        }
+
+        // Canvas.drawPosText() draws from the bottom,
+        // so we need to offset downwards a bit to compensate.
+        xformMatrix.reset();
+        xformMatrix.postTranslate(0, 3*characterHeight/16);
+        xformMatrix.mapPoints(letterPositions);
+
+        sectorLines.computeBounds(sectorLineBounds, false); // Used to position icons
     }
 
     @Override
@@ -144,19 +185,13 @@ public class XpadView extends View {
             paintTypingTrail(canvas);
         }
 
-        foregroundPaint.setStrokeWidth(5);
+        float density = getResources().getDisplayMetrics().density;
+        foregroundPaint.setStrokeWidth(2 * density);
         foregroundPaint.setStyle(Paint.Style.STROKE);
 
         //The centre circle
         canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), foregroundPaint);
-        //The lines demarcating the sectors
-        for (LineSegment lineSegment : sectorDemarcatingLines) {
-            canvas.drawLine(lineSegment.getStartingPoint().x,
-                    lineSegment.getStartingPoint().y,
-                    lineSegment.getEndPoint().x,
-                    lineSegment.getEndPoint().y,
-                    foregroundPaint);
-        }
+        canvas.drawPath(sectorLines, foregroundPaint); //The lines demarcating the sectors
 
         // Converting float value to int
         int centre_x_value = (int) circle.getCentre().x;
@@ -166,20 +201,19 @@ public class XpadView extends View {
         if (userPrefersSectorIcons) {
             setupSectorIcons(centre_x_value, centre_y_value, canvas);
         }
+
         //the text along the lines
-        foregroundPaint.setStrokeWidth(2);
+        foregroundPaint.setStrokeWidth(0.75f * density);
         foregroundPaint.setStyle(Paint.Style.FILL);
 
-        String charactersToDisplay = getCharacterSetToDisplay();
-        float[] pointsOfDisplay = Utilities.convertPointFListToPrimitiveFloatArray(listOfPointsOfDisplay);
-        canvas.drawPosText(charactersToDisplay, pointsOfDisplay, foregroundPaint);
-
+        foregroundPaint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawPosText(getCharacterSetToDisplay(), letterPositions, foregroundPaint);
     }
 
     private void setForegroundPaint() {
         foregroundPaint.setAntiAlias(true);
         foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
-        foregroundPaint.setTextSize(Constants.TEXT_SIZE);
+        foregroundPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
         Typeface font = Typeface.createFromAsset(getContext().getAssets(),
                 "SF-UI-Display-Regular.otf");
         foregroundPaint.setTypeface(font);
@@ -187,33 +221,38 @@ public class XpadView extends View {
 
     private void setupSectorIcons(int centre_x_value, int centre_y_value, Canvas canvas) {
 
-        //Number pad icon
-        int numberpad_icon_x_coordinates = centre_x_value - 310;
-        int numberpad_icon_y_coordinates = centre_y_value - 40;
-        drawIconInSector(numberpad_icon_x_coordinates,
-                numberpad_icon_y_coordinates,
+        int icon_size = getResources().getDimensionPixelSize(R.dimen.icon_size);
+        int icon_half_width = icon_size / 2;
+        int icon_half_height = icon_size / 2;
+        int icon_edge_padding = icon_size * 2 / 3;
+        sectorLines.computeBounds(sectorLineBounds, false);
+        //Number pad icon (left side)
+        int icon_center_x = (int) Math.max(sectorLineBounds.left, 0);
+        int icon_center_y = centre_y_value;
+        drawIconInSector(icon_center_x - icon_half_width,
+                icon_center_y - icon_half_height,
                 canvas,
                 R.drawable.numericpad_vd_vector);
 
-        //for Backspace icon
-        int backspace_icon_x_coordinates = centre_x_value + 240;
-        int backspace_icon_y_coordinates = centre_y_value - 40;
-        drawIconInSector(backspace_icon_x_coordinates,
-                backspace_icon_y_coordinates,
+        //for Backspace icon (right side)
+        icon_center_x = (int) Math.min(sectorLineBounds.right, canvas.getWidth());
+        icon_center_y = centre_y_value;
+        drawIconInSector(icon_center_x - icon_half_width,
+                icon_center_y - icon_half_height,
                 canvas,
                 R.drawable.ic_backspace);
 
-        //for Enter icon
-        int enter_icon_x_coordinates = centre_x_value - 30;
-        int enter_icon_y_coordinates = centre_y_value + 240;
-        drawIconInSector(enter_icon_x_coordinates,
-                enter_icon_y_coordinates,
+        //for Enter icon (bottom)
+        icon_center_x = centre_x_value;
+        icon_center_y = (int) Math.min(sectorLineBounds.bottom, canvas.getHeight());
+        drawIconInSector(icon_center_x - icon_half_width,
+                icon_center_y - icon_half_height,
                 canvas,
                 R.drawable.ic_keyboard_return);
 
         //for caps lock and shift icon
-        int shift_icon_x_coordinates = centre_x_value - 30;
-        int shift_icon_y_coordinates = centre_y_value - 310;
+        icon_center_x = centre_x_value;
+        icon_center_y = (int) Math.max(sectorLineBounds.top, 0);
         int shift_icon_to_display = R.drawable.ic_no_capslock;
         if (actionListener.isShiftSet()) {
             shift_icon_to_display = R.drawable.ic_shift_engaged;
@@ -221,20 +260,21 @@ public class XpadView extends View {
         if (actionListener.isCapsLockSet()) {
             shift_icon_to_display = R.drawable.ic_capslock_engaged;
         }
-        drawIconInSector(shift_icon_x_coordinates,
-                shift_icon_y_coordinates,
+        drawIconInSector(icon_center_x - icon_half_width,
+                icon_center_y - icon_half_height,
                 canvas,
                 shift_icon_to_display);
     }
 
     private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId) {
+        int icon_size = getResources().getDimensionPixelSize(R.dimen.icon_size);
 
         VectorDrawableCompat icon_vectorDrawable = VectorDrawableCompat
                 .create(getContext().getResources(), resourceId, null);
         icon_vectorDrawable.setBounds(coordinateX,
                 coordinateY,
-                coordinateX + iconDimension.getWidth(),
-                coordinateY + iconDimension.getHeight());
+                coordinateX + icon_size,
+                coordinateY + icon_size);
         icon_vectorDrawable.setTint(foregroundColor);
         // TODO: define in .xml (don't know in which file)
         icon_vectorDrawable.setAlpha(85);
@@ -277,67 +317,6 @@ public class XpadView extends View {
         }
 
         return characterSetSmall;
-    }
-
-    private List<PointF> getCharacterDisplayPointsOnTheLineSegment(LineSegment lineSegment, int numberOfCharactersToDisplay, float height) {
-        List<PointF> pointsOfCharacterDisplay = new ArrayList<>();
-
-        //Assuming we got to derive 4 points
-        double spacingBetweenPoints = lineSegment.getLength() / numberOfCharactersToDisplay;
-
-        for (int i = 0; i < 4; i++) {
-            PointF nextPoint = GeometricUtilities.findPointSpecifiedDistanceAwayInGivenDirection(lineSegment.getStartingPoint(), lineSegment.getDirectionOfLineInDegree(), (spacingBetweenPoints * i));
-            PointF displayPointInAntiClockwiseDirection = new PointF(nextPoint.x + computeAntiClockwiseXOffset(lineSegment, height)
-                    , nextPoint.y + computeAntiClockwiseYOffset(lineSegment, height));
-
-            PointF displayPointInClockwiseDirection = new PointF(nextPoint.x + computeClockwiseXOffset(lineSegment, height)
-                    , nextPoint.y + computeClockwiseYOffset(lineSegment, height));
-
-            pointsOfCharacterDisplay.add(displayPointInAntiClockwiseDirection);
-            pointsOfCharacterDisplay.add(displayPointInClockwiseDirection);
-        }
-        return pointsOfCharacterDisplay;
-
-
-    }
-
-    private float computeClockwiseYOffset(LineSegment lineSegment, float height) {
-        double angle = lineSegment.getDirectionOfLineInDegree();
-        boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
-
-        if (lineSegment.isSlopePositive()) {
-            return characterCoordinateOffsetDistance + (isXDirectionPositive ? height : -height);
-        }
-        return 0;
-    }
-
-    private float computeAntiClockwiseYOffset(LineSegment lineSegment, float height) {
-        double angle = lineSegment.getDirectionOfLineInDegree();
-        boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
-        if (lineSegment.isSlopePositive()) {
-            return characterCoordinateOffsetDistance;
-        }
-        return isXDirectionPositive ? -height : height;
-    }
-
-    private float computeClockwiseXOffset(LineSegment lineSegment, float height) {
-        double angle = lineSegment.getDirectionOfLineInDegree();
-        boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
-
-        if (lineSegment.isSlopePositive()) {
-            return 0;
-        }
-        return isXDirectionPositive ? height : -height;
-    }
-
-    private float computeAntiClockwiseXOffset(LineSegment lineSegment, float height) {
-        double angle = lineSegment.getDirectionOfLineInDegree();
-        boolean isXDirectionPositive = (angle > 0 && angle < 90) || (angle > 270 && angle < 360);
-
-        if (lineSegment.isSlopePositive()) {
-            return isXDirectionPositive ? height : -height;
-        }
-        return 0;
     }
 
     private FingerPosition getCurrentFingerPosition(PointF position) {
