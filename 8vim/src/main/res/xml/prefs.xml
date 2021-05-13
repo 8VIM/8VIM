@@ -62,8 +62,8 @@
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/pref_display_sector_icons_key"
-            app:summaryOff="@string/pref_display_sector_icons_summary_on"
-            app:summaryOn="@string/pref_display_sector_icons_summary_off"
+            app:summaryOff="@string/pref_display_sector_icons_summary_off"
+            app:summaryOn="@string/pref_display_sector_icons_summary_on"
             app:title="@string/pref_display_sector_icons_title" />
 
         <SwitchPreference
