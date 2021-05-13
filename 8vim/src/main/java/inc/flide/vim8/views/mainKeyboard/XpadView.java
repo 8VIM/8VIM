@@ -29,6 +29,7 @@ public class XpadView extends View {
     private final Path typingTrailPath = new Path();
     Paint backgroundPaint = new Paint();
     Paint foregroundPaint = new Paint();
+    Paint typingTrailPaint = new Paint();
     private MainKeypadActionListener actionListener;
     private PointF circleCenter;
     private Circle circle;
@@ -44,6 +45,8 @@ public class XpadView extends View {
     private int backgroundColor;
     private int foregroundColor;
     private int trailColor;
+    private final float[] trialPathPos = new float[2];
+    private final PathMeasure pathMeasure = new PathMeasure();
 
     public XpadView(Context context) {
         super(context);
@@ -78,6 +81,7 @@ public class XpadView extends View {
 
         backgroundPaint.setColor(backgroundColor);
         foregroundPaint.setColor(foregroundColor);
+        typingTrailPaint.setColor(trailColor);
     }
 
     private void initialize(Context context) {
@@ -282,14 +286,11 @@ public class XpadView extends View {
     }
 
     private void paintTypingTrail(Canvas canvas) {
-        float[] pathPos = new float[2];
-        Paint typingTrailPaint = new Paint();
 
         if (typingTrailPath != null) {
             final short steps = 150;
             final byte stepDistance = 5;
             final byte maxTrailRadius = 14;
-            PathMeasure pathMeasure = new PathMeasure();
             pathMeasure.setPath(typingTrailPath, false);
             final float pathLength = pathMeasure.getLength();
 
@@ -297,11 +298,10 @@ public class XpadView extends View {
                 final float distance = pathLength - i * stepDistance;
                 if (distance >= 0) {
                     final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
-                    pathMeasure.getPosTan(distance, pathPos, null);
-                    final float x = pathPos[0];
-                    final float y = pathPos[1];
+                    pathMeasure.getPosTan(distance, trialPathPos, null);
+                    final float x = trialPathPos[0];
+                    final float y = trialPathPos[1];
 
-                    typingTrailPaint.setColor(trailColor);
                     canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
                 }
             }
