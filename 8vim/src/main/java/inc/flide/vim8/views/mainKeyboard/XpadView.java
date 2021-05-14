@@ -3,7 +3,6 @@ package inc.flide.vim8.views.mainKeyboard;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -85,7 +84,7 @@ public class XpadView extends View {
     }
 
     private void initialize(Context context) {
-        SharedPreferenceHelper.getInstance(context).addListener(() -> { invalidate(); } );
+        SharedPreferenceHelper.getInstance(context).addListener(this::invalidate);
         updateColors(context);
         setForegroundPaint();
 
@@ -141,8 +140,8 @@ public class XpadView extends View {
         // Then apply repeated rotation (45, then 90 x4) to get the final positions.
         float eastEdge = circleCenter.x + circle.getRadius() + characterHeight/2;
         for (int i = 0; i < 4; i++) {
-            float dx = (float)( i * lengthOfLineDemarcatingSectors / 4);
-            letterPositions[4*i+0] = eastEdge + dx;
+            float dx = ( i * lengthOfLineDemarcatingSectors / 4f);
+            letterPositions[4*i] = eastEdge + dx;
             letterPositions[4*i+1] = circleCenter.y - characterHeight/2; // upper letter
             letterPositions[4*i+2] = eastEdge + dx;
             letterPositions[4*i+3] = circleCenter.y + characterHeight/2; // lower letter
@@ -229,7 +228,6 @@ public class XpadView extends View {
         int icon_size = getResources().getDimensionPixelSize(R.dimen.icon_size);
         int icon_half_width = icon_size / 2;
         int icon_half_height = icon_size / 2;
-        int icon_edge_padding = icon_size * 2 / 3;
         sectorLines.computeBounds(sectorLineBounds, false);
         //Number pad icon (left side)
         int icon_center_x = (int) Math.max(sectorLineBounds.left, 0);
@@ -287,24 +285,21 @@ public class XpadView extends View {
     }
 
     private void paintTypingTrail(Canvas canvas) {
+        final short steps = 150;
+        final byte stepDistance = 5;
+        final byte maxTrailRadius = 14;
+        pathMeasure.setPath(typingTrailPath, false);
+        final float pathLength = pathMeasure.getLength();
 
-        if (typingTrailPath != null) {
-            final short steps = 150;
-            final byte stepDistance = 5;
-            final byte maxTrailRadius = 14;
-            pathMeasure.setPath(typingTrailPath, false);
-            final float pathLength = pathMeasure.getLength();
+        for (short i = 1; i <= steps; i++) {
+            final float distance = pathLength - i * stepDistance;
+            if (distance >= 0) {
+                final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
+                pathMeasure.getPosTan(distance, trialPathPos, null);
+                final float x = trialPathPos[0];
+                final float y = trialPathPos[1];
 
-            for (short i = 1; i <= steps; i++) {
-                final float distance = pathLength - i * stepDistance;
-                if (distance >= 0) {
-                    final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
-                    pathMeasure.getPosTan(distance, trialPathPos, null);
-                    final float x = trialPathPos[0];
-                    final float y = trialPathPos[1];
-
-                    canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
-                }
+                canvas.drawCircle(x, y, trailRadius, typingTrailPaint);
             }
         }
     }

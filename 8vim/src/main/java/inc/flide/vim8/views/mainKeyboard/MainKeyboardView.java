@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -74,11 +73,6 @@ public class MainKeyboardView extends ConstraintLayout {
         } else {
             inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);
         }
-    }
-
-    private void setupBackgroundColours(int backgroundColor) {
-        View sidebar = findViewById(R.id.sidebarButtonsLayout);
-        sidebar.setBackgroundColor(backgroundColor);
     }
 
     private void setupButtonsOnSideBar(int tintColor) {
