@@ -148,7 +148,7 @@
         <Key
             android:keyOutputText=" "
             android:isRepeatable="true"
-            android:keyLabel="@string/fullWidthLowLine"
+            android:keyLabel="@string/spaceBarSymbol"
             android:keyWidth="60%p"/>
         <Key
             android:keyOutputText="@string/crossProduct"
