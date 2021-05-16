@@ -4,6 +4,7 @@ import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -89,8 +90,19 @@ public class MainInputMethodService extends InputMethodService {
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        setCurrentKeypadView(mainKeyboardView);
         this.editorInfo = info;
+        int inputType = this.editorInfo.inputType & InputType.TYPE_MASK_CLASS;
+        switch (inputType) {
+            case InputType.TYPE_CLASS_NUMBER:
+            case InputType.TYPE_CLASS_PHONE:
+            case InputType.TYPE_CLASS_DATETIME:
+                switchToNumberPad();
+                break;
+            case InputType.TYPE_CLASS_TEXT:
+            default:
+                switchToMainKeypad();
+                break;
+        }
     }
 
     @Override
