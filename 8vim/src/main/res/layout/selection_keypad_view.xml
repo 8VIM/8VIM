@@ -30,8 +30,7 @@
             android:keyIcon="@drawable/ic_keyboard_arrow_left"
             android:isRepeatable="true" />
         <Key android:codes="@integer/TOGGLE_SELECTION_ANCHOR"
-            android:keyIcon="@drawable/pad_center"
-            android:isSticky="true"/>
+            android:keyIcon="@drawable/pad_center" />
         <Key android:codes="@integer/MOVE_CURRENT_END_POINT_RIGHT"
             android:keyIcon="@drawable/ic_keyboard_arrow_right"
             android:isRepeatable="true"/>
