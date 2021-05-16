@@ -1,0 +1,13 @@
+- Update keyboard UI when configuration parameters are changed
+- Enable rapid fire on selection keypad buttons
+- [bug fix] Ghost input when keypad not visible
+- All keys on number pad are now repeatable
+- All keys on symbol pad are now repeatable
+- Regular, shift and capslock now have visual feedback
+- All Button keypads now make enter button behave properly
+- Haptic feedback on input is now a user preference
+- Swipe down gesture hides the keyboard on button keypads
+- [bug fix] Fixed startup crash, courtesy @qespr
+- Hell of of UI make over, courtesy Michal Lebeda
+- Performance improvements, courtesy Noam Postavsky
+- The center button on selection keyboard allows to switch the selection anchor.
