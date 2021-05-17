@@ -84,7 +84,10 @@ public class XpadView extends View {
     }
 
     private void initialize(Context context) {
-        SharedPreferenceHelper.getInstance(context).addListener(this::invalidate);
+        SharedPreferenceHelper.getInstance(context).addListener(() -> {
+            this.updateColors(context);
+            this.invalidate();
+        });
         updateColors(context);
         setForegroundPaint();
 
