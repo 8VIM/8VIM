@@ -54,6 +54,11 @@
     <string name="pref_display_sector_icons_summary_on">Sector icons are enabled</string>
     <string name="pref_display_sector_icons_summary_off">Sector icons are disabled</string>
 
+    <string name="pref_display_wheel_characters_key">user_preferred_display_letters_on_wheel</string>
+    <string name="pref_display_wheel_characters_title">Display letters on X-pad</string>
+    <string name="pref_display_wheel_characters_summary_on">Letters on X-pad are visible</string>
+    <string name="pref_display_wheel_characters_summary_off">Letters on X-pad are not visible</string>
+
     <string name="pref_typing_trail_visibility_key">user_preferred_typing_trail_visibility</string>
     <string name="pref_typing_trail_visibility_title">Display touch trail</string>
     <string name="pref_typing_trail_visibility_summary_on">Trail will be visible when typing</string>

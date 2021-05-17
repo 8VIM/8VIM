@@ -69,6 +69,14 @@
         <SwitchPreference
             app:defaultValue="true"
             app:iconSpaceReserved="false"
+            app:key="@string/pref_display_wheel_characters_key"
+            app:summaryOff="@string/pref_display_wheel_characters_summary_off"
+            app:summaryOn="@string/pref_display_wheel_characters_summary_on"
+            app:title="@string/pref_display_wheel_characters_title" />
+
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
             app:key="@string/pref_typing_trail_visibility_key"
             app:summaryOff="@string/pref_typing_trail_visibility_summary_off"
             app:summaryOn="@string/pref_typing_trail_visibility_summary_on"

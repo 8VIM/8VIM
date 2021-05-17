@@ -207,11 +207,13 @@ public class XpadView extends View {
         }
 
         //the text along the lines
-        foregroundPaint.setStrokeWidth(0.75f * density);
-        foregroundPaint.setStyle(Paint.Style.FILL);
-
-        foregroundPaint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawPosText(getCharacterSetToDisplay(), letterPositions, foregroundPaint);
+        boolean userPreferWheelLetters = SharedPreferenceHelper.getInstance(getContext()).getBoolean(this.getContext().getString(R.string.pref_display_wheel_characters_key), true);
+        if (userPreferWheelLetters) {
+            foregroundPaint.setStrokeWidth(0.75f * density);
+            foregroundPaint.setStyle(Paint.Style.FILL);
+            foregroundPaint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawPosText(getCharacterSetToDisplay(), letterPositions, foregroundPaint);
+        }
     }
 
     private void setForegroundPaint() {
