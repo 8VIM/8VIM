@@ -23,14 +23,14 @@
             android:keyLabel="&amp;"
             android:keyWidth="25%p"/>
         <Key
-            android:keyOutputText="_"
+            android:keyOutputText="("
             android:isRepeatable="true"
-            android:keyLabel="_"
+            android:keyLabel="("
             android:keyWidth="25%p"/>
         <Key
-            android:keyOutputText="-"
+            android:keyOutputText=")"
             android:isRepeatable="true"
-            android:keyLabel="-"
+            android:keyLabel=")"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="1"
@@ -62,24 +62,23 @@
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />
         <Key
-            android:keyOutputText="("
-            android:isRepeatable="true"
-            android:keyLabel="("
-            android:keyWidth="25%p"/>
-        <Key
-            android:keyOutputText=")"
-            android:isRepeatable="true"
-            android:keyLabel=")"
-            android:keyWidth="25%p"/>
-        <Key
             android:keyOutputText="="
             android:isRepeatable="true"
             android:keyLabel="="
             android:keyWidth="25%p"/>
         <Key
-            android:keyOutputText="+"
+            android:keyOutputText="_"
             android:isRepeatable="true"
-            android:keyLabel="+"
+            android:keyLabel="_"
+            android:keyWidth="25%p"/>
+        <Key
+            android:keyOutputText="/"
+            android:isRepeatable="true"
+            android:keyLabel="/"
+            android:keyWidth="25%p"/>
+        <Key
+            android:codes="@integer/SWITCH_TO_SYMBOLS_KEYPAD"
+            android:keyLabel="@string/symbolPadIcon"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="4"
@@ -105,29 +104,28 @@
     </Row>
     <Row>
         <Key
-            android:codes="@integer/SWITCH_TO_SYMBOLS_KEYPAD"
-            android:keyLabel="{+="
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="left" />
-        <Key
-            android:keyOutputText="'"
-            android:isRepeatable="true"
-            android:keyLabel="'"
-            android:keyWidth="25%p"/>
-        <Key
-            android:keyOutputText=":"
-            android:isRepeatable="true"
-            android:keyLabel=":"
-            android:keyWidth="25%p"/>
-        <Key
             android:keyOutputText="%"
             android:isRepeatable="true"
             android:keyLabel="%"
+            android:keyWidth="25%p"
+            android:keyEdgeFlags="left" />
+        <Key
+            android:keyOutputText="*"
+            android:isRepeatable="true"
+            android:keyLabel="*" />
+        <Key
+            android:keyOutputText="-"
+            android:isRepeatable="true"
+            android:keyLabel="-"
             android:keyWidth="25%p"/>
         <Key
-            android:keyOutputText="/"
+            android:keyOutputText="+"
             android:isRepeatable="true"
-            android:keyLabel="/"
+            android:keyLabel="+"
+            android:keyWidth="25%p"/>
+        <Key
+            android:codes="@integer/SWITCH_TO_MAIN_KEYPAD"
+            android:keyIcon="@drawable/ic_viii"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="7"
@@ -153,8 +151,9 @@
     </Row>
     <Row>
         <Key
-            android:codes="@integer/SWITCH_TO_MAIN_KEYPAD"
-            android:keyIcon="@drawable/ic_viii"
+            android:keyOutputText=":"
+            android:isRepeatable="true"
+            android:keyLabel=":"
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />
         <Key
@@ -163,14 +162,15 @@
             android:keyLabel="&quot;"
             android:keyWidth="25%p"/>
         <Key
+            android:keyOutputText="'"
+            android:isRepeatable="true"
+            android:keyLabel="'"
+            android:keyWidth="25%p"/>
+        <Key
             android:keyOutputText=" "
             android:isRepeatable="true"
             android:keyLabel="@string/spaceBarSymbol"
-            android:keyWidth="40%p"/>
-        <Key
-            android:keyOutputText="*"
-            android:isRepeatable="true"
-            android:keyLabel="*" />
+            android:keyWidth="50%p"/>
         <Key
             android:keyOutputText=","
             android:isRepeatable="true"
