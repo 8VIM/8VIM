@@ -6,7 +6,6 @@ check.dependsOn('checkstyle')
 
 android {
     compileSdkVersion 30
-    buildToolsVersion '29.0.3'
 
     defaultConfig {
         applicationId "inc.flide.vi8"
