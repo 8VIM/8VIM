@@ -69,6 +69,11 @@
     <string name="pref_haptic_feedback_summary_on">Haptic feedback is enabled</string>
     <string name="pref_haptic_feedback_summary_off">Haptic feedback is disabled</string>
 
+    <string name="pref_random_trail_color_key">user_preferred_random_trail_color_enabled</string>
+    <string name="pref_random_trail_color_title">Select Touch Trail color at Random</string>
+    <string name="pref_random_trail_color_summary_on">Touch Trail color is random</string>
+    <string name="pref_random_trail_color_summary_off">Touch Trail color is selected by user</string>
+
     <string name="pref_board_bg_color_key">board_bg_color</string>
     <string name="pref_board_bg_color_title">Keyboard background color</string>
 

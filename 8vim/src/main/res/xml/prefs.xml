@@ -112,6 +112,14 @@
             app:numColumns="6"
             app:showDialog="true" />
 
+        <SwitchPreference
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_random_trail_color_key"
+            app:summaryOff="@string/pref_random_trail_color_summary_off"
+            app:summaryOn="@string/pref_random_trail_color_summary_on"
+            app:title="@string/pref_random_trail_color_title" />
+
         <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
             app:defaultValue="@color/defaultTrail"
             app:key="@string/pref_trail_color_key"
