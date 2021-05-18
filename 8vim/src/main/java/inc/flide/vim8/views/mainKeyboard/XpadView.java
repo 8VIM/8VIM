@@ -95,6 +95,7 @@ public class XpadView extends View {
     private void initialize(Context context) {
         SharedPreferenceHelper.getInstance(context).addListener(() -> {
             this.updateColors(context);
+            this.computeComponentPositions(this.getWidth(), this.getHeight());
             this.invalidate();
         });
         updateColors(context);
@@ -108,7 +109,7 @@ public class XpadView extends View {
         circle = new Circle();
     }
 
-    private void computeComponentPositions() {
+    private void computeComponentPositions(int fullWidth, int fullHeight) {
         Context context = getContext();
         SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(context);
         float spRadiusValue = pref.getInt(context.getString(R.string.pref_circle_scale_factor), 3);
@@ -126,12 +127,12 @@ public class XpadView extends View {
         float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
         // We chop off a bit of the right side of the view width from the keypadDimension (see onMeasure),
         // this introduces a bit of asymmetry which we have to compensate for here.
-        int keypadXOffset = getWidth() - keypadDimension.getWidth();
+        int keypadXOffset = fullWidth - keypadDimension.getWidth();
         // If the xOffset is to the right, we can spread into the extra padding space.
-        int smallDim = Math.min(xOffset > 0? getWidth()/2 - xOffset + keypadXOffset
+        int smallDim = Math.min(xOffset > 0? fullWidth/2 - xOffset + keypadXOffset
                 // If xOffset goes to the left, restrict to keypadDimension.
                 : keypadDimension.getWidth()/2 + xOffset,
-                getHeight()/2 - Math.abs(yOffset));
+                fullHeight/2 - Math.abs(yOffset));
         // Compute the length of sector lines, such that they stop a little before hitting the edge of the view.
         float lengthOfLineDemarcatingSectors = (float) Math.hypot(smallDim, smallDim)
                 - radius - characterHeight;
@@ -188,11 +189,12 @@ public class XpadView extends View {
         keypadDimension.setHeight(parentHeight);
 
         setMeasuredDimension(keypadDimension.getWidth(), keypadDimension.getHeight());
+        // this.getWidth() returns 0 at this point, parentWidth (& height) give the correct result.
+        computeComponentPositions(parentWidth, parentHeight);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        computeComponentPositions();
 
         canvas.drawColor(backgroundPaint.getColor());
 
