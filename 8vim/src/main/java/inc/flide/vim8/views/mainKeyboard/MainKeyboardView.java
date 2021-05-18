@@ -42,21 +42,13 @@ public class MainKeyboardView extends ConstraintLayout {
     }
 
     public void initialize(Context context) {
-        Resources resources = getResources();
-
-        int backgroundColor = SharedPreferenceHelper.getInstance(getContext()).getInt(
-                resources.getString(R.string.pref_board_bg_color_key),
-                resources.getColor(R.color.defaultBoardBg));
-
-        int foregroundColor = SharedPreferenceHelper.getInstance(getContext()).getInt(
-                resources.getString(R.string.pref_board_fg_color_key),
-                resources.getColor(R.color.defaultBoardFg));
-
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setupMainKeyboardView(context);
-        setBackgroundColor(backgroundColor);
-        setupButtonsOnSideBar(foregroundColor);
+        setupButtonsOnSideBar();
+        setColors();
         setHapticFeedbackEnabled(true);
+
+        SharedPreferenceHelper.getInstance(getContext()).addListener(this::setColors);
     }
 
     private void setupMainKeyboardView(Context context) {
@@ -75,25 +67,44 @@ public class MainKeyboardView extends ConstraintLayout {
         }
     }
 
-    private void setupButtonsOnSideBar(int tintColor) {
-        setupSwitchToEmojiKeyboardButton(tintColor);
-        setupSwitchToSelectionKeyboardButton(tintColor);
-        setupTabKey(tintColor);
-        setupGoToSettingsButton(tintColor);
-        setupCtrlKey(tintColor);
+    private void setupButtonsOnSideBar() {
+        setupSwitchToEmojiKeyboardButton();
+        setupSwitchToSelectionKeyboardButton();
+        setupTabKey();
+        setupGoToSettingsButton();
+        setupCtrlKey();
     }
 
-    private void setupCtrlKey(int color) {
-        ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
-        ctrlKeyButton.setColorFilter(color);
+    private void setImageButtonTint(int tintColor, int id) {
+        ImageButton button = findViewById(id);
+        button.setColorFilter(tintColor);
+    }
+    private void setColors() {
+        Resources resources = getResources();
+        SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(getContext());
+        int backgroundColor = pref.getInt(
+                resources.getString(R.string.pref_board_bg_color_key),
+                resources.getColor(R.color.defaultBoardBg));
 
+        int tintColor = pref.getInt(
+                resources.getString(R.string.pref_board_fg_color_key),
+                resources.getColor(R.color.defaultBoardFg));
+
+        this.setBackgroundColor(backgroundColor);
+        setImageButtonTint(tintColor, R.id.ctrlButton);
+        setImageButtonTint(tintColor, R.id.goToSettingsButton);
+        setImageButtonTint(tintColor, R.id.tabButton);
+        setImageButtonTint(tintColor, R.id.switchToSelectionKeyboard);
+        setImageButtonTint(tintColor, R.id.switchToEmojiKeyboard);
+    }
+
+    private void setupCtrlKey() {
+        ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
         ctrlKeyButton.setOnClickListener(view -> actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK));
     }
 
-    private void setupGoToSettingsButton(int color) {
+    private void setupGoToSettingsButton() {
         ImageButton goToSettingsButton = findViewById(R.id.goToSettingsButton);
-        goToSettingsButton.setColorFilter(color);
-
         goToSettingsButton.setOnClickListener(view -> {
             Intent vim8SettingsIntent = new Intent(getContext(), SettingsActivity.class);
             vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -101,16 +112,13 @@ public class MainKeyboardView extends ConstraintLayout {
         });
     }
 
-    private void setupTabKey(int color) {
+    private void setupTabKey() {
         ImageButton tabKeyButton = findViewById(R.id.tabButton);
-        tabKeyButton.setColorFilter(color);
-
         tabKeyButton.setOnClickListener(view -> actionListener.handleInputKey(KeyEvent.KEYCODE_TAB, 0));
     }
 
-    private void setupSwitchToSelectionKeyboardButton(int color) {
+    private void setupSwitchToSelectionKeyboardButton() {
         ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
-        switchToSelectionKeyboardButton.setColorFilter(color);
         switchToSelectionKeyboardButton.setOnClickListener(view -> {
             KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
                     KeyboardActionType.INPUT_KEY
@@ -120,9 +128,8 @@ public class MainKeyboardView extends ConstraintLayout {
         });
     }
 
-    private void setupSwitchToEmojiKeyboardButton(int color) {
+    private void setupSwitchToEmojiKeyboardButton() {
         ImageButton switchToEmojiKeyboardButton = findViewById(R.id.switchToEmojiKeyboard);
-        switchToEmojiKeyboardButton.setColorFilter(color);
         switchToEmojiKeyboardButton.setOnClickListener(view -> {
             KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
                     KeyboardActionType.INPUT_KEY
