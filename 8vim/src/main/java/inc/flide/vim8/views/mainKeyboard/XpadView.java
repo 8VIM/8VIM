@@ -28,6 +28,7 @@ import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.FingerPosition;
 
 public class XpadView extends View {
+    private final Random rnd = new Random();
     private final Path typingTrailPath = new Path();
     Paint backgroundPaint = new Paint();
     Paint foregroundPaint = new Paint();
@@ -320,7 +321,6 @@ public class XpadView extends View {
     }
 
     private int getRandomColor() {
-        Random rnd = new Random();
         int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
         return color;
     }
