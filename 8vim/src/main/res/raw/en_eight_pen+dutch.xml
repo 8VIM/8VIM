@@ -5,13 +5,13 @@
     <!--Dutch Characters-->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
         <inputString>€</inputString>
         <inputCapsLockString>¢</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
         <inputString>ĳ</inputString>
         <inputCapsLockString>Ĳ</inputCapsLockString>
     </keyboardAction>

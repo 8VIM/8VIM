@@ -5,19 +5,19 @@
     <!--Norwegian Characters-->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
         <inputString>å</inputString>
         <inputCapsLockString>Å</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
         <inputString>æ</inputString>
         <inputCapsLockString>Æ</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
         <inputString>ø</inputString>
         <inputCapsLockString>Ø</inputCapsLockString>
     </keyboardAction>
