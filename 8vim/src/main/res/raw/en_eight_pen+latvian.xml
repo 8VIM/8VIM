@@ -1,0 +1,75 @@
+<keyboardActionMap>
+    <!--{NO_TOUCH, INSIDE_CIRCLE, TOP, LEFT, BOTTOM, RIGHT}-->
+
+
+    <!--Latvian Characters -->
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ā</inputString>
+        <inputCapsLockString>Ā</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>č</inputString>
+        <inputCapsLockString>Č</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ē</inputString>
+        <inputCapsLockString>Ē</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ģ</inputString>
+        <inputCapsLockString>Ģ</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <inputString>Ī</inputString>
+        <inputCapsLockString>ī</inputCapsLockString>
+	<flags>
+		<flag>1</flag>
+	</flags>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;TOP;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ķ</inputString>
+        <inputCapsLockString>Ķ</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;TOP;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ļ</inputString>
+        <inputCapsLockString>Ļ</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ņ</inputString>
+        <inputCapsLockString>Ņ</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;TOP;LEFT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>š</inputString>
+        <inputCapsLockString>Š</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ū</inputString>
+        <inputCapsLockString>Ū</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;BOTTOM;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ž</inputString>
+        <inputCapsLockString>Ž</inputCapsLockString>
+    </keyboardAction>
+</keyboardActionMap>
