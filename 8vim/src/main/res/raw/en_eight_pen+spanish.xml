@@ -1,0 +1,28 @@
+<keyboardActionMap>
+    <!--{NO_TOUCH, INSIDE_CIRCLE, TOP, LEFT, BOTTOM, RIGHT}-->
+    <!--Spanish Characters https://en.wikipedia.org/wiki/Spanish_orthography#Alphabet_in_Spanish -->
+    <!-- additional chars: €, ñ, ¿, and ¡ -->
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>€</inputString>
+        <inputCapsLockString>¢</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ñ</inputString>
+        <inputCapsLockString>Ñ</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;LEFT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>¿</inputString>
+        <inputCapsLockString>*</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>¡</inputString>
+    </keyboardAction>
+</keyboardActionMap>

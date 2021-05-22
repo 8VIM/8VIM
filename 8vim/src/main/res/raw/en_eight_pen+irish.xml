@@ -1,0 +1,42 @@
+<keyboardActionMap>
+    <!--{NO_TOUCH, INSIDE_CIRCLE, TOP, LEFT, BOTTOM, RIGHT}-->
+
+
+    <!--Irish Characters -->
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <inputString>á</inputString>
+        <inputCapsLockString>Á</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>é</inputString>
+        <inputCapsLockString>É</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <inputString>Í</inputString>
+        <inputCapsLockString>í</inputCapsLockString>
+	<flags>
+		<flag>1</flag>
+	</flags>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ó</inputString>
+        <inputCapsLockString>Ó</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <inputString>Ú</inputString>
+        <inputCapsLockString>ú</inputCapsLockString>
+	<flags>
+		<flag>1</flag>
+	</flags>
+    </keyboardAction>
+</keyboardActionMap>
