@@ -498,25 +498,25 @@
     <!--Spanish Characters -->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
         <inputString>€</inputString>
         <inputCapsLockString>¢</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
         <inputString>ñ</inputString>
         <inputCapsLockString>Ñ</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;LEFT;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;LEFT;BOTTOM;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
         <inputString>¿</inputString>
         <inputCapsLockString>*</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
         <inputString>¡</inputString>
     </keyboardAction>
 </keyboardActionMap>

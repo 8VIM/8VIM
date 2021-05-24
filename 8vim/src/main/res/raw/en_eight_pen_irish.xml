@@ -498,19 +498,19 @@
     <!--Irish Characters -->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
         <inputString>á</inputString>
         <inputCapsLockString>Á</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
         <inputString>é</inputString>
         <inputCapsLockString>É</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
         <inputString>í</inputString>
         <inputCapsLockString>Í</inputCapsLockString>
 	<flags>
@@ -519,13 +519,13 @@
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
         <inputString>ó</inputString>
         <inputCapsLockString>Ó</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
         <inputString>ú</inputString>
         <inputCapsLockString>Ú</inputCapsLockString>
 	<flags>
