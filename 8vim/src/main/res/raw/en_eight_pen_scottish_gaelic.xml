@@ -495,7 +495,7 @@
     </keyboardAction>
 
 
-    <!--Irish Characters -->
+    <!--Scotish Gaelic Characters -->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
