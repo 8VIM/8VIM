@@ -555,4 +555,15 @@
         <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
         <inputString>¡</inputString>
     </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <inputString>₡</inputString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;TOP;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <inputString>$</inputString>
+        <inputCapsLockString>¢</inputCapsLockString>
+    </keyboardAction>
 </keyboardActionMap>
