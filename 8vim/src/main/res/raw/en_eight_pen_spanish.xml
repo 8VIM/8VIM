@@ -558,12 +558,33 @@
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+        <inputString>℆</inputString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
         <inputString>₡</inputString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;TOP;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
         <inputString>$</inputString>
+        <inputCapsLockString>¢</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ª</inputString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>º</inputString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <inputString>₲</inputString>
         <inputCapsLockString>¢</inputCapsLockString>
     </keyboardAction>
 </keyboardActionMap>
