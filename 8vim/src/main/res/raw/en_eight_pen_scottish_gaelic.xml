@@ -510,12 +510,9 @@
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
         <inputString>ì</inputString>
         <inputCapsLockString>Ì</inputCapsLockString>
-	<flags>
-		<flag>1</flag>
-	</flags>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
@@ -525,11 +522,8 @@
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
         <inputString>ù</inputString>
         <inputCapsLockString>Ù</inputCapsLockString>
-	<flags>
-		<flag>1</flag>
-	</flags>
     </keyboardAction>
 </keyboardActionMap>

@@ -510,11 +510,8 @@
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
         <inputString>æ</inputString>
         <inputCapsLockString>Æ</inputCapsLockString>
-	<flags>
-		<flag>1</flag>
-	</flags>
     </keyboardAction>
 </keyboardActionMap>

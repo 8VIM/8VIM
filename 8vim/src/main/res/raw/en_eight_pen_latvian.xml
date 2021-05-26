@@ -522,12 +522,9 @@
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
-        <inputString>Ī</inputString>
-        <inputCapsLockString>ī</inputCapsLockString>
-	<flags>
-		<flag>1</flag>
-	</flags>
+        <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
+        <inputString>ī</inputString>
+        <inputCapsLockString>Ī</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
