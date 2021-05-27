@@ -59,16 +59,6 @@ public abstract class ButtonKeypadView extends KeyboardView {
         foregroundPaint.setTypeface(font);
     }
 
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
-        Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
-                MeasureSpec.getSize(widthMeasureSpec),
-                MeasureSpec.getSize(heightMeasureSpec),
-                getResources().getConfiguration().orientation);
-
-        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
-    }
 
     @Override
     public void onDraw(Canvas canvas) {
