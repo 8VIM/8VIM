@@ -43,6 +43,15 @@ public class SettingsFragment extends PreferenceFragmentCompat
             }
         });
 
+        Preference keyboardPref = findPreference(getString(R.string.pref_select_keyboard_layout_key));
+        assert keyboardPref != null;
+
+        keyboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                askUserPreferredKeyboardLayout();
+                return true;
+            }
+        });
     }
 
     @Override
@@ -53,6 +62,45 @@ public class SettingsFragment extends PreferenceFragmentCompat
         }
 
         return true;
+    }
+
+    private void askUserPreferredKeyboardLayout() {
+        Context context = getContext();
+
+        Map<String, String> inputMethodsNameAndId = new HashMap<>();
+        inputMethodsNameAndId.put("German", "en_eight_pen_german");
+        inputMethodsNameAndId.put("French", "en_eight_pen_french");
+
+        ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String selectedKeyboardId = SharedPreferenceHelper
+                .getInstance(context.getApplicationContext())
+                .getString(
+                        getString(R.string.pref_selected_keyboard_layout),
+                        "");
+        int selectedKeyboardIndex = -1;
+        if (!selectedKeyboardId.isEmpty()) {
+            selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
+            if (selectedKeyboardIndex == -1) {
+                // seems like we have a stale selection, it should be removed.
+                sharedPreferences.edit().remove(getString(R.string.pref_selected_keyboard_layout)).apply();
+            }
+        }
+        new MaterialDialog.Builder(context)
+                .title(R.string.select_preferred_keyboard_layout_dialog_title)
+                .items(inputMethodsNameAndId.keySet())
+                .itemsCallbackSingleChoice(selectedKeyboardIndex, (dialog, itemView, which, text) -> {
+
+                    if (which != -1) {
+                        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                        sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout), keyboardIds.get(which));
+                        sharedPreferencesEditor.apply();
+                    }
+                    return true;
+                })
+                .positiveText(R.string.generic_okay_text)
+                .show();
     }
 
     private void askUserPreferredEmoticonKeyboard() {
