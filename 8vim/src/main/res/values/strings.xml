@@ -19,6 +19,7 @@
     <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
     <string name="share_app">Share &appname;</string>
     <string name="select_preferred_emoticon_keyboard_dialog_title">Choose the input method</string>
+    <string name="select_preferred_keyboard_layout_dialog_title">Choose the diacritics</string>
     <string name="generic_okay_text">OK</string>
 
     <!--   preferences categories -->
@@ -28,8 +29,13 @@
 
     <!--    hidden/internal preferences-->
     <string name="pref_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
+    <string name="pref_selected_keyboard_layout">selected_keyboard_layout</string>
 
     <!--    preferences shown in gui UI-->
+    <string name="pref_select_keyboard_layout_key">select_keyboard_layout</string>
+    <string name="pref_select_keyboard_layout_title">Select diacritics layout</string>
+    <string name="pref_select_keyboard_layout_summary">Chosen language will decide which diacritics can be entered </string>
+
     <string name="pref_select_emoji_keyboard_key">select_emoji_keyboard</string>
     <string name="pref_select_emoji_keyboard_title">Select emoji keyboard</string>
     <string name="pref_select_emoji_keyboard_summary">Chosen keyboard will be accessible through keyboard\'s emoji icon </string>

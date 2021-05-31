@@ -8,6 +8,11 @@
 
         <Preference
             app:iconSpaceReserved="false"
+            app:key="@string/pref_select_keyboard_layout_key"
+            app:summary="@string/pref_select_keyboard_layout_summary"
+            app:title="@string/pref_select_keyboard_layout_title" />
+        <Preference
+            app:iconSpaceReserved="false"
             app:key="@string/pref_select_emoji_keyboard_key"
             app:summary="@string/pref_select_emoji_keyboard_summary"
             app:title="@string/pref_select_emoji_keyboard_title" />
