@@ -3,7 +3,7 @@
     <!-- Hide keyboard -->
     <keyboardAction>
         <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>TOP;INSIDE_CIRCLE;NO_TOUCH</movementSequence>
+        <movementSequence>TOP;INSIDE_CIRCLE;NO_TOUCH;</movementSequence>
         <inputKey>HIDE_KEYBOARD</inputKey>
     </keyboardAction>
 
@@ -29,6 +29,90 @@
         <keyboardActionType>INPUT_KEY</keyboardActionType>
         <movementSequence>RIGHT;INSIDE_CIRCLE;LONG_PRESS_END;</movementSequence>
         <inputKey>SWITCH_TO_SELECTION_KEYPAD</inputKey>
+    </keyboardAction>
+
+    <!-- Emoji: Starting and ending with NO_TOUCH in a non-INSIDE_CIRCLE -->
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <!-- smile -->
+        <movementSequence>NO_TOUCH;LEFT;BOTTOM;RIGHT;NO_TOUCH;</movementSequence>
+        <inputString>😊</inputString>
+        <inputCapsLockString>😁</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <!-- smile + one step back -->
+        <movementSequence>NO_TOUCH;LEFT;BOTTOM;RIGHT;BOTTOM;NO_TOUCH;</movementSequence>
+        <inputString>😉</inputString>
+        <inputCapsLockString>🤣</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <!-- frown -->
+        <movementSequence>NO_TOUCH;LEFT;TOP;RIGHT;NO_TOUCH;</movementSequence>
+        <inputString>😢</inputString>
+        <inputCapsLockString>😭</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <!-- heart -->
+        <movementSequence>NO_TOUCH;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;TOP;RIGHT;BOTTOM;NO_TOUCH;</movementSequence>
+        <inputString>❤</inputString>
+        <inputCapsLockString>😍</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <!-- 2x heart -->
+        <movementSequence>NO_TOUCH;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;RIGHT;BOTTOM;NO_TOUCH;</movementSequence>
+        <inputString>😘</inputString>
+        <inputCapsLockString>🌹</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <!-- upside down T -->
+        <movementSequence>NO_TOUCH;LEFT;INSIDE_CIRCLE;TOP;INSIDE_CIRCLE;RIGHT;NO_TOUCH;</movementSequence>
+        <inputString>🤔</inputString>
+        <inputCapsLockString>🙏</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <!-- halo -->
+        <movementSequence>NO_TOUCH;TOP;LEFT;TOP;RIGHT;TOP;NO_TOUCH;</movementSequence>
+        <inputString>👏</inputString>
+        <inputCapsLockString>😇</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <!-- thumbs up -->
+        <movementSequence>NO_TOUCH;LEFT;BOTTOM;RIGHT;TOP;INSIDE_CIRCLE;TOP;NO_TOUCH;</movementSequence>
+        <inputString>👍</inputString>
+        <inputCapsLockString>🎉</inputCapsLockString>
+    </keyboardAction>
+
+    <!-- Braces -->
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>NO_TOUCH;TOP;LEFT;BOTTOM;NO_TOUCH;</movementSequence>
+        <inputString>(</inputString>
+        <inputCapsLockString>[</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>NO_TOUCH;TOP;RIGHT;BOTTOM;NO_TOUCH;</movementSequence>
+        <inputString>)</inputString>
+        <inputCapsLockString>]</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>NO_TOUCH;TOP;LEFT;INSIDE_CIRCLE;LEFT;BOTTOM;NO_TOUCH;</movementSequence>
+        <inputString>{</inputString>
+        <inputCapsLockString>&lt;</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>NO_TOUCH;TOP;RIGHT;BOTTOM;NO_TOUCH;</movementSequence>
+        <inputString>}</inputString>
+        <inputCapsLockString>&gt;</inputCapsLockString>
     </keyboardAction>
 
 </keyboardActionMap>
