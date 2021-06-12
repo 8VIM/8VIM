@@ -63,7 +63,7 @@
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <!-- 2x heart -->
-        <movementSequence>NO_TOUCH;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;RIGHT;BOTTOM;NO_TOUCH;</movementSequence>
+        <movementSequence>NO_TOUCH;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;TOP;RIGHT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;TOP;RIGHT;BOTTOM;NO_TOUCH;</movementSequence>
         <inputString>😘</inputString>
         <inputCapsLockString>🌹</inputCapsLockString>
     </keyboardAction>
@@ -110,7 +110,7 @@
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>NO_TOUCH;TOP;RIGHT;BOTTOM;NO_TOUCH;</movementSequence>
+        <movementSequence>NO_TOUCH;TOP;RIGHT;INSIDE_CIRCLE;RIGHT;BOTTOM;NO_TOUCH;</movementSequence>
         <inputString>}</inputString>
         <inputCapsLockString>&gt;</inputCapsLockString>
     </keyboardAction>
