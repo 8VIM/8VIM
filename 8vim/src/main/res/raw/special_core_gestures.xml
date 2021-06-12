@@ -43,8 +43,10 @@
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <!-- smile + one step back -->
         <movementSequence>NO_TOUCH;LEFT;BOTTOM;RIGHT;BOTTOM;NO_TOUCH;</movementSequence>
-        <inputString>😉</inputString>
-        <inputCapsLockString>🤣</inputCapsLockString>
+        <!-- 😉 -->
+        <inputString>&#x1f609;</inputString>
+        <!-- 🤣 -->
+        <inputCapsLockString>&#x1f923;</inputCapsLockString>
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
