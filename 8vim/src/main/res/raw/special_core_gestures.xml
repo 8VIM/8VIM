@@ -31,7 +31,9 @@
         <inputKey>SWITCH_TO_SELECTION_KEYPAD</inputKey>
     </keyboardAction>
 
-    <!-- Emoji: Starting and ending with NO_TOUCH in a non-INSIDE_CIRCLE -->
+    <!-- Emoji: Starting and ending with NO_TOUCH in a non-INSIDE_CIRCLE
+    "shift" is going to INSIDE_CIRCLE and back to the previous secotor
+    (beween the end of the main gesture and NO_TOUCH) -->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <!-- smile -->
