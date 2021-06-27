@@ -19,7 +19,7 @@ public class MainKeypadActionListener extends KeypadActionListener{
 
     private final Handler longPressHandler = new Handler();
     private final View mainKeyboardView;
-    private final Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
+    public static Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
     private final List<FingerPosition> movementSequence;
     private FingerPosition currentFingerPosition;
     private boolean isLongPressCallbackSet;

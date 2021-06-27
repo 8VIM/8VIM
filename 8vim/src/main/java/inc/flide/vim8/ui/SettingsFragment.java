@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.Map;
 
 import inc.flide.vim8.R;
+import inc.flide.vim8.MainInputMethodService;
+import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
+import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 
@@ -97,6 +100,8 @@ public class SettingsFragment extends PreferenceFragmentCompat
                         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
                         sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout), keyboardIds.get(which));
                         sharedPreferencesEditor.apply();
+                        MainKeypadActionListener.keyboardActionMap = InputMethodServiceHelper.initializeKeyboardActionMap(getResources(),
+                                                                                                                          getContext());
                     }
                     return true;
                 })
