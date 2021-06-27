@@ -45,13 +45,9 @@ public class InputMethodServiceHelper {
     }
 
     private static int loadTheSelectedLanguageLayout(Resources resources, Context context) {
-        String currentLanguageLayout = SharedPreferenceHelper.getInstance(context).getString("current_language_layout", resources.getResourceName(R.raw.en_eight_pen_esperanto));
+        String currentLanguageLayout = SharedPreferenceHelper.getInstance(context).getString("current_language_layout", "en_eight_pen_esperanto");
 
-        String packageName = currentLanguageLayout.substring(0, currentLanguageLayout.indexOf(':'));
-        String defType = currentLanguageLayout.substring(currentLanguageLayout.indexOf(':')+1, currentLanguageLayout.indexOf('/'));
-        currentLanguageLayout = currentLanguageLayout.substring(currentLanguageLayout.indexOf('/')+1);
-
-        return resources.getIdentifier(currentLanguageLayout, defType, packageName);
+        return resources.getIdentifier(currentLanguageLayout, "raw", context.getPackageName());
     }
 
     private static Map<List<FingerPosition>, KeyboardAction> addToKeyboardActionsMap(
