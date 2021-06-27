@@ -29,7 +29,7 @@
 
     <!--    hidden/internal preferences-->
     <string name="pref_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
-    <string name="pref_selected_keyboard_layout">en_eight_pen_esperanto</string>
+    <string name="pref_selected_keyboard_layout">current_language_layout</string>
 
     <!-- keyboard layouts -->
     <string-array name="keyboard_layouts_id">

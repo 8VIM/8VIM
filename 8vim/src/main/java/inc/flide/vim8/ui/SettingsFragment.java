@@ -79,7 +79,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 .getInstance(context.getApplicationContext())
                 .getString(
                         getString(R.string.pref_selected_keyboard_layout),
-                        "");
+                        "en_eight_pen_esperanto");
         int selectedKeyboardIndex = -1;
         if (!selectedKeyboardId.isEmpty()) {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
