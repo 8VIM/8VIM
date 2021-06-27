@@ -16,6 +16,7 @@ import androidx.preference.SeekBarPreference;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,14 +65,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
         return true;
     }
 
+    private String[] getStringArray(int resId) {
+        return getResources().getStringArray(resId);
+    }
+
     private void askUserPreferredKeyboardLayout() {
         Context context = getContext();
 
-        Map<String, String> inputMethodsNameAndId = new HashMap<>();
-        inputMethodsNameAndId.put("German", "en_eight_pen_german");
-        inputMethodsNameAndId.put("French", "en_eight_pen_french");
-
-        ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
+        List<String> keyboardIds = Arrays.asList(getStringArray(R.array.keyboard_layouts_id));
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String selectedKeyboardId = SharedPreferenceHelper
@@ -89,7 +90,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         }
         new MaterialDialog.Builder(context)
                 .title(R.string.select_preferred_keyboard_layout_dialog_title)
-                .items(inputMethodsNameAndId.keySet())
+                .items(getStringArray(R.array.keyboard_layouts_title))
                 .itemsCallbackSingleChoice(selectedKeyboardIndex, (dialog, itemView, which, text) -> {
 
                     if (which != -1) {

@@ -29,7 +29,37 @@
 
     <!--    hidden/internal preferences-->
     <string name="pref_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
-    <string name="pref_selected_keyboard_layout">selected_keyboard_layout</string>
+    <string name="pref_selected_keyboard_layout">en_eight_pen_esperanto</string>
+
+    <!-- keyboard layouts -->
+    <string-array name="keyboard_layouts_id">
+        <item>en_eight_pen_albanian</item>
+        <item>en_eight_pen_danish</item>
+        <item>en_eight_pen_dutch</item>
+        <item>en_eight_pen_esperanto</item>
+        <item>en_eight_pen_french</item>
+        <item>en_eight_pen_german</item>
+        <item>en_eight_pen_irish</item>
+        <item>en_eight_pen_italian</item>
+        <item>en_eight_pen_latvian</item>
+        <item>en_eight_pen_norwegian</item>
+        <item>en_eight_pen_scottish_gaelic</item>
+        <item>en_eight_pen_spanish</item>
+    </string-array>
+    <string-array name="keyboard_layouts_title">
+        <item>Albanian</item>
+        <item>Danish</item>
+        <item>Dutch</item>
+        <item>Esperanto</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Irish</item>
+        <item>Italian</item>
+        <item>Latvian</item>
+        <item>Norwegian</item>
+        <item>Scottish Gaelic</item>
+        <item>Spanish</item>
+    </string-array>
 
     <!--    preferences shown in gui UI-->
     <string name="pref_select_keyboard_layout_key">select_keyboard_layout</string>
