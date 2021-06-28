@@ -327,7 +327,8 @@ public class XpadView extends View {
 
     private String getCharacterSetToDisplay() {
         Resources resources = getResources();
-        String characterSetName = "en_eight_pen";
+        String characterSetName = "en_eight_pen_esperanto";
+        characterSetName = characterSetName.substring(0, characterSetName.lastIndexOf('_'));
         String characterSetCase = actionListener.areCharactersCapitalized() ? "_charset_caps" : "_charset_small";
         return resources.getString(resources.getIdentifier(characterSetName + characterSetCase, "string", getContext().getPackageName()));
     }
