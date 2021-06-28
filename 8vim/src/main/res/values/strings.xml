@@ -32,6 +32,8 @@
     <string name="pref_selected_keyboard_layout">current_language_layout</string>
 
     <!-- keyboard layouts -->
+    <string name="en_eight_pen_charset_small">nomufv!weilhkj@,tscdzg.'yabrpxq?</string>
+    <string name="en_eight_pen_charset_caps">NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</string>
     <string-array name="keyboard_layouts_id">
         <item>en_eight_pen_albanian</item>
         <item>en_eight_pen_danish</item>

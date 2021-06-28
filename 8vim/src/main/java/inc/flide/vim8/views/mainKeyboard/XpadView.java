@@ -326,14 +326,10 @@ public class XpadView extends View {
     }
 
     private String getCharacterSetToDisplay() {
-        String characterSetSmall = "nomufv!weilhkj@,tscdzg.'yabrpxq?";
-        String characterSetCaps = "NOMUFV!WEILHKJ@_TSCDZG-\"YABRPXQ*";
-
-        if (actionListener.areCharactersCapitalized()) {
-            return characterSetCaps;
-        }
-
-        return characterSetSmall;
+        Resources resources = getResources();
+        String characterSetName = "en_eight_pen";
+        String characterSetCase = actionListener.areCharactersCapitalized() ? "_charset_caps" : "_charset_small";
+        return resources.getString(resources.getIdentifier(characterSetName + characterSetCase, "string", getContext().getPackageName()));
     }
 
     private FingerPosition getCurrentFingerPosition(PointF position) {
