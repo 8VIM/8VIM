@@ -32,8 +32,11 @@
     <string name="pref_selected_keyboard_layout">current_language_layout</string>
 
     <!-- keyboard layouts -->
-    <string name="en_eight_pen_charset_small">nomufv!weilhkj@,tscdzg.'yabrpxq?</string>
+    <string name="en_eight_pen_charset_small">nomufv!weilhkj@,tscdzg.\'yabrpxq?</string>
     <string name="en_eight_pen_charset_caps">NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</string>
+    <string name="he_eight_pen_charset_small">להמתחד!גיכוקןט@,בשפעךף.ץנאםרסזצ?</string>
+    <string name="he_eight_pen_charset_caps">nomufv!weilhkj@,tscdzg.\'yabrpxq?</string>
+
     <string-array name="keyboard_layouts_id">
         <item>en_eight_pen_albanian</item>
         <item>en_eight_pen_danish</item>
@@ -41,6 +44,7 @@
         <item>en_eight_pen_esperanto</item>
         <item>en_eight_pen_french</item>
         <item>en_eight_pen_german</item>
+        <item>he_eight_pen_latincaps</item>
         <item>en_eight_pen_irish</item>
         <item>en_eight_pen_italian</item>
         <item>en_eight_pen_latvian</item>
@@ -55,6 +59,7 @@
         <item>Esperanto</item>
         <item>French</item>
         <item>German</item>
+        <item>Hebrew</item>
         <item>Irish</item>
         <item>Italian</item>
         <item>Latvian</item>

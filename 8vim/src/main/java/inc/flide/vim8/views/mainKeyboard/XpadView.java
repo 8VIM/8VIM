@@ -327,10 +327,11 @@ public class XpadView extends View {
 
     private String getCharacterSetToDisplay() {
         Resources resources = getResources();
-        String characterSetName = resources.getString(R.raw.current_language_layout);
+        Context context = getContext();
+        String characterSetName = SharedPreferenceHelper.getInstance(context).getString("current_language_layout", "en_eight_pen_esperanto");
         characterSetName = characterSetName.substring(0, characterSetName.lastIndexOf('_'));    // remove diacritics postfix
         String characterSetCase = actionListener.areCharactersCapitalized() ? "_charset_caps" : "_charset_small";
-        return resources.getString(resources.getIdentifier(characterSetName + characterSetCase, "string", getContext().getPackageName()));
+        return resources.getString(resources.getIdentifier(characterSetName + characterSetCase, "string", context.getPackageName()));
     }
 
     private FingerPosition getCurrentFingerPosition(PointF position) {
