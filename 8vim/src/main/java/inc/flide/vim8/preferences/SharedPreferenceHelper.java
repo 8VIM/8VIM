@@ -14,7 +14,7 @@ public class SharedPreferenceHelper implements SharedPreferences.OnSharedPrefere
     private SharedPreferences sharedPreferences;
     private static SharedPreferenceHelper singleton = null;
 
-    public static interface Listener {
+    public interface Listener {
         void onPreferenceChanged();
     }
 
