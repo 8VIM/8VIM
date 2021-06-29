@@ -8,14 +8,11 @@ import android.graphics.Typeface;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
-
 import java.util.List;
-
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import inc.flide.vim8.structures.Constants;
 
 public abstract class ButtonKeypadView extends KeyboardView {
 
@@ -32,6 +29,14 @@ public abstract class ButtonKeypadView extends KeyboardView {
     }
 
     protected void initialize() {
+        //this.setOnKeyboardActionListener(new KeyboardActionListener((MainInputMethodService) context, this));
+        this.setHapticFeedbackEnabled(true);
+
+        setColors();
+        SharedPreferenceHelper.getInstance(getContext()).addListener(this::setColors);
+    }
+
+    private void setColors() {
         Resources resources = getResources();
         SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(getContext());
 
@@ -43,15 +48,9 @@ public abstract class ButtonKeypadView extends KeyboardView {
 
         int backgroundColor = sharedPreferenceHelper.getInt(bgColorKeyId, defaultBackgroundColor);
         int foregroundColor = sharedPreferenceHelper.getInt(fgColorKeyId, defaultForegroundColor);
-
-        //this.setOnKeyboardActionListener(new KeyboardActionListener((MainInputMethodService) context, this));
-        this.setHapticFeedbackEnabled(true);
         this.setBackgroundColor(backgroundColor);
-        setupForegroundPaint(foregroundColor);
-    }
 
-    private void setupForegroundPaint(int color) {
-        foregroundPaint.setColor(color);
+        foregroundPaint.setColor(foregroundColor);
         foregroundPaint.setTextAlign(Paint.Align.CENTER);
         foregroundPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
         Typeface font = Typeface.createFromAsset(getContext().getAssets(),
@@ -72,8 +71,7 @@ public abstract class ButtonKeypadView extends KeyboardView {
 
     @Override
     public void onDraw(Canvas canvas) {
-        List<Keyboard.Key> keys = getKeyboard().getKeys();
-        for (Keyboard.Key key : keys) {
+        for (Keyboard.Key key : getKeyboard().getKeys()) {
             if (key.label != null)
                 canvas.drawText(key.label.toString(), (key.x * 2 + key.width) / 2f, (key.y * 2 + key.height) / 2f, this.foregroundPaint);
             if (key.icon != null) {
