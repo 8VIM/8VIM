@@ -495,7 +495,7 @@
     </keyboardAction>
 
 
-    <!--Norwegian Characters-->
+    <!-- Danish / Norwegian Characters -->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
@@ -504,14 +504,14 @@
     </keyboardAction>
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
-        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
-        <inputString>æ</inputString>
-        <inputCapsLockString>Æ</inputCapsLockString>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_TEXT</keyboardActionType>
         <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
         <inputString>ø</inputString>
         <inputCapsLockString>Ø</inputCapsLockString>
+    </keyboardAction>
+    <keyboardAction>
+        <keyboardActionType>INPUT_TEXT</keyboardActionType>
+        <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+        <inputString>æ</inputString>
+        <inputCapsLockString>Æ</inputCapsLockString>
     </keyboardAction>
 </keyboardActionMap>

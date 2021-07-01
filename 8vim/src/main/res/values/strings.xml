@@ -39,7 +39,7 @@
 
     <string-array name="keyboard_layouts_id">
         <item>en_eight_pen_albanian</item>
-        <item>en_eight_pen_danish</item>
+        <item>en_eight_pen_danishnorwegian</item>
         <item>en_eight_pen_dutch</item>
         <item>en_eight_pen_esperanto</item>
         <item>en_eight_pen_french</item>
@@ -48,7 +48,7 @@
         <item>en_eight_pen_irish</item>
         <item>en_eight_pen_italian</item>
         <item>en_eight_pen_latvian</item>
-        <item>en_eight_pen_norwegian</item>
+        <item>en_eight_pen_danishnorwegian</item>
         <item>en_eight_pen_scottish_gaelic</item>
         <item>en_eight_pen_spanish</item>
     </string-array>
