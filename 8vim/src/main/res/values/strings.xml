@@ -33,7 +33,7 @@
 
     <!-- keyboard layouts -->
     <string name="en_eight_pen_charset_small">nomufv!weilhkj@,tscdzg.\'yabrpxq?</string>
-    <string name="en_eight_pen_charset_caps">NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</string>
+    <string name="en_eight_pen_charset_caps">NOMUFV!WEILHKJ@_TSCDZG-\"YABRPXQ*</string>
     <string name="he_eight_pen_charset_small">להמתחד!גיכוקןט@,בשפעךף.ץנאםרסזצ?</string>
     <string name="he_eight_pen_charset_caps">nomufv!weilhkj@,tscdzg.\'yabrpxq?</string>
 
