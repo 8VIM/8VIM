@@ -49,7 +49,7 @@
         <item>en_eight_pen_italian</item>
         <item>en_eight_pen_latvian</item>
         <item>en_eight_pen_danishnorwegian</item>
-        <item>en_eight_pen_scottish_gaelic</item>
+        <item>en_eight_pen_scottishgaelic</item>
         <item>en_eight_pen_spanish</item>
     </string-array>
     <string-array name="keyboard_layouts_title">
