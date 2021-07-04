@@ -42,38 +42,75 @@
     <string name="de_glitchy_tozier_charset_caps">UIGHWZX@EADCKPQ_TNLMYF-\'SROBVJ!*</string>
 
     <string-array name="keyboard_layouts_id">
+        <item>en_eight_pen_afrikaans</item>
         <item>en_eight_pen_albanian</item>
+        <item>en_eight_pen_breton</item>
+        <item>en_eight_pen_catalan</item>
+        <item>en_eight_pen_czech</item>
         <item>en_eight_pen_danishnorwegian</item>
         <item>en_eight_pen_dutch</item>
         <item>en_eight_pen_esperanto</item>
         <item>en_glitchy_tozier_esperanto</item>
+        <item>en_eight_pen_faroese</item>
+        <item>en_eight_pen_finish</item>
         <item>en_eight_pen_french</item>
+        <item>en_eight_pen_gaj</item>
         <item>en_eight_pen_german</item>
         <item>de_glitchy_tozier_german</item>
         <item>he_eight_pen_latincaps</item>
+        <item>en_eight_pen_hungarian</item>
         <item>en_eight_pen_irish</item>
+        <item>en_eight_pen_islandic</item>
         <item>en_eight_pen_italian</item>
+        <item>en_eight_pen_kashubian</item>
         <item>en_eight_pen_latvian</item>
+        <item>en_eight_pen_lithuanian</item>
+        <item>en_eight_pen_montenegrin</item>
         <item>en_eight_pen_danishnorwegian</item>
+        <item>en_eight_pen_polish</item>
+        <item>en_eight_pen_portuguese</item>
         <item>en_eight_pen_scottishgaelic</item>
+        <item>en_eight_pen_slovak</item>
+        <item>en_eight_pen_sorbian</item>
         <item>en_eight_pen_spanish</item>
+        <item>en_eight_pen_swedish</item>
+        <item>en_eight_pen_turkish</item>
     </string-array>
     <string-array name="keyboard_layouts_title">
+        <item>Afrikaans</item>
         <item>Albanian</item>
+        <item>Breton</item>
+        <item>Catalan</item>
+        <item>Czech</item>
         <item>Danish</item>
         <item>Dutch</item>
         <item>English / Esperanto</item>
         <item>English (optimized; experimental)</item>
+        <item>Faroese</item>
+        <item>Finish</item>
         <item>French</item>
+        <item>Gaj</item>
         <item>German</item>
         <item>German (optimized; experimental)</item>
         <item>Hebrew</item>
+        <item>Hungarian</item>
+        <item>Icelandic</item>
         <item>Irish</item>
         <item>Italian</item>
+        <item>Kashubian</item>
         <item>Latvian</item>
+        <item>Lithuanian</item>
+        <item>Montenegrin</item>
         <item>Norwegian</item>
+        <item>Polish</item>
+        <item>Portuguese</item>
         <item>Scottish Gaelic</item>
+        <item>Slovak</item>
+        <item>Sorbian</item>
         <item>Spanish</item>
+        <item>Swedish</item>
+        <item>Spanish</item>
+        <item>Turkish</item>
     </string-array>
 
     <!--    preferences shown in gui UI-->
