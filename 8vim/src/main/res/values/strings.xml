@@ -38,6 +38,8 @@
     <string name="he_eight_pen_charset_caps">nomufv!weilhkj@,tscdzg.\'yabrpxq?</string>
     <string name="en_glitchy_tozier_charset_small">tdcfkx!znrumbj@,ailhwp.\'eosgyvq?</string>
     <string name="en_glitchy_tozier_charset_caps">TDCFKX!ZNRUMBJ@_AILHWP-\"EOSGYVQ*</string>
+    <string name="de_glitchy_tozier_charset_small">tnlmyf!.srobvj@,uighwzx\"eadckpq?</string>
+    <string name="de_glitchy_tozier_charset_caps">TNLMYF!-SROBVJ@_UIGHWZX\'EADCKPQ*</string>
 
     <string-array name="keyboard_layouts_id">
         <item>en_eight_pen_albanian</item>
@@ -47,6 +49,7 @@
         <item>en_glitchy_tozier_esperanto</item>
         <item>en_eight_pen_french</item>
         <item>en_eight_pen_german</item>
+        <item>de_glitchy_tozier_german</item>
         <item>he_eight_pen_latincaps</item>
         <item>en_eight_pen_irish</item>
         <item>en_eight_pen_italian</item>
@@ -60,9 +63,10 @@
         <item>Danish</item>
         <item>Dutch</item>
         <item>English / Esperanto</item>
-        <item>English Optimized (experimental)</item>
+        <item>English (optimized; experimental)</item>
         <item>French</item>
         <item>German</item>
+        <item>German (optimized; experimental)</item>
         <item>Hebrew</item>
         <item>Irish</item>
         <item>Italian</item>
