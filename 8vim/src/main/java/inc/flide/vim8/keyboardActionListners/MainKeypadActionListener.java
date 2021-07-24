@@ -10,6 +10,7 @@ import java.util.Map;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardHelpers.KeyboardAction;
+import inc.flide.vim8.keyboardHelpers.KeyboardData;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
@@ -19,7 +20,7 @@ public class MainKeypadActionListener extends KeypadActionListener{
 
     private final Handler longPressHandler = new Handler();
     private final View mainKeyboardView;
-    private final Map<List<FingerPosition>, KeyboardAction> keyboardActionMap;
+    private KeyboardData keyboardData;
     private final List<FingerPosition> movementSequence;
     private FingerPosition currentFingerPosition;
     private boolean isLongPressCallbackSet;
@@ -39,10 +40,18 @@ public class MainKeypadActionListener extends KeypadActionListener{
         super(inputMethodService, view);
         this.mainKeyboardView = view;
 
-        keyboardActionMap = mainInputMethodService.buildKeyboardActionMap();
+        keyboardData = mainInputMethodService.buildKeyboardActionMap();
 
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
+    }
+
+    public String getLowerCaseCharacters() {
+        return keyboardData.getLowerCaseCharacters();
+    }
+
+    public String getUpperCaseCharacters() {
+        return keyboardData.getUpperCaseCharacters();
     }
 
     public void movementStarted(FingerPosition fingerPosition) {
@@ -63,7 +72,7 @@ public class MainKeypadActionListener extends KeypadActionListener{
             interruptLongPress();
             movementSequence.add(currentFingerPosition);
             if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE
-                    && keyboardActionMap.get(movementSequence) != null) {
+                    && keyboardData.getActionMap().get(movementSequence) != null) {
                 processMovementSequence(movementSequence);
                 movementSequence.clear();
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT;
@@ -105,12 +114,12 @@ public class MainKeypadActionListener extends KeypadActionListener{
 
     private void processMovementSequence(List<FingerPosition> movementSequence) {
 
-        KeyboardAction keyboardAction = keyboardActionMap.get(movementSequence);
+        KeyboardAction keyboardAction = keyboardData.getActionMap().get(movementSequence);
 
         if (keyboardAction == null && currentMovementSequenceType == MovementSequenceType.NEW_MOVEMENT) {
             List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
             modifiedMovementSequence.add(0, FingerPosition.NO_TOUCH);
-            keyboardAction = keyboardActionMap.get(modifiedMovementSequence);
+            keyboardAction = keyboardData.getActionMap().get(modifiedMovementSequence);
         }
 
         if (keyboardAction == null) {

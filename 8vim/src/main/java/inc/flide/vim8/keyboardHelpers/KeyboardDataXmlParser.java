@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,8 @@ import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardActionType;
 
-class KeyboardActionXmlParser {
+class KeyboardDataXmlParser {
+    private static final String KEYBOARD_DATA_TAG = "keyboardData";
     private static final String KEYBOARD_ACTION_MAP_TAG = "keyboardActionMap";
     private static final String KEYBOARD_ACTION_TAG = "keyboardAction";
     private static final String KEYBOARD_ACTION_TYPE_TAG = "keyboardActionType";
@@ -29,20 +29,41 @@ class KeyboardActionXmlParser {
     private static final String INPUT_KEY_TAG = "inputKey";
     private static final String INPUT_KEY_FLAGS_TAG = "flags";
     private static final String INPUT_KEY_FLAG_TAG = "flag";
+    private static final String KEYBOARD_CHARACTER_SET_TAG = "keyboardCharacterSet";
+    private static final String KEYBOARD_CHARACTER_SET_LOWERCASE_TAG = "lowerCase";
+    private static final String KEYBOARD_CHARACTER_SET_UPPERCASE_TAG = "upperCase";
 
     private final XmlPullParser parser;
 
-    KeyboardActionXmlParser(InputStream inputStream) throws XmlPullParserException, IOException {
+    KeyboardDataXmlParser(InputStream inputStream) throws XmlPullParserException, IOException {
         parser = Xml.newPullParser();
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(inputStream, null);
         parser.nextTag();
     }
 
-    Map<List<FingerPosition>, KeyboardAction> readKeyboardActionMap() throws IOException, XmlPullParserException {
+    public KeyboardData readKeyboardData() throws IOException, XmlPullParserException {
+        KeyboardData keyboardData = new KeyboardData();
+        parser.require(XmlPullParser.START_TAG, null, KEYBOARD_DATA_TAG);
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String tagName = parser.getName();
+            switch (tagName) {
+                case KEYBOARD_CHARACTER_SET_TAG:
+                    readKeyboardCharacterSet(keyboardData);
+                    break;
+                case KEYBOARD_ACTION_MAP_TAG:
+                    keyboardData.setActionMap(readKeyboardActionMap());
+                    break;
+            }
+        }
+        return keyboardData;
+    }
+    private Map<List<FingerPosition>, KeyboardAction> readKeyboardActionMap() throws IOException, XmlPullParserException {
         Map<List<FingerPosition>, KeyboardAction> keyboardActionMap = new HashMap<>();
 
-        parser.require(XmlPullParser.START_TAG, null, KEYBOARD_ACTION_MAP_TAG);
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -54,6 +75,30 @@ class KeyboardActionXmlParser {
             }
         }
         return keyboardActionMap;
+    }
+
+    private void readKeyboardCharacterSet(KeyboardData keyboardData) throws XmlPullParserException, IOException {
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String tagName = parser.getName();
+            switch (tagName) {
+                case KEYBOARD_CHARACTER_SET_LOWERCASE_TAG:
+                    parser.require(XmlPullParser.START_TAG, null, KEYBOARD_CHARACTER_SET_LOWERCASE_TAG);
+                    String keyboardLowerCaseCharacterSet = readText();
+                    keyboardData.setLowerCaseCharacters(keyboardLowerCaseCharacterSet);
+                    parser.require(XmlPullParser.END_TAG, null, KEYBOARD_CHARACTER_SET_LOWERCASE_TAG);
+                    break;
+                case KEYBOARD_CHARACTER_SET_UPPERCASE_TAG:
+                    parser.require(XmlPullParser.START_TAG, null, KEYBOARD_CHARACTER_SET_UPPERCASE_TAG);
+                    String keyboardUpperCaseCharacterSet = readText();
+                    keyboardData.setUpperCaseCharacters(keyboardUpperCaseCharacterSet);
+                    parser.require(XmlPullParser.END_TAG, null, KEYBOARD_CHARACTER_SET_UPPERCASE_TAG);
+                    break;
+                default:
+            }
+        }
     }
 
     private Map.Entry<List<FingerPosition>, KeyboardAction> readKeyboardAction() throws XmlPullParserException, IOException {
