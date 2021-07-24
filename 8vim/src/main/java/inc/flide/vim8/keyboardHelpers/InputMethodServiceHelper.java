@@ -2,14 +2,8 @@ package inc.flide.vim8.keyboardHelpers;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.renderscript.ScriptGroup;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,29 +13,29 @@ import inc.flide.vim8.structures.FingerPosition;
 
 public class InputMethodServiceHelper {
 
-    public static Map<List<FingerPosition>, KeyboardAction> initializeKeyboardActionMap(Resources resources, Context context) {
+    public static KeyboardData initializeKeyboardActionMap(Resources resources, Context context) {
 
-        Map<List<FingerPosition>, KeyboardAction> mainKeyboardActionsMap = new HashMap<>();
-        mainKeyboardActionsMap = addToKeyboardActionsMap(
-                mainKeyboardActionsMap,
+        KeyboardData mainKeyboardData = new KeyboardData();
+        addToKeyboardActionsMap(
+                mainKeyboardData,
                 resources,
                 R.raw.sector_circle_as_buttons);
-        mainKeyboardActionsMap = addToKeyboardActionsMap(
-                mainKeyboardActionsMap,
+        addToKeyboardActionsMap(
+                mainKeyboardData,
                 resources,
                 R.raw.d_pad_actions);
-        mainKeyboardActionsMap = addToKeyboardActionsMap(
-                mainKeyboardActionsMap,
+        addToKeyboardActionsMap(
+                mainKeyboardData,
                 resources,
                 R.raw.special_core_gestures);
 
         int languageLayoutResourceId = loadTheSelectedLanguageLayout(resources, context);
-        mainKeyboardActionsMap = addToKeyboardActionsMap(
-                mainKeyboardActionsMap,
+        addToKeyboardActionsMap(
+                mainKeyboardData,
                 resources,
                 languageLayoutResourceId);
 
-        return mainKeyboardActionsMap;
+        return mainKeyboardData;
     }
 
     private static int loadTheSelectedLanguageLayout(Resources resources, Context context) {
@@ -54,26 +48,27 @@ public class InputMethodServiceHelper {
         return resources.getIdentifier(currentLanguageLayout, defType, packageName);
     }
 
-    private static Map<List<FingerPosition>, KeyboardAction> addToKeyboardActionsMap(
-        Map<List<FingerPosition>, KeyboardAction> firstKeyboardActionsMap,
+    private static void addToKeyboardActionsMap(
+        KeyboardData keyboardData,
         Resources resources, int resourceId) {
 
-        if( firstKeyboardActionsMap == null) {
-            firstKeyboardActionsMap = new HashMap<>();
-        }
         try (InputStream inputStream = resources.openRawResource(resourceId)){
-            KeyboardActionXmlParser keyboardActionXmlParser = new KeyboardActionXmlParser(inputStream);
-            Map<List<FingerPosition>, KeyboardAction> tempKeyboardActionMap = keyboardActionXmlParser
-                    .readKeyboardActionMap();
-            if (validateNoConflictingActions(firstKeyboardActionsMap, tempKeyboardActionMap)) {
-                firstKeyboardActionsMap.putAll(tempKeyboardActionMap);
+            KeyboardDataXmlParser keyboardDataXmlParser = new KeyboardDataXmlParser(inputStream);
+            KeyboardData tempKeyboardData = keyboardDataXmlParser.readKeyboardData();
+            if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.getActionMap())) {
+                keyboardData.addAllToActionMap(tempKeyboardData.getActionMap());
             }
-
+            if (keyboardData.getLowerCaseCharacters().isEmpty()
+                    && !tempKeyboardData.getLowerCaseCharacters().isEmpty()) {
+                keyboardData.setLowerCaseCharacters(tempKeyboardData.getLowerCaseCharacters());
+            }
+            if (keyboardData.getUpperCaseCharacters().isEmpty()
+                    && !tempKeyboardData.getUpperCaseCharacters().isEmpty()) {
+                keyboardData.setUpperCaseCharacters(tempKeyboardData.getUpperCaseCharacters());
+            }
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-
-        return firstKeyboardActionsMap;
     }
 
     private static boolean validateNoConflictingActions(

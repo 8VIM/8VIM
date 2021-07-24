@@ -1,46 +1,47 @@
-<keyboardActionMap>
+<keyboardData>
+    <keyboardActionMap>
+        <keyboardAction>
+            <keyboardActionType>INPUT_KEY</keyboardActionType>
+            <movementSequence>NO_TOUCH;INSIDE_CIRCLE;TOP;NO_TOUCH;</movementSequence>
+            <inputKey>KEYCODE_DPAD_UP</inputKey>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_KEY</keyboardActionType>
+            <movementSequence>NO_TOUCH;INSIDE_CIRCLE;BOTTOM;NO_TOUCH;</movementSequence>
+            <inputKey>KEYCODE_DPAD_DOWN</inputKey>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_KEY</keyboardActionType>
+            <movementSequence>NO_TOUCH;INSIDE_CIRCLE;LEFT;NO_TOUCH;</movementSequence>
+            <inputKey>KEYCODE_DPAD_LEFT</inputKey>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_KEY</keyboardActionType>
+            <movementSequence>NO_TOUCH;INSIDE_CIRCLE;RIGHT;NO_TOUCH;</movementSequence>
+            <inputKey>KEYCODE_DPAD_RIGHT</inputKey>
+        </keyboardAction>
 
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;TOP;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_DPAD_UP</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;BOTTOM;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_DPAD_DOWN</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;LEFT;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_DPAD_LEFT</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;RIGHT;NO_TOUCH;</movementSequence>
-        <inputKey>KEYCODE_DPAD_RIGHT</inputKey>
-    </keyboardAction>
+        <!--Long press configuration-->
+        <keyboardAction>
+            <keyboardActionType>INPUT_KEY</keyboardActionType>
+            <movementSequence>NO_TOUCH;INSIDE_CIRCLE;TOP;LONG_PRESS;</movementSequence>
+            <inputKey>KEYCODE_DPAD_UP</inputKey>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_KEY</keyboardActionType>
+            <movementSequence>NO_TOUCH;INSIDE_CIRCLE;BOTTOM;LONG_PRESS;</movementSequence>
+            <inputKey>KEYCODE_DPAD_DOWN</inputKey>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_KEY</keyboardActionType>
+            <movementSequence>NO_TOUCH;INSIDE_CIRCLE;LEFT;LONG_PRESS;</movementSequence>
+            <inputKey>KEYCODE_DPAD_LEFT</inputKey>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_KEY</keyboardActionType>
+            <movementSequence>NO_TOUCH;INSIDE_CIRCLE;RIGHT;LONG_PRESS;</movementSequence>
+            <inputKey>KEYCODE_DPAD_RIGHT</inputKey>
+        </keyboardAction>
 
-    <!--Long press configuration-->
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;TOP;LONG_PRESS;</movementSequence>
-        <inputKey>KEYCODE_DPAD_UP</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;BOTTOM;LONG_PRESS;</movementSequence>
-        <inputKey>KEYCODE_DPAD_DOWN</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;LEFT;LONG_PRESS;</movementSequence>
-        <inputKey>KEYCODE_DPAD_LEFT</inputKey>
-    </keyboardAction>
-    <keyboardAction>
-        <keyboardActionType>INPUT_KEY</keyboardActionType>
-        <movementSequence>NO_TOUCH;INSIDE_CIRCLE;RIGHT;LONG_PRESS;</movementSequence>
-        <inputKey>KEYCODE_DPAD_RIGHT</inputKey>
-    </keyboardAction>
-
-</keyboardActionMap>
+    </keyboardActionMap>
+</keyboardData>
