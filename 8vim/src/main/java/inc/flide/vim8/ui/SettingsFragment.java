@@ -15,6 +15,7 @@ import androidx.preference.SeekBarPreference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Map;
 import inc.flide.vim8.R;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.LayoutFileName;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -67,9 +69,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
     private void askUserPreferredKeyboardLayout() {
         Context context = getContext();
 
-        Map<String, String> inputMethodsNameAndId = new HashMap<>();
-        inputMethodsNameAndId.put("German", "en_eight_pen_german");
-        inputMethodsNameAndId.put("French", "en_eight_pen_french");
+        Map<String, String> inputMethodsNameAndId = findAllAvailableLayouts();
 
         ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
 
@@ -101,6 +101,19 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 })
                 .positiveText(R.string.generic_okay_text)
                 .show();
+    }
+
+    private Map<String, String> findAllAvailableLayouts() {
+        Map<String, String> languagesAndLayouts = new HashMap<>();
+        Field[] fields=R.raw.class.getFields();
+        for(int count=0; count < fields.length; count++){
+            LayoutFileName file = new LayoutFileName(fields[count].getName());
+            if (file.isValidLayout()) {
+                languagesAndLayouts.put(file.getLayoutDisplayName(), file.getResourceName());
+            }
+        }
+
+        return languagesAndLayouts;
     }
 
     private void askUserPreferredEmoticonKeyboard() {
