@@ -1,18 +1,15 @@
 package inc.flide.vim8.keyboardActionListners;
 
 import android.os.Handler;
-import android.view.HapticFeedbackConstants;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import inc.flide.vim8.MainInputMethodService;
-import inc.flide.vim8.keyboardHelpers.KeyboardAction;
-import inc.flide.vim8.keyboardHelpers.KeyboardData;
+import inc.flide.vim8.structures.KeyboardAction;
+import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.MovementSequenceType;
 

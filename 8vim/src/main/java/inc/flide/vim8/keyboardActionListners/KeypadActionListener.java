@@ -8,7 +8,7 @@ import android.view.View;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.keyboardHelpers.KeyboardAction;
+import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.CustomKeycode;
 

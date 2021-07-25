@@ -1,4 +1,4 @@
-package inc.flide.vim8.keyboardHelpers;
+package inc.flide.vim8.structures;
 
 import java.util.Locale;
 
