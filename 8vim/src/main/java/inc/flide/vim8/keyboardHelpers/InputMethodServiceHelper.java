@@ -21,7 +21,7 @@ public class InputMethodServiceHelper {
         addToKeyboardActionsMap(
                 mainKeyboardData,
                 resources,
-                R.raw.sector_circle_as_buttons);
+                R.raw.sector_circle_buttons);
         addToKeyboardActionsMap(
                 mainKeyboardData,
                 resources,
@@ -41,7 +41,11 @@ public class InputMethodServiceHelper {
     }
 
     private static int loadTheSelectedLanguageLayout(Resources resources, Context context) {
-        String currentLanguageLayout = SharedPreferenceHelper.getInstance(context).getString("current_language_layout", resources.getResourceName(R.raw.en_eight_pen_original));
+        String currentLanguageLayout = SharedPreferenceHelper
+                .getInstance(context)
+                .getString("current_language_layout",
+                        resources.getResourceName(R.raw.en_regular_8pen
+                        ));
 
         String packageName = currentLanguageLayout.substring(0, currentLanguageLayout.indexOf(':'));
         String defType = currentLanguageLayout.substring(currentLanguageLayout.indexOf(':')+1, currentLanguageLayout.indexOf('/'));
