@@ -16,7 +16,9 @@ import java.util.Map;
 
 import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardActionType;
+import inc.flide.vim8.structures.KeyboardData;
 
 class KeyboardDataXmlParser {
     private static final String KEYBOARD_DATA_TAG = "keyboardData";

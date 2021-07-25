@@ -15,7 +15,7 @@ import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
 import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
-import inc.flide.vim8.keyboardHelpers.KeyboardAction;
+import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.KeyboardActionType;

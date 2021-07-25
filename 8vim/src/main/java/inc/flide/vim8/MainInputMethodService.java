@@ -16,13 +16,10 @@ import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.List;
-import java.util.Map;
 
 import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
-import inc.flide.vim8.keyboardHelpers.KeyboardAction;
-import inc.flide.vim8.keyboardHelpers.KeyboardData;
+import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
