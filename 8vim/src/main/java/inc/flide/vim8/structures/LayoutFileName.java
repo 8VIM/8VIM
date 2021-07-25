@@ -41,7 +41,7 @@ public class LayoutFileName {
             languageCode = nameComponents[0];
             fontCode = nameComponents[1];
             layoutName = nameComponents[2];
-            languageName = Locale.forLanguageTag(languageCode).getDisplayName();
+            languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
             layoutDisplayName = layoutName + " (" + languageName + ")";
             isValidLayout = true;
         } else {
