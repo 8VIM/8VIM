@@ -12,6 +12,7 @@ import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.structures.LayoutFileName;
 
 public class InputMethodServiceHelper {
 
@@ -43,15 +44,10 @@ public class InputMethodServiceHelper {
     private static int loadTheSelectedLanguageLayout(Resources resources, Context context) {
         String currentLanguageLayout = SharedPreferenceHelper
                 .getInstance(context)
-                .getString("current_language_layout",
-                        resources.getResourceName(R.raw.en_regular_8pen
-                        ));
+                .getString(resources.getString(R.string.pref_selected_keyboard_layout),
+                        new LayoutFileName().getResourceName() );
 
-        String packageName = currentLanguageLayout.substring(0, currentLanguageLayout.indexOf(':'));
-        String defType = currentLanguageLayout.substring(currentLanguageLayout.indexOf(':')+1, currentLanguageLayout.indexOf('/'));
-        currentLanguageLayout = currentLanguageLayout.substring(currentLanguageLayout.indexOf('/')+1);
-
-        return resources.getIdentifier(currentLanguageLayout, defType, packageName);
+        return resources.getIdentifier(currentLanguageLayout, "raw", context.getPackageName());
     }
 
     private static void addToKeyboardActionsMap(
