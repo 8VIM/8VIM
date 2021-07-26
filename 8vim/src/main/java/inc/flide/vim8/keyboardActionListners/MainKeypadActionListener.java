@@ -1,5 +1,7 @@
 package inc.flide.vim8.keyboardActionListners;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Handler;
 import android.view.View;
 
@@ -7,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import inc.flide.vim8.MainInputMethodService;
+import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.Constants;
@@ -17,7 +20,7 @@ public class MainKeypadActionListener extends KeypadActionListener{
 
     private final Handler longPressHandler = new Handler();
     private final View mainKeyboardView;
-    private KeyboardData keyboardData;
+    private static KeyboardData keyboardData;
     private final List<FingerPosition> movementSequence;
     private FingerPosition currentFingerPosition;
     private boolean isLongPressCallbackSet;
@@ -38,9 +41,12 @@ public class MainKeypadActionListener extends KeypadActionListener{
         this.mainKeyboardView = view;
 
         keyboardData = mainInputMethodService.buildKeyboardActionMap();
-
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
+    }
+
+    public static void rebuildKeyboardData(Resources resource, Context context) {
+        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resource, context);
     }
 
     public String getLowerCaseCharacters() {
