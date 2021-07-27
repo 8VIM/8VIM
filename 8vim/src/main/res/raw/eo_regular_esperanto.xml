@@ -498,5 +498,45 @@
             <inputString>,</inputString>
             <inputCapsLockString>_</inputCapsLockString>
         </keyboardAction>
+
+
+        <!--Esperanto Characters -->
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ĉ</inputString>
+            <inputCapsLockString>Ĉ</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ĝ</inputString>
+            <inputCapsLockString>Ĝ</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ĥ</inputString>
+            <inputCapsLockString>Ĥ</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ĵ</inputString>
+            <inputCapsLockString>Ĵ</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;TOP;LEFT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ŝ</inputString>
+            <inputCapsLockString>Ŝ</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ŭ</inputString>
+            <inputCapsLockString>Ŭ</inputCapsLockString>
+        </keyboardAction>
+
     </keyboardActionMap>
 </keyboardData>
