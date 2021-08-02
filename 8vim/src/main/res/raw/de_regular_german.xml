@@ -1,4 +1,8 @@
 <keyboardActionMap>
+    <keyboardCharacterSet>
+        <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
+        <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
+    </keyboardCharacterSet>
     <!--{NO_TOUCH, INSIDE_CIRCLE, TOP, LEFT, BOTTOM, RIGHT}-->
     <keyboardAction>
         <keyboardActionType>INPUT_TEXT</keyboardActionType>
