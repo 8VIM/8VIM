@@ -91,7 +91,7 @@
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
             <inputString>i</inputString>
-            <inputCapsLockString>I</inputCapsLockString>
+			<inputCapsLockString>İ</inputCapsLockString>
         </keyboardAction>
         <keyboardAction>
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
@@ -310,7 +310,7 @@
         <keyboardAction>
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
-            <inputString>I</inputString>
+            <inputString>İ</inputString>
             <inputCapsLockString>i</inputCapsLockString>
         <flags>
             <flag>1</flag>
@@ -445,7 +445,7 @@
         <keyboardAction>
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
-            <inputString>YO!! _\m/</inputString>
+			<inputString>YO!! _\m/</inputString> <!-- when I first saw it in keyboard, thought it was a bug .d -->
         </keyboardAction>
 
         <keyboardAction>
@@ -500,42 +500,88 @@
         </keyboardAction>
 
 
-        <!--Esperanto Characters -->
+        <!-- Turkish Characters -->
+
+
+		<!-- lowercase -->
+
         <keyboardAction>
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
-            <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
-            <inputString>ĉ</inputString>
-            <inputCapsLockString>Ĉ</inputCapsLockString>
-        </keyboardAction>
-        <keyboardAction>
-            <keyboardActionType>INPUT_TEXT</keyboardActionType>
-            <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
-            <inputString>ĝ</inputString>
-            <inputCapsLockString>Ĝ</inputCapsLockString>
-        </keyboardAction>
-        <keyboardAction>
-            <keyboardActionType>INPUT_TEXT</keyboardActionType>
-            <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
-            <inputString>ĥ</inputString>
-            <inputCapsLockString>Ĥ</inputCapsLockString>
-        </keyboardAction>
-        <keyboardAction>
-            <keyboardActionType>INPUT_TEXT</keyboardActionType>
-            <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
-            <inputString>ĵ</inputString>
-            <inputCapsLockString>Ĵ</inputCapsLockString>
-        </keyboardAction>
-        <keyboardAction>
-            <keyboardActionType>INPUT_TEXT</keyboardActionType>
-            <movementSequence>INSIDE_CIRCLE;TOP;LEFT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
-            <inputString>ŝ</inputString>
-            <inputCapsLockString>Ŝ</inputCapsLockString>
+            <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ı</inputString>
+            <inputCapsLockString>I</inputCapsLockString>
         </keyboardAction>
         <keyboardAction>
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
-            <inputString>ŭ</inputString>
-            <inputCapsLockString>Ŭ</inputCapsLockString>
+            <inputString>ü</inputString>
+            <inputCapsLockString>Ü</inputCapsLockString>
         </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ö</inputString>
+            <inputCapsLockString>Ö</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ğ</inputString>
+            <inputCapsLockString>Ğ</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;TOP;LEFT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ş</inputString>
+            <inputCapsLockString>Ş</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ç</inputString>
+            <inputCapsLockString>Ç</inputCapsLockString>
+        </keyboardAction>
+
+
+		<!-- uppercase -->
+
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
+            <inputString>I</inputString>
+            <inputCapsLockString>ı</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
+            <inputString>Ü</inputString>
+            <inputCapsLockString>ü</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>Ö</inputString>
+            <inputCapsLockString>ö</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>Ğ</inputString>
+            <inputCapsLockString>ğ</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+			<movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>Ş</inputString>
+            <inputCapsLockString>ş</inputCapsLockString>
+        </keyboardAction>
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
+            <inputString>Ç</inputString>
+            <inputCapsLockString>ç</inputCapsLockString>
+        </keyboardAction>
+
+
     </keyboardActionMap>
 </keyboardData>
