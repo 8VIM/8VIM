@@ -1,5 +1,7 @@
 package inc.flide.vim8.structures;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
@@ -26,7 +28,7 @@ public class LayoutFileName {
         languageName = "English";
         isValidLayout = true;
         resourceName = languageCode + "_" + fontCode + "_" + layoutName;
-        layoutDisplayName = layoutName + " (" + languageName + ")";
+        layoutDisplayName = StringUtils.capitalize(layoutName) + " (" + StringUtils.capitalize(languageName) + ")";
     }
 
     public LayoutFileName(String fileName) {
@@ -42,7 +44,7 @@ public class LayoutFileName {
             fontCode = nameComponents[1];
             layoutName = nameComponents[2];
             languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
-            layoutDisplayName = layoutName + " (" + languageName + ")";
+            layoutDisplayName = StringUtils.capitalize(layoutName) + " (" + StringUtils.capitalize(languageName) + ")";
             isValidLayout = true;
         } else {
             setLayoutValidityFalse();
