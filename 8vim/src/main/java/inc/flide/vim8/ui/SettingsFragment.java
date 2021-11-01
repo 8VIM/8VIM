@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -107,7 +108,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
     }
 
     private Map<String, String> findAllAvailableLayouts() {
-        Map<String, String> languagesAndLayouts = new HashMap<>();
+        Map<String, String> languagesAndLayouts = new TreeMap<>();
         Field[] fields=R.raw.class.getFields();
         for(int count=0; count < fields.length; count++){
             LayoutFileName file = new LayoutFileName(fields[count].getName());
