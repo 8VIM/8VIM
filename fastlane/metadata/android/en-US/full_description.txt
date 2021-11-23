@@ -2,7 +2,7 @@
 
 Usability Guide
 
-So, what capabilities does 8Vim have? Once you know how to type with this thing (Learn how to type with this original [8Pen-game App] (https://play.google.com/store/apps/details?id=com.eightpen.android.wordcup&hl=en), you must know the following
+So, what capabilities does 8Vim have? Once you know how to type with this thing (Learn how to type with this original [8Pen-game video](https://www.youtube.com/watch?v=99vsUF4NuLk), you must know the following
 Basic Needed Stuff
 
 Right Sector acts as a backspace Key.
