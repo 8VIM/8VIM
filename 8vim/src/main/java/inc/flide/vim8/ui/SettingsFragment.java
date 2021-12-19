@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
@@ -38,22 +37,35 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.prefs, rootKey);
 
-        Preference emojiKeyboardPref = findPreference(getString(R.string.pref_select_emoji_keyboard_key));
-        assert emojiKeyboardPref != null;
+        setupPreferenceButtonActions();
+    }
 
-        emojiKeyboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                askUserPreferredEmoticonKeyboard();
+    private void setupPreferenceButtonActions() {
+        setupEmojiKeyboardPreferenceAction();
+        setupLayoutPreferenceAction();
                 return true;
-            }
-        });
+    }
 
+
+    private void setupLayoutPreferenceAction() {
         Preference keyboardPref = findPreference(getString(R.string.pref_select_keyboard_layout_key));
         assert keyboardPref != null;
 
         keyboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 askUserPreferredKeyboardLayout();
+                return true;
+            }
+        });
+    }
+
+    private void setupEmojiKeyboardPreferenceAction() {
+        Preference emojiKeyboardPref = findPreference(getString(R.string.pref_select_emoji_keyboard_key));
+        assert emojiKeyboardPref != null;
+
+        emojiKeyboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                askUserPreferredEmoticonKeyboard();
                 return true;
             }
         });
