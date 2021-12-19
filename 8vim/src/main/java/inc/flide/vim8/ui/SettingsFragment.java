@@ -43,9 +43,39 @@ public class SettingsFragment extends PreferenceFragmentCompat
     private void setupPreferenceButtonActions() {
         setupEmojiKeyboardPreferenceAction();
         setupLayoutPreferenceAction();
-                return true;
+        setupLoadCustomLayoutPreferenceAction();
     }
 
+    private void setupLoadCustomLayoutPreferenceAction() {
+        Preference loadCustomKeyboardPreference = findPreference(getString(R.string.pref_select_custom_keyboard_layout_key));
+        assert loadCustomKeyboardPreference != null;
+
+        loadCustomKeyboardPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                askUserLoadCustomKeyboardLayout();
+                return true;
+            }
+        });
+    }
+
+    private void askUserLoadCustomKeyboardLayout(){
+        //show dialog to load file
+        //save the current layout settings
+        //set the pref 'pref_use_custom_selected_keyboard_layout' to true
+        //try and load the custom layout
+        // if loading fails
+        //set the pref 'pref_use_custom_selected_keyboard_layout' to false
+        // reload the saved layout settings
+        // if loading is success
+        // nothing more to do
+        Context context = getContext();
+
+        new MaterialDialog.Builder(context)
+                .title(R.string.select_custom_keyboard_layout_dialog_title)
+                .positiveText(R.string.generic_okay_text)
+                .negativeText(R.string.generic_cancel_text)
+                .show();
+    }
 
     private void setupLayoutPreferenceAction() {
         Preference keyboardPref = findPreference(getString(R.string.pref_select_keyboard_layout_key));
