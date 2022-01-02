@@ -2,7 +2,9 @@ package inc.flide.vim8.ui;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -22,13 +24,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.LayoutFileName;
 
+import static android.app.Activity.RESULT_OK;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class SettingsFragment extends PreferenceFragmentCompat
@@ -38,24 +40,70 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.prefs, rootKey);
 
-        Preference emojiKeyboardPref = findPreference(getString(R.string.pref_select_emoji_keyboard_key));
-        assert emojiKeyboardPref != null;
+        setupPreferenceButtonActions();
+    }
 
-        emojiKeyboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                askUserPreferredEmoticonKeyboard();
-                return true;
-            }
+    private void setupPreferenceButtonActions() {
+        setupEmojiKeyboardPreferenceAction();
+        setupLayoutPreferenceAction();
+        setupLoadCustomLayoutPreferenceAction();
+    }
+
+    private void setupLoadCustomLayoutPreferenceAction() {
+        Preference loadCustomKeyboardPreference = findPreference(getString(R.string.pref_select_custom_keyboard_layout_key));
+        assert loadCustomKeyboardPreference != null;
+
+        loadCustomKeyboardPreference.setOnPreferenceClickListener(preference -> {
+            askUserLoadCustomKeyboardLayout();
+            return true;
         });
+    }
 
+    private static final int PICK_KEYBOARD_LAYOUT_FILE = 1;
+    private void askUserLoadCustomKeyboardLayout(){
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("text/xml");
+        startActivityForResult(Intent.createChooser(intent, "Select a layout file"), PICK_KEYBOARD_LAYOUT_FILE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Context context = getContext();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+
+
+        if(requestCode == PICK_KEYBOARD_LAYOUT_FILE && resultCode == RESULT_OK) {
+            // TODO: Verify if the picked file is actually a valid layout file.
+            final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+            Uri selectedCustomLayoutFile = data.getData();
+            getContext().getContentResolver().takePersistableUriPermission(selectedCustomLayoutFile, takeFlags);
+            sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), true);
+            sharedPreferencesEditor.putString(getString(R.string.pref_selected_custom_keyboard_layout_uri), selectedCustomLayoutFile.toString());
+            sharedPreferencesEditor.apply();
+            MainKeypadActionListener.rebuildKeyboardData(getResources(), getContext(), selectedCustomLayoutFile);
+
+        }
+    }
+    private void setupLayoutPreferenceAction() {
         Preference keyboardPref = findPreference(getString(R.string.pref_select_keyboard_layout_key));
         assert keyboardPref != null;
 
-        keyboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                askUserPreferredKeyboardLayout();
-                return true;
-            }
+        keyboardPref.setOnPreferenceClickListener(preference -> {
+            askUserPreferredKeyboardLayout();
+            return true;
+        });
+    }
+
+    private void setupEmojiKeyboardPreferenceAction() {
+        Preference emojiKeyboardPref = findPreference(getString(R.string.pref_select_emoji_keyboard_key));
+        assert emojiKeyboardPref != null;
+
+        emojiKeyboardPref.setOnPreferenceClickListener(preference -> {
+            askUserPreferredEmoticonKeyboard();
+            return true;
         });
     }
 
@@ -98,6 +146,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
                     if (which != -1) {
                         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
                         sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout), keyboardIds.get(which));
+                        sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), false);
                         sharedPreferencesEditor.apply();
                         MainKeypadActionListener.rebuildKeyboardData(getResources(), getContext());
                     }

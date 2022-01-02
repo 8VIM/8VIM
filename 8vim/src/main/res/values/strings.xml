@@ -20,7 +20,9 @@
     <string name="share_app">Share &appname;</string>
     <string name="select_preferred_emoticon_keyboard_dialog_title">Choose the input method</string>
     <string name="select_preferred_keyboard_layout_dialog_title">Choose the diacritics</string>
+    <string name="select_custom_keyboard_layout_dialog_title">Load the layout file from disk</string>
     <string name="generic_okay_text">OK</string>
+    <string name="generic_cancel_text">Cancel</string>
 
     <!--   preferences categories -->
     <string name="pref_category_general">General</string>
@@ -30,11 +32,17 @@
     <!--    hidden/internal preferences-->
     <string name="pref_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
     <string name="pref_selected_keyboard_layout">selected_keyboard_layout</string>
+    <string name="pref_use_custom_selected_keyboard_layout">use_custom_selected_keyboard_layout</string>
+    <string name="pref_selected_custom_keyboard_layout_uri">pref_selected_custom_keyboard_layout_uri</string>
 
     <!--    preferences shown in gui UI-->
     <string name="pref_select_keyboard_layout_key">select_keyboard_layout</string>
     <string name="pref_select_keyboard_layout_title">Select diacritics layout</string>
     <string name="pref_select_keyboard_layout_summary">Chosen language will decide which diacritics can be entered </string>
+
+    <string name="pref_select_custom_keyboard_layout_key">select_custom_keyboard_layout</string>
+    <string name="pref_select_custom_keyboard_layout_title">Select layout file from device</string>
+    <string name="pref_select_custom_keyboard_layout_summary">Layout file from the device memory will be loaded. Please note this is experimental and might not work.</string>
 
     <string name="pref_select_emoji_keyboard_key">select_emoji_keyboard</string>
     <string name="pref_select_emoji_keyboard_title">Select emoji keyboard</string>
