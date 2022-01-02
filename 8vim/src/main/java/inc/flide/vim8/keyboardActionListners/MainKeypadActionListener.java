@@ -1,14 +1,18 @@
 package inc.flide.vim8.keyboardActionListners;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Handler;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.preference.PreferenceManager;
 import inc.flide.vim8.MainInputMethodService;
+import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
@@ -47,6 +51,10 @@ public class MainKeypadActionListener extends KeypadActionListener{
 
     public static void rebuildKeyboardData(Resources resource, Context context) {
         keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resource, context);
+    }
+
+    public static void rebuildKeyboardData(Resources resource, Context context, Uri customLayoutUri) {
+        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resource, context, customLayoutUri);
     }
 
     public String getLowerCaseCharacters() {
