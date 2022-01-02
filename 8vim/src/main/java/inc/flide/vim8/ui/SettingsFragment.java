@@ -91,11 +91,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
         Preference keyboardPref = findPreference(getString(R.string.pref_select_keyboard_layout_key));
         assert keyboardPref != null;
 
-        keyboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                askUserPreferredKeyboardLayout();
-                return true;
-            }
+        keyboardPref.setOnPreferenceClickListener(preference -> {
+            askUserPreferredKeyboardLayout();
+            return true;
         });
     }
 
@@ -103,11 +101,9 @@ public class SettingsFragment extends PreferenceFragmentCompat
         Preference emojiKeyboardPref = findPreference(getString(R.string.pref_select_emoji_keyboard_key));
         assert emojiKeyboardPref != null;
 
-        emojiKeyboardPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            public boolean onPreferenceClick(Preference preference) {
-                askUserPreferredEmoticonKeyboard();
-                return true;
-            }
+        emojiKeyboardPref.setOnPreferenceClickListener(preference -> {
+            askUserPreferredEmoticonKeyboard();
+            return true;
         });
     }
 
