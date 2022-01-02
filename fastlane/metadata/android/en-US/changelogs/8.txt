@@ -1,0 +1,37 @@
+- Load Custom Keyboard Layout from Device Memory
+- Update issue templates
+- Make SymbolKeypadView, ButtonKeypadView and NumberKeypadView react to color preference change - Chris G
+- Add keypress sounds- Noam Postavsky
+- Experimental: gestures for emoji and braces - Adam Schmalhofer
+- Color changes should reflect immediately - Noam Postavsky
+- Add config to hide letters on the X-pad
+- Restructure numbers keypad
+- Restructure symbols keypad
+
+- Big Thanks to @adamschmalhofer for adding all the below languages to the keyboard.
+- Add Swedish language 
+- Add Serbian language
+- Add Slovak language
+- Add Polish language
+- Add Portuguese language 
+- Add Lithuanian language
+- Add Islandic language 
+- Add Hungarian language
+- Add Croatian language
+- Add Faroese language
+- Add French language
+- Add Czech language
+- Add Finnish language 
+- Add Catalan language
+- Add Bosnian language
+- Add Breton language
+- Add Afrikaans language 
+- Add Turkish language 
+- Add Spanish language 
+- Add Latvian language 
+- Add Norwegian language 
+- Add Italian language 
+- Add Irish language 
+- Add Dutch language 
+- Add Albanian language 
+- Add Danish language 
