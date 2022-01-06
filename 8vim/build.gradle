@@ -29,8 +29,8 @@ android {
     lintOptions {
         htmlReport true
         htmlOutput file("lint-report.html")
-        warningsAsErrors true
-        abortOnError true
+        warningsAsErrors false
+        abortOnError false
         disable "ObsoleteLintCustomCheck"
         disable "ClickableViewAccessibility"
         disable "VectorPath"
