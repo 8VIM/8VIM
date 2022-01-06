@@ -40,7 +40,7 @@ public class MainInputMethodService extends InputMethodService {
     private int capsLockFlag;
     private int modifierFlags;
 
-    private void setCurrentKeypadView(View view){
+    private void setCurrentKeypadView(View view) {
         this.currentKeypadView = view;
         currentKeypadView.invalidate();
         setInputView(currentKeypadView);
@@ -206,13 +206,21 @@ public class MainInputMethodService extends InputMethodService {
     }
 
 
-    public void switchToSelectionKeypad() { setCurrentKeypadView(selectionKeypadView); }
+    public void switchToSelectionKeypad() {
+        setCurrentKeypadView(selectionKeypadView);
+    }
 
-    public void switchToSymbolsKeypad() { setCurrentKeypadView(symbolKeypadView); }
+    public void switchToSymbolsKeypad() {
+        setCurrentKeypadView(symbolKeypadView);
+    }
 
-    public void switchToMainKeypad() { setCurrentKeypadView(mainKeyboardView); }
+    public void switchToMainKeypad() {
+        setCurrentKeypadView(mainKeyboardView);
+    }
 
-    public void switchToNumberPad() { setCurrentKeypadView(numberKeypadView); }
+    public void switchToNumberPad() {
+        setCurrentKeypadView(numberKeypadView);
+    }
 
     public void cut() {
         inputConnection.performContextMenuAction(android.R.id.cut);
@@ -297,7 +305,7 @@ public class MainInputMethodService extends InputMethodService {
      */
     public void commitImeOptionsBasedEnter() {
         int imeAction = this.editorInfo.imeOptions & EditorInfo.IME_MASK_ACTION;
-        switch(imeAction) {
+        switch (imeAction) {
             case EditorInfo.IME_ACTION_GO:
             case EditorInfo.IME_ACTION_SEARCH:
             case EditorInfo.IME_ACTION_SEND:

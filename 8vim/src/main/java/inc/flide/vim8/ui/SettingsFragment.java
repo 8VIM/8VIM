@@ -60,7 +60,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
     }
 
     private static final int PICK_KEYBOARD_LAYOUT_FILE = 1;
-    private void askUserLoadCustomKeyboardLayout(){
+    private void askUserLoadCustomKeyboardLayout() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .addCategory(Intent.CATEGORY_OPENABLE)
                 .setType("text/xml");
@@ -75,7 +75,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
 
 
-        if(requestCode == PICK_KEYBOARD_LAYOUT_FILE && resultCode == RESULT_OK) {
+        if (requestCode == PICK_KEYBOARD_LAYOUT_FILE && resultCode == RESULT_OK) {
             // TODO: Verify if the picked file is actually a valid layout file.
             final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
             Uri selectedCustomLayoutFile = data.getData();
@@ -158,8 +158,8 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     private Map<String, String> findAllAvailableLayouts() {
         Map<String, String> languagesAndLayouts = new TreeMap<>();
-        Field[] fields=R.raw.class.getFields();
-        for(int count=0; count < fields.length; count++){
+        Field[] fields = R.raw.class.getFields();
+        for (int count = 0; count < fields.length; count++) {
             LayoutFileName file = new LayoutFileName(fields[count].getName());
             if (file.isValidLayout()) {
                 languagesAndLayouts.put(file.getLayoutDisplayName(), file.getResourceName());

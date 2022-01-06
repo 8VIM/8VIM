@@ -4,9 +4,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
-import inc.flide.vim8.MainInputMethodService;
-import inc.flide.vim8.R;
-
 public enum CustomKeycode {
     MOVE_CURRENT_END_POINT_LEFT(-1),
     MOVE_CURRENT_END_POINT_RIGHT(-2),
@@ -23,13 +20,13 @@ public enum CustomKeycode {
     SWITCH_TO_EMOTICON_KEYBOARD(-13),
     HIDE_KEYBOARD(-14);
 
-    private static final Map<Integer, CustomKeycode> keyCodeToStringCode;
+    private static final Map<Integer, CustomKeycode> KEY_CODE_TO_STRING_CODE_MAP;
     private final int keyCode;
 
     static {
-        keyCodeToStringCode = new HashMap<>();
-        for (CustomKeycode customKeycode: EnumSet.allOf(CustomKeycode.class)) {
-            keyCodeToStringCode.put(customKeycode.getKeyCode(), customKeycode);
+        KEY_CODE_TO_STRING_CODE_MAP = new HashMap<>();
+        for (CustomKeycode customKeycode : EnumSet.allOf(CustomKeycode.class)) {
+            KEY_CODE_TO_STRING_CODE_MAP.put(customKeycode.getKeyCode(), customKeycode);
         }
     }
 
@@ -42,7 +39,6 @@ public enum CustomKeycode {
     }
 
     public static CustomKeycode fromIntValue(int value) {
-        CustomKeycode ret = keyCodeToStringCode.get(value);
-        return ret;
+        return KEY_CODE_TO_STRING_CODE_MAP.get(value);
     }
 }

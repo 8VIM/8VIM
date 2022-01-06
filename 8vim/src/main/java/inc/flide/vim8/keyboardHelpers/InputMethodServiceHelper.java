@@ -17,14 +17,18 @@ import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.LayoutFileName;
 
-public class InputMethodServiceHelper {
+public final class InputMethodServiceHelper {
 
     public static KeyboardData initializeKeyboardActionMap(Resources resources, Context context) {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean useCustomSelectedKeyboardLayout = sharedPreferences.getBoolean(context.getString(R.string.pref_use_custom_selected_keyboard_layout), false);
+        boolean useCustomSelectedKeyboardLayout = sharedPreferences.getBoolean(
+                context.getString(R.string.pref_use_custom_selected_keyboard_layout),
+                false);
         if (useCustomSelectedKeyboardLayout) {
-            String customKeyboardLayoutString = sharedPreferences.getString(context.getString(R.string.pref_selected_custom_keyboard_layout_uri), null);
+            String customKeyboardLayoutString = sharedPreferences.getString(
+                    context.getString(R.string.pref_selected_custom_keyboard_layout_uri),
+                    null);
             if (customKeyboardLayoutString != null && !customKeyboardLayoutString.isEmpty()) {
                 Uri customKeyboardLayout = Uri.parse(customKeyboardLayoutString);
                 return initializeKeyboardActionMapForCustomLayout(resources, context, customKeyboardLayout);
@@ -82,27 +86,27 @@ public class InputMethodServiceHelper {
         String currentLanguageLayout = SharedPreferenceHelper
                 .getInstance(context)
                 .getString(resources.getString(R.string.pref_selected_keyboard_layout),
-                        new LayoutFileName().getResourceName() );
+                        new LayoutFileName().getResourceName());
 
         return resources.getIdentifier(currentLanguageLayout, "raw", context.getPackageName());
     }
 
-    private static void addToKeyboardActionsMapUsingResourceId( KeyboardData keyboardData, Resources resources, int resourceId) {
-        try (InputStream inputStream = resources.openRawResource(resourceId)){
+    private static void addToKeyboardActionsMapUsingResourceId(KeyboardData keyboardData, Resources resources, int resourceId) {
+        try (InputStream inputStream = resources.openRawResource(resourceId)) {
             addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
-    private static void addToKeyboardActionsMapUsingUri( KeyboardData keyboardData, Context context, Uri customLayoutUri) {
-        try (InputStream inputStream = context.getContentResolver().openInputStream(customLayoutUri)){
+    private static void addToKeyboardActionsMapUsingUri(KeyboardData keyboardData, Context context, Uri customLayoutUri) {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(customLayoutUri)) {
             addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
 
-    private static void addToKeyboardActionsMapUsingInputStream( KeyboardData keyboardData, InputStream inputStream) throws Exception{
+    private static void addToKeyboardActionsMapUsingInputStream(KeyboardData keyboardData, InputStream inputStream) throws Exception {
         KeyboardDataXmlParser keyboardDataXmlParser = new KeyboardDataXmlParser(inputStream);
         KeyboardData tempKeyboardData = keyboardDataXmlParser.readKeyboardData();
         if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.getActionMap())) {
@@ -125,8 +129,8 @@ public class InputMethodServiceHelper {
         if (mainKeyboardActionsMap == null || mainKeyboardActionsMap.isEmpty()) {
             return true;
         }
-        for (Map.Entry<List<FingerPosition>, KeyboardAction> newKeyboardAction: newKeyboardActionsMap.entrySet()) {
-            if(mainKeyboardActionsMap.containsKey(newKeyboardAction.getKey())) {
+        for (Map.Entry<List<FingerPosition>, KeyboardAction> newKeyboardAction : newKeyboardActionsMap.entrySet()) {
+            if (mainKeyboardActionsMap.containsKey(newKeyboardAction.getKey())) {
                 return false;
             }
         }
@@ -134,4 +138,5 @@ public class InputMethodServiceHelper {
         return true;
     }
 
+    private InputMethodServiceHelper() { }
 }

@@ -5,11 +5,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import inc.flide.vim8.R;
@@ -21,8 +19,6 @@ public class AboutUsActivity extends AppCompatActivity {
     private ConstraintLayout website;
     private ConstraintLayout twitter;
     private ConstraintLayout googlePlayStore;
-
-    CardView cardView_back_arrow;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,23 +111,18 @@ public class AboutUsActivity extends AppCompatActivity {
         });
 
 
-        ImageView back_arrow = findViewById(R.id.back_arrow);
+        ImageView backArrow = findViewById(R.id.back_arrow);
 
-        back_arrow.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if(motionEvent.getAction() == MotionEvent.ACTION_DOWN)
-                {
-                    back_arrow.setBackgroundColor(Color.LTGRAY);
-                }
-                if(motionEvent.getAction() == MotionEvent.ACTION_UP)
-                {
-                    back_arrow.setBackgroundColor(Color.WHITE);
-                    Intent intent = new Intent(AboutUsActivity.this, SettingsActivity.class);
-                    startActivity(intent);
-                }
-                return true;
+        backArrow.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                backArrow.setBackgroundColor(Color.LTGRAY);
             }
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                backArrow.setBackgroundColor(Color.WHITE);
+                Intent intent = new Intent(AboutUsActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+            return true;
         });
 
     }

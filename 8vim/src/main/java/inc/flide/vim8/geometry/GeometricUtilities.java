@@ -2,11 +2,13 @@ package inc.flide.vim8.geometry;
 
 import android.graphics.PointF;
 
-public class GeometricUtilities {
+public final class GeometricUtilities {
+
+    private GeometricUtilities() { }
 
     public static double getSquaredDistanceBetweenPoints(PointF a, PointF b) {
-        double xSquare = Math.pow((a.x - b.x), 2);
-        double ySquare = Math.pow((a.y - b.y), 2);
+        double xSquare = Math.pow(a.x - b.x, 2);
+        double ySquare = Math.pow(a.y - b.y, 2);
         double distanceSquare = Math.abs(xSquare + ySquare);
         return distanceSquare;
     }

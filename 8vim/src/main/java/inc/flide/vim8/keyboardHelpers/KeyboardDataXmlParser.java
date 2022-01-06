@@ -137,6 +137,7 @@ class KeyboardDataXmlParser {
                     break;
                 case INPUT_KEY_FLAGS_TAG:
                     flags = readInputFlags();
+                    break;
                 default:
                     //Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
             }
@@ -184,7 +185,7 @@ class KeyboardDataXmlParser {
         //Strictly the inputKey has to has to be a Keycode from the KeyEvent class
         //Or it needs to be one of the customKeyCodes
         int keyCode = KeyEvent.keyCodeFromString(inputKeyString);
-        if ( keyCode == KeyEvent.KEYCODE_UNKNOWN) {
+        if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
             try {
                 keyCode = CustomKeycode.valueOf(inputKeyString).getKeyCode();
             } catch (IllegalArgumentException error) {

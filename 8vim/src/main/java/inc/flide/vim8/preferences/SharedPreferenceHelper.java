@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SharedPreferenceHelper implements SharedPreferences.OnSharedPreferenceChangeListener {
+public final class SharedPreferenceHelper implements SharedPreferences.OnSharedPreferenceChangeListener {
     private SharedPreferences sharedPreferences;
     private static SharedPreferenceHelper singleton = null;
 
@@ -18,13 +18,13 @@ public class SharedPreferenceHelper implements SharedPreferences.OnSharedPrefere
         void onPreferenceChanged();
     }
 
-    public static SharedPreferenceHelper getInstance(Context context){
+    public static SharedPreferenceHelper getInstance(Context context) {
         //These two ifs should be probably swapped as it can still return null
         //when singleton is null.
         if (context == null) {
             return singleton;
         }
-        if(singleton == null){
+        if (singleton == null) {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
             singleton = new SharedPreferenceHelper(sp);
         }
@@ -38,7 +38,7 @@ public class SharedPreferenceHelper implements SharedPreferences.OnSharedPrefere
         listeners.add(note);
     }
 
-    private SharedPreferenceHelper (SharedPreferences sharedPreferences){
+    private SharedPreferenceHelper(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }

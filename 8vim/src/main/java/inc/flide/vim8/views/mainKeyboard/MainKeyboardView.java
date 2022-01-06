@@ -121,9 +121,11 @@ public class MainKeyboardView extends ConstraintLayout {
         ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
         switchToSelectionKeyboardButton.setOnClickListener(view -> {
             KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
-                    KeyboardActionType.INPUT_KEY
-                    , "", null
-                    , CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(), 0);
+                    KeyboardActionType.INPUT_KEY,
+                    "",
+                    null,
+                    CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(),
+                    0);
             actionListener.handleInputKey(switchToSelectionKeyboard);
         });
     }
@@ -132,9 +134,11 @@ public class MainKeyboardView extends ConstraintLayout {
         ImageButton switchToEmojiKeyboardButton = findViewById(R.id.switchToEmojiKeyboard);
         switchToEmojiKeyboardButton.setOnClickListener(view -> {
             KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
-                    KeyboardActionType.INPUT_KEY
-                    , "", null
-                    , CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(), 0);
+                    KeyboardActionType.INPUT_KEY,
+                    "",
+                    null,
+                    CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(),
+                    0);
             actionListener.handleInputKey(switchToEmojiKeyboard);
         });
     }

@@ -8,12 +8,10 @@
     <module name="FileTabCharacter" />
 
     <!-- Trailing spaces -->
-    <!--
     <module name="RegexpSingleline">
       <property name="format" value="\s+$"/>
       <property name="message" value="Line has trailing spaces."/>
     </module>
-    -->
 
     <!-- Space after 'for' and 'if' -->
     <module name="RegexpSingleline">
@@ -48,7 +46,7 @@
 
         <!-- Checks for Naming Conventions.                  -->
         <!-- See http://checkstyle.sf.net/config_naming.html -->
-        <!--<module name="ConstantName" />-->
+        <module name="ConstantName" />
         <module name="LocalFinalVariableName" />
         <module name="LocalVariableName" />
         <module name="MemberName">
@@ -83,7 +81,7 @@
         <!-- Checks for whitespace                               -->
         <!-- See http://checkstyle.sf.net/config_whitespace.html -->
         <module name="GenericWhitespace" />
-        <!--<module name="EmptyForIteratorPad"/>-->
+        <module name="EmptyForIteratorPad"/>
         <module name="MethodParamPad" />
         <module name="NoWhitespaceAfter">
             <property name="tokens" value="BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS" />
@@ -101,14 +99,14 @@
         <!-- Modifier Checks                                    -->
         <!-- See http://checkstyle.sf.net/config_modifiers.html -->
         <module name="ModifierOrder" />
-        <!--<module name="RedundantModifier" />-->
+        <module name="RedundantModifier" />
 
 
         <!-- Checks for blocks. You know, those {
             }'s         -->
         <!-- See http://checkstyle.sf.net/config_blocks.html -->
         <module name="AvoidNestedBlocks" />
-        <!--<module name="EmptyBlock" />-->
+        <module name="EmptyBlock" />
         <module name="LeftCurly" />
         <module name="NeedBraces" />
         <module name="RightCurly" />
@@ -116,18 +114,20 @@
 
         <!-- Checks for common coding problems               -->
         <!-- See http://checkstyle.sf.net/config_coding.html -->
-        <!--module name="AvoidInlineConditionals"/-->
+        <!--<module name="AvoidInlineConditionals"/>-->
         <module name="CovariantEquals" />
         <module name="EmptyStatement" />
-        <!--<module name="EqualsAvoidNull"/>-->
-        <!--<module name="EqualsHashCode" />-->
+        <module name="EqualsAvoidNull"/>
+        <module name="EqualsHashCode" />
         <!--<module name="HiddenField"/>-->
         <module name="IllegalInstantiation" />
-        <!--module name="InnerAssignment"/-->
-        <!--<module name="MagicNumber">-->
-        <!--<property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9" />-->
-        <!--</module>-->
-        <!--module name="MissingSwitchDefault"/-->
+        <module name="InnerAssignment"/>
+        <!--
+        <module name="MagicNumber">
+            <property name="ignoreNumbers" value="-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9" />
+        </module>
+        -->
+        <!--<module name="MissingSwitchDefault"/>-->
         <!--<module name="RedundantThrows">-->
         <!--<property name="allowUnchecked" value="true"/>-->
         <!--<property name="allowSubclasses" value="true"/>-->
@@ -135,24 +135,26 @@
         <module name="SimplifyBooleanExpression" />
         <module name="SimplifyBooleanReturn" />
         <module name="StringLiteralEquality" />
-        <!--<module name="IllegalCatch" />-->
+<!--        <module name="IllegalCatch" />-->
         <module name="IllegalThrows" />
         <module name="FallThrough" />
-        <!--<module name="MultipleStringLiterals" />-->
+<!--        <module name="MultipleStringLiterals" />-->
         <module name="UnnecessaryParentheses" />
-        <!--<module name="DeclarationOrder"/>-->
+<!--        <module name="DeclarationOrder"/>-->
 
         <!-- Checks for class design                         -->
         <!-- See http://checkstyle.sf.net/config_design.html -->
-        <!--module name="DesignForExtension"/-->
-        <!--<module name="FinalClass"/>-->
+<!--        <module name="DesignForExtension"/>-->
+        <module name="FinalClass"/>
         <module name="HideUtilityClassConstructor" />
         <module name="InterfaceIsType" />
-        <!--module name="VisibilityModifier"/-->
-        <!--<module name="MutableException">-->
+        <module name="VisibilityModifier">
+            <property name="protectedAllowed" value="true"/>
+        </module>
+        <module name="MutableException">
         <!-- Extend MutableException to enforce immutable events as well -->
-        <!--<property name="format" value="^.*Exception$|^.*Error$|^.*Event$" />-->
-        <!--</module>-->
+            <property name="format" value="^.*Exception$|^.*Error$|^.*Event$" />
+        </module>
 
         <!-- Miscellaneous other checks.                   -->
         <!-- See http://checkstyle.sf.net/config_misc.html -->

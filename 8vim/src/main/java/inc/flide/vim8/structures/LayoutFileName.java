@@ -8,10 +8,8 @@ import java.util.Locale;
 import java.util.Set;
 
 public class LayoutFileName {
-    private static final Set<String> ISO_LANGUAGES = new HashSet<String>
-            (Arrays.asList(Locale.getISOLanguages()));
-    private static final Set<String> FONT_CODES = new HashSet<String>
-            (Arrays.asList(new String[]{"regular", "bold", "italic", "underline"}));
+    private static final Set<String> ISO_LANGUAGES = new HashSet<String>(Arrays.asList(Locale.getISOLanguages()));
+    private static final Set<String> FONT_CODES = new HashSet<String>(Arrays.asList(new String[]{"regular", "bold", "italic", "underline"}));
 
     private String languageCode;
     private String fontCode;
@@ -34,7 +32,7 @@ public class LayoutFileName {
     public LayoutFileName(String fileName) {
         this();
         String[] nameComponents = fileName.split("_", 3);
-        if (nameComponents.length !=3 ) {
+        if (nameComponents.length != 3) {
             setLayoutValidityFalse();
             return;
         }

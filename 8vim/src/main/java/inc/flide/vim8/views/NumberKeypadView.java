@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.inputmethodservice.Keyboard;
 import android.util.AttributeSet;
-import android.widget.Toast;
 
-import java.util.List;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardActionListners.ButtonKeypadActionListener;

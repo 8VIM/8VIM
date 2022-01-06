@@ -26,8 +26,7 @@ public class KeypadActionListener {
     }
 
     private boolean keyCodeIsValid(int keyCode) {
-        //return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KeyEvent.KEYCODE_PROFILE_SWITCH;
-        return keyCode >= 0 && keyCode <= 288;
+        return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KeyEvent.KEYCODE_PROFILE_SWITCH;
     }
 
     private boolean customKeyCodeIsValid(int keyCode) {
@@ -66,19 +65,19 @@ public class KeypadActionListener {
     }
     private void performInputAcceptedFeedback(int keySound) {
         SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(mainInputMethodService);
-        boolean user_enabled_haptic_feedback =
+        boolean userEnabledHapticFeedback =
                 pref.getBoolean(
                         mainInputMethodService.getString(R.string.pref_haptic_feedback_key),
                         true);
-        if (user_enabled_haptic_feedback) {
+        if (userEnabledHapticFeedback) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
                     HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
-        boolean user_enabled_sound_feedback = pref
+        boolean userEnabledSoundFeedback = pref
                 .getBoolean(
                         mainInputMethodService.getString(R.string.pref_sound_feedback_key),
                         true);
-        if (user_enabled_sound_feedback) {
+        if (userEnabledSoundFeedback) {
             audioManager.playSoundEffect(keySound);
         }
     }
@@ -178,11 +177,11 @@ public class KeypadActionListener {
         }
     }
 
-    private void moveSelection(int dpad_keyCode) {
+    private void moveSelection(int dpadKeyCode) {
         if (isSelectionOn) {
             mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
         }
-        mainInputMethodService.sendDownAndUpKeyEvent(dpad_keyCode, 0);
+        mainInputMethodService.sendDownAndUpKeyEvent(dpadKeyCode, 0);
         if (isSelectionOn) {
             mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
         }
@@ -197,7 +196,7 @@ public class KeypadActionListener {
     }
 
     public boolean isShiftSet() {
-        return mainInputMethodService.getShiftLockFlag() == KeyEvent.META_SHIFT_ON ;
+        return mainInputMethodService.getShiftLockFlag() == KeyEvent.META_SHIFT_ON;
     }
 
     public boolean isCapsLockSet() {

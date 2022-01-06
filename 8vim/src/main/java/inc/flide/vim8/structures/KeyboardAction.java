@@ -2,8 +2,6 @@ package inc.flide.vim8.structures;
 
 import java.util.Locale;
 
-import inc.flide.vim8.structures.KeyboardActionType;
-
 public class KeyboardAction {
 
     private final KeyboardActionType keyboardActionType;

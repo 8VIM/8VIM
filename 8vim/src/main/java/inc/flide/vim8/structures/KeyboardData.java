@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.KeyboardAction;
-
 public class KeyboardData {
     private Map<List<FingerPosition>, KeyboardAction> actionMap;
     private String lowerCaseCharacters;

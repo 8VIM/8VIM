@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
-import java.util.List;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
@@ -72,8 +71,9 @@ public abstract class ButtonKeypadView extends KeyboardView {
     @Override
     public void onDraw(Canvas canvas) {
         for (Keyboard.Key key : getKeyboard().getKeys()) {
-            if (key.label != null)
+            if (key.label != null) {
                 canvas.drawText(key.label.toString(), (key.x * 2 + key.width) / 2f, (key.y * 2 + key.height) / 2f, this.foregroundPaint);
+            }
             if (key.icon != null) {
                 int side = key.height;
                 if (key.width < key.height) {

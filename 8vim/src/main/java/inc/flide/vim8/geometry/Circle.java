@@ -44,11 +44,11 @@ public class Circle {
 
         double dSquare = GeometricUtilities.getSquaredDistanceBetweenPoints(point, centre);
         double rSquare = Math.pow(radius, 2);
-        return (dSquare - rSquare);
+        return dSquare - rSquare;
     }
 
     public boolean isPointInsideCircle(PointF point) {
-        return (getPowerOfPoint(point) < 0);
+        return getPowerOfPoint(point) < 0;
     }
 
     /**
