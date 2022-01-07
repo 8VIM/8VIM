@@ -1,18 +1,18 @@
 package inc.flide.vim8.geometry
 
 import android.graphics.PointF
+import kotlin.math.*
 
 object GeometricUtilities {
-    fun getSquaredDistanceBetweenPoints(a: PointF?, b: PointF?): Double {
-        val xSquare = Math.pow((a.x - b.x).toDouble(), 2.0)
-        val ySquare = Math.pow((a.y - b.y).toDouble(), 2.0)
-        return Math.abs(xSquare + ySquare)
+    fun getSquaredDistanceBetweenPoints(a: PointF, b: PointF): Double {
+        val xSquare = (a.x - b.x).toDouble().pow(2.0)
+        val ySquare = (a.y - b.y).toDouble().pow(2.0)
+        return abs(xSquare + ySquare)
     }
 
-    fun getBaseQuadrant(continiousQuadrantValue: Int): Int {
-        var result: Int
+    fun getBaseQuadrant(continuousQuadrantValue: Int): Int {
         // Calculate result with modulus operator
-        result = continiousQuadrantValue % 4
+        var result: Int = continuousQuadrantValue % 4
         // Fix zero truncation
         if (result < 0) {
             result += 4
@@ -20,10 +20,10 @@ object GeometricUtilities {
         return result
     }
 
-    fun findPointSpecifiedDistanceAwayInGivenDirection(startingPoint: PointF?, directionalAngleInDegree: Double, length: Double): PointF? {
+    fun findPointSpecifiedDistanceAwayInGivenDirection(startingPoint: PointF, directionalAngleInDegree: Double, length: Double): PointF {
         val directionalAngleInRadians = Math.toRadians(directionalAngleInDegree)
-        val x = (startingPoint.x + length * Math.cos(directionalAngleInRadians)) as Int
-        val y = (startingPoint.y + length * Math.sin(directionalAngleInRadians)) as Int
-        return PointF(x, y)
+        val x = (startingPoint.x + length * cos(directionalAngleInRadians)).toFloat().roundToInt()
+        val y = (startingPoint.y + length * sin(directionalAngleInRadians)).toFloat().roundToInt()
+        return PointF(x.toFloat(), y.toFloat())
     }
 }
