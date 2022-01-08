@@ -6,29 +6,28 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.preference.PreferenceManager
 import java.util.*
 
-class SharedPreferenceHelper private constructor(private val sharedPreferences: SharedPreferences?) : OnSharedPreferenceChangeListener {
+class SharedPreferenceHelper private constructor(private val sharedPreferences: SharedPreferences) : OnSharedPreferenceChangeListener {
     interface Listener {
-        open fun onPreferenceChanged()
+        fun onPreferenceChanged()
     }
 
-    private val prefKeys: MutableSet<String?>? = HashSet()
-    private val listeners: MutableList<Listener?>? = ArrayList()
-    fun addListener(note: Listener?) {
+    private val prefKeys: MutableSet<String> = HashSet()
+    private val listeners: MutableList<Listener> = ArrayList()
+    fun addListener(note: Listener) {
         listeners.add(note)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, s: String?) {
-        if (prefKeys.contains(s)) {
+        if (this.prefKeys.contains(s)) {
             for (n in listeners) {
                 n.onPreferenceChanged()
             }
         }
     }
 
-    fun getString(preferenceId: String?, defaultValue: String?): String? {
+    fun getString(preferenceId: String, defaultValue: String?): String? {
         prefKeys.add(preferenceId)
-        val preferencesString: String?
-        preferencesString = try {
+        val preferencesString: String? = try {
             sharedPreferences.getString(preferenceId, defaultValue)
         } catch (e: ClassCastException) {
             return defaultValue
@@ -36,10 +35,9 @@ class SharedPreferenceHelper private constructor(private val sharedPreferences: 
         return preferencesString
     }
 
-    fun getInt(preferenceId: String?, defaultValue: Int): Int {
+    fun getInt(preferenceId: String, defaultValue: Int): Int {
         prefKeys.add(preferenceId)
-        val preferenceInt: Int
-        preferenceInt = try {
+        val preferenceInt: Int = try {
             sharedPreferences.getInt(preferenceId, defaultValue)
         } catch (e: ClassCastException) {
             return defaultValue
@@ -47,10 +45,9 @@ class SharedPreferenceHelper private constructor(private val sharedPreferences: 
         return preferenceInt
     }
 
-    fun getBoolean(preferenceId: String?, defaultValue: Boolean): Boolean {
+    fun getBoolean(preferenceId: String, defaultValue: Boolean): Boolean {
         prefKeys.add(preferenceId)
-        val preferenceBoolean: Boolean
-        preferenceBoolean = try {
+        val preferenceBoolean: Boolean = try {
             sharedPreferences.getBoolean(preferenceId, defaultValue)
         } catch (e: ClassCastException) {
             return defaultValue
@@ -58,10 +55,9 @@ class SharedPreferenceHelper private constructor(private val sharedPreferences: 
         return preferenceBoolean
     }
 
-    fun getFloat(preferenceId: String?, defaultValue: Float): Float {
+    fun getFloat(preferenceId: String, defaultValue: Float): Float {
         prefKeys.add(preferenceId)
-        val preferenceFloat: Float
-        preferenceFloat = try {
+        val preferenceFloat: Float = try {
             sharedPreferences.getFloat(preferenceId, defaultValue)
         } catch (e: ClassCastException) {
             return defaultValue
@@ -71,17 +67,14 @@ class SharedPreferenceHelper private constructor(private val sharedPreferences: 
 
     companion object {
         private var singleton: SharedPreferenceHelper? = null
-        fun getInstance(context: Context?): SharedPreferenceHelper? {
+        fun getInstance(context: Context): SharedPreferenceHelper {
             //These two ifs should be probably swapped as it can still return null
             //when singleton is null.
-            if (context == null) {
-                return singleton
-            }
             if (singleton == null) {
                 val sp = PreferenceManager.getDefaultSharedPreferences(context)
                 singleton = SharedPreferenceHelper(sp)
             }
-            return singleton
+            return singleton as SharedPreferenceHelper
         }
     }
 
