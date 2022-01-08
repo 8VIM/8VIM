@@ -9,33 +9,33 @@ import java.io.IOException
 import java.io.InputStream
 import java.util.*
 
-internal class KeyboardDataXmlParser(inputStream: InputStream?) {
-    private val parser: XmlPullParser?
+internal class KeyboardDataXmlParser(inputStream: InputStream) {
+    private val parser: XmlPullParser = Xml.newPullParser()
+
     @Throws(IOException::class, XmlPullParserException::class)
-    fun readKeyboardData(): KeyboardData? {
+    fun readKeyboardData(): KeyboardData {
         val keyboardData = KeyboardData()
         parser.require(XmlPullParser.START_TAG, null, KEYBOARD_DATA_TAG)
         while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
             }
-            val tagName = parser.getName()
-            when (tagName) {
+            when (parser.name) {
                 KEYBOARD_CHARACTER_SET_TAG -> readKeyboardCharacterSet(keyboardData)
-                KEYBOARD_ACTION_MAP_TAG -> keyboardData.actionMap = readKeyboardActionMap()
+                KEYBOARD_ACTION_MAP_TAG -> keyboardData.setActionMap(readKeyboardActionMap())
             }
         }
         return keyboardData
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun readKeyboardActionMap(): MutableMap<MutableList<FingerPosition?>?, KeyboardAction?>? {
-        val keyboardActionMap: MutableMap<MutableList<FingerPosition?>?, KeyboardAction?> = HashMap()
+    private fun readKeyboardActionMap(): MutableMap<MutableList<FingerPosition>?, KeyboardAction?> {
+        val keyboardActionMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?> = HashMap()
         while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
             }
-            val tagName = parser.getName()
+            val tagName = parser.name
             if (tagName == KEYBOARD_ACTION_TAG) {
                 val keyboardAction = readKeyboardAction()
                 keyboardActionMap[keyboardAction.key] = keyboardAction.value
@@ -45,13 +45,12 @@ internal class KeyboardDataXmlParser(inputStream: InputStream?) {
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
-    private fun readKeyboardCharacterSet(keyboardData: KeyboardData?) {
+    private fun readKeyboardCharacterSet(keyboardData: KeyboardData) {
         while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
             }
-            val tagName = parser.getName()
-            when (tagName) {
+            when (parser.name) {
                 KEYBOARD_CHARACTER_SET_LOWERCASE_TAG -> {
                     parser.require(XmlPullParser.START_TAG, null, KEYBOARD_CHARACTER_SET_LOWERCASE_TAG)
                     val keyboardLowerCaseCharacterSet = readText()
@@ -70,8 +69,8 @@ internal class KeyboardDataXmlParser(inputStream: InputStream?) {
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
-    private fun readKeyboardAction(): MutableMap.MutableEntry<MutableList<FingerPosition?>?, KeyboardAction?>? {
-        var movementSequence: MutableList<FingerPosition?>? = null
+    private fun readKeyboardAction(): MutableMap.MutableEntry<MutableList<FingerPosition>?, KeyboardAction?> {
+        var movementSequence: MutableList<FingerPosition>? = null
         val keyboardAction: KeyboardAction
         var keyboardActionType: KeyboardActionType? = null
         var associatedText: String? = ""
@@ -79,11 +78,10 @@ internal class KeyboardDataXmlParser(inputStream: InputStream?) {
         var keyEventCode = 0
         var flags = 0
         while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
             }
-            val tagName = parser.getName()
-            when (tagName) {
+            when (parser.name) {
                 KEYBOARD_ACTION_TYPE_TAG -> keyboardActionType = readKeyboardActionType()
                 MOVEMENT_SEQUENCE_TAG -> movementSequence = readMovementSequence()
                 INPUT_STRING_TAG -> associatedText = readInputString()
@@ -101,11 +99,10 @@ internal class KeyboardDataXmlParser(inputStream: InputStream?) {
     private fun readInputFlags(): Int {
         var flags = 0
         while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
             }
-            val tagName = parser.getName()
-            when (tagName) {
+            when (parser.name) {
                 INPUT_KEY_FLAG_TAG -> flags = flags or readInputFlag()
                 else -> {}
             }
@@ -132,7 +129,7 @@ internal class KeyboardDataXmlParser(inputStream: InputStream?) {
         var keyCode = KeyEvent.keyCodeFromString(inputKeyString)
         if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
             keyCode = try {
-                CustomKeycode.valueOf(inputKeyString).keyCode
+                CustomKeycode.valueOf(inputKeyString).getKeyCode()
             } catch (error: IllegalArgumentException) {
                 KeyEvent.KEYCODE_UNKNOWN
             }
@@ -141,7 +138,7 @@ internal class KeyboardDataXmlParser(inputStream: InputStream?) {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun readInputString(): String? {
+    private fun readInputString(): String {
         parser.require(XmlPullParser.START_TAG, null, INPUT_STRING_TAG)
         val inputString = readText()
         parser.require(XmlPullParser.END_TAG, null, INPUT_STRING_TAG)
@@ -149,7 +146,7 @@ internal class KeyboardDataXmlParser(inputStream: InputStream?) {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun readInputCapsLockString(): String? {
+    private fun readInputCapsLockString(): String {
         parser.require(XmlPullParser.START_TAG, null, INPUT_CAPSLOCK_STRING_TAG)
         val inputString = readText()
         parser.require(XmlPullParser.END_TAG, null, INPUT_CAPSLOCK_STRING_TAG)
@@ -157,12 +154,12 @@ internal class KeyboardDataXmlParser(inputStream: InputStream?) {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun readMovementSequence(): MutableList<FingerPosition?>? {
+    private fun readMovementSequence(): MutableList<FingerPosition> {
         parser.require(XmlPullParser.START_TAG, null, MOVEMENT_SEQUENCE_TAG)
         val movementSequenceString = readText()
         parser.require(XmlPullParser.END_TAG, null, MOVEMENT_SEQUENCE_TAG)
-        val movementSequenceList: Array<String?> = movementSequenceString.split("\\s*;\\s*").toTypedArray()
-        val movementSequence: MutableList<FingerPosition?> = ArrayList()
+        val movementSequenceList: Array<String> = movementSequenceString.split("\\s*;\\s*").toTypedArray()
+        val movementSequence: MutableList<FingerPosition> = ArrayList()
         for (movement in movementSequenceList) {
             movementSequence.add(FingerPosition.valueOf(movement))
         }
@@ -170,7 +167,7 @@ internal class KeyboardDataXmlParser(inputStream: InputStream?) {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun readKeyboardActionType(): KeyboardActionType? {
+    private fun readKeyboardActionType(): KeyboardActionType {
         parser.require(XmlPullParser.START_TAG, null, KEYBOARD_ACTION_TYPE_TAG)
         val keyboardActionTypeString = readText()
         parser.require(XmlPullParser.END_TAG, null, KEYBOARD_ACTION_TYPE_TAG)
@@ -178,33 +175,32 @@ internal class KeyboardDataXmlParser(inputStream: InputStream?) {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun readText(): String? {
-        var result: String? = ""
+    private fun readText(): String {
+        var result = ""
         if (parser.next() == XmlPullParser.TEXT) {
-            result = parser.getText()
+            result = parser.text
             parser.nextTag()
         }
         return result
     }
 
     companion object {
-        private val KEYBOARD_DATA_TAG: String? = "keyboardData"
-        private val KEYBOARD_ACTION_MAP_TAG: String? = "keyboardActionMap"
-        private val KEYBOARD_ACTION_TAG: String? = "keyboardAction"
-        private val KEYBOARD_ACTION_TYPE_TAG: String? = "keyboardActionType"
-        private val MOVEMENT_SEQUENCE_TAG: String? = "movementSequence"
-        private val INPUT_STRING_TAG: String? = "inputString"
-        private val INPUT_CAPSLOCK_STRING_TAG: String? = "inputCapsLockString"
-        private val INPUT_KEY_TAG: String? = "inputKey"
-        private val INPUT_KEY_FLAGS_TAG: String? = "flags"
-        private val INPUT_KEY_FLAG_TAG: String? = "flag"
-        private val KEYBOARD_CHARACTER_SET_TAG: String? = "keyboardCharacterSet"
-        private val KEYBOARD_CHARACTER_SET_LOWERCASE_TAG: String? = "lowerCase"
-        private val KEYBOARD_CHARACTER_SET_UPPERCASE_TAG: String? = "upperCase"
+        private const val KEYBOARD_DATA_TAG: String = "keyboardData"
+        private const val KEYBOARD_ACTION_MAP_TAG: String = "keyboardActionMap"
+        private const val KEYBOARD_ACTION_TAG: String = "keyboardAction"
+        private const val KEYBOARD_ACTION_TYPE_TAG: String = "keyboardActionType"
+        private const val MOVEMENT_SEQUENCE_TAG: String = "movementSequence"
+        private const val INPUT_STRING_TAG: String = "inputString"
+        private const val INPUT_CAPSLOCK_STRING_TAG: String = "inputCapsLockString"
+        private const val INPUT_KEY_TAG: String = "inputKey"
+        private const val INPUT_KEY_FLAGS_TAG: String = "flags"
+        private const val INPUT_KEY_FLAG_TAG: String = "flag"
+        private const val KEYBOARD_CHARACTER_SET_TAG: String = "keyboardCharacterSet"
+        private const val KEYBOARD_CHARACTER_SET_LOWERCASE_TAG: String = "lowerCase"
+        private const val KEYBOARD_CHARACTER_SET_UPPERCASE_TAG: String = "upperCase"
     }
 
     init {
-        parser = Xml.newPullParser()
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
         parser.setInput(inputStream, null)
         parser.nextTag()

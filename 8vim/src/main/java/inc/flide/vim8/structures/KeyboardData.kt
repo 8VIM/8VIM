@@ -3,18 +3,18 @@ package inc.flide.vim8.structures
 import java.util.HashMap
 
 class KeyboardData {
-    private var actionMap: MutableMap<MutableList<FingerPosition?>?, KeyboardAction?>?
+    private var actionMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?>?
     private var lowerCaseCharacters: String?
     private var upperCaseCharacters: String?
-    fun getActionMap(): MutableMap<MutableList<FingerPosition?>?, KeyboardAction?>? {
+    fun getActionMap(): MutableMap<MutableList<FingerPosition>?, KeyboardAction?>? {
         return actionMap
     }
 
-    fun setActionMap(actionMap: MutableMap<MutableList<FingerPosition?>?, KeyboardAction?>?) {
+    fun setActionMap(actionMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?>?) {
         this.actionMap = actionMap
     }
 
-    fun addAllToActionMap(actionMapAddition: MutableMap<MutableList<FingerPosition?>?, KeyboardAction?>?) {
+    fun addAllToActionMap(actionMapAddition: MutableMap<MutableList<FingerPosition>?, KeyboardAction?>?) {
         if (actionMapAddition != null) {
             actionMap?.putAll(actionMapAddition)
         }

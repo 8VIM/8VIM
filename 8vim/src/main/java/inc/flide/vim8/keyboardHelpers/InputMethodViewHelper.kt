@@ -2,6 +2,7 @@ package inc.flide.vim8.keyboardHelpers
 
 import android.content.res.Configuration
 import inc.flide.vim8.geometry.Dimension
+import kotlin.math.roundToInt
 
 object InputMethodViewHelper {
     fun onMeasureHelper(width: Int, height: Int, orientation: Int): Dimension? {
@@ -10,9 +11,9 @@ object InputMethodViewHelper {
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //Landscape is just un-usable right now.
             // TODO: Landscape mode requires more clarity, what exactly do you want to do?
-            width = Math.round(1.33f * height)
+            width = (1.33f * height).roundToInt()
         } else { // Portrait mode
-            height = Math.round(0.8f * (width - 60 * 3))
+            height = (0.8f * (width - 60 * 3)).roundToInt()
         }
         return Dimension(width, height)
     }

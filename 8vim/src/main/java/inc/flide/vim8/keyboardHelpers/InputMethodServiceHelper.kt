@@ -14,7 +14,7 @@ import inc.flide.vim8.structures.LayoutFileName
 import java.io.InputStream
 
 object InputMethodServiceHelper {
-    fun initializeKeyboardActionMap(resources: Resources?, context: Context?): KeyboardData? {
+    fun initializeKeyboardActionMap(resources: Resources, context: Context): KeyboardData {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val useCustomSelectedKeyboardLayout = sharedPreferences.getBoolean(
                 context.getString(R.string.pref_use_custom_selected_keyboard_layout),
@@ -23,7 +23,7 @@ object InputMethodServiceHelper {
             val customKeyboardLayoutString = sharedPreferences.getString(
                     context.getString(R.string.pref_selected_custom_keyboard_layout_uri),
                     null)
-            if (customKeyboardLayoutString != null && !customKeyboardLayoutString.isEmpty()) {
+            if (customKeyboardLayoutString != null && customKeyboardLayoutString.isNotEmpty()) {
                 val customKeyboardLayout = Uri.parse(customKeyboardLayoutString)
                 return initializeKeyboardActionMapForCustomLayout(resources, context, customKeyboardLayout)
             }
@@ -37,7 +37,7 @@ object InputMethodServiceHelper {
         return mainKeyboardData
     }
 
-    fun initializeKeyboardActionMapForCustomLayout(resources: Resources?, context: Context?, customLayoutUri: Uri?): KeyboardData? {
+    fun initializeKeyboardActionMapForCustomLayout(resources: Resources, context: Context, customLayoutUri: Uri?): KeyboardData {
         if (customLayoutUri == null) {
             val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
             val sharedPreferencesEditor = sharedPreferences.edit()
@@ -53,7 +53,7 @@ object InputMethodServiceHelper {
         return mainKeyboardData
     }
 
-    private fun getLayoutIndependentKeyboardData(resources: Resources?): KeyboardData? {
+    private fun getLayoutIndependentKeyboardData(resources: Resources): KeyboardData {
         val layoutIndependentKeyboardData = KeyboardData()
         addToKeyboardActionsMapUsingResourceId(
                 layoutIndependentKeyboardData,
@@ -70,14 +70,14 @@ object InputMethodServiceHelper {
         return layoutIndependentKeyboardData
     }
 
-    private fun loadTheSelectedLanguageLayout(resources: Resources?, context: Context?): Int {
-        val currentLanguageLayout: String = SharedPreferenceHelper.Companion.getInstance(context)
+    private fun loadTheSelectedLanguageLayout(resources: Resources, context: Context): Int {
+        val currentLanguageLayout: String? = SharedPreferenceHelper.Companion.getInstance(context)
                 .getString(resources.getString(R.string.pref_selected_keyboard_layout),
-                        LayoutFileName().resourceName)
+                        LayoutFileName().getResourceName())
         return resources.getIdentifier(currentLanguageLayout, "raw", context.getPackageName())
     }
 
-    private fun addToKeyboardActionsMapUsingResourceId(keyboardData: KeyboardData?, resources: Resources?, resourceId: Int) {
+    private fun addToKeyboardActionsMapUsingResourceId(keyboardData: KeyboardData, resources: Resources, resourceId: Int) {
         try {
             resources.openRawResource(resourceId).use { inputStream -> addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream) }
         } catch (exception: Exception) {
@@ -85,35 +85,43 @@ object InputMethodServiceHelper {
         }
     }
 
-    private fun addToKeyboardActionsMapUsingUri(keyboardData: KeyboardData?, context: Context?, customLayoutUri: Uri?) {
+    private fun addToKeyboardActionsMapUsingUri(keyboardData: KeyboardData, context: Context, customLayoutUri: Uri) {
         try {
-            context.getContentResolver().openInputStream(customLayoutUri).use { inputStream -> addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream) }
+            context.contentResolver.openInputStream(customLayoutUri).use { inputStream ->
+                if (inputStream != null) {
+                    addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream)
+                } else {
+                    throw Exception("Input stream is null")
+                }
+            }
         } catch (exception: Exception) {
             exception.printStackTrace()
         }
     }
 
     @Throws(Exception::class)
-    private fun addToKeyboardActionsMapUsingInputStream(keyboardData: KeyboardData?, inputStream: InputStream?) {
+    private fun addToKeyboardActionsMapUsingInputStream(keyboardData: KeyboardData, inputStream: InputStream) {
         val keyboardDataXmlParser = KeyboardDataXmlParser(inputStream)
         val tempKeyboardData = keyboardDataXmlParser.readKeyboardData()
-        if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.actionMap)) {
-            keyboardData.addAllToActionMap(tempKeyboardData.actionMap)
+        if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.getActionMap())) {
+            keyboardData.addAllToActionMap(tempKeyboardData.getActionMap())
         }
-        if (keyboardData.getLowerCaseCharacters().isEmpty()
-                && !tempKeyboardData.lowerCaseCharacters.isEmpty()) {
-            keyboardData.setLowerCaseCharacters(tempKeyboardData.lowerCaseCharacters)
+        if (keyboardData.getLowerCaseCharacters()!!.isEmpty()
+                && tempKeyboardData.getLowerCaseCharacters()!!.isNotEmpty()
+        ) {
+            keyboardData.setLowerCaseCharacters(tempKeyboardData.getLowerCaseCharacters())
         }
-        if (keyboardData.getUpperCaseCharacters().isEmpty()
-                && !tempKeyboardData.upperCaseCharacters.isEmpty()) {
-            keyboardData.setUpperCaseCharacters(tempKeyboardData.upperCaseCharacters)
+        if (keyboardData.getUpperCaseCharacters()!!.isEmpty()
+                && tempKeyboardData.getUpperCaseCharacters()!!.isNotEmpty()
+        ) {
+            keyboardData.setUpperCaseCharacters(tempKeyboardData.getUpperCaseCharacters())
         }
     }
 
     private fun validateNoConflictingActions(
-            mainKeyboardActionsMap: MutableMap<MutableList<FingerPosition?>?, KeyboardAction?>?,
-            newKeyboardActionsMap: MutableMap<MutableList<FingerPosition?>?, KeyboardAction?>?): Boolean {
-        if (mainKeyboardActionsMap == null || mainKeyboardActionsMap.isEmpty()) {
+            mainKeyboardActionsMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?>?,
+            newKeyboardActionsMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?>?): Boolean {
+        if (mainKeyboardActionsMap!!.isEmpty() || newKeyboardActionsMap!!.isEmpty()) {
             return true
         }
         for ((key) in newKeyboardActionsMap) {

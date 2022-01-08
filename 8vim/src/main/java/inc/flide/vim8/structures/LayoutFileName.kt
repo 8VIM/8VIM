@@ -12,6 +12,10 @@ class LayoutFileName() {
     private var resourceName: String?
     private var layoutDisplayName: String?
 
+    public fun getResourceName() : String? {
+        return resourceName
+    }
+
     constructor(fileName: String) : this() {
         val nameComponents: Array<String?> = fileName.split("_", ignoreCase = false, limit = 3).toTypedArray()
         if (nameComponents.size != 3) {
