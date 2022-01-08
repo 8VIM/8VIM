@@ -18,21 +18,9 @@ enum class CustomKeycode(private val keyCode: Int) {
     HIDE_KEYBOARD(-14);
 
     companion object {
-        private val KEY_CODE_TO_STRING_CODE_MAP: MutableMap<Int?, CustomKeycode?>? = null;
-        fun fromIntValue(value: Int): CustomKeycode? {
-            if (KEY_CODE_TO_STRING_CODE_MAP != null) {
-                return KEY_CODE_TO_STRING_CODE_MAP[value]
-            }
-            return UNKNOWN
-        }
-
-        init {
-            for (code in values()) {
-                KEY_CODE_TO_STRING_CODE_MAP?.set(code.getKeyCode(), code)
-            }
-        }
+        private val map = values().associateBy{keycode -> keycode.getKeyCode()}
+        fun fromIntValue(type: Int) = map[type]
     }
-
     fun getKeyCode(): Int {
         return keyCode
     }
