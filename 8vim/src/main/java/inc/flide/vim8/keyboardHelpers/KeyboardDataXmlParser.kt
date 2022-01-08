@@ -158,7 +158,7 @@ internal class KeyboardDataXmlParser(inputStream: InputStream) {
         parser.require(XmlPullParser.START_TAG, null, MOVEMENT_SEQUENCE_TAG)
         val movementSequenceString = readText()
         parser.require(XmlPullParser.END_TAG, null, MOVEMENT_SEQUENCE_TAG)
-        val movementSequenceList: Array<String> = movementSequenceString.split("\\s*;\\s*").toTypedArray()
+        val movementSequenceList: Array<String> = movementSequenceString.split(";").filter { movement -> movement.length > 0 }.toTypedArray()
         val movementSequence: MutableList<FingerPosition> = ArrayList()
         for (movement in movementSequenceList) {
             movementSequence.add(FingerPosition.valueOf(movement))
