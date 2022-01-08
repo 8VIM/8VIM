@@ -54,10 +54,10 @@ class MainInputMethodService : InputMethodService() {
      * 13. InputMethodService stops
      */
     override fun onCreateInputView(): View {
-        numberKeypadView = NumberKeypadView(this, null)
-        selectionKeypadView = SelectionKeypadView(this, null)
-        symbolKeypadView = SymbolKeypadView(this, null)
-        mainKeyboardView = MainKeyboardView(this, null)
+        numberKeypadView = NumberKeypadView(this)
+        selectionKeypadView = SelectionKeypadView(this)
+        symbolKeypadView = SymbolKeypadView(this)
+        mainKeyboardView = MainKeyboardView(this)
         setCurrentKeypadView(mainKeyboardView)
         return currentKeypadView
     }

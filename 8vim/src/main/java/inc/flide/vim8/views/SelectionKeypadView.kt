@@ -9,6 +9,10 @@ import inc.flide.vim8.keyboardActionListners.ButtonKeypadActionListener
 import inc.flide.vim8.preferences.SharedPreferenceHelper
 
 class SelectionKeypadView : ButtonKeypadView {
+    constructor(context: Context) : super(context) {
+        initialize(context)
+    }
+
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initialize(context)
     }

@@ -11,6 +11,9 @@ import inc.flide.vim8.preferences.SharedPreferenceHelper
 abstract class ButtonKeypadView : KeyboardView {
     private val foregroundPaint: Paint = Paint()
 
+    constructor(context: Context) : super(context, null) {
+        initialize()
+    }
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initialize()
     }
