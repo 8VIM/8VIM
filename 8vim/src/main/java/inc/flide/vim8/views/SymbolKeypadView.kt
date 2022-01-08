@@ -9,25 +9,29 @@ import inc.flide.vim8.keyboardActionListners.ButtonKeypadActionListener
 import inc.flide.vim8.preferences.SharedPreferenceHelper
 
 class SymbolKeypadView : ButtonKeypadView {
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initialize(context)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         initialize(context)
     }
 
-    fun initialize(context: Context?) {
-        val mainInputMethodService = context as MainInputMethodService?
+    fun initialize(context: Context) {
+        val mainInputMethodService = context as MainInputMethodService
         val keyboard = Keyboard(context, R.layout.symbols_keypad_view)
         setColors(keyboard)
-        keyboard = keyboard
         val actionListener = ButtonKeypadActionListener(mainInputMethodService, this)
         this.onKeyboardActionListener = actionListener
-        SharedPreferenceHelper.Companion.getInstance(context).addListener(SharedPreferenceHelper.Listener { setColors(keyboard) })
+        SharedPreferenceHelper.getInstance(context).addListener(
+            object : SharedPreferenceHelper.Listener() {
+                override fun onPreferenceChanged() {
+                    setColors(keyboard)
+                }
+            })
     }
 
-    private fun setColors(keyboard: Keyboard?) {
+    private fun setColors(keyboard: Keyboard) {
         val resources = resources
         val foregroundColor: Int = SharedPreferenceHelper.Companion.getInstance(context).getInt(
                 resources.getString(R.string.pref_board_fg_color_key),

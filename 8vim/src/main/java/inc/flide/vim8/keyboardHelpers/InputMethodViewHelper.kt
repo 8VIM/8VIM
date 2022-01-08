@@ -5,7 +5,7 @@ import inc.flide.vim8.geometry.Dimension
 import kotlin.math.roundToInt
 
 object InputMethodViewHelper {
-    fun onMeasureHelper(width: Int, height: Int, orientation: Int): Dimension? {
+    fun onMeasureHelper(width: Int, height: Int, orientation: Int): Dimension {
         var width = width
         var height = height
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {

@@ -9,20 +9,20 @@ import inc.flide.vim8.keyboardActionListners.ButtonKeypadActionListener
 import inc.flide.vim8.preferences.SharedPreferenceHelper
 
 class SelectionKeypadView : ButtonKeypadView {
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initialize(context)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         initialize(context)
     }
 
-    fun initialize(context: Context?) {
+    private fun initialize(context: Context) {
         val resources = resources
         val foregroundColor: Int = SharedPreferenceHelper.Companion.getInstance(getContext()).getInt(
                 resources.getString(R.string.pref_board_fg_color_key),
                 resources.getColor(R.color.defaultBoardFg))
-        val mainInputMethodService = context as MainInputMethodService?
+        val mainInputMethodService = context as MainInputMethodService
         val keyboard = Keyboard(context, R.layout.selection_keypad_view)
         val keys = keyboard.keys
         for (key in keys) {
@@ -34,7 +34,6 @@ class SelectionKeypadView : ButtonKeypadView {
                 key.icon.alpha = 255
             }
         }
-        keyboard = keyboard
         val actionListener = ButtonKeypadActionListener(mainInputMethodService, this)
         this.onKeyboardActionListener = actionListener
     }

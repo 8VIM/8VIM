@@ -2,6 +2,7 @@ package inc.flide.vim8.keyboardActionListners
 
 import android.content.Context
 import android.media.AudioManager
+import android.os.Build
 import android.view.*
 import inc.flide.vim8.MainInputMethodService
 import inc.flide.vim8.R
@@ -9,18 +10,22 @@ import inc.flide.vim8.preferences.SharedPreferenceHelper
 import inc.flide.vim8.structures.CustomKeycode
 import inc.flide.vim8.structures.KeyboardAction
 
-open class KeypadActionListener(protected var mainInputMethodService: MainInputMethodService?, protected var view: View?) {
+open class KeypadActionListener(protected var mainInputMethodService: MainInputMethodService, protected var view: View) {
     private val isSelectionOn = true
-    private val audioManager: AudioManager?
+    private val audioManager: AudioManager = view.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     private fun keyCodeIsValid(keyCode: Int): Boolean {
-        return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KeyEvent.KEYCODE_PROFILE_SWITCH
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KeyEvent.KEYCODE_PROFILE_SWITCH
+        } else {
+            keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= 288
+        }
     }
 
     private fun customKeyCodeIsValid(keyCode: Int): Boolean {
         return keyCode <= KeyEvent.KEYCODE_UNKNOWN
     }
 
-    fun handleInputKey(keyboardAction: KeyboardAction?) {
+    fun handleInputKey(keyboardAction: KeyboardAction) {
         handleInputKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags())
     }
 
@@ -30,7 +35,7 @@ open class KeypadActionListener(protected var mainInputMethodService: MainInputM
             actionHandled = handleCustomKeyCodes(keyCode, keyFlags)
         }
         if (!actionHandled) {
-            onText(keyCode as Char.toString())
+            onText(keyCode.toString())
         }
         if (actionHandled) {
             performInputAcceptedFeedback(keySound(keyCode))
@@ -47,7 +52,7 @@ open class KeypadActionListener(protected var mainInputMethodService: MainInputM
     }
 
     private fun performInputAcceptedFeedback(keySound: Int) {
-        val pref: SharedPreferenceHelper = SharedPreferenceHelper.Companion.getInstance(mainInputMethodService)
+        val pref: SharedPreferenceHelper = SharedPreferenceHelper.getInstance(mainInputMethodService)
         val userEnabledHapticFeedback = pref.getBoolean(
                 mainInputMethodService.getString(R.string.pref_haptic_feedback_key),
                 true)
@@ -65,7 +70,7 @@ open class KeypadActionListener(protected var mainInputMethodService: MainInputM
     }
 
     private fun handleCustomKeyCodes(customKeyEventCode: Int, keyFlags: Int): Boolean {
-        when (CustomKeycode.Companion.fromIntValue(customKeyEventCode)) {
+        when (CustomKeycode.fromIntValue(customKeyEventCode)) {
             CustomKeycode.MOVE_CURRENT_END_POINT_LEFT -> moveSelection(KeyEvent.KEYCODE_DPAD_LEFT)
             CustomKeycode.MOVE_CURRENT_END_POINT_RIGHT -> moveSelection(KeyEvent.KEYCODE_DPAD_RIGHT)
             CustomKeycode.MOVE_CURRENT_END_POINT_UP -> moveSelection(KeyEvent.KEYCODE_DPAD_UP)
@@ -89,7 +94,7 @@ open class KeypadActionListener(protected var mainInputMethodService: MainInputM
         return true
     }
 
-    fun handleKeyEventKeyCodes(primaryCode: Int, keyFlags: Int): Boolean {
+    private fun handleKeyEventKeyCodes(primaryCode: Int, keyFlags: Int): Boolean {
         if (keyCodeIsValid(primaryCode)) {
             when (primaryCode) {
                 KeyEvent.KEYCODE_CUT -> mainInputMethodService.cut()
@@ -107,14 +112,14 @@ open class KeypadActionListener(protected var mainInputMethodService: MainInputM
         return false
     }
 
-    fun onText(text: CharSequence?) {
+    protected open fun onText(text: CharSequence?) {
         mainInputMethodService.sendText(text.toString())
         mainInputMethodService.setShiftLockFlag(0)
         performInputAcceptedFeedback(AudioManager.FX_KEYPRESS_STANDARD)
     }
 
-    fun handleInputText(keyboardAction: KeyboardAction?) {
-        if (keyboardAction.getText().length == 1
+    fun handleInputText(keyboardAction: KeyboardAction) {
+        if (keyboardAction.getText()?.length == 1
                 && (isShiftSet() || isCapsLockSet())) {
             onText(keyboardAction.getCapsLockText())
         } else {
@@ -148,7 +153,4 @@ open class KeypadActionListener(protected var mainInputMethodService: MainInputM
         return mainInputMethodService.getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON
     }
 
-    init {
-        audioManager = view.getContext().getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    }
 }

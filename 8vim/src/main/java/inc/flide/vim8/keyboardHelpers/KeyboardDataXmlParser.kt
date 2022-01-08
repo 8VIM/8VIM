@@ -72,7 +72,7 @@ internal class KeyboardDataXmlParser(inputStream: InputStream) {
     private fun readKeyboardAction(): MutableMap.MutableEntry<MutableList<FingerPosition>?, KeyboardAction?> {
         var movementSequence: MutableList<FingerPosition>? = null
         val keyboardAction: KeyboardAction
-        var keyboardActionType: KeyboardActionType? = null
+        var keyboardActionType: KeyboardActionType = KeyboardActionType.UNDEFINED_ACTION
         var associatedText: String? = ""
         var associatedCapsLockText: String? = ""
         var keyEventCode = 0

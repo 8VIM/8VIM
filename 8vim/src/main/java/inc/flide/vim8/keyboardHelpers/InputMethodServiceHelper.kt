@@ -71,10 +71,10 @@ object InputMethodServiceHelper {
     }
 
     private fun loadTheSelectedLanguageLayout(resources: Resources, context: Context): Int {
-        val currentLanguageLayout: String? = SharedPreferenceHelper.Companion.getInstance(context)
+        val currentLanguageLayout: String = SharedPreferenceHelper.getInstance(context)
                 .getString(resources.getString(R.string.pref_selected_keyboard_layout),
                         LayoutFileName().getResourceName())
-        return resources.getIdentifier(currentLanguageLayout, "raw", context.getPackageName())
+        return resources.getIdentifier(currentLanguageLayout, "raw", context.packageName)
     }
 
     private fun addToKeyboardActionsMapUsingResourceId(keyboardData: KeyboardData, resources: Resources, resourceId: Int) {
@@ -106,13 +106,13 @@ object InputMethodServiceHelper {
         if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.getActionMap())) {
             keyboardData.addAllToActionMap(tempKeyboardData.getActionMap())
         }
-        if (keyboardData.getLowerCaseCharacters()!!.isEmpty()
-                && tempKeyboardData.getLowerCaseCharacters()!!.isNotEmpty()
+        if (keyboardData.getLowerCaseCharacters().isEmpty()
+                && tempKeyboardData.getLowerCaseCharacters().isNotEmpty()
         ) {
             keyboardData.setLowerCaseCharacters(tempKeyboardData.getLowerCaseCharacters())
         }
-        if (keyboardData.getUpperCaseCharacters()!!.isEmpty()
-                && tempKeyboardData.getUpperCaseCharacters()!!.isNotEmpty()
+        if (keyboardData.getUpperCaseCharacters().isEmpty()
+                && tempKeyboardData.getUpperCaseCharacters().isNotEmpty()
         ) {
             keyboardData.setUpperCaseCharacters(tempKeyboardData.getUpperCaseCharacters())
         }

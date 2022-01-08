@@ -2,7 +2,7 @@ package inc.flide.vim8.structures
 
 import java.util.*
 
-class KeyboardAction(private val keyboardActionType: KeyboardActionType?, private val text: String?, capsLockText: String?, private val keyEventCode: Int, keyFlags: Int) {
+class KeyboardAction(private val keyboardActionType: KeyboardActionType, private val text: String?, capsLockText: String?, private val keyEventCode: Int, keyFlags: Int) {
     private var capsLockText: String? = null
     private val keyFlags: Int
     fun getKeyFlags(): Int {
@@ -17,7 +17,7 @@ class KeyboardAction(private val keyboardActionType: KeyboardActionType?, privat
         return keyEventCode
     }
 
-    fun getKeyboardActionType(): KeyboardActionType? {
+    fun getKeyboardActionType(): KeyboardActionType {
         return keyboardActionType
     }
 

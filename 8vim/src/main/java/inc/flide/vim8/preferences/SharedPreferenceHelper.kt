@@ -7,8 +7,8 @@ import androidx.preference.PreferenceManager
 import java.util.*
 
 class SharedPreferenceHelper private constructor(private val sharedPreferences: SharedPreferences) : OnSharedPreferenceChangeListener {
-    interface Listener {
-        fun onPreferenceChanged()
+    abstract class Listener {
+        abstract fun onPreferenceChanged()
     }
 
     private val prefKeys: MutableSet<String> = HashSet()
@@ -25,14 +25,14 @@ class SharedPreferenceHelper private constructor(private val sharedPreferences: 
         }
     }
 
-    fun getString(preferenceId: String, defaultValue: String?): String? {
+    fun getString(preferenceId: String, defaultValue: String = ""): String {
         prefKeys.add(preferenceId)
         val preferencesString: String? = try {
             sharedPreferences.getString(preferenceId, defaultValue)
         } catch (e: ClassCastException) {
             return defaultValue
         }
-        return preferencesString
+        return preferencesString ?: defaultValue
     }
 
     fun getInt(preferenceId: String, defaultValue: Int): Int {

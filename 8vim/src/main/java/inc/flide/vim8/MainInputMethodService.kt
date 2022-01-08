@@ -19,17 +19,17 @@ import inc.flide.vim8.views.SymbolKeypadView
 import inc.flide.vim8.views.mainKeyboard.MainKeyboardView
 
 class MainInputMethodService : InputMethodService() {
-    private var inputConnection: InputConnection? = null
-    private var editorInfo: EditorInfo? = null
-    private var mainKeyboardView: MainKeyboardView? = null
-    private var numberKeypadView: NumberKeypadView? = null
-    private var selectionKeypadView: SelectionKeypadView? = null
-    private var symbolKeypadView: SymbolKeypadView? = null
-    private var currentKeypadView: View? = null
+    private lateinit var inputConnection: InputConnection
+    private lateinit var editorInfo: EditorInfo
+    private lateinit var mainKeyboardView: MainKeyboardView
+    private lateinit var numberKeypadView: NumberKeypadView
+    private lateinit var selectionKeypadView: SelectionKeypadView
+    private lateinit var symbolKeypadView: SymbolKeypadView
+    private lateinit var currentKeypadView: View
     private var shiftLockFlag = 0
     private var capsLockFlag = 0
     private var modifierFlags = 0
-    private fun setCurrentKeypadView(view: View?) {
+    private fun setCurrentKeypadView(view: View) {
         currentKeypadView = view
         currentKeypadView.invalidate()
         setInputView(currentKeypadView)
@@ -53,7 +53,7 @@ class MainInputMethodService : InputMethodService() {
      * 12. onDestroy()
      * 13. InputMethodService stops
      */
-    override fun onCreateInputView(): View? {
+    override fun onCreateInputView(): View {
         numberKeypadView = NumberKeypadView(this, null)
         selectionKeypadView = SelectionKeypadView(this, null)
         symbolKeypadView = SymbolKeypadView(this, null)
@@ -62,7 +62,7 @@ class MainInputMethodService : InputMethodService() {
         return currentKeypadView
     }
 
-    override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
+    override fun onStartInput(attribute: EditorInfo, restarting: Boolean) {
         super.onStartInput(attribute, restarting)
         inputConnection = currentInputConnection
     }
@@ -71,11 +71,10 @@ class MainInputMethodService : InputMethodService() {
         inputConnection = currentInputConnection
     }
 
-    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+    override fun onStartInputView(info: EditorInfo, restarting: Boolean) {
         super.onStartInputView(info, restarting)
         editorInfo = info
-        val inputType = editorInfo.inputType and InputType.TYPE_MASK_CLASS
-        when (inputType) {
+        when (editorInfo.inputType and InputType.TYPE_MASK_CLASS) {
             InputType.TYPE_CLASS_NUMBER, InputType.TYPE_CLASS_PHONE, InputType.TYPE_CLASS_DATETIME -> switchToNumberPad()
             InputType.TYPE_CLASS_TEXT -> switchToMainKeypad()
             else -> switchToMainKeypad()
@@ -90,7 +89,7 @@ class MainInputMethodService : InputMethodService() {
         clearModifierFlags()
     }
 
-    fun buildKeyboardActionMap(): KeyboardData? {
+    fun buildKeyboardActionMap(): KeyboardData {
         return InputMethodServiceHelper.initializeKeyboardActionMap(resources, applicationContext)
     }
 
@@ -136,7 +135,7 @@ class MainInputMethodService : InputMethodService() {
 
     fun switchToExternalEmoticonKeyboard() {
         val inputMethodManager = this.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        val iBinder = this.window.window.getAttributes().token
+        val iBinder = this.window.window!!.attributes.token
         val keyboardId = getSelectedEmoticonKeyboardId()
         if (keyboardId.isEmpty()) {
             inputMethodManager.switchToLastInputMethod(iBinder)
@@ -145,7 +144,7 @@ class MainInputMethodService : InputMethodService() {
         }
     }
 
-    private fun getSelectedEmoticonKeyboardId(): String? {
+    private fun getSelectedEmoticonKeyboardId(): String {
         val emoticonKeyboardId: String = SharedPreferenceHelper.Companion.getInstance(applicationContext)
                 .getString(getString(R.string.pref_selected_emoticon_keyboard), "")
 
@@ -217,15 +216,19 @@ class MainInputMethodService : InputMethodService() {
         //single press locks the shift key,
         //double press locks the caps key
         //a third press unlocks both.
-        if (getShiftLockFlag() == KeyEvent.META_SHIFT_ON) {
-            setShiftLockFlag(0)
-            setCapsLockFlag(KeyEvent.META_CAPS_LOCK_ON)
-        } else if (getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON) {
-            setShiftLockFlag(0)
-            setCapsLockFlag(0)
-        } else {
-            setShiftLockFlag(KeyEvent.META_SHIFT_ON)
-            setCapsLockFlag(0)
+        when {
+            getShiftLockFlag() == KeyEvent.META_SHIFT_ON -> {
+                setShiftLockFlag(0)
+                setCapsLockFlag(KeyEvent.META_CAPS_LOCK_ON)
+            }
+            getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON -> {
+                setShiftLockFlag(0)
+                setCapsLockFlag(0)
+            }
+            else -> {
+                setShiftLockFlag(KeyEvent.META_SHIFT_ON)
+                setCapsLockFlag(0)
+            }
         }
     }
 
@@ -252,7 +255,7 @@ class MainInputMethodService : InputMethodService() {
         return capsLockFlag
     }
 
-    fun setCapsLockFlag(capsLockFlag: Int) {
+    private fun setCapsLockFlag(capsLockFlag: Int) {
         this.capsLockFlag = capsLockFlag
     }
 

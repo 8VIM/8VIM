@@ -9,11 +9,19 @@ class LayoutFileName() {
     private var layoutName: String = "8pen"
     private var languageName: String = "English"
     private var isValidLayout = true
-    private var resourceName: String?
+    private var resourceName: String
     private var layoutDisplayName: String?
 
-    public fun getResourceName() : String? {
+    fun getResourceName() : String {
         return resourceName
+    }
+
+    fun isValidLayout() : Boolean {
+        return isValidLayout
+    }
+
+    fun getLayoutDisplayName() : String? {
+        return layoutDisplayName
     }
 
     constructor(fileName: String) : this() {

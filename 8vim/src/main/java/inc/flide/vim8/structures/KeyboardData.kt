@@ -3,14 +3,14 @@ package inc.flide.vim8.structures
 import java.util.HashMap
 
 class KeyboardData {
-    private var actionMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?>?
-    private var lowerCaseCharacters: String?
-    private var upperCaseCharacters: String?
-    fun getActionMap(): MutableMap<MutableList<FingerPosition>?, KeyboardAction?>? {
+    private var actionMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?> = HashMap()
+    private var lowerCaseCharacters: String = ""
+    private var upperCaseCharacters: String = ""
+    fun getActionMap(): MutableMap<MutableList<FingerPosition>?, KeyboardAction?> {
         return actionMap
     }
 
-    fun setActionMap(actionMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?>?) {
+    fun setActionMap(actionMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?>) {
         this.actionMap = actionMap
     }
 
@@ -20,25 +20,19 @@ class KeyboardData {
         }
     }
 
-    fun getLowerCaseCharacters(): String? {
+    fun getLowerCaseCharacters(): String {
         return lowerCaseCharacters
     }
 
-    fun setLowerCaseCharacters(lowerCaseCharacters: String?) {
+    fun setLowerCaseCharacters(lowerCaseCharacters: String) {
         this.lowerCaseCharacters = lowerCaseCharacters
     }
 
-    fun getUpperCaseCharacters(): String? {
+    fun getUpperCaseCharacters(): String {
         return upperCaseCharacters
     }
 
-    fun setUpperCaseCharacters(upperCaseCharacters: String?) {
+    fun setUpperCaseCharacters(upperCaseCharacters: String) {
         this.upperCaseCharacters = upperCaseCharacters
-    }
-
-    init {
-        actionMap = HashMap()
-        lowerCaseCharacters = ""
-        upperCaseCharacters = ""
     }
 }

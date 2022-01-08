@@ -19,7 +19,7 @@ import com.google.android.material.navigation.NavigationView
 import inc.flide.vim8.BuildConfig
 import inc.flide.vim8.R
 import inc.flide.vim8.structures.*
-import inc.flide.vim8.ui.SettingsActivity
+import kotlin.system.exitProcess
 
 class SettingsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var isKeyboardEnabled = false
@@ -51,33 +51,37 @@ class SettingsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
             finish()
-            System.exit(0)
+            exitProcess(0)
         }
         pressBackTwice = true
         Toast.makeText(this@SettingsActivity, "Please press Back again to exit", Toast.LENGTH_SHORT).show()
         Handler().postDelayed({ pressBackTwice = false }, 2000)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem?): Boolean {
-        if (item.getItemId() == R.id.share) {
-            val shareIntent = Intent(Intent.ACTION_SEND)
-            shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name)
-            var shareMessage = "\nCheck out this awesome keyboard application\n\n"
-            shareMessage = """
-                ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
-                
-                """.trimIndent()
-            shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
-            startActivity(Intent.createChooser(shareIntent, "Share " + R.string.app_name))
-        } else if (item.getItemId() == R.id.help) {
-            val intent = Intent(Intent.ACTION_VIEW)
-            val data = Uri.parse("mailto:flideravi@gmail.com?subject=" + "Feedback")
-            intent.data = data
-            startActivity(intent)
-        } else if (item.getItemId() == R.id.about) {
-            val intentAboutUs = Intent(this@SettingsActivity, AboutUsActivity::class.java)
-            startActivity(intentAboutUs)
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.share -> {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name)
+                var shareMessage = "\nCheck out this awesome keyboard application\n\n"
+                shareMessage = """
+                        ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
+                        
+                        """.trimIndent()
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+                startActivity(Intent.createChooser(shareIntent, "Share " + R.string.app_name))
+            }
+            R.id.help -> {
+                val intent = Intent(Intent.ACTION_VIEW)
+                val data = Uri.parse("mailto:flideravi@gmail.com?subject=" + "Feedback")
+                intent.data = data
+                startActivity(intent)
+            }
+            R.id.about -> {
+                val intentAboutUs = Intent(this@SettingsActivity, AboutUsActivity::class.java)
+                startActivity(intentAboutUs)
+            }
         }
         val drawer = findViewById<DrawerLayout?>(R.id.drawer_layout)
         drawer.closeDrawer(GravityCompat.START)
@@ -127,7 +131,7 @@ class SettingsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 .canceledOnTouchOutside(false)
                 .build()
         enableInputMethodNotificationDialog.builder
-                .onNeutral { dialog: MaterialDialog?, which: DialogAction? ->
+                .onNeutral { _: MaterialDialog?, _: DialogAction? ->
                     showToast()
                     startActivityForResult(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS), 0)
                     enableInputMethodNotificationDialog.dismiss()
@@ -135,7 +139,7 @@ class SettingsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
         enableInputMethodNotificationDialog.show()
     }
 
-    fun showToast() {
+    private fun showToast() {
         val inflater = layoutInflater
         val layout = inflater.inflate(R.layout.custom_toast,
                 findViewById(R.id.toast_layout))
@@ -156,7 +160,7 @@ class SettingsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSel
                 .canceledOnTouchOutside(false)
                 .build()
         activateInputMethodNotificationDialog.builder
-                .onPositive { dialog: MaterialDialog?, which: DialogAction? ->
+                .onPositive { _: MaterialDialog?, _: DialogAction? ->
                     val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     inputMethodManager.showInputMethodPicker()
                     activateInputMethodNotificationDialog.dismiss()

@@ -14,7 +14,7 @@ import androidx.preference.SeekBarPreference
 import com.afollestad.materialdialogs.MaterialDialog
 import inc.flide.vim8.R
 import inc.flide.vim8.R.raw
-import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener
+import inc.flide.vim8.keyboardHelpers.KeyboardDataStore
 import inc.flide.vim8.preferences.SharedPreferenceHelper
 import inc.flide.vim8.structures.Constants
 import inc.flide.vim8.structures.LayoutFileName
@@ -34,7 +34,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
 
     private fun setupLoadCustomLayoutPreferenceAction() {
         val loadCustomKeyboardPreference = findPreference<Preference?>(getString(R.string.pref_select_custom_keyboard_layout_key))!!
-        loadCustomKeyboardPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference: Preference? ->
+        loadCustomKeyboardPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             askUserLoadCustomKeyboardLayout()
             true
         }
@@ -49,24 +49,23 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        val context = context
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val sharedPreferencesEditor = sharedPreferences.edit()
         if (requestCode == PICK_KEYBOARD_LAYOUT_FILE && resultCode == Activity.RESULT_OK) {
             // TODO: Verify if the picked file is actually a valid layout file.
             val takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            val selectedCustomLayoutFile = data.getData()
-            getContext().getContentResolver().takePersistableUriPermission(selectedCustomLayoutFile, takeFlags)
+            val selectedCustomLayoutFile = data!!.data
+            requireContext().contentResolver.takePersistableUriPermission(selectedCustomLayoutFile!!, takeFlags)
             sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), true)
             sharedPreferencesEditor.putString(getString(R.string.pref_selected_custom_keyboard_layout_uri), selectedCustomLayoutFile.toString())
             sharedPreferencesEditor.apply()
-            MainKeypadActionListener.Companion.rebuildKeyboardData(resources, getContext(), selectedCustomLayoutFile)
+            KeyboardDataStore.rebuildKeyboardData(resources, requireContext(), selectedCustomLayoutFile)
         }
     }
 
     private fun setupLayoutPreferenceAction() {
         val keyboardPref = findPreference<Preference?>(getString(R.string.pref_select_keyboard_layout_key))!!
-        keyboardPref.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference: Preference? ->
+        keyboardPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             askUserPreferredKeyboardLayout()
             true
         }
@@ -74,7 +73,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
 
     private fun setupEmojiKeyboardPreferenceAction() {
         val emojiKeyboardPref = findPreference<Preference?>(getString(R.string.pref_select_emoji_keyboard_key))!!
-        emojiKeyboardPref.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference: Preference? ->
+        emojiKeyboardPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             askUserPreferredEmoticonKeyboard()
             true
         }
@@ -93,28 +92,28 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
         val inputMethodsNameAndId = findAllAvailableLayouts()
         val keyboardIds = ArrayList(inputMethodsNameAndId.values)
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val selectedKeyboardId: String = SharedPreferenceHelper.Companion.getInstance(context.getApplicationContext())
-                .getString(
-                        getString(R.string.pref_selected_keyboard_layout),
-                        "")
+        val selectedKeyboardId: String = SharedPreferenceHelper.getInstance(requireContext())
+            .getString(
+                getString(R.string.pref_selected_keyboard_layout),
+                "")
         var selectedKeyboardIndex = -1
-        if (!selectedKeyboardId.isEmpty()) {
+        if (selectedKeyboardId.isNotEmpty()) {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId)
             if (selectedKeyboardIndex == -1) {
                 // seems like we have a stale selection, it should be removed.
                 sharedPreferences.edit().remove(getString(R.string.pref_selected_keyboard_layout)).apply()
             }
         }
-        MaterialDialog.Builder(context)
-                .title(R.string.select_preferred_keyboard_layout_dialog_title)
-                .items(inputMethodsNameAndId.keys)
-                .itemsCallbackSingleChoice(selectedKeyboardIndex) { dialog: MaterialDialog?, itemView: View?, which: Int, text: CharSequence? ->
-                    if (which != -1) {
-                        val sharedPreferencesEditor = sharedPreferences.edit()
-                        sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout), keyboardIds[which])
-                        sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), false)
-                        sharedPreferencesEditor.apply()
-                        MainKeypadActionListener.Companion.rebuildKeyboardData(resources, getContext())
+        MaterialDialog.Builder(requireContext())
+            .title(R.string.select_preferred_keyboard_layout_dialog_title)
+            .items(inputMethodsNameAndId.keys)
+            .itemsCallbackSingleChoice(selectedKeyboardIndex) { _: MaterialDialog?, _: View?, which: Int, _: CharSequence? ->
+                if (which != -1) {
+                    val sharedPreferencesEditor = sharedPreferences.edit()
+                    sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout), keyboardIds[which])
+                    sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), false)
+                    sharedPreferencesEditor.apply()
+                    KeyboardDataStore.rebuildKeyboardData(resources, requireContext())
                     }
                     true
                 }
@@ -122,46 +121,45 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
                 .show()
     }
 
-    private fun findAllAvailableLayouts(): MutableMap<String?, String?>? {
+    private fun findAllAvailableLayouts(): MutableMap<String?, String?> {
         val languagesAndLayouts: MutableMap<String?, String?> = TreeMap()
         val fields = raw::class.java.fields
         for (count in fields.indices) {
             val file = LayoutFileName(fields[count].name)
-            if (file.isValidLayout) {
-                languagesAndLayouts[file.layoutDisplayName] = file.resourceName
+            if (file.isValidLayout()) {
+                languagesAndLayouts[file.getLayoutDisplayName()] = file.getResourceName()
             }
         }
         return languagesAndLayouts
     }
 
     private fun askUserPreferredEmoticonKeyboard() {
-        val context = context
-        val imeManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imeManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val inputMethods = imeManager.enabledInputMethodList
         val inputMethodsNameAndId: MutableMap<String?, String?> = HashMap()
         for (inputMethodInfo in inputMethods) {
             if (inputMethodInfo.id.compareTo(Constants.SELF_KEYBOARD_ID) != 0) {
-                inputMethodsNameAndId[inputMethodInfo.loadLabel(context.getPackageManager()).toString()] = inputMethodInfo.id
+                inputMethodsNameAndId[inputMethodInfo.loadLabel(requireContext().packageManager).toString()] = inputMethodInfo.id
             }
         }
         val keyboardIds = ArrayList(inputMethodsNameAndId.values)
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val selectedKeyboardId: String = SharedPreferenceHelper.Companion.getInstance(context.getApplicationContext())
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val selectedKeyboardId: String = SharedPreferenceHelper.getInstance(requireContext().applicationContext)
                 .getString(
                         getString(R.string.pref_selected_emoticon_keyboard),
                         "")
         var selectedKeyboardIndex = -1
-        if (!selectedKeyboardId.isEmpty()) {
+        if (selectedKeyboardId.isNotEmpty()) {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId)
             if (selectedKeyboardIndex == -1) {
                 // seems like we have a stale selection, it should be removed.
                 sharedPreferences.edit().remove(getString(R.string.pref_selected_emoticon_keyboard)).apply()
             }
         }
-        MaterialDialog.Builder(context)
+        MaterialDialog.Builder(requireContext())
                 .title(R.string.select_preferred_emoticon_keyboard_dialog_title)
                 .items(inputMethodsNameAndId.keys)
-                .itemsCallbackSingleChoice(selectedKeyboardIndex) { dialog: MaterialDialog?, itemView: View?, which: Int, text: CharSequence? ->
+                .itemsCallbackSingleChoice(selectedKeyboardIndex) { _: MaterialDialog?, _: View?, which: Int, _: CharSequence? ->
                     if (which != -1) {
                         val sharedPreferencesEditor = sharedPreferences.edit()
                         sharedPreferencesEditor.putString(getString(R.string.pref_selected_emoticon_keyboard), keyboardIds[which])

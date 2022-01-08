@@ -61,16 +61,15 @@ class Circle @JvmOverloads constructor(private var centre: PointF = PointF(0f, 0
      *
      * @return 0: right, 1: top, 2: left, 3: bottom
      */
-    fun getSectorOfPoint(p: PointF): FingerPosition? {
+    fun getSectorOfPoint(p: PointF): FingerPosition {
         val angleDouble: Double = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p)
         val angleToSectorValue: Double = angleDouble / (Math.PI / 2)
         val quadrantCyclic: Int = angleToSectorValue.toInt()
-        when (GeometricUtilities.getBaseQuadrant(quadrantCyclic)) {
-            0 -> return FingerPosition.RIGHT
-            1 -> return FingerPosition.TOP
-            2 -> return FingerPosition.LEFT
-            3 -> return FingerPosition.BOTTOM
+        return when (GeometricUtilities.getBaseQuadrant(quadrantCyclic)) {
+            0 -> FingerPosition.RIGHT
+            1 -> FingerPosition.TOP
+            2 -> FingerPosition.LEFT
+            else -> FingerPosition.BOTTOM //a.k.a 3
         }
-        return null
     }
 }

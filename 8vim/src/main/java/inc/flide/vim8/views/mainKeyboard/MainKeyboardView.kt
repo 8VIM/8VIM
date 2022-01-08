@@ -17,32 +17,38 @@ import inc.flide.vim8.structures.KeyboardActionType
 import inc.flide.vim8.ui.SettingsActivity
 
 class MainKeyboardView : ConstraintLayout {
-    private var actionListener: MainKeypadActionListener? = null
+    private lateinit var actionListener: MainKeypadActionListener
 
-    constructor(context: Context?) : super(context) {
+    constructor(context: Context) : super(context) {
         initialize(context)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         initialize(context)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         initialize(context)
     }
 
-    fun initialize(context: Context?) {
-        actionListener = MainKeypadActionListener(context as MainInputMethodService?, this)
+    private fun initialize(context: Context) {
+        actionListener = MainKeypadActionListener(context as MainInputMethodService, this)
         setupMainKeyboardView(context)
         setupButtonsOnSideBar()
         setColors()
         isHapticFeedbackEnabled = true
-        SharedPreferenceHelper.Companion.getInstance(getContext()).addListener(SharedPreferenceHelper.Listener { setColors() })
+        SharedPreferenceHelper.getInstance(context).addListener(
+            object : SharedPreferenceHelper.Listener() {
+                override fun onPreferenceChanged() {
+                    setColors()
+                }
+
+            })
     }
 
-    private fun setupMainKeyboardView(context: Context?) {
+    private fun setupMainKeyboardView(context: Context) {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val preferredSidebarLeft: Boolean = SharedPreferenceHelper.Companion.getInstance(context)
+        val preferredSidebarLeft: Boolean = SharedPreferenceHelper.getInstance(context)
                 .getBoolean(
                         context.getString(R.string.pref_sidebar_left_key),
                         true)
@@ -68,7 +74,7 @@ class MainKeyboardView : ConstraintLayout {
 
     private fun setColors() {
         val resources = resources
-        val pref: SharedPreferenceHelper = SharedPreferenceHelper.Companion.getInstance(context)
+        val pref: SharedPreferenceHelper = SharedPreferenceHelper.getInstance(context)
         val backgroundColor = pref.getInt(
                 resources.getString(R.string.pref_board_bg_color_key),
                 resources.getColor(R.color.defaultBoardBg))
@@ -85,12 +91,12 @@ class MainKeyboardView : ConstraintLayout {
 
     private fun setupCtrlKey() {
         val ctrlKeyButton = findViewById<ImageButton?>(R.id.ctrlButton)
-        ctrlKeyButton.setOnClickListener { view: View? -> actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK) }
+        ctrlKeyButton.setOnClickListener { actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK) }
     }
 
     private fun setupGoToSettingsButton() {
         val goToSettingsButton = findViewById<ImageButton?>(R.id.goToSettingsButton)
-        goToSettingsButton.setOnClickListener { view: View? ->
+        goToSettingsButton.setOnClickListener {
             val vim8SettingsIntent = Intent(context, SettingsActivity::class.java)
             vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(vim8SettingsIntent)
@@ -99,17 +105,17 @@ class MainKeyboardView : ConstraintLayout {
 
     private fun setupTabKey() {
         val tabKeyButton = findViewById<ImageButton?>(R.id.tabButton)
-        tabKeyButton.setOnClickListener { view: View? -> actionListener.handleInputKey(KeyEvent.KEYCODE_TAB, 0) }
+        tabKeyButton.setOnClickListener { actionListener.handleInputKey(KeyEvent.KEYCODE_TAB, 0) }
     }
 
     private fun setupSwitchToSelectionKeyboardButton() {
         val switchToSelectionKeyboardButton = findViewById<ImageButton?>(R.id.switchToSelectionKeyboard)
-        switchToSelectionKeyboardButton.setOnClickListener { view: View? ->
+        switchToSelectionKeyboardButton.setOnClickListener {
             val switchToSelectionKeyboard = KeyboardAction(
                     KeyboardActionType.INPUT_KEY,
                     "",
                     null,
-                    CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.keyCode,
+                    CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(),
                     0)
             actionListener.handleInputKey(switchToSelectionKeyboard)
         }
@@ -117,12 +123,12 @@ class MainKeyboardView : ConstraintLayout {
 
     private fun setupSwitchToEmojiKeyboardButton() {
         val switchToEmojiKeyboardButton = findViewById<ImageButton?>(R.id.switchToEmojiKeyboard)
-        switchToEmojiKeyboardButton.setOnClickListener { view: View? ->
+        switchToEmojiKeyboardButton.setOnClickListener {
             val switchToEmojiKeyboard = KeyboardAction(
                     KeyboardActionType.INPUT_KEY,
                     "",
                     null,
-                    CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.keyCode,
+                    CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(),
                     0)
             actionListener.handleInputKey(switchToEmojiKeyboard)
         }
@@ -133,14 +139,14 @@ class MainKeyboardView : ConstraintLayout {
                 MeasureSpec.getSize(widthMeasureSpec),
                 MeasureSpec.getSize(heightMeasureSpec),
                 resources.configuration.orientation)
-        setMeasuredDimension(computedDimension.width, computedDimension.height)
+        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight())
         super.onMeasure(
                 MeasureSpec.makeMeasureSpec(
-                        computedDimension.width,
+                        computedDimension.getWidth(),
                         MeasureSpec.EXACTLY
                 ),
                 MeasureSpec.makeMeasureSpec(
-                        computedDimension.height,
+                        computedDimension.getHeight(),
                         MeasureSpec.EXACTLY
                 )
         )
