@@ -29,8 +29,8 @@ internal class KeyboardDataXmlParser(inputStream: InputStream) {
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
-    private fun readKeyboardActionMap(): MutableMap<MutableList<FingerPosition>?, KeyboardAction?> {
-        val keyboardActionMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?> = HashMap()
+    private fun readKeyboardActionMap(): MutableMap<List<FingerPosition>, KeyboardAction> {
+        val keyboardActionMap: MutableMap<List<FingerPosition>, KeyboardAction> = HashMap()
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
@@ -69,7 +69,7 @@ internal class KeyboardDataXmlParser(inputStream: InputStream) {
     }
 
     @Throws(XmlPullParserException::class, IOException::class)
-    private fun readKeyboardAction(): MutableMap.MutableEntry<MutableList<FingerPosition>?, KeyboardAction?> {
+    private fun readKeyboardAction(): MutableMap.MutableEntry<List<FingerPosition>, KeyboardAction> {
         var movementSequence: MutableList<FingerPosition>? = null
         val keyboardAction: KeyboardAction
         var keyboardActionType: KeyboardActionType = KeyboardActionType.UNDEFINED_ACTION
@@ -158,7 +158,7 @@ internal class KeyboardDataXmlParser(inputStream: InputStream) {
         parser.require(XmlPullParser.START_TAG, null, MOVEMENT_SEQUENCE_TAG)
         val movementSequenceString = readText()
         parser.require(XmlPullParser.END_TAG, null, MOVEMENT_SEQUENCE_TAG)
-        val movementSequenceList: Array<String> = movementSequenceString.split(";").filter { movement -> movement.length > 0 }.toTypedArray()
+        val movementSequenceList: Array<String> = movementSequenceString.split(";").filter { movement -> movement.isNotEmpty() }.toTypedArray()
         val movementSequence: MutableList<FingerPosition> = ArrayList()
         for (movement in movementSequenceList) {
             movementSequence.add(FingerPosition.valueOf(movement))

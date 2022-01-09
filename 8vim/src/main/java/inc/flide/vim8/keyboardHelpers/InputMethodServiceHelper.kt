@@ -119,8 +119,8 @@ object InputMethodServiceHelper {
     }
 
     private fun validateNoConflictingActions(
-            mainKeyboardActionsMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?>?,
-            newKeyboardActionsMap: MutableMap<MutableList<FingerPosition>?, KeyboardAction?>?): Boolean {
+            mainKeyboardActionsMap: MutableMap<List<FingerPosition>, KeyboardAction>?,
+            newKeyboardActionsMap: MutableMap<List<FingerPosition>, KeyboardAction>?): Boolean {
         if (mainKeyboardActionsMap!!.isEmpty() || newKeyboardActionsMap!!.isEmpty()) {
             return true
         }
