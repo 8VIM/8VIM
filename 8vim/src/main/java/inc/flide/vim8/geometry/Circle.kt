@@ -5,22 +5,10 @@ import inc.flide.vim8.structures.FingerPosition
 import kotlin.math.atan2
 import kotlin.math.pow
 
-class Circle @JvmOverloads constructor(private var centre: PointF = PointF(0f, 0f), private var radius: Float = 0f){
+class Circle @JvmOverloads constructor(var centre: PointF = PointF(0f, 0f), var radius: Float = 0f){
 
-    fun getCentre(): PointF {
-        return centre
-    }
-
-    fun setCentre(centre: PointF) {
-        this.centre = centre
-    }
-
-    fun getRadius(): Float {
-        return radius
-    }
-
-    fun setRadius(radius: Float) {
-        this.radius = radius
+    fun setCentre(x: Float, y: Float) {
+        this.centre = PointF(x, y);
     }
 
     private fun getPowerOfPoint(point: PointF): Double {

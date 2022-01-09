@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import inc.flide.vim8.MainInputMethodService
 import inc.flide.vim8.R
@@ -22,7 +23,6 @@ class XpadView : View {
     private val foregroundPaint: Paint = Paint()
     private val typingTrailPaint: Paint = Paint()
     private lateinit var actionListener: MainKeypadActionListener
-    private lateinit var circleCenter: PointF
     private lateinit var circle: Circle
     private val keypadDimension: Dimension = Dimension()
     private val xFormMatrix: Matrix = Matrix()
@@ -56,16 +56,16 @@ class XpadView : View {
         val sharedPreferenceHelper: SharedPreferenceHelper = SharedPreferenceHelper.getInstance(context)
         bgColor = sharedPreferenceHelper.getInt(
                 resources.getString(R.string.pref_board_bg_color_key),
-                resources.getColor(R.color.defaultBoardBg))
+                ContextCompat.getColor(context, R.color.defaultBoardBg))
         foregroundColor = sharedPreferenceHelper.getInt(
                 resources.getString(R.string.pref_board_fg_color_key),
-                resources.getColor(R.color.defaultBoardFg))
+                ContextCompat.getColor(context, R.color.defaultBoardFg))
         userPreferRandomTrailColor = sharedPreferenceHelper.getBoolean(
                 resources.getString(R.string.pref_random_trail_color_key),
                 false)
         trailColor = sharedPreferenceHelper.getInt(
                 resources.getString(R.string.pref_trail_color_key),
-                resources.getColor(R.color.defaultTrail))
+                ContextCompat.getColor(context, R.color.defaultTrail))
         backgroundPaint.color = bgColor
         foregroundPaint.color = foregroundColor
         typingTrailPaint.color = trailColor
@@ -84,7 +84,6 @@ class XpadView : View {
         setForegroundPaint()
         actionListener = MainKeypadActionListener(context as MainInputMethodService, this)
         isHapticFeedbackEnabled = true
-        circleCenter = PointF()
         circle = Circle()
     }
 
@@ -93,13 +92,10 @@ class XpadView : View {
         val pref: SharedPreferenceHelper = SharedPreferenceHelper.getInstance(context)
         val spRadiusValue = pref.getInt(context.getString(R.string.pref_circle_scale_factor), 3).toFloat()
         // TODO: Store constant in .xml file (but where?)
-        val radius = spRadiusValue / 40f * keypadDimension.getWidth() / 2
         val xOffset = pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0) * 26
         val yOffset = pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0) * 26
-        circleCenter.x = keypadDimension.getWidth() / 2f + xOffset
-        circleCenter.y = keypadDimension.getHeight() / 2f + yOffset
-        circle.setCentre(circleCenter)
-        circle.setRadius(radius)
+        circle.setCentre( keypadDimension.getWidth() / 2f + xOffset, keypadDimension.getHeight() / 2f + yOffset)
+        circle.radius = spRadiusValue / 40f * keypadDimension.getWidth() / 2
         val characterHeight = foregroundPaint.fontMetrics.descent - foregroundPaint.fontMetrics.ascent
         // We chop off a bit of the right side of the view width from the keypadDimension (see onMeasure),
         // this introduces a bit of asymmetry which we have to compensate for here.
@@ -111,36 +107,36 @@ class XpadView : View {
         )
         // Compute the length of sector lines, such that they stop a little before hitting the edge of the view.
         val lengthOfLineDemarcatingSectors = (hypot(smallDim.toDouble(), smallDim.toDouble()).toFloat()
-                - radius - characterHeight)
+                - circle.radius - characterHeight)
 
         // Compute sector demarcation lines as if they were all going orthogonal (like a "+").
         // This is easier to compute.  Later we apply rotation to orient the lines properly (like an "x").
         sectorLines.rewind()
-        sectorLines.moveTo(circleCenter.x + radius, circleCenter.y)
+        sectorLines.moveTo(circle.centre.x + circle.radius, circle.centre.y)
         sectorLines.rLineTo(lengthOfLineDemarcatingSectors, 0f)
-        sectorLines.moveTo(circleCenter.x - radius, circleCenter.y)
+        sectorLines.moveTo(circle.centre.x - circle.radius, circle.centre.y)
         sectorLines.rLineTo(-lengthOfLineDemarcatingSectors, 0f)
-        sectorLines.moveTo(circleCenter.x, circleCenter.y + radius)
+        sectorLines.moveTo(circle.centre.x, circle.centre.y + circle.radius)
         sectorLines.rLineTo(0f, lengthOfLineDemarcatingSectors)
-        sectorLines.moveTo(circleCenter.x, circleCenter.y - radius)
+        sectorLines.moveTo(circle.centre.x, circle.centre.y - circle.radius)
         sectorLines.rLineTo(0f, -lengthOfLineDemarcatingSectors)
 
         // Compute the first set of points going straight to the "east" (aka, rightwards).
         // Then apply repeated rotation (45, then 90 x4) to get the final positions.
-        val eastEdge = circleCenter.x + circle.getRadius() + characterHeight / 2
+        val eastEdge = circle.centre.x + circle.radius + characterHeight / 2
         for (i in 0..3) {
             val dx = i * lengthOfLineDemarcatingSectors / 4f
             letterPositions[4 * i] = eastEdge + dx
-            letterPositions[4 * i + 1] = circleCenter.y - characterHeight / 2 // upper letter
+            letterPositions[4 * i + 1] = circle.centre.y - characterHeight / 2 // upper letter
             letterPositions[4 * i + 2] = eastEdge + dx
-            letterPositions[4 * i + 3] = circleCenter.y + characterHeight / 2 // lower letter
+            letterPositions[4 * i + 3] = circle.centre.y + characterHeight / 2 // lower letter
         }
         xFormMatrix.reset()
-        xFormMatrix.postRotate(45f, circleCenter.x, circleCenter.y)
+        xFormMatrix.postRotate(45f, circle.centre.x, circle.centre.y)
         xFormMatrix.mapPoints(letterPositions, 0, letterPositions, 0, 8)
         sectorLines.transform(xFormMatrix)
         xFormMatrix.reset()
-        xFormMatrix.postRotate(90f, circleCenter.x, circleCenter.y)
+        xFormMatrix.postRotate(90f, circle.centre.x, circle.centre.y)
         for (i in 1..3) {
             xFormMatrix.mapPoints(letterPositions, 4 * 4 * i, letterPositions, 4 * 4 * (i - 1), 8)
         }
@@ -177,12 +173,12 @@ class XpadView : View {
         foregroundPaint.style = Paint.Style.STROKE
 
         //The centre circle
-        canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), foregroundPaint)
+        canvas.drawCircle(circle.centre.x, circle.centre.y, circle.radius, foregroundPaint)
         canvas.drawPath(sectorLines, foregroundPaint) //The lines demarcating the sectors
 
         // Converting float value to int
-        val centreXValue = circle.getCentre().x.toInt()
-        val centreYValue = circle.getCentre().y.toInt()
+        val centreXValue = circle.centre.x.toInt()
+        val centreYValue = circle.centre.y.toInt()
         val userPrefersSectorIcons: Boolean = SharedPreferenceHelper.getInstance(context)
                 .getBoolean(
                         this.context.getString(R.string.pref_display_sector_icons_key),
