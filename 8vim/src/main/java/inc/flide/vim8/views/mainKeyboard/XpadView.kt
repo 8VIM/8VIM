@@ -11,8 +11,8 @@ import inc.flide.vim8.R
 import inc.flide.vim8.geometry.Circle
 import inc.flide.vim8.geometry.Dimension
 import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener
+import inc.flide.vim8.keyboardHelpers.KeyboardDataStore
 import inc.flide.vim8.preferences.SharedPreferenceHelper
-import inc.flide.vim8.structures.FingerPosition
 import java.util.*
 import kotlin.math.*
 
@@ -292,21 +292,12 @@ class XpadView : View {
 
     private fun getCharacterSetToDisplay(): String {
         return if (actionListener.areCharactersCapitalized()) {
-            actionListener.getUpperCaseCharacters()
-        } else actionListener.getLowerCaseCharacters()
-    }
-
-    private fun getCurrentFingerPosition(position: PointF): FingerPosition {
-        return if (circle.isPointInsideCircle(position)) {
-            FingerPosition.INSIDE_CIRCLE
-        } else {
-            circle.getSectorOfPoint(position)
-        }
+            KeyboardDataStore.keyboardData.getUpperCaseCharacters()
+        } else KeyboardDataStore.keyboardData.getLowerCaseCharacters()
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean {
-        val position = PointF(floor(e.x), floor(e.y))
-        val currentFingerPosition = getCurrentFingerPosition(position)
+        val currentFingerPosition = circle.getCurrentFingerPosition(PointF(e.x, e.y))
         invalidate()
         return when (e.actionMasked) {
             MotionEvent.ACTION_DOWN -> {

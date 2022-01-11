@@ -23,41 +23,35 @@ class Circle @JvmOverloads constructor(var centre: PointF = PointF(0f, 0f), var 
         return dSquare - rSquare
     }
 
-    fun isPointInsideCircle(point: PointF): Boolean {
-        return getPowerOfPoint(point) < 0
-    }
-
     /**
      * Gets the angle of point p relative to the center
+     * think of the regular cartisian coordinates rotated about center by 135 degree anti-clockwise
      */
     private fun getAngleInRadiansOfPointWithRespectToCentreOfCircle(point: PointF): Double {
-        // Get difference of coordinates
-        val x = (point.x - centre.x).toDouble()
-        val y = (centre.y - point.y).toDouble()
-
         // Calculate angle with special atan (calculates the correct angle in all quadrants)
-        var angle = atan2(y, x)
-        // Make all angles positive
-        if (angle < 0) {
-            angle += Math.PI * 2
-        }
-        return angle
+        return (atan2(point.x - 360.0, 360.0 - point.y) + (Math.PI * 2)) % (Math.PI * 2)
     }
 
+    fun getCurrentFingerPosition(position: PointF): FingerPosition {
+        return if (getPowerOfPoint(position) <= 0) {
+            FingerPosition.INSIDE_CIRCLE
+        } else {
+            getSectorOfPoint(position)
+        }
+    }
     /**
      * Get the number of the sector that point p is in
      *
-     * @return 0: right, 1: top, 2: left, 3: bottom
+     * @return 0: top, 1: right, 2: bottom, 3: left
      */
-    fun getSectorOfPoint(p: PointF): FingerPosition {
+    private fun getSectorOfPoint(p: PointF): FingerPosition {
         val angleDouble: Double = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p)
-        val angleToSectorValue: Double = angleDouble / (Math.PI / 2)
-        val quadrantCyclic: Int = angleToSectorValue.toInt()
+        val quadrantCyclic: Int = angleDouble.toInt() / (Math.PI / 2).toInt()
         return when (GeometricUtilities.getBaseQuadrant(quadrantCyclic)) {
-            0 -> FingerPosition.RIGHT
-            1 -> FingerPosition.TOP
-            2 -> FingerPosition.LEFT
-            else -> FingerPosition.BOTTOM //a.k.a 3
+            0 -> FingerPosition.TOP
+            1 -> FingerPosition.RIGHT
+            2 -> FingerPosition.BOTTOM
+            else -> FingerPosition.LEFT //a.k.a 3
         }
     }
 }

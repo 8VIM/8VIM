@@ -25,14 +25,6 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
         }
     }
 
-    fun getLowerCaseCharacters(): String {
-        return KeyboardDataStore.keyboardData.getLowerCaseCharacters()
-    }
-
-    fun getUpperCaseCharacters(): String {
-        return KeyboardDataStore.keyboardData.getUpperCaseCharacters()
-    }
-
     fun movementStarted(fingerPosition: FingerPosition) {
         currentFingerPosition = fingerPosition
         movementSequence.clear()
