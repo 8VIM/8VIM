@@ -10,16 +10,6 @@ object GeometricUtilities {
         return abs(xSquare + ySquare)
     }
 
-    fun getBaseQuadrant(continuousQuadrantValue: Int): Int {
-        // Calculate result with modulus operator
-        var result: Int = continuousQuadrantValue % 4
-        // Fix zero truncation
-        if (result < 0) {
-            result += 4
-        }
-        return result
-    }
-
     fun findPointSpecifiedDistanceAwayInGivenDirection(startingPoint: PointF, directionalAngleInDegree: Double, length: Double): PointF {
         val directionalAngleInRadians = Math.toRadians(directionalAngleInDegree)
         val x = (startingPoint.x + length * cos(directionalAngleInRadians)).toFloat().roundToInt()
