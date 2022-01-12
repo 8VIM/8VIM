@@ -32,7 +32,7 @@ class MainKeyboardView : ConstraintLayout {
     }
 
     private fun initialize(context: Context) {
-        actionListener = MainKeypadActionListener(context as MainInputMethodService, this)
+        actionListener = MainKeypadActionListener(this)
         setupMainKeyboardView(context)
         setupButtonsOnSideBar()
         setColors()
@@ -91,7 +91,7 @@ class MainKeyboardView : ConstraintLayout {
 
     private fun setupCtrlKey() {
         val ctrlKeyButton = findViewById<ImageButton?>(R.id.ctrlButton)
-        ctrlKeyButton.setOnClickListener { actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK) }
+        ctrlKeyButton.setOnClickListener { MainInputMethodService.setModifierFlags(KeyEvent.META_CTRL_MASK) }
     }
 
     private fun setupGoToSettingsButton() {

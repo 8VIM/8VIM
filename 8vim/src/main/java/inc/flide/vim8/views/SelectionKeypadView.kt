@@ -26,7 +26,6 @@ class SelectionKeypadView : ButtonKeypadView {
         val foregroundColor: Int = SharedPreferenceHelper.Companion.getInstance(getContext()).getInt(
                 resources.getString(R.string.pref_board_fg_color_key),
                 resources.getColor(R.color.defaultBoardFg))
-        val mainInputMethodService = context as MainInputMethodService
         val keyboard = Keyboard(context, R.layout.selection_keypad_view)
         val keys = keyboard.keys
         for (key in keys) {
@@ -38,7 +37,7 @@ class SelectionKeypadView : ButtonKeypadView {
                 key.icon.alpha = 255
             }
         }
-        val actionListener = ButtonKeypadActionListener(mainInputMethodService, this)
+        val actionListener = ButtonKeypadActionListener(this)
         this.onKeyboardActionListener = actionListener
     }
 }

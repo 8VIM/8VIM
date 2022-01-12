@@ -2,15 +2,12 @@ package inc.flide.vim8.keyboardActionListners
 
 import android.os.Handler
 import android.view.View
-import inc.flide.vim8.MainInputMethodService
 import inc.flide.vim8.keyboardHelpers.KeyboardDataStore
 import inc.flide.vim8.structures.*
 import java.util.*
 
-class MainKeypadActionListener(inputMethodService: MainInputMethodService, view: View) : KeypadActionListener(inputMethodService, view) {
-    init {
-        KeyboardDataStore.keyboardData = mainInputMethodService.buildKeyboardActionMap()
-    }
+class MainKeypadActionListener(view: View) : KeypadActionListener(view) {
+
     private val longPressHandler: Handler = Handler()
     private val movementSequence: MutableList<FingerPosition> = ArrayList()
     private var currentFingerPosition: FingerPosition = FingerPosition.NO_TOUCH

@@ -4,7 +4,7 @@ import android.inputmethodservice.KeyboardView.OnKeyboardActionListener
 import android.view.View
 import inc.flide.vim8.MainInputMethodService
 
-class ButtonKeypadActionListener(mainInputMethodService: MainInputMethodService, view: View) : KeypadActionListener(mainInputMethodService, view), OnKeyboardActionListener {
+class ButtonKeypadActionListener(view: View) : KeypadActionListener(view), OnKeyboardActionListener {
     override fun onKey(primaryCode: Int, keyCodes: IntArray?) {
         super.handleInputKey(primaryCode, 0)
     }
@@ -15,7 +15,7 @@ class ButtonKeypadActionListener(mainInputMethodService: MainInputMethodService,
     override fun swipeLeft() {}
     override fun swipeRight() {}
     override fun swipeDown() {
-        mainInputMethodService.hideKeyboard()
+        MainInputMethodService.hideKeyboard()
     }
 
     override fun swipeUp() {}

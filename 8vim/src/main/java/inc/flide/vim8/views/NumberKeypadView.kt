@@ -22,10 +22,9 @@ class NumberKeypadView : ButtonKeypadView {
     }
 
     private fun initialize(context: Context) {
-        val mainInputMethodService = context as MainInputMethodService
         val keyboard = Keyboard(context, R.layout.number_keypad_view)
         setColors(keyboard)
-        val actionListener = ButtonKeypadActionListener(mainInputMethodService, this)
+        val actionListener = ButtonKeypadActionListener(this)
         this.onKeyboardActionListener = actionListener
         SharedPreferenceHelper.getInstance(getContext()).addListener(
             object : SharedPreferenceHelper.Listener() {

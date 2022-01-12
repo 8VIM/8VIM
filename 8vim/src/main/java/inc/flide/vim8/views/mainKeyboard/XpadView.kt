@@ -82,7 +82,7 @@ class XpadView : View {
         })
         updateColors(context)
         setForegroundPaint()
-        actionListener = MainKeypadActionListener(context as MainInputMethodService, this)
+        actionListener = MainKeypadActionListener(this)
         isHapticFeedbackEnabled = true
         circle = Circle()
     }
@@ -242,10 +242,10 @@ class XpadView : View {
         iconCenterX = centreXValue
         iconCenterY = max(sectorLineBounds.top, 0f).toInt()
         var shiftIconToDisplay = R.drawable.ic_no_capslock
-        if (actionListener.isShiftSet()) {
+        if (MainInputMethodService.getShiftLockFlag() == KeyEvent.META_SHIFT_ON) {
             shiftIconToDisplay = R.drawable.ic_shift_engaged
         }
-        if (actionListener.isCapsLockSet()) {
+        if (MainInputMethodService.getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON) {
             shiftIconToDisplay = R.drawable.ic_capslock_engaged
         }
         drawIconInSector(iconCenterX - iconHalfWidth,
@@ -291,7 +291,7 @@ class XpadView : View {
     }
 
     private fun getCharacterSetToDisplay(): String {
-        return if (actionListener.areCharactersCapitalized()) {
+        return if (MainInputMethodService.areCharactersCapitalized()) {
             KeyboardDataStore.keyboardData.getUpperCaseCharacters()
         } else KeyboardDataStore.keyboardData.getLowerCaseCharacters()
     }
