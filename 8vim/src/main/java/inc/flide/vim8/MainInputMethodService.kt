@@ -1,6 +1,5 @@
 package inc.flide.vim8
 
-import android.inputmethodservice.InputMethodService
 import android.os.SystemClock
 import android.text.InputType
 import android.text.TextUtils
@@ -10,18 +9,33 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.AbstractComposeView
+import androidx.compose.ui.unit.dp
 import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper
 import inc.flide.vim8.keyboardHelpers.KeyboardDataStore
+import inc.flide.vim8.keyboardHelpers.LifecycleInputMethodService
 import inc.flide.vim8.preferences.SharedPreferenceHelper
 import inc.flide.vim8.views.NumberKeypadView
 import inc.flide.vim8.views.SelectionKeypadView
 import inc.flide.vim8.views.SymbolKeypadView
 import inc.flide.vim8.views.mainKeyboard.MainKeyboardView
+import inc.flide.vim8.views.mainKeyboard.XpadView
 import java.lang.ref.WeakReference
 
 private var MainInputMethodServiceReference = WeakReference<MainInputMethodService>(null)
 
-class MainInputMethodService : InputMethodService() {
+class MainInputMethodService : LifecycleInputMethodService() {
     companion object {
         private var shiftLockFlag = 0
         private var capsLockFlag = 0
@@ -199,26 +213,23 @@ class MainInputMethodService : InputMethodService() {
         }
 
         fun switchToSelectionKeypad() {
-            MainInputMethodServiceReference.get()!!.setCurrentKeypadView(
-                MainInputMethodServiceReference.get()!!.selectionKeypadView)
+            //MainInputMethodServiceReference.get()!!.setCurrentKeypadView(MainInputMethodServiceReference.get()!!.selectionKeypadView)
         }
 
         fun switchToSymbolsKeypad() {
-            MainInputMethodServiceReference.get()!!.setCurrentKeypadView(
-                MainInputMethodServiceReference.get()!!.symbolKeypadView)
+            //MainInputMethodServiceReference.get()!!.setCurrentKeypadView(MainInputMethodServiceReference.get()!!.symbolKeypadView)
         }
 
         fun switchToMainKeypad() {
-            MainInputMethodServiceReference.get()!!.setCurrentKeypadView(
-                MainInputMethodServiceReference.get()!!.mainKeyboardView)
+            //MainInputMethodServiceReference.get()!!.setCurrentKeypadView(MainInputMethodServiceReference.get()!!.mainKeyboardView)
         }
 
         fun switchToNumberPad() {
-            MainInputMethodServiceReference.get()!!.setCurrentKeypadView(
-                MainInputMethodServiceReference.get()!!.numberKeypadView)
+            //MainInputMethodServiceReference.get()!!.setCurrentKeypadView(MainInputMethodServiceReference.get()!!.numberKeypadView)
         }
     }
     private lateinit var inputConnection: InputConnection
+    private var inputWindowView by mutableStateOf<View?>(null)
     private lateinit var editorInfo: EditorInfo
     private lateinit var mainKeyboardView: MainKeyboardView
     private lateinit var numberKeypadView: NumberKeypadView
@@ -256,12 +267,49 @@ class MainInputMethodService : InputMethodService() {
         KeyboardDataStore.keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, applicationContext)
     }
     override fun onCreateInputView(): View {
+        super.onCreateInputView()
+        val composeView = ComposeInputView()
+        inputWindowView = composeView
         numberKeypadView = NumberKeypadView(this)
         selectionKeypadView = SelectionKeypadView(this)
         symbolKeypadView = SymbolKeypadView(this)
         mainKeyboardView = MainKeyboardView(this)
-        setCurrentKeypadView(mainKeyboardView)
-        return currentKeypadView
+        //setCurrentKeypadView(mainKeyboardView)
+        //return currentKeypadView
+        return composeView
+    }
+
+    @Composable
+    private fun ImeUiWrapper() {
+        // Outer box is necessary as an "outer window"
+        Box(modifier = Modifier.height(250.dp)) {
+            //Text(text = "Hodor Hodor!", fontSize = 50.sp, modifier = Modifier.align(Alignment.Center))
+            xPad()
+        }
+    }
+
+    @Composable
+    fun xPad() {
+        Canvas(
+            modifier = Modifier
+                .size(330.dp, 250.dp)
+                .background(color = Color.White),
+            onDraw =  {
+                val userPrefersTypingTrail: Boolean = SharedPreferenceHelper.getInstance(applicationContext)
+                    .getBoolean(
+                        applicationContext.getString(R.string.pref_typing_trail_visibility_key),
+                        true)
+                if (userPrefersTypingTrail) {
+                    //paintTypingTrail(canvas)
+                }
+                drawCircle(
+                    color = Color.Black,
+                    center = center,
+                    radius = 50f
+                )
+                //drawPath(color = Color(XpadView.foregroundColor), path = XpadView.sectorLines)
+            }
+        )
     }
 
     override fun onCreateCandidatesView(): View? {
@@ -316,4 +364,19 @@ class MainInputMethodService : InputMethodService() {
         return ""
     }
 
+    private inner class ComposeInputView : AbstractComposeView(this) {
+        init {
+            isHapticFeedbackEnabled = true
+            layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        }
+
+        @Composable
+        override fun Content() {
+            ImeUiWrapper()
+        }
+
+        override fun getAccessibilityClassName(): CharSequence {
+            return javaClass.name
+        }
+    }
 }
