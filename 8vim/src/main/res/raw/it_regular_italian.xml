@@ -548,8 +548,8 @@
         <keyboardAction>
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
-            <inputString>î</inputString>
-            <inputCapsLockString>Î</inputCapsLockString>
+            <inputString>í</inputString>
+            <inputCapsLockString>Í</inputCapsLockString>
         </keyboardAction>
         <keyboardAction>
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
