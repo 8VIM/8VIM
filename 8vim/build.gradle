@@ -26,14 +26,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    lintOptions {
-        htmlReport true
-        htmlOutput file("lint-report.html")
-        warningsAsErrors false
+    lint {
         abortOnError false
-        disable "ObsoleteLintCustomCheck"
-        disable "ClickableViewAccessibility"
-        disable "VectorPath"
+        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath'
+        htmlOutput file('lint-report.html')
+        htmlReport true
+        warningsAsErrors false
     }
 }
 
