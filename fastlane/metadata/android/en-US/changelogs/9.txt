@@ -1,0 +1,3 @@
+- small change to Italian Layout - @davidossky
+- fix for empty layout list - Adam Schmalhofer
+- starting from circle to a sector and back is now ignored and no longer breaks the flow
