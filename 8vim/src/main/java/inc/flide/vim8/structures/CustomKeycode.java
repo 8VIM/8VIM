@@ -18,7 +18,8 @@ public enum CustomKeycode {
     SWITCH_TO_SYMBOLS_KEYPAD(-11),
     SWITCH_TO_SELECTION_KEYPAD(-12),
     SWITCH_TO_EMOTICON_KEYBOARD(-13),
-    HIDE_KEYBOARD(-14);
+    HIDE_KEYBOARD(-14),
+    NO_OPERATION(-15);
 
     private static final Map<Integer, CustomKeycode> KEY_CODE_TO_STRING_CODE_MAP;
     private final int keyCode;

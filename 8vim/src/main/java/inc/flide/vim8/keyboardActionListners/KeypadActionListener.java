@@ -128,6 +128,8 @@ public class KeypadActionListener {
             case HIDE_KEYBOARD:
                 mainInputMethodService.hideKeyboard();
                 break;
+            case NO_OPERATION:
+                break;
             default:
                 return false;
         }
