@@ -66,11 +66,11 @@ public class SettingsActivity extends AppCompatActivity
 
         if (pressBackTwice) {
             finishAndRemoveTask();
+        } else {
+            pressBackTwice = true;
+            Toast.makeText(SettingsActivity.this, "Please press Back again to exit", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(() -> pressBackTwice = false, 2000);
         }
-
-        pressBackTwice = true;
-        Toast.makeText(SettingsActivity.this, "Please press Back again to exit", Toast.LENGTH_SHORT).show();
-        new Handler().postDelayed(() -> pressBackTwice = false, 2000);
     }
 
 
