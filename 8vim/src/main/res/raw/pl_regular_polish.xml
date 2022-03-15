@@ -519,6 +519,13 @@
             <inputCapsLockString>Ź</inputCapsLockString>
         </keyboardAction>
 
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;TOP;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
+            <inputString>ś</inputString>
+            <inputCapsLockString>Ś</inputCapsLockString>
+        </keyboardAction>
+
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         <!-- Capital Characters by going all the way around the board -->
@@ -570,6 +577,13 @@
             <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
             <inputString>Ź</inputString>
             <inputCapsLockString>ź</inputCapsLockString>
+        </keyboardAction>
+
+        <keyboardAction>
+            <keyboardActionType>INPUT_TEXT</keyboardActionType>
+            <movementSequence>INSIDE_CIRCLE;TOP;LEFT;BOTTOM;RIGHT;TOP;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
+            <inputString>Ś</inputString>
+            <inputCapsLockString>ś</inputCapsLockString>
         </keyboardAction>
 
 
