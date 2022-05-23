@@ -15,6 +15,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.Locale;
 import java.util.Random;
 
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
@@ -32,6 +33,7 @@ public class XpadView extends View {
     private final Path typingTrailPath = new Path();
     private Paint backgroundPaint = new Paint();
     private Paint foregroundPaint = new Paint();
+    private Paint foregroundBoldPaint = new Paint();
     private Paint typingTrailPaint = new Paint();
     private MainKeypadActionListener actionListener;
     private PointF circleCenter;
@@ -131,8 +133,8 @@ public class XpadView extends View {
         int keypadXOffset = fullWidth - keypadDimension.getWidth();
         // If the xOffset is to the right, we can spread into the extra padding space.
         int smallDim = Math.min(xOffset > 0 ? fullWidth / 2 - xOffset + keypadXOffset
-                // If xOffset goes to the left, restrict to keypadDimension.
-                : keypadDimension.getWidth() / 2 + xOffset,
+                        // If xOffset goes to the left, restrict to keypadDimension.
+                        : keypadDimension.getWidth() / 2 + xOffset,
                 fullHeight / 2 - Math.abs(yOffset));
         // Compute the length of sector lines, such that they stop a little before hitting the edge of the view.
         float lengthOfLineDemarcatingSectors = (float) Math.hypot(smallDim, smallDim)
@@ -236,20 +238,42 @@ public class XpadView extends View {
                         this.getContext().getString(R.string.pref_display_wheel_characters_key),
                         true);
         if (userPreferWheelLetters) {
-            foregroundPaint.setStrokeWidth(0.75f * density);
+            foregroundPaint.setStrokeWidth(0.85f * density);
             foregroundPaint.setStyle(Paint.Style.FILL);
             foregroundPaint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawPosText(getCharacterSetToDisplay(), letterPositions, foregroundPaint);
+
+            foregroundBoldPaint.setStrokeWidth(0.85f * density);
+            foregroundBoldPaint.setStyle(Paint.Style.FILL);
+            foregroundBoldPaint.setTextAlign(Paint.Align.CENTER);
+
+            String characterSet = getCharacterSetToDisplay();
+            for (int i = 0; i < characterSet.length(); i++) {
+                Paint paint = foregroundPaint;
+                String highlightedLetter = actionListener.getCurrentLetter();
+                String letter = String.valueOf(characterSet.charAt(i));
+                if (highlightedLetter != null && highlightedLetter.equals(letter.toLowerCase(Locale.ROOT))) {
+                    paint = foregroundBoldPaint;
+                }
+                canvas.drawText(letter, letterPositions[i * 2], letterPositions[i * 2 + 1], paint);
+            }
         }
     }
 
     private void setForegroundPaint() {
+        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
+                "SF-UI-Display-Regular.otf");
+        Typeface fontBold = Typeface.createFromAsset(getContext().getAssets(),
+                "SF-UI-Display-Bold.otf");
+
         foregroundPaint.setAntiAlias(true);
         foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
         foregroundPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
-                "SF-UI-Display-Regular.otf");
         foregroundPaint.setTypeface(font);
+
+        foregroundBoldPaint.setAntiAlias(true);
+        foregroundBoldPaint.setStrokeJoin(Paint.Join.ROUND);
+        foregroundBoldPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
+        foregroundBoldPaint.setTypeface(fontBold);
     }
 
     private void setupSectorIcons(int centreXValue, int centreYValue, Canvas canvas) {
