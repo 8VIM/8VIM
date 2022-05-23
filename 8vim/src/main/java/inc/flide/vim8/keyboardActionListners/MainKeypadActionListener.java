@@ -66,6 +66,11 @@ public class MainKeypadActionListener extends KeypadActionListener {
         return currentLetter;
     }
 
+    @Override public boolean areCharactersCapitalized() {
+        if(movementSequence.size() < 6) return super.areCharactersCapitalized();
+        return true;
+    }
+
     public void movementStarted(FingerPosition fingerPosition) {
         currentFingerPosition = fingerPosition;
         movementSequence.clear();
@@ -160,5 +165,4 @@ public class MainKeypadActionListener extends KeypadActionListener {
                 break;
         }
     }
-
 }
