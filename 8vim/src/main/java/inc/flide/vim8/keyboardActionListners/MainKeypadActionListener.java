@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -68,6 +69,11 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     @Override public boolean areCharactersCapitalized() {
         if(movementSequence.size() < 6) return super.areCharactersCapitalized();
+        return true;
+    }
+
+    @Override public boolean isShiftSet() {
+        if(movementSequence.size() < 6) return super.isShiftSet();
         return true;
     }
 
