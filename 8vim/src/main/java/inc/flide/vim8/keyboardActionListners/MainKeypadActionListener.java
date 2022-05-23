@@ -8,6 +8,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
@@ -23,6 +24,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
     private static KeyboardData keyboardData;
     private final List<FingerPosition> movementSequence;
     private FingerPosition currentFingerPosition;
+    private String currentLetter;
     private boolean isLongPressCallbackSet;
     private MovementSequenceType currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT;
 
@@ -60,9 +62,14 @@ public class MainKeypadActionListener extends KeypadActionListener {
         return keyboardData.getUpperCaseCharacters();
     }
 
+    public String getCurrentLetter() {
+        return currentLetter;
+    }
+
     public void movementStarted(FingerPosition fingerPosition) {
         currentFingerPosition = fingerPosition;
         movementSequence.clear();
+        currentLetter = null;
         currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT;
         movementSequence.add(currentFingerPosition);
         initiateLongPressDetection();
@@ -81,8 +88,17 @@ public class MainKeypadActionListener extends KeypadActionListener {
                     && keyboardData.getActionMap().get(movementSequence) != null) {
                 processMovementSequence(movementSequence);
                 movementSequence.clear();
+                currentLetter = null;
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT;
                 movementSequence.add(currentFingerPosition);
+            } else if (currentFingerPosition != FingerPosition.INSIDE_CIRCLE) {
+                List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
+                modifiedMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
+                KeyboardAction action = keyboardData.getActionMap().get(modifiedMovementSequence);
+
+                if (action != null) {
+                    currentLetter = action.getText().toLowerCase(Locale.ROOT);
+                }
             }
         } else if (!isLongPressCallbackSet) {
             initiateLongPressDetection();
@@ -95,6 +111,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
         movementSequence.add(currentFingerPosition);
         processMovementSequence(movementSequence);
         movementSequence.clear();
+        currentLetter = null;
         currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT;
     }
 
@@ -102,6 +119,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
         longPressHandler.removeCallbacks(longPressRunnable);
         isLongPressCallbackSet = false;
         movementSequence.clear();
+        currentLetter = null;
         currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT;
     }
 
