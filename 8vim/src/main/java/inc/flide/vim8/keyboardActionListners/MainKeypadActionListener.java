@@ -68,13 +68,13 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     @Override
     public boolean areCharactersCapitalized() {
-        if (movementSequence.size() < 6) return super.areCharactersCapitalized();
+        if (movementSequence.size() < 7) return super.areCharactersCapitalized();
         return true;
     }
 
     @Override
     public boolean isShiftSet() {
-        if (movementSequence.size() < 6) return super.isShiftSet();
+        if (movementSequence.size() < 7) return super.isShiftSet();
         return true;
     }
 
@@ -109,7 +109,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
                 KeyboardAction action = keyboardData.getActionMap().get(modifiedMovementSequence);
 
                 if (action != null) {
-                    currentLetter = action.getText().toLowerCase(Locale.ROOT);
+                    currentLetter = action.getText();
                 }
             }
         } else if (!isLongPressCallbackSet) {

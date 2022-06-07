@@ -251,7 +251,7 @@ public class XpadView extends View {
                 Paint paint = foregroundPaint;
                 String highlightedLetter = actionListener.getCurrentLetter();
                 String letter = String.valueOf(characterSet.charAt(i));
-                if (highlightedLetter != null && highlightedLetter.equals(letter.toLowerCase(Locale.ROOT))) {
+                if (highlightedLetter != null && highlightedLetter.equalsIgnoreCase(letter)) {
                     paint = foregroundBoldPaint;
                 }
                 canvas.drawText(letter, letterPositions[i * 2], letterPositions[i * 2 + 1], paint);
