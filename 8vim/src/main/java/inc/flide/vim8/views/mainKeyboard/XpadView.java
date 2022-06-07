@@ -15,7 +15,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.Locale;
 import java.util.Random;
 
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
