@@ -68,13 +68,13 @@ public class MainKeypadActionListener extends KeypadActionListener {
     @Override
     public boolean areCharactersCapitalized() {
         if (movementSequence.size() < 7) return super.areCharactersCapitalized();
-        return true;
+        return movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
     }
 
     @Override
     public boolean isShiftSet() {
         if (movementSequence.size() < 7) return super.isShiftSet();
-        return true;
+        return movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
     }
 
     public void movementStarted(FingerPosition fingerPosition) {
