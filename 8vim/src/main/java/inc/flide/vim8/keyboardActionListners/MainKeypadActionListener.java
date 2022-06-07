@@ -8,7 +8,6 @@ import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
