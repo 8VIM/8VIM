@@ -237,11 +237,11 @@ public class XpadView extends View {
                         this.getContext().getString(R.string.pref_display_wheel_characters_key),
                         true);
         if (userPreferWheelLetters) {
-            foregroundPaint.setStrokeWidth(0.85f * density);
+            foregroundPaint.setStrokeWidth(0.75f * density);
             foregroundPaint.setStyle(Paint.Style.FILL);
             foregroundPaint.setTextAlign(Paint.Align.CENTER);
 
-            foregroundBoldPaint.setStrokeWidth(0.85f * density);
+            foregroundBoldPaint.setStrokeWidth(0.75f * density);
             foregroundBoldPaint.setStyle(Paint.Style.FILL);
             foregroundBoldPaint.setTextAlign(Paint.Align.CENTER);
 
