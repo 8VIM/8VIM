@@ -89,7 +89,7 @@ class MainKeypadActionListener(view: View) : KeypadActionListener(view) {
             movementSequence.clear()
             return
         }
-        when (keyboardAction.getKeyboardActionType()) {
+        when (keyboardAction.keyboardActionType) {
             KeyboardActionType.INPUT_TEXT -> handleInputText(keyboardAction)
             KeyboardActionType.INPUT_KEY -> handleInputKey(keyboardAction)
         }

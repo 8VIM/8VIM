@@ -35,7 +35,7 @@ open class KeypadActionListener {
     }
 
     fun handleInputKey(keyboardAction: KeyboardAction) {
-        handleInputKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags())
+        handleInputKey(keyboardAction.keyEventCode, keyboardAction.keyFlags)
     }
 
     fun handleInputKey(keyCode: Int, keyFlags: Int) {
@@ -128,12 +128,12 @@ open class KeypadActionListener {
     }
 
     fun handleInputText(keyboardAction: KeyboardAction) {
-        if (keyboardAction.getText()!!.length == 1
+        if (keyboardAction.text!!.length == 1
                 && (MainInputMethodService.getShiftLockFlag() == KeyEvent.META_SHIFT_ON ||
                     MainInputMethodService.getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON)) {
-            onText(keyboardAction.getCapsLockText())
+            onText(keyboardAction.capsLockText)
         } else {
-            onText(keyboardAction.getText())
+            onText(keyboardAction.text)
         }
     }
 
