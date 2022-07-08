@@ -6,11 +6,7 @@ import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.pow
 
-class Circle @JvmOverloads constructor(var centre: PointF = PointF(0f, 0f), var radius: Float = 0f){
-
-    fun setCentre(x: Float, y: Float) {
-        this.centre = PointF(x, y);
-    }
+class Circle(var centre: PointF = PointF(0f, 0f), var radius: Float = 0f) {
 
     private fun getPowerOfPoint(point: PointF): Double {
         /*

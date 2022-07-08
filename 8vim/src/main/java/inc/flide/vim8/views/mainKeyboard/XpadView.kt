@@ -94,7 +94,7 @@ class XpadView : View {
         // TODO: Store constant in .xml file (but where?)
         val xOffset = pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0) * 26
         val yOffset = pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0) * 26
-        circle.setCentre(keypadDimension.width / 2f + xOffset, keypadDimension.height / 2f + yOffset)
+        circle.centre = PointF(keypadDimension.width / 2f + xOffset, keypadDimension.height / 2f + yOffset)
         circle.radius = spRadiusValue / 40f * keypadDimension.width / 2
         val characterHeight = foregroundPaint.fontMetrics.descent - foregroundPaint.fontMetrics.ascent
         // We chop off a bit of the right side of the view width from the keypadDimension (see onMeasure),
