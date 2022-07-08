@@ -139,14 +139,14 @@ class MainKeyboardView : ConstraintLayout {
                 MeasureSpec.getSize(widthMeasureSpec),
                 MeasureSpec.getSize(heightMeasureSpec),
                 resources.configuration.orientation)
-        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight())
+        setMeasuredDimension(computedDimension.width, computedDimension.height)
         super.onMeasure(
                 MeasureSpec.makeMeasureSpec(
-                        computedDimension.getWidth(),
+                        computedDimension.width,
                         MeasureSpec.EXACTLY
                 ),
                 MeasureSpec.makeMeasureSpec(
-                        computedDimension.getHeight(),
+                        computedDimension.height,
                         MeasureSpec.EXACTLY
                 )
         )

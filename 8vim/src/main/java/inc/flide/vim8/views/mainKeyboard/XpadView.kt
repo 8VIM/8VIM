@@ -94,15 +94,15 @@ class XpadView : View {
         // TODO: Store constant in .xml file (but where?)
         val xOffset = pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0) * 26
         val yOffset = pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0) * 26
-        circle.setCentre( keypadDimension.getWidth() / 2f + xOffset, keypadDimension.getHeight() / 2f + yOffset)
-        circle.radius = spRadiusValue / 40f * keypadDimension.getWidth() / 2
+        circle.setCentre(keypadDimension.width / 2f + xOffset, keypadDimension.height / 2f + yOffset)
+        circle.radius = spRadiusValue / 40f * keypadDimension.width / 2
         val characterHeight = foregroundPaint.fontMetrics.descent - foregroundPaint.fontMetrics.ascent
         // We chop off a bit of the right side of the view width from the keypadDimension (see onMeasure),
         // this introduces a bit of asymmetry which we have to compensate for here.
-        val keypadXOffset = fullWidth - keypadDimension.getWidth()
+        val keypadXOffset = fullWidth - keypadDimension.width
         // If the xOffset is to the right, we can spread into the extra padding space.
         val smallDim = min(if (xOffset > 0) fullWidth / 2 - xOffset + keypadXOffset // If xOffset goes to the left, restrict to keypadDimension.
-        else keypadDimension.getWidth() / 2 + xOffset,
+        else keypadDimension.width / 2 + xOffset,
                 fullHeight / 2 - abs(yOffset)
         )
         // Compute the length of sector lines, such that they stop a little before hitting the edge of the view.
@@ -152,9 +152,9 @@ class XpadView : View {
     public override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val parentWidth = MeasureSpec.getSize(widthMeasureSpec)
         val parentHeight = MeasureSpec.getSize(heightMeasureSpec)
-        keypadDimension.setWidth(parentWidth / 6 * 5)
-        keypadDimension.setHeight(parentHeight)
-        setMeasuredDimension(keypadDimension.getWidth(), keypadDimension.getHeight())
+        keypadDimension.width = parentWidth / 6 * 5
+        keypadDimension.height = parentHeight
+        setMeasuredDimension(keypadDimension.width, keypadDimension.height)
         // this.getWidth() returns 0 at this point, parentWidth (& height) give the correct result.
         computeComponentPositions(parentWidth, parentHeight)
     }
