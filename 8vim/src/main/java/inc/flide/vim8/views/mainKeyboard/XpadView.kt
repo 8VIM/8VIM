@@ -292,8 +292,8 @@ class XpadView : View {
 
     private fun getCharacterSetToDisplay(): String {
         return if (MainInputMethodService.areCharactersCapitalized()) {
-            KeyboardDataStore.keyboardData.getUpperCaseCharacters()
-        } else KeyboardDataStore.keyboardData.getLowerCaseCharacters()
+            KeyboardDataStore.keyboardData.upperCaseCharacters
+        } else KeyboardDataStore.keyboardData.lowerCaseCharacters
     }
 
     override fun onTouchEvent(e: MotionEvent): Boolean {

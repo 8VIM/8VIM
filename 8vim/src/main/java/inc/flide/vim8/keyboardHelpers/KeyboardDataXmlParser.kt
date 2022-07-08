@@ -22,7 +22,7 @@ internal class KeyboardDataXmlParser(inputStream: InputStream) {
             }
             when (parser.name) {
                 KEYBOARD_CHARACTER_SET_TAG -> readKeyboardCharacterSet(keyboardData)
-                KEYBOARD_ACTION_MAP_TAG -> keyboardData.setActionMap(readKeyboardActionMap())
+                KEYBOARD_ACTION_MAP_TAG -> keyboardData.actionMap = readKeyboardActionMap()
             }
         }
         return keyboardData
@@ -54,13 +54,13 @@ internal class KeyboardDataXmlParser(inputStream: InputStream) {
                 KEYBOARD_CHARACTER_SET_LOWERCASE_TAG -> {
                     parser.require(XmlPullParser.START_TAG, null, KEYBOARD_CHARACTER_SET_LOWERCASE_TAG)
                     val keyboardLowerCaseCharacterSet = readText()
-                    keyboardData.setLowerCaseCharacters(keyboardLowerCaseCharacterSet)
+                    keyboardData.lowerCaseCharacters = keyboardLowerCaseCharacterSet
                     parser.require(XmlPullParser.END_TAG, null, KEYBOARD_CHARACTER_SET_LOWERCASE_TAG)
                 }
                 KEYBOARD_CHARACTER_SET_UPPERCASE_TAG -> {
                     parser.require(XmlPullParser.START_TAG, null, KEYBOARD_CHARACTER_SET_UPPERCASE_TAG)
                     val keyboardUpperCaseCharacterSet = readText()
-                    keyboardData.setUpperCaseCharacters(keyboardUpperCaseCharacterSet)
+                    keyboardData.upperCaseCharacters = keyboardUpperCaseCharacterSet
                     parser.require(XmlPullParser.END_TAG, null, KEYBOARD_CHARACTER_SET_UPPERCASE_TAG)
                 }
                 else -> {}

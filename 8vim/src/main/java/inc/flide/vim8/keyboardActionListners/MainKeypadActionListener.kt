@@ -38,7 +38,7 @@ class MainKeypadActionListener(view: View) : KeypadActionListener(view) {
             interruptLongPress()
             movementSequence.add(currentFingerPosition)
             if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE
-                    && KeyboardDataStore.keyboardData.getActionMap()[movementSequence] != null) {
+                    && KeyboardDataStore.keyboardData.actionMap[movementSequence] != null) {
                 processMovementSequence(movementSequence)
                 movementSequence.clear()
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT
@@ -79,11 +79,11 @@ class MainKeypadActionListener(view: View) : KeypadActionListener(view) {
     }
 
     private fun processMovementSequence(movementSequence: MutableList<FingerPosition>) {
-        var keyboardAction = KeyboardDataStore.keyboardData.getActionMap()[movementSequence]
+        var keyboardAction = KeyboardDataStore.keyboardData.actionMap[movementSequence]
         if (keyboardAction == null && currentMovementSequenceType == MovementSequenceType.NEW_MOVEMENT) {
             val modifiedMovementSequence: MutableList<FingerPosition> = ArrayList(movementSequence)
             modifiedMovementSequence.add(0, FingerPosition.NO_TOUCH)
-            keyboardAction = KeyboardDataStore.keyboardData.getActionMap()[modifiedMovementSequence]
+            keyboardAction = KeyboardDataStore.keyboardData.actionMap[modifiedMovementSequence]
         }
         if (keyboardAction == null) {
             movementSequence.clear()

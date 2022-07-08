@@ -103,18 +103,18 @@ object InputMethodServiceHelper {
     private fun addToKeyboardActionsMapUsingInputStream(keyboardData: KeyboardData, inputStream: InputStream) {
         val keyboardDataXmlParser = KeyboardDataXmlParser(inputStream)
         val tempKeyboardData = keyboardDataXmlParser.readKeyboardData()
-        if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.getActionMap())) {
-            keyboardData.addAllToActionMap(tempKeyboardData.getActionMap())
+        if (validateNoConflictingActions(keyboardData.actionMap, tempKeyboardData.actionMap)) {
+            keyboardData.actionMap.putAll(tempKeyboardData.actionMap)
         }
-        if (keyboardData.getLowerCaseCharacters().isEmpty()
-                && tempKeyboardData.getLowerCaseCharacters().isNotEmpty()
+        if (keyboardData.lowerCaseCharacters.isEmpty()
+                && tempKeyboardData.lowerCaseCharacters.isNotEmpty()
         ) {
-            keyboardData.setLowerCaseCharacters(tempKeyboardData.getLowerCaseCharacters())
+            keyboardData.lowerCaseCharacters = tempKeyboardData.lowerCaseCharacters
         }
-        if (keyboardData.getUpperCaseCharacters().isEmpty()
-                && tempKeyboardData.getUpperCaseCharacters().isNotEmpty()
+        if (keyboardData.upperCaseCharacters.isEmpty()
+                && tempKeyboardData.upperCaseCharacters.isNotEmpty()
         ) {
-            keyboardData.setUpperCaseCharacters(tempKeyboardData.getUpperCaseCharacters())
+            keyboardData.upperCaseCharacters = tempKeyboardData.upperCaseCharacters
         }
     }
 
