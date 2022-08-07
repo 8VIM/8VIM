@@ -17,6 +17,7 @@ import android.view.View;
 
 import java.util.Random;
 
+import androidx.core.graphics.ColorUtils;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import inc.flide.vim8.MainInputMethodService;
@@ -237,6 +238,25 @@ public class XpadView extends View {
                         this.getContext().getString(R.string.pref_display_wheel_characters_key),
                         true);
         if (userPreferWheelLetters) {
+            // Set the paint for drawing a nice background behind the current letter.
+            float roundness = 25f;
+
+            // Make the color the same as the typing trail, but blend it with white
+            // because it's too hard to see a black font on dark backgrounds.
+            int letterBackgroundColor = ColorUtils.blendARGB( typingTrailPaint.getColor(), Color.WHITE,0.5f );
+
+            Paint letterBackgroundPaint = new Paint();
+            letterBackgroundPaint.setColor( letterBackgroundColor );
+
+            Paint letterBackgroundOutlinePaint = new Paint();
+            letterBackgroundOutlinePaint.setColor( Color.BLACK );
+            letterBackgroundOutlinePaint.setStyle(Paint.Style.STROKE);
+            letterBackgroundOutlinePaint.setStrokeWidth(3f);
+
+            letterBackgroundPaint.setAntiAlias( true );
+            letterBackgroundOutlinePaint.setAntiAlias( true );
+
+            // Paint for the regular and bold fonts.
             foregroundPaint.setStrokeWidth(0.75f * density);
             foregroundPaint.setStyle(Paint.Style.FILL);
             foregroundPaint.setTextAlign(Paint.Align.CENTER);
@@ -252,6 +272,21 @@ public class XpadView extends View {
                 String letter = String.valueOf(characterSet.charAt(i));
                 if (highlightedLetter != null && highlightedLetter.equalsIgnoreCase(letter)) {
                     paint = foregroundBoldPaint;
+
+                    // Draw a box around the current letter.
+                    float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
+                    float characterWidth = characterHeight;
+                    canvas.drawRoundRect(
+                            letterPositions[i * 2]-(characterWidth/2), letterPositions[i * 2 + 1]-(characterHeight),
+                            letterPositions[i * 2]+(characterWidth/2), letterPositions[i * 2 + 1]+(characterHeight/2),
+                            roundness, roundness, letterBackgroundPaint
+                    );
+
+                    canvas.drawRoundRect(
+                            letterPositions[i * 2]-(characterWidth/2), letterPositions[i * 2 + 1]-(characterHeight),
+                            letterPositions[i * 2]+(characterWidth/2), letterPositions[i * 2 + 1]+(characterHeight/2),
+                            roundness, roundness, letterBackgroundOutlinePaint
+                    );
                 }
                 canvas.drawText(letter, letterPositions[i * 2], letterPositions[i * 2 + 1], paint);
             }
