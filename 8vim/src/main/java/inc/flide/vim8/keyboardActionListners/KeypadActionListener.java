@@ -171,7 +171,7 @@ public class KeypadActionListener {
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
-        if (keyboardAction.getText().length() == 1
+        if (keyboardAction.getText().length() == 1 && Character.isLowerCase(keyboardAction.getText().charAt(0))
                 && (isShiftSet() || isCapsLockSet())) {
             onText(keyboardAction.getCapsLockText());
         } else {
