@@ -8,6 +8,7 @@ import android.view.View;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
+import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.CustomKeycode;
@@ -63,6 +64,7 @@ public class KeypadActionListener {
         }
         return AudioManager.FX_KEYPRESS_STANDARD;
     }
+
     private void performInputAcceptedFeedback(int keySound) {
         SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(mainInputMethodService);
         boolean userEnabledHapticFeedback =
@@ -171,8 +173,7 @@ public class KeypadActionListener {
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
-        if (keyboardAction.getText().length() == 1 && Character.isLowerCase(keyboardAction.getText().charAt(0))
-                && (isShiftSet() || isCapsLockSet())) {
+        if (keyboardAction.getText().length() == 1 && (isShiftSet() || isCapsLockSet())) {
             onText(keyboardAction.getCapsLockText());
         } else {
             onText(keyboardAction.getText());
@@ -203,5 +204,9 @@ public class KeypadActionListener {
 
     public boolean isCapsLockSet() {
         return mainInputMethodService.getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
+    }
+
+    public boolean isCircleCapitalization() {
+        return false;
     }
 }

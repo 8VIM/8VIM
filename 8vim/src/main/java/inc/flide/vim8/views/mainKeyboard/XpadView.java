@@ -396,7 +396,7 @@ public class XpadView extends View {
     }
 
     private String getCharacterSetToDisplay() {
-        if (actionListener.areCharactersCapitalized()) {
+        if (actionListener.areCharactersCapitalized() || actionListener.isCircleCapitalization()) {
             return actionListener.getUpperCaseCharacters();
         }
 
