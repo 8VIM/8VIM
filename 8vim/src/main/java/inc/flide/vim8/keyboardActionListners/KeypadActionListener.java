@@ -173,7 +173,8 @@ public class KeypadActionListener {
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
-        if (keyboardAction.getText().length() == 1 && (isShiftSet() || isCapsLockSet())) {
+        if (keyboardAction.getText().length() == 1
+                && (isShiftSet() || isCapsLockSet())) {
             onText(keyboardAction.getCapsLockText());
         } else {
             onText(keyboardAction.getText());
