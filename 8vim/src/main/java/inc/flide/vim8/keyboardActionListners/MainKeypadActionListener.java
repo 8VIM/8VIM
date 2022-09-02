@@ -67,7 +67,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     @Override
     public boolean isCircleCapitalization() {
-       return  movementSequence.size() >= 7 && movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
+        return movementSequence.size() >= 7 && movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
     }
 
     public void movementStarted(FingerPosition fingerPosition) {

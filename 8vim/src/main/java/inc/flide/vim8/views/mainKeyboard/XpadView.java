@@ -243,18 +243,18 @@ public class XpadView extends View {
 
             // Make the color the same as the typing trail, but blend it with white
             // because it's too hard to see a black font on dark backgrounds.
-            int letterBackgroundColor = ColorUtils.blendARGB( typingTrailPaint.getColor(), Color.WHITE,0.5f );
+            int letterBackgroundColor = ColorUtils.blendARGB(typingTrailPaint.getColor(), Color.WHITE, 0.5f);
 
             Paint letterBackgroundPaint = new Paint();
-            letterBackgroundPaint.setColor( letterBackgroundColor );
+            letterBackgroundPaint.setColor(letterBackgroundColor);
 
             Paint letterBackgroundOutlinePaint = new Paint();
-            letterBackgroundOutlinePaint.setColor( Color.BLACK );
+            letterBackgroundOutlinePaint.setColor(Color.BLACK);
             letterBackgroundOutlinePaint.setStyle(Paint.Style.STROKE);
             letterBackgroundOutlinePaint.setStrokeWidth(3f);
 
-            letterBackgroundPaint.setAntiAlias( true );
-            letterBackgroundOutlinePaint.setAntiAlias( true );
+            letterBackgroundPaint.setAntiAlias(true);
+            letterBackgroundOutlinePaint.setAntiAlias(true);
 
             // Paint for the regular and bold fonts.
             foregroundPaint.setStrokeWidth(0.75f * density);
@@ -277,14 +277,14 @@ public class XpadView extends View {
                     float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
                     float characterWidth = characterHeight;
                     canvas.drawRoundRect(
-                            letterPositions[i * 2]-(characterWidth/2), letterPositions[i * 2 + 1]-(characterHeight),
-                            letterPositions[i * 2]+(characterWidth/2), letterPositions[i * 2 + 1]+(characterHeight/2),
+                            letterPositions[i * 2] - (characterWidth / 2), letterPositions[i * 2 + 1] - (characterHeight),
+                            letterPositions[i * 2] + (characterWidth / 2), letterPositions[i * 2 + 1] + (characterHeight / 2),
                             roundness, roundness, letterBackgroundPaint
                     );
 
                     canvas.drawRoundRect(
-                            letterPositions[i * 2]-(characterWidth/2), letterPositions[i * 2 + 1]-(characterHeight),
-                            letterPositions[i * 2]+(characterWidth/2), letterPositions[i * 2 + 1]+(characterHeight/2),
+                            letterPositions[i * 2] - (characterWidth / 2), letterPositions[i * 2 + 1] - (characterHeight),
+                            letterPositions[i * 2] + (characterWidth / 2), letterPositions[i * 2 + 1] + (characterHeight / 2),
                             roundness, roundness, letterBackgroundOutlinePaint
                     );
                 }
