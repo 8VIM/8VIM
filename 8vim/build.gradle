@@ -33,6 +33,7 @@ android {
         htmlReport true
         warningsAsErrors false
     }
+    namespace 'inc.flide.vim8'
 }
 
 
