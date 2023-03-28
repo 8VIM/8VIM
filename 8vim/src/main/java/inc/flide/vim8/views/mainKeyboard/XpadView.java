@@ -277,13 +277,13 @@ public class XpadView extends View {
                     float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
                     float characterWidth = characterHeight;
                     canvas.drawRoundRect(
-                            letterPositions[i * 2] - (characterWidth / 2), letterPositions[i * 2 + 1] - (characterHeight),
+                            letterPositions[i * 2] - (characterWidth / 2), letterPositions[i * 2 + 1] - characterHeight,
                             letterPositions[i * 2] + (characterWidth / 2), letterPositions[i * 2 + 1] + (characterHeight / 2),
                             roundness, roundness, letterBackgroundPaint
                     );
 
                     canvas.drawRoundRect(
-                            letterPositions[i * 2] - (characterWidth / 2), letterPositions[i * 2 + 1] - (characterHeight),
+                            letterPositions[i * 2] - (characterWidth / 2), letterPositions[i * 2 + 1] - characterHeight,
                             letterPositions[i * 2] + (characterWidth / 2), letterPositions[i * 2 + 1] + (characterHeight / 2),
                             roundness, roundness, letterBackgroundOutlinePaint
                     );
