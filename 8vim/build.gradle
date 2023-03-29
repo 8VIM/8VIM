@@ -5,12 +5,12 @@ assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "inc.flide.vi8"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode 9
         versionName "iteration-9"
         vectorDrawables.useSupportLibrary = true
