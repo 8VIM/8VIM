@@ -1,0 +1,8 @@
+- 🎨 style(README.md): remove quotes from video link This commit removes the quotes from the video link in the README.md file. The quotes were unnecessary and could cause issues with some markdown parsers.
+- 📝 docs(README.md): update video link and remove build status The video link has been updated to the correct one. The build status has been removed as it is no longer relevant to the project.
+- #274 Remove empty preview boxes
+- Highlight current letter with background color related to the trail color
+- Highlight current letter and upper case the dial
+- Added "ś" to the polish language
+- Fix toast behavior on back press
+- fix typo in readme
