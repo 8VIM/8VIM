@@ -2,7 +2,7 @@
 
 The application was started essentially as a clone of 8pen, which for some reason they have stopped distributing. (I can no longer install it, even though I paid for it!)
 
-To exactly understand this keyboard, please watch the video "https://www.youtube.com/watch?v=99vsUF4NuLk"
+To exactly understand this keyboard, please watch the [video]("https://www.youtube.com/watch?v=q3OuCR0EpGo")
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -10,9 +10,6 @@ To exactly understand this keyboard, please watch the video "https://www.youtube
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=inc.flide.vi8)
-
-## Build Status
-[![Build Status](https://travis-ci.org/flide/8VIM.svg?branch=master)](https://travis-ci.org/flide/8VIM)
 
 ## Usability Guide
 
