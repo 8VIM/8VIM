@@ -33,6 +33,7 @@ public abstract class ButtonKeypadView extends KeyboardView {
 
         setColors();
         SharedPreferenceHelper.getInstance(getContext()).addListener(this::setColors);
+        this.setPreviewEnabled(false);
     }
 
     private void setColors() {
