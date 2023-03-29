@@ -2,7 +2,7 @@
 
 The application was started essentially as a clone of 8pen, which for some reason they have stopped distributing. (I can no longer install it, even though I paid for it!)
 
-To exactly understand this keyboard, please watch the [video]("https://www.youtube.com/watch?v=q3OuCR0EpGo")
+To exactly understand this keyboard, please watch the [video](https://www.youtube.com/watch?v=q3OuCR0EpGo)
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
