@@ -2,7 +2,7 @@
 <resources>
     <string name="spaceBarSymbol">&#x2517;&#x2501;&#x251B;</string>
     <string name="symbolPadIcon">&#x007C;{^$&#x007C;</string>
-    <string name="rupeeSymbol">&#x20B9;</string>
+    <string name="currencySymbol">currencySymbol</string>
     <string name="poundSign">&#x00A3;</string>
     <string name="euroSign">&#x20AC;</string>
     <string name="copyrightSign">&#x00A9;</string>
