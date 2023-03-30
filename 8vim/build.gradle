@@ -38,8 +38,8 @@ android {
 
 
 dependencies {
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
-    implementation "androidx.preference:preference:1.1.1"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.preference:preference:1.2.0"
     implementation 'com.github.kizitonwose.colorpreference:support:1.1.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'org.apache.commons:commons-text:1.7'
