@@ -5,6 +5,9 @@ import android.content.res.Resources;
 import android.inputmethodservice.Keyboard;
 import android.util.AttributeSet;
 
+import java.util.Currency;
+import java.util.Locale;
+
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardActionListners.ButtonKeypadActionListener;
@@ -23,16 +26,26 @@ public class NumberKeypadView extends ButtonKeypadView {
     }
 
     public void initialize(Context context) {
-
         MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
 
         Keyboard keyboard = new Keyboard(context, R.layout.number_keypad_view);
+        setCurrencySymbolBasedOnLocale(keyboard);
         setColors(keyboard);
         this.setKeyboard(keyboard);
 
         ButtonKeypadActionListener actionListener = new ButtonKeypadActionListener(mainInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
         SharedPreferenceHelper.getInstance(getContext()).addListener(() -> setColors(keyboard));
+    }
+
+    private void setCurrencySymbolBasedOnLocale(Keyboard keyboard) {
+        for (Keyboard.Key key: keyboard.getKeys()) {
+            if(key.label != null && key.label.toString().equals(getResources().getString(R.string.currencySymbol))) {
+            Currency currency = Currency.getInstance(Locale.getDefault());
+            key.label = currency.getSymbol();
+            key.text = currency.getSymbol();
+            }
+        }
     }
 
     private void setColors(Keyboard keyboard) {

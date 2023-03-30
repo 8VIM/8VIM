@@ -13,9 +13,8 @@
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />
         <Key
-            android:keyOutputText="@string/rupeeSymbol"
             android:isRepeatable="true"
-            android:keyLabel="@string/rupeeSymbol"
+            android:keyLabel="@string/currencySymbol"
             android:keyWidth="25%p"/>
         <Key
             android:keyOutputText="&amp;"
