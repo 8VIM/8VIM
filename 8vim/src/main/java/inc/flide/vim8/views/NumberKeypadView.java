@@ -39,11 +39,11 @@ public class NumberKeypadView extends ButtonKeypadView {
     }
 
     private void setCurrencySymbolBasedOnLocale(Keyboard keyboard) {
-        for (Keyboard.Key key: keyboard.getKeys()) {
-            if(key.label != null && key.label.toString().equals(getResources().getString(R.string.currencySymbol))) {
-            Currency currency = Currency.getInstance(Locale.getDefault());
-            key.label = currency.getSymbol();
-            key.text = currency.getSymbol();
+        for (Keyboard.Key key : keyboard.getKeys()) {
+            if (key.label != null && key.label.toString().equals(getResources().getString(R.string.currencySymbol))) {
+                Currency currency = Currency.getInstance(Locale.getDefault());
+                key.label = currency.getSymbol();
+                key.text = currency.getSymbol();
             }
         }
     }
