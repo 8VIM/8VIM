@@ -196,6 +196,8 @@ public class XpadView extends View {
         computeComponentPositions(parentWidth, parentHeight);
     }
 
+    private Paint letterBackgroundPaint = new Paint();
+    private Paint letterBackgroundOutlinePaint = new Paint();
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -245,10 +247,8 @@ public class XpadView extends View {
             // because it's too hard to see a black font on dark backgrounds.
             int letterBackgroundColor = ColorUtils.blendARGB(typingTrailPaint.getColor(), Color.WHITE, 0.5f);
 
-            Paint letterBackgroundPaint = new Paint();
             letterBackgroundPaint.setColor(letterBackgroundColor);
 
-            Paint letterBackgroundOutlinePaint = new Paint();
             letterBackgroundOutlinePaint.setColor(Color.BLACK);
             letterBackgroundOutlinePaint.setStyle(Paint.Style.STROKE);
             letterBackgroundOutlinePaint.setStrokeWidth(3f);
