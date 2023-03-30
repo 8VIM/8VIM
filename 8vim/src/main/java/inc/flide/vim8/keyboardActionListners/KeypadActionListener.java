@@ -2,6 +2,7 @@ package inc.flide.vim8.keyboardActionListners;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Build;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,7 +27,12 @@ public class KeypadActionListener {
     }
 
     private boolean keyCodeIsValid(int keyCode) {
-        return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KeyEvent.KEYCODE_PROFILE_SWITCH;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KeyEvent.KEYCODE_PROFILE_SWITCH;
+        } else {
+            int KEYCODE_PROFILE_SWITCH = 288;
+            return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KEYCODE_PROFILE_SWITCH;
+        }
     }
 
     private boolean customKeyCodeIsValid(int keyCode) {
