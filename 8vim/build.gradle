@@ -38,10 +38,11 @@ android {
 
 
 dependencies {
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.preference:preference:1.2.0"
     implementation 'com.github.kizitonwose.colorpreference:support:1.1.0'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'com.google.android.material:material:1.8.0'
     implementation 'org.apache.commons:commons-text:1.7'
     api 'com.afollestad.material-dialogs:core:0.9.2.3'
 }
