@@ -198,6 +198,7 @@ public class XpadView extends View {
 
     private Paint letterBackgroundPaint = new Paint();
     private Paint letterBackgroundOutlinePaint = new Paint();
+
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -396,11 +397,12 @@ public class XpadView extends View {
     }
 
     private String getCharacterSetToDisplay() {
+        int layer = actionListener.findLayer();
         if (actionListener.areCharactersCapitalized() || actionListener.isCircleCapitalization()) {
-            return actionListener.getUpperCaseCharacters();
+            return actionListener.getUpperCaseCharacters(layer);
         }
 
-        return actionListener.getLowerCaseCharacters();
+        return actionListener.getLowerCaseCharacters(layer);
     }
 
     private FingerPosition getCurrentFingerPosition(PointF position) {

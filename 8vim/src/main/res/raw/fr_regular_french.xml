@@ -1,7 +1,29 @@
 <keyboardData>
     <keyboardCharacterSet>
-        <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
-        <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
+        <layer id="0">
+            <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
+            <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
+        </layer>
+        <layer id="1">
+            <lowerCase>ñ       é         ç             </lowerCase>
+            <upperCase>Ñ       É         Ç             </upperCase>
+        </layer>
+        <layer id="2">
+            <lowerCase>   ù      è                à    </lowerCase>
+            <upperCase>   Ù      È                À    </upperCase>
+        </layer>
+        <layer id="3">
+            <lowerCase>     ô      êî               â  </lowerCase>
+            <upperCase>     Ô      ÊÎ               Â  </upperCase>
+        </layer>
+        <layer id="4">
+            <lowerCase>     ü œ      ë               ÿæ</lowerCase>
+            <upperCase>     Ü Œ      Ë               ŸÆ</upperCase>
+        </layer>
+        <layer id="5">
+            <lowerCase>              €                 </lowerCase>
+            <upperCase>              ¢                 </upperCase>
+        </layer>
     </keyboardCharacterSet>
     <keyboardActionMap>
         <!-- Keywords for defining the movements -->
@@ -475,6 +497,7 @@
             <movementSequence>INSIDE_CIRCLE;RIGHT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
             <inputString>ñ</inputString>
             <inputCapsLockString>Ñ</inputCapsLockString>
+            <layer>1</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -482,6 +505,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
             <inputString>é</inputString>
             <inputCapsLockString>É</inputCapsLockString>
+            <layer>1</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -489,6 +513,7 @@
             <movementSequence>INSIDE_CIRCLE;LEFT;TOP;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
             <inputString>ç</inputString>
             <inputCapsLockString>Ç</inputCapsLockString>
+            <layer>1</layer>
         </keyboardAction>
 
 
@@ -529,6 +554,7 @@
             <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
             <inputString>à</inputString>
             <inputCapsLockString>À</inputCapsLockString>
+            <layer>2</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -536,6 +562,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
             <inputString>ù</inputString>
             <inputCapsLockString>Ù</inputCapsLockString>
+            <layer>2</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -543,6 +570,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
             <inputString>è</inputString>
             <inputCapsLockString>È</inputCapsLockString>
+            <layer>2</layer>
         </keyboardAction>
 
 
@@ -568,6 +596,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;LEFT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
             <inputString>È</inputString>
             <inputCapsLockString>è</inputCapsLockString>
+            <layer>2</layer>
         </keyboardAction>
 
 
@@ -583,6 +612,7 @@
             <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;RIGHT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
             <inputString>â</inputString>
             <inputCapsLockString>Â</inputCapsLockString>
+            <layer>3</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -590,6 +620,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
             <inputString>ô</inputString>
             <inputCapsLockString>Ô</inputCapsLockString>
+            <layer>3</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -597,6 +628,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;RIGHT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
             <inputString>û</inputString>
             <inputCapsLockString>Û</inputCapsLockString>
+            <layer>3</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -604,6 +636,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
             <inputString>ê</inputString>
             <inputCapsLockString>Ê</inputCapsLockString>
+            <layer>3</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -611,6 +644,7 @@
             <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;LEFT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
             <inputString>î</inputString>
             <inputCapsLockString>Î</inputCapsLockString>
+            <layer>3</layer>
         </keyboardAction>
 
 
@@ -665,6 +699,7 @@
             <movementSequence>INSIDE_CIRCLE;TOP;RIGHT;TOP;LEFT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
             <inputString>ÿ</inputString>
             <inputCapsLockString>Ÿ</inputCapsLockString>
+            <layer>4</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -672,6 +707,7 @@
             <movementSequence>INSIDE_CIRCLE;RIGHT;TOP;RIGHT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
             <inputString>æ</inputString>
             <inputCapsLockString>Æ</inputCapsLockString>
+            <layer>4</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -679,6 +715,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;BOTTOM;LEFT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
             <inputString>œ</inputString>
             <inputCapsLockString>Œ</inputCapsLockString>
+            <layer>4</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -686,6 +723,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;RIGHT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
             <inputString>ü</inputString>
             <inputCapsLockString>Ü</inputCapsLockString>
+            <layer>4</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -693,6 +731,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;RIGHT;TOP;LEFT;INSIDE_CIRCLE;</movementSequence>
             <inputString>ë</inputString>
             <inputCapsLockString>Ë</inputCapsLockString>
+            <layer>4</layer>
         </keyboardAction>
 
         <keyboardAction>
@@ -700,6 +739,7 @@
             <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;LEFT;TOP;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
             <inputString>ï</inputString>
             <inputCapsLockString>Ï</inputCapsLockString>
+            <layer>4</layer>
         </keyboardAction>
 
 
@@ -761,6 +801,7 @@
             <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;RIGHT;TOP;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
             <inputString>€</inputString>
             <inputCapsLockString>¢</inputCapsLockString>
+            <layer>5</layer>
         </keyboardAction>
 
 

@@ -215,4 +215,8 @@ public class KeypadActionListener {
     public boolean isCircleCapitalization() {
         return false;
     }
+
+    public int findLayer() {
+        return 0;
+    }
 }

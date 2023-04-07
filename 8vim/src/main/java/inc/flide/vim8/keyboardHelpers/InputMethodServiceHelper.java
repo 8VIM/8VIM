@@ -9,13 +9,16 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
+
 import inc.flide.vim8.R;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.LayoutFileName;
+import inc.flide.vim8.structures.TrieNode;
 
 public final class InputMethodServiceHelper {
 
@@ -64,6 +67,7 @@ public final class InputMethodServiceHelper {
 
         return mainKeyboardData;
     }
+
     private static KeyboardData getLayoutIndependentKeyboardData(Resources resources) {
         KeyboardData layoutIndependentKeyboardData = new KeyboardData();
         addToKeyboardActionsMapUsingResourceId(
@@ -102,6 +106,7 @@ public final class InputMethodServiceHelper {
             exception.printStackTrace();
         }
     }
+
     private static void addToKeyboardActionsMapUsingUri(KeyboardData keyboardData, Context context, Uri customLayoutUri) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(customLayoutUri)) {
             addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream);
@@ -116,13 +121,20 @@ public final class InputMethodServiceHelper {
         if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.getActionMap())) {
             keyboardData.addAllToActionMap(tempKeyboardData.getActionMap());
         }
-        if (keyboardData.getLowerCaseCharacters().isEmpty()
-                && !tempKeyboardData.getLowerCaseCharacters().isEmpty()) {
-            keyboardData.setLowerCaseCharacters(tempKeyboardData.getLowerCaseCharacters());
+
+        if (keyboardData.getActivationMovementSequences().isEmpty()
+                && !tempKeyboardData.getActivationMovementSequences().isEmpty()) {
+            keyboardData.addAllMovementSequence(tempKeyboardData.getActivationMovementSequences());
         }
-        if (keyboardData.getUpperCaseCharacters().isEmpty()
-                && !tempKeyboardData.getUpperCaseCharacters().isEmpty()) {
-            keyboardData.setUpperCaseCharacters(tempKeyboardData.getUpperCaseCharacters());
+
+        for (int i = 0; i < tempKeyboardData.totalLayers(); i++) {
+            if (keyboardData.getLowerCaseCharacters(i).isEmpty()
+                    && !tempKeyboardData.getLowerCaseCharacters(i).isEmpty())
+                keyboardData.setLowerCaseCharacters(tempKeyboardData.getLowerCaseCharacters(i), i);
+            if (keyboardData.getUpperCaseCharacters(i).isEmpty()
+                    && !tempKeyboardData.getUpperCaseCharacters(i).isEmpty())
+                keyboardData.setUpperCaseCharacters(tempKeyboardData.getUpperCaseCharacters(i), i);
+
         }
     }
 
@@ -142,5 +154,6 @@ public final class InputMethodServiceHelper {
         return true;
     }
 
-    private InputMethodServiceHelper() { }
+    private InputMethodServiceHelper() {
+    }
 }
