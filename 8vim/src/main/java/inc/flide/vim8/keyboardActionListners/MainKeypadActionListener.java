@@ -3,15 +3,12 @@ package inc.flide.vim8.keyboardActionListners;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import inc.flide.vim8.MainInputMethodService;
@@ -21,7 +18,6 @@ import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.MovementSequenceType;
-import inc.flide.vim8.structures.TrieNode;
 
 public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 6;
@@ -42,7 +38,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
     private String currentLetter;
     private boolean isLongPressCallbackSet;
     private MovementSequenceType currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT;
-    private final TrieNode rotationMovementSequences;
+    private final HashSet<List<FingerPosition>> rotationMovementSequences;
 
     private final Runnable longPressRunnable = new Runnable() {
         @Override
@@ -56,10 +52,10 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     public MainKeypadActionListener(MainInputMethodService inputMethodService, View view) {
         super(inputMethodService, view);
-        rotationMovementSequences = new TrieNode();
+        rotationMovementSequences = new HashSet<>();
 
         for (FingerPosition[] movementSequences : ROTATION_MOVEMENT_SEQUENCES) {
-           rotationMovementSequences.addMovementSequence(Arrays.asList(movementSequences), 1);
+            rotationMovementSequences.add(Arrays.asList(movementSequences));
         }
 
         keyboardData = mainInputMethodService.buildKeyboardActionMap();
@@ -89,23 +85,26 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     @Override
     public boolean isCircleCapitalization() {
-        return isFullRotation() && movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
+        return isFullRotation();
     }
 
     @Override
     public int findLayer() {
-        List<FingerPosition> tempMovementSequence = movementSequence;
+        if (movementSequence.isEmpty() || movementSequence.get(0) != FingerPosition.INSIDE_CIRCLE)
+            return Constants.DEFAULT_LAYER;
+        List<FingerPosition> tempMovementSequence = new ArrayList<>(movementSequence);
         if (isFullRotation()) {
-            tempMovementSequence = movementSequence.subList(FULL_ROTATION_STEPS - 1,movementSequence.size());
+            tempMovementSequence = tempMovementSequence.subList(FULL_ROTATION_STEPS - 1, movementSequence.size());
+            tempMovementSequence.add(0, FingerPosition.INSIDE_CIRCLE);
         }
+        tempMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
         return keyboardData.findLayer(tempMovementSequence);
     }
 
     private boolean isFullRotation() {
-        int size = movementSequence.size();
-        if (size < 7) return false;
-
-        return rotationMovementSequences.findLayer(movementSequence.subList(0, FULL_ROTATION_STEPS + 1)) == 1;
+        if (movementSequence.size() < 7 || movementSequence.get(0) != FingerPosition.INSIDE_CIRCLE)
+            return false;
+        return rotationMovementSequences.contains(movementSequence.subList(1, FULL_ROTATION_STEPS + 1));
 
     }
 

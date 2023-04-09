@@ -1,21 +1,19 @@
 <keyboardData>
-    <keyboardCharacterSet>
-        <layer id="0">
-            <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
-            <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
-        </layer>
-        <layer id="1">
-            <lowerCase> ö ü    ëï                      </lowerCase>
-            <upperCase> Ö Ü    ËÏ                      </upperCase>
-        </layer>
-        <layer id="2">
-            <lowerCase>   ô û    êî                    </lowerCase>
-            <upperCase>   Ô Û    ÊÎ                    </upperCase>
-        </layer>
-        <layer id="3">
-            <lowerCase>            è                   </lowerCase>
-            <upperCase>            È                   </upperCase>
-        </layer>
+    <keyboardCharacterSet layer="0">
+        <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
+        <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
+    </keyboardCharacterSet>
+    <keyboardCharacterSet layer="1">
+        <lowerCase> ö ü    ëï                      </lowerCase>
+        <upperCase> Ö Ü    ËÏ                      </upperCase>
+    </keyboardCharacterSet>
+    <keyboardCharacterSet layer="2">
+        <lowerCase>   ô û    êî                    </lowerCase>
+        <upperCase>   Ô Û    ÊÎ                    </upperCase>
+    </keyboardCharacterSet>
+    <keyboardCharacterSet layer="3">
+        <lowerCase>            è                   </lowerCase>
+        <upperCase>            È                   </upperCase>
     </keyboardCharacterSet>
     <keyboardActionMap>
         <!-- Keywords for defining the movements -->
@@ -484,36 +482,32 @@
         <!-- ~~~~~~~~~ -->
         <!-- Lowercase -->
         <!-- ~~~~~~~~~ -->
-        <keyboardAction>
+        <keyboardAction layer="1">
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
             <inputString>ö</inputString>
             <inputCapsLockString>Ö</inputCapsLockString>
-            <layer>1</layer>
         </keyboardAction>
 
-        <keyboardAction>
+        <keyboardAction layer="1">
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;RIGHT;INSIDE_CIRCLE;</movementSequence>
             <inputString>ü</inputString>
             <inputCapsLockString>Ü</inputCapsLockString>
-            <layer>1</layer>
         </keyboardAction>
 
-        <keyboardAction>
+        <keyboardAction layer="1">
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
             <inputString>ë</inputString>
             <inputCapsLockString>Ë</inputCapsLockString>
-            <layer>1</layer>
         </keyboardAction>
 
-        <keyboardAction>
+        <keyboardAction layer="1">
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
             <inputString>ï</inputString>
             <inputCapsLockString>Ï</inputCapsLockString>
-            <layer>1</layer>
         </keyboardAction>
 
 
@@ -556,36 +550,32 @@
         <!-- ~~~~~~~~~ -->
         <!-- Lowercase -->
         <!-- ~~~~~~~~~ -->
-        <keyboardAction>
+        <keyboardAction layer="2">
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;BOTTOM;LEFT;INSIDE_CIRCLE;</movementSequence>
             <inputString>ô</inputString>
             <inputCapsLockString>Ô</inputCapsLockString>
-            <layer>2</layer>
         </keyboardAction>
 
-        <keyboardAction>
+        <keyboardAction> layer="2"
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;BOTTOM;RIGHT;TOP;RIGHT;BOTTOM;INSIDE_CIRCLE;</movementSequence>
             <inputString>û</inputString>
             <inputCapsLockString>Û</inputCapsLockString>
-            <layer>2</layer>
         </keyboardAction>
 
-        <keyboardAction>
+        <keyboardAction layer="2">
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;RIGHT;INSIDE_CIRCLE;</movementSequence>
             <inputString>ê</inputString>
             <inputCapsLockString>Ê</inputCapsLockString>
-            <layer>2</layer>
         </keyboardAction>
 
-        <keyboardAction>
+        <keyboardAction layer="2">
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;LEFT;BOTTOM;LEFT;TOP;INSIDE_CIRCLE;</movementSequence>
             <inputString>î</inputString>
             <inputCapsLockString>Î</inputCapsLockString>
-            <layer>2</layer>
         </keyboardAction>
 
 
@@ -628,12 +618,11 @@
         <!-- ~~~~~~~~~ -->
         <!-- Lowercase -->
         <!-- ~~~~~~~~~ -->
-        <keyboardAction>
+        <keyboardAction layer="3">
             <keyboardActionType>INPUT_TEXT</keyboardActionType>
             <movementSequence>INSIDE_CIRCLE;BOTTOM;LEFT;BOTTOM;RIGHT;TOP;INSIDE_CIRCLE;</movementSequence>
             <inputString>è</inputString>
             <inputCapsLockString>È</inputCapsLockString>
-            <layer>3</layer>
         </keyboardAction>
 
 

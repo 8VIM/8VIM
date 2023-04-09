@@ -1,9 +1,7 @@
 <keyboardData>
-    <keyboardCharacterSet>
-        <layer id="0">
-            <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
-            <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
-        </layer>
+    <keyboardCharacterSet layer="0">
+        <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
+        <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
     </keyboardCharacterSet>
     <keyboardActionMap>
         <!--{NO_TOUCH, INSIDE_CIRCLE, TOP, LEFT, BOTTOM, RIGHT}-->

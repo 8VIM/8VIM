@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
 import inc.flide.vim8.R;
@@ -18,7 +17,6 @@ import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.LayoutFileName;
-import inc.flide.vim8.structures.TrieNode;
 
 public final class InputMethodServiceHelper {
 
@@ -120,11 +118,6 @@ public final class InputMethodServiceHelper {
         KeyboardData tempKeyboardData = keyboardDataXmlParser.readKeyboardData();
         if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.getActionMap())) {
             keyboardData.addAllToActionMap(tempKeyboardData.getActionMap());
-        }
-
-        if (keyboardData.getActivationMovementSequences().isEmpty()
-                && !tempKeyboardData.getActivationMovementSequences().isEmpty()) {
-            keyboardData.addAllMovementSequence(tempKeyboardData.getActivationMovementSequences());
         }
 
         for (int i = 0; i < tempKeyboardData.totalLayers(); i++) {

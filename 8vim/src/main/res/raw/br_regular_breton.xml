@@ -1,17 +1,15 @@
 <keyboardData>
-    <keyboardCharacterSet>
-        <layer id="0">
-            <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
-            <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
-        </layer>
-        <layer id="1">
-            <lowerCase>ñô û    êî               â      </lowerCase>
-            <upperCase>ÑÔ Û    ÊÎ               Â      </upperCase>
-        </layer>
-        <layer id="2">
-            <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
-            <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
-        </layer>
+    <keyboardCharacterSet layer="0">
+        <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
+        <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
+    </keyboardCharacterSet>
+    <keyboardCharacterSet layer="1">
+        <lowerCase>ñô û    êî               â      </lowerCase>
+        <upperCase>ÑÔ Û    ÊÎ               Â      </upperCase>
+    </keyboardCharacterSet>
+    <keyboardCharacterSet layer="2">
+        <lowerCase>nomufv!weilhkj@,tscdzg.'yabrpxq?</lowerCase>
+        <upperCase>NOMUFV!WEILHKJ@_TSCDZG-"YABRPXQ*</upperCase>
     </keyboardCharacterSet>
     <keyboardActionMap>
         <!-- Keywords for defining the movements -->

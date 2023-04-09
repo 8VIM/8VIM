@@ -125,6 +125,7 @@ public class MainKeyboardView extends ConstraintLayout {
                     "",
                     null,
                     CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(),
+                    0,
                     0);
             actionListener.handleInputKey(switchToSelectionKeyboard);
         });
@@ -138,6 +139,7 @@ public class MainKeyboardView extends ConstraintLayout {
                     "",
                     null,
                     CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(),
+                    0,
                     0);
             actionListener.handleInputKey(switchToEmojiKeyboard);
         });

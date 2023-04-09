@@ -1,6 +1,5 @@
 package inc.flide.vim8.keyboardHelpers;
 
-import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
 
@@ -14,7 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
@@ -33,7 +34,6 @@ class KeyboardDataXmlParser {
     private static final String INPUT_KEY_FLAGS_TAG = "flags";
     private static final String INPUT_KEY_FLAG_TAG = "flag";
     private static final String KEYBOARD_CHARACTER_SET_TAG = "keyboardCharacterSet";
-    private static final String LAYER_TAG = "layer";
     private static final String KEYBOARD_CHARACTER_SET_LOWERCASE_TAG = "lowerCase";
     private static final String KEYBOARD_CHARACTER_SET_UPPERCASE_TAG = "upperCase";
 
@@ -56,10 +56,11 @@ class KeyboardDataXmlParser {
             String tagName = parser.getName();
             switch (tagName) {
                 case KEYBOARD_CHARACTER_SET_TAG:
-                    readKeyboardCharacterSet(keyboardData);
+                    int layer = readLayerAttribute();
+                    readKeyboardCharacterSet(keyboardData, layer);
                     break;
                 case KEYBOARD_ACTION_MAP_TAG:
-                    Map<List<FingerPosition>, KeyboardAction> actionMap = readKeyboardActionMap(keyboardData);
+                    Map<List<FingerPosition>, KeyboardAction> actionMap = readKeyboardActionMap();
                     keyboardData.setActionMap(actionMap);
                     break;
             }
@@ -67,7 +68,7 @@ class KeyboardDataXmlParser {
         return keyboardData;
     }
 
-    private Map<List<FingerPosition>, KeyboardAction> readKeyboardActionMap(KeyboardData keyboardData) throws IOException, XmlPullParserException {
+    private Map<List<FingerPosition>, KeyboardAction> readKeyboardActionMap() throws IOException, XmlPullParserException {
         Map<List<FingerPosition>, KeyboardAction> keyboardActionMap = new HashMap<>();
 
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -76,25 +77,21 @@ class KeyboardDataXmlParser {
             }
             String tagName = parser.getName();
             if (tagName.equals(KEYBOARD_ACTION_TAG)) {
-                Map.Entry<List<FingerPosition>, KeyboardAction> keyboardAction = readKeyboardAction(keyboardData);
+                int layer = readLayerAttribute();
+                Map.Entry<List<FingerPosition>, KeyboardAction> keyboardAction = readKeyboardAction(layer);
                 keyboardActionMap.put(keyboardAction.getKey(), keyboardAction.getValue());
             }
         }
         return keyboardActionMap;
     }
 
-    private void readKeyboardCharacterSet(KeyboardData keyboardData) throws XmlPullParserException, IOException {
-        int layer = 0;
-        while (parser.next() != XmlPullParser.END_TAG || parser.getName().equals(LAYER_TAG)) {
+    private void readKeyboardCharacterSet(KeyboardData keyboardData, int layer) throws XmlPullParserException, IOException {
+        while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
             }
             String tagName = parser.getName();
             switch (tagName) {
-                case LAYER_TAG:
-                    parser.require(XmlPullParser.START_TAG, null, LAYER_TAG);
-                    layer = Integer.parseInt(parser.getAttributeValue(0));
-                    break;
                 case KEYBOARD_CHARACTER_SET_LOWERCASE_TAG:
                     parser.require(XmlPullParser.START_TAG, null, KEYBOARD_CHARACTER_SET_LOWERCASE_TAG);
                     String keyboardLowerCaseCharacterSet = readText();
@@ -112,7 +109,7 @@ class KeyboardDataXmlParser {
         }
     }
 
-    private Map.Entry<List<FingerPosition>, KeyboardAction> readKeyboardAction(KeyboardData keyboardData) throws XmlPullParserException, IOException {
+    private Map.Entry<List<FingerPosition>, KeyboardAction> readKeyboardAction(int layer) throws XmlPullParserException, IOException {
         List<FingerPosition> movementSequence = null;
         KeyboardAction keyboardAction;
         KeyboardActionType keyboardActionType = null;
@@ -120,7 +117,6 @@ class KeyboardDataXmlParser {
         String associatedCapsLockText = "";
         int keyEventCode = 0;
         int flags = 0;
-        int layer = 0;
         while (parser.next() != XmlPullParser.END_TAG) {
 
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -147,18 +143,29 @@ class KeyboardDataXmlParser {
                 case INPUT_KEY_FLAGS_TAG:
                     flags = readInputFlags();
                     break;
-                case LAYER_TAG:
-                    parser.require(XmlPullParser.START_TAG, null, LAYER_TAG);
-                    String layerString = readText();
-                    parser.require(XmlPullParser.END_TAG, null, LAYER_TAG);
-                    layer = Integer.parseInt(layerString);
                 default:
                     //Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
             }
         }
-        keyboardData.addMovementSequence(movementSequence, layer);
-        keyboardAction = new KeyboardAction(keyboardActionType, associatedText, associatedCapsLockText, keyEventCode, flags);
+        keyboardAction = new KeyboardAction(keyboardActionType, associatedText, associatedCapsLockText, keyEventCode, flags, layer);
         return new AbstractMap.SimpleEntry<>(movementSequence, keyboardAction);
+    }
+
+    private int readLayerAttribute() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return Optional
+                    .ofNullable(parser.getAttributeValue(null, "layer"))
+                    .map(id -> {
+                        try {
+                            return Integer.parseInt(id);
+                        } catch (Exception e) {
+                            return Constants.DEFAULT_LAYER;
+                        }
+                    })
+                    .orElse(Constants.DEFAULT_LAYER);
+
+        }
+        return Constants.DEFAULT_LAYER;
     }
 
     private int readInputFlags() throws IOException, XmlPullParserException {
@@ -188,7 +195,7 @@ class KeyboardDataXmlParser {
         String inputKeyString = readText();
         parser.require(XmlPullParser.END_TAG, null, INPUT_KEY_FLAG_TAG);
 
-        return Integer.valueOf(inputKeyString);
+        return Integer.parseInt(inputKeyString);
     }
 
     private int readInputKey() throws IOException, XmlPullParserException {

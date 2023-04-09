@@ -9,11 +9,13 @@ public class KeyboardAction {
     private String capsLockText;
     private final int keyEventCode;
     private final int keyFlags;
+    private final int layer;
 
-    public KeyboardAction(KeyboardActionType keyboardActionType, String text, String capsLockText, int keyEventCode, int keyFlags) {
+    public KeyboardAction(KeyboardActionType keyboardActionType, String text, String capsLockText, int keyEventCode, int keyFlags, int layer) {
         this.keyboardActionType = keyboardActionType;
         this.text = text;
         this.keyEventCode = keyEventCode;
+        this.layer = layer;
         setCapsLockText(capsLockText);
         this.keyFlags = keyFlags;
     }
@@ -44,5 +46,9 @@ public class KeyboardAction {
         } else {
             this.capsLockText = capsLockText;
         }
+    }
+
+    public int getLayer() {
+        return layer;
     }
 }

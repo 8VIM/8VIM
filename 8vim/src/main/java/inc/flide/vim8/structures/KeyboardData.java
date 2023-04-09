@@ -9,16 +9,9 @@ public class KeyboardData {
     private Map<List<FingerPosition>, KeyboardAction> actionMap;
     private final List<CharacterSet> characterSets;
 
-    public TrieNode getActivationMovementSequences() {
-        return activationMovementSequences;
-    }
-
-    private final TrieNode activationMovementSequences;
-
     public KeyboardData() {
         actionMap = new HashMap<>();
         characterSets = new ArrayList<>();
-        activationMovementSequences = new TrieNode();
     }
 
     public Map<List<FingerPosition>, KeyboardAction> getActionMap() {
@@ -60,19 +53,11 @@ public class KeyboardData {
     }
 
     public int findLayer(List<FingerPosition> movementSequence) {
-        int layer = activationMovementSequences.findLayer(movementSequence);
-        return Math.max(0, layer);
+        KeyboardAction action = actionMap.get(movementSequence);
+        if (action == null) return Constants.DEFAULT_LAYER;
+        return action.getLayer();
     }
 
-
-    public void addMovementSequence(List<FingerPosition> movementSequence, int layer) {
-        if (movementSequence == null || layer <= 0) return;
-        activationMovementSequences.addMovementSequence(movementSequence, layer);
-    }
-
-    public void addAllMovementSequence(TrieNode node) {
-        activationMovementSequences.copy(node);
-    }
 
     private void updateCharacterSets(int layer) {
         if (layer >= characterSets.size()) {
