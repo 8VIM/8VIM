@@ -8,19 +8,18 @@ android {
     compileSdkVersion 33
 
     defaultConfig {
-        def iterationCode = 11
-        def iterationName = "iteration-$iterationCode"
 
         applicationId "inc.flide.vi8"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode iterationCode
-        versionName iterationName
+        versionCode 11
+        versionName "iteration-11"
 
         vectorDrawables.useSupportLibrary = true
 
-        resValue "string", "version_name", iterationName
+        resValue "string", "version_name", versionName
     }
+
     buildTypes {
         release {
             minifyEnabled true

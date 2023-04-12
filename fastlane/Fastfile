@@ -40,4 +40,19 @@ platform :android do
     gradle(task: "clean assembleRelease")
     upload_to_play_store
   end
+
+  desc "Verify if the version is getting updated"
+  lane :versionUpdate do
+    currentVersionCode = android_get_version_code(
+      gradle_file: "8vim/build.gradle" # optional
+    )
+    android_set_version_name(
+      version_name: "iteration-" + (currentVersionCode.to_i + 1).to_s,
+      gradle_file: "8vim/build.gradle" # optional
+    )
+    android_set_version_code(
+      version_code: currentVersionCode.to_i + 1,
+      gradle_file: "8vim/build.gradle" # optional
+    )
+  end
 end
