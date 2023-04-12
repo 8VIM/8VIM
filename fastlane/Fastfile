@@ -16,46 +16,41 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
-
-  desc "Build"
-  lane :build do
-    gradle(task: "clean assembleRelease")
-  end
-
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
 
   desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
-  end
-
-  desc "Verify if the version is getting updated"
-  lane :versionUpdate do
+  lane :release do
+    # Get current version code
     currentVersionCode = android_get_version_code(
       gradle_file: "8vim/build.gradle" # optional
     )
+    # update version name
     android_set_version_name(
       version_name: "iteration-" + (currentVersionCode.to_i + 1).to_s,
       gradle_file: "8vim/build.gradle" # optional
     )
+    # update version code
     android_set_version_code(
       version_code: currentVersionCode.to_i + 1,
       gradle_file: "8vim/build.gradle" # optional
     )
-      commit_android_version_bump(
-        gradle_file_folder:"8vim"
-      )
+    # Create a version bump commit
+    commit_android_version_bump(
+      gradle_file_folder:"8vim"
+    )
+
+    # Build the application
+    gradle(task: "clean assembleRelease")
+
+    # Upload the app to the google play store
+    upload_to_play_store
+
+    # Create a tag with version name to release on f-droid
+    add_git_tag(
+      tag: "iteration-" + (currentVersionCode.to_i + 1).to_s
+    )
+
+    #Upload everything to remote
+    push_to_git_remote
   end
+
 end
