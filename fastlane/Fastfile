@@ -54,5 +54,8 @@ platform :android do
       version_code: currentVersionCode.to_i + 1,
       gradle_file: "8vim/build.gradle" # optional
     )
+      commit_android_version_bump(
+        gradle_file_folder:"8vim"
+      )
   end
 end
