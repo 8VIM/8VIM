@@ -19,11 +19,20 @@ android {
 
         resValue "string", "version_name", versionName
     }
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("VIM8_BUILD_KEYSTORE_FILE"))
+            storePassword System.getenv("VIM8_BUILD_KEYSTORE_PASSWORD")
+            keyAlias System.getenv("VIM8_BUILD_KEY_ALIAS")
+            keyPassword System.getenv("VIM8_BUILD_KEY_PASSWORD")
+        }
+    }
 
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
