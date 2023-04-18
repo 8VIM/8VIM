@@ -1,8 +1,5 @@
 package inc.flide.vim8.structures;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CharacterSet {
 
     private String lowerCaseCharacters;

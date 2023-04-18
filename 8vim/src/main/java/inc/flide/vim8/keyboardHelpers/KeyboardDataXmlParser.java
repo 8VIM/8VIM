@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.CustomKeycode;
@@ -21,10 +21,11 @@ import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.structures.Quadrant;
+import inc.flide.vim8.utils.QuadrantHelper;
 
 class KeyboardDataXmlParser {
     private static final String KEYBOARD_DATA_TAG = "keyboardData";
-    private static final String KEYBOARD_ACTION_MAP_TAG = "keyboardActionMap";
     private static final String KEYBOARD_ACTION_TAG = "keyboardAction";
     private static final String KEYBOARD_ACTION_TYPE_TAG = "keyboardActionType";
     private static final String MOVEMENT_SEQUENCE_TAG = "movementSequence";
@@ -33,9 +34,11 @@ class KeyboardDataXmlParser {
     private static final String INPUT_KEY_TAG = "inputKey";
     private static final String INPUT_KEY_FLAGS_TAG = "flags";
     private static final String INPUT_KEY_FLAG_TAG = "flag";
-    private static final String KEYBOARD_CHARACTER_SET_TAG = "keyboardCharacterSet";
-    private static final String KEYBOARD_CHARACTER_SET_LOWERCASE_TAG = "lowerCase";
-    private static final String KEYBOARD_CHARACTER_SET_UPPERCASE_TAG = "upperCase";
+    private static final String LAYER_TAG = "layer";
+    private static final String SECTOR_TAG = "sector";
+    private static final String LAYER_LEVEL_ATTRIBUTE = "level";
+    private static final String QUADRANT_ATTRIBUTE = "quadrant";
+    private static final String POSITION_ATTRIBUTE = "position";
 
     private final XmlPullParser parser;
 
@@ -55,20 +58,41 @@ class KeyboardDataXmlParser {
             }
             String tagName = parser.getName();
             switch (tagName) {
-                case KEYBOARD_CHARACTER_SET_TAG:
-                    int layer = readLayerAttribute();
-                    readKeyboardCharacterSet(keyboardData, layer);
-                    break;
-                case KEYBOARD_ACTION_MAP_TAG:
-                    Map<List<FingerPosition>, KeyboardAction> actionMap = readKeyboardActionMap();
-                    keyboardData.setActionMap(actionMap);
+                case LAYER_TAG:
+                    int layer = readLayerLevelAttribute();
+                    readLayer(keyboardData, layer);
                     break;
             }
         }
         return keyboardData;
     }
 
-    private Map<List<FingerPosition>, KeyboardAction> readKeyboardActionMap() throws IOException, XmlPullParserException {
+    private void readLayer(KeyboardData keyboardData, int layer) throws IOException, XmlPullParserException {
+        StringBuilder lowerCaseCharacters = new StringBuilder();
+        StringBuilder upperCaseCharacters = new StringBuilder();
+
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+            String tagName = parser.getName();
+            if (tagName.equals(SECTOR_TAG)) {
+                Quadrant quadrant = readQuadrantAttribute();
+                Objects.requireNonNull(quadrant);
+                Map<List<FingerPosition>, KeyboardAction> actionMap =
+                    readKeyboardActionMap(layer, quadrant, lowerCaseCharacters, upperCaseCharacters);
+                keyboardData.addAllToActionMap(actionMap);
+            }
+        }
+        if (layer >= Constants.DEFAULT_LAYER) {
+            keyboardData.setLowerCaseCharacters(String.valueOf(lowerCaseCharacters), layer);
+            keyboardData.setUpperCaseCharacters(String.valueOf(upperCaseCharacters), layer);
+        }
+    }
+
+    private Map<List<FingerPosition>, KeyboardAction> readKeyboardActionMap(int layer, Quadrant quadrant, StringBuilder lowerCaseCharacters,
+                                                                            StringBuilder upperCaseCharacters)
+        throws IOException, XmlPullParserException {
         Map<List<FingerPosition>, KeyboardAction> keyboardActionMap = new HashMap<>();
 
         while (parser.next() != XmlPullParser.END_TAG) {
@@ -77,39 +101,21 @@ class KeyboardDataXmlParser {
             }
             String tagName = parser.getName();
             if (tagName.equals(KEYBOARD_ACTION_TAG)) {
-                int layer = readLayerAttribute();
-                Map.Entry<List<FingerPosition>, KeyboardAction> keyboardAction = readKeyboardAction(layer);
+                int position = readPositionAttribute();
+                int characterSetIndex = getCharacterSetIndex(quadrant, position);
+                List<FingerPosition> movementSequence = QuadrantHelper.computeMovementSequence(layer, quadrant, position);
+                Map.Entry<List<FingerPosition>, KeyboardAction> keyboardAction =
+                    readKeyboardAction(layer, characterSetIndex, movementSequence, lowerCaseCharacters, upperCaseCharacters);
                 keyboardActionMap.put(keyboardAction.getKey(), keyboardAction.getValue());
             }
         }
         return keyboardActionMap;
     }
 
-    private void readKeyboardCharacterSet(KeyboardData keyboardData, int layer) throws XmlPullParserException, IOException {
-        while (parser.next() != XmlPullParser.END_TAG) {
-            if (parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
-            String tagName = parser.getName();
-            switch (tagName) {
-                case KEYBOARD_CHARACTER_SET_LOWERCASE_TAG:
-                    parser.require(XmlPullParser.START_TAG, null, KEYBOARD_CHARACTER_SET_LOWERCASE_TAG);
-                    String keyboardLowerCaseCharacterSet = readText();
-                    keyboardData.setLowerCaseCharacters(keyboardLowerCaseCharacterSet, layer);
-                    parser.require(XmlPullParser.END_TAG, null, KEYBOARD_CHARACTER_SET_LOWERCASE_TAG);
-                    break;
-                case KEYBOARD_CHARACTER_SET_UPPERCASE_TAG:
-                    parser.require(XmlPullParser.START_TAG, null, KEYBOARD_CHARACTER_SET_UPPERCASE_TAG);
-                    String keyboardUpperCaseCharacterSet = readText();
-                    keyboardData.setUpperCaseCharacters(keyboardUpperCaseCharacterSet, layer);
-                    parser.require(XmlPullParser.END_TAG, null, KEYBOARD_CHARACTER_SET_UPPERCASE_TAG);
-                    break;
-                default:
-            }
-        }
-    }
 
-    private Map.Entry<List<FingerPosition>, KeyboardAction> readKeyboardAction(int layer) throws XmlPullParserException, IOException {
+    private Map.Entry<List<FingerPosition>, KeyboardAction> readKeyboardAction(int layer, int index, List<FingerPosition> computedMovementSequence,
+                                                                               StringBuilder lowerCaseCharacters, StringBuilder upperCaseCharacters)
+        throws XmlPullParserException, IOException {
         List<FingerPosition> movementSequence = null;
         KeyboardAction keyboardAction;
         KeyboardActionType keyboardActionType = null;
@@ -117,6 +123,11 @@ class KeyboardDataXmlParser {
         String associatedCapsLockText = "";
         int keyEventCode = 0;
         int flags = 0;
+
+        if (!computedMovementSequence.isEmpty()) {
+            movementSequence = computedMovementSequence;
+        }
+
         while (parser.next() != XmlPullParser.END_TAG) {
 
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -133,12 +144,20 @@ class KeyboardDataXmlParser {
                     break;
                 case INPUT_STRING_TAG:
                     associatedText = readInputString();
+                    if (lowerCaseCharacters.length() == 0) {
+                        lowerCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
+                    }
+                    lowerCaseCharacters.setCharAt(index, associatedText.charAt(0));
                     break;
                 case INPUT_KEY_TAG:
                     keyEventCode = readInputKey();
                     break;
                 case INPUT_CAPSLOCK_STRING_TAG:
                     associatedCapsLockText = readInputCapsLockString();
+                    if (upperCaseCharacters.length() == 0) {
+                        upperCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
+                    }
+                    upperCaseCharacters.setCharAt(index, associatedCapsLockText.charAt(0));
                     break;
                 case INPUT_KEY_FLAGS_TAG:
                     flags = readInputFlags();
@@ -147,25 +166,47 @@ class KeyboardDataXmlParser {
                     //Logger.w(this, "keyboard_actions xml has unknown tag : " + tagName);
             }
         }
+
         keyboardAction = new KeyboardAction(keyboardActionType, associatedText, associatedCapsLockText, keyEventCode, flags, layer);
         return new AbstractMap.SimpleEntry<>(movementSequence, keyboardAction);
     }
 
-    private int readLayerAttribute() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            return Optional
-                    .ofNullable(parser.getAttributeValue(null, "layer"))
-                    .map(id -> {
-                        try {
-                            return Integer.parseInt(id);
-                        } catch (Exception e) {
-                            return Constants.DEFAULT_LAYER;
-                        }
-                    })
-                    .orElse(Constants.DEFAULT_LAYER);
+    public Quadrant readQuadrantAttribute() {
+        String quadrant = parser.getAttributeValue(null, QUADRANT_ATTRIBUTE);
 
+        if (quadrant == null) {
+            return null;
         }
-        return Constants.DEFAULT_LAYER;
+
+        return Quadrant.valueOf(quadrant);
+    }
+
+    private int readLayerLevelAttribute() {
+        String id = parser.getAttributeValue(null, LAYER_LEVEL_ATTRIBUTE);
+
+        if (id == null) {
+            return Constants.DEFAULT_LAYER;
+        }
+
+        try {
+            return Integer.parseInt(id);
+        } catch (Exception e) {
+            return Constants.DEFAULT_LAYER;
+        }
+    }
+
+    private int readPositionAttribute() {
+        String position = parser.getAttributeValue(null, POSITION_ATTRIBUTE);
+
+        if (position == null) {
+            return Constants.DEFAULT_POSITION;
+        }
+
+        try {
+            return Integer.parseInt(position) - 1;
+        } catch (Exception e) {
+            return Constants.DEFAULT_POSITION;
+        }
     }
 
     private int readInputFlags() throws IOException, XmlPullParserException {
@@ -264,4 +305,9 @@ class KeyboardDataXmlParser {
         return result;
     }
 
+    private int getCharacterSetIndex(Quadrant quadrant, int position) {
+        int base = quadrant.ordinal() / 2 * 8;
+        int delta = quadrant.ordinal() % 2;
+        return base + position * 2 + delta;
+    }
 }

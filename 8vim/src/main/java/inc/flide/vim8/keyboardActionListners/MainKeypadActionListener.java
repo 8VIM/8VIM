@@ -21,17 +21,25 @@ import inc.flide.vim8.structures.MovementSequenceType;
 
 public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 6;
-    private final Handler longPressHandler = new Handler();
-    private static final FingerPosition[][] ROTATION_MOVEMENT_SEQUENCES = new FingerPosition[][]{
-            new FingerPosition[]{FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT},
-            new FingerPosition[]{FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT},
-            new FingerPosition[]{FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP},
-            new FingerPosition[]{FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM},
-            new FingerPosition[]{FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT},
-            new FingerPosition[]{FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT},
-            new FingerPosition[]{FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP},
-            new FingerPosition[]{FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM},
+    private static final FingerPosition[][] ROTATION_MOVEMENT_SEQUENCES = new FingerPosition[][] {
+        new FingerPosition[] {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+            FingerPosition.LEFT},
+        new FingerPosition[] {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM,
+            FingerPosition.RIGHT},
+        new FingerPosition[] {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+            FingerPosition.TOP},
+        new FingerPosition[] {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+            FingerPosition.BOTTOM},
+        new FingerPosition[] {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
+            FingerPosition.LEFT},
+        new FingerPosition[] {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
+            FingerPosition.RIGHT},
+        new FingerPosition[] {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
+            FingerPosition.TOP},
+        new FingerPosition[] {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+            FingerPosition.BOTTOM},
     };
+    private final Handler longPressHandler = new Handler();
     private static KeyboardData keyboardData;
     private final List<FingerPosition> movementSequence;
     private FingerPosition currentFingerPosition;
@@ -90,8 +98,9 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     @Override
     public int findLayer() {
-        if (movementSequence.isEmpty() || movementSequence.get(0) != FingerPosition.INSIDE_CIRCLE)
+        if (movementSequence.isEmpty() || movementSequence.get(0) != FingerPosition.INSIDE_CIRCLE) {
             return Constants.DEFAULT_LAYER;
+        }
         List<FingerPosition> tempMovementSequence = new ArrayList<>(movementSequence);
         if (isFullRotation()) {
             tempMovementSequence = tempMovementSequence.subList(FULL_ROTATION_STEPS - 1, movementSequence.size());
@@ -102,8 +111,9 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     private boolean isFullRotation() {
-        if (movementSequence.size() < 7 || movementSequence.get(0) != FingerPosition.INSIDE_CIRCLE)
+        if (movementSequence.size() < 7 || movementSequence.get(0) != FingerPosition.INSIDE_CIRCLE) {
             return false;
+        }
         return rotationMovementSequences.contains(movementSequence.subList(1, FULL_ROTATION_STEPS + 1));
 
     }
@@ -126,15 +136,19 @@ public class MainKeypadActionListener extends KeypadActionListener {
         if (isFingerPositionChanged) {
             interruptLongPress();
             movementSequence.add(currentFingerPosition);
+            List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
+            if (isCircleCapitalization()) {
+                modifiedMovementSequence.subList(1, FULL_ROTATION_STEPS - 1).clear();
+
+            }
             if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE
-                    && keyboardData.getActionMap().get(movementSequence) != null) {
-                processMovementSequence(movementSequence);
+                && keyboardData.getActionMap().get(modifiedMovementSequence) != null) {
+                processMovementSequence(modifiedMovementSequence);
                 movementSequence.clear();
                 currentLetter = null;
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT;
                 movementSequence.add(currentFingerPosition);
             } else if (currentFingerPosition != FingerPosition.INSIDE_CIRCLE) {
-                List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
                 modifiedMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
                 KeyboardAction action = keyboardData.getActionMap().get(modifiedMovementSequence);
 
@@ -181,7 +195,12 @@ public class MainKeypadActionListener extends KeypadActionListener {
     private void processMovementSequence(List<FingerPosition> movementSequence) {
 
         KeyboardAction keyboardAction = keyboardData.getActionMap().get(movementSequence);
+        if (keyboardAction == null && isCircleCapitalization()) {
+            List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
+            modifiedMovementSequence.subList(1, FULL_ROTATION_STEPS - 1).clear();
+            keyboardAction = keyboardData.getActionMap().get(modifiedMovementSequence);
 
+        }
         if (keyboardAction == null && currentMovementSequenceType == MovementSequenceType.NEW_MOVEMENT) {
             List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
             modifiedMovementSequence.add(0, FingerPosition.NO_TOUCH);

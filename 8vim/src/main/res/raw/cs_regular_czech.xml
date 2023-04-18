@@ -24,6 +24,7 @@
                 <inputString>!</inputString>
                 <inputCapsLockString>!!!</inputCapsLockString>
             </keyboardAction>
+
         </sector>
 
         <sector quadrant="RIGHT_TOP">
@@ -210,19 +211,114 @@
     </layer>
 
     <layer level="2">
+        <sector quadrant="RIGHT_BOTTOM">
+            <keyboardAction position="1">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>ň</inputString>
+                <inputCapsLockString>Ň</inputCapsLockString>
+            </keyboardAction>
+        </sector>
+
+        <sector quadrant="RIGHT_TOP">
+            <keyboardAction position="1">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>á</inputString>
+                <inputCapsLockString>Á</inputCapsLockString>
+            </keyboardAction>
+
+            <keyboardAction position="2">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>ř</inputString>
+                <inputCapsLockString>Ř</inputCapsLockString>
+            </keyboardAction>
+        </sector>
+
+        <sector quadrant="TOP_RIGHT">
+            <keyboardAction position="1">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>ý</inputString>
+                <inputCapsLockString>Ý</inputCapsLockString>
+            </keyboardAction>
+        </sector>
+
+        <sector quadrant="TOP_LEFT">
+            <keyboardAction position="1">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>š</inputString>
+                <inputCapsLockString>Š</inputCapsLockString>
+            </keyboardAction>
+            <keyboardAction position="2">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>ď</inputString>
+                <inputCapsLockString>Ď</inputCapsLockString>
+            </keyboardAction>
+        </sector>
+
+        <sector quadrant="LEFT_TOP">
+            <keyboardAction position="1">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>ť</inputString>
+                <inputCapsLockString>Ť</inputCapsLockString>
+            </keyboardAction>
+
+            <keyboardAction position="2">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>č</inputString>
+                <inputCapsLockString>Č</inputCapsLockString>
+            </keyboardAction>
+
+            <keyboardAction position="3">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>ž</inputString>
+                <inputCapsLockString>Ž</inputCapsLockString>
+            </keyboardAction>
+        </sector>
+
         <sector quadrant="LEFT_BOTTOM">
             <keyboardAction position="1">
                 <keyboardActionType>INPUT_TEXT</keyboardActionType>
-                <inputString>ĳ</inputString>
-                <inputCapsLockString>Ĳ</inputCapsLockString>
+                <inputString>í</inputString>
+                <inputCapsLockString>Í</inputCapsLockString>
             </keyboardAction>
         </sector>
 
         <sector quadrant="BOTTOM_LEFT">
             <keyboardAction position="1">
                 <keyboardActionType>INPUT_TEXT</keyboardActionType>
-                <inputString>€</inputString>
-                <inputCapsLockString>¢</inputCapsLockString>
+                <inputString>é</inputString>
+                <inputCapsLockString>É</inputCapsLockString>
+            </keyboardAction>
+        </sector>
+
+        <sector quadrant="BOTTOM_RIGHT">
+            <keyboardAction position="1">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>ó</inputString>
+                <inputCapsLockString>Ó</inputCapsLockString>
+            </keyboardAction>
+
+            <keyboardAction position="2">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>ú</inputString>
+                <inputCapsLockString>Ú</inputCapsLockString>
+            </keyboardAction>
+        </sector>
+    </layer>
+
+    <layer level="3">
+        <sector quadrant="BOTTOM_LEFT">
+            <keyboardAction position="1">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>ě</inputString>
+                <inputCapsLockString>Ě</inputCapsLockString>
+            </keyboardAction>
+        </sector>
+
+        <sector quadrant="BOTTOM_RIGHT">
+            <keyboardAction position="2">
+                <keyboardActionType>INPUT_TEXT</keyboardActionType>
+                <inputString>ů</inputString>
+                <inputCapsLockString>Ů</inputCapsLockString>
             </keyboardAction>
         </sector>
     </layer>
