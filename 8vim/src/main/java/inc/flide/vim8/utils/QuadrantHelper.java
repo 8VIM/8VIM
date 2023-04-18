@@ -6,7 +6,10 @@ import java.util.List;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.Quadrant;
 
-public class QuadrantHelper {
+public final class QuadrantHelper {
+    private QuadrantHelper() {
+
+    }
 
     public static List<FingerPosition> computeMovementSequence(int layer, Quadrant quadrant, int position) {
         List<FingerPosition> movementSequence = new ArrayList<>();
