@@ -51,6 +51,7 @@
         <item>sr_regular_serbian</item>
         <item>sv_regular_swedish</item>
         <item>tr_regular_turkish</item>
+        <item>uk_regular_ukrainain</item>
     </string-array>
     <string name="select_custom_keyboard_layout_dialog_title">Load the layout file from disk</string>
     <string name="generic_okay_text">OK</string>

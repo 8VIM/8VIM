@@ -115,8 +115,8 @@ public final class InputMethodServiceHelper {
     }
 
     private static void addToKeyboardActionsMapUsingInputStream(KeyboardData keyboardData, InputStream inputStream) throws Exception {
-        KeyboardDataXmlParser keyboardDataXmlParser = new KeyboardDataXmlParser(inputStream);
-        KeyboardData tempKeyboardData = keyboardDataXmlParser.readKeyboardData();
+        KeyboardDataYamlParser keyboardDataYamlParser = new KeyboardDataYamlParser(inputStream);
+        KeyboardData tempKeyboardData = keyboardDataYamlParser.readKeyboardData();
         if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.getActionMap())) {
             keyboardData.addAllToActionMap(tempKeyboardData.getActionMap());
         }

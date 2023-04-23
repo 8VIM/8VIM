@@ -1,0 +1,209 @@
+visible:
+  - RIGHT_BOTTOM:
+      - actionType: INPUT_TEXT
+        lowerCase: ל
+        upperCase: n
+      - actionType: INPUT_TEXT
+        lowerCase: מ
+        upperCase: m
+      - actionType: INPUT_TEXT
+        lowerCase: ח
+        upperCase: f
+      - actionType: INPUT_TEXT
+        lowerCase: "!"
+        upperCase: "!!!"
+    RIGHT_TOP:
+      - actionType: INPUT_TEXT
+        lowerCase: א
+        upperCase: a
+      - actionType: INPUT_TEXT
+        lowerCase: ר
+        upperCase: r
+      - actionType: INPUT_TEXT
+        lowerCase: ז
+        upperCase: x
+      - actionType: INPUT_TEXT
+        lowerCase: "?"
+        upperCase: "*"
+    TOP_RIGHT:
+      - actionType: INPUT_TEXT
+        lowerCase: נ
+        upperCase: y
+      - actionType: INPUT_TEXT
+        lowerCase: ם
+        upperCase: b
+      - actionType: INPUT_TEXT
+        lowerCase: ס
+        upperCase: p
+      - actionType: INPUT_TEXT
+        lowerCase: צ
+        upperCase: q
+    TOP_LEFT:
+      - actionType: INPUT_TEXT
+        lowerCase: ש
+        upperCase: s
+      - actionType: INPUT_TEXT
+        lowerCase: ע
+        upperCase: d
+      - actionType: INPUT_TEXT
+        lowerCase: ף
+        upperCase: g
+      - actionType: INPUT_TEXT
+        lowerCase: ץ
+        upperCase: "'"
+    LEFT_TOP:
+      - actionType: INPUT_TEXT
+        lowerCase: ב
+        upperCase: t
+      - actionType: INPUT_TEXT
+        lowerCase: פ
+        upperCase: c
+      - actionType: INPUT_TEXT
+        lowerCase: ך
+        upperCase: z
+      - actionType: INPUT_TEXT
+        lowerCase: .
+        upperCase: "-"
+    LEFT_BOTTOM:
+      - actionType: INPUT_TEXT
+        lowerCase: כ
+        upperCase: i
+      - actionType: INPUT_TEXT
+        lowerCase: ק
+        upperCase: h
+      - actionType: INPUT_TEXT
+        lowerCase: ט
+        upperCase: j
+      - actionType: INPUT_TEXT
+        lowerCase: ","
+        upperCase: _
+    BOTTOM_LEFT:
+      - actionType: INPUT_TEXT
+        lowerCase: י
+        upperCase: e
+      - actionType: INPUT_TEXT
+        lowerCase: ו
+        upperCase: l
+      - actionType: INPUT_TEXT
+        lowerCase: ן
+        upperCase: k
+      - actionType: INPUT_TEXT
+        lowerCase: "@"
+        upperCase: "@gmail.com"
+    BOTTOM_RIGHT:
+      - actionType: INPUT_TEXT
+        lowerCase: ה
+        upperCase: o
+      - actionType: INPUT_TEXT
+        lowerCase: ת
+        upperCase: u
+      - actionType: INPUT_TEXT
+        lowerCase: ד
+        upperCase: v
+      - actionType: INPUT_TEXT
+        lowerCase: ג
+        upperCase: w
+  - RIGHT_BOTTOM:
+      - actionType: INPUT_TEXT
+        lowerCase: n
+        upperCase: N
+      - actionType: INPUT_TEXT
+        lowerCase: m
+        upperCase: M
+      - actionType: INPUT_TEXT
+        lowerCase: f
+        upperCase: F
+      - actionType: INPUT_TEXT
+        lowerCase: "!"
+        upperCase: "!!!"
+    RIGHT_TOP:
+      - actionType: INPUT_TEXT
+        lowerCase: a
+        upperCase: A
+      - actionType: INPUT_TEXT
+        lowerCase: r
+        upperCase: R
+      - actionType: INPUT_TEXT
+        lowerCase: x
+        upperCase: X
+      - actionType: INPUT_TEXT
+        lowerCase: "?"
+        upperCase: "*"
+    TOP_RIGHT:
+      - actionType: INPUT_TEXT
+        lowerCase: y
+        upperCase: Y
+      - actionType: INPUT_TEXT
+        lowerCase: b
+        upperCase: B
+      - actionType: INPUT_TEXT
+        lowerCase: p
+        upperCase: P
+      - actionType: INPUT_TEXT
+        lowerCase: q
+        upperCase: Q
+    TOP_LEFT:
+      - actionType: INPUT_TEXT
+        lowerCase: s
+        upperCase: S
+      - actionType: INPUT_TEXT
+        lowerCase: d
+        upperCase: D
+      - actionType: INPUT_TEXT
+        lowerCase: g
+        upperCase: G
+      - actionType: INPUT_TEXT
+        lowerCase: "'"
+        upperCase: '"'
+    LEFT_TOP:
+      - actionType: INPUT_TEXT
+        lowerCase: t
+        upperCase: T
+      - actionType: INPUT_TEXT
+        lowerCase: c
+        upperCase: C
+      - actionType: INPUT_TEXT
+        lowerCase: z
+        upperCase: Z
+      - actionType: INPUT_TEXT
+        lowerCase: .
+        upperCase: "-"
+    LEFT_BOTTOM:
+      - actionType: INPUT_TEXT
+        lowerCase: i
+        upperCase: I
+      - actionType: INPUT_TEXT
+        lowerCase: h
+        upperCase: H
+      - actionType: INPUT_TEXT
+        lowerCase: j
+        upperCase: J
+      - actionType: INPUT_TEXT
+        lowerCase: ","
+        upperCase: _
+    BOTTOM_LEFT:
+      - actionType: INPUT_TEXT
+        lowerCase: e
+        upperCase: E
+      - actionType: INPUT_TEXT
+        lowerCase: l
+        upperCase: L
+      - actionType: INPUT_TEXT
+        lowerCase: k
+        upperCase: K
+      - actionType: INPUT_TEXT
+        lowerCase: "@"
+        upperCase: "@gmail.com"
+    BOTTOM_RIGHT:
+      - actionType: INPUT_TEXT
+        lowerCase: o
+        upperCase: O
+      - actionType: INPUT_TEXT
+        lowerCase: u
+        upperCase: U
+      - actionType: INPUT_TEXT
+        lowerCase: v
+        upperCase: V
+      - actionType: INPUT_TEXT
+        lowerCase: w
+        upperCase: W

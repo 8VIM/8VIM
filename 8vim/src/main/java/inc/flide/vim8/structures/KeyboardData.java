@@ -17,8 +17,8 @@ public class KeyboardData {
         return actionMap;
     }
 
-    public void setActionMap(Map<List<FingerPosition>, KeyboardAction> actionMap) {
-        this.actionMap = actionMap;
+    public void addActionMap(List<FingerPosition> movementSequence, KeyboardAction keyboardAction) {
+        this.actionMap.put(movementSequence, keyboardAction);
     }
 
     public void addAllToActionMap(Map<List<FingerPosition>, KeyboardAction> actionMapAddition) {
