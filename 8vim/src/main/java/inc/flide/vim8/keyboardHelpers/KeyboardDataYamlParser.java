@@ -60,19 +60,20 @@ public class KeyboardDataYamlParser {
                 if (movementSequence == null || movementSequence.isEmpty()) {
                     movementSequence = QuadrantHelper.computeMovementSequence(layer, quadrant, position);
                 }
-
-                if (quadrant != Quadrant.NO_SECTOR && action.getLowerCase() != null && !action.getLowerCase().isEmpty()) {
-                    if (lowerCaseCharacters.length() == 0) {
-                        lowerCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
+                if (layer > 0 && quadrant != Quadrant.NO_SECTOR) {
+                    if (action.getLowerCase() != null && !action.getLowerCase().isEmpty()) {
+                        if (lowerCaseCharacters.length() == 0) {
+                            lowerCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
+                        }
+                        lowerCaseCharacters.setCharAt(characterSetIndex, action.getLowerCase().charAt(0));
                     }
-                    lowerCaseCharacters.setCharAt(characterSetIndex, action.getLowerCase().charAt(0));
-                }
 
-                if (quadrant != Quadrant.NO_SECTOR && action.getUpperCase() != null && !action.getUpperCase().isEmpty()) {
-                    if (upperCaseCharacters.length() == 0) {
-                        upperCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
+                    if(action.getUpperCase() != null && !action.getUpperCase().isEmpty()){
+                        if (upperCaseCharacters.length() == 0) {
+                            upperCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
+                        }
+                        upperCaseCharacters.setCharAt(characterSetIndex, action.getUpperCase().charAt(0));
                     }
-                    upperCaseCharacters.setCharAt(characterSetIndex, action.getUpperCase().charAt(0));
                 }
 
                 int keyCode = getKeyCode(action.getKeyCode());
