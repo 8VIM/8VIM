@@ -1,17 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY appname "8Vim"><!ENTITY version_name "iteration 11">]>
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY appname "8Vim">]>
 <resources>
     <string name="app_name">&appname;</string>
-    <string name="version_name">&version_name;</string>
     <string name="version_name_label">Version : </string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="enable_ime_dialog_title">Please Enable IME</string>
-    <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "&appname;
-        Keyboard" there.</string>
+    <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "&appname; Keyboard" there.</string>
     <string name="enable_ime_dialog_neutral_button_text">Enable</string>
     <string name="activate_ime_dialog_title">Please Activate IME</string>
-    <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname;
-        Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
+    <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname; Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
 

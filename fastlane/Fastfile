@@ -1,0 +1,56 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+  desc "Deploy a new version to the Google Play"
+  lane :release do
+    # Get current version code
+    currentVersionCode = android_get_version_code(
+      gradle_file: "8vim/build.gradle" # optional
+    )
+    # update version name
+    android_set_version_name(
+      version_name: "iteration-" + (currentVersionCode.to_i + 1).to_s,
+      gradle_file: "8vim/build.gradle" # optional
+    )
+    # update version code
+    android_set_version_code(
+      version_code: currentVersionCode.to_i + 1,
+      gradle_file: "8vim/build.gradle" # optional
+    )
+    # Create a version bump commit
+    commit_android_version_bump(
+      gradle_file_folder:"8vim"
+    )
+
+    # Build the application
+    gradle(task: "clean assembleRelease")
+
+    # Upload the app to the google play store
+    upload_to_play_store
+
+    # Create a tag with version name to release on f-droid
+    add_git_tag(
+      tag: "iteration-" + (currentVersionCode.to_i + 1).to_s
+    )
+
+    #Upload everything to remote
+    push_to_git_remote
+  end
+
+end

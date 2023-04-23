@@ -18,3 +18,5 @@ Security files/
 8vim/release/output-metadata.json
 
 8vim/release/
+
+fastlane/report.xml

@@ -22,4 +22,4 @@ jobs:
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
     - name: Build with Gradle
-      run: ./gradlew build --debug
+      run: ./gradlew assembleDebug --debug

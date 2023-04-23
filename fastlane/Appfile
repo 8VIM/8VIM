@@ -1,0 +1,2 @@
+json_key_file("./Store\ Assets/pc-api-8379389773343824046-681-fa21ee9d635a.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("inc.flide.vi8") # e.g. com.krausefx.app
