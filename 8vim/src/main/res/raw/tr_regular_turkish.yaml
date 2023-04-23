@@ -107,7 +107,7 @@ visible:
       - actionType: INPUT_TEXT
         lowerCase: ş
         upperCase: Ş
-      - {}
+      - null
       - actionType: INPUT_TEXT
         lowerCase: ğ
         upperCase: Ğ
