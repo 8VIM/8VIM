@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import inc.flide.vim8.structures.Constants;
@@ -74,6 +75,10 @@ public class KeyboardDataYamlParser {
                             lowerCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
                         }
                         lowerCaseCharacters.setCharAt(characterSetIndex, action.getLowerCase().charAt(0));
+
+                        if (action.getUpperCase() == null || action.getUpperCase().isEmpty()) {
+                            action.setUpperCase(action.getLowerCase().toUpperCase(Locale.ROOT));
+                        }
                     }
 
                     if (action.getUpperCase() != null && !action.getUpperCase().isEmpty()) {

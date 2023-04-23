@@ -30,8 +30,7 @@ hidden:
         - INSIDE_CIRCLE
         - LONG_PRESS_END
       keyCode: SWITCH_TO_SELECTION_KEYPAD
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - LEFT
         - BOTTOM
@@ -39,8 +38,7 @@ hidden:
         - NO_TOUCH
       lowerCase: 😊
       upperCase: 😁
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - LEFT
         - BOTTOM
@@ -49,8 +47,7 @@ hidden:
         - RIGHT
         - NO_TOUCH
       lowerCase: 😁
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - LEFT
         - BOTTOM
@@ -59,8 +56,7 @@ hidden:
         - NO_TOUCH
       lowerCase: 😉
       upperCase: 🤣
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - LEFT
         - BOTTOM
@@ -70,8 +66,7 @@ hidden:
         - BOTTOM
         - NO_TOUCH
       lowerCase: 🤣
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - LEFT
         - TOP
@@ -79,8 +74,7 @@ hidden:
         - NO_TOUCH
       lowerCase: 😢
       upperCase: 😭
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - LEFT
         - TOP
@@ -89,8 +83,7 @@ hidden:
         - RIGHT
         - NO_TOUCH
       lowerCase: 😭
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - BOTTOM
         - LEFT
@@ -102,8 +95,7 @@ hidden:
         - NO_TOUCH
       lowerCase: ❤
       upperCase: 😍
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - BOTTOM
         - LEFT
@@ -116,8 +108,7 @@ hidden:
         - BOTTOM
         - NO_TOUCH
       lowerCase: 😍
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - BOTTOM
         - LEFT
@@ -135,8 +126,7 @@ hidden:
         - NO_TOUCH
       lowerCase: 😘
       upperCase: 🌹
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - BOTTOM
         - LEFT
@@ -155,8 +145,7 @@ hidden:
         - BOTTOM
         - NO_TOUCH
       lowerCase: 🌹
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - LEFT
         - INSIDE_CIRCLE
@@ -166,8 +155,7 @@ hidden:
         - NO_TOUCH
       lowerCase: 🤔
       upperCase: 🙏
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - LEFT
         - INSIDE_CIRCLE
@@ -178,8 +166,7 @@ hidden:
         - RIGHT
         - NO_TOUCH
       lowerCase: 🙏
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - TOP
         - LEFT
@@ -189,8 +176,7 @@ hidden:
         - NO_TOUCH
       lowerCase: 👏
       upperCase: 😇
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - TOP
         - LEFT
@@ -201,8 +187,7 @@ hidden:
         - TOP
         - NO_TOUCH
       lowerCase: 😇
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - LEFT
         - BOTTOM
@@ -213,8 +198,7 @@ hidden:
         - NO_TOUCH
       lowerCase: 👍
       upperCase: 🎉
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - LEFT
         - BOTTOM
@@ -226,8 +210,7 @@ hidden:
         - TOP
         - NO_TOUCH
       lowerCase: 🎉
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - TOP
         - LEFT
@@ -235,8 +218,7 @@ hidden:
         - NO_TOUCH
       lowerCase: (
       upperCase: "["
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - TOP
         - RIGHT
@@ -244,8 +226,7 @@ hidden:
         - NO_TOUCH
       lowerCase: )
       upperCase: "]"
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - TOP
         - LEFT
@@ -255,8 +236,7 @@ hidden:
         - NO_TOUCH
       lowerCase: "{"
       upperCase: <
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - NO_TOUCH
         - TOP
         - RIGHT

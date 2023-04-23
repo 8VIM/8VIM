@@ -1,209 +1,119 @@
 visible:
   - RIGHT_BOTTOM:
-      - actionType: INPUT_TEXT
-        lowerCase: ל
+      - lowerCase: ל
         upperCase: n
-      - actionType: INPUT_TEXT
-        lowerCase: מ
+      - lowerCase: מ
         upperCase: m
-      - actionType: INPUT_TEXT
-        lowerCase: ח
+      - lowerCase: ח
         upperCase: f
-      - actionType: INPUT_TEXT
-        lowerCase: "!"
+      - lowerCase: "!"
         upperCase: "!!!"
     RIGHT_TOP:
-      - actionType: INPUT_TEXT
-        lowerCase: א
+      - lowerCase: א
         upperCase: a
-      - actionType: INPUT_TEXT
-        lowerCase: ר
+      - lowerCase: ר
         upperCase: r
-      - actionType: INPUT_TEXT
-        lowerCase: ז
+      - lowerCase: ז
         upperCase: x
-      - actionType: INPUT_TEXT
-        lowerCase: "?"
+      - lowerCase: "?"
         upperCase: "*"
     TOP_RIGHT:
-      - actionType: INPUT_TEXT
-        lowerCase: נ
+      - lowerCase: נ
         upperCase: y
-      - actionType: INPUT_TEXT
-        lowerCase: ם
+      - lowerCase: ם
         upperCase: b
-      - actionType: INPUT_TEXT
-        lowerCase: ס
+      - lowerCase: ס
         upperCase: p
-      - actionType: INPUT_TEXT
-        lowerCase: צ
+      - lowerCase: צ
         upperCase: q
     TOP_LEFT:
-      - actionType: INPUT_TEXT
-        lowerCase: ש
+      - lowerCase: ש
         upperCase: s
-      - actionType: INPUT_TEXT
-        lowerCase: ע
+      - lowerCase: ע
         upperCase: d
-      - actionType: INPUT_TEXT
-        lowerCase: ף
+      - lowerCase: ף
         upperCase: g
-      - actionType: INPUT_TEXT
-        lowerCase: ץ
+      - lowerCase: ץ
         upperCase: "'"
     LEFT_TOP:
-      - actionType: INPUT_TEXT
-        lowerCase: ב
+      - lowerCase: ב
         upperCase: t
-      - actionType: INPUT_TEXT
-        lowerCase: פ
+      - lowerCase: פ
         upperCase: c
-      - actionType: INPUT_TEXT
-        lowerCase: ך
+      - lowerCase: ך
         upperCase: z
-      - actionType: INPUT_TEXT
-        lowerCase: .
+      - lowerCase: .
         upperCase: "-"
     LEFT_BOTTOM:
-      - actionType: INPUT_TEXT
-        lowerCase: כ
+      - lowerCase: כ
         upperCase: i
-      - actionType: INPUT_TEXT
-        lowerCase: ק
+      - lowerCase: ק
         upperCase: h
-      - actionType: INPUT_TEXT
-        lowerCase: ט
+      - lowerCase: ט
         upperCase: j
-      - actionType: INPUT_TEXT
-        lowerCase: ","
+      - lowerCase: ","
         upperCase: _
     BOTTOM_LEFT:
-      - actionType: INPUT_TEXT
-        lowerCase: י
+      - lowerCase: י
         upperCase: e
-      - actionType: INPUT_TEXT
-        lowerCase: ו
+      - lowerCase: ו
         upperCase: l
-      - actionType: INPUT_TEXT
-        lowerCase: ן
+      - lowerCase: ן
         upperCase: k
-      - actionType: INPUT_TEXT
-        lowerCase: "@"
+      - lowerCase: "@"
         upperCase: "@gmail.com"
     BOTTOM_RIGHT:
-      - actionType: INPUT_TEXT
-        lowerCase: ה
+      - lowerCase: ה
         upperCase: o
-      - actionType: INPUT_TEXT
-        lowerCase: ת
+      - lowerCase: ת
         upperCase: u
-      - actionType: INPUT_TEXT
-        lowerCase: ד
+      - lowerCase: ד
         upperCase: v
-      - actionType: INPUT_TEXT
-        lowerCase: ג
+      - lowerCase: ג
         upperCase: w
   - RIGHT_BOTTOM:
-      - actionType: INPUT_TEXT
-        lowerCase: n
-        upperCase: N
-      - actionType: INPUT_TEXT
-        lowerCase: m
-        upperCase: M
-      - actionType: INPUT_TEXT
-        lowerCase: f
-        upperCase: F
-      - actionType: INPUT_TEXT
-        lowerCase: "!"
+      - lowerCase: n
+      - lowerCase: m
+      - lowerCase: f
+      - lowerCase: "!"
         upperCase: "!!!"
     RIGHT_TOP:
-      - actionType: INPUT_TEXT
-        lowerCase: a
-        upperCase: A
-      - actionType: INPUT_TEXT
-        lowerCase: r
-        upperCase: R
-      - actionType: INPUT_TEXT
-        lowerCase: x
-        upperCase: X
-      - actionType: INPUT_TEXT
-        lowerCase: "?"
+      - lowerCase: a
+      - lowerCase: r
+      - lowerCase: x
+      - lowerCase: "?"
         upperCase: "*"
     TOP_RIGHT:
-      - actionType: INPUT_TEXT
-        lowerCase: y
-        upperCase: Y
-      - actionType: INPUT_TEXT
-        lowerCase: b
-        upperCase: B
-      - actionType: INPUT_TEXT
-        lowerCase: p
-        upperCase: P
-      - actionType: INPUT_TEXT
-        lowerCase: q
-        upperCase: Q
+      - lowerCase: y
+      - lowerCase: b
+      - lowerCase: p
+      - lowerCase: q
     TOP_LEFT:
-      - actionType: INPUT_TEXT
-        lowerCase: s
-        upperCase: S
-      - actionType: INPUT_TEXT
-        lowerCase: d
-        upperCase: D
-      - actionType: INPUT_TEXT
-        lowerCase: g
-        upperCase: G
-      - actionType: INPUT_TEXT
-        lowerCase: "'"
+      - lowerCase: s
+      - lowerCase: d
+      - lowerCase: g
+      - lowerCase: "'"
         upperCase: '"'
     LEFT_TOP:
-      - actionType: INPUT_TEXT
-        lowerCase: t
-        upperCase: T
-      - actionType: INPUT_TEXT
-        lowerCase: c
-        upperCase: C
-      - actionType: INPUT_TEXT
-        lowerCase: z
-        upperCase: Z
-      - actionType: INPUT_TEXT
-        lowerCase: .
+      - lowerCase: t
+      - lowerCase: c
+      - lowerCase: z
+      - lowerCase: .
         upperCase: "-"
     LEFT_BOTTOM:
-      - actionType: INPUT_TEXT
-        lowerCase: i
-        upperCase: I
-      - actionType: INPUT_TEXT
-        lowerCase: h
-        upperCase: H
-      - actionType: INPUT_TEXT
-        lowerCase: j
-        upperCase: J
-      - actionType: INPUT_TEXT
-        lowerCase: ","
+      - lowerCase: i
+      - lowerCase: h
+      - lowerCase: j
+      - lowerCase: ","
         upperCase: _
     BOTTOM_LEFT:
-      - actionType: INPUT_TEXT
-        lowerCase: e
-        upperCase: E
-      - actionType: INPUT_TEXT
-        lowerCase: l
-        upperCase: L
-      - actionType: INPUT_TEXT
-        lowerCase: k
-        upperCase: K
-      - actionType: INPUT_TEXT
-        lowerCase: "@"
+      - lowerCase: e
+      - lowerCase: l
+      - lowerCase: k
+      - lowerCase: "@"
         upperCase: "@gmail.com"
     BOTTOM_RIGHT:
-      - actionType: INPUT_TEXT
-        lowerCase: o
-        upperCase: O
-      - actionType: INPUT_TEXT
-        lowerCase: u
-        upperCase: U
-      - actionType: INPUT_TEXT
-        lowerCase: v
-        upperCase: V
-      - actionType: INPUT_TEXT
-        lowerCase: w
-        upperCase: W
+      - lowerCase: o
+      - lowerCase: u
+      - lowerCase: v
+      - lowerCase: w

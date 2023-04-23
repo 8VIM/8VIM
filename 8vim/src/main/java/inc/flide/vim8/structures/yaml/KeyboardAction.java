@@ -15,6 +15,7 @@ public class KeyboardAction {
 
     public KeyboardAction() {
         flags = 0;
+        actionType = KeyboardActionType.INPUT_TEXT;
     }
 
     public KeyboardActionType getActionType() {

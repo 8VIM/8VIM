@@ -10,8 +10,7 @@ hidden:
         - LEFT
         - NO_TOUCH
       keyCode: SWITCH_TO_NUMBER_KEYPAD
-    - actionType: INPUT_TEXT
-      movementSequence:
+    - movementSequence:
         - INSIDE_CIRCLE
         - NO_TOUCH
       lowerCase: " "

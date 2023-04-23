@@ -1,232 +1,105 @@
 visible:
   - RIGHT_TOP:
-      - actionType: INPUT_TEXT
-        lowerCase: a
-        upperCase: A
-      - actionType: INPUT_TEXT
-        lowerCase: ь
-        upperCase: Ь
-      - actionType: INPUT_TEXT
-        lowerCase: x
-        upperCase: X
-      - actionType: INPUT_TEXT
-        lowerCase: '?'
-        upperCase: '*'
-    TOP_RIGHT:
-      - actionType: INPUT_TEXT
-        lowerCase: и
-        upperCase: И
-      - actionType: INPUT_TEXT
-        lowerCase: с
-        upperCase: С
-      - actionType: INPUT_TEXT
-        lowerCase: б
-        upperCase: Б
-      - actionType: INPUT_TEXT
-        lowerCase: ц
-        upperCase: Ц
-    TOP_LEFT:
-      - actionType: INPUT_TEXT
-        lowerCase: p
-        upperCase: P
-      - actionType: INPUT_TEXT
-        lowerCase: д
-        upperCase: Д
-      - actionType: INPUT_TEXT
-        lowerCase: г
-        upperCase: Г
-      - actionType: INPUT_TEXT
-        lowerCase: ґ
-        upperCase: Ґ
-    LEFT_TOP:
-      - actionType: INPUT_TEXT
-        lowerCase: т
-        upperCase: Т
-      - actionType: INPUT_TEXT
-        lowerCase: к
-        upperCase: К
-      - actionType: INPUT_TEXT
-        lowerCase: з
-        upperCase: З
-      - actionType: INPUT_TEXT
-        lowerCase: .
-        upperCase: '-'
-    LEFT_BOTTOM:
-      - actionType: INPUT_TEXT
-        lowerCase: i
-        upperCase: I
-      - actionType: INPUT_TEXT
-        lowerCase: п
-        upperCase: П
-      - actionType: INPUT_TEXT
-        lowerCase: ч
-        upperCase: Ч
-      - actionType: INPUT_TEXT
-        lowerCase: ','
-        upperCase: _
-    BOTTOM_LEFT:
-      - actionType: INPUT_TEXT
-        lowerCase: в
-        upperCase: В
-      - actionType: INPUT_TEXT
-        lowerCase: л
-        upperCase: Л
-      - actionType: INPUT_TEXT
-        lowerCase: e
-        upperCase: E
-      - actionType: INPUT_TEXT
-        lowerCase: '@'
-        upperCase: '@gmail.com'
-    BOTTOM_RIGHT:
-      - actionType: INPUT_TEXT
-        lowerCase: o
-        upperCase: O
-      - actionType: INPUT_TEXT
-        lowerCase: y
-        upperCase: Y
-      - actionType: INPUT_TEXT
-        lowerCase: л
-        upperCase: Л
-      - actionType: INPUT_TEXT
-        lowerCase: ф
-        upperCase: Ф
-    RIGHT_BOTTOM:
-      - actionType: INPUT_TEXT
-        lowerCase: н
-        upperCase: Н
-      - actionType: INPUT_TEXT
-        lowerCase: м
-        upperCase: М
-      - actionType: INPUT_TEXT
-        lowerCase: ж
-        upperCase: Ж
-      - actionType: INPUT_TEXT
-        lowerCase: '!'
-        upperCase: '!!!'
-  - RIGHT_TOP:
-      - actionType: INPUT_TEXT
-        lowerCase: я
-        upperCase: Я
-    TOP_RIGHT:
-      - actionType: INPUT_TEXT
-        lowerCase: й
-        upperCase: Й
-    LEFT_BOTTOM:
-      - actionType: INPUT_TEXT
-        lowerCase: ї
-        upperCase: Ї
-    BOTTOM_LEFT:
-      - null
-      - null
-      - actionType: INPUT_TEXT
-        lowerCase: є
-        upperCase: Є
-    BOTTOM_RIGHT:
-     - null
-     - actionType: INPUT_TEXT
-       lowerCase: ю
-       upperCase: Ю
-  - RIGHT_BOTTOM:
-      - actionType: INPUT_TEXT
-        lowerCase: n
-        upperCase: N
-      - actionType: INPUT_TEXT
-        lowerCase: m
-        upperCase: M
-      - actionType: INPUT_TEXT
-        lowerCase: f
-        upperCase: F
-      - actionType: INPUT_TEXT
-        lowerCase: "!"
-        upperCase: "!!!"
-    RIGHT_TOP:
-      - actionType: INPUT_TEXT
-        lowerCase: a
-        upperCase: A
-      - actionType: INPUT_TEXT
-        lowerCase: r
-        upperCase: R
-      - actionType: INPUT_TEXT
-        lowerCase: x
-        upperCase: X
-      - actionType: INPUT_TEXT
-        lowerCase: "?"
+      - lowerCase: a
+      - lowerCase: ь
+      - lowerCase: x
+      - lowerCase: "?"
         upperCase: "*"
     TOP_RIGHT:
-      - actionType: INPUT_TEXT
-        lowerCase: y
-        upperCase: Y
-      - actionType: INPUT_TEXT
-        lowerCase: b
-        upperCase: B
-      - actionType: INPUT_TEXT
-        lowerCase: p
-        upperCase: P
-      - actionType: INPUT_TEXT
-        lowerCase: q
-        upperCase: Q
+      - lowerCase: и
+      - lowerCase: с
+      - lowerCase: б
+      - lowerCase: ц
     TOP_LEFT:
-      - actionType: INPUT_TEXT
-        lowerCase: s
-        upperCase: S
-      - actionType: INPUT_TEXT
-        lowerCase: d
-        upperCase: D
-      - actionType: INPUT_TEXT
-        lowerCase: g
-        upperCase: G
-      - actionType: INPUT_TEXT
-        lowerCase: "'"
-        upperCase: '"'
+      - lowerCase: p
+      - lowerCase: д
+      - lowerCase: г
+      - lowerCase: ґ
     LEFT_TOP:
-      - actionType: INPUT_TEXT
-        lowerCase: t
-        upperCase: T
-      - actionType: INPUT_TEXT
-        lowerCase: c
-        upperCase: C
-      - actionType: INPUT_TEXT
-        lowerCase: z
-        upperCase: Z
-      - actionType: INPUT_TEXT
-        lowerCase: .
+      - lowerCase: т
+      - lowerCase: к
+      - lowerCase: з
+      - lowerCase: .
         upperCase: "-"
     LEFT_BOTTOM:
-      - actionType: INPUT_TEXT
-        lowerCase: i
-        upperCase: I
-      - actionType: INPUT_TEXT
-        lowerCase: h
-        upperCase: H
-      - actionType: INPUT_TEXT
-        lowerCase: j
-        upperCase: J
-      - actionType: INPUT_TEXT
-        lowerCase: ","
+      - lowerCase: i
+      - lowerCase: п
+      - lowerCase: ч
+      - lowerCase: ","
         upperCase: _
     BOTTOM_LEFT:
-      - actionType: INPUT_TEXT
-        lowerCase: e
-        upperCase: E
-      - actionType: INPUT_TEXT
-        lowerCase: l
-        upperCase: L
-      - actionType: INPUT_TEXT
-        lowerCase: k
-        upperCase: K
-      - actionType: INPUT_TEXT
-        lowerCase: "@"
+      - lowerCase: в
+      - lowerCase: л
+      - lowerCase: e
+      - lowerCase: "@"
         upperCase: "@gmail.com"
     BOTTOM_RIGHT:
-      - actionType: INPUT_TEXT
-        lowerCase: o
-        upperCase: O
-      - actionType: INPUT_TEXT
-        lowerCase: u
-        upperCase: U
-      - actionType: INPUT_TEXT
-        lowerCase: v
-        upperCase: V
-      - actionType: INPUT_TEXT
-        lowerCase: w
-        upperCase: W
+      - lowerCase: o
+      - lowerCase: y
+      - lowerCase: л
+      - lowerCase: ф
+    RIGHT_BOTTOM:
+      - lowerCase: н
+      - lowerCase: м
+      - lowerCase: ж
+      - lowerCase: "!"
+        upperCase: "!!!"
+  - RIGHT_TOP:
+      - lowerCase: я
+    TOP_RIGHT:
+      - lowerCase: й
+    LEFT_BOTTOM:
+      - lowerCase: ї
+    BOTTOM_LEFT:
+      - null
+      - null
+      - lowerCase: є
+    BOTTOM_RIGHT:
+      - null
+      - lowerCase: ю
+  - RIGHT_BOTTOM:
+      - lowerCase: n
+      - lowerCase: m
+      - lowerCase: f
+      - lowerCase: "!"
+        upperCase: "!!!"
+    RIGHT_TOP:
+      - lowerCase: a
+      - lowerCase: r
+      - lowerCase: x
+      - lowerCase: "?"
+        upperCase: "*"
+    TOP_RIGHT:
+      - lowerCase: y
+      - lowerCase: b
+      - lowerCase: p
+      - lowerCase: q
+    TOP_LEFT:
+      - lowerCase: s
+      - lowerCase: d
+      - lowerCase: g
+      - lowerCase: "'"
+        upperCase: '"'
+    LEFT_TOP:
+      - lowerCase: t
+      - lowerCase: c
+      - lowerCase: z
+      - lowerCase: .
+        upperCase: "-"
+    LEFT_BOTTOM:
+      - lowerCase: i
+      - lowerCase: h
+      - lowerCase: j
+      - lowerCase: ","
+        upperCase: _
+    BOTTOM_LEFT:
+      - lowerCase: e
+      - lowerCase: l
+      - lowerCase: k
+      - lowerCase: "@"
+        upperCase: "@gmail.com"
+    BOTTOM_RIGHT:
+      - lowerCase: o
+      - lowerCase: u
+      - lowerCase: v
+      - lowerCase: w
