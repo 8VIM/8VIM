@@ -21,7 +21,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file(System.getenv("VIM8_BUILD_KEYSTORE_FILE"))
+            storeFile file(System.getenv().getOrDefault("VIM8_BUILD_KEYSTORE_FILE","keystore"))
             storePassword System.getenv("VIM8_BUILD_KEYSTORE_PASSWORD")
             keyAlias System.getenv("VIM8_BUILD_KEY_ALIAS")
             keyPassword System.getenv("VIM8_BUILD_KEY_PASSWORD")
@@ -52,6 +52,7 @@ android {
 
 dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.14.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.preference:preference:1.2.0"
     implementation 'com.github.kizitonwose.colorpreference:support:1.1.0'
