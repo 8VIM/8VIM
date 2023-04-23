@@ -49,18 +49,26 @@ public class KeyboardDataYamlParser {
             Quadrant quadrant = entry.getKey();
             List<KeyboardAction> actions = entry.getValue();
             for (int position = 0; position < actions.size(); position++) {
+                boolean isVisible = layer >= Constants.DEFAULT_LAYER && quadrant != Quadrant.NO_SECTOR;
+
+                if (isVisible && position >= 4) {
+                    continue;
+                }
+
+
                 KeyboardAction action = actions.get(position);
                 if (action == null || action.isEmpty()) {
                     continue;
                 }
 
-                int characterSetIndex = getCharacterSetIndex(quadrant, position);
-
                 List<FingerPosition> movementSequence = action.getMovementSequence();
+
                 if (movementSequence == null || movementSequence.isEmpty()) {
                     movementSequence = QuadrantHelper.computeMovementSequence(layer, quadrant, position);
                 }
-                if (layer > 0 && quadrant != Quadrant.NO_SECTOR) {
+
+                if (isVisible) {
+                    int characterSetIndex = getCharacterSetIndex(quadrant, position);
                     if (action.getLowerCase() != null && !action.getLowerCase().isEmpty()) {
                         if (lowerCaseCharacters.length() == 0) {
                             lowerCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
@@ -68,7 +76,7 @@ public class KeyboardDataYamlParser {
                         lowerCaseCharacters.setCharAt(characterSetIndex, action.getLowerCase().charAt(0));
                     }
 
-                    if(action.getUpperCase() != null && !action.getUpperCase().isEmpty()){
+                    if (action.getUpperCase() != null && !action.getUpperCase().isEmpty()) {
                         if (upperCaseCharacters.length() == 0) {
                             upperCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
                         }
