@@ -13,10 +13,10 @@ import java.util.List;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.KeyboardAction;
+import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.MovementSequenceType;
 
 public class MainKeypadActionListener extends KeypadActionListener {
@@ -153,7 +153,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
                 KeyboardAction action = keyboardData.getActionMap().get(modifiedMovementSequence);
 
                 if (action != null) {
-                    currentLetter = action.getText();
+                    currentLetter = isCircleCapitalization() ? action.getCapsLockText() : action.getText();
                 }
             }
         } else if (!isLongPressCallbackSet) {
