@@ -31,7 +31,7 @@ public class KeyboardDataYamlParser {
     public KeyboardData readKeyboardData() {
         KeyboardData keyboardData = new KeyboardData();
         if (layers.getHidden() != null && !layers.getHidden().isEmpty()) {
-            addSectors(keyboardData, 0, layers.getHidden());
+            addSectors(keyboardData, layers.getHidden());
         }
         if (layers.getVisible() != null && !layers.getVisible().isEmpty()) {
             List<Map<Quadrant, List<KeyboardAction>>> visible = layers.getVisible();
@@ -43,6 +43,22 @@ public class KeyboardDataYamlParser {
         return keyboardData;
     }
 
+    private void addSectors(KeyboardData keyboardData, List<KeyboardAction> actions) {
+        for (KeyboardAction action : actions) {
+            List<FingerPosition> movementSequence = action.getMovementSequence();
+
+            if (movementSequence == null || movementSequence.isEmpty()) {
+                continue;
+            }
+
+            int keyCode = getKeyCode(action.getKeyCode());
+            inc.flide.vim8.structures.KeyboardAction actionMap =
+                new inc.flide.vim8.structures.KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(), keyCode,
+                    action.getFlags(), Constants.HIDDEN_LAYER);
+            keyboardData.addActionMap(movementSequence, actionMap);
+        }
+    }
+
     private void addSectors(KeyboardData keyboardData, int layer, Map<Quadrant, List<KeyboardAction>> sectors) {
         StringBuilder lowerCaseCharacters = new StringBuilder();
         StringBuilder upperCaseCharacters = new StringBuilder();
@@ -50,7 +66,7 @@ public class KeyboardDataYamlParser {
             Quadrant quadrant = entry.getKey();
             List<KeyboardAction> actions = entry.getValue();
             for (int position = 0; position < actions.size(); position++) {
-                boolean isVisible = layer >= Constants.DEFAULT_LAYER && quadrant != Quadrant.NO_SECTOR;
+                boolean isVisible = layer >= Constants.DEFAULT_LAYER;
 
                 if (isVisible && position >= 4) {
                     continue;

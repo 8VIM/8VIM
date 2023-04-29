@@ -8,6 +8,5 @@ public enum Quadrant {
     LEFT_TOP,
     TOP_LEFT,
     TOP_RIGHT,
-    RIGHT_TOP,
-    NO_SECTOR
+    RIGHT_TOP
 }

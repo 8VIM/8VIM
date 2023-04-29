@@ -3,6 +3,7 @@ package inc.flide.vim8.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.Quadrant;
 
@@ -14,7 +15,7 @@ public final class QuadrantHelper {
     public static List<FingerPosition> computeMovementSequence(int layer, Quadrant quadrant, int position) {
         List<FingerPosition> movementSequence = new ArrayList<>();
 
-        if (quadrant == Quadrant.NO_SECTOR) {
+        if (layer == Constants.HIDDEN_LAYER) {
             return movementSequence;
         }
 
@@ -309,8 +310,6 @@ public final class QuadrantHelper {
                         nextPosition = FingerPosition.TOP;
                         break;
                 }
-                break;
-            case NO_SECTOR:
                 break;
         }
         return nextPosition;

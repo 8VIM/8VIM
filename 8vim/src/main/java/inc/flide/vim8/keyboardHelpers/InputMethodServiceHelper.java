@@ -81,10 +81,6 @@ public final class InputMethodServiceHelper {
             layoutIndependentKeyboardData,
             resources,
             R.raw.special_core_gestures);
-        addToKeyboardActionsMapUsingResourceId(
-            layoutIndependentKeyboardData,
-            resources,
-            R.raw.zero_turn_no_actions);
 
         return layoutIndependentKeyboardData;
     }

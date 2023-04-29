@@ -1,58 +1,57 @@
 hidden:
-  NO_SECTOR:
-    - actionType: INPUT_KEY
-      movementSequence:
-        - NO_TOUCH
-        - INSIDE_CIRCLE
-        - TOP
-        - NO_TOUCH
-      keyCode: KEYCODE_DPAD_UP
-    - actionType: INPUT_KEY
-      movementSequence:
-        - NO_TOUCH
-        - INSIDE_CIRCLE
-        - BOTTOM
-        - NO_TOUCH
-      keyCode: KEYCODE_DPAD_DOWN
-    - actionType: INPUT_KEY
-      movementSequence:
-        - NO_TOUCH
-        - INSIDE_CIRCLE
-        - LEFT
-        - NO_TOUCH
-      keyCode: KEYCODE_DPAD_LEFT
-    - actionType: INPUT_KEY
-      movementSequence:
-        - NO_TOUCH
-        - INSIDE_CIRCLE
-        - RIGHT
-        - NO_TOUCH
-      keyCode: KEYCODE_DPAD_RIGHT
-    - actionType: INPUT_KEY
-      movementSequence:
-        - NO_TOUCH
-        - INSIDE_CIRCLE
-        - TOP
-        - LONG_PRESS
-      keyCode: KEYCODE_DPAD_UP
-    - actionType: INPUT_KEY
-      movementSequence:
-        - NO_TOUCH
-        - INSIDE_CIRCLE
-        - BOTTOM
-        - LONG_PRESS
-      keyCode: KEYCODE_DPAD_DOWN
-    - actionType: INPUT_KEY
-      movementSequence:
-        - NO_TOUCH
-        - INSIDE_CIRCLE
-        - LEFT
-        - LONG_PRESS
-      keyCode: KEYCODE_DPAD_LEFT
-    - actionType: INPUT_KEY
-      movementSequence:
-        - NO_TOUCH
-        - INSIDE_CIRCLE
-        - RIGHT
-        - LONG_PRESS
-      keyCode: KEYCODE_DPAD_RIGHT
+  - actionType: INPUT_KEY
+    movementSequence:
+      - NO_TOUCH
+      - INSIDE_CIRCLE
+      - TOP
+      - NO_TOUCH
+    keyCode: KEYCODE_DPAD_UP
+  - actionType: INPUT_KEY
+    movementSequence:
+      - NO_TOUCH
+      - INSIDE_CIRCLE
+      - BOTTOM
+      - NO_TOUCH
+    keyCode: KEYCODE_DPAD_DOWN
+  - actionType: INPUT_KEY
+    movementSequence:
+      - NO_TOUCH
+      - INSIDE_CIRCLE
+      - LEFT
+      - NO_TOUCH
+    keyCode: KEYCODE_DPAD_LEFT
+  - actionType: INPUT_KEY
+    movementSequence:
+      - NO_TOUCH
+      - INSIDE_CIRCLE
+      - RIGHT
+      - NO_TOUCH
+    keyCode: KEYCODE_DPAD_RIGHT
+  - actionType: INPUT_KEY
+    movementSequence:
+      - NO_TOUCH
+      - INSIDE_CIRCLE
+      - TOP
+      - LONG_PRESS
+    keyCode: KEYCODE_DPAD_UP
+  - actionType: INPUT_KEY
+    movementSequence:
+      - NO_TOUCH
+      - INSIDE_CIRCLE
+      - BOTTOM
+      - LONG_PRESS
+    keyCode: KEYCODE_DPAD_DOWN
+  - actionType: INPUT_KEY
+    movementSequence:
+      - NO_TOUCH
+      - INSIDE_CIRCLE
+      - LEFT
+      - LONG_PRESS
+    keyCode: KEYCODE_DPAD_LEFT
+  - actionType: INPUT_KEY
+    movementSequence:
+      - NO_TOUCH
+      - INSIDE_CIRCLE
+      - RIGHT
+      - LONG_PRESS
+    keyCode: KEYCODE_DPAD_RIGHT

@@ -8,19 +8,19 @@ import java.util.Map;
 import inc.flide.vim8.structures.Quadrant;
 
 public class Layers {
-    private Map<Quadrant, List<KeyboardAction>> hidden;
+    private List<KeyboardAction> hidden;
     private List<Map<Quadrant, List<KeyboardAction>>> visible;
 
     public Layers() {
-        hidden = new HashMap<>();
+        hidden = new ArrayList<>();
         visible = new ArrayList<>();
     }
 
-    public Map<Quadrant, List<KeyboardAction>> getHidden() {
+    public  List<KeyboardAction> getHidden() {
         return hidden;
     }
 
-    public void setHidden(Map<Quadrant, List<KeyboardAction>> hidden) {
+    public void setHidden( List<KeyboardAction> hidden) {
         this.hidden = hidden;
     }
 

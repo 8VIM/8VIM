@@ -4,6 +4,7 @@ public final class Constants {
     public static final String SELF_KEYBOARD_ID = "inc.flide.vi8/inc.flide.vim8.MainInputMethodService";
     public static final int DELAY_MILLIS_LONG_PRESS_INITIATION = 500;
     public static final int DELAY_MILLIS_LONG_PRESS_CONTINUATION = 50;
+    public static final int HIDDEN_LAYER = 0;
     public static final int DEFAULT_LAYER = 1;
     public static final int MAX_LAYERS = 6;
     public static final int DEFAULT_POSITION = -1;
