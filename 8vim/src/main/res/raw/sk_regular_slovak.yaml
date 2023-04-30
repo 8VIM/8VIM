@@ -4,101 +4,101 @@ layers:
       right:
         parts:
           bottom:
-            - lowerCase: n
-            - lowerCase: m
-            - lowerCase: f
-            - lowerCase: "!"
-              upperCase: "!!!"
+            - lower_case: n
+            - lower_case: m
+            - lower_case: f
+            - lower_case: "!"
+              upper_case: "!!!"
           top:
-            - lowerCase: a
-            - lowerCase: r
-            - lowerCase: x
-            - lowerCase: "?"
-              upperCase: "*"
+            - lower_case: a
+            - lower_case: r
+            - lower_case: x
+            - lower_case: "?"
+              upper_case: "*"
       top:
         parts:
           right:
-            - lowerCase: y
-            - lowerCase: b
-            - lowerCase: p
-            - lowerCase: q
+            - lower_case: y
+            - lower_case: b
+            - lower_case: p
+            - lower_case: q
           left:
-            - lowerCase: s
-            - lowerCase: d
-            - lowerCase: g
-            - lowerCase: "'"
-              upperCase: '"'
+            - lower_case: s
+            - lower_case: d
+            - lower_case: g
+            - lower_case: "'"
+              upper_case: '"'
       left:
         parts:
           top:
-            - lowerCase: t
-            - lowerCase: c
-            - lowerCase: z
-            - lowerCase: .
-              upperCase: "-"
+            - lower_case: t
+            - lower_case: c
+            - lower_case: z
+            - lower_case: .
+              upper_case: "-"
           bottom:
-            - lowerCase: i
-            - lowerCase: h
-            - lowerCase: j
-            - lowerCase: ","
-              upperCase: _
+            - lower_case: i
+            - lower_case: h
+            - lower_case: j
+            - lower_case: ","
+              upper_case: _
       bottom:
         parts:
           left:
-            - lowerCase: e
-            - lowerCase: l
-            - lowerCase: k
-            - lowerCase: "@"
-              upperCase: "@gmail.com"
+            - lower_case: e
+            - lower_case: l
+            - lower_case: k
+            - lower_case: "@"
+              upper_case: "@gmail.com"
           right:
-            - lowerCase: o
-            - lowerCase: u
-            - lowerCase: v
-            - lowerCase: w
-  extraLayers:
+            - lower_case: o
+            - lower_case: u
+            - lower_case: v
+            - lower_case: w
+  extra_layers:
     first:
       sectors:
         right:
           parts:
             bottom:
-              - lowerCase: ň
+              - lower_case: ň
             top:
-              - lowerCase: á
-              - lowerCase: ŕ
+              - lower_case: á
+              - lower_case: ŕ
         top:
           parts:
             right:
-              - lowerCase: ý
+              - lower_case: ý
             left:
-              - lowerCase: š
-              - lowerCase: ď
+              - lower_case: š
+              - lower_case: ď
         left:
           parts:
             top:
-              - lowerCase: ť
-              - lowerCase: č
-              - lowerCase: ž
+              - lower_case: ť
+              - lower_case: č
+              - lower_case: ž
             bottom:
-              - lowerCase: í
+              - lower_case: í
         bottom:
           parts:
             left:
-              - lowerCase: é
-              - lowerCase: ĺ
+              - lower_case: é
+              - lower_case: ĺ
             right:
-              - lowerCase: ó
-              - lowerCase: ú
+              - lower_case: ó
+              - lower_case: ú
     second:
       sectors:
         right:
           parts:
             top:
-              - lowerCase: ä
+              - lower_case: ä
         bottom:
           parts:
             left:
-              - lowerCase: €
-                upperCase: ¢
-              - lowerCase: ľ
+              - lower_case: €
+                upper_case: ¢
+              - lower_case: ľ
             right:
-              - lowerCase: ô
+              - lower_case: ô

@@ -5,6 +5,7 @@ import android.view.KeyEvent;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import java.io.IOException;
@@ -34,6 +35,7 @@ public class KeyboardDataYamlParser {
         ObjectMapper mapper = YAMLMapper.builder()
             .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
             .enable(DeserializationFeature.UNWRAP_ROOT_VALUE)
+            .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             .build();
         layout = mapper.readValue(inputStream, Layout.class);
     }
@@ -90,7 +92,7 @@ public class KeyboardDataYamlParser {
         for (Action action : actions) {
             List<FingerPosition> movementSequence = action.getMovementSequence();
 
-            if (movementSequence == null || movementSequence.isEmpty()) {
+            if (movementSequence.isEmpty()) {
                 continue;
             }
 
@@ -106,31 +108,33 @@ public class KeyboardDataYamlParser {
                                     StringBuilder lowerCaseCharacters,
                                     StringBuilder upperCaseCharacters) {
         int actionsSize = Math.min(actions.size(), 4);
-        for (int position = 0; position < actionsSize; position++) {
-            Action action = actions.get(position);
+
+        for (int characterPosition = 0; characterPosition < actionsSize; characterPosition++) {
+            Action action = actions.get(characterPosition);
             if (action == null || action.isEmpty()) {
                 continue;
             }
 
             List<FingerPosition> movementSequence = action.getMovementSequence();
 
-            if (movementSequence == null || movementSequence.isEmpty()) {
-                movementSequence = QuadrantHelper.computeMovementSequence(layer, quadrant, position);
+            if (movementSequence.isEmpty()) {
+                movementSequence = QuadrantHelper.computeMovementSequence(layer, quadrant, characterPosition);
             }
 
-            int characterSetIndex = getCharacterSetIndex(quadrant, position);
-            if (action.getLowerCase() != null && !action.getLowerCase().isEmpty()) {
+            int characterSetIndex = getCharacterSetIndex(quadrant, characterPosition);
+
+            if (!action.getLowerCase().isEmpty()) {
                 if (lowerCaseCharacters.length() == 0) {
                     lowerCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
                 }
                 lowerCaseCharacters.setCharAt(characterSetIndex, action.getLowerCase().charAt(0));
 
-                if (action.getUpperCase() == null || action.getUpperCase().isEmpty()) {
+                if (action.getUpperCase().isEmpty()) {
                     action.setUpperCase(action.getLowerCase().toUpperCase(Locale.ROOT));
                 }
             }
 
-            if (action.getUpperCase() != null && !action.getUpperCase().isEmpty()) {
+            if (!action.getUpperCase().isEmpty()) {
                 if (upperCaseCharacters.length() == 0) {
                     upperCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
                 }
@@ -138,19 +142,20 @@ public class KeyboardDataYamlParser {
             }
 
             int keyCode = getKeyCode(action.getKeyCode());
-            inc.flide.vim8.structures.KeyboardAction actionMap =
-                new inc.flide.vim8.structures.KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(), keyCode,
-                    action.getFlags(), layer);
+
+            KeyboardAction actionMap =
+                new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(), keyCode, action.getFlags(), layer);
+
             keyboardData.addActionMap(movementSequence, actionMap);
         }
     }
 
     private int getKeyCode(String keyCodeString) {
         int keyCode = 0;
-        if (keyCodeString == null || keyCodeString.isEmpty()) {
+        if (keyCodeString.isEmpty()) {
             return keyCode;
         }
-
+        keyCodeString = keyCodeString.toUpperCase();
         //Strictly the inputKey has to has to be a Keycode from the KeyEvent class
         //Or it needs to be one of the customKeyCodes
         keyCode = KeyEvent.keyCodeFromString(keyCodeString);
@@ -158,7 +163,6 @@ public class KeyboardDataYamlParser {
             try {
                 keyCode = CustomKeycode.valueOf(keyCodeString).getKeyCode();
             } catch (IllegalArgumentException error) {
-                keyCode = KeyEvent.KEYCODE_UNKNOWN;
             }
         }
 

@@ -1,21 +1,30 @@
 package inc.flide.vim8.structures.yaml;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardActionType;
 
 public class Action {
+    @JsonProperty(value = "type")
     private KeyboardActionType actionType;
     private String lowerCase;
     private String upperCase;
     private List<FingerPosition> movementSequence;
     private String keyCode;
+
     private int flags;
 
     public Action() {
-        flags = 0;
         actionType = KeyboardActionType.INPUT_TEXT;
+        flags = 0;
+        lowerCase = "";
+        upperCase = "";
+        movementSequence = new ArrayList<>();
+        keyCode = "";
     }
 
     public KeyboardActionType getActionType() {
@@ -69,8 +78,8 @@ public class Action {
     public boolean isEmpty() {
         return (lowerCase == null || lowerCase.isEmpty())
             && (upperCase == null || upperCase.isEmpty())
-            && (movementSequence == null || movementSequence.isEmpty())
-            && (keyCode == null || keyCode.isEmpty())
-            && actionType == null && flags == 0;
+            && movementSequence.isEmpty()
+            && keyCode.isEmpty()
+            && flags == 0;
     }
 }
