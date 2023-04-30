@@ -1,52 +1,69 @@
-visible:
-  - RIGHT_BOTTOM:
-      - lowerCase: n
-      - lowerCase: m
-      - lowerCase: f
-      - lowerCase: "!"
-        upperCase: "!!!"
-    RIGHT_TOP:
-      - lowerCase: a
-      - lowerCase: r
-      - lowerCase: x
-      - lowerCase: "?"
-        upperCase: "*"
-    TOP_RIGHT:
-      - lowerCase: y
-      - lowerCase: b
-      - lowerCase: p
-      - lowerCase: q
-    TOP_LEFT:
-      - lowerCase: s
-      - lowerCase: d
-      - lowerCase: g
-      - lowerCase: "'"
-        upperCase: '"'
-    LEFT_TOP:
-      - lowerCase: t
-      - lowerCase: c
-      - lowerCase: z
-      - lowerCase: .
-        upperCase: "-"
-    LEFT_BOTTOM:
-      - lowerCase: i
-      - lowerCase: h
-      - lowerCase: j
-      - lowerCase: ","
-        upperCase: _
-    BOTTOM_LEFT:
-      - lowerCase: e
-      - lowerCase: l
-      - lowerCase: k
-      - lowerCase: "@"
-        upperCase: "@gmail.com"
-    BOTTOM_RIGHT:
-      - lowerCase: o
-      - lowerCase: u
-      - lowerCase: v
-      - lowerCase: w
-  - LEFT_BOTTOM:
-      - lowerCase: ĳ
-    BOTTOM_LEFT:
-      - lowerCase: €
-        upperCase: ¢
+layers:
+  default:
+    sectors:
+      right:
+        parts:
+          bottom:
+            - lowerCase: n
+            - lowerCase: m
+            - lowerCase: f
+            - lowerCase: "!"
+              upperCase: "!!!"
+          top:
+            - lowerCase: a
+            - lowerCase: r
+            - lowerCase: x
+            - lowerCase: "?"
+              upperCase: "*"
+      top:
+        parts:
+          right:
+            - lowerCase: y
+            - lowerCase: b
+            - lowerCase: p
+            - lowerCase: q
+          left:
+            - lowerCase: s
+            - lowerCase: d
+            - lowerCase: g
+            - lowerCase: "'"
+              upperCase: '"'
+      left:
+        parts:
+          top:
+            - lowerCase: t
+            - lowerCase: c
+            - lowerCase: z
+            - lowerCase: .
+              upperCase: "-"
+          bottom:
+            - lowerCase: i
+            - lowerCase: h
+            - lowerCase: j
+            - lowerCase: ","
+              upperCase: _
+      bottom:
+        parts:
+          left:
+            - lowerCase: e
+            - lowerCase: l
+            - lowerCase: k
+            - lowerCase: "@"
+              upperCase: "@gmail.com"
+          right:
+            - lowerCase: o
+            - lowerCase: u
+            - lowerCase: v
+            - lowerCase: w
+  extraLayers:
+    first:
+      sectors:
+        left:
+          parts:
+            bottom:
+              - lowerCase: ĳ
+        bottom:
+          parts:
+            left:
+              - lowerCase: €
+                upperCase: ¢

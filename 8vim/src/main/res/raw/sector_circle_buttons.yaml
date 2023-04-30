@@ -1,35 +1,36 @@
-hidden:
-  - actionType: INPUT_KEY
-    movementSequence:
-      - TOP
-      - NO_TOUCH
-    keyCode: SHIFT_TOGGLE
-  - actionType: INPUT_KEY
-    movementSequence:
-      - LEFT
-      - NO_TOUCH
-    keyCode: SWITCH_TO_NUMBER_KEYPAD
-  - movementSequence:
-      - INSIDE_CIRCLE
-      - NO_TOUCH
-    lowerCase: " "
-  - actionType: INPUT_KEY
-    movementSequence:
-      - BOTTOM
-      - NO_TOUCH
-    keyCode: KEYCODE_ENTER
-  - actionType: INPUT_KEY
-    movementSequence:
-      - BOTTOM
-      - LONG_PRESS
-    keyCode: KEYCODE_ENTER
-  - actionType: INPUT_KEY
-    movementSequence:
-      - RIGHT
-      - NO_TOUCH
-    keyCode: KEYCODE_DEL
-  - actionType: INPUT_KEY
-    movementSequence:
-      - RIGHT
-      - LONG_PRESS
-    keyCode: KEYCODE_DEL
+layers:
+  hidden:
+    - actionType: INPUT_KEY
+      movementSequence:
+        - top
+        - NO_TOUCH
+      keyCode: SHIFT_TOGGLE
+    - actionType: INPUT_KEY
+      movementSequence:
+        - left
+        - NO_TOUCH
+      keyCode: SWITCH_TO_NUMBER_KEYPAD
+    - movementSequence:
+        - INSIDE_CIRCLE
+        - NO_TOUCH
+      lowerCase: " "
+    - actionType: INPUT_KEY
+      movementSequence:
+        - bottom
+        - NO_TOUCH
+      keyCode: KEYCODE_ENTER
+    - actionType: INPUT_KEY
+      movementSequence:
+        - bottom
+        - LONG_PRESS
+      keyCode: KEYCODE_ENTER
+    - actionType: INPUT_KEY
+      movementSequence:
+        - right
+        - NO_TOUCH
+      keyCode: KEYCODE_DEL
+    - actionType: INPUT_KEY
+      movementSequence:
+        - right
+        - LONG_PRESS
+      keyCode: KEYCODE_DEL

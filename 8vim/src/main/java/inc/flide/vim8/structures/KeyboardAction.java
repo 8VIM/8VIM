@@ -37,10 +37,10 @@ public class KeyboardAction {
     }
 
     public String getCapsLockText() {
-        if(capsLockText == null) {
+        if (capsLockText == null) {
             return "";
         }
-        
+
         return capsLockText;
     }
 

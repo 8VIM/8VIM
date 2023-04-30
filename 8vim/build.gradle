@@ -1,3 +1,7 @@
+plugins {
+    id 'org.jetbrains.kotlin.android' version '1.8.10'
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'checkstyle'
 
@@ -49,9 +53,8 @@ android {
     namespace 'inc.flide.vim8'
 }
 
-
 dependencies {
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "androidx.preference:preference:1.2.0"

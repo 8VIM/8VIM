@@ -6,6 +6,7 @@ import java.util.List;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.Quadrant;
+import inc.flide.vim8.structures.yaml.Direction;
 
 public final class QuadrantHelper {
     private QuadrantHelper() {
@@ -315,4 +316,12 @@ public final class QuadrantHelper {
         return nextPosition;
     }
 
+    public static Quadrant getQuadrant(Direction sector, Direction part) {
+        String quadrant = sector.toString() + "_" + part.toString();
+        try {
+            return Quadrant.valueOf(quadrant);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
 }

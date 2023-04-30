@@ -1,105 +1,136 @@
-visible:
-  - RIGHT_TOP:
-      - lowerCase: a
-      - lowerCase: ь
-      - lowerCase: x
-      - lowerCase: "?"
-        upperCase: "*"
-    TOP_RIGHT:
-      - lowerCase: и
-      - lowerCase: с
-      - lowerCase: б
-      - lowerCase: ц
-    TOP_LEFT:
-      - lowerCase: p
-      - lowerCase: д
-      - lowerCase: г
-      - lowerCase: ґ
-    LEFT_TOP:
-      - lowerCase: т
-      - lowerCase: к
-      - lowerCase: з
-      - lowerCase: .
-        upperCase: "-"
-    LEFT_BOTTOM:
-      - lowerCase: i
-      - lowerCase: п
-      - lowerCase: ч
-      - lowerCase: ","
-        upperCase: _
-    BOTTOM_LEFT:
-      - lowerCase: в
-      - lowerCase: л
-      - lowerCase: e
-      - lowerCase: "@"
-        upperCase: "@gmail.com"
-    BOTTOM_RIGHT:
-      - lowerCase: o
-      - lowerCase: y
-      - lowerCase: л
-      - lowerCase: ф
-    RIGHT_BOTTOM:
-      - lowerCase: н
-      - lowerCase: м
-      - lowerCase: ж
-      - lowerCase: "!"
-        upperCase: "!!!"
-  - RIGHT_TOP:
-      - lowerCase: я
-    TOP_RIGHT:
-      - lowerCase: й
-    LEFT_BOTTOM:
-      - lowerCase: ї
-    BOTTOM_LEFT:
-      - null
-      - null
-      - lowerCase: є
-    BOTTOM_RIGHT:
-      - null
-      - lowerCase: ю
-  - RIGHT_BOTTOM:
-      - lowerCase: n
-      - lowerCase: m
-      - lowerCase: f
-      - lowerCase: "!"
-        upperCase: "!!!"
-    RIGHT_TOP:
-      - lowerCase: a
-      - lowerCase: r
-      - lowerCase: x
-      - lowerCase: "?"
-        upperCase: "*"
-    TOP_RIGHT:
-      - lowerCase: y
-      - lowerCase: b
-      - lowerCase: p
-      - lowerCase: q
-    TOP_LEFT:
-      - lowerCase: s
-      - lowerCase: d
-      - lowerCase: g
-      - lowerCase: "'"
-        upperCase: '"'
-    LEFT_TOP:
-      - lowerCase: t
-      - lowerCase: c
-      - lowerCase: z
-      - lowerCase: .
-        upperCase: "-"
-    LEFT_BOTTOM:
-      - lowerCase: i
-      - lowerCase: h
-      - lowerCase: j
-      - lowerCase: ","
-        upperCase: _
-    BOTTOM_LEFT:
-      - lowerCase: e
-      - lowerCase: l
-      - lowerCase: k
-      - lowerCase: "@"
-        upperCase: "@gmail.com"
-    BOTTOM_RIGHT:
-      - lowerCase: o
-      - lowerCase: u
-      - lowerCase: v
-      - lowerCase: w
+layers:
+  default:
+    sectors:
+      right:
+        parts:
+          top:
+            - lowerCase: a
+            - lowerCase: ь
+            - lowerCase: x
+            - lowerCase: "?"
+              upperCase: "*"
+          bottom:
+            - lowerCase: н
+            - lowerCase: м
+            - lowerCase: ж
+            - lowerCase: "!"
+              upperCase: "!!!"
+      top:
+        parts:
+          right:
+            - lowerCase: и
+            - lowerCase: с
+            - lowerCase: б
+            - lowerCase: ц
+          left:
+            - lowerCase: p
+            - lowerCase: д
+            - lowerCase: г
+            - lowerCase: ґ
+      left:
+        parts:
+          top:
+            - lowerCase: т
+            - lowerCase: к
+            - lowerCase: з
+            - lowerCase: .
+              upperCase: "-"
+          bottom:
+            - lowerCase: i
+            - lowerCase: п
+            - lowerCase: ч
+            - lowerCase: ","
+              upperCase: _
+      bottom:
+        parts:
+          left:
+            - lowerCase: в
+            - lowerCase: л
+            - lowerCase: e
+            - lowerCase: "@"
+              upperCase: "@gmail.com"
+          right:
+            - lowerCase: o
+            - lowerCase: y
+            - lowerCase: л
+            - lowerCase: ф
+  extraLayers:
+    first:
+      sectors:
+        right:
+          parts:
+            top:
+              - lowerCase: я
+        top:
+          parts:
+            right:
+              - lowerCase: й
+        left:
+          parts:
+            bottom:
+              - lowerCase: ї
+        bottom:
+          parts:
+            left:
+              - null
+              - null
+              - lowerCase: є
+            right:
+              - null
+              - lowerCase: ю
+    second:
+      sectors:
+        right:
+          parts:
+            bottom:
+              - lowerCase: n
+              - lowerCase: m
+              - lowerCase: f
+              - lowerCase: "!"
+                upperCase: "!!!"
+            top:
+              - lowerCase: a
+              - lowerCase: r
+              - lowerCase: x
+              - lowerCase: "?"
+                upperCase: "*"
+        top:
+          parts:
+            right:
+              - lowerCase: y
+              - lowerCase: b
+              - lowerCase: p
+              - lowerCase: q
+            left:
+              - lowerCase: s
+              - lowerCase: d
+              - lowerCase: g
+              - lowerCase: "'"
+                upperCase: '"'
+        left:
+          parts:
+            top:
+              - lowerCase: t
+              - lowerCase: c
+              - lowerCase: z
+              - lowerCase: .
+                upperCase: "-"
+            bottom:
+              - lowerCase: i
+              - lowerCase: h
+              - lowerCase: j
+              - lowerCase: ","
+                upperCase: _
+        bottom:
+          parts:
+            left:
+              - lowerCase: e
+              - lowerCase: l
+              - lowerCase: k
+              - lowerCase: "@"
+                upperCase: "@gmail.com"
+            right:
+              - lowerCase: o
+              - lowerCase: u
+              - lowerCase: v
+              - lowerCase: w

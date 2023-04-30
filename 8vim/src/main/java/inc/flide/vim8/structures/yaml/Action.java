@@ -5,7 +5,7 @@ import java.util.List;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardActionType;
 
-public class KeyboardAction {
+public class Action {
     private KeyboardActionType actionType;
     private String lowerCase;
     private String upperCase;
@@ -13,7 +13,7 @@ public class KeyboardAction {
     private String keyCode;
     private int flags;
 
-    public KeyboardAction() {
+    public Action() {
         flags = 0;
         actionType = KeyboardActionType.INPUT_TEXT;
     }
