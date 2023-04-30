@@ -32,8 +32,7 @@ public class Layout {
         return defaultLayer;
     }
 
-    public void setDefaultLayer(
-        Layer defaultLayer) {
+    public void setDefaultLayer(Layer defaultLayer) {
         this.defaultLayer = defaultLayer;
     }
 
@@ -41,8 +40,7 @@ public class Layout {
         return extraLayers;
     }
 
-    public void setExtraLayers(
-        Map<ExtraLayer, Layer> extraLayers) {
+    public void setExtraLayers(Map<ExtraLayer, Layer> extraLayers) {
         this.extraLayers = extraLayers;
     }
 }

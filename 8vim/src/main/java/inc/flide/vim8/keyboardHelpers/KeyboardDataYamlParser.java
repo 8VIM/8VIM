@@ -1,6 +1,7 @@
 package inc.flide.vim8.keyboardHelpers;
 
-import android.view.KeyEvent;
+import android.content.Context;
+import android.net.Uri;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
@@ -15,7 +16,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
@@ -38,6 +38,16 @@ public class KeyboardDataYamlParser {
             .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
             .build();
         layout = mapper.readValue(inputStream, Layout.class);
+    }
+
+    public static boolean isValidFile(Context context, Uri uri) {
+        try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
+            KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
+            parser.readKeyboardData();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public KeyboardData readKeyboardData() {
@@ -96,9 +106,8 @@ public class KeyboardDataYamlParser {
                 continue;
             }
 
-            int keyCode = getKeyCode(action.getKeyCode());
             KeyboardAction actionMap =
-                new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(), keyCode, action.getFlags(),
+                new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(), action.getKeyCode(), action.getFlags(),
                     Constants.HIDDEN_LAYER);
             keyboardData.addActionMap(movementSequence, actionMap);
         }
@@ -141,32 +150,12 @@ public class KeyboardDataYamlParser {
                 upperCaseCharacters.setCharAt(characterSetIndex, action.getUpperCase().charAt(0));
             }
 
-            int keyCode = getKeyCode(action.getKeyCode());
-
             KeyboardAction actionMap =
-                new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(), keyCode, action.getFlags(), layer);
+                new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(), action.getKeyCode(), action.getFlags(),
+                    layer);
 
             keyboardData.addActionMap(movementSequence, actionMap);
         }
-    }
-
-    private int getKeyCode(String keyCodeString) {
-        int keyCode = 0;
-        if (keyCodeString.isEmpty()) {
-            return keyCode;
-        }
-        keyCodeString = keyCodeString.toUpperCase();
-        //Strictly the inputKey has to has to be a Keycode from the KeyEvent class
-        //Or it needs to be one of the customKeyCodes
-        keyCode = KeyEvent.keyCodeFromString(keyCodeString);
-        if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
-            try {
-                keyCode = CustomKeycode.valueOf(keyCodeString).getKeyCode();
-            } catch (IllegalArgumentException error) {
-            }
-        }
-
-        return keyCode;
     }
 
     private int getCharacterSetIndex(Quadrant quadrant, int position) {

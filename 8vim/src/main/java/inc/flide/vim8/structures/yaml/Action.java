@@ -1,10 +1,14 @@
 package inc.flide.vim8.structures.yaml;
 
+import android.view.KeyEvent;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardActionType;
 
@@ -14,7 +18,7 @@ public class Action {
     private String lowerCase;
     private String upperCase;
     private List<FingerPosition> movementSequence;
-    private String keyCode;
+    private int keyCode;
 
     private int flags;
 
@@ -24,7 +28,7 @@ public class Action {
         lowerCase = "";
         upperCase = "";
         movementSequence = new ArrayList<>();
-        keyCode = "";
+        keyCode = 0;
     }
 
     public KeyboardActionType getActionType() {
@@ -59,12 +63,25 @@ public class Action {
         this.movementSequence = movementSequence;
     }
 
-    public String getKeyCode() {
+    public int getKeyCode() {
         return keyCode;
     }
 
-    public void setKeyCode(String keyCode) {
-        this.keyCode = keyCode;
+    @JsonSetter("key_code")
+    public void setKeyCode(String keyCodeString) {
+        if (keyCodeString == null || keyCodeString.isEmpty()) {
+            return;
+        }
+        keyCodeString = keyCodeString.toUpperCase();
+        //Strictly the inputKey has to has to be a Keycode from the KeyEvent class
+        //Or it needs to be one of the customKeyCodes
+        keyCode = KeyEvent.keyCodeFromString(keyCodeString);
+        if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
+            try {
+                keyCode = CustomKeycode.valueOf(keyCodeString).getKeyCode();
+            } catch (IllegalArgumentException error) {
+            }
+        }
     }
 
     public int getFlags() {
@@ -79,7 +96,6 @@ public class Action {
         return (lowerCase == null || lowerCase.isEmpty())
             && (upperCase == null || upperCase.isEmpty())
             && movementSequence.isEmpty()
-            && keyCode.isEmpty()
             && flags == 0;
     }
 }
