@@ -1,14 +1,8 @@
 package inc.flide.vim8.structures;
 
 public class CharacterSet {
-
-    private String lowerCaseCharacters;
-    private String upperCaseCharacters;
-
-    public CharacterSet() {
-        lowerCaseCharacters = "";
-        upperCaseCharacters = "";
-    }
+    private String lowerCaseCharacters = "";
+    private String upperCaseCharacters = "";
 
     public String getLowerCaseCharacters() {
         return lowerCaseCharacters;

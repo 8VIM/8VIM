@@ -5,8 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-public class Part {
+import inc.flide.vim8.structures.Direction;
 
+public class Part {
     @JsonProperty(required = true)
     private Map<Direction, List<Action>> parts;
 

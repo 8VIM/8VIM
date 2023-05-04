@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
+import inc.flide.vim8.structures.Direction;
+
 public class Layer {
 
     @JsonProperty(required = true)

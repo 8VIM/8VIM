@@ -14,6 +14,8 @@ import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -30,7 +32,7 @@ import inc.flide.vim8.R;
 import inc.flide.vim8.structures.Constants;
 
 public class SettingsActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+    implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean isKeyboardEnabled;
 
@@ -49,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -57,13 +59,12 @@ public class SettingsActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.settings_fragment, new SettingsFragment())
-                .commit();
+            .replace(R.id.settings_fragment, new SettingsFragment())
+            .commit();
     }
 
     @Override
     public void onBackPressed() {
-
         if (pressBackTwice) {
             finishAndRemoveTask();
         } else {
@@ -74,10 +75,8 @@ public class SettingsActivity extends AppCompatActivity
     }
 
 
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
         if (item.getItemId() == R.id.share) {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
@@ -112,7 +111,6 @@ public class SettingsActivity extends AppCompatActivity
         super.onStart();
 
         if (!isActivityRestarting) {
-
             // Ask user to activate the IME while he is using the settings application
             if (!Constants.SELF_KEYBOARD_ID.equals(Settings.Secure.getString(getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD))) {
                 activateInputMethodDialog();
@@ -142,19 +140,23 @@ public class SettingsActivity extends AppCompatActivity
 
     private void enableInputMethodDialog() {
         final MaterialDialog enableInputMethodNotificationDialog = new MaterialDialog.Builder(this)
-                .title(R.string.enable_ime_dialog_title)
-                .content(R.string.enable_ime_dialog_content)
-                .neutralText(R.string.enable_ime_dialog_neutral_button_text)
-                .cancelable(false)
-                .canceledOnTouchOutside(false)
-                .build();
+            .title(R.string.enable_ime_dialog_title)
+            .content(R.string.enable_ime_dialog_content)
+            .neutralText(R.string.enable_ime_dialog_neutral_button_text)
+            .cancelable(false)
+            .canceledOnTouchOutside(false)
+            .build();
+
+        ActivityResultLauncher<Intent> launchInputMethodSettings =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            });
 
         enableInputMethodNotificationDialog.getBuilder()
-                .onNeutral((dialog, which) -> {
-                    showToast();
-                    startActivityForResult(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS), 0);
-                    enableInputMethodNotificationDialog.dismiss();
-                });
+            .onNeutral((dialog, which) -> {
+                showToast();
+                launchInputMethodSettings.launch(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
+                enableInputMethodNotificationDialog.dismiss();
+            });
 
         enableInputMethodNotificationDialog.show();
     }
@@ -162,7 +164,7 @@ public class SettingsActivity extends AppCompatActivity
     public void showToast() {
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_toast,
-                findViewById(R.id.toast_layout));
+            findViewById(R.id.toast_layout));
 
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
@@ -174,20 +176,20 @@ public class SettingsActivity extends AppCompatActivity
 
     private void activateInputMethodDialog() {
         final MaterialDialog activateInputMethodNotificationDialog = new MaterialDialog.Builder(this)
-                .title(R.string.activate_ime_dialog_title)
-                .content(R.string.activate_ime_dialog_content)
-                .positiveText(R.string.activate_ime_dialog_positive_button_text)
-                .negativeText(R.string.activate_ime_dialog_negative_button_text)
-                .cancelable(false)
-                .canceledOnTouchOutside(false)
-                .build();
+            .title(R.string.activate_ime_dialog_title)
+            .content(R.string.activate_ime_dialog_content)
+            .positiveText(R.string.activate_ime_dialog_positive_button_text)
+            .negativeText(R.string.activate_ime_dialog_negative_button_text)
+            .cancelable(false)
+            .canceledOnTouchOutside(false)
+            .build();
 
         activateInputMethodNotificationDialog.getBuilder()
-                .onPositive((dialog, which) -> {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.showInputMethodPicker();
-                    activateInputMethodNotificationDialog.dismiss();
-                });
+            .onPositive((dialog, which) -> {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showInputMethodPicker();
+                activateInputMethodNotificationDialog.dismiss();
+            });
 
         activateInputMethodNotificationDialog.show();
     }

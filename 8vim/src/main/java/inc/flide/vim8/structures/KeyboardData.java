@@ -5,13 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 public class KeyboardData {
-    private Map<List<FingerPosition>, KeyboardAction> actionMap;
-    private final CharacterSet[] characterSets;
-
-    public KeyboardData() {
-        actionMap = new HashMap<>();
-        characterSets = new CharacterSet[Constants.MAX_LAYERS + 1];
-    }
+    private final Map<List<FingerPosition>, KeyboardAction> actionMap = new HashMap<>();
+    private final CharacterSet[] characterSets = new CharacterSet[Constants.MAX_LAYERS + 1];
+    private int totalLayers = 0;
 
     public Map<List<FingerPosition>, KeyboardAction> getActionMap() {
         return actionMap;
@@ -25,8 +21,12 @@ public class KeyboardData {
         this.actionMap.putAll(actionMapAddition);
     }
 
+    public int getTotalLayer() {
+        return totalLayers;
+    }
+
     public String getLowerCaseCharacters(int layer) {
-        if (layer > characterSets.length || characterSets[layer] == null) {
+        if (layer > totalLayers || characterSets[layer] == null) {
             return "";
         }
         return characterSets[layer].getLowerCaseCharacters();
@@ -39,7 +39,7 @@ public class KeyboardData {
     }
 
     public String getUpperCaseCharacters(int layer) {
-        if (layer > characterSets.length || characterSets[layer] == null) {
+        if (layer > totalLayers || characterSets[layer] == null) {
             return "";
         }
         return characterSets[layer].getUpperCaseCharacters();
@@ -61,6 +61,7 @@ public class KeyboardData {
 
 
     private void updateCharacterSets(int layer) {
+        totalLayers = Math.max(totalLayers, layer);
         if (characterSets[layer] == null) {
             characterSets[layer] = new CharacterSet();
         }

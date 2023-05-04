@@ -17,8 +17,7 @@ public class KeypadActionListener {
 
     protected MainInputMethodService mainInputMethodService;
     protected View view;
-    private boolean isSelectionOn = true;
-    private AudioManager audioManager;
+    private final AudioManager audioManager;
 
     public KeypadActionListener(MainInputMethodService mainInputMethodService, View view) {
         this.mainInputMethodService = mainInputMethodService;
@@ -35,10 +34,6 @@ public class KeypadActionListener {
         }
     }
 
-    private boolean customKeyCodeIsValid(int keyCode) {
-        return keyCode <= KeyEvent.KEYCODE_UNKNOWN;
-    }
-
     public void handleInputKey(KeyboardAction keyboardAction) {
         handleInputKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
     }
@@ -47,7 +42,7 @@ public class KeypadActionListener {
 
         boolean actionHandled = handleKeyEventKeyCodes(keyCode, keyFlags);
         if (!actionHandled) {
-            actionHandled = handleCustomKeyCodes(keyCode, keyFlags);
+            actionHandled = handleCustomKeyCodes(keyCode);
         }
         if (!actionHandled) {
             onText(String.valueOf((char) keyCode));
@@ -89,7 +84,7 @@ public class KeypadActionListener {
         }
     }
 
-    private boolean handleCustomKeyCodes(int customKeyEventCode, int keyFlags) {
+    private boolean handleCustomKeyCodes(int customKeyEventCode) {
         switch (CustomKeycode.fromIntValue(customKeyEventCode)) {
             case MOVE_CURRENT_END_POINT_LEFT:
                 moveSelection(KeyEvent.KEYCODE_DPAD_LEFT);
@@ -186,13 +181,9 @@ public class KeypadActionListener {
     }
 
     private void moveSelection(int dpadKeyCode) {
-        if (isSelectionOn) {
-            mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-        }
+        mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
         mainInputMethodService.sendDownAndUpKeyEvent(dpadKeyCode, 0);
-        if (isSelectionOn) {
-            mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-        }
+        mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
     }
 
     public boolean areCharactersCapitalized() {

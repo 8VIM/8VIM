@@ -1,6 +1,7 @@
 package inc.flide.vim8.keyboardHelpers;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -21,7 +22,7 @@ import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.Quadrant;
 import inc.flide.vim8.structures.yaml.Action;
-import inc.flide.vim8.structures.yaml.Direction;
+import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.yaml.ExtraLayer;
 import inc.flide.vim8.structures.yaml.Layer;
 import inc.flide.vim8.structures.yaml.Layout;
@@ -40,13 +41,23 @@ public class KeyboardDataYamlParser {
         layout = mapper.readValue(inputStream, Layout.class);
     }
 
-    public static boolean isValidFile(Context context, Uri uri) {
+    public static int isValidFile(Context context, Uri uri) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
             KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
-            parser.readKeyboardData();
-            return true;
+            KeyboardData keyboardData = parser.readKeyboardData();
+            return keyboardData.getTotalLayer();
         } catch (Exception e) {
-            return false;
+            return 0;
+        }
+    }
+
+    public static int isValidFile(Resources resources, int resourceId) {
+        try (InputStream inputStream = resources.openRawResource(resourceId)) {
+            KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
+            KeyboardData keyboardData = parser.readKeyboardData();
+            return keyboardData.getTotalLayer();
+        } catch (Exception e) {
+            return 0;
         }
     }
 

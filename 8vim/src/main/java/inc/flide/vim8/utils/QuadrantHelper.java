@@ -6,7 +6,7 @@ import java.util.List;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.Quadrant;
-import inc.flide.vim8.structures.yaml.Direction;
+import inc.flide.vim8.structures.Direction;
 
 public final class QuadrantHelper {
     private QuadrantHelper() {

@@ -1,9 +1,6 @@
 package inc.flide.vim8.structures;
 
-import java.util.Locale;
-
 public class KeyboardAction {
-
     private final KeyboardActionType keyboardActionType;
     private final String text;
     private String capsLockText;
@@ -16,7 +13,7 @@ public class KeyboardAction {
         this.text = text;
         this.keyEventCode = keyEventCode;
         this.layer = layer;
-        setCapsLockText(capsLockText);
+        this.capsLockText = capsLockText;
         this.keyFlags = keyFlags;
     }
 
@@ -42,14 +39,6 @@ public class KeyboardAction {
         }
 
         return capsLockText;
-    }
-
-    private void setCapsLockText(String capsLockText) {
-        if ((capsLockText == null || capsLockText.length() == 0) && this.text != null) {
-            this.capsLockText = this.text.toUpperCase(Locale.getDefault());
-        } else {
-            this.capsLockText = capsLockText;
-        }
     }
 
     public int getLayer() {

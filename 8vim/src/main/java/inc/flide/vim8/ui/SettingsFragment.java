@@ -6,6 +6,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -49,7 +51,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
             context.getContentResolver().takePersistableUriPermission(selectedCustomLayoutFile, takeFlags);
 
-            if (!KeyboardDataYamlParser.isValidFile(context, selectedCustomLayoutFile)) {
+            if (KeyboardDataYamlParser.isValidFile(context, selectedCustomLayoutFile) == 0) {
                 return;
             }
 
@@ -109,7 +111,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
     }
 
     @Override
-    public boolean onPreferenceChange(Preference preference, Object newValue) {
+    public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
         Toast.makeText(getContext(), "test" + newValue.toString(), Toast.LENGTH_LONG).show();
         if (preference instanceof SeekBarPreference) {
             Toast.makeText(getContext(), "test" + newValue.toString(), Toast.LENGTH_LONG).show();
@@ -143,7 +145,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
             .title(R.string.select_preferred_keyboard_layout_dialog_title)
             .items(inputMethodsNameAndId.keySet())
             .itemsCallbackSingleChoice(selectedKeyboardIndex, (dialog, itemView, which, text) -> {
-
                 if (which != -1) {
                     SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
                     sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout), keyboardIds.get(which));
@@ -159,9 +160,12 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     private Map<String, String> findAllAvailableLayouts() {
         Map<String, String> languagesAndLayouts = new TreeMap<>();
-        String[] fields = getResources().getStringArray(R.array.keyboard_layouts_id);
-        for (int count = 0; count < fields.length; count++) {
-            LayoutFileName file = new LayoutFileName(fields[count]);
+        Resources resources = getResources();
+        Context context = getContext().getApplicationContext();
+        String[] fields = resources.getStringArray(R.array.keyboard_layouts_id);
+
+        for (String field : fields) {
+            LayoutFileName file = new LayoutFileName(resources, context, field);
             if (file.isValidLayout()) {
                 languagesAndLayouts.put(file.getLayoutDisplayName(), file.getResourceName());
             }

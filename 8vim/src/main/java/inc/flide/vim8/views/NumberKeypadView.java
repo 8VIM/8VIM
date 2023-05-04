@@ -58,7 +58,6 @@ public class NumberKeypadView extends ButtonKeypadView {
             if (key.icon != null) {
                 // Has to be mutated, otherwise icon has linked alpha to same key
                 // on xpad view
-                // TODO: find more info
                 key.icon = key.icon.mutate();
                 key.icon.setTint(foregroundColor);
                 key.icon.setAlpha(255);

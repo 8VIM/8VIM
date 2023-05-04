@@ -3,6 +3,7 @@ package inc.flide.vim8.geometry;
 import android.graphics.PointF;
 
 import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.Direction;
 
 public class Circle {
     private PointF centre;
@@ -70,27 +71,32 @@ public class Circle {
 
     /**
      * Get the number of the sector that point p is in
-     *
-     * @return 0: right, 1: top, 2: left, 3: bottom
      */
     public FingerPosition getSectorOfPoint(PointF p) {
         double angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p);
         double angleToSectorValue = angleDouble / (Math.PI / 2);
         int quadrantCyclic = (int) Math.round(angleToSectorValue);
-        int baseQuadrant = GeometricUtilities.getBaseQuadrant(quadrantCyclic);
+        Direction baseQuadrant = GeometricUtilities.getBaseQuadrant(quadrantCyclic);
+        FingerPosition result = null;
+
+        if (baseQuadrant == null) {
+            return null;
+        }
 
         switch (baseQuadrant) {
-            case 0:
-                return FingerPosition.RIGHT;
-            case 1:
-                return FingerPosition.TOP;
-
-            case 2:
-                return FingerPosition.LEFT;
-
-            case 3:
-                return FingerPosition.BOTTOM;
+            case RIGHT:
+                result = FingerPosition.RIGHT;
+                break;
+            case TOP:
+                result = FingerPosition.TOP;
+                break;
+            case LEFT:
+                result = FingerPosition.LEFT;
+                break;
+            case BOTTOM:
+                result = FingerPosition.BOTTOM;
+                break;
         }
-        return null;
+        return result;
     }
 }

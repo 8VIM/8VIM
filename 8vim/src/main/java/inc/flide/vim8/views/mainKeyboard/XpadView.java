@@ -31,14 +31,18 @@ import inc.flide.vim8.structures.FingerPosition;
 public class XpadView extends View {
     private final Random rnd = new Random();
     private final Path typingTrailPath = new Path();
-    private Paint backgroundPaint = new Paint();
-    private Paint foregroundPaint = new Paint();
-    private Paint foregroundBoldPaint = new Paint();
-    private Paint typingTrailPaint = new Paint();
+    private final Paint backgroundPaint = new Paint();
+    private final Paint foregroundPaint = new Paint();
+    private final Paint foregroundBoldPaint = new Paint();
+    private final Paint typingTrailPaint = new Paint();
+    private final Paint letterBackgroundPaint = new Paint();
+    private final Paint letterBackgroundOutlinePaint = new Paint();
     private MainKeypadActionListener actionListener;
-    private PointF circleCenter;
-    private Circle circle;
+    private PointF circleCenter=new PointF();
+    private Circle circle= new Circle();
     private final Dimension keypadDimension = new Dimension();
+    private Typeface font;
+    private Typeface fontBold;
 
     private final Matrix xformMatrix = new Matrix();
     // There are 4 sectors, each has 4 letters above, and 4 below.
@@ -47,9 +51,7 @@ public class XpadView extends View {
     private final Path sectorLines = new Path();
     private final RectF sectorLineBounds = new RectF();
 
-    private int backgroundColor;
     private int foregroundColor;
-    private int trailColor;
     private final float[] trialPathPos = new float[2];
     private final PathMeasure pathMeasure = new PathMeasure();
 
@@ -74,7 +76,7 @@ public class XpadView extends View {
         Resources resources = getResources();
         SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
 
-        backgroundColor = sharedPreferenceHelper.getInt(
+        int backgroundColor = sharedPreferenceHelper.getInt(
             resources.getString(R.string.pref_board_bg_color_key),
             resources.getColor(R.color.defaultBoardBg));
 
@@ -86,7 +88,7 @@ public class XpadView extends View {
             resources.getString(R.string.pref_random_trail_color_key),
             false);
 
-        trailColor = sharedPreferenceHelper.getInt(
+        int trailColor = sharedPreferenceHelper.getInt(
             resources.getString(R.string.pref_trail_color_key),
             resources.getColor(R.color.defaultTrail));
 
@@ -101,15 +103,14 @@ public class XpadView extends View {
             this.computeComponentPositions(this.getWidth(), this.getHeight());
             this.invalidate();
         });
+        font = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Regular.otf");
+        fontBold = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Bold.otf");
+
         updateColors(context);
         setForegroundPaint();
 
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
-
-
-        circleCenter = new PointF();
-        circle = new Circle();
     }
 
     private void computeComponentPositions(int fullWidth, int fullHeight) {
@@ -196,8 +197,6 @@ public class XpadView extends View {
         computeComponentPositions(parentWidth, parentHeight);
     }
 
-    private Paint letterBackgroundPaint = new Paint();
-    private Paint letterBackgroundOutlinePaint = new Paint();
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -295,11 +294,6 @@ public class XpadView extends View {
     }
 
     private void setForegroundPaint() {
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
-            "SF-UI-Display-Regular.otf");
-        Typeface fontBold = Typeface.createFromAsset(getContext().getAssets(),
-            "SF-UI-Display-Bold.otf");
-
         foregroundPaint.setAntiAlias(true);
         foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
         foregroundPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
@@ -392,8 +386,7 @@ public class XpadView extends View {
     }
 
     private int getRandomColor() {
-        int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-        return color;
+        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
     }
 
     private String getCharacterSetToDisplay() {
