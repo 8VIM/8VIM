@@ -7,6 +7,7 @@ public final class Constants {
     public static final int HIDDEN_LAYER = 0;
     public static final int DEFAULT_LAYER = 1;
     public static final int MAX_LAYERS = 6;
+    public static final int NUMBER_OF_SECTORS = 4;
     public static final int CHARACTER_SET_SIZE = 4 * 4 * 2; // 4 sectors, 2 parts, 4 characters per parts
     private Constants() {
     }

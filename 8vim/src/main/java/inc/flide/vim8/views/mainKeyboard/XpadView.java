@@ -26,9 +26,13 @@ import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 
 public class XpadView extends View {
+    private static final short TRAIL_STEPS = 150;
+    private static final byte TRAIL_STEP_DISTANCE = 5;
+    private static final byte TRAIL_MAX_RADIUS = 14;
     private final Random rnd = new Random();
     private final Path typingTrailPath = new Path();
     private final Paint backgroundPaint = new Paint();
@@ -56,6 +60,9 @@ public class XpadView extends View {
     private final PathMeasure pathMeasure = new PathMeasure();
 
     private boolean userPreferRandomTrailColor = false;
+    private float circleRadiusFactor;
+    private int circleOffsetFactor;
+    private int iconAlpha;
 
     public XpadView(Context context) {
         super(context);
@@ -70,6 +77,26 @@ public class XpadView extends View {
     public XpadView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context);
+    }
+
+    private void initialize(Context context) {
+        SharedPreferenceHelper.getInstance(context).addListener(() -> {
+            this.updateColors(context);
+            this.computeComponentPositions(this.getWidth(), this.getHeight());
+            this.invalidate();
+        });
+        font = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Regular.otf");
+        fontBold = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Bold.otf");
+
+        circleRadiusFactor = (float) R.dimen.xpad_circle_radius_factor;
+        circleOffsetFactor = R.integer.xpad_circle_offset_factor;
+        iconAlpha = R.integer.xpad_icon_alpha;
+
+        updateColors(context);
+        setForegroundPaint();
+
+        actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
+        setHapticFeedbackEnabled(true);
     }
 
     private void updateColors(Context context) {
@@ -97,31 +124,14 @@ public class XpadView extends View {
         typingTrailPaint.setColor(trailColor);
     }
 
-    private void initialize(Context context) {
-        SharedPreferenceHelper.getInstance(context).addListener(() -> {
-            this.updateColors(context);
-            this.computeComponentPositions(this.getWidth(), this.getHeight());
-            this.invalidate();
-        });
-        font = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Regular.otf");
-        fontBold = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Bold.otf");
-
-        updateColors(context);
-        setForegroundPaint();
-
-        actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
-        setHapticFeedbackEnabled(true);
-    }
-
     private void computeComponentPositions(int fullWidth, int fullHeight) {
         Context context = getContext();
         SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(context);
         float spRadiusValue = pref.getInt(context.getString(R.string.pref_circle_scale_factor), 3);
-        // TODO: Store constant in .xml file (but where?)
-        float radius = (spRadiusValue / 40.f * keypadDimension.getWidth()) / 2;
+        float radius = (spRadiusValue / circleRadiusFactor * keypadDimension.getWidth()) / 2;
 
-        int xOffset = (pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0)) * 26;
-        int yOffset = (pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0)) * 26;
+        int xOffset = (pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0)) * circleOffsetFactor;
+        int yOffset = (pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0)) * circleOffsetFactor;
         circleCenter.x = (keypadDimension.getWidth() / 2f) + xOffset;
         circleCenter.y = (keypadDimension.getHeight() / 2f) + yOffset;
 
@@ -156,12 +166,12 @@ public class XpadView extends View {
         // Compute the first set of points going straight to the "east" (aka, rightwards).
         // Then apply repeated rotation (45, then 90 x4) to get the final positions.
         float eastEdge = circleCenter.x + circle.getRadius() + characterHeight / 2;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < Constants.NUMBER_OF_SECTORS; i++) {
             float dx = i * lengthOfLineDemarcatingSectors / 4f;
-            letterPositions[4 * i] = eastEdge + dx;
-            letterPositions[4 * i + 1] = circleCenter.y - characterHeight / 2; // upper letter
-            letterPositions[4 * i + 2] = eastEdge + dx;
-            letterPositions[4 * i + 3] = circleCenter.y + characterHeight / 2; // lower letter
+            letterPositions[Constants.NUMBER_OF_SECTORS * i] = eastEdge + dx;
+            letterPositions[Constants.NUMBER_OF_SECTORS * i + 1] = circleCenter.y - characterHeight / 2; // upper letter
+            letterPositions[Constants.NUMBER_OF_SECTORS * i + 2] = eastEdge + dx;
+            letterPositions[Constants.NUMBER_OF_SECTORS * i + 3] = circleCenter.y + characterHeight / 2; // lower letter
         }
 
         xformMatrix.reset();
@@ -171,7 +181,7 @@ public class XpadView extends View {
 
         xformMatrix.reset();
         xformMatrix.postRotate(90, circleCenter.x, circleCenter.y);
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < Constants.NUMBER_OF_SECTORS; i++) {
             xformMatrix.mapPoints(letterPositions, 4 * 4 * i, letterPositions, 4 * 4 * (i - 1), 8);
         }
 
@@ -274,17 +284,16 @@ public class XpadView extends View {
                     paint = foregroundBoldPaint;
 
                     // Draw a box around the current letter.
-                    float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
-                    float characterWidth = characterHeight;
+                    float characterHeightWidth = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
                     canvas.drawRoundRect(
-                        letterPositions[i * 2] - (characterWidth / 2), letterPositions[i * 2 + 1] - characterHeight,
-                        letterPositions[i * 2] + (characterWidth / 2), letterPositions[i * 2 + 1] + (characterHeight / 2),
+                        letterPositions[i * 2] - (characterHeightWidth / 2), letterPositions[i * 2 + 1] - characterHeightWidth,
+                        letterPositions[i * 2] + (characterHeightWidth / 2), letterPositions[i * 2 + 1] + (characterHeightWidth / 2),
                         roundness, roundness, letterBackgroundPaint
                     );
 
                     canvas.drawRoundRect(
-                        letterPositions[i * 2] - (characterWidth / 2), letterPositions[i * 2 + 1] - characterHeight,
-                        letterPositions[i * 2] + (characterWidth / 2), letterPositions[i * 2 + 1] + (characterHeight / 2),
+                        letterPositions[i * 2] - (characterHeightWidth / 2), letterPositions[i * 2 + 1] - characterHeightWidth,
+                        letterPositions[i * 2] + (characterHeightWidth / 2), letterPositions[i * 2 + 1] + (characterHeightWidth / 2),
                         roundness, roundness, letterBackgroundOutlinePaint
                     );
                 }
@@ -321,7 +330,6 @@ public class XpadView extends View {
 
         //for Backspace icon (right side)
         iconCenterX = (int) Math.min(sectorLineBounds.right, canvas.getWidth());
-        iconCenterY = centreYValue;
         drawIconInSector(iconCenterX - iconHalfWidth,
             iconCenterY - iconHalfHeight,
             canvas,
@@ -336,7 +344,6 @@ public class XpadView extends View {
             R.drawable.ic_keyboard_return);
 
         //for caps lock and shift icon
-        iconCenterX = centreXValue;
         iconCenterY = (int) Math.max(sectorLineBounds.top, 0);
         int shiftIconToDisplay = R.drawable.ic_no_capslock;
         if (actionListener.isShiftSet()) {
@@ -356,27 +363,27 @@ public class XpadView extends View {
 
         VectorDrawableCompat iconVectorDrawable = VectorDrawableCompat
             .create(getContext().getResources(), resourceId, null);
+        if (iconVectorDrawable == null) {
+            return;
+        }
+
         iconVectorDrawable.setBounds(coordinateX,
             coordinateY,
             coordinateX + iconSize,
             coordinateY + iconSize);
         iconVectorDrawable.setTint(foregroundColor);
-        // TODO: define in .xml (don't know in which file)
-        iconVectorDrawable.setAlpha(85);
+        iconVectorDrawable.setAlpha(iconAlpha);
         iconVectorDrawable.draw(canvas);
     }
 
     private void paintTypingTrail(Canvas canvas) {
-        final short steps = 150;
-        final byte stepDistance = 5;
-        final byte maxTrailRadius = 14;
         pathMeasure.setPath(typingTrailPath, false);
         final float pathLength = pathMeasure.getLength();
 
-        for (short i = 1; i <= steps; i++) {
-            final float distance = pathLength - i * stepDistance;
+        for (short i = 1; i <= TRAIL_STEPS; i++) {
+            final float distance = pathLength - i * TRAIL_STEP_DISTANCE;
             if (distance >= 0) {
-                final float trailRadius = maxTrailRadius * (1 - (float) i / steps);
+                final float trailRadius = TRAIL_MAX_RADIUS * (1 - (float) i / TRAIL_STEPS);
                 pathMeasure.getPosTan(distance, trialPathPos, null);
                 final float x = trialPathPos[0];
                 final float y = trialPathPos[1];

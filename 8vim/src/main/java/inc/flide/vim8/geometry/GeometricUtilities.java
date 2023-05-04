@@ -15,10 +15,10 @@ public final class GeometricUtilities {
         return Math.abs(xSquare + ySquare);
     }
 
-    public static Direction getBaseQuadrant(int continiousQuadrantValue) {
+    public static Direction getBaseQuadrant(int continuousQuadrantValue) {
         int result;
         // Calculate result with modulus operator
-        result = continiousQuadrantValue % 4;
+        result = continuousQuadrantValue % 4;
         // Fix zero truncation
         if (result < 0) {
             result += 4;
@@ -29,14 +29,5 @@ public final class GeometricUtilities {
             return null;
         }
     }
-
-    public static PointF findPointSpecifiedDistanceAwayInGivenDirection(PointF startingPoint, double directionalAngleInDegree, double length) {
-        double directionalAngleInRadians = Math.toRadians(directionalAngleInDegree);
-        int x = (int) (startingPoint.x + (length * Math.cos(directionalAngleInRadians)));
-        int y = (int) (startingPoint.y + (length * Math.sin(directionalAngleInRadians)));
-        PointF endPoint = new PointF(x, y);
-        return endPoint;
-    }
-
 }
 

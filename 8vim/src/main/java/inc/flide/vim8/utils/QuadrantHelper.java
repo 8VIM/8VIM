@@ -6,14 +6,14 @@ import java.util.List;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.PartPosition;
+import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Quadrant;
 
 public final class QuadrantHelper {
     private QuadrantHelper() {
     }
 
-    public static List<FingerPosition> computeMovementSequence(int layer, Quadrant quadrant, PartPosition position) {
+    public static List<FingerPosition> computeMovementSequence(int layer, Quadrant quadrant, CharacterPosition position) {
         List<FingerPosition> movementSequence = new ArrayList<>();
 
         if (layer == Constants.HIDDEN_LAYER) {
@@ -47,7 +47,7 @@ public final class QuadrantHelper {
         return movementSequence;
     }
 
-    private static Quadrant getOppositeQuadrant(Quadrant quadrant, PartPosition position) {
+    private static Quadrant getOppositeQuadrant(Quadrant quadrant, CharacterPosition position) {
         Direction[] quadrantParts = getDirectionsFromQuadrant(quadrant);
         if (quadrantParts == null) {
             return null;
@@ -55,11 +55,11 @@ public final class QuadrantHelper {
         Direction sector = quadrantParts[0];
         Direction part = quadrantParts[1];
 
-        if (position == PartPosition.FIRST) {
+        if (position == CharacterPosition.FIRST) {
             return getQuadrant(sector, Direction.getOpposite(part));
-        } else if (position == PartPosition.SECOND) {
+        } else if (position == CharacterPosition.SECOND) {
             return getQuadrant(part, sector);
-        } else if (position == PartPosition.THIRD) {
+        } else if (position == CharacterPosition.THIRD) {
             return getQuadrant(Direction.getOpposite(sector), part);
         } else {
             return getQuadrant(Direction.getOpposite(part), Direction.getOpposite(sector));

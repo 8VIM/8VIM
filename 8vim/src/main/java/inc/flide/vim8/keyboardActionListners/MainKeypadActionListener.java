@@ -43,9 +43,9 @@ public class MainKeypadActionListener extends KeypadActionListener {
     private final Runnable longPressRunnable = new Runnable() {
         @Override
         public void run() {
-            List<FingerPosition> movementSequenceAgumented = new ArrayList<>(movementSequence);
-            movementSequenceAgumented.add(FingerPosition.LONG_PRESS);
-            processMovementSequence(movementSequenceAgumented);
+            List<FingerPosition> movementSequenceAugmented = new ArrayList<>(movementSequence);
+            movementSequenceAugmented.add(FingerPosition.LONG_PRESS);
+            processMovementSequence(movementSequenceAugmented);
             longPressHandler.postDelayed(this, Constants.DELAY_MILLIS_LONG_PRESS_CONTINUATION);
         }
     };

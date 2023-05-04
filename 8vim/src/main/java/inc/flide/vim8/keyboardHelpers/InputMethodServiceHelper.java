@@ -1,5 +1,6 @@
 package inc.flide.vim8.keyboardHelpers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -85,6 +86,7 @@ public final class InputMethodServiceHelper {
         return layoutIndependentKeyboardData;
     }
 
+    @SuppressLint("DiscouragedApi")
     private static int loadTheSelectedLanguageLayout(Resources resources, Context context) {
         String currentLanguageLayout = SharedPreferenceHelper
             .getInstance(context)

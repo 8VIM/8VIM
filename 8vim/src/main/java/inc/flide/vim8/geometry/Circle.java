@@ -2,8 +2,8 @@ package inc.flide.vim8.geometry;
 
 import android.graphics.PointF;
 
-import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.Direction;
+import inc.flide.vim8.structures.FingerPosition;
 
 public class Circle {
     private PointF centre;
@@ -12,11 +12,6 @@ public class Circle {
     public Circle() {
         this.centre = new PointF(0f, 0f);
         this.radius = 0f;
-    }
-
-    public Circle(PointF centre, float radius) {
-        this.centre = centre;
-        this.radius = radius;
     }
 
     public PointF getCentre() {

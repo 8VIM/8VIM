@@ -1,5 +1,5 @@
 package inc.flide.vim8.structures;
 
-public enum PartPosition {
+public enum CharacterPosition {
     FIRST, SECOND, THIRD, FORTH
 }
