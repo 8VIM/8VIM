@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.Quadrant;
 import inc.flide.vim8.structures.Direction;
+import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.PartPosition;
+import inc.flide.vim8.structures.Quadrant;
 
 public final class QuadrantHelper {
     private QuadrantHelper() {
-
     }
 
-    public static List<FingerPosition> computeMovementSequence(int layer, Quadrant quadrant, int position) {
+    public static List<FingerPosition> computeMovementSequence(int layer, Quadrant quadrant, PartPosition position) {
         List<FingerPosition> movementSequence = new ArrayList<>();
 
         if (layer == Constants.HIDDEN_LAYER) {
@@ -22,7 +22,7 @@ public final class QuadrantHelper {
 
         movementSequence.add(FingerPosition.INSIDE_CIRCLE);
 
-        for (int i = 0; i <= position + 1; i++) {
+        for (int i = 0; i <= position.ordinal() + 1; i++) {
             FingerPosition lastPosition = movementSequence.get(movementSequence.size() - 1);
             FingerPosition nextPosition = getNextPosition(quadrant, lastPosition);
             movementSequence.add(nextPosition);
@@ -47,273 +47,60 @@ public final class QuadrantHelper {
         return movementSequence;
     }
 
-    private static Quadrant getOppositeQuadrant(Quadrant quadrant, int position) {
-        Quadrant oppositeQuadrant = quadrant;
-        switch (position) {
-            case 0:
-                switch (quadrant) {
-                    case RIGHT_BOTTOM:
-                        oppositeQuadrant = Quadrant.RIGHT_TOP;
-                        break;
-                    case BOTTOM_RIGHT:
-                        oppositeQuadrant = Quadrant.BOTTOM_LEFT;
-                        break;
-                    case BOTTOM_LEFT:
-                        oppositeQuadrant = Quadrant.BOTTOM_RIGHT;
-                        break;
-                    case LEFT_BOTTOM:
-                        oppositeQuadrant = Quadrant.LEFT_TOP;
-                        break;
-                    case LEFT_TOP:
-                        oppositeQuadrant = Quadrant.LEFT_BOTTOM;
-                        break;
-                    case TOP_LEFT:
-                        oppositeQuadrant = Quadrant.TOP_RIGHT;
-                        break;
-                    case TOP_RIGHT:
-                        oppositeQuadrant = Quadrant.TOP_LEFT;
-                        break;
-                    case RIGHT_TOP:
-                        oppositeQuadrant = Quadrant.RIGHT_BOTTOM;
-                        break;
-                }
-                break;
-            case 1:
-                switch (quadrant) {
-                    case RIGHT_BOTTOM:
-                        oppositeQuadrant = Quadrant.BOTTOM_RIGHT;
-                        break;
-                    case BOTTOM_RIGHT:
-                        oppositeQuadrant = Quadrant.RIGHT_BOTTOM;
-                        break;
-                    case BOTTOM_LEFT:
-                        oppositeQuadrant = Quadrant.LEFT_BOTTOM;
-                        break;
-                    case LEFT_BOTTOM:
-                        oppositeQuadrant = Quadrant.BOTTOM_LEFT;
-                        break;
-                    case LEFT_TOP:
-                        oppositeQuadrant = Quadrant.TOP_LEFT;
-                        break;
-                    case TOP_LEFT:
-                        oppositeQuadrant = Quadrant.LEFT_TOP;
-                        break;
-                    case TOP_RIGHT:
-                        oppositeQuadrant = Quadrant.RIGHT_TOP;
-                        break;
-                    case RIGHT_TOP:
-                        oppositeQuadrant = Quadrant.TOP_RIGHT;
-                        break;
-                }
-                break;
-            case 2:
-                switch (quadrant) {
-                    case RIGHT_BOTTOM:
-                        oppositeQuadrant = Quadrant.LEFT_BOTTOM;
-                        break;
-                    case BOTTOM_RIGHT:
-                        oppositeQuadrant = Quadrant.TOP_RIGHT;
-                        break;
-                    case BOTTOM_LEFT:
-                        oppositeQuadrant = Quadrant.TOP_LEFT;
-                        break;
-                    case LEFT_BOTTOM:
-                        oppositeQuadrant = Quadrant.RIGHT_BOTTOM;
-                        break;
-                    case LEFT_TOP:
-                        oppositeQuadrant = Quadrant.RIGHT_TOP;
-                        break;
-                    case TOP_LEFT:
-                        oppositeQuadrant = Quadrant.BOTTOM_LEFT;
-                        break;
-                    case TOP_RIGHT:
-                        oppositeQuadrant = Quadrant.BOTTOM_RIGHT;
-                        break;
-                    case RIGHT_TOP:
-                        oppositeQuadrant = Quadrant.LEFT_TOP;
-                        break;
-                }
-                break;
-            case 3:
-                switch (quadrant) {
-                    case RIGHT_BOTTOM:
-                        oppositeQuadrant = Quadrant.TOP_LEFT;
-                        break;
-                    case BOTTOM_RIGHT:
-                        oppositeQuadrant = Quadrant.LEFT_TOP;
-                        break;
-                    case BOTTOM_LEFT:
-                        oppositeQuadrant = Quadrant.RIGHT_TOP;
-                        break;
-                    case LEFT_BOTTOM:
-                        oppositeQuadrant = Quadrant.TOP_RIGHT;
-                        break;
-                    case LEFT_TOP:
-                        oppositeQuadrant = Quadrant.BOTTOM_RIGHT;
-                        break;
-                    case TOP_LEFT:
-                        oppositeQuadrant = Quadrant.RIGHT_BOTTOM;
-                        break;
-                    case TOP_RIGHT:
-                        oppositeQuadrant = Quadrant.LEFT_BOTTOM;
-                        break;
-                    case RIGHT_TOP:
-                        oppositeQuadrant = Quadrant.BOTTOM_LEFT;
-                        break;
-                }
-                break;
+    private static Quadrant getOppositeQuadrant(Quadrant quadrant, PartPosition position) {
+        Direction[] quadrantParts = getDirectionsFromQuadrant(quadrant);
+        if (quadrantParts == null) {
+            return null;
         }
+        Direction sector = quadrantParts[0];
+        Direction part = quadrantParts[1];
 
-        return oppositeQuadrant;
+        if (position == PartPosition.FIRST) {
+            return getQuadrant(sector, Direction.getOpposite(part));
+        } else if (position == PartPosition.SECOND) {
+            return getQuadrant(part, sector);
+        } else if (position == PartPosition.THIRD) {
+            return getQuadrant(Direction.getOpposite(sector), part);
+        } else {
+            return getQuadrant(Direction.getOpposite(part), Direction.getOpposite(sector));
+        }
     }
 
     private static FingerPosition getNextPosition(Quadrant quadrant, FingerPosition lastPosition) {
-        if (lastPosition == FingerPosition.NO_TOUCH
-            || lastPosition == FingerPosition.LONG_PRESS
-            || lastPosition == FingerPosition.LONG_PRESS_END) {
+        Direction[] sectorPart = getDirectionsFromQuadrant(quadrant);
+
+        if (!FingerPosition.VALID_QUADRANT_POSITIONS.contains(lastPosition) || sectorPart == null) {
             return null;
         }
 
-        FingerPosition nextPosition = null;
-        switch (quadrant) {
-            case RIGHT_BOTTOM:
-                switch (lastPosition) {
-                    case INSIDE_CIRCLE:
-                    case TOP:
-                        nextPosition = FingerPosition.RIGHT;
-                        break;
-                    case LEFT:
-                        nextPosition = FingerPosition.TOP;
-                        break;
-                    case BOTTOM:
-                        nextPosition = FingerPosition.LEFT;
-                        break;
-                    case RIGHT:
-                        nextPosition = FingerPosition.BOTTOM;
-                        break;
-                }
-                break;
-            case BOTTOM_RIGHT:
-                switch (lastPosition) {
-                    case INSIDE_CIRCLE:
-                    case LEFT:
-                        nextPosition = FingerPosition.BOTTOM;
-                        break;
-                    case TOP:
-                        nextPosition = FingerPosition.LEFT;
-                        break;
-                    case BOTTOM:
-                        nextPosition = FingerPosition.RIGHT;
-                        break;
-                    case RIGHT:
-                        nextPosition = FingerPosition.TOP;
-                        break;
-                }
-                break;
-            case BOTTOM_LEFT:
-                switch (lastPosition) {
-                    case INSIDE_CIRCLE:
-                    case RIGHT:
-                        nextPosition = FingerPosition.BOTTOM;
-                        break;
-                    case TOP:
-                        nextPosition = FingerPosition.RIGHT;
-                        break;
-                    case BOTTOM:
-                        nextPosition = FingerPosition.LEFT;
-                        break;
-                    case LEFT:
-                        nextPosition = FingerPosition.TOP;
-                        break;
-                }
-                break;
-            case LEFT_BOTTOM:
-                switch (lastPosition) {
-                    case INSIDE_CIRCLE:
-                    case TOP:
-                        nextPosition = FingerPosition.LEFT;
-                        break;
-                    case LEFT:
-                        nextPosition = FingerPosition.BOTTOM;
-                        break;
-                    case BOTTOM:
-                        nextPosition = FingerPosition.RIGHT;
-                        break;
-                    case RIGHT:
-                        nextPosition = FingerPosition.TOP;
-                        break;
-                }
-                break;
-            case LEFT_TOP:
-                switch (lastPosition) {
-                    case INSIDE_CIRCLE:
-                    case BOTTOM:
-                        nextPosition = FingerPosition.LEFT;
-                        break;
-                    case LEFT:
-                        nextPosition = FingerPosition.TOP;
-                        break;
-                    case TOP:
-                        nextPosition = FingerPosition.RIGHT;
-                        break;
-                    case RIGHT:
-                        nextPosition = FingerPosition.BOTTOM;
-                        break;
-                }
-                break;
-            case TOP_LEFT:
-                switch (lastPosition) {
-                    case INSIDE_CIRCLE:
-                    case RIGHT:
-                        nextPosition = FingerPosition.TOP;
-                        break;
-                    case LEFT:
-                        nextPosition = FingerPosition.BOTTOM;
-                        break;
-                    case BOTTOM:
-                        nextPosition = FingerPosition.RIGHT;
-                        break;
-                    case TOP:
-                        nextPosition = FingerPosition.LEFT;
-                        break;
-                }
-                break;
-            case TOP_RIGHT:
-                switch (lastPosition) {
-                    case INSIDE_CIRCLE:
-                    case LEFT:
-                        nextPosition = FingerPosition.TOP;
-                        break;
-                    case RIGHT:
-                        nextPosition = FingerPosition.BOTTOM;
-                        break;
-                    case BOTTOM:
-                        nextPosition = FingerPosition.LEFT;
-                        break;
-                    case TOP:
-                        nextPosition = FingerPosition.RIGHT;
-                        break;
-                }
-                break;
-            case RIGHT_TOP:
-                switch (lastPosition) {
-                    case INSIDE_CIRCLE:
-                    case BOTTOM:
-                        nextPosition = FingerPosition.RIGHT;
-                        break;
-                    case LEFT:
-                        nextPosition = FingerPosition.BOTTOM;
-                        break;
-                    case TOP:
-                        nextPosition = FingerPosition.LEFT;
-                        break;
-                    case RIGHT:
-                        nextPosition = FingerPosition.TOP;
-                        break;
-                }
-                break;
+        Direction sector = sectorPart[0];
+        Direction part = sectorPart[1];
+        FingerPosition currentSector = Direction.toFingerPosition(sector);
+        FingerPosition oppositeSector = Direction.toFingerPosition(Direction.getOpposite(sector));
+        FingerPosition currentPart = Direction.toFingerPosition(part);
+        FingerPosition oppositePart = Direction.toFingerPosition(Direction.getOpposite(part));
+
+        if (lastPosition == FingerPosition.INSIDE_CIRCLE || lastPosition == oppositePart) {
+            return currentSector;
+        } else if (lastPosition == oppositeSector) {
+            return oppositePart;
+        } else if (lastPosition == currentPart) {
+            return oppositeSector;
+        } else {
+            return currentPart;
         }
-        return nextPosition;
+    }
+
+    private static Direction[] getDirectionsFromQuadrant(Quadrant quadrant) {
+        String[] quadrantSplit = quadrant.name().split("_", 2);
+        if (quadrantSplit.length != 2) {
+            return null;
+        }
+        try {
+            return new Direction[] {Direction.valueOf(quadrantSplit[0]), Direction.valueOf(quadrantSplit[1])};
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public static Quadrant getQuadrant(Direction sector, Direction part) {

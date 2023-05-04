@@ -38,8 +38,8 @@ public class XpadView extends View {
     private final Paint letterBackgroundPaint = new Paint();
     private final Paint letterBackgroundOutlinePaint = new Paint();
     private MainKeypadActionListener actionListener;
-    private PointF circleCenter=new PointF();
-    private Circle circle= new Circle();
+    private final PointF circleCenter = new PointF();
+    private final Circle circle = new Circle();
     private final Dimension keypadDimension = new Dimension();
     private Typeface font;
     private Typeface fontBold;

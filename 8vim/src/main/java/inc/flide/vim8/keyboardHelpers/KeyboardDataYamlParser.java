@@ -20,6 +20,7 @@ import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.structures.PartPosition;
 import inc.flide.vim8.structures.Quadrant;
 import inc.flide.vim8.structures.yaml.Action;
 import inc.flide.vim8.structures.Direction;
@@ -138,7 +139,7 @@ public class KeyboardDataYamlParser {
             List<FingerPosition> movementSequence = action.getMovementSequence();
 
             if (movementSequence.isEmpty()) {
-                movementSequence = QuadrantHelper.computeMovementSequence(layer, quadrant, characterPosition);
+                movementSequence = QuadrantHelper.computeMovementSequence(layer, quadrant, PartPosition.values()[characterPosition]);
             }
 
             int characterSetIndex = getCharacterSetIndex(quadrant, characterPosition);
