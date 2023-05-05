@@ -9,6 +9,8 @@ public final class Constants {
     public static final int MAX_LAYERS = 6;
     public static final int NUMBER_OF_SECTORS = 4;
     public static final int CHARACTER_SET_SIZE = 4 * 4 * 2; // 4 sectors, 2 parts, 4 characters per parts
+    public static final int MAX_RGB_COMPONENT_VALUE = 255;
+
     private Constants() {
     }
 }

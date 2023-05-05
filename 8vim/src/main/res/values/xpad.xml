@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <item name="xpad_circle_radius_factor" type="dimen" format="float">40</item>
-   <integer name="xpad_circle_offset_factor">26</integer>
-   <integer name="xpad_icon_alpha">85</integer>
+    <item name="xpad_circle_radius_factor" format="float" type="dimen">40</item>
+    <integer name="xpad_circle_offset_factor">26</integer>
+    <integer name="xpad_icon_alpha">85</integer>
+    <item name="xpad_letter_highlight_roundness" format="float" type="dimen">25</item>
 </resources>

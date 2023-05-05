@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
+
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
@@ -16,6 +17,7 @@ import inc.flide.vim8.preferences.SharedPreferenceHelper;
 public abstract class ButtonKeypadView extends KeyboardView {
 
     private final Paint foregroundPaint = new Paint();
+    private Typeface font;
 
     public ButtonKeypadView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -28,8 +30,10 @@ public abstract class ButtonKeypadView extends KeyboardView {
     }
 
     protected void initialize() {
-        //this.setOnKeyboardActionListener(new KeyboardActionListener((MainInputMethodService) context, this));
         this.setHapticFeedbackEnabled(true);
+
+        font = Typeface.createFromAsset(getContext().getAssets(),
+            "SF-UI-Display-Regular.otf");
 
         setColors();
         SharedPreferenceHelper.getInstance(getContext()).addListener(this::setColors);
@@ -53,18 +57,15 @@ public abstract class ButtonKeypadView extends KeyboardView {
         foregroundPaint.setColor(foregroundColor);
         foregroundPaint.setTextAlign(Paint.Align.CENTER);
         foregroundPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
-        Typeface font = Typeface.createFromAsset(getContext().getAssets(),
-                "SF-UI-Display-Regular.otf");
         foregroundPaint.setTypeface(font);
     }
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
         Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
-                MeasureSpec.getSize(widthMeasureSpec),
-                MeasureSpec.getSize(heightMeasureSpec),
-                getResources().getConfiguration().orientation);
+            MeasureSpec.getSize(widthMeasureSpec),
+            MeasureSpec.getSize(heightMeasureSpec),
+            getResources().getConfiguration().orientation);
 
         setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
     }

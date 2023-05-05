@@ -12,6 +12,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -30,14 +31,21 @@ import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 
 public class XpadView extends View {
+    public static final float FOREGROUND_STROKE_FACTOR = 0.75f;
     private static final short TRAIL_STEPS = 150;
     private static final byte TRAIL_STEP_DISTANCE = 5;
     private static final byte TRAIL_MAX_RADIUS = 14;
+    public static final float LETTER_BACKGROUND_BLEND_RATIO = 0.5f;
+    public static final int DEGREE_45 = 45;
+    public static final int DEGREE_90 = 90;
+    public static final int UPPER_LETTER_Y_IDX_OFFSET = 1;
+    public static final int LOWER_LETTER_X_IDX_OFFSET = 2;
+    public static final int LOWER_LETTER_Y_IDX_OFFSET = 3;
     private final Random rnd = new Random();
     private final Path typingTrailPath = new Path();
     private final Paint backgroundPaint = new Paint();
     private final Paint foregroundPaint = new Paint();
-    private final Paint foregroundBoldPaint = new Paint();
+    private final Paint foregroundHighlightPaint = new Paint();
     private final Paint typingTrailPaint = new Paint();
     private final Paint letterBackgroundPaint = new Paint();
     private final Paint letterBackgroundOutlinePaint = new Paint();
@@ -51,7 +59,7 @@ public class XpadView extends View {
     private final Matrix xformMatrix = new Matrix();
     // There are 4 sectors, each has 4 letters above, and 4 below.
     // Finally, each letter position has an x & y co-ordinate.
-    private final float[] letterPositions = new float[4 * 2 * 4 * 2];
+    private final float[] letterPositions = new float[Constants.NUMBER_OF_SECTORS * 2 * Constants.NUMBER_OF_SECTORS * 2];
     private final Path sectorLines = new Path();
     private final RectF sectorLineBounds = new RectF();
 
@@ -63,6 +71,7 @@ public class XpadView extends View {
     private float circleRadiusFactor;
     private int circleOffsetFactor;
     private int iconAlpha;
+    private float letterHighlightRoundness;
 
     public XpadView(Context context) {
         super(context);
@@ -88,15 +97,24 @@ public class XpadView extends View {
         font = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Regular.otf");
         fontBold = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Bold.otf");
 
-        circleRadiusFactor = (float) R.dimen.xpad_circle_radius_factor;
-        circleOffsetFactor = R.integer.xpad_circle_offset_factor;
-        iconAlpha = R.integer.xpad_icon_alpha;
-
+        loadResources();
         updateColors(context);
-        setForegroundPaint();
+        setForegroundPaint(foregroundPaint, font);
+        setForegroundPaint(foregroundHighlightPaint, fontBold);
 
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
+    }
+
+    private void loadResources() {
+        Resources resources = getResources();
+        TypedValue outValue = new TypedValue();
+        resources.getValue(R.dimen.xpad_circle_radius_factor, outValue, true);
+        circleRadiusFactor = outValue.getFloat();
+        circleOffsetFactor = resources.getInteger(R.integer.xpad_circle_offset_factor);
+        iconAlpha = Math.max(Math.min(resources.getInteger(R.integer.xpad_icon_alpha), Constants.MAX_RGB_COMPONENT_VALUE), 0);
+        resources.getValue(R.dimen.xpad_letter_highlight_roundness, outValue, true);
+        letterHighlightRoundness = outValue.getFloat();
     }
 
     private void updateColors(Context context) {
@@ -165,24 +183,21 @@ public class XpadView extends View {
 
         // Compute the first set of points going straight to the "east" (aka, rightwards).
         // Then apply repeated rotation (45, then 90 x4) to get the final positions.
-        float eastEdge = circleCenter.x + circle.getRadius() + characterHeight / 2;
-        for (int i = 0; i < Constants.NUMBER_OF_SECTORS; i++) {
-            float dx = i * lengthOfLineDemarcatingSectors / 4f;
-            letterPositions[Constants.NUMBER_OF_SECTORS * i] = eastEdge + dx;
-            letterPositions[Constants.NUMBER_OF_SECTORS * i + 1] = circleCenter.y - characterHeight / 2; // upper letter
-            letterPositions[Constants.NUMBER_OF_SECTORS * i + 2] = eastEdge + dx;
-            letterPositions[Constants.NUMBER_OF_SECTORS * i + 3] = circleCenter.y + characterHeight / 2; // lower letter
-        }
+        computeLettersPositions(characterHeight, lengthOfLineDemarcatingSectors);
 
         xformMatrix.reset();
-        xformMatrix.postRotate(45, circleCenter.x, circleCenter.y);
+        xformMatrix.postRotate(DEGREE_45, circleCenter.x, circleCenter.y);
         xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, 8);
         sectorLines.transform(xformMatrix);
 
         xformMatrix.reset();
-        xformMatrix.postRotate(90, circleCenter.x, circleCenter.y);
+        xformMatrix.postRotate(DEGREE_90, circleCenter.x, circleCenter.y);
         for (int i = 1; i < Constants.NUMBER_OF_SECTORS; i++) {
-            xformMatrix.mapPoints(letterPositions, 4 * 4 * i, letterPositions, 4 * 4 * (i - 1), 8);
+            xformMatrix.mapPoints(letterPositions,
+                Constants.NUMBER_OF_SECTORS * Constants.NUMBER_OF_SECTORS * i,
+                letterPositions,
+                Constants.NUMBER_OF_SECTORS * Constants.NUMBER_OF_SECTORS * (i - 1),
+                8);
         }
 
         // Canvas.drawPosText() draws from the bottom,
@@ -192,6 +207,17 @@ public class XpadView extends View {
         xformMatrix.mapPoints(letterPositions);
 
         sectorLines.computeBounds(sectorLineBounds, false); // Used to position icons
+    }
+
+    private void computeLettersPositions(float characterHeight, float lengthOfLineDemarcatingSectors) {
+        float eastEdge = circleCenter.x + circle.getRadius() + characterHeight / 2;
+        for (int i = 0; i < Constants.NUMBER_OF_SECTORS; i++) {
+            float dx = i * lengthOfLineDemarcatingSectors / ((float) Constants.NUMBER_OF_SECTORS);
+            letterPositions[Constants.NUMBER_OF_SECTORS * i] = eastEdge + dx;
+            letterPositions[Constants.NUMBER_OF_SECTORS * i + UPPER_LETTER_Y_IDX_OFFSET] = circleCenter.y - characterHeight / 2; // upper letter
+            letterPositions[Constants.NUMBER_OF_SECTORS * i + LOWER_LETTER_X_IDX_OFFSET] = eastEdge + dx;
+            letterPositions[Constants.NUMBER_OF_SECTORS * i + LOWER_LETTER_Y_IDX_OFFSET] = circleCenter.y + characterHeight / 2; // lower letter
+        }
     }
 
     @Override
@@ -210,7 +236,6 @@ public class XpadView extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
-
         canvas.drawColor(backgroundPaint.getColor());
 
         boolean userPrefersTypingTrail = SharedPreferenceHelper
@@ -239,6 +264,7 @@ public class XpadView extends View {
             .getBoolean(
                 this.getContext().getString(R.string.pref_display_sector_icons_key),
                 true);
+
         if (userPrefersSectorIcons) {
             setupSectorIcons(centreXValue, centreYValue, canvas);
         }
@@ -249,13 +275,11 @@ public class XpadView extends View {
             .getBoolean(
                 this.getContext().getString(R.string.pref_display_wheel_characters_key),
                 true);
-        if (userPreferWheelLetters) {
-            // Set the paint for drawing a nice background behind the current letter.
-            float roundness = 25f;
 
+        if (userPreferWheelLetters) {
             // Make the color the same as the typing trail, but blend it with white
             // because it's too hard to see a black font on dark backgrounds.
-            int letterBackgroundColor = ColorUtils.blendARGB(typingTrailPaint.getColor(), Color.WHITE, 0.5f);
+            int letterBackgroundColor = ColorUtils.blendARGB(typingTrailPaint.getColor(), Color.WHITE, LETTER_BACKGROUND_BLEND_RATIO);
 
             letterBackgroundPaint.setColor(letterBackgroundColor);
 
@@ -267,13 +291,8 @@ public class XpadView extends View {
             letterBackgroundOutlinePaint.setAntiAlias(true);
 
             // Paint for the regular and bold fonts.
-            foregroundPaint.setStrokeWidth(0.75f * density);
-            foregroundPaint.setStyle(Paint.Style.FILL);
-            foregroundPaint.setTextAlign(Paint.Align.CENTER);
-
-            foregroundBoldPaint.setStrokeWidth(0.75f * density);
-            foregroundBoldPaint.setStyle(Paint.Style.FILL);
-            foregroundBoldPaint.setTextAlign(Paint.Align.CENTER);
+            setForeground(foregroundPaint, density);
+            setForeground(foregroundHighlightPaint, density);
 
             String characterSet = getCharacterSetToDisplay();
             for (int i = 0; i < characterSet.length(); i++) {
@@ -281,20 +300,20 @@ public class XpadView extends View {
                 String highlightedLetter = actionListener.getCurrentLetter();
                 String letter = String.valueOf(characterSet.charAt(i));
                 if (highlightedLetter != null && highlightedLetter.equalsIgnoreCase(letter)) {
-                    paint = foregroundBoldPaint;
+                    paint = foregroundHighlightPaint;
 
                     // Draw a box around the current letter.
                     float characterHeightWidth = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
                     canvas.drawRoundRect(
                         letterPositions[i * 2] - (characterHeightWidth / 2), letterPositions[i * 2 + 1] - characterHeightWidth,
                         letterPositions[i * 2] + (characterHeightWidth / 2), letterPositions[i * 2 + 1] + (characterHeightWidth / 2),
-                        roundness, roundness, letterBackgroundPaint
+                        letterHighlightRoundness, letterHighlightRoundness, letterBackgroundPaint
                     );
 
                     canvas.drawRoundRect(
                         letterPositions[i * 2] - (characterHeightWidth / 2), letterPositions[i * 2 + 1] - characterHeightWidth,
                         letterPositions[i * 2] + (characterHeightWidth / 2), letterPositions[i * 2 + 1] + (characterHeightWidth / 2),
-                        roundness, roundness, letterBackgroundOutlinePaint
+                        letterHighlightRoundness, letterHighlightRoundness, letterBackgroundOutlinePaint
                     );
                 }
                 canvas.drawText(letter, letterPositions[i * 2], letterPositions[i * 2 + 1], paint);
@@ -302,16 +321,17 @@ public class XpadView extends View {
         }
     }
 
-    private void setForegroundPaint() {
-        foregroundPaint.setAntiAlias(true);
-        foregroundPaint.setStrokeJoin(Paint.Join.ROUND);
-        foregroundPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
-        foregroundPaint.setTypeface(font);
+    private void setForeground(Paint foregroundPaint, float density) {
+        foregroundPaint.setStrokeWidth(FOREGROUND_STROKE_FACTOR * density);
+        foregroundPaint.setStyle(Paint.Style.FILL);
+        foregroundPaint.setTextAlign(Paint.Align.CENTER);
+    }
 
-        foregroundBoldPaint.setAntiAlias(true);
-        foregroundBoldPaint.setStrokeJoin(Paint.Join.ROUND);
-        foregroundBoldPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
-        foregroundBoldPaint.setTypeface(fontBold);
+    private void setForegroundPaint(Paint paint, Typeface font) {
+        paint.setAntiAlias(true);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
+        paint.setTypeface(font);
     }
 
     private void setupSectorIcons(int centreXValue, int centreYValue, Canvas canvas) {
@@ -393,7 +413,10 @@ public class XpadView extends View {
     }
 
     private int getRandomColor() {
-        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+        return Color.argb(Constants.MAX_RGB_COMPONENT_VALUE,
+            rnd.nextInt(Constants.MAX_RGB_COMPONENT_VALUE + 1),
+            rnd.nextInt(Constants.MAX_RGB_COMPONENT_VALUE + 1),
+            rnd.nextInt(Constants.MAX_RGB_COMPONENT_VALUE + 1));
     }
 
     private String getCharacterSetToDisplay() {

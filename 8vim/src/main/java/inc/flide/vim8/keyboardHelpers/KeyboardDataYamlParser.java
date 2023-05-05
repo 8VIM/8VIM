@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
-import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Quadrant;
 import inc.flide.vim8.structures.yaml.Action;
-import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.yaml.ExtraLayer;
 import inc.flide.vim8.structures.yaml.Layer;
 import inc.flide.vim8.structures.yaml.Layout;
@@ -130,16 +130,18 @@ public class KeyboardDataYamlParser {
                                     StringBuilder upperCaseCharacters) {
         int actionsSize = Math.min(actions.size(), 4);
 
-        for (int characterPosition = 0; characterPosition < actionsSize; characterPosition++) {
-            Action action = actions.get(characterPosition);
+        for (int i = 0; i < actionsSize; i++) {
+            Action action = actions.get(i);
             if (action == null || action.isEmpty()) {
                 continue;
             }
 
+            CharacterPosition characterPosition = CharacterPosition.values()[i];
+
             List<FingerPosition> movementSequence = action.getMovementSequence();
 
             if (movementSequence.isEmpty()) {
-                movementSequence = QuadrantHelper.computeMovementSequence(layer, quadrant, CharacterPosition.values()[characterPosition]);
+                movementSequence = QuadrantHelper.computeMovementSequence(layer, quadrant, characterPosition);
             }
 
             int characterSetIndex = getCharacterSetIndex(quadrant, characterPosition);
@@ -163,16 +165,20 @@ public class KeyboardDataYamlParser {
             }
 
             KeyboardAction actionMap =
-                new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(), action.getKeyCode(), action.getFlags(),
+                new KeyboardAction(action.getActionType(),
+                    action.getLowerCase(),
+                    action.getUpperCase(),
+                    action.getKeyCode(),
+                    action.getFlags(),
                     layer);
 
             keyboardData.addActionMap(movementSequence, actionMap);
         }
     }
 
-    private int getCharacterSetIndex(Quadrant quadrant, int position) {
-        int base = quadrant.ordinal() / 2 * 8;
+    private int getCharacterSetIndex(Quadrant quadrant, CharacterPosition characterPosition) {
+        int base = quadrant.ordinal() / 2 * (Constants.NUMBER_OF_SECTORS * 2);
         int delta = quadrant.ordinal() % 2;
-        return base + position * 2 + delta;
+        return base + characterPosition.ordinal() * 2 + delta;
     }
 }
