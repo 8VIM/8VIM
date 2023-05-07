@@ -5,31 +5,44 @@ layers:
         - top
         - inside_circle
         - no_touch
-      key_code: HIDE_KEYBOARD
+      key_code: hide_keyboard
     - type: input_key
       movement_sequence:
         - left
         - inside_circle
         - no_touch
-      key_code: KEYCODE_PASTE
+      key_code: keycode_paste
+    - type: input_key
+      movement_sequence:
+        - bottom
+        - inside_circle
+        - no_touch
+      key_code: keycode_cut
+    - type: input_key
+      movement_sequence:
+        - bottom
+        - inside_circle
+        - top
+        - no_touch
+      key_code: keycode_copy
     - type: input_key
       movement_sequence:
         - right
         - inside_circle
         - no_touch
-      key_code: SELECTION_START
+      key_code: selection_start
     - type: input_key
       movement_sequence:
         - right
         - inside_circle
         - long_press
-      key_code: SELECTION_START
+      key_code: selection_start
     - type: input_key
       movement_sequence:
         - right
         - inside_circle
         - long_press_end
-      key_code: SWITCH_TO_SELECTION_KEYPAD
+      key_code: switch_to_selection_keypad
     - movement_sequence:
         - no_touch
         - left

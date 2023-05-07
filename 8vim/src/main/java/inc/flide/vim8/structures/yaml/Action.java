@@ -80,7 +80,6 @@ public class Action {
             try {
                 keyCode = CustomKeycode.valueOf(keyCodeString).getKeyCode();
             } catch (IllegalArgumentException error) {
-                return;
             }
         }
     }
