@@ -1,5 +1,8 @@
 package inc.flide.vim8.structures;
 
+
+import org.apache.commons.lang3.tuple.Pair;
+
 public enum SectorPart {
     RIGHT, TOP, LEFT, BOTTOM;
 
@@ -27,20 +30,20 @@ public enum SectorPart {
         }
     }
 
-    public static int getCharacterIndexInString(SectorPart sector, SectorPart part, CharacterPosition characterPosition) {
+    public static int getCharacterIndexInString(Pair<SectorPart, SectorPart> sectorParts, CharacterPosition characterPosition) {
         int index = 0;
-        switch (sector) {
+        switch (sectorParts.getLeft()) {
             case RIGHT:
-                index = part == BOTTOM ? 0 : 7;
+                index = sectorParts.getRight() == BOTTOM ? 0 : 7;
                 break;
             case TOP:
-                index = part == LEFT ? 5 : 6;
+                index = sectorParts.getRight() == LEFT ? 5 : 6;
                 break;
             case LEFT:
-                index = part == BOTTOM ? 3 : 4;
+                index = sectorParts.getRight() == BOTTOM ? 3 : 4;
                 break;
             case BOTTOM:
-                index = part == RIGHT ? 1 : 2;
+                index = sectorParts.getRight() == RIGHT ? 1 : 2;
                 break;
         }
         int base = index / 2 * (Constants.NUMBER_OF_SECTORS * 2);
@@ -48,15 +51,15 @@ public enum SectorPart {
         return base + characterPosition.ordinal() * 2 + delta;
     }
 
-    public static SectorPart[] getOppositeSectorPart(SectorPart sector, SectorPart part, CharacterPosition position) {
+    public static Pair<SectorPart, SectorPart> getOppositeSectorPart(Pair<SectorPart, SectorPart> sectorParts, CharacterPosition position) {
         if (position == CharacterPosition.FIRST) {
-            return new SectorPart[] {sector, SectorPart.getOpposite(part)};
+            return Pair.of(sectorParts.getLeft(), SectorPart.getOpposite(sectorParts.getRight()));
         } else if (position == CharacterPosition.SECOND) {
-            return new SectorPart[] {part, sector};
+            return Pair.of(sectorParts.getRight(), sectorParts.getLeft());
         } else if (position == CharacterPosition.THIRD) {
-            return new SectorPart[] {SectorPart.getOpposite(sector), part};
+            return Pair.of(SectorPart.getOpposite(sectorParts.getLeft()), sectorParts.getRight());
         } else {
-            return new SectorPart[] {SectorPart.getOpposite(part), SectorPart.getOpposite(sector)};
+            return Pair.of(SectorPart.getOpposite(sectorParts.getRight()), SectorPart.getOpposite(sectorParts.getLeft()));
         }
     }
 }

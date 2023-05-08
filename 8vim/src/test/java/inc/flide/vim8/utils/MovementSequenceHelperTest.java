@@ -9,6 +9,8 @@ import net.jqwik.api.Property;
 import net.jqwik.api.Table;
 import net.jqwik.api.Tuple;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,7 +54,8 @@ public class MovementSequenceHelperTest {
     @FromData("defaultLayerSequences")
     public void computeMovementSequence_forDefaultLayer(@ForAll CharacterPosition characterPosition, @ForAll List<FingerPosition> movementSequence) {
         List<FingerPosition> computedMovementSequence =
-            MovementSequenceHelper.computeMovementSequence(Constants.DEFAULT_LAYER, SectorPart.BOTTOM, SectorPart.LEFT, characterPosition);
+            MovementSequenceHelper.computeMovementSequence(Constants.DEFAULT_LAYER, Pair.of(SectorPart.BOTTOM, SectorPart.LEFT),
+                characterPosition);
         assertThat(computedMovementSequence).containsExactlyElementsOf(movementSequence);
     }
 
@@ -60,7 +63,8 @@ public class MovementSequenceHelperTest {
     @FromData("extraLayerMovementSequence")
     public void computeMovementSequence_forExtraLayer(@ForAll ExtraLayer extraLayer, @ForAll List<FingerPosition> movementSequence) {
         List<FingerPosition> computedMovementSequence =
-            MovementSequenceHelper.computeMovementSequence(extraLayer.ordinal() + 2, SectorPart.BOTTOM, SectorPart.LEFT, CharacterPosition.FIRST);
+            MovementSequenceHelper.computeMovementSequence(extraLayer.ordinal() + 2, Pair.of(SectorPart.BOTTOM, SectorPart.LEFT),
+                CharacterPosition.FIRST);
         assertThat(computedMovementSequence).containsExactlyElementsOf(movementSequence);
     }
 }

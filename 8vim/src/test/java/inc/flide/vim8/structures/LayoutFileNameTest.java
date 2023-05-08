@@ -1,8 +1,8 @@
 package inc.flide.vim8.structures;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
@@ -25,9 +25,9 @@ public class LayoutFileNameTest {
     Resources resources;
 
     @BeforeEach
-    void init() {
+    void initMock() {
         lenient().when(context.getPackageName()).thenReturn("package");
-        lenient().when(resources.getIdentifier(anyString(), eq("raw"), anyString())).thenReturn(0);
+        lenient().when(resources.getIdentifier(anyString(), anyString(), anyString())).thenReturn(0);
     }
 
     @Test
@@ -38,8 +38,7 @@ public class LayoutFileNameTest {
 
     @Test
     void valid_Layout_with_one_layer() {
-        InputStream inputStream = getClass().getResourceAsStream("/one_layer.yaml");
-        when(resources.openRawResource(0)).thenReturn(inputStream);
+        setupInputStream("/one_layer.yaml");
         LayoutFileName layoutFileName = new LayoutFileName(resources, context, "en");
         assertThat(layoutFileName.isValidLayout()).isTrue();
         assertThat(layoutFileName.getLayoutDisplayName()).isEqualTo("English");
@@ -48,8 +47,7 @@ public class LayoutFileNameTest {
 
     @Test
     void valid_Layout_with_multiple_layers() {
-        InputStream inputStream = getClass().getResourceAsStream("/multiple_layers.yaml");
-        when(resources.openRawResource(0)).thenReturn(inputStream);
+        setupInputStream("/multiple_layers.yaml");
         LayoutFileName layoutFileName = new LayoutFileName(resources, context, "en");
         assertThat(layoutFileName.isValidLayout()).isTrue();
         assertThat(layoutFileName.getLayoutDisplayName()).isEqualTo("English (2 layers)");
@@ -58,10 +56,13 @@ public class LayoutFileNameTest {
 
     @Test
     void invalid_Layout_with_only_hidden_layer() {
-        InputStream inputStream = getClass().getResourceAsStream("/hidden_layer.yaml");
-        when(resources.openRawResource(0)).thenReturn(inputStream);
+        setupInputStream("/hidden_layer.yaml");
         LayoutFileName layoutFileName = new LayoutFileName(resources, context, "en");
         assertThat(layoutFileName.isValidLayout()).isFalse();
+    }
 
+    void setupInputStream(String file) {
+        InputStream inputStream = getClass().getResourceAsStream(file);
+        when(resources.openRawResource(anyInt())).thenReturn(inputStream);
     }
 }

@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -71,13 +73,15 @@ public class KeyboardDataYamlParser {
     private void addLayer(KeyboardData keyboardData, int layer, Layer layerData) {
         StringBuilder lowerCaseCharacters = new StringBuilder();
         StringBuilder upperCaseCharacters = new StringBuilder();
+        Pair<StringBuilder, StringBuilder> characterSets = Pair.of(lowerCaseCharacters, upperCaseCharacters);
 
         for (Map.Entry<SectorPart, Part> sectorEntry : layerData.getSectors().entrySet()) {
             SectorPart sector = sectorEntry.getKey();
 
             for (Map.Entry<SectorPart, List<Action>> partEntry : sectorEntry.getValue().getParts().entrySet()) {
                 SectorPart part = partEntry.getKey();
-                addKeyboardActions(keyboardData, layer, sector, part, partEntry.getValue(), lowerCaseCharacters, upperCaseCharacters);
+                Pair<SectorPart, SectorPart> sectorParts = Pair.of(sector, part);
+                addKeyboardActions(keyboardData, layer, sectorParts, partEntry.getValue(), characterSets);
             }
         }
 
@@ -100,8 +104,8 @@ public class KeyboardDataYamlParser {
         }
     }
 
-    private void addKeyboardActions(KeyboardData keyboardData, int layer, SectorPart sector, SectorPart part, List<Action> actions,
-                                    StringBuilder lowerCaseCharacters, StringBuilder upperCaseCharacters) {
+    private void addKeyboardActions(KeyboardData keyboardData, int layer, Pair<SectorPart, SectorPart> sectorParts, List<Action> actions,
+                                    Pair<StringBuilder, StringBuilder> characterSets) {
         int actionsSize = Math.min(actions.size(), 4);
 
         for (int i = 0; i < actionsSize; i++) {
@@ -115,16 +119,16 @@ public class KeyboardDataYamlParser {
             List<FingerPosition> movementSequence = action.getMovementSequence();
 
             if (movementSequence.isEmpty()) {
-                movementSequence = MovementSequenceHelper.computeMovementSequence(layer, sector, part, characterPosition);
+                movementSequence = MovementSequenceHelper.computeMovementSequence(layer, sectorParts, characterPosition);
             }
 
-            int characterSetIndex = SectorPart.getCharacterIndexInString(sector, part, characterPosition);
+            int characterSetIndex = SectorPart.getCharacterIndexInString(sectorParts, characterPosition);
 
             if (!action.getLowerCase().isEmpty()) {
-                if (lowerCaseCharacters.length() == 0) {
-                    lowerCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
+                if (characterSets.getLeft().length() == 0) {
+                    characterSets.getLeft().setLength(Constants.CHARACTER_SET_SIZE);
                 }
-                lowerCaseCharacters.setCharAt(characterSetIndex, action.getLowerCase().charAt(0));
+                characterSets.getLeft().setCharAt(characterSetIndex, action.getLowerCase().charAt(0));
 
                 if (action.getUpperCase().isEmpty()) {
                     action.setUpperCase(action.getLowerCase().toUpperCase(Locale.ROOT));
@@ -132,10 +136,10 @@ public class KeyboardDataYamlParser {
             }
 
             if (!action.getUpperCase().isEmpty()) {
-                if (upperCaseCharacters.length() == 0) {
-                    upperCaseCharacters.setLength(Constants.CHARACTER_SET_SIZE);
+                if (characterSets.getRight().length() == 0) {
+                    characterSets.getRight().setLength(Constants.CHARACTER_SET_SIZE);
                 }
-                upperCaseCharacters.setCharAt(characterSetIndex, action.getUpperCase().charAt(0));
+                characterSets.getRight().setCharAt(characterSetIndex, action.getUpperCase().charAt(0));
             }
 
             KeyboardAction actionMap =
