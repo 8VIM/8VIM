@@ -85,7 +85,7 @@ public class KeyboardDataYamlParserTest {
     }
 
     @Test
-    void isValidFil() throws IOException {
+    void isValidFile() throws IOException {
         InputStream inputStream = getClass().getResourceAsStream("/valid_file.yaml");
         assertThat(KeyboardDataYamlParser.isValidFile(inputStream)).isEqualTo(2);
     }
