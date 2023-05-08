@@ -1,8 +1,9 @@
-package inc.flide.vim8.geometry;
+package inc.flide.vim8.utils;
 
 import android.graphics.PointF;
 
-import inc.flide.vim8.structures.Direction;
+import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.SectorPart;
 
 public final class GeometricUtilities {
 
@@ -15,19 +16,11 @@ public final class GeometricUtilities {
         return Math.abs(xSquare + ySquare);
     }
 
-    public static Direction getBaseQuadrant(int continuousQuadrantValue) {
+    public static SectorPart getBaseQuadrant(int continuousQuadrantValue) {
         int result;
         // Calculate result with modulus operator
-        result = continuousQuadrantValue % 4;
-        // Fix zero truncation
-        if (result < 0) {
-            result += 4;
-        }
-        try {
-            return Direction.values()[result];
-        } catch (Exception e) {
-            return null;
-        }
+        result = continuousQuadrantValue % Constants.NUMBER_OF_SECTORS;
+        return SectorPart.values()[result];
     }
 }
 

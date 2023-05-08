@@ -1,54 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:keyWidth="20%p"
-    android:keyHeight="12%p"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:keyWidth="20%p"
+    android:keyHeight="12%p">
 
     <Row>
-        <Key android:codes="@integer/KEYCODE_CUT"
+
+        <Key
+            android:codes="@integer/KEYCODE_CUT"
             android:keyIcon="@drawable/ic_content_cut" />
-        <Key android:codes="@integer/KEYCODE_COPY"
+
+        <Key
+            android:codes="@integer/KEYCODE_COPY"
             android:keyIcon="@drawable/ic_content_copy" />
-        <Key android:codes="@integer/KEYCODE_FORWARD_DEL"
-            android:keyIcon="@drawable/ic_delete"
-            android:isRepeatable="true"/>
-        <Key android:codes="@integer/MOVE_CURRENT_END_POINT_UP"
-            android:keyIcon="@drawable/ic_keyboard_arrow_up"
-            android:isRepeatable="true" />
-        <Key android:codes="@integer/KEYCODE_DEL"
-            android:keyIcon="@drawable/ic_backspace"
-            android:isRepeatable="true" />
+
+        <Key
+            android:codes="@integer/KEYCODE_FORWARD_DEL"
+            android:isRepeatable="true"
+            android:keyIcon="@drawable/ic_delete" />
+
+        <Key
+            android:codes="@integer/MOVE_CURRENT_END_POINT_UP"
+            android:isRepeatable="true"
+            android:keyIcon="@drawable/ic_keyboard_arrow_up" />
+
+        <Key
+            android:codes="@integer/KEYCODE_DEL"
+            android:isRepeatable="true"
+            android:keyIcon="@drawable/ic_backspace" />
     </Row>
+
     <Row>
-        <Key android:keyOutputText=""
-            android:keyLabel=" "/>
-        <Key android:codes="@integer/SWITCH_TO_MAIN_KEYPAD"
-            android:keyIcon="@drawable/ic_viii"/>
-        <Key android:codes="@integer/MOVE_CURRENT_END_POINT_LEFT"
-            android:keyIcon="@drawable/ic_keyboard_arrow_left"
-            android:isRepeatable="true" />
-        <Key android:codes="@integer/TOGGLE_SELECTION_ANCHOR"
+
+        <Key
+            android:keyLabel=" "
+            android:keyOutputText="" />
+
+        <Key
+            android:codes="@integer/SWITCH_TO_MAIN_KEYPAD"
+            android:keyIcon="@drawable/ic_viii" />
+
+        <Key
+            android:codes="@integer/MOVE_CURRENT_END_POINT_LEFT"
+            android:isRepeatable="true"
+            android:keyIcon="@drawable/ic_keyboard_arrow_left" />
+
+        <Key
+            android:codes="@integer/TOGGLE_SELECTION_ANCHOR"
             android:keyIcon="@drawable/pad_center" />
-        <Key android:codes="@integer/MOVE_CURRENT_END_POINT_RIGHT"
-            android:keyIcon="@drawable/ic_keyboard_arrow_right"
-            android:isRepeatable="true"/>
+
+        <Key
+            android:codes="@integer/MOVE_CURRENT_END_POINT_RIGHT"
+            android:isRepeatable="true"
+            android:keyIcon="@drawable/ic_keyboard_arrow_right" />
     </Row>
+
     <Row>
-        <Key android:codes="@integer/SELECT_ALL"
-            android:keyIcon="@drawable/ic_select_all"/>
-        <Key android:codes="@integer/KEYCODE_PASTE"
-            android:keyIcon="@drawable/ic_content_paste"
-            android:isRepeatable="true"/>
-        <Key android:keyOutputText=""
-            android:keyLabel=" "/>
-        <Key android:codes="@integer/MOVE_CURRENT_END_POINT_DOWN"
-            android:keyIcon="@drawable/ic_keyboard_arrow_down"
-            android:isRepeatable="true" />
+
+        <Key
+            android:codes="@integer/SELECT_ALL"
+            android:keyIcon="@drawable/ic_select_all" />
+
+        <Key
+            android:codes="@integer/KEYCODE_PASTE"
+            android:isRepeatable="true"
+            android:keyIcon="@drawable/ic_content_paste" />
+
+        <Key
+            android:keyLabel=" "
+            android:keyOutputText="" />
+
+        <Key
+            android:codes="@integer/MOVE_CURRENT_END_POINT_DOWN"
+            android:isRepeatable="true"
+            android:keyIcon="@drawable/ic_keyboard_arrow_down" />
+
         <Key
             android:codes="@integer/KEYCODE_ENTER"
             android:isRepeatable="true"
-            android:keyIcon="@drawable/ic_keyboard_return"
-            android:keyEdgeFlags="right" />
+            android:keyEdgeFlags="right"
+            android:keyIcon="@drawable/ic_keyboard_return" />
     </Row>
 </Keyboard>

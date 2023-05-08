@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
 
-import inc.flide.vim8.structures.Direction;
+import inc.flide.vim8.structures.SectorPart;
 
 public class Layer {
     @JsonProperty(required = true)
-    private Map<Direction, Part> sectors;
+    private Map<SectorPart, Part> sectors;
 
-    public Map<Direction, Part> getSectors() {
+    public Map<SectorPart, Part> getSectors() {
         return sectors;
     }
 
     public void setSectors(
-        Map<Direction, Part> sectors) {
+        Map<SectorPart, Part> sectors) {
         this.sectors = sectors;
     }
 }

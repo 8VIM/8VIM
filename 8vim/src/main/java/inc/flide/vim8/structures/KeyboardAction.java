@@ -3,7 +3,7 @@ package inc.flide.vim8.structures;
 public class KeyboardAction {
     private final KeyboardActionType keyboardActionType;
     private final String text;
-    private String capsLockText;
+    private final String capsLockText;
     private final int keyEventCode;
     private final int keyFlags;
     private final int layer;

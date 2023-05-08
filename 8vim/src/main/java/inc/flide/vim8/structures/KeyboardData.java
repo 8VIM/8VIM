@@ -21,25 +21,29 @@ public class KeyboardData {
         this.actionMap.putAll(actionMapAddition);
     }
 
-    public int getTotalLayer() {
+    public int getTotalLayers() {
         return totalLayers;
     }
 
     public String getLowerCaseCharacters(int layer) {
-        if (layer > totalLayers || characterSets[layer] == null) {
+        if (layer < 0 || layer > totalLayers || characterSets[layer] == null) {
             return "";
         }
         return characterSets[layer].getLowerCaseCharacters();
     }
 
 
-    public void setLowerCaseCharacters(String upperCaseCharacters, int layer) {
+    public void setLowerCaseCharacters(String lowerCaseCharacters, int layer) {
+        if (layer < 0 || layer > Constants.MAX_LAYERS) {
+            return;
+        }
+
         updateCharacterSets(layer);
-        characterSets[layer].setLowerCaseCharacters(upperCaseCharacters);
+        characterSets[layer].setLowerCaseCharacters(lowerCaseCharacters);
     }
 
     public String getUpperCaseCharacters(int layer) {
-        if (layer > totalLayers || characterSets[layer] == null) {
+        if (layer < 0 || layer > totalLayers || characterSets[layer] == null) {
             return "";
         }
         return characterSets[layer].getUpperCaseCharacters();
@@ -47,6 +51,10 @@ public class KeyboardData {
 
 
     public void setUpperCaseCharacters(String upperCaseCharacters, int layer) {
+        if (layer < 0 || layer > Constants.MAX_LAYERS) {
+            return;
+        }
+
         updateCharacterSets(layer);
         characterSets[layer].setUpperCaseCharacters(upperCaseCharacters);
     }
@@ -58,7 +66,6 @@ public class KeyboardData {
         }
         return action.getLayer();
     }
-
 
     private void updateCharacterSets(int layer) {
         totalLayers = Math.max(totalLayers, layer);

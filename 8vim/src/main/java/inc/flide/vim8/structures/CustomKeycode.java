@@ -21,19 +21,15 @@ public enum CustomKeycode {
     HIDE_KEYBOARD(-14),
     NO_OPERATION(-15);
 
-    private static final Map<Integer, CustomKeycode> KEY_CODE_TO_STRING_CODE_MAP;
-    private final int keyCode;
+    private static final Map<Integer, CustomKeycode> KEY_CODE_TO_STRING_CODE_MAP = new HashMap<>();
 
     static {
-        KEY_CODE_TO_STRING_CODE_MAP = new HashMap<>();
         for (CustomKeycode customKeycode : EnumSet.allOf(CustomKeycode.class)) {
             KEY_CODE_TO_STRING_CODE_MAP.put(customKeycode.getKeyCode(), customKeycode);
         }
     }
 
-    public int getKeyCode() {
-        return keyCode;
-    }
+    private final int keyCode;
 
     CustomKeycode(int keyCode) {
         this.keyCode = keyCode;
@@ -41,5 +37,9 @@ public enum CustomKeycode {
 
     public static CustomKeycode fromIntValue(int value) {
         return KEY_CODE_TO_STRING_CODE_MAP.get(value);
+    }
+
+    public int getKeyCode() {
+        return keyCode;
     }
 }

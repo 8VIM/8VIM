@@ -18,27 +18,24 @@ import java.util.Map;
 
 import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
-import inc.flide.vim8.structures.Quadrant;
+import inc.flide.vim8.structures.SectorPart;
 import inc.flide.vim8.structures.yaml.Action;
 import inc.flide.vim8.structures.yaml.ExtraLayer;
 import inc.flide.vim8.structures.yaml.Layer;
 import inc.flide.vim8.structures.yaml.Layout;
 import inc.flide.vim8.structures.yaml.Part;
-import inc.flide.vim8.utils.QuadrantHelper;
+import inc.flide.vim8.utils.MovementSequenceHelper;
 
 public class KeyboardDataYamlParser {
     private final Layout layout;
 
     public KeyboardDataYamlParser(InputStream inputStream) throws IOException {
-        ObjectMapper mapper = YAMLMapper.builder()
-            .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-            .enable(DeserializationFeature.UNWRAP_ROOT_VALUE)
-            .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
-            .build();
+        ObjectMapper mapper =
+            YAMLMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS).enable(DeserializationFeature.UNWRAP_ROOT_VALUE)
+                .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE).build();
         layout = mapper.readValue(inputStream, Layout.class);
     }
 
@@ -46,7 +43,7 @@ public class KeyboardDataYamlParser {
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
             KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
             KeyboardData keyboardData = parser.readKeyboardData();
-            return keyboardData.getTotalLayer();
+            return keyboardData.getTotalLayers();
         } catch (Exception e) {
             return 0;
         }
@@ -56,7 +53,7 @@ public class KeyboardDataYamlParser {
         try (InputStream inputStream = resources.openRawResource(resourceId)) {
             KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
             KeyboardData keyboardData = parser.readKeyboardData();
-            return keyboardData.getTotalLayer();
+            return keyboardData.getTotalLayers();
         } catch (Exception e) {
             return 0;
         }
@@ -91,18 +88,12 @@ public class KeyboardDataYamlParser {
         StringBuilder lowerCaseCharacters = new StringBuilder();
         StringBuilder upperCaseCharacters = new StringBuilder();
 
-        for (Map.Entry<Direction, Part> sectorEntry : layerData.getSectors().entrySet()) {
-            Direction sector = sectorEntry.getKey();
+        for (Map.Entry<SectorPart, Part> sectorEntry : layerData.getSectors().entrySet()) {
+            SectorPart sector = sectorEntry.getKey();
 
-            for (Map.Entry<Direction, List<Action>> partEntry : sectorEntry.getValue().getParts().entrySet()) {
-                Direction part = partEntry.getKey();
-                Quadrant quadrant = QuadrantHelper.getQuadrant(sector, part);
-
-                if (quadrant == null) {
-                    continue;
-                }
-
-                addKeyboardActions(keyboardData, layer, quadrant, partEntry.getValue(), lowerCaseCharacters, upperCaseCharacters);
+            for (Map.Entry<SectorPart, List<Action>> partEntry : sectorEntry.getValue().getParts().entrySet()) {
+                SectorPart part = partEntry.getKey();
+                addKeyboardActions(keyboardData, layer, sector, part, partEntry.getValue(), lowerCaseCharacters, upperCaseCharacters);
             }
         }
 
@@ -125,9 +116,8 @@ public class KeyboardDataYamlParser {
         }
     }
 
-    private void addKeyboardActions(KeyboardData keyboardData, int layer, Quadrant quadrant, List<Action> actions,
-                                    StringBuilder lowerCaseCharacters,
-                                    StringBuilder upperCaseCharacters) {
+    private void addKeyboardActions(KeyboardData keyboardData, int layer, SectorPart sector, SectorPart part, List<Action> actions,
+                                    StringBuilder lowerCaseCharacters, StringBuilder upperCaseCharacters) {
         int actionsSize = Math.min(actions.size(), 4);
 
         for (int i = 0; i < actionsSize; i++) {
@@ -141,10 +131,10 @@ public class KeyboardDataYamlParser {
             List<FingerPosition> movementSequence = action.getMovementSequence();
 
             if (movementSequence.isEmpty()) {
-                movementSequence = QuadrantHelper.computeMovementSequence(layer, quadrant, characterPosition);
+                movementSequence = MovementSequenceHelper.computeMovementSequence(layer, sector, part, characterPosition);
             }
 
-            int characterSetIndex = getCharacterSetIndex(quadrant, characterPosition);
+            int characterSetIndex = SectorPart.getCharacterIndexInString(sector, part, characterPosition);
 
             if (!action.getLowerCase().isEmpty()) {
                 if (lowerCaseCharacters.length() == 0) {
@@ -165,20 +155,10 @@ public class KeyboardDataYamlParser {
             }
 
             KeyboardAction actionMap =
-                new KeyboardAction(action.getActionType(),
-                    action.getLowerCase(),
-                    action.getUpperCase(),
-                    action.getKeyCode(),
-                    action.getFlags(),
+                new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(), action.getKeyCode(), action.getFlags(),
                     layer);
 
             keyboardData.addActionMap(movementSequence, actionMap);
         }
-    }
-
-    private int getCharacterSetIndex(Quadrant quadrant, CharacterPosition characterPosition) {
-        int base = quadrant.ordinal() / 2 * (Constants.NUMBER_OF_SECTORS * 2);
-        int delta = quadrant.ordinal() % 2;
-        return base + characterPosition.ordinal() * 2 + delta;
     }
 }
