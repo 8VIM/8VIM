@@ -5,6 +5,7 @@ import android.content.res.Resources;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
@@ -39,12 +40,16 @@ public class LayoutFileName {
             languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
             layoutDisplayName = StringUtils.capitalize(languageName);
             int resourceId = resources.getIdentifier(fileName, "raw", context.getPackageName());
-            totalLayers = KeyboardDataYamlParser.isValidFile(resources, resourceId);
-            isValidLayout = true;
-            if (totalLayers > 1) {
-                layoutDisplayName += " (" + totalLayers + " layers)";
-            }
-            if (totalLayers == 0) {
+            try (InputStream inputStream = resources.openRawResource(resourceId)) {
+                totalLayers = KeyboardDataYamlParser.isValidFile(inputStream);
+                isValidLayout = true;
+                if (totalLayers > 1) {
+                    layoutDisplayName += " (" + totalLayers + " layers)";
+                }
+                if (totalLayers == 0) {
+                    setLayoutValidityFalse();
+                }
+            } catch (Exception e) {
                 setLayoutValidityFalse();
             }
         } else {

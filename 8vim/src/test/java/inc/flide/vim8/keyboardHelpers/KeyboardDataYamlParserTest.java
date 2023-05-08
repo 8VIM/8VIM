@@ -2,16 +2,8 @@ package inc.flide.vim8.keyboardHelpers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.view.KeyEvent;
 
 import com.fasterxml.jackson.databind.DatabindException;
@@ -23,7 +15,6 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -94,21 +85,8 @@ public class KeyboardDataYamlParserTest {
     }
 
     @Test
-    void isValidFile_using_URI() throws FileNotFoundException {
+    void isValidFil() throws IOException {
         InputStream inputStream = getClass().getResourceAsStream("/valid_file.yaml");
-
-        Context context = mock(Context.class);
-        ContentResolver contentResolver = mock(ContentResolver.class);
-        when(context.getContentResolver()).thenReturn(contentResolver);
-        when(contentResolver.openInputStream(any())).thenReturn(inputStream);
-        assertThat(KeyboardDataYamlParser.isValidFile(context, Uri.EMPTY)).isEqualTo(2);
-    }
-
-    @Test
-    void isValidFile_using_resources() throws FileNotFoundException {
-        InputStream inputStream = getClass().getResourceAsStream("/valid_file.yaml");
-        Resources resources = mock(Resources.class);
-        when(resources.openRawResource(anyInt())).thenReturn(inputStream);
-        assertThat(KeyboardDataYamlParser.isValidFile(resources, 0)).isEqualTo(2);
+        assertThat(KeyboardDataYamlParser.isValidFile(inputStream)).isEqualTo(2);
     }
 }

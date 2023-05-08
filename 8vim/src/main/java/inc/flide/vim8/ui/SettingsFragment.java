@@ -22,6 +22,7 @@ import androidx.preference.SeekBarPreference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,8 +51,11 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
             final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
             context.getContentResolver().takePersistableUriPermission(selectedCustomLayoutFile, takeFlags);
-
-            if (KeyboardDataYamlParser.isValidFile(context, selectedCustomLayoutFile) == 0) {
+            try (InputStream inputStream = context.getContentResolver().openInputStream(selectedCustomLayoutFile)) {
+                if (KeyboardDataYamlParser.isValidFile(inputStream) == 0) {
+                    return;
+                }
+            } catch (Exception e) {
                 return;
             }
 

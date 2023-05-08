@@ -1,9 +1,5 @@
 package inc.flide.vim8.keyboardHelpers;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.net.Uri;
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,23 +36,7 @@ public class KeyboardDataYamlParser {
         this.inputStream = inputStream;
     }
 
-    public static int isValidFile(Context context, Uri uri) {
-        try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-            return isValidFile(inputStream);
-        } catch (Exception e) {
-            return 0;
-        }
-    }
-
-    public static int isValidFile(Resources resources, int resourceId) {
-        try (InputStream inputStream = resources.openRawResource(resourceId)) {
-            return isValidFile(inputStream);
-        } catch (Exception e) {
-            return 0;
-        }
-    }
-
-    private static int isValidFile(InputStream inputStream) throws IOException {
+    public static int isValidFile(InputStream inputStream) throws IOException {
         KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
         KeyboardData keyboardData = parser.readKeyboardData();
         return keyboardData.getTotalLayers();
