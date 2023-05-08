@@ -30,20 +30,19 @@ import inc.flide.vim8.structures.yaml.Part;
 import inc.flide.vim8.utils.MovementSequenceHelper;
 
 public class KeyboardDataYamlParser {
-    private final Layout layout;
+    private final ObjectMapper mapper;
+    private final InputStream inputStream;
 
-    public KeyboardDataYamlParser(InputStream inputStream) throws IOException {
-        ObjectMapper mapper =
+    public KeyboardDataYamlParser(InputStream inputStream) {
+        mapper =
             YAMLMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS).enable(DeserializationFeature.UNWRAP_ROOT_VALUE)
                 .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE).build();
-        layout = mapper.readValue(inputStream, Layout.class);
+        this.inputStream = inputStream;
     }
 
     public static int isValidFile(Context context, Uri uri) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(uri)) {
-            KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
-            KeyboardData keyboardData = parser.readKeyboardData();
-            return keyboardData.getTotalLayers();
+            return isValidFile(inputStream);
         } catch (Exception e) {
             return 0;
         }
@@ -51,15 +50,20 @@ public class KeyboardDataYamlParser {
 
     public static int isValidFile(Resources resources, int resourceId) {
         try (InputStream inputStream = resources.openRawResource(resourceId)) {
-            KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
-            KeyboardData keyboardData = parser.readKeyboardData();
-            return keyboardData.getTotalLayers();
+            return isValidFile(inputStream);
         } catch (Exception e) {
             return 0;
         }
     }
 
-    public KeyboardData readKeyboardData() {
+    private static int isValidFile(InputStream inputStream) throws IOException {
+        KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
+        KeyboardData keyboardData = parser.readKeyboardData();
+        return keyboardData.getTotalLayers();
+    }
+
+    public KeyboardData readKeyboardData() throws IOException {
+        Layout layout = mapper.readValue(inputStream, Layout.class);
         KeyboardData keyboardData = new KeyboardData();
         if (!layout.getHidden().isEmpty()) {
             addKeyboardActions(keyboardData, layout.getHidden());

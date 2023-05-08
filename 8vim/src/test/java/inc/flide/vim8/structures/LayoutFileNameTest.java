@@ -25,7 +25,7 @@ public class LayoutFileNameTest {
     Resources resources;
 
     @BeforeEach
-    void setup() {
+    void init() {
         lenient().when(context.getPackageName()).thenReturn("package");
         lenient().when(resources.getIdentifier(anyString(), eq("raw"), anyString())).thenReturn(0);
     }
