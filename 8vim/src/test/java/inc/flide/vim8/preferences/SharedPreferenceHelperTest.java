@@ -5,39 +5,53 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import androidx.preference.PreferenceManager;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.class)
 public class SharedPreferenceHelperTest {
-    static SharedPreferences sharedPreferences;
-    static Context context;
+    private static SharedPreferences sharedPreferences;
+    private static Context context;
+    private static MockedStatic<SharedPreferenceHelper> sharedPreferenceHelper;
 
-    @BeforeAll
-    static void setup() {
-        sharedPreferences = mock(SharedPreferences.class);
+    @BeforeClass
+    public static void setup() {
         context = mock(Context.class);
+        sharedPreferences = mock(SharedPreferences.class);
 
-        MockedStatic<PreferenceManager> preferenceManager = Mockito.mockStatic(PreferenceManager.class);
-        preferenceManager.when(() -> PreferenceManager.getDefaultSharedPreferences(any())).thenReturn(sharedPreferences);
+        when(context.getSharedPreferences(anyString(),anyInt())).thenReturn(sharedPreferences);
+
+        when(sharedPreferences.getString(anyString(), anyString())).thenReturn("test");
+        when(sharedPreferences.getInt(anyString(), anyInt())).thenReturn(42);
+        when(sharedPreferences.getBoolean(anyString(), anyBoolean())).thenReturn(true);
+
+        doNothing().when(sharedPreferences).registerOnSharedPreferenceChangeListener(any());
+
+        SharedPreferenceHelper singleton = SharedPreferenceHelper.getInstance(context);
+        sharedPreferenceHelper = mockStatic(SharedPreferenceHelper.class);
+        sharedPreferenceHelper.when(() -> SharedPreferenceHelper.getInstance(any())).thenReturn(singleton);
+    }
+
+    @AfterClass
+    public static void close() {
+        sharedPreferenceHelper.close();
     }
 
     @Test
-    void listener_called() {
-        when(sharedPreferences.getString(anyString(), anyString())).thenReturn("test");
+    public void listener_called() {
         SharedPreferenceHelper helper = SharedPreferenceHelper.getInstance(context);
         SharedPreferenceHelper.Listener listener = mock(SharedPreferenceHelper.Listener.class);
         helper.addListener(listener);
@@ -48,23 +62,19 @@ public class SharedPreferenceHelperTest {
     }
 
     @Test
-    void getString() {
-        when(sharedPreferences.getString(anyString(), anyString())).thenReturn("test");
+    public void getString() {
         SharedPreferenceHelper helper = SharedPreferenceHelper.getInstance(context);
         assertThat(helper.getString("test", "")).isEqualTo("test");
     }
 
     @Test
-    void getInt() {
-        when(sharedPreferences.getInt(anyString(), anyInt())).thenReturn(42);
-        assertThat(SharedPreferenceHelper.getInstance(context).getInt("testInt", 0))
-            .isEqualTo(42);
+    public void getInt() {
+        assertThat(SharedPreferenceHelper.getInstance(context).getInt("testInt", 0)).isEqualTo(42);
     }
 
     @Test
-    void getBoolean() {
-        when(sharedPreferences.getBoolean(anyString(), anyBoolean())).thenReturn(true);
-        assertThat(SharedPreferenceHelper.getInstance(context).getBoolean("testBool", false))
-            .isTrue();
+    public void getBoolean() {
+        assertThat(SharedPreferenceHelper.getInstance(context).getBoolean("testBool", false)).isTrue();
     }
+
 }

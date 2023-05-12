@@ -24,15 +24,15 @@ public final class InputMethodServiceHelper {
 
     public static KeyboardData initializeKeyboardActionMap(Resources resources, Context context) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        boolean useCustomSelectedKeyboardLayout = sharedPreferences.getBoolean(
+        SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
+        boolean useCustomSelectedKeyboardLayout = sharedPreferenceHelper.getBoolean(
             context.getString(R.string.pref_use_custom_selected_keyboard_layout),
             false);
         if (useCustomSelectedKeyboardLayout) {
-            String customKeyboardLayoutString = sharedPreferences.getString(
+            String customKeyboardLayoutString = sharedPreferenceHelper.getString(
                 context.getString(R.string.pref_selected_custom_keyboard_layout_uri),
-                null);
-            if (customKeyboardLayoutString != null && !customKeyboardLayoutString.isEmpty()) {
+                "");
+            if (!customKeyboardLayoutString.isEmpty()) {
                 Uri customKeyboardLayout = Uri.parse(customKeyboardLayoutString);
                 return initializeKeyboardActionMapForCustomLayout(resources, context, customKeyboardLayout);
             }

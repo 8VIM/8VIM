@@ -9,35 +9,35 @@ import static org.mockito.Mockito.when;
 import android.content.Context;
 import android.content.res.Resources;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.InputStream;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(MockitoJUnitRunner.class)
 public class LayoutFileNameTest {
     @Mock
     Context context;
     @Mock
     Resources resources;
 
-    @BeforeEach
-    void initMock() {
+    @Before
+    public void initMock() {
         lenient().when(context.getPackageName()).thenReturn("package");
         lenient().when(resources.getIdentifier(anyString(), anyString(), anyString())).thenReturn(0);
     }
 
     @Test
-    void invalid_ISO_Code() {
+    public void invalid_ISO_Code() {
         LayoutFileName layoutFileName = new LayoutFileName(resources, context, "xyz");
         assertThat(layoutFileName.isValidLayout()).isFalse();
     }
 
     @Test
-    void valid_Layout_with_one_layer() {
+    public void valid_Layout_with_one_layer() {
         setupInputStream("/one_layer.yaml");
         LayoutFileName layoutFileName = new LayoutFileName(resources, context, "en");
         assertThat(layoutFileName.isValidLayout()).isTrue();
@@ -46,7 +46,7 @@ public class LayoutFileNameTest {
     }
 
     @Test
-    void valid_Layout_with_multiple_layers() {
+    public void valid_Layout_with_multiple_layers() {
         setupInputStream("/multiple_layers.yaml");
         LayoutFileName layoutFileName = new LayoutFileName(resources, context, "en");
         assertThat(layoutFileName.isValidLayout()).isTrue();
@@ -55,7 +55,7 @@ public class LayoutFileNameTest {
     }
 
     @Test
-    void invalid_Layout_with_only_hidden_layer() {
+    public void invalid_Layout_with_only_hidden_layer() {
         setupInputStream("/hidden_layer.yaml");
         LayoutFileName layoutFileName = new LayoutFileName(resources, context, "en");
         assertThat(layoutFileName.isValidLayout()).isFalse();

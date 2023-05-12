@@ -7,10 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: set up JDK 11
@@ -21,5 +19,5 @@ jobs:
         cache: gradle
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
-    - name: Build with Gradle
-      run: ./gradlew assembleDebug
+    - name: Test with Gradle
+      run: ./gradlew checkstyle test

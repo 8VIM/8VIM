@@ -2,7 +2,7 @@ package inc.flide.vim8.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import inc.flide.vim8.structures.SectorPart;
 import stub.FakePointF;

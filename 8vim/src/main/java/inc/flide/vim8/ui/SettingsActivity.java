@@ -23,6 +23,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.list.DialogSingleChoiceExtKt;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -139,26 +140,22 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void enableInputMethodDialog() {
-        final MaterialDialog enableInputMethodNotificationDialog = new MaterialDialog.Builder(this)
-            .title(R.string.enable_ime_dialog_title)
-            .content(R.string.enable_ime_dialog_content)
-            .neutralText(R.string.enable_ime_dialog_neutral_button_text)
-            .cancelable(false)
-            .canceledOnTouchOutside(false)
-            .build();
 
         ActivityResultLauncher<Intent> launchInputMethodSettings =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             });
-
-        enableInputMethodNotificationDialog.getBuilder()
-            .onNeutral((dialog, which) -> {
+        new MaterialDialog(this, MaterialDialog.getDEFAULT_BEHAVIOR())
+            .title(R.string.enable_ime_dialog_title, null)
+            .message(R.string.enable_ime_dialog_content, null, null)
+            .cancelable(false)
+            .cancelOnTouchOutside(false)
+            .neutralButton(R.string.enable_ime_dialog_content, null, (dialog) -> {
                 showToast();
                 launchInputMethodSettings.launch(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
-                enableInputMethodNotificationDialog.dismiss();
-            });
-
-        enableInputMethodNotificationDialog.show();
+                dialog.dismiss();
+                return null;
+            })
+            .show();
     }
 
     public void showToast() {
@@ -175,23 +172,20 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void activateInputMethodDialog() {
-        final MaterialDialog activateInputMethodNotificationDialog = new MaterialDialog.Builder(this)
-            .title(R.string.activate_ime_dialog_title)
-            .content(R.string.activate_ime_dialog_content)
-            .positiveText(R.string.activate_ime_dialog_positive_button_text)
-            .negativeText(R.string.activate_ime_dialog_negative_button_text)
-            .cancelable(false)
-            .canceledOnTouchOutside(false)
-            .build();
-
-        activateInputMethodNotificationDialog.getBuilder()
-            .onPositive((dialog, which) -> {
+        new MaterialDialog(this, MaterialDialog.getDEFAULT_BEHAVIOR())
+            .title(R.string.activate_ime_dialog_title, null)
+            .message(R.string.activate_ime_dialog_content, null, null)
+            .positiveButton(R.string.activate_ime_dialog_positive_button_text, null, (dialog) -> {
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.showInputMethodPicker();
-                activateInputMethodNotificationDialog.dismiss();
-            });
+                dialog.dismiss();
+                return null;
+            })
+            .negativeButton(R.string.activate_ime_dialog_negative_button_text, null, null)
+            .cancelable(false)
+            .cancelOnTouchOutside(false)
+            .show();
 
-        activateInputMethodNotificationDialog.show();
     }
 
 }

@@ -21,6 +21,7 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SeekBarPreference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.list.DialogSingleChoiceExtKt;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -145,20 +146,28 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 sharedPreferences.edit().remove(getString(R.string.pref_selected_keyboard_layout)).apply();
             }
         }
-        new MaterialDialog.Builder(context)
-            .title(R.string.select_preferred_keyboard_layout_dialog_title)
-            .items(inputMethodsNameAndId.keySet())
-            .itemsCallbackSingleChoice(selectedKeyboardIndex, (dialog, itemView, which, text) -> {
-                if (which != -1) {
-                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                    sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout), keyboardIds.get(which));
-                    sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), false);
-                    sharedPreferencesEditor.apply();
-                    MainKeypadActionListener.rebuildKeyboardData(getResources(), getContext());
+        DialogSingleChoiceExtKt.listItemsSingleChoice(
+                new MaterialDialog(context, MaterialDialog.getDEFAULT_BEHAVIOR())
+                    .title(R.string.select_preferred_keyboard_layout_dialog_title, null)
+                    .positiveButton(R.string.generic_okay_text, null, null),
+                null,
+                new ArrayList<>(inputMethodsNameAndId.keySet()),
+                null,
+                selectedKeyboardIndex,
+                true,
+                -1,
+                -1,
+                (dialog, which, text) -> {
+                    if (which != -1) {
+                        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                        sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout), keyboardIds.get(which));
+                        sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), false);
+                        sharedPreferencesEditor.apply();
+                        MainKeypadActionListener.rebuildKeyboardData(getResources(), getContext());
+                    }
+                    return null;
                 }
-                return true;
-            })
-            .positiveText(R.string.generic_okay_text)
+            )
             .show();
     }
 
@@ -205,19 +214,26 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 sharedPreferences.edit().remove(getString(R.string.pref_selected_emoticon_keyboard)).apply();
             }
         }
-        new MaterialDialog.Builder(context)
-            .title(R.string.select_preferred_emoticon_keyboard_dialog_title)
-            .items(inputMethodsNameAndId.keySet())
-            .itemsCallbackSingleChoice(selectedKeyboardIndex, (dialog, itemView, which, text) -> {
-
-                if (which != -1) {
-                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                    sharedPreferencesEditor.putString(getString(R.string.pref_selected_emoticon_keyboard), keyboardIds.get(which));
-                    sharedPreferencesEditor.apply();
+        DialogSingleChoiceExtKt.listItemsSingleChoice(
+                new MaterialDialog(context, null)
+                    .title(R.string.select_preferred_emoticon_keyboard_dialog_title, null)
+                    .positiveButton(R.string.generic_okay_text, null, null),
+                null,
+                new ArrayList<>(inputMethodsNameAndId.keySet()),
+                null,
+                selectedKeyboardIndex,
+                true,
+                -1,
+                -1,
+                (dialog, which, text) -> {
+                    if (which != -1) {
+                        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                        sharedPreferencesEditor.putString(getString(R.string.pref_selected_emoticon_keyboard), keyboardIds.get(which));
+                        sharedPreferencesEditor.apply();
+                    }
+                    return null;
                 }
-                return true;
-            })
-            .positiveText(R.string.generic_okay_text)
+            )
             .show();
     }
 }
