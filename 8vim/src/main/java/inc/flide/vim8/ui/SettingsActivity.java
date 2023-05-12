@@ -23,7 +23,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.list.DialogSingleChoiceExtKt;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -149,7 +148,7 @@ public class SettingsActivity extends AppCompatActivity
             .message(R.string.enable_ime_dialog_content, null, null)
             .cancelable(false)
             .cancelOnTouchOutside(false)
-            .neutralButton(R.string.enable_ime_dialog_content, null, (dialog) -> {
+            .neutralButton(R.string.enable_ime_dialog_content, null, dialog -> {
                 showToast();
                 launchInputMethodSettings.launch(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
                 dialog.dismiss();
@@ -175,7 +174,7 @@ public class SettingsActivity extends AppCompatActivity
         new MaterialDialog(this, MaterialDialog.getDEFAULT_BEHAVIOR())
             .title(R.string.activate_ime_dialog_title, null)
             .message(R.string.activate_ime_dialog_content, null, null)
-            .positiveButton(R.string.activate_ime_dialog_positive_button_text, null, (dialog) -> {
+            .positiveButton(R.string.activate_ime_dialog_positive_button_text, null, dialog -> {
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.showInputMethodPicker();
                 dialog.dismiss();

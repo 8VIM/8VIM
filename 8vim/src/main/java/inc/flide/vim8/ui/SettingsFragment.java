@@ -119,7 +119,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
         Toast.makeText(getContext(), "test" + newValue.toString(), Toast.LENGTH_LONG).show();
         if (preference instanceof SeekBarPreference) {
-            Toast.makeText(getContext(), "test" + newValue.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "test" + newValue, Toast.LENGTH_LONG).show();
         }
 
         return true;
