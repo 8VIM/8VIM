@@ -30,7 +30,8 @@ public enum SectorPart {
         }
     }
 
-    public static int getCharacterIndexInString(Pair<SectorPart, SectorPart> sectorParts, CharacterPosition characterPosition) {
+    public static int getCharacterIndexInString(Pair<SectorPart, SectorPart> sectorParts,
+                                                CharacterPosition characterPosition) {
         int index = 0;
         switch (sectorParts.getLeft()) {
             case RIGHT:
@@ -45,13 +46,16 @@ public enum SectorPart {
             case BOTTOM:
                 index = sectorParts.getRight() == RIGHT ? 1 : 2;
                 break;
+            default:
+                break;
         }
         int base = index / 2 * (Constants.NUMBER_OF_SECTORS * 2);
         int delta = index % 2;
         return base + characterPosition.ordinal() * 2 + delta;
     }
 
-    public static Pair<SectorPart, SectorPart> getOppositeSectorPart(Pair<SectorPart, SectorPart> sectorParts, CharacterPosition position) {
+    public static Pair<SectorPart, SectorPart> getOppositeSectorPart(Pair<SectorPart, SectorPart> sectorParts,
+                                                                     CharacterPosition position) {
         if (position == CharacterPosition.FIRST) {
             return Pair.of(sectorParts.getLeft(), SectorPart.getOpposite(sectorParts.getRight()));
         } else if (position == CharacterPosition.SECOND) {
@@ -59,7 +63,8 @@ public enum SectorPart {
         } else if (position == CharacterPosition.THIRD) {
             return Pair.of(SectorPart.getOpposite(sectorParts.getLeft()), sectorParts.getRight());
         } else {
-            return Pair.of(SectorPart.getOpposite(sectorParts.getRight()), SectorPart.getOpposite(sectorParts.getLeft()));
+            return Pair.of(SectorPart.getOpposite(sectorParts.getRight()),
+                    SectorPart.getOpposite(sectorParts.getLeft()));
         }
     }
 }

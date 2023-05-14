@@ -1,9 +1,7 @@
-package inc.flide.vim8.keyboardActionListners;
+package inc.flide.vim8.keyboardactionlisteners;
 
 import android.view.View;
-
 import com.hijamoya.keyboardview.KeyboardView;
-
 import inc.flide.vim8.MainInputMethodService;
 
 public class ButtonKeypadActionListener extends KeypadActionListener implements KeyboardView.OnKeyboardActionListener {

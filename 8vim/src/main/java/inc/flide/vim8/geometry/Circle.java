@@ -1,9 +1,8 @@
 package inc.flide.vim8.geometry;
 
 import android.graphics.PointF;
-
-import inc.flide.vim8.structures.SectorPart;
 import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.SectorPart;
 import inc.flide.vim8.utils.GeometricUtilities;
 
 public class Circle {
@@ -35,13 +34,14 @@ public class Circle {
         /*
         If O is the centre of circle
         Consider startingPoint point P not necessarily on the circumference of the circle.
-        If d = OP is the distance between P and the circle's center O, then the power of the point P relative to the circle is
+        If d = OP is the distance between P and the circle's center O,
+        then the power of the point P relative to the circle is
         p=d^2-r^2.
         */
 
-        double dSquare = GeometricUtilities.getSquaredDistanceBetweenPoints(point, centre);
-        double rSquare = Math.pow(radius, 2);
-        return dSquare - rSquare;
+        double squaredDistanceBetweenPoints = GeometricUtilities.getSquaredDistanceBetweenPoints(point, centre);
+        double radiusSquare = Math.pow(radius, 2);
+        return squaredDistanceBetweenPoints - radiusSquare;
     }
 
     public boolean isPointInsideCircle(PointF point) {
@@ -73,22 +73,18 @@ public class Circle {
         double angleToSectorValue = angleDouble / (Math.PI / 2);
         int quadrantCyclic = (int) Math.round(angleToSectorValue);
         SectorPart baseQuadrant = GeometricUtilities.getBaseQuadrant(quadrantCyclic);
-        FingerPosition result = null;
 
         switch (baseQuadrant) {
             case RIGHT:
-                result = FingerPosition.RIGHT;
-                break;
+                return FingerPosition.RIGHT;
             case TOP:
-                result = FingerPosition.TOP;
-                break;
+                return FingerPosition.TOP;
             case LEFT:
-                result = FingerPosition.LEFT;
-                break;
+                return FingerPosition.LEFT;
             case BOTTOM:
-                result = FingerPosition.BOTTOM;
-                break;
+                return FingerPosition.BOTTOM;
+            default:
+                return null;
         }
-        return result;
     }
 }

@@ -1,45 +1,51 @@
-package inc.flide.vim8.keyboardActionListners;
+package inc.flide.vim8.keyboardactionlisteners;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Handler;
 import android.view.View;
-
+import inc.flide.vim8.MainInputMethodService;
+import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
+import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.KeyboardAction;
+import inc.flide.vim8.structures.KeyboardActionType;
+import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.structures.MovementSequenceType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-import inc.flide.vim8.MainInputMethodService;
-import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
-import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardData;
-import inc.flide.vim8.structures.MovementSequenceType;
-
 public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 6;
     private static final FingerPosition[][] ROTATION_MOVEMENT_SEQUENCES = {
-        {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT},
-        {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT},
-        {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP},
-        {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM},
-        {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT},
-        {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT},
-        {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP},
-        {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM},
+            {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+                    FingerPosition.BOTTOM, FingerPosition.LEFT},
+            {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+                    FingerPosition.BOTTOM, FingerPosition.RIGHT},
+            {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                    FingerPosition.TOP},
+            {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+                    FingerPosition.BOTTOM},
+            {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
+                    FingerPosition.LEFT},
+            {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
+                    FingerPosition.RIGHT},
+            {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
+                    FingerPosition.TOP},
+            {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+                    FingerPosition.BOTTOM},
     };
-    private final Handler longPressHandler = new Handler();
     private static KeyboardData keyboardData;
+    private final Handler longPressHandler = new Handler();
     private final List<FingerPosition> movementSequence;
+    private final HashSet<List<FingerPosition>> rotationMovementSequences;
     private FingerPosition currentFingerPosition;
     private String currentLetter;
     private boolean isLongPressCallbackSet;
     private MovementSequenceType currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT;
-    private final HashSet<List<FingerPosition>> rotationMovementSequences;
-
     private final Runnable longPressRunnable = new Runnable() {
         @Override
         public void run() {
@@ -68,7 +74,8 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     public static void rebuildKeyboardData(Resources resource, Context context, Uri customLayoutUri) {
-        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resource, context, customLayoutUri);
+        keyboardData =
+                InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resource, context, customLayoutUri);
     }
 
     public String getLowerCaseCharacters(int layer) {
@@ -134,7 +141,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
             }
             if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE
-                && keyboardData.getActionMap().get(modifiedMovementSequence) != null) {
+                    && keyboardData.getActionMap().get(modifiedMovementSequence) != null) {
                 processMovementSequence(modifiedMovementSequence);
                 movementSequence.clear();
                 currentLetter = null;
@@ -204,13 +211,10 @@ public class MainKeypadActionListener extends KeypadActionListener {
             return;
         }
 
-        switch (keyboardAction.getKeyboardActionType()) {
-            case INPUT_TEXT:
-                handleInputText(keyboardAction);
-                break;
-            case INPUT_KEY:
-                handleInputKey(keyboardAction);
-                break;
+        if (keyboardAction.getKeyboardActionType() == KeyboardActionType.INPUT_KEY) {
+            handleInputText(keyboardAction);
+        } else {
+            handleInputKey(keyboardAction);
         }
     }
 }

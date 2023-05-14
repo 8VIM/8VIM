@@ -8,7 +8,7 @@
     <integer name="KEYCODE_COPY">278</integer>
     <integer name="KEYCODE_PASTE">279</integer>
 
-<!--Selection Keypad specific keycodes-->
+    <!--Selection Keypad specific keycodes-->
     <integer name="MOVE_CURRENT_END_POINT_LEFT">-1</integer>
     <integer name="MOVE_CURRENT_END_POINT_RIGHT">-2</integer>
     <integer name="MOVE_CURRENT_END_POINT_UP">-3</integer>

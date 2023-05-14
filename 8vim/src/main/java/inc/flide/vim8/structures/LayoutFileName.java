@@ -3,16 +3,13 @@ package inc.flide.vim8.structures;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
-
-import org.apache.commons.lang3.StringUtils;
-
+import inc.flide.vim8.keyboardhelpers.KeyboardDataYamlParser;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-
-import inc.flide.vim8.keyboardHelpers.KeyboardDataYamlParser;
+import org.apache.commons.lang3.StringUtils;
 
 public class LayoutFileName {
     private static final Set<String> ISO_LANGUAGES = new HashSet<>(Arrays.asList(Locale.getISOLanguages()));
