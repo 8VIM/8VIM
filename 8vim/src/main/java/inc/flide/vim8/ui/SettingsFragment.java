@@ -10,15 +10,12 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import androidx.preference.SeekBarPreference;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.list.DialogSingleChoiceExtKt;
@@ -38,12 +35,11 @@ import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.LayoutFileName;
 
-public class SettingsFragment extends PreferenceFragmentCompat
-    implements Preference.OnPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat {
     private static final String[] LAYOUT_FILTER = {"*/*"};
+    private Context context;
     private final ActivityResultLauncher<String[]> openContent =
         registerForActivityResult(new ActivityResultContracts.OpenDocument(), selectedCustomLayoutFile -> {
-            Context context = getContext();
             if (selectedCustomLayoutFile == null || context == null) {
                 return;
             }
@@ -70,6 +66,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        context = getContext();
         setPreferencesFromResource(R.xml.prefs, rootKey);
 
         setupPreferenceButtonActions();
@@ -116,29 +113,14 @@ public class SettingsFragment extends PreferenceFragmentCompat
         });
     }
 
-    @Override
-    public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
-        Toast.makeText(getContext(), "test" + newValue.toString(), Toast.LENGTH_LONG).show();
-        if (preference instanceof SeekBarPreference) {
-            Toast.makeText(getContext(), "test" + newValue, Toast.LENGTH_LONG).show();
-        }
-
-        return true;
-    }
-
     private void askUserPreferredKeyboardLayout() {
-        Context context = getContext();
-
         Map<String, String> inputMethodsNameAndId = findAllAvailableLayouts();
 
         ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String selectedKeyboardId = SharedPreferenceHelper
-            .getInstance(context.getApplicationContext())
-            .getString(
-                getString(R.string.pref_selected_keyboard_layout),
-                "");
+        String selectedKeyboardId =
+            SharedPreferenceHelper.getInstance(context.getApplicationContext()).getString(getString(R.string.pref_selected_keyboard_layout), "");
         int selectedKeyboardIndex = -1;
         if (!selectedKeyboardId.isEmpty()) {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
@@ -156,18 +138,17 @@ public class SettingsFragment extends PreferenceFragmentCompat
                     sharedPreferencesEditor.apply();
                     MainKeypadActionListener.rebuildKeyboardData(getResources(), getContext());
                 }
-            })
-            .show();
+            }).show();
     }
 
     private Map<String, String> findAllAvailableLayouts() {
         Map<String, String> languagesAndLayouts = new TreeMap<>();
         Resources resources = getResources();
-        Context context = getContext().getApplicationContext();
+        Context applicationContext = context.getApplicationContext();
         String[] fields = resources.getStringArray(R.array.keyboard_layouts_id);
 
         for (String field : fields) {
-            LayoutFileName file = new LayoutFileName(resources, context, field);
+            LayoutFileName file = new LayoutFileName(resources, applicationContext, field);
             if (file.isValidLayout()) {
                 languagesAndLayouts.put(file.getLayoutDisplayName(), file.getResourceName());
             }
@@ -177,7 +158,6 @@ public class SettingsFragment extends PreferenceFragmentCompat
     }
 
     private void askUserPreferredEmoticonKeyboard() {
-        Context context = getContext();
         InputMethodManager imeManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
         List<InputMethodInfo> inputMethods = imeManager.getEnabledInputMethodList();
 
@@ -190,11 +170,8 @@ public class SettingsFragment extends PreferenceFragmentCompat
         ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String selectedKeyboardId = SharedPreferenceHelper
-            .getInstance(context.getApplicationContext())
-            .getString(
-                getString(R.string.pref_selected_emoticon_keyboard),
-                "");
+        String selectedKeyboardId =
+            SharedPreferenceHelper.getInstance(context.getApplicationContext()).getString(getString(R.string.pref_selected_emoticon_keyboard), "");
         int selectedKeyboardIndex = -1;
         if (!selectedKeyboardId.isEmpty()) {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
@@ -210,29 +187,17 @@ public class SettingsFragment extends PreferenceFragmentCompat
                     sharedPreferencesEditor.putString(getString(R.string.pref_selected_emoticon_keyboard), keyboardIds.get(which));
                     sharedPreferencesEditor.apply();
                 }
-            }
-        )
-            .show();
+            }).show();
     }
 
     private MaterialDialog createItemsChoice(int titleRes, Collection<String> items, int selectedIndex, OnSelectCallback onSelectCallback) {
         return DialogSingleChoiceExtKt.listItemsSingleChoice(
-            new MaterialDialog(getContext(), MaterialDialog.getDEFAULT_BEHAVIOR())
-                .title(titleRes, null)
-                .positiveButton(R.string.generic_okay_text, null, null)
-                .negativeButton(R.string.generic_cancel_text, null, null),
-            null,
-            new ArrayList<>(items),
-            null,
-            selectedIndex,
-            true,
-            -1,
-            -1,
-            (dialog, which, text) -> {
+            new MaterialDialog(context, MaterialDialog.getDEFAULT_BEHAVIOR()).title(titleRes, null)
+                .positiveButton(R.string.generic_okay_text, null, null).negativeButton(R.string.generic_cancel_text, null, null), null,
+            new ArrayList<>(items), null, selectedIndex, true, -1, -1, (dialog, which, text) -> {
                 onSelectCallback.onSelect(dialog, which, text);
                 return null;
-            }
-        );
+            });
     }
 
     private interface OnSelectCallback {
