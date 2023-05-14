@@ -55,7 +55,8 @@
             app:showSeekBarValue="true"
             app:title="@string/pref_circle_y_offset_title" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
+            android:widgetLayout="@layout/material_switch"
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/pref_sidebar_left_key"
@@ -68,7 +69,8 @@
         app:iconSpaceReserved="false"
         app:title="@string/pref_category_look_and_feel">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
+            android:widgetLayout="@layout/material_switch"
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/pref_display_sector_icons_key"
@@ -76,7 +78,8 @@
             app:summaryOn="@string/pref_display_sector_icons_summary_on"
             app:title="@string/pref_display_sector_icons_title" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
+            android:widgetLayout="@layout/material_switch"
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/pref_display_wheel_characters_key"
@@ -84,7 +87,8 @@
             app:summaryOn="@string/pref_display_wheel_characters_summary_on"
             app:title="@string/pref_display_wheel_characters_title" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
+            android:widgetLayout="@layout/material_switch"
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/pref_typing_trail_visibility_key"
@@ -92,7 +96,8 @@
             app:summaryOn="@string/pref_typing_trail_visibility_summary_on"
             app:title="@string/pref_typing_trail_visibility_title" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
+            android:widgetLayout="@layout/material_switch"
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/pref_haptic_feedback_key"
@@ -100,37 +105,39 @@
             app:summaryOn="@string/pref_haptic_feedback_summary_on"
             app:title="@string/pref_haptic_feedback_title" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/pref_sound_feedback_key"
             app:summaryOff="@string/pref_sound_feedback_summary_off"
             app:summaryOn="@string/pref_sound_feedback_summary_on"
             app:title="@string/pref_sound_feedback_title" />
+        android:widgetLayout="@layout/material_switch"/>
 
         <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
+            app:colorChoices="@array/color_palette"
+            app:colorShape="circle"
             app:defaultValue="@color/defaultBoardBg"
-            app:key="@string/pref_board_bg_color_key"
-            app:title="@string/pref_board_bg_color_title"
             app:iconSpaceReserved="false"
-            app:colorShape="circle"
-            app:colorChoices="@array/color_palette"
-            app:viewSize="large"
+            app:key="@string/pref_board_bg_color_key"
             app:numColumns="6"
-            app:showDialog="true" />
+            app:showDialog="true"
+            app:title="@string/pref_board_bg_color_title"
+            app:viewSize="large" />
 
         <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
-            app:defaultValue="@color/defaultBoardFg"
-            app:key="@string/pref_board_fg_color_key"
-            app:title="@string/pref_board_fg_color_title"
-            app:iconSpaceReserved="false"
-            app:colorShape="circle"
             app:colorChoices="@array/color_palette"
-            app:viewSize="large"
+            app:colorShape="circle"
+            app:defaultValue="@color/defaultBoardFg"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_board_fg_color_key"
             app:numColumns="6"
-            app:showDialog="true" />
+            app:showDialog="true"
+            app:title="@string/pref_board_fg_color_title"
+            app:viewSize="large" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
+            android:widgetLayout="@layout/material_switch"
             app:defaultValue="true"
             app:iconSpaceReserved="false"
             app:key="@string/pref_random_trail_color_key"
@@ -139,14 +146,14 @@
             app:title="@string/pref_random_trail_color_title" />
 
         <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
-            app:defaultValue="@color/defaultTrail"
-            app:key="@string/pref_trail_color_key"
-            app:title="@string/pref_trail_color_title"
-            app:iconSpaceReserved="false"
-            app:colorShape="circle"
             app:colorChoices="@array/color_palette"
-            app:viewSize="large"
+            app:colorShape="circle"
+            app:defaultValue="@color/defaultTrail"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_trail_color_key"
             app:numColumns="6"
-            app:showDialog="true" />
+            app:showDialog="true"
+            app:title="@string/pref_trail_color_title"
+            app:viewSize="large" />
     </PreferenceCategory>
 </PreferenceScreen>

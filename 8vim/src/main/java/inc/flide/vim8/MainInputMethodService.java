@@ -15,11 +15,13 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.android.material.color.DynamicColors;
+
 import java.util.List;
 
 import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
-import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
@@ -66,10 +68,11 @@ public class MainInputMethodService extends InputMethodService {
 
     @Override
     public View onCreateInputView() {
-        numberKeypadView = new NumberKeypadView(this, null);
-        selectionKeypadView = new SelectionKeypadView(this, null);
-        symbolKeypadView = new SymbolKeypadView(this, null);
-        mainKeyboardView = new MainKeyboardView(this, null);
+        DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
+        numberKeypadView = new NumberKeypadView(this);
+        selectionKeypadView = new SelectionKeypadView(this);
+        symbolKeypadView = new SymbolKeypadView(this);
+        mainKeyboardView = new MainKeyboardView(this);
         setCurrentKeypadView(mainKeyboardView);
         return currentKeypadView;
     }
@@ -127,27 +130,27 @@ public class MainInputMethodService extends InputMethodService {
 
     public void sendDownKeyEvent(int keyEventCode, int flags) {
         inputConnection.sendKeyEvent(
-                new KeyEvent(
-                        SystemClock.uptimeMillis(),
-                        SystemClock.uptimeMillis(),
-                        KeyEvent.ACTION_DOWN,
-                        keyEventCode,
-                        0,
-                        flags
-                )
+            new KeyEvent(
+                SystemClock.uptimeMillis(),
+                SystemClock.uptimeMillis(),
+                KeyEvent.ACTION_DOWN,
+                keyEventCode,
+                0,
+                flags
+            )
         );
     }
 
     public void sendUpKeyEvent(int keyEventCode, int flags) {
         inputConnection.sendKeyEvent(
-                new KeyEvent(
-                        SystemClock.uptimeMillis(),
-                        SystemClock.uptimeMillis(),
-                        KeyEvent.ACTION_UP,
-                        keyEventCode,
-                        0,
-                        flags
-                )
+            new KeyEvent(
+                SystemClock.uptimeMillis(),
+                SystemClock.uptimeMillis(),
+                KeyEvent.ACTION_UP,
+                keyEventCode,
+                0,
+                flags
+            )
         );
     }
 
@@ -170,8 +173,8 @@ public class MainInputMethodService extends InputMethodService {
 
     private String getSelectedEmoticonKeyboardId() {
         String emoticonKeyboardId = SharedPreferenceHelper
-                .getInstance(getApplicationContext())
-                .getString(getString(R.string.pref_selected_emoticon_keyboard), "");
+            .getInstance(getApplicationContext())
+            .getString(getString(R.string.pref_selected_emoticon_keyboard), "");
 
         // Before returning verify that this keyboard Id we have does exist in the system.
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -283,7 +286,7 @@ public class MainInputMethodService extends InputMethodService {
 
     /*
      * |-------|-------|-------|-------|
-             *                              1111 IME_MASK_ACTION
+     *                              1111 IME_MASK_ACTION
      * |-------|-------|-------|-------|
      *                                   IME_ACTION_UNSPECIFIED
      *                                 1 IME_ACTION_NONE

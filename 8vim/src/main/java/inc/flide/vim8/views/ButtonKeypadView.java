@@ -5,9 +5,9 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
-import android.util.AttributeSet;
+
+import com.hijamoya.keyboardview.Keyboard;
+import com.hijamoya.keyboardview.KeyboardView;
 
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
@@ -19,13 +19,8 @@ public abstract class ButtonKeypadView extends KeyboardView {
     private final Paint foregroundPaint = new Paint();
     private Typeface font;
 
-    public ButtonKeypadView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initialize();
-    }
-
-    public ButtonKeypadView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public ButtonKeypadView(Context context) {
+        super(context, null, R.attr.keyboardViewStyle, R.style.KeyboardView);
         initialize();
     }
 

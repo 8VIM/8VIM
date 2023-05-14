@@ -1,5 +1,6 @@
 package inc.flide.vim8.structures;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 
@@ -32,6 +33,7 @@ public class LayoutFileName {
         totalLayers = 1;
     }
 
+    @SuppressLint("DiscouragedApi")
     public LayoutFileName(Resources resources, Context context, String fileName) {
         this();
         if (ISO_LANGUAGES.contains(fileName)) {

@@ -25,6 +25,7 @@ import com.afollestad.materialdialogs.list.DialogSingleChoiceExtKt;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,28 +147,16 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 sharedPreferences.edit().remove(getString(R.string.pref_selected_keyboard_layout)).apply();
             }
         }
-        DialogSingleChoiceExtKt.listItemsSingleChoice(
-                new MaterialDialog(context, MaterialDialog.getDEFAULT_BEHAVIOR())
-                    .title(R.string.select_preferred_keyboard_layout_dialog_title, null)
-                    .positiveButton(R.string.generic_okay_text, null, null),
-                null,
-                new ArrayList<>(inputMethodsNameAndId.keySet()),
-                null,
-                selectedKeyboardIndex,
-                true,
-                -1,
-                -1,
-                (dialog, which, text) -> {
-                    if (which != -1) {
-                        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                        sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout), keyboardIds.get(which));
-                        sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), false);
-                        sharedPreferencesEditor.apply();
-                        MainKeypadActionListener.rebuildKeyboardData(getResources(), getContext());
-                    }
-                    return null;
+        createItemsChoice(R.string.select_preferred_keyboard_layout_dialog_title, inputMethodsNameAndId.keySet(), selectedKeyboardIndex,
+            (dialog, which, text) -> {
+                if (which != -1) {
+                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                    sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout), keyboardIds.get(which));
+                    sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), false);
+                    sharedPreferencesEditor.apply();
+                    MainKeypadActionListener.rebuildKeyboardData(getResources(), getContext());
                 }
-            )
+            })
             .show();
     }
 
@@ -214,26 +203,39 @@ public class SettingsFragment extends PreferenceFragmentCompat
                 sharedPreferences.edit().remove(getString(R.string.pref_selected_emoticon_keyboard)).apply();
             }
         }
-        DialogSingleChoiceExtKt.listItemsSingleChoice(
-                new MaterialDialog(context, null)
-                    .title(R.string.select_preferred_emoticon_keyboard_dialog_title, null)
-                    .positiveButton(R.string.generic_okay_text, null, null),
-                null,
-                new ArrayList<>(inputMethodsNameAndId.keySet()),
-                null,
-                selectedKeyboardIndex,
-                true,
-                -1,
-                -1,
-                (dialog, which, text) -> {
-                    if (which != -1) {
-                        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                        sharedPreferencesEditor.putString(getString(R.string.pref_selected_emoticon_keyboard), keyboardIds.get(which));
-                        sharedPreferencesEditor.apply();
-                    }
-                    return null;
+        createItemsChoice(R.string.select_preferred_emoticon_keyboard_dialog_title, inputMethodsNameAndId.keySet(), selectedKeyboardIndex,
+            (dialog, which, text) -> {
+                if (which != -1) {
+                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                    sharedPreferencesEditor.putString(getString(R.string.pref_selected_emoticon_keyboard), keyboardIds.get(which));
+                    sharedPreferencesEditor.apply();
                 }
-            )
+            }
+        )
             .show();
+    }
+
+    private MaterialDialog createItemsChoice(int titleRes, Collection<String> items, int selectedIndex, OnSelectCallback onSelectCallback) {
+        return DialogSingleChoiceExtKt.listItemsSingleChoice(
+            new MaterialDialog(getContext(), MaterialDialog.getDEFAULT_BEHAVIOR())
+                .title(titleRes, null)
+                .positiveButton(R.string.generic_okay_text, null, null)
+                .negativeButton(R.string.generic_cancel_text, null, null),
+            null,
+            new ArrayList<>(items),
+            null,
+            selectedIndex,
+            true,
+            -1,
+            -1,
+            (dialog, which, text) -> {
+                onSelectCallback.onSelect(dialog, which, text);
+                return null;
+            }
+        );
+    }
+
+    private interface OnSelectCallback {
+        void onSelect(MaterialDialog dialog, int index, CharSequence test);
     }
 }

@@ -50,7 +50,6 @@
         <item>tr</item>
         <item>uk</item>
     </string-array>
-    <string name="select_custom_keyboard_layout_dialog_title">Load the layout file from disk</string>
     <string name="generic_okay_text">OK</string>
     <string name="generic_cancel_text">Cancel</string>
 

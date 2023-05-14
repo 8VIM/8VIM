@@ -2,8 +2,8 @@ package inc.flide.vim8.views;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.inputmethodservice.Keyboard;
-import android.util.AttributeSet;
+
+import com.hijamoya.keyboardview.Keyboard;
 
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -13,13 +13,8 @@ import inc.flide.vim8.structures.Constants;
 
 public class SymbolKeypadView extends ButtonKeypadView {
 
-    public SymbolKeypadView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initialize(context);
-    }
-
-    public SymbolKeypadView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public SymbolKeypadView(Context context) {
+        super(context);
         initialize(context);
     }
 

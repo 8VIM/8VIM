@@ -2,8 +2,8 @@ package inc.flide.vim8.views;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.inputmethodservice.Keyboard;
-import android.util.AttributeSet;
+
+import com.hijamoya.keyboardview.Keyboard;
 
 import java.util.List;
 
@@ -15,21 +15,15 @@ import inc.flide.vim8.structures.Constants;
 
 public class SelectionKeypadView extends ButtonKeypadView {
 
-    public SelectionKeypadView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        initialize(context);
-    }
-
-    public SelectionKeypadView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public SelectionKeypadView(Context context) {
+        super(context);
         initialize(context);
     }
 
     public void initialize(Context context) {
         Resources resources = getResources();
-        int foregroundColor = SharedPreferenceHelper.getInstance(getContext()).getInt(
-            resources.getString(R.string.pref_board_fg_color_key),
-            resources.getColor(R.color.defaultBoardFg));
+        int foregroundColor = SharedPreferenceHelper.getInstance(getContext())
+            .getInt(resources.getString(R.string.pref_board_fg_color_key), resources.getColor(R.color.defaultBoardFg));
 
         MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
 
@@ -44,9 +38,9 @@ public class SelectionKeypadView extends ButtonKeypadView {
                 key.icon.setAlpha(Constants.MAX_RGB_COMPONENT_VALUE);
             }
         }
-        this.setKeyboard(keyboard);
+        setKeyboard(keyboard);
 
         ButtonKeypadActionListener actionListener = new ButtonKeypadActionListener(mainInputMethodService, this);
-        this.setOnKeyboardActionListener(actionListener);
+        setOnKeyboardActionListener(actionListener);
     }
 }

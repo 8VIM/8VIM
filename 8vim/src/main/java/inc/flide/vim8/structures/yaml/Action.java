@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
@@ -72,7 +73,7 @@ public class Action {
         if (keyCodeString == null || keyCodeString.isEmpty()) {
             return;
         }
-        keyCodeString = keyCodeString.toUpperCase();
+        keyCodeString = keyCodeString.toUpperCase(Locale.ROOT);
         //Strictly the inputKey has to has to be a Keycode from the KeyEvent class
         //Or it needs to be one of the customKeyCodes
         keyCode = KeyEvent.keyCodeFromString(keyCodeString);
