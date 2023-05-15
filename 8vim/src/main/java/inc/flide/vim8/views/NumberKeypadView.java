@@ -8,6 +8,7 @@ import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardactionlisteners.ButtonKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.utils.ColorsHelper;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -43,9 +44,10 @@ public class NumberKeypadView extends ButtonKeypadView {
 
     private void setColors(Keyboard keyboard) {
         Resources resources = getResources();
-        int foregroundColor = SharedPreferenceHelper.getInstance(getContext()).getInt(
-                resources.getString(R.string.pref_board_fg_color_key),
-                resources.getColor(R.color.defaultBoardFg));
+        int foregroundColor = ColorsHelper.getThemeColor(getContext(), R.attr.colorOnBackground);
+//        int foregroundColor = SharedPreferenceHelper.getInstance(getContext()).getInt(
+//                resources.getString(R.string.pref_board_fg_color_key),
+//                resources.getColor(R.color.defaultBoardFg));
         // Tint icon keys
         for (Keyboard.Key key : keyboard.getKeys()) {
             if (key.icon != null) {

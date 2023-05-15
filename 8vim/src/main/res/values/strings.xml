@@ -133,6 +133,8 @@
     <string name="pref_trail_color_key">trail_color</string>
     <string name="pref_trail_color_title">Touch trail color</string>
 
+    <string name="pref_color_mode">color_mode</string>
+
     <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
     <string name="about_us_label">About Us</string>
     <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>

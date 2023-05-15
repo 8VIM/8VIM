@@ -52,7 +52,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 } catch (Exception e) {
                     return;
                 }
-
                 sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), true);
                 sharedPreferencesEditor.putString(getString(R.string.pref_selected_custom_keyboard_layout_uri),
                         selectedCustomLayoutFile.toString());
@@ -65,8 +64,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         context = getContext();
         setPreferencesFromResource(R.xml.preferences, rootKey);
-
         setupPreferenceButtonActions();
+        setupPreferenceCallbacks();
+    }
+
+    private void setupPreferenceCallbacks() {
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String prefRandomTrailKey = getString(R.string.pref_random_trail_color_key);
+        Preference preferenceTrailColor = findPreference(getString(R.string.pref_trail_color_key));
+        findPreference(prefRandomTrailKey).setOnPreferenceChangeListener((pref, value) -> {
+            preferenceTrailColor.setVisible(!((boolean) value));
+            return true;
+        });
+        preferenceTrailColor.setVisible(defaultSharedPreferences.getBoolean(prefRandomTrailKey, false));
     }
 
     private void setupPreferenceButtonActions() {

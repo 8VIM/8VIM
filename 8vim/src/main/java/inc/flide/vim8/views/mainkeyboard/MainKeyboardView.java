@@ -18,6 +18,7 @@ import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.ui.SettingsActivity;
+import inc.flide.vim8.utils.ColorsHelper;
 
 
 public class MainKeyboardView extends ConstraintLayout {
@@ -80,14 +81,18 @@ public class MainKeyboardView extends ConstraintLayout {
 
     private void setColors() {
         Resources resources = getResources();
+        Context context = getContext();
         SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(getContext());
-        int backgroundColor = pref.getInt(
-                resources.getString(R.string.pref_board_bg_color_key),
-                resources.getColor(R.color.defaultBoardBg));
+        int backgroundColor = ColorsHelper.getThemeColor(context, R.attr.backgroundColor);
+        int tintColor = ColorsHelper.getThemeColor(context, R.attr.colorOnBackground);
 
-        int tintColor = pref.getInt(
-                resources.getString(R.string.pref_board_fg_color_key),
-                resources.getColor(R.color.defaultBoardFg));
+//        int backgroundColor = pref.getInt(
+//                resources.getString(R.string.pref_board_bg_color_key),
+//                resources.getColor(R.color.defaultBoardBg));
+//
+//        int tintColor = pref.getInt(
+//                resources.getString(R.string.pref_board_fg_color_key),
+//                resources.getColor(R.color.defaultBoardFg));
 
         this.setBackgroundColor(backgroundColor);
         setImageButtonTint(tintColor, R.id.ctrlButton);

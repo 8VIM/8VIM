@@ -25,6 +25,7 @@ import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.utils.ColorsHelper;
 import java.util.Random;
 
 public class XpadView extends View {
@@ -115,15 +116,16 @@ public class XpadView extends View {
     private void updateColors(Context context) {
         Resources resources = getResources();
         SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
-
-        int backgroundColor = sharedPreferenceHelper.getInt(
-                resources.getString(R.string.pref_board_bg_color_key),
-                resources.getColor(R.color.defaultBoardBg));
-
-        foregroundColor = sharedPreferenceHelper.getInt(
-                resources.getString(R.string.pref_board_fg_color_key),
-                resources.getColor(R.color.defaultBoardFg));
-
+        int backgroundColor = ColorsHelper.getThemeColor(context, R.attr.backgroundColor);
+        foregroundColor = ColorsHelper.getThemeColor(context, R.attr.colorOnBackground);
+//        int backgroundColor = sharedPreferenceHelper.getInt(
+//                resources.getString(R.string.pref_board_bg_color_key),
+//                resources.getColor(R.color.defaultBoardBg));
+//
+//        foregroundColor = sharedPreferenceHelper.getInt(
+//                resources.getString(R.string.pref_board_fg_color_key),
+//                resources.getColor(R.color.defaultBoardFg));
+//
         userPreferRandomTrailColor = sharedPreferenceHelper.getBoolean(
                 resources.getString(R.string.pref_random_trail_color_key),
                 false);

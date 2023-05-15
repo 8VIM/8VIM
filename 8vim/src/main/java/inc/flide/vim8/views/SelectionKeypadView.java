@@ -8,6 +8,7 @@ import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardactionlisteners.ButtonKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.utils.ColorsHelper;
 import java.util.List;
 
 public class SelectionKeypadView extends ButtonKeypadView {
@@ -19,9 +20,10 @@ public class SelectionKeypadView extends ButtonKeypadView {
 
     public void initialize(Context context) {
         Resources resources = getResources();
-        int foregroundColor = SharedPreferenceHelper.getInstance(getContext())
-                .getInt(resources.getString(R.string.pref_board_fg_color_key),
-                        resources.getColor(R.color.defaultBoardFg));
+        int foregroundColor = ColorsHelper.getThemeColor(getContext(), R.attr.colorOnBackground);
+//        int foregroundColor = SharedPreferenceHelper.getInstance(getContext())
+//                .getInt(resources.getString(R.string.pref_board_fg_color_key),
+//                        resources.getColor(R.color.defaultBoardFg));
 
         MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
 

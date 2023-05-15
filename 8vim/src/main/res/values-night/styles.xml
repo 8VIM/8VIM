@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.Material3.DynamicColors.Light" />
+    <style name="AppTheme" parent="Theme.Material3.DynamicColors.Dark" />
 
     <style name="AppTheme.NoActionBar">
-        <item name="backgroundColor">@android:color/background_light</item>
+        <item name="backgroundColor">@android:color/background_dark</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>

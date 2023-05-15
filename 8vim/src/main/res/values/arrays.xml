@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="pref_color_mode_labels">
+        <item>System</item>
+        <item>Dark</item>
+        <item>Light</item>
+        <item>Custom</item>
+    </array>
+    <array name="pref_color_mode_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </array>
+</resources>

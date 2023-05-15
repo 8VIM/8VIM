@@ -211,7 +211,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
             return;
         }
 
-        if (keyboardAction.getKeyboardActionType() == KeyboardActionType.INPUT_KEY) {
+        if (keyboardAction.getKeyboardActionType() == KeyboardActionType.INPUT_TEXT) {
             handleInputText(keyboardAction);
         } else {
             handleInputKey(keyboardAction);

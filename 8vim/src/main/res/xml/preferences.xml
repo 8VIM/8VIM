@@ -112,8 +112,12 @@
             app:summaryOff="@string/pref_sound_feedback_summary_off"
             app:summaryOn="@string/pref_sound_feedback_summary_on"
             app:title="@string/pref_sound_feedback_title" />
-        android:widgetLayout="@layout/material_switch"/>
-
+        <ListPreference
+            android:entries="@array/pref_color_mode_labels"
+            android:entryValues="@array/pref_color_mode_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_color_mode"
+            app:title="@string/pref_sound_feedback_title" />
         <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
             app:colorChoices="@array/color_palette"
             app:colorShape="circle"

@@ -14,6 +14,7 @@ import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
+import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
@@ -45,6 +46,13 @@ public class MainInputMethodService extends InputMethodService {
         setInputView(currentKeypadView);
     }
 
+    @Override
+    public void onCreate() {
+        DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
+        setTheme(R.style.AppTheme_NoActionBar);
+        super.onCreate();
+    }
+
     /**
      * Lifecycle of IME
      * <p>
@@ -63,9 +71,9 @@ public class MainInputMethodService extends InputMethodService {
      * 13. InputMethodService stops
      */
 
+
     @Override
     public View onCreateInputView() {
-        DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         numberKeypadView = new NumberKeypadView(this);
         selectionKeypadView = new SelectionKeypadView(this);
         symbolKeypadView = new SymbolKeypadView(this);
