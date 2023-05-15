@@ -6,7 +6,6 @@ import android.os.Build;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
-
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
@@ -15,9 +14,9 @@ import inc.flide.vim8.structures.KeyboardAction;
 
 public class KeypadActionListener {
 
+    private final AudioManager audioManager;
     protected MainInputMethodService mainInputMethodService;
     protected View view;
-    private final AudioManager audioManager;
 
     public KeypadActionListener(MainInputMethodService mainInputMethodService, View view) {
         this.mainInputMethodService = mainInputMethodService;
@@ -68,17 +67,17 @@ public class KeypadActionListener {
     private void performInputAcceptedFeedback(int keySound) {
         SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(mainInputMethodService);
         boolean userEnabledHapticFeedback =
-            pref.getBoolean(
-                mainInputMethodService.getString(R.string.pref_haptic_feedback_key),
-                true);
+                pref.getBoolean(
+                        mainInputMethodService.getString(R.string.pref_haptic_feedback_key),
+                        true);
         if (userEnabledHapticFeedback) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
-                HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
         boolean userEnabledSoundFeedback = pref
-            .getBoolean(
-                mainInputMethodService.getString(R.string.pref_sound_feedback_key),
-                true);
+                .getBoolean(
+                        mainInputMethodService.getString(R.string.pref_sound_feedback_key),
+                        true);
         if (userEnabledSoundFeedback) {
             audioManager.playSoundEffect(keySound);
         }
@@ -173,7 +172,7 @@ public class KeypadActionListener {
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
-        if ((isShiftSet() || isCapsLockSet() || isCircleCapitalization()) && !keyboardAction.getCapsLockText().isEmpty()) {
+        if ((isShiftSet() || isCapsLockSet()) && !keyboardAction.getCapsLockText().isEmpty()) {
             onText(keyboardAction.getCapsLockText());
         } else {
             onText(keyboardAction.getText());
@@ -200,10 +199,6 @@ public class KeypadActionListener {
 
     public boolean isCapsLockSet() {
         return mainInputMethodService.getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
-    }
-
-    public boolean isCircleCapitalization() {
-        return false;
     }
 
     public int findLayer() {

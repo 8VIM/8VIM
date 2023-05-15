@@ -53,8 +53,6 @@ public class XpadView extends View {
     private final PointF circleCenter = new PointF();
     private final Circle circle = new Circle();
     private final Dimension keypadDimension = new Dimension();
-    private Typeface font;
-    private Typeface fontBold;
 
     private final Matrix xformMatrix = new Matrix();
     // There are 4 sectors, each has 4 letters above, and 4 below.
@@ -94,8 +92,8 @@ public class XpadView extends View {
             this.computeComponentPositions(this.getWidth(), this.getHeight());
             this.invalidate();
         });
-        font = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Regular.otf");
-        fontBold = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Bold.otf");
+        Typeface font = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Regular.otf");
+        Typeface fontBold = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Bold.otf");
 
         loadResources();
         updateColors(context);
@@ -421,7 +419,7 @@ public class XpadView extends View {
 
     private String getCharacterSetToDisplay() {
         int layer = actionListener.findLayer();
-        if (actionListener.areCharactersCapitalized() || actionListener.isCircleCapitalization()) {
+        if (actionListener.areCharactersCapitalized()) {
             return actionListener.getUpperCaseCharacters(layer);
         }
 
