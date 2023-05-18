@@ -296,8 +296,8 @@ public class XpadView extends View {
             for (int i = 0; i < characterSet.length(); i++) {
                 Paint paint = foregroundPaint;
                 String letter = String.valueOf(characterSet.charAt(i));
-                if (actionListener.getCurrentLetter() != null &&
-                        String.valueOf(actionListener.getCurrentLetter().charAt(0)).equals(letter)) {
+                if (actionListener.getCurrentLetter() != null
+                        && String.valueOf(actionListener.getCurrentLetter().charAt(0)).equals(letter)) {
                     paint = foregroundHighlightPaint;
 
                     // Draw a box around the current letter.

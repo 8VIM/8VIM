@@ -5,6 +5,12 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Handler;
 import android.view.View;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
 import inc.flide.vim8.structures.Constants;
@@ -12,30 +18,18 @@ import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.MovementSequenceType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 
 public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 7;
     private static final FingerPosition[][] ROTATION_MOVEMENT_SEQUENCES = {
-            {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
-                    FingerPosition.BOTTOM, FingerPosition.LEFT},
-            {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
-                    FingerPosition.BOTTOM, FingerPosition.RIGHT},
-            {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                    FingerPosition.TOP},
-            {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
-                    FingerPosition.BOTTOM},
-            {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
-                    FingerPosition.LEFT},
-            {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
-                    FingerPosition.RIGHT},
-            {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
-                    FingerPosition.TOP},
-            {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
-                    FingerPosition.BOTTOM},
+        {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT},
+        {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT},
+        {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP},
+        {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM},
+        {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT},
+        {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT},
+        {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP},
+        {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM},
     };
     private static KeyboardData keyboardData;
     private final Handler longPressHandler = new Handler();
@@ -74,7 +68,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     public static void rebuildKeyboardData(Resources resource, Context context, Uri customLayoutUri) {
         keyboardData =
-                InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resource, context, customLayoutUri);
+            InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resource, context, customLayoutUri);
     }
 
     public String getLowerCaseCharacters(int layer) {
@@ -105,7 +99,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     private boolean isFullRotation() {
         if (movementSequence.size() == FULL_ROTATION_STEPS
-                && movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE) {
+            && movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE) {
             return rotationMovementSequences.contains(movementSequence.subList(1, FULL_ROTATION_STEPS));
         }
         return false;
@@ -135,7 +129,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
             }
 
             if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE
-                    && keyboardData.getActionMap().get(movementSequence) != null) {
+                && keyboardData.getActionMap().get(movementSequence) != null) {
                 processMovementSequence(movementSequence);
                 movementSequence.clear();
                 currentLetter = null;
