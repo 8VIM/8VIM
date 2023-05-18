@@ -1,7 +1,6 @@
 package inc.flide.vim8.views;
 
 import android.content.Context;
-import android.content.res.Resources;
 import com.hijamoya.keyboardview.Keyboard;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -43,11 +42,10 @@ public class NumberKeypadView extends ButtonKeypadView {
     }
 
     private void setColors(Keyboard keyboard) {
-        Resources resources = getResources();
-        int foregroundColor = ColorsHelper.getThemeColor(getContext(), R.attr.colorOnBackground);
-//        int foregroundColor = SharedPreferenceHelper.getInstance(getContext()).getInt(
-//                resources.getString(R.string.pref_board_fg_color_key),
-//                resources.getColor(R.color.defaultBoardFg));
+        int foregroundColor =
+                ColorsHelper.getThemeColor(getContext(), R.attr.colorOnBackground, R.string.pref_board_fg_color_key,
+                        R.color.defaultBoardFg);
+
         // Tint icon keys
         for (Keyboard.Key key : keyboard.getKeys()) {
             if (key.icon != null) {

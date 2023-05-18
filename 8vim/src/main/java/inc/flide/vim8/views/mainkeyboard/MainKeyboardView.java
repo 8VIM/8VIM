@@ -2,7 +2,6 @@ package inc.flide.vim8.views.mainkeyboard;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -80,19 +79,13 @@ public class MainKeyboardView extends ConstraintLayout {
     }
 
     private void setColors() {
-        Resources resources = getResources();
         Context context = getContext();
-        SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(getContext());
-        int backgroundColor = ColorsHelper.getThemeColor(context, R.attr.backgroundColor);
-        int tintColor = ColorsHelper.getThemeColor(context, R.attr.colorOnBackground);
-
-//        int backgroundColor = pref.getInt(
-//                resources.getString(R.string.pref_board_bg_color_key),
-//                resources.getColor(R.color.defaultBoardBg));
-//
-//        int tintColor = pref.getInt(
-//                resources.getString(R.string.pref_board_fg_color_key),
-//                resources.getColor(R.color.defaultBoardFg));
+        int backgroundColor =
+                ColorsHelper.getThemeColor(context, R.attr.backgroundColor, R.string.pref_board_bg_color_key,
+                        R.color.defaultBoardBg);
+        int tintColor =
+                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground, R.string.pref_board_fg_color_key,
+                        R.color.defaultBoardFg);
 
         this.setBackgroundColor(backgroundColor);
         setImageButtonTint(tintColor, R.id.ctrlButton);

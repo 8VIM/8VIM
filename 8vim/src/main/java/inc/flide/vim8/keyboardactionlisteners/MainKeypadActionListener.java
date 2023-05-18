@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Handler;
 import android.view.View;
+import androidx.annotation.StyleRes;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.structures.Constants;
@@ -21,22 +22,22 @@ import java.util.List;
 public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 6;
     private static final FingerPosition[][] ROTATION_MOVEMENT_SEQUENCES = {
-            {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
-                    FingerPosition.BOTTOM, FingerPosition.LEFT},
-            {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
-                    FingerPosition.BOTTOM, FingerPosition.RIGHT},
-            {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                    FingerPosition.TOP},
-            {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
-                    FingerPosition.BOTTOM},
-            {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
-                    FingerPosition.LEFT},
-            {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
-                    FingerPosition.RIGHT},
-            {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
-                    FingerPosition.TOP},
-            {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
-                    FingerPosition.BOTTOM},
+        {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+            FingerPosition.BOTTOM, FingerPosition.LEFT},
+        {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+            FingerPosition.BOTTOM, FingerPosition.RIGHT},
+        {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+            FingerPosition.TOP},
+        {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+            FingerPosition.BOTTOM},
+        {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
+            FingerPosition.LEFT},
+        {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
+            FingerPosition.RIGHT},
+        {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
+            FingerPosition.TOP},
+        {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+            FingerPosition.BOTTOM},
     };
     private static KeyboardData keyboardData;
     private final Handler longPressHandler = new Handler();
@@ -75,7 +76,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     public static void rebuildKeyboardData(Resources resource, Context context, Uri customLayoutUri) {
         keyboardData =
-                InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resource, context, customLayoutUri);
+            InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resource, context, customLayoutUri);
     }
 
     public String getLowerCaseCharacters(int layer) {
@@ -141,7 +142,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
             }
             if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE
-                    && keyboardData.getActionMap().get(modifiedMovementSequence) != null) {
+                && keyboardData.getActionMap().get(modifiedMovementSequence) != null) {
                 processMovementSequence(modifiedMovementSequence);
                 movementSequence.clear();
                 currentLetter = null;

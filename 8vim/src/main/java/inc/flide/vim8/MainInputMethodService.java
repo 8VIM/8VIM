@@ -49,7 +49,20 @@ public class MainInputMethodService extends InputMethodService {
     @Override
     public void onCreate() {
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
-        setTheme(R.style.AppTheme_NoActionBar);
+        Context applicationContext = getApplicationContext();
+        switch (SharedPreferenceHelper.getInstance(applicationContext)
+                .getString(getString(R.string.pref_color_mode_key), "system")) {
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                setTheme(R.style.AppThemeDark_NoActionBar);
+                break;
+            case "light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                setTheme(R.style.AppThemeLight_NoActionBar);
+                break;
+            default:
+                setTheme(R.style.AppTheme_NoActionBar);
+        }
         super.onCreate();
     }
 

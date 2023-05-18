@@ -23,8 +23,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
+import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 import java.util.List;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean isKeyboardEnabled;
@@ -35,6 +38,19 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        switch (SharedPreferenceHelper.getInstance(getApplicationContext())
+                .getString(getString(R.string.pref_color_mode_key), "system")) {
+            case "system":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                break;
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                break;
+            case "light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                break;
+            default:
+        }
         setContentView(R.layout.settings_page_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,9 +92,9 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");
             shareIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name);
-            String shareMessage = "\nCheck out this awesome keyboard application\n\n";
-            shareMessage =
-                    shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n";
+            String shareMessage = String.format(
+                    "\nCheck out this awesome keyboard application\n\nhttps://play.google.com/store/apps/details?id=%s\n",
+                    BuildConfig.APPLICATION_ID);
             shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
             startActivity(Intent.createChooser(shareIntent, "Share " + R.string.app_name));
         } else if (item.getItemId() == R.id.help) {
@@ -131,37 +147,38 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     private void enableInputMethodDialog() {
         createMaterialDialog(R.string.enable_ime_dialog_title, R.string.enable_ime_dialog_content,
                 R.string.enable_ime_dialog_neutral_button_text,
-                () -> Snackbar.make(findViewById(android.R.id.content), getString(R.string.choose_the_8vim),
-                                Snackbar.LENGTH_LONG)
-                        .addCallback(new Snackbar.Callback() {
-                            @Override
-                            public void onShown(Snackbar sb) {
-                            }
+                (dialog) -> {
+                    Snackbar.make(findViewById(android.R.id.content), getString(R.string.choose_the_8vim),
+                                    Snackbar.LENGTH_LONG)
+                            .addCallback(new Snackbar.Callback() {
+                                @Override
+                                public void onShown(Snackbar sb) {
+                                }
 
-                            @Override
-                            public void onDismissed(Snackbar transientBottomBar, @DismissEvent int event) {
-                                launchInputMethodSettings.launch(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
-                            }
-                        }).show()).show();
+                                @Override
+                                public void onDismissed(Snackbar transientBottomBar, @DismissEvent int event) {
+                                    launchInputMethodSettings.launch(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
+                                }
+                            }).show();
+                    return null;
+                }).show();
     }
 
     private void activateInputMethodDialog() {
         createMaterialDialog(R.string.activate_ime_dialog_title, R.string.activate_ime_dialog_content,
                 R.string.activate_ime_dialog_positive_button_text,
-                () -> inputMethodManager.showInputMethodPicker()).show();
+                (dialog) -> {
+                    inputMethodManager.showInputMethodPicker();
+                    return null;
+                }).show();
     }
 
     private MaterialDialog createMaterialDialog(int titleRes, int messageRes, int positiveButtonRes,
-                                                OnClickCallback onClickCallback) {
+                                                Function1<MaterialDialog, Unit> callback) {
         return new MaterialDialog(this, MaterialDialog.getDEFAULT_BEHAVIOR()).title(titleRes, null)
                 .message(messageRes, null, null).cancelable(false)
-                .cancelOnTouchOutside(false).positiveButton(positiveButtonRes, null, materialDialog -> {
-                    onClickCallback.onClick();
-                    return null;
-                }).negativeButton(R.string.activate_ime_dialog_negative_button_text, null, null);
-    }
-
-    private interface OnClickCallback {
-        void onClick();
+                .cancelOnTouchOutside(false)
+                .positiveButton(positiveButtonRes, null, callback)
+                .negativeButton(R.string.activate_ime_dialog_negative_button_text, null, null);
     }
 }

@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -30,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function3;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private static final String[] LAYOUT_FILTER = {"*/*"};
@@ -71,12 +74,39 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void setupPreferenceCallbacks() {
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String prefRandomTrailKey = getString(R.string.pref_random_trail_color_key);
+        String prefColorModeKey = getString(R.string.pref_color_mode_key);
         Preference preferenceTrailColor = findPreference(getString(R.string.pref_trail_color_key));
+
         findPreference(prefRandomTrailKey).setOnPreferenceChangeListener((pref, value) -> {
             preferenceTrailColor.setVisible(!((boolean) value));
             return true;
         });
         preferenceTrailColor.setVisible(defaultSharedPreferences.getBoolean(prefRandomTrailKey, false));
+        setColorsSelectionVisible(defaultSharedPreferences.getString(prefColorModeKey, "system"));
+
+        findPreference(prefColorModeKey).setOnPreferenceChangeListener((pref, value) -> {
+            switch ((String) value) {
+                case "system":
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                    break;
+                case "dark":
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    context.getApplicationContext().setTheme(R.style.AppThemeDark_NoActionBar);
+                    break;
+                case "light":
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    break;
+                default:
+            }
+            setColorsSelectionVisible((String) value);
+            return true;
+        });
+    }
+
+    private void setColorsSelectionVisible(String mode) {
+        boolean visible = mode.equals("custom");
+        findPreference(getString(R.string.pref_board_bg_color_key)).setVisible(visible);
+        findPreference(getString(R.string.pref_board_fg_color_key)).setVisible(visible);
     }
 
     private void setupPreferenceButtonActions() {
@@ -150,6 +180,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         sharedPreferencesEditor.apply();
                         MainKeypadActionListener.rebuildKeyboardData(getResources(), getContext());
                     }
+                    return null;
                 }).show();
     }
 
@@ -203,22 +234,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 keyboardIds.get(which));
                         sharedPreferencesEditor.apply();
                     }
+                    return null;
                 }).show();
     }
 
     private MaterialDialog createItemsChoice(int titleRes, Collection<String> items, int selectedIndex,
-                                             OnSelectCallback onSelectCallback) {
+                                             Function3<MaterialDialog, Integer, CharSequence, Unit> callback) {
         return DialogSingleChoiceExtKt.listItemsSingleChoice(
                 new MaterialDialog(context, MaterialDialog.getDEFAULT_BEHAVIOR()).title(titleRes, null)
                         .positiveButton(R.string.generic_okay_text, null, null)
                         .negativeButton(R.string.generic_cancel_text, null, null), null,
-                new ArrayList<>(items), null, selectedIndex, true, -1, -1, (dialog, which, text) -> {
-                    onSelectCallback.onSelect(dialog, which, text);
-                    return null;
-                });
-    }
-
-    private interface OnSelectCallback {
-        void onSelect(MaterialDialog dialog, int index, CharSequence test);
+                new ArrayList<>(items), null, selectedIndex, true, -1, -1, callback);
     }
 }

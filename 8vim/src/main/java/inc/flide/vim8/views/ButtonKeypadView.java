@@ -1,7 +1,6 @@
 package inc.flide.vim8.views;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -35,20 +34,15 @@ public abstract class ButtonKeypadView extends KeyboardView {
     }
 
     private void setColors() {
-        Resources resources = getResources();
         Context context = getContext();
-        SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(getContext());
-        int backgroundColor = ColorsHelper.getThemeColor(context, R.attr.backgroundColor);
-        int foregroundColor = ColorsHelper.getThemeColor(context, R.attr.colorOnBackground);
 
-//        String bgColorKeyId = resources.getString(R.string.pref_board_bg_color_key);
-//        int defaultBackgroundColor = resources.getColor(R.color.defaultBoardBg);
-//
-//        String fgColorKeyId = resources.getString(R.string.pref_board_fg_color_key);
-//        int defaultForegroundColor = resources.getColor(R.color.defaultBoardFg);
-//
-//        int backgroundColor = sharedPreferenceHelper.getInt(bgColorKeyId, defaultBackgroundColor);
-//        int foregroundColor = sharedPreferenceHelper.getInt(fgColorKeyId, defaultForegroundColor);
+        int backgroundColor =
+                ColorsHelper.getThemeColor(context, R.attr.backgroundColor, R.string.pref_board_bg_color_key,
+                        R.color.defaultBoardBg);
+        int foregroundColor =
+                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground, R.string.pref_board_fg_color_key,
+                        R.color.defaultBoardFg);
+
         this.setBackgroundColor(backgroundColor);
 
         foregroundPaint.setColor(foregroundColor);

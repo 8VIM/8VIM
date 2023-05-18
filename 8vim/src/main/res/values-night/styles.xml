@@ -13,7 +13,7 @@
     </style>
 
     <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="color">@color/black</item>
+        <item name="color">?android:colorBackground</item>
     </style>
 
     <style name="KeyboardView" parent="android:Widget">

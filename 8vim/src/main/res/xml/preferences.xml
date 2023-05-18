@@ -115,9 +115,12 @@
         <ListPreference
             android:entries="@array/pref_color_mode_labels"
             android:entryValues="@array/pref_color_mode_values"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="system"
             app:iconSpaceReserved="false"
-            app:key="@string/pref_color_mode"
-            app:title="@string/pref_sound_feedback_title" />
+            app:key="@string/pref_color_mode_key"
+            app:title="@string/pref_color_mode_title" />
+
         <com.kizitonwose.colorpreferencecompat.ColorPreferenceCompat
             app:colorChoices="@array/color_palette"
             app:colorShape="circle"
