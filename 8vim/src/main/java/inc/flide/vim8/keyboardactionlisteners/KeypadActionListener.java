@@ -10,6 +10,7 @@ import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.KeyboardAction;
 
@@ -18,7 +19,6 @@ public abstract class KeypadActionListener {
     private final AudioManager audioManager;
     protected MainInputMethodService mainInputMethodService;
     protected View view;
-    private final AudioManager audioManager;
 
     public KeypadActionListener(MainInputMethodService mainInputMethodService, View view) {
         this.mainInputMethodService = mainInputMethodService;
@@ -28,7 +28,7 @@ public abstract class KeypadActionListener {
 
     private boolean keyCodeIsValid(int keyCode) {
         int keycodeProfileSwitch = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? KeyEvent.KEYCODE_PROFILE_SWITCH :
-                KEYCODE_PROFILE_SWITCH;
+            KEYCODE_PROFILE_SWITCH;
         return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= keycodeProfileSwitch;
     }
 
@@ -73,7 +73,7 @@ public abstract class KeypadActionListener {
                 true);
         if (userEnabledHapticFeedback) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
-                    HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
         boolean userEnabledSoundFeedback = pref
             .getBoolean(
@@ -119,9 +119,9 @@ public abstract class KeypadActionListener {
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
-        boolean isUpperCase = isShiftSet() || isCapsLockSet() || isCircleCapitalization();
+        boolean isUpperCase = isShiftSet() || isCapsLockSet();
         String text = (isUpperCase && !keyboardAction.getCapsLockText().isEmpty()) ? keyboardAction.getCapsLockText() :
-                keyboardAction.getText();
+            keyboardAction.getText();
         onText(text);
     }
 
