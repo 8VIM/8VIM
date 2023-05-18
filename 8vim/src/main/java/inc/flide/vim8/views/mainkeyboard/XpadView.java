@@ -1,4 +1,4 @@
-package inc.flide.vim8.views.mainkeyboard;
+package inc.flide.vim8.views.mainKeyboard;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -295,9 +295,9 @@ public class XpadView extends View {
             String characterSet = getCharacterSetToDisplay();
             for (int i = 0; i < characterSet.length(); i++) {
                 Paint paint = foregroundPaint;
-                String highlightedLetter = actionListener.getCurrentLetter();
                 String letter = String.valueOf(characterSet.charAt(i));
-                if (highlightedLetter != null && highlightedLetter.equalsIgnoreCase(letter)) {
+                if (actionListener.getCurrentLetter() != null
+                        && String.valueOf(actionListener.getCurrentLetter().charAt(0)).equals(letter)) {
                     paint = foregroundHighlightPaint;
 
                     // Draw a box around the current letter.
@@ -424,7 +424,7 @@ public class XpadView extends View {
 
     private String getCharacterSetToDisplay() {
         int layer = actionListener.findLayer();
-        if (actionListener.areCharactersCapitalized() || actionListener.isCircleCapitalization()) {
+        if (actionListener.areCharactersCapitalized()) {
             return actionListener.getUpperCaseCharacters(layer);
         }
 

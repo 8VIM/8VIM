@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class MainKeypadActionListener extends KeypadActionListener {
-    private static final int FULL_ROTATION_STEPS = 6;
+    private static final int FULL_ROTATION_STEPS = 7;
     private static final FingerPosition[][] ROTATION_MOVEMENT_SEQUENCES = {
         {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
             FingerPosition.BOTTOM, FingerPosition.LEFT},
@@ -92,11 +92,6 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     @Override
-    public boolean isCircleCapitalization() {
-        return isFullRotation();
-    }
-
-    @Override
     public int findLayer() {
         if (movementSequence.isEmpty() || movementSequence.get(0) != FingerPosition.INSIDE_CIRCLE) {
             return Constants.DEFAULT_LAYER;
@@ -111,11 +106,11 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     private boolean isFullRotation() {
-        if (movementSequence.size() < 7 || movementSequence.get(0) != FingerPosition.INSIDE_CIRCLE) {
-            return false;
+        if (movementSequence.size() == FULL_ROTATION_STEPS
+            && movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE) {
+            return rotationMovementSequences.contains(movementSequence.subList(1, FULL_ROTATION_STEPS));
         }
-        return rotationMovementSequences.contains(movementSequence.subList(1, FULL_ROTATION_STEPS + 1));
-
+        return false;
     }
 
     public void movementStarted(FingerPosition fingerPosition) {
@@ -136,24 +131,25 @@ public class MainKeypadActionListener extends KeypadActionListener {
         if (isFingerPositionChanged) {
             interruptLongPress();
             movementSequence.add(currentFingerPosition);
-            List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
-            if (isCircleCapitalization()) {
-                modifiedMovementSequence.subList(1, FULL_ROTATION_STEPS - 1).clear();
-
+            if (isFullRotation()) {
+                movementSequence.subList(2, FULL_ROTATION_STEPS - 1).clear();
+                mainInputMethodService.performShiftToggle();
             }
+
             if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE
-                && keyboardData.getActionMap().get(modifiedMovementSequence) != null) {
-                processMovementSequence(modifiedMovementSequence);
+                && keyboardData.getActionMap().get(movementSequence) != null) {
+                processMovementSequence(movementSequence);
                 movementSequence.clear();
                 currentLetter = null;
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT;
                 movementSequence.add(currentFingerPosition);
             } else if (currentFingerPosition != FingerPosition.INSIDE_CIRCLE) {
+                List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
                 modifiedMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
                 KeyboardAction action = keyboardData.getActionMap().get(modifiedMovementSequence);
 
                 if (action != null) {
-                    currentLetter = isCircleCapitalization() ? action.getCapsLockText() : action.getText();
+                    currentLetter = areCharactersCapitalized() ? action.getCapsLockText() : action.getText();
                 }
             }
         } else if (!isLongPressCallbackSet) {
@@ -186,21 +182,15 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     private void interruptLongPress() {
         longPressHandler.removeCallbacks(longPressRunnable);
-        List<FingerPosition> movementSequenceAgumented = new ArrayList<>(movementSequence);
-        movementSequenceAgumented.add(FingerPosition.LONG_PRESS_END);
-        processMovementSequence(movementSequenceAgumented);
+        List<FingerPosition> movementSequenceAugmented = new ArrayList<>(movementSequence);
+        movementSequenceAugmented.add(FingerPosition.LONG_PRESS_END);
+        processMovementSequence(movementSequenceAugmented);
         isLongPressCallbackSet = false;
     }
 
     private void processMovementSequence(List<FingerPosition> movementSequence) {
 
         KeyboardAction keyboardAction = keyboardData.getActionMap().get(movementSequence);
-        if (keyboardAction == null && isCircleCapitalization()) {
-            List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
-            modifiedMovementSequence.subList(1, FULL_ROTATION_STEPS - 1).clear();
-            keyboardAction = keyboardData.getActionMap().get(modifiedMovementSequence);
-
-        }
         if (keyboardAction == null && currentMovementSequenceType == MovementSequenceType.NEW_MOVEMENT) {
             List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
             modifiedMovementSequence.add(0, FingerPosition.NO_TOUCH);
