@@ -18,16 +18,24 @@ import java.util.HashSet;
 import java.util.List;
 
 public class MainKeypadActionListener extends KeypadActionListener {
-    private static final int FULL_ROTATION_STEPS = 6;
+    private static final int FULL_ROTATION_STEPS = 7;
     private static final FingerPosition[][] ROTATION_MOVEMENT_SEQUENCES = {
-        {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT},
-        {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT},
-        {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP},
-        {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM},
-        {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT},
-        {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT},
-        {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP},
-        {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM},
+            {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+                    FingerPosition.BOTTOM, FingerPosition.LEFT},
+            {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+                    FingerPosition.BOTTOM, FingerPosition.RIGHT},
+            {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                    FingerPosition.TOP},
+            {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+                    FingerPosition.BOTTOM},
+            {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
+                    FingerPosition.LEFT},
+            {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
+                    FingerPosition.RIGHT},
+            {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
+                    FingerPosition.TOP},
+            {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+                    FingerPosition.BOTTOM},
     };
     private static KeyboardData keyboardData;
     private final Handler longPressHandler = new Handler();
@@ -66,7 +74,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     public static void rebuildKeyboardData(Resources resource, Context context, Uri customLayoutUri) {
         keyboardData =
-            InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resource, context, customLayoutUri);
+                InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resource, context, customLayoutUri);
     }
 
     public String getLowerCaseCharacters(int layer) {
@@ -96,11 +104,11 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     private boolean isFullRotation() {
-        if (movementSequence.size() < 7 || movementSequence.get(0) != FingerPosition.INSIDE_CIRCLE) {
-            return false;
+        if (movementSequence.size() == FULL_ROTATION_STEPS
+                && movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE) {
+            return rotationMovementSequences.contains(movementSequence.subList(1, FULL_ROTATION_STEPS));
         }
-        return rotationMovementSequences.contains(movementSequence.subList(1, FULL_ROTATION_STEPS + 1));
-
+        return false;
     }
 
     public void movementStarted(FingerPosition fingerPosition) {
@@ -122,12 +130,12 @@ public class MainKeypadActionListener extends KeypadActionListener {
             interruptLongPress();
             movementSequence.add(currentFingerPosition);
             if (isFullRotation()) {
-                movementSequence.subList(1, FULL_ROTATION_STEPS - 1).clear();
+                movementSequence.subList(2, FULL_ROTATION_STEPS - 1).clear();
                 mainInputMethodService.performShiftToggle();
             }
 
             if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE
-                && keyboardData.getActionMap().get(movementSequence) != null) {
+                    && keyboardData.getActionMap().get(movementSequence) != null) {
                 processMovementSequence(movementSequence);
                 movementSequence.clear();
                 currentLetter = null;
