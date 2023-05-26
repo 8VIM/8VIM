@@ -43,9 +43,10 @@ ext {
     assertJVersion = "3.24.2"
     colorPreferenceVersion = "1.1.0"
     espressoVersion = "3.5.1"
-    junitVersion = "4.13.2"
     jacksonYamlVersion = "2.14.2"
+    jqwikVersion = "1.7.3"
+    junit4Version = "4.13.2"
+    junit5Version = "5.9.3"
     materialDialogs = "3.3.0"
     mockitoVersion = "5.3.1"
-    propertyTestBasedJqwik = "1.7.3"
 }

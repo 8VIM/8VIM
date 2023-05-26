@@ -1,10 +1,12 @@
 package inc.flide.vim8.keyboardhelpers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
@@ -20,14 +22,14 @@ import android.view.KeyEvent;
 
 import androidx.preference.PreferenceManager;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -43,9 +45,9 @@ import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.structures.KeyboardData;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class InputMethodServiceHelperTest {
-    static Map<List<FingerPosition>, KeyboardAction> movementSequences;
+    static Map<List<FingerPosition>, KeyboardAction> expectedMovementSequences;
     private static MockedStatic<KeyEvent> keyEvent;
     private static SharedPreferenceHelper sharedPreferenceHelper;
     private static MockedStatic<SharedPreferenceHelper> sharedPreferenceHelperMockedStatic;
@@ -56,8 +58,8 @@ public class InputMethodServiceHelperTest {
     @Mock
     private SharedPreferences sharedPreferences;
 
-    @BeforeClass
-    public static void setup() {
+    @BeforeAll
+    static void setup() {
         context = mock(Context.class);
         lenient().when(context.getPackageName()).thenReturn("package");
 
@@ -73,46 +75,42 @@ public class InputMethodServiceHelperTest {
         uriMockedStatic.when(() -> Uri.parse(anyString())).thenReturn(mock(Uri.class));
     }
 
-    @AfterClass
-    public static void close() {
+    @AfterAll
+    static void close() {
         keyEvent.close();
         sharedPreferenceHelperMockedStatic.close();
         uriMockedStatic.close();
     }
 
-    @BeforeClass
-    public static void setupExpectation() {
-        movementSequences = new HashMap<>();
-        movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.TOP, FingerPosition.NO_TOUCH)),
+    @BeforeAll
+    static void setupExpectations() {
+        expectedMovementSequences = new HashMap<>();
+        expectedMovementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.TOP, FingerPosition.NO_TOUCH)),
             new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0, 0));
-        movementSequences.put(
+        expectedMovementSequences.put(
             new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE)),
             new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, 0, 1));
     }
 
-    @Before
-    public void setupMock() {
-        when(resources.getString(anyInt())).thenReturn("pref");
+    @BeforeEach
+    void setupMock() {
+        lenient().when(resources.getString(anyInt())).thenReturn("pref");
         lenient().when(resources.getIdentifier(anyString(), anyString(), anyString())).thenReturn(0);
-        when(resources.openRawResource(anyInt())).thenAnswer((arg) -> {
-            if ((int) arg.getArgument(0) == 0) {
-                return getClass().getResourceAsStream("/one_layer.yaml");
-            }
-            return getClass().getResourceAsStream("/hidden_layer.yaml");
-        });
+        when(resources.openRawResource(eq(0))).thenAnswer((args) -> getClass().getResourceAsStream("/one_layer.yaml"));
+        when(resources.openRawResource(gt(0))).thenAnswer((args) -> getClass().getResourceAsStream("/hidden_layer.yaml"));
     }
 
     @Test
-    public void initializeKeyboardActionMap_not_using_custom_keyboard_layout() {
+    void initializeKeyboardActionMap_not_using_custom_keyboard_layout() {
         when(sharedPreferenceHelper.getBoolean(anyString(), anyBoolean())).thenReturn(false);
 
         KeyboardData keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
 
-        assertThat(keyboardData.getActionMap()).containsAllEntriesOf(movementSequences);
+        assertThat(keyboardData.getActionMap()).containsAllEntriesOf(expectedMovementSequences);
     }
 
     @Test
-    public void initializeKeyboardActionMap_using_custom_keyboard_layout() throws FileNotFoundException {
+    void initializeKeyboardActionMap_using_custom_keyboard_layout() throws FileNotFoundException {
         ContentResolver contentResolver = mock(ContentResolver.class);
         lenient().when(contentResolver.openInputStream(any())).thenReturn(getClass().getResourceAsStream("/one_layer.yaml"));
         when(context.getContentResolver()).thenReturn(contentResolver);
@@ -120,11 +118,11 @@ public class InputMethodServiceHelperTest {
 
         KeyboardData keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
 
-        assertThat(keyboardData.getActionMap()).containsAllEntriesOf(movementSequences);
+        assertThat(keyboardData.getActionMap()).containsAllEntriesOf(expectedMovementSequences);
     }
 
     @Test
-    public void initializeKeyboardActionMapForCustomLayout() throws FileNotFoundException {
+    void initializeKeyboardActionMapForCustomLayout() throws FileNotFoundException {
         try (MockedStatic<PreferenceManager> preferenceManagerMockedStatic = mockStatic(PreferenceManager.class)) {
             preferenceManagerMockedStatic.when(() -> PreferenceManager.getDefaultSharedPreferences(any())).thenReturn(sharedPreferences);
 
@@ -141,7 +139,7 @@ public class InputMethodServiceHelperTest {
 
             KeyboardData keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resources, context, null);
 
-            assertThat(keyboardData.getActionMap()).containsAllEntriesOf(movementSequences);
+            assertThat(keyboardData.getActionMap()).containsAllEntriesOf(expectedMovementSequences);
         }
     }
 }

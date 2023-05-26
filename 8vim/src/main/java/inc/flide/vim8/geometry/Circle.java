@@ -1,8 +1,9 @@
 package inc.flide.vim8.geometry;
 
 import android.graphics.PointF;
+
+import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.SectorPart;
 import inc.flide.vim8.utils.GeometricUtilities;
 
 public class Circle {
@@ -72,7 +73,8 @@ public class Circle {
         double angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p);
         double angleToSectorValue = angleDouble / (Math.PI / 2);
         int quadrantCyclic = (int) Math.round(angleToSectorValue);
-        SectorPart baseQuadrant = GeometricUtilities.getBaseQuadrant(quadrantCyclic);
+        Direction baseQuadrant = GeometricUtilities.getBaseQuadrant(quadrantCyclic);
+        FingerPosition result = null;
 
         switch (baseQuadrant) {
             case RIGHT:
