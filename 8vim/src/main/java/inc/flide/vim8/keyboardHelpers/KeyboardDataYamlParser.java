@@ -16,10 +16,11 @@ import java.util.Map;
 
 import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
-import inc.flide.vim8.structures.SectorPart;
+import inc.flide.vim8.structures.Quadrant;
 import inc.flide.vim8.structures.yaml.Action;
 import inc.flide.vim8.structures.yaml.ExtraLayer;
 import inc.flide.vim8.structures.yaml.Layer;
@@ -75,13 +76,13 @@ public class KeyboardDataYamlParser {
         StringBuilder upperCaseCharacters = new StringBuilder();
         Pair<StringBuilder, StringBuilder> characterSets = Pair.of(lowerCaseCharacters, upperCaseCharacters);
 
-        for (Map.Entry<SectorPart, Part> sectorEntry : layerData.getSectors().entrySet()) {
-            SectorPart sector = sectorEntry.getKey();
+        for (Map.Entry<Direction, Part> sectorEntry : layerData.getSectors().entrySet()) {
+            Direction sector = sectorEntry.getKey();
 
-            for (Map.Entry<SectorPart, List<Action>> partEntry : sectorEntry.getValue().getParts().entrySet()) {
-                SectorPart part = partEntry.getKey();
-                Pair<SectorPart, SectorPart> sectorParts = Pair.of(sector, part);
-                addKeyboardActions(keyboardData, layer, sectorParts, partEntry.getValue(), characterSets);
+            for (Map.Entry<Direction, List<Action>> partEntry : sectorEntry.getValue().getParts().entrySet()) {
+                Direction part = partEntry.getKey();
+                Quadrant quadrant = new Quadrant(sector, part);
+                addKeyboardActions(keyboardData, layer, quadrant, partEntry.getValue(), characterSets);
             }
         }
 
@@ -104,7 +105,7 @@ public class KeyboardDataYamlParser {
         }
     }
 
-    private void addKeyboardActions(KeyboardData keyboardData, int layer, Pair<SectorPart, SectorPart> sectorParts, List<Action> actions,
+    private void addKeyboardActions(KeyboardData keyboardData, int layer, Quadrant quadrant, List<Action> actions,
                                     Pair<StringBuilder, StringBuilder> characterSets) {
         int actionsSize = Math.min(actions.size(), 4);
 
@@ -119,10 +120,10 @@ public class KeyboardDataYamlParser {
             List<FingerPosition> movementSequence = action.getMovementSequence();
 
             if (movementSequence.isEmpty()) {
-                movementSequence = MovementSequenceHelper.computeMovementSequence(layer, sectorParts, characterPosition);
+                movementSequence = MovementSequenceHelper.computeMovementSequence(layer, quadrant, characterPosition);
             }
 
-            int characterSetIndex = SectorPart.getCharacterIndexInString(sectorParts, characterPosition);
+            int characterSetIndex = quadrant.getCharacterIndexInString(characterPosition);
 
             if (!action.getLowerCase().isEmpty()) {
                 if (characterSets.getLeft().length() == 0) {

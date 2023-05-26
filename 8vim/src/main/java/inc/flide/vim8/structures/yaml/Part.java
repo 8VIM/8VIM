@@ -5,17 +5,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-import inc.flide.vim8.structures.SectorPart;
+import inc.flide.vim8.structures.Direction;
 
 public class Part {
     @JsonProperty(required = true)
-    private Map<SectorPart, List<Action>> parts;
+    private Map<Direction, List<Action>> parts;
 
-    public Map<SectorPart, List<Action>> getParts() {
+    public Map<Direction, List<Action>> getParts() {
         return parts;
     }
 
-    public void setParts(Map<SectorPart, List<Action>> parts) {
+    public void setParts(Map<Direction, List<Action>> parts) {
         this.parts = parts;
     }
 }

@@ -9,16 +9,15 @@ import net.jqwik.api.Property;
 import net.jqwik.api.Table;
 import net.jqwik.api.Tuple;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.SectorPart;
+import inc.flide.vim8.structures.Quadrant;
 import inc.flide.vim8.structures.yaml.ExtraLayer;
 
 public class MovementSequenceHelperTest {
@@ -54,7 +53,7 @@ public class MovementSequenceHelperTest {
     @FromData("defaultLayerSequences")
     public void computeMovementSequence_forDefaultLayer(@ForAll CharacterPosition characterPosition, @ForAll List<FingerPosition> movementSequence) {
         List<FingerPosition> computedMovementSequence =
-            MovementSequenceHelper.computeMovementSequence(Constants.DEFAULT_LAYER, Pair.of(SectorPart.BOTTOM, SectorPart.LEFT),
+            MovementSequenceHelper.computeMovementSequence(Constants.DEFAULT_LAYER, new Quadrant(Direction.BOTTOM, Direction.LEFT),
                 characterPosition);
         assertThat(computedMovementSequence).containsExactlyElementsOf(movementSequence);
     }
@@ -63,7 +62,7 @@ public class MovementSequenceHelperTest {
     @FromData("extraLayerMovementSequence")
     public void computeMovementSequence_forExtraLayer(@ForAll ExtraLayer extraLayer, @ForAll List<FingerPosition> movementSequence) {
         List<FingerPosition> computedMovementSequence =
-            MovementSequenceHelper.computeMovementSequence(extraLayer.ordinal() + 2, Pair.of(SectorPart.BOTTOM, SectorPart.LEFT),
+            MovementSequenceHelper.computeMovementSequence(extraLayer.ordinal() + 2, new Quadrant(Direction.BOTTOM, Direction.LEFT),
                 CharacterPosition.FIRST);
         assertThat(computedMovementSequence).containsExactlyElementsOf(movementSequence);
     }

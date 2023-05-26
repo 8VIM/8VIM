@@ -1,10 +1,12 @@
 package inc.flide.vim8.keyboardHelpers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalMatchers.gt;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
@@ -45,7 +47,7 @@ import inc.flide.vim8.structures.KeyboardData;
 
 @ExtendWith(MockitoExtension.class)
 public class InputMethodServiceHelperTest {
-    static Map<List<FingerPosition>, KeyboardAction> movementSequences;
+    static Map<List<FingerPosition>, KeyboardAction> expectedMovementSequences;
     private static MockedStatic<KeyEvent> keyEvent;
     private static SharedPreferenceHelper sharedPreferenceHelper;
     private static MockedStatic<SharedPreferenceHelper> sharedPreferenceHelperMockedStatic;
@@ -81,11 +83,11 @@ public class InputMethodServiceHelperTest {
     }
 
     @BeforeAll
-    static void setupExpectation() {
-        movementSequences = new HashMap<>();
-        movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.TOP, FingerPosition.NO_TOUCH)),
+    static void setupExpectations() {
+        expectedMovementSequences = new HashMap<>();
+        expectedMovementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.TOP, FingerPosition.NO_TOUCH)),
             new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0, 0));
-        movementSequences.put(
+        expectedMovementSequences.put(
             new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE)),
             new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, 0, 1));
     }
@@ -94,12 +96,8 @@ public class InputMethodServiceHelperTest {
     void setupMock() {
         lenient().when(resources.getString(anyInt())).thenReturn("pref");
         lenient().when(resources.getIdentifier(anyString(), anyString(), anyString())).thenReturn(0);
-        when(resources.openRawResource(anyInt())).thenAnswer((arg) -> {
-            if ((int) arg.getArgument(0) == 0) {
-                return getClass().getResourceAsStream("/one_layer.yaml");
-            }
-            return getClass().getResourceAsStream("/hidden_layer.yaml");
-        });
+        when(resources.openRawResource(eq(0))).thenAnswer((args) -> getClass().getResourceAsStream("/one_layer.yaml"));
+        when(resources.openRawResource(gt(0))).thenAnswer((args) -> getClass().getResourceAsStream("/hidden_layer.yaml"));
     }
 
     @Test
@@ -108,7 +106,7 @@ public class InputMethodServiceHelperTest {
 
         KeyboardData keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
 
-        assertThat(keyboardData.getActionMap()).containsAllEntriesOf(movementSequences);
+        assertThat(keyboardData.getActionMap()).containsAllEntriesOf(expectedMovementSequences);
     }
 
     @Test
@@ -120,7 +118,7 @@ public class InputMethodServiceHelperTest {
 
         KeyboardData keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
 
-        assertThat(keyboardData.getActionMap()).containsAllEntriesOf(movementSequences);
+        assertThat(keyboardData.getActionMap()).containsAllEntriesOf(expectedMovementSequences);
     }
 
     @Test
@@ -141,7 +139,7 @@ public class InputMethodServiceHelperTest {
 
             KeyboardData keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resources, context, null);
 
-            assertThat(keyboardData.getActionMap()).containsAllEntriesOf(movementSequences);
+            assertThat(keyboardData.getActionMap()).containsAllEntriesOf(expectedMovementSequences);
         }
     }
 }

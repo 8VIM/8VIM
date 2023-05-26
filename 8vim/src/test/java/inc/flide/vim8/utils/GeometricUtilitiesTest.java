@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import inc.flide.vim8.structures.SectorPart;
+import inc.flide.vim8.structures.Direction;
 
 @ExtendWith(MockitoExtension.class)
 public class GeometricUtilitiesTest {
@@ -31,7 +31,7 @@ public class GeometricUtilitiesTest {
 
     @Test
     void getBaseQuadrantTest() {
-        SectorPart quadrant = GeometricUtilities.getBaseQuadrant(6);
-        assertThat(quadrant).isEqualTo(SectorPart.LEFT);
+        Direction quadrant = GeometricUtilities.getBaseQuadrant(6);
+        assertThat(quadrant).isEqualTo(Direction.LEFT);
     }
 }
