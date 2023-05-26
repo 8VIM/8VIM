@@ -10,6 +10,14 @@ assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\agass\\8vim.jks')
+            storePassword 'password'
+            keyAlias 'key0'
+            keyPassword 'password'
+        }
+    }
     compileSdkVersion 33
 
     defaultConfig {
@@ -54,11 +62,11 @@ android {
     }
 
     lint {
-        abortOnError false
-        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath'
+        abortOnError true
+        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath', 'UnusedResources'
         htmlOutput file('lint-report.html')
         htmlReport true
-        warningsAsErrors false
+        warningsAsErrors true
     }
 
     namespace 'inc.flide.vim8'

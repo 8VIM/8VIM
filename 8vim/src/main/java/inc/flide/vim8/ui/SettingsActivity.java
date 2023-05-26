@@ -31,14 +31,14 @@ import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
 import inc.flide.vim8.structures.Constants;
 
-public class SettingsActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener {
+public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean isKeyboardEnabled;
 
     private boolean pressBackTwice;
 
     private boolean isActivityRestarting;
+    private ActivityResultLauncher<Intent> launchInputMethodSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +50,17 @@ public class SettingsActivity extends AppCompatActivity
         toolbar.setTitleTextColor(getResources().getColor(R.color.black));
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle =
+            new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        getSupportFragmentManager().beginTransaction()
-            .replace(R.id.settings_fragment, new SettingsFragment())
-            .commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.settings_fragment, new SettingsFragment()).commit();
+        launchInputMethodSettings = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        });
     }
 
     @Override
@@ -140,27 +140,20 @@ public class SettingsActivity extends AppCompatActivity
 
     private void enableInputMethodDialog() {
 
-        ActivityResultLauncher<Intent> launchInputMethodSettings =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            });
-        new MaterialDialog(this, MaterialDialog.getDEFAULT_BEHAVIOR())
-            .title(R.string.enable_ime_dialog_title, null)
-            .message(R.string.enable_ime_dialog_content, null, null)
-            .cancelable(false)
-            .cancelOnTouchOutside(false)
+
+        new MaterialDialog(this, MaterialDialog.getDEFAULT_BEHAVIOR()).title(R.string.enable_ime_dialog_title, null)
+            .message(R.string.enable_ime_dialog_content, null, null).cancelable(false).cancelOnTouchOutside(false)
             .neutralButton(R.string.enable_ime_dialog_content, null, dialog -> {
                 showToast();
                 launchInputMethodSettings.launch(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
                 dialog.dismiss();
                 return null;
-            })
-            .show();
+            }).show();
     }
 
     public void showToast() {
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast,
-            findViewById(R.id.toast_layout));
+        View layout = inflater.inflate(R.layout.custom_toast, findViewById(R.id.toast_layout));
 
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
@@ -171,19 +164,14 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void activateInputMethodDialog() {
-        new MaterialDialog(this, MaterialDialog.getDEFAULT_BEHAVIOR())
-            .title(R.string.activate_ime_dialog_title, null)
+        new MaterialDialog(this, MaterialDialog.getDEFAULT_BEHAVIOR()).title(R.string.activate_ime_dialog_title, null)
             .message(R.string.activate_ime_dialog_content, null, null)
             .positiveButton(R.string.activate_ime_dialog_positive_button_text, null, dialog -> {
                 InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.showInputMethodPicker();
                 dialog.dismiss();
                 return null;
-            })
-            .negativeButton(R.string.activate_ime_dialog_negative_button_text, null, null)
-            .cancelable(false)
-            .cancelOnTouchOutside(false)
-            .show();
+            }).negativeButton(R.string.activate_ime_dialog_negative_button_text, null, null).cancelable(false).cancelOnTouchOutside(false).show();
 
     }
 
