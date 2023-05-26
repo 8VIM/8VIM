@@ -6,7 +6,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="enable_ime_dialog_title">Please Enable IME</string>
     <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "&appname; Keyboard" there.</string>
-    <string name="enable_ime_dialog_neutral_button_text">Enable</string>
     <string name="activate_ime_dialog_title">Please Activate IME</string>
     <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname; Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
@@ -50,9 +49,7 @@
         <item>tr</item>
         <item>uk</item>
     </string-array>
-    <string name="select_custom_keyboard_layout_dialog_title">Load the layout file from disk</string>
     <string name="generic_okay_text">OK</string>
-    <string name="generic_cancel_text">Cancel</string>
 
     <!--   preferences categories -->
     <string name="pref_category_general">General</string>

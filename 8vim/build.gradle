@@ -26,12 +26,14 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        release {
-            storeFile file(System.getenv().getOrDefault("VIM8_BUILD_KEYSTORE_FILE", "keystore"))
-            storePassword System.getenv("VIM8_BUILD_KEYSTORE_PASSWORD")
-            keyAlias System.getenv("VIM8_BUILD_KEY_ALIAS")
-            keyPassword System.getenv("VIM8_BUILD_KEY_PASSWORD")
+    if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
+        signingConfigs {
+            release {
+                storeFile file(System.getenv("VIM8_BUILD_KEYSTORE_FILE"))
+                storePassword System.getenv("VIM8_BUILD_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("VIM8_BUILD_KEY_ALIAS")
+                keyPassword System.getenv("VIM8_BUILD_KEY_PASSWORD")
+            }
         }
     }
 
@@ -39,7 +41,9 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 
