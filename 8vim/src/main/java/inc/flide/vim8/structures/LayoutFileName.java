@@ -38,7 +38,7 @@ public class LayoutFileName {
             languageCode = fileName;
             languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
             layoutDisplayName = StringUtils.capitalize(languageName);
-            int resourceId = resources.getIdentifier(fileName, "raw", context.getPackageName());
+            @SuppressLint("DiscouragedApi") int resourceId = resources.getIdentifier(fileName, "raw", context.getPackageName());
             try (InputStream inputStream = resources.openRawResource(resourceId)) {
                 totalLayers = KeyboardDataYamlParser.isValidFile(inputStream);
                 isValidLayout = true;

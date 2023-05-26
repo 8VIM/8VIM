@@ -70,7 +70,7 @@ public class Action {
         if (keyCodeString == null || keyCodeString.isEmpty()) {
             return;
         }
-        keyCodeString = keyCodeString.toUpperCase(Locale.ROOT);
+        keyCodeString = keyCodeString.toUpperCase(Locale.getDefault());
         //Strictly the inputKey has to has to be a Keycode from the KeyEvent class
         //Or it needs to be one of the customKeyCodes
         keyCode = KeyEvent.keyCodeFromString(keyCodeString);

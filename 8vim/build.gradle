@@ -10,6 +10,7 @@ assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 android {
+    
     compileSdkVersion 33
 
     defaultConfig {
@@ -26,12 +27,14 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    signingConfigs {
-        release {
-            storeFile file(System.getenv().getOrDefault("VIM8_BUILD_KEYSTORE_FILE", "keystore"))
-            storePassword System.getenv("VIM8_BUILD_KEYSTORE_PASSWORD")
-            keyAlias System.getenv("VIM8_BUILD_KEY_ALIAS")
-            keyPassword System.getenv("VIM8_BUILD_KEY_PASSWORD")
+    if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
+        signingConfigs {
+            release {
+                storeFile file(System.getenv("VIM8_BUILD_KEYSTORE_FILE"))
+                storePassword System.getenv("VIM8_BUILD_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("VIM8_BUILD_KEY_ALIAS")
+                keyPassword System.getenv("VIM8_BUILD_KEY_PASSWORD")
+            }
         }
     }
 
@@ -39,7 +42,9 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 
@@ -50,11 +55,11 @@ android {
     }
 
     lint {
-        abortOnError false
-        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath'
+        abortOnError true
+        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath', 'UnusedResources'
         htmlOutput file('lint-report.html')
         htmlReport true
-        warningsAsErrors false
+        warningsAsErrors true
     }
 
     namespace 'inc.flide.vim8'
