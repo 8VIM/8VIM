@@ -8,13 +8,13 @@ import android.view.KeyEvent;
 
 import com.fasterxml.jackson.databind.DatabindException;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,23 +31,23 @@ import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.structures.KeyboardData;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class KeyboardDataYamlParserTest {
     private static MockedStatic<KeyEvent> keyEvent;
 
-    @BeforeClass
-    public static void setup() {
+    @BeforeAll
+    static void setup() {
         keyEvent = Mockito.mockStatic(KeyEvent.class);
         keyEvent.when(() -> KeyEvent.keyCodeFromString(anyString())).thenReturn(KeyEvent.KEYCODE_UNKNOWN);
     }
 
-    @AfterClass
-    public static void close() {
+    @AfterAll
+    static void close() {
         keyEvent.close();
     }
 
     @Test
-    public void parse_valid_file() throws IOException {
+    void parse_valid_file() throws IOException {
         Map<List<FingerPosition>, KeyboardAction> movementSequences = new HashMap<>();
         movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.TOP, FingerPosition.NO_TOUCH)),
             new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0, 0));
@@ -77,21 +77,21 @@ public class KeyboardDataYamlParserTest {
     }
 
     @Test
-    public void parse_invalid_file_format() {
+    void parse_invalid_file_format() {
         InputStream inputStream = getClass().getResourceAsStream("/invalid_file.yaml");
         KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
         assertThatExceptionOfType(DatabindException.class).isThrownBy(parser::readKeyboardData);
     }
 
     @Test
-    public void parse_non_yaml_file() {
+    void parse_non_yaml_file() {
         InputStream inputStream = getClass().getResourceAsStream("/invalid_file.xml");
         KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
         assertThatExceptionOfType(DatabindException.class).isThrownBy(parser::readKeyboardData);
     }
 
     @Test
-    public void isValidFile() throws IOException {
+    void isValidFile() throws IOException {
         InputStream inputStream = getClass().getResourceAsStream("/valid_file.yaml");
         assertThat(KeyboardDataYamlParser.isValidFile(inputStream)).isEqualTo(2);
     }

@@ -1,5 +1,6 @@
 plugins {
     id 'org.jetbrains.kotlin.android' version '1.8.10'
+    id 'de.mannodermaus.android-junit5' version '1.9.3.0'
 }
 
 apply plugin: 'com.android.application'
@@ -78,10 +79,14 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-idling-resource:${rootProject.espressoVersion}"
     androidTestImplementation "org.mockito:mockito-android:${rootProject.mockitoVersion}"
 
-    testImplementation "junit:junit:${rootProject.junitVersion}"
-    testImplementation "net.jqwik:jqwik:${rootProject.propertyTestBasedJqwik}"
+    androidTestImplementation "junit:junit:${rootProject.junit4Version}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${rootProject.junit5Version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${rootProject.junit5Version}"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:${rootProject.junit5Version}"
+    testImplementation "net.jqwik:jqwik:${rootProject.jqwikVersion}"
     testImplementation "org.assertj:assertj-core:${rootProject.assertJVersion}"
     testImplementation "org.mockito:mockito-core:${rootProject.mockitoVersion}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${rootProject.mockitoVersion}"
 
     api "com.afollestad.material-dialogs:core:${rootProject.materialDialogs}"
 }
