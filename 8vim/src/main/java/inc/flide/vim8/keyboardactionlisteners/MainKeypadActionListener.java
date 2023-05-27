@@ -1,11 +1,17 @@
-package inc.flide.vim8.keyboardActionListners;
+package inc.flide.vim8.keyboardactionlisteners;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Handler;
 import android.view.View;
-import androidx.annotation.StyleRes;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.structures.Constants;
@@ -14,10 +20,7 @@ import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.MovementSequenceType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import inc.flide.vim8.structures.yaml.ExtraLayer;
 
 public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 7;
