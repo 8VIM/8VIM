@@ -14,19 +14,6 @@ layers:
       key_code: keycode_paste
     - type: input_key
       movement_sequence:
-        - bottom
-        - inside_circle
-        - no_touch
-      key_code: keycode_cut
-    - type: input_key
-      movement_sequence:
-        - bottom
-        - inside_circle
-        - top
-        - no_touch
-      key_code: keycode_copy
-    - type: input_key
-      movement_sequence:
         - right
         - inside_circle
         - no_touch

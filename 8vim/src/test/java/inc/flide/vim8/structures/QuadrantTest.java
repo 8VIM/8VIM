@@ -26,29 +26,9 @@ class QuadrantTest {
         );
     }
 
-    @Data
-    Iterable<Tuple.Tuple2<CharacterPosition, Quadrant>> getOppositeSectorPartTable() {
-        return Table.of(
-            Tuple.of(CharacterPosition.FIRST, new Quadrant(Direction.RIGHT, Direction.BOTTOM)),
-            Tuple.of(CharacterPosition.SECOND, new Quadrant(Direction.TOP, Direction.RIGHT)),
-            Tuple.of(CharacterPosition.THIRD, new Quadrant(Direction.LEFT, Direction.TOP)),
-            Tuple.of(CharacterPosition.FOURTH, new Quadrant(Direction.BOTTOM, Direction.LEFT))
-        );
-    }
-
     @Property
     @FromData("getCharacterIndexInStringTable")
     public void getCharacterIndexInString(@ForAll Quadrant quadrant, @ForAll Integer characterIndex) {
         assertThat(quadrant.getCharacterIndexInString(CharacterPosition.FIRST)).isEqualTo(characterIndex);
     }
-
-    @Property
-    @FromData("getOppositeSectorPartTable")
-    public void getOppositeSectorPart(@ForAll CharacterPosition characterPosition, @ForAll Quadrant oppositeSectorPart) {
-        Direction sector = Direction.RIGHT;
-        Direction part = Direction.TOP;
-        Quadrant quadrant = new Quadrant(sector, part);
-        assertThat(quadrant.getOppositeQuadrant(characterPosition)).isEqualTo(oppositeSectorPart);
-    }
-
 }

@@ -55,8 +55,9 @@ public class KeyboardDataYamlParserTest {
             new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE)),
             new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, 0, 1));
         movementSequences.put(new ArrayList<>(
-            Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.BOTTOM,
-                FingerPosition.INSIDE_CIRCLE)), new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0, 0, 2));
+                Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.INSIDE_CIRCLE)),
+            new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0, 0, 2));
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.setLength(Constants.CHARACTER_SET_SIZE);

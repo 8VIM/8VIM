@@ -42,11 +42,10 @@ public class LayoutFileName {
             try (InputStream inputStream = resources.openRawResource(resourceId)) {
                 totalLayers = KeyboardDataYamlParser.isValidFile(inputStream);
                 isValidLayout = true;
-                if (totalLayers > 1) {
-                    layoutDisplayName += " (" + totalLayers + " layers)";
-                }
                 if (totalLayers == 0) {
                     setLayoutValidityFalse();
+                } else if (totalLayers > 1) {
+                    layoutDisplayName += " (" + totalLayers + " layers)";
                 }
             } catch (Exception e) {
                 setLayoutValidityFalse();
