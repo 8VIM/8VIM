@@ -32,18 +32,6 @@ public class Quadrant {
         return base + characterPosition.ordinal() * 2 + delta;
     }
 
-    public Quadrant getOppositeQuadrant(CharacterPosition position) {
-        if (position == CharacterPosition.FIRST) {
-            return new Quadrant(sector, Direction.getOpposite(part));
-        } else if (position == CharacterPosition.SECOND) {
-            return new Quadrant(part, sector);
-        } else if (position == CharacterPosition.THIRD) {
-            return new Quadrant(Direction.getOpposite(sector), part);
-        } else {
-            return new Quadrant(Direction.getOpposite(part), Direction.getOpposite(sector));
-        }
-    }
-
     public Direction getSector() {
         return sector;
     }

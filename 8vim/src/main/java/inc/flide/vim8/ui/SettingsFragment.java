@@ -215,7 +215,7 @@ public class SettingsFragment extends PreferenceFragmentCompat
             }
         }
         DialogSingleChoiceExtKt.listItemsSingleChoice(
-                new MaterialDialog(context, null)
+                new MaterialDialog(context, MaterialDialog.getDEFAULT_BEHAVIOR())
                     .title(R.string.select_preferred_emoticon_keyboard_dialog_title, null)
                     .positiveButton(R.string.generic_okay_text, null, null),
                 null,
