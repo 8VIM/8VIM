@@ -1,7 +1,6 @@
 package inc.flide.vim8.geometry;
 
 import android.graphics.PointF;
-
 import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.utils.GeometricUtilities;

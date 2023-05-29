@@ -60,8 +60,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         selectedCustomLayoutFile.toString());
                 sharedPreferencesEditor.apply();
                 MainKeypadActionListener.rebuildKeyboardData(getResources(), context, selectedCustomLayoutFile);
-
-        });
+            });
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

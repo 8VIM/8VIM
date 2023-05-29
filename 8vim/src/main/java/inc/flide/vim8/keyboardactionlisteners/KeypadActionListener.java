@@ -6,7 +6,6 @@ import android.os.Build;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
-
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
@@ -28,7 +27,7 @@ public abstract class KeypadActionListener {
 
     private boolean keyCodeIsValid(int keyCode) {
         int keycodeProfileSwitch = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? KeyEvent.KEYCODE_PROFILE_SWITCH :
-            KEYCODE_PROFILE_SWITCH;
+                KEYCODE_PROFILE_SWITCH;
         return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= keycodeProfileSwitch;
     }
 
@@ -68,17 +67,17 @@ public abstract class KeypadActionListener {
     private void performInputAcceptedFeedback(int keySound) {
         SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(mainInputMethodService);
         boolean userEnabledHapticFeedback =
-            pref.getBoolean(
-                mainInputMethodService.getString(R.string.pref_haptic_feedback_key),
-                true);
+                pref.getBoolean(
+                        mainInputMethodService.getString(R.string.pref_haptic_feedback_key),
+                        true);
         if (userEnabledHapticFeedback) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
-                HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                    HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
         boolean userEnabledSoundFeedback = pref
-            .getBoolean(
-                mainInputMethodService.getString(R.string.pref_sound_feedback_key),
-                true);
+                .getBoolean(
+                        mainInputMethodService.getString(R.string.pref_sound_feedback_key),
+                        true);
         if (userEnabledSoundFeedback) {
             audioManager.playSoundEffect(keySound);
         }
@@ -121,7 +120,7 @@ public abstract class KeypadActionListener {
     public void handleInputText(KeyboardAction keyboardAction) {
         boolean isUpperCase = isShiftSet() || isCapsLockSet();
         String text = (isUpperCase && !keyboardAction.getCapsLockText().isEmpty()) ? keyboardAction.getCapsLockText() :
-            keyboardAction.getText();
+                keyboardAction.getText();
         onText(text);
     }
 

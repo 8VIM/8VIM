@@ -5,15 +5,6 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.Direction;
@@ -27,6 +18,12 @@ import inc.flide.vim8.structures.yaml.Layer;
 import inc.flide.vim8.structures.yaml.Layout;
 import inc.flide.vim8.structures.yaml.Part;
 import inc.flide.vim8.utils.MovementSequenceHelper;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class KeyboardDataYamlParser {
     private final ObjectMapper mapper;
@@ -100,8 +97,9 @@ public class KeyboardDataYamlParser {
             }
 
             KeyboardAction actionMap =
-                new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(), action.getKeyCode(), action.getFlags(),
-                    Constants.HIDDEN_LAYER);
+                    new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(),
+                            action.getKeyCode(), action.getFlags(),
+                            Constants.HIDDEN_LAYER);
             keyboardData.addActionMap(movementSequence, actionMap);
         }
     }

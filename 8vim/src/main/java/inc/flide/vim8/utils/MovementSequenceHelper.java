@@ -1,22 +1,20 @@
 package inc.flide.vim8.utils;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.Quadrant;
 import inc.flide.vim8.structures.yaml.ExtraLayer;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class MovementSequenceHelper {
     private MovementSequenceHelper() {
     }
 
-    public static List<FingerPosition> computeMovementSequence(int layer, Quadrant quadrant, CharacterPosition position) {
+    public static List<FingerPosition> computeMovementSequence(int layer, Quadrant quadrant,
+                                                               CharacterPosition position) {
         List<FingerPosition> movementSequence = new ArrayList<>();
 
         if (layer == Constants.HIDDEN_LAYER) {
@@ -34,7 +32,8 @@ public final class MovementSequenceHelper {
         return movementSequence;
     }
 
-    private static List<FingerPosition> movementSequencesForLayer(int layer, Quadrant quadrant, CharacterPosition position) {
+    private static List<FingerPosition> movementSequencesForLayer(int layer, Quadrant quadrant,
+                                                                  CharacterPosition position) {
         List<FingerPosition> movementSequence = new ArrayList<>();
         int maxMovements = position.ordinal() + 1;
 
