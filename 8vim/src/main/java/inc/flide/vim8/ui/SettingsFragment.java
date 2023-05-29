@@ -77,11 +77,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         String prefColorModeKey = getString(R.string.pref_color_mode_key);
         Preference preferenceTrailColor = findPreference(getString(R.string.pref_trail_color_key));
 
-        findPreference(prefRandomTrailKey).setOnPreferenceChangeListener((pref, value) -> {
+        Preference randomTrailColorPreference = findPreference(prefRandomTrailKey);
+        randomTrailColorPreference.setOnPreferenceChangeListener((pref, value) -> {
             preferenceTrailColor.setVisible(!((boolean) value));
             return true;
         });
-        preferenceTrailColor.setVisible(defaultSharedPreferences.getBoolean(prefRandomTrailKey, false));
+        preferenceTrailColor.setVisible(!defaultSharedPreferences.getBoolean(prefRandomTrailKey, false));
         setColorsSelectionVisible(defaultSharedPreferences.getString(prefColorModeKey, "system"));
 
         findPreference(prefColorModeKey).setOnPreferenceChangeListener((pref, value) -> {
@@ -91,7 +92,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     break;
                 case "dark":
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    context.getApplicationContext().setTheme(R.style.AppThemeDark_NoActionBar);
                     break;
                 case "light":
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
