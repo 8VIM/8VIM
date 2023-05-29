@@ -1,0 +1,4 @@
+🚀 Dynamic currency symbol on Number pad : The currency symbol is now based on the system settings.
+🚀 Multiple Layers for layouts: accessible through the gesture - bottom-> centre -> bottom. Cycle clockwise to see all 5 extra layers if available.
+    Special thanks to Pedro Mangabeira for all the hard work he put in for the multiple layout feature.
+
