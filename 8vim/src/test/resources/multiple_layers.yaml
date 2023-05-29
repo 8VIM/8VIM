@@ -1,0 +1,14 @@
+layers:
+  default:
+    sectors:
+      right:
+        parts:
+          bottom:
+            - lower_case: n
+  extra_layers:
+    first:
+      sectors:
+        bottom:
+          parts:
+            left:
+              - lower_case: é

@@ -1,0 +1,36 @@
+layers:
+  hidden:
+    - type: input_key
+      movement_sequence:
+        - top
+        - no_touch
+      key_code: shift_toggle
+    - type: input_key
+      movement_sequence:
+        - left
+        - no_touch
+      key_code: switch_to_number_keypad
+    - movement_sequence:
+        - inside_circle
+        - no_touch
+      lower_case: " "
+    - type: input_key
+      movement_sequence:
+        - bottom
+        - no_touch
+      key_code: keycode_enter
+    - type: input_key
+      movement_sequence:
+        - bottom
+        - long_press
+      key_code: keycode_enter
+    - type: input_key
+      movement_sequence:
+        - right
+        - no_touch
+      key_code: keycode_del
+    - type: input_key
+      movement_sequence:
+        - right
+        - long_press
+      key_code: keycode_del

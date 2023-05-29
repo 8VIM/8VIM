@@ -32,7 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/app_bar_launcher" >
+            app:layout_constraintTop_toBottomOf="@id/app_bar_launcher">
 
             <FrameLayout
                 android:id="@+id/settings_fragment"

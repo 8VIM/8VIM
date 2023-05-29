@@ -1,3 +1,8 @@
+plugins {
+    id 'org.jetbrains.kotlin.android' version '1.8.10'
+    id 'de.mannodermaus.android-junit5' version '1.9.3.0'
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'checkstyle'
 
@@ -5,6 +10,7 @@ assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 android {
+    
     compileSdkVersion 33
 
     defaultConfig {
@@ -18,13 +24,17 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         resValue "string", "version_name", versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    signingConfigs {
-        release {
-            storeFile file(System.getenv("VIM8_BUILD_KEYSTORE_FILE"))
-            storePassword System.getenv("VIM8_BUILD_KEYSTORE_PASSWORD")
-            keyAlias System.getenv("VIM8_BUILD_KEY_ALIAS")
-            keyPassword System.getenv("VIM8_BUILD_KEY_PASSWORD")
+
+    if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
+        signingConfigs {
+            release {
+                storeFile file(System.getenv("VIM8_BUILD_KEYSTORE_FILE"))
+                storePassword System.getenv("VIM8_BUILD_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("VIM8_BUILD_KEY_ALIAS")
+                keyPassword System.getenv("VIM8_BUILD_KEY_PASSWORD")
+            }
         }
     }
 
@@ -32,31 +42,56 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
+                signingConfig signingConfigs.release
+            }
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+
     }
+
     lint {
-        abortOnError false
-        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath'
+        abortOnError true
+        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath', 'UnusedResources'
         htmlOutput file('lint-report.html')
         htmlReport true
-        warningsAsErrors false
+        warningsAsErrors true
     }
+
     namespace 'inc.flide.vim8'
 }
 
-
 dependencies {
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "androidx.preference:preference:1.2.0"
-    implementation 'com.github.kizitonwose.colorpreference:support:1.1.0'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'org.apache.commons:commons-text:1.7'
-    api 'com.afollestad.material-dialogs:core:0.9.2.3'
-}
+    implementation "androidx.constraintlayout:constraintlayout:${rootProject.androidXConstraintlayoutVersion}"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${rootProject.androidXLifecycleViewmodelVersion}"
+    implementation "androidx.preference:preference:${rootProject.androidXPreferenceVersion}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${rootProject.jacksonYamlVersion}"
+    implementation "com.github.kizitonwose.colorpreference:support:${rootProject.colorPreferenceVersion}"
+    implementation "com.google.android.material:material:${rootProject.androidMaterialVersion}"
+    implementation "org.apache.commons:commons-text:${rootProject.apacheCommonTextVersion}"
 
+    androidTestImplementation "androidx.test:core:${rootProject.androidXTestCoreVersion}"
+    androidTestImplementation "androidx.test.ext:junit:${rootProject.androidXTestExtJUnitVersion}"
+//    androidTestImplementation "androidx.test.ext:truth:${rootProject.androidXTesExtTruthVersion}"
+    androidTestImplementation "androidx.test:runner:${rootProject.androidXTestRunnerVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.espressoVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:${rootProject.espressoVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:${rootProject.espressoVersion}"
+    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:${rootProject.espressoVersion}"
+    androidTestImplementation "org.mockito:mockito-android:${rootProject.mockitoVersion}"
+
+    androidTestImplementation "junit:junit:${rootProject.junit4Version}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${rootProject.junit5Version}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${rootProject.junit5Version}"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:${rootProject.junit5Version}"
+    testImplementation "net.jqwik:jqwik:${rootProject.jqwikVersion}"
+    testImplementation "org.assertj:assertj-core:${rootProject.assertJVersion}"
+    testImplementation "org.mockito:mockito-core:${rootProject.mockitoVersion}"
+    testImplementation "org.mockito:mockito-junit-jupiter:${rootProject.mockitoVersion}"
+
+    api "com.afollestad.material-dialogs:core:${rootProject.materialDialogs}"
+}

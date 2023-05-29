@@ -1,0 +1,136 @@
+layers:
+  default:
+    sectors:
+      right:
+        parts:
+          top:
+            - lower_case: a
+            - lower_case: ь
+            - lower_case: x
+            - lower_case: "?"
+              upper_case: "*"
+          bottom:
+            - lower_case: н
+            - lower_case: м
+            - lower_case: ж
+            - lower_case: "!"
+              upper_case: "!!!"
+      top:
+        parts:
+          right:
+            - lower_case: и
+            - lower_case: с
+            - lower_case: б
+            - lower_case: ц
+          left:
+            - lower_case: p
+            - lower_case: д
+            - lower_case: г
+            - lower_case: ґ
+      left:
+        parts:
+          top:
+            - lower_case: т
+            - lower_case: к
+            - lower_case: з
+            - lower_case: .
+              upper_case: "-"
+          bottom:
+            - lower_case: i
+            - lower_case: п
+            - lower_case: ч
+            - lower_case: ","
+              upper_case: _
+      bottom:
+        parts:
+          left:
+            - lower_case: в
+            - lower_case: л
+            - lower_case: e
+            - lower_case: "@"
+              upper_case: "@gmail.com"
+          right:
+            - lower_case: o
+            - lower_case: y
+            - lower_case: л
+            - lower_case: ф
+  extra_layers:
+    first:
+      sectors:
+        right:
+          parts:
+            top:
+              - lower_case: я
+        top:
+          parts:
+            right:
+              - lower_case: й
+        left:
+          parts:
+            bottom:
+              - lower_case: ї
+        bottom:
+          parts:
+            left:
+              - null
+              - null
+              - lower_case: є
+            right:
+              - null
+              - lower_case: ю
+    second:
+      sectors:
+        right:
+          parts:
+            bottom:
+              - lower_case: n
+              - lower_case: m
+              - lower_case: f
+              - lower_case: "!"
+                upper_case: "!!!"
+            top:
+              - lower_case: a
+              - lower_case: r
+              - lower_case: x
+              - lower_case: "?"
+                upper_case: "*"
+        top:
+          parts:
+            right:
+              - lower_case: y
+              - lower_case: b
+              - lower_case: p
+              - lower_case: q
+            left:
+              - lower_case: s
+              - lower_case: d
+              - lower_case: g
+              - lower_case: "'"
+                upper_case: '"'
+        left:
+          parts:
+            top:
+              - lower_case: t
+              - lower_case: c
+              - lower_case: z
+              - lower_case: .
+                upper_case: "-"
+            bottom:
+              - lower_case: i
+              - lower_case: h
+              - lower_case: j
+              - lower_case: ","
+                upper_case: _
+        bottom:
+          parts:
+            left:
+              - lower_case: e
+              - lower_case: l
+              - lower_case: k
+              - lower_case: "@"
+                upper_case: "@gmail.com"
+            right:
+              - lower_case: o
+              - lower_case: u
+              - lower_case: v
+              - lower_case: w

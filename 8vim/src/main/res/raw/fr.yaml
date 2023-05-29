@@ -1,0 +1,129 @@
+layers:
+  default:
+    sectors:
+      right:
+        parts:
+          bottom:
+            - lower_case: n
+            - lower_case: m
+            - lower_case: f
+            - lower_case: "!"
+              upper_case: "!!!"
+          top:
+            - lower_case: a
+            - lower_case: r
+            - lower_case: x
+            - lower_case: "?"
+              upper_case: "*"
+      top:
+        parts:
+          right:
+            - lower_case: y
+            - lower_case: b
+            - lower_case: p
+            - lower_case: q
+          left:
+            - lower_case: s
+            - lower_case: d
+            - lower_case: g
+            - lower_case: "'"
+              upper_case: '"'
+      left:
+        parts:
+          top:
+            - lower_case: t
+            - lower_case: c
+            - lower_case: z
+            - lower_case: .
+              upper_case: "-"
+          bottom:
+            - lower_case: i
+            - lower_case: h
+            - lower_case: j
+            - lower_case: ","
+              upper_case: _
+      bottom:
+        parts:
+          left:
+            - lower_case: e
+            - lower_case: l
+            - lower_case: k
+            - lower_case: "@"
+              upper_case: "@gmail.com"
+          right:
+            - lower_case: o
+            - lower_case: u
+            - lower_case: v
+            - lower_case: w
+  extra_layers:
+    first:
+      sectors:
+        bottom:
+          parts:
+            left:
+              - lower_case: é
+            right:
+              - lower_case: œ
+        right:
+          parts:
+            top:
+              - lower_case: æ
+        left:
+          parts:
+            top:
+              - null
+              - lower_case: ç
+    second:
+      sectors:
+        right:
+          parts:
+            top:
+              - lower_case: à
+        bottom:
+          parts:
+            right:
+              - null
+              - lower_case: ù
+            left:
+              - lower_case: è
+    third:
+      sectors:
+        right:
+          parts:
+            top:
+              - lower_case: â
+        bottom:
+          parts:
+            right:
+              - lower_case: ô
+              - lower_case: û
+            left:
+              - lower_case: ê
+        left:
+          parts:
+            bottom:
+              - lower_case: î
+    fourth:
+      sectors:
+        top:
+          parts:
+            right:
+              - lower_case: ÿ
+        bottom:
+          parts:
+            right:
+              - lower_case: ö
+              - lower_case: ü
+            left:
+              - lower_case: ë
+        left:
+          parts:
+            bottom:
+              - lower_case: ï
+    fifth:
+      sectors:
+        bottom:
+          parts:
+            left:
+              - lower_case: €
+                upper_case: ¢

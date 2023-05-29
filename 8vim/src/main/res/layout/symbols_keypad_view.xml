@@ -6,27 +6,32 @@
     android:layout_width="match_parent">
 
     <Row>
+
         <Key
             android:keyOutputText="@string/poundSign"
             android:isRepeatable="true"
             android:keyLabel="@string/poundSign"
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />
+
         <Key
             android:keyOutputText="@string/euroSign"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel="@string/euroSign" />
+
         <Key
             android:keyOutputText="$"
             android:isRepeatable="true"
             android:keyLabel="$"
             android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="@string/centSign"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel="@string/centSign" />
+
         <Key
             android:codes="@integer/KEYCODE_TAB"
             android:isRepeatable="true"
@@ -38,156 +43,188 @@
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel="@string/copyrightSign" />
+
         <Key
             android:keyOutputText="@string/registeredSign"
             android:isRepeatable="true"
             android:keyLabel="@string/registeredSign"
-            android:keyWidth="25%p"/>
+            android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="@string/tradeMarkSign"
             android:isRepeatable="true"
             android:keyLabel="@string/tradeMarkSign"
-            android:keyWidth="25%p"/>
+            android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="@string/invertedQuestionMark"
             android:isRepeatable="true"
             android:keyLabel="@string/invertedQuestionMark"
             android:keyWidth="25%p"
-            android:keyEdgeFlags="right"/>
+            android:keyEdgeFlags="right" />
     </Row>
+
     <Row>
+
         <Key
             android:keyOutputText="["
             android:isRepeatable="true"
             android:keyLabel="["
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />
+
         <Key
             android:keyOutputText="]"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel="]" />
+
         <Key
             android:keyOutputText="{"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel="{" />
+
         <Key
             android:keyOutputText="}"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel="}" />
+
         <Key
             android:codes="@integer/SWITCH_TO_NUMBER_KEYPAD"
             android:keyIcon="@drawable/numericpad_vd_vector"
             android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="@string/lessThan"
             android:isRepeatable="true"
             android:keyLabel="@string/lessThan"
-            android:keyWidth="25%p"/>
+            android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="@string/greaterThan"
             android:isRepeatable="true"
             android:keyLabel="@string/greaterThan"
-            android:keyWidth="25%p"/>
+            android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="^"
             android:isRepeatable="true"
             android:keyLabel="^"
-            android:keyWidth="25%p"/>
+            android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="@string/invertedExclamationMark"
             android:isRepeatable="true"
             android:keyLabel="@string/invertedExclamationMark"
             android:keyWidth="25%p"
-            android:keyEdgeFlags="right"/>
+            android:keyEdgeFlags="right" />
     </Row>
+
     <Row>
+
         <Key
             android:keyOutputText="@string/sectionSign"
             android:isRepeatable="true"
             android:keyLabel="@string/sectionSign"
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />
+
         <Key
             android:keyOutputText="@string/notSign"
             android:isRepeatable="true"
             android:keyLabel="@string/notSign"
-            android:keyWidth="25%p"/>
+            android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="@string/pilcrowSign"
             android:isRepeatable="true"
             android:keyLabel="@string/pilcrowSign"
-            android:keyWidth="25%p"/>
+            android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="@string/degreeSign"
             android:isRepeatable="true"
             android:keyLabel="@string/degreeSign"
-            android:keyWidth="25%p"/>
+            android:keyWidth="25%p" />
+
         <Key
             android:codes="@integer/SWITCH_TO_MAIN_KEYPAD"
             android:keyIcon="@drawable/ic_viii"
             android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="\\"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel="\\" />
+
         <Key
             android:keyOutputText="@string/verticalLine"
             android:isRepeatable="true"
             android:keyLabel="@string/verticalLine"
-            android:keyWidth="25%p"/>
+            android:keyWidth="25%p" />
+
         <Key
             android:keyOutputText="@string/brokenBar"
             android:isRepeatable="true"
             android:keyLabel="@string/brokenBar"
-            android:keyWidth="25%p"/>
+            android:keyWidth="25%p" />
+
         <Key
             android:codes="@integer/KEYCODE_DEL"
             android:isRepeatable="true"
             android:keyIcon="@drawable/ic_backspace"
             android:keyWidth="25%p"
-            android:keyEdgeFlags="right"/>
+            android:keyEdgeFlags="right" />
     </Row>
+
     <Row>
+
         <Key
             android:keyOutputText="~"
             android:isRepeatable="true"
             android:keyLabel="~"
             android:keyWidth="25%p"
             android:keyEdgeFlags="left" />
+
         <Key
             android:keyOutputText="@string/crossProduct"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel="@string/crossProduct" />
+
         <Key
             android:keyOutputText="@string/divisionSign"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel="@string/divisionSign" />
+
         <Key
             android:keyOutputText=" "
             android:isRepeatable="true"
             android:keyLabel="@string/spaceBarSymbol"
-            android:keyWidth="50%p"/>
+            android:keyWidth="50%p" />
+
         <Key
             android:keyOutputText="`"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel="`" />
+
         <Key
             android:keyOutputText=";"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel=";" />
+
         <Key
             android:keyOutputText=":"
             android:isRepeatable="true"
             android:keyWidth="25%p"
             android:keyLabel=":" />
+
         <Key
             android:codes="@integer/KEYCODE_ENTER"
             android:isRepeatable="true"

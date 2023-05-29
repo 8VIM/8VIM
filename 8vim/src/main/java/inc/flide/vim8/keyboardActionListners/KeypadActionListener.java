@@ -6,19 +6,17 @@ import android.os.Build;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
-
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.CustomKeycode;
+import inc.flide.vim8.structures.KeyboardAction;
 
 public class KeypadActionListener {
 
+    private final AudioManager audioManager;
     protected MainInputMethodService mainInputMethodService;
     protected View view;
-    private boolean isSelectionOn = true;
-    private AudioManager audioManager;
 
     public KeypadActionListener(MainInputMethodService mainInputMethodService, View view) {
         this.mainInputMethodService = mainInputMethodService;
@@ -35,10 +33,6 @@ public class KeypadActionListener {
         }
     }
 
-    private boolean customKeyCodeIsValid(int keyCode) {
-        return keyCode <= KeyEvent.KEYCODE_UNKNOWN;
-    }
-
     public void handleInputKey(KeyboardAction keyboardAction) {
         handleInputKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
     }
@@ -47,7 +41,7 @@ public class KeypadActionListener {
 
         boolean actionHandled = handleKeyEventKeyCodes(keyCode, keyFlags);
         if (!actionHandled) {
-            actionHandled = handleCustomKeyCodes(keyCode, keyFlags);
+            actionHandled = handleCustomKeyCodes(keyCode);
         }
         if (!actionHandled) {
             onText(String.valueOf((char) keyCode));
@@ -89,7 +83,7 @@ public class KeypadActionListener {
         }
     }
 
-    private boolean handleCustomKeyCodes(int customKeyEventCode, int keyFlags) {
+    private boolean handleCustomKeyCodes(int customKeyEventCode) {
         switch (CustomKeycode.fromIntValue(customKeyEventCode)) {
             case MOVE_CURRENT_END_POINT_LEFT:
                 moveSelection(KeyEvent.KEYCODE_DPAD_LEFT);
@@ -178,8 +172,7 @@ public class KeypadActionListener {
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
-        if (keyboardAction.getText().length() == 1
-                && (isShiftSet() || isCapsLockSet())) {
+        if ((isShiftSet() || isCapsLockSet()) && !keyboardAction.getCapsLockText().isEmpty()) {
             onText(keyboardAction.getCapsLockText());
         } else {
             onText(keyboardAction.getText());
@@ -187,13 +180,9 @@ public class KeypadActionListener {
     }
 
     private void moveSelection(int dpadKeyCode) {
-        if (isSelectionOn) {
-            mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-        }
+        mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
         mainInputMethodService.sendDownAndUpKeyEvent(dpadKeyCode, 0);
-        if (isSelectionOn) {
-            mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-        }
+        mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
     }
 
     public boolean areCharactersCapitalized() {
@@ -212,7 +201,7 @@ public class KeypadActionListener {
         return mainInputMethodService.getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
     }
 
-    public boolean isCircleCapitalization() {
-        return false;
+    public int findLayer() {
+        return 0;
     }
 }

@@ -12,6 +12,7 @@ import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardActionListners.ButtonKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.structures.Constants;
 
 public class NumberKeypadView extends ButtonKeypadView {
 
@@ -51,17 +52,16 @@ public class NumberKeypadView extends ButtonKeypadView {
     private void setColors(Keyboard keyboard) {
         Resources resources = getResources();
         int foregroundColor = SharedPreferenceHelper.getInstance(getContext()).getInt(
-                resources.getString(R.string.pref_board_fg_color_key),
-                resources.getColor(R.color.defaultBoardFg));
+            resources.getString(R.string.pref_board_fg_color_key),
+            resources.getColor(R.color.defaultBoardFg));
         // Tint icon keys
         for (Keyboard.Key key : keyboard.getKeys()) {
             if (key.icon != null) {
                 // Has to be mutated, otherwise icon has linked alpha to same key
                 // on xpad view
-                // TODO: find more info
                 key.icon = key.icon.mutate();
                 key.icon.setTint(foregroundColor);
-                key.icon.setAlpha(255);
+                key.icon.setAlpha(Constants.MAX_RGB_COMPONENT_VALUE);
             }
         }
         invalidate();
