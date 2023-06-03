@@ -16,12 +16,13 @@
 #   public *;
 #}
 # Proguard configuration for Jackson 2.x
+-keepattributes *Annotation*,EnclosingMethod,Signature
 -keep class com.fasterxml.jackson.databind.ObjectMapper {
     public <methods>;
     protected <methods>;
 }
--keep class com.fasterxml.jackson.databind.ObjectWriter {
-    public ** writeValueAsString(**);
-}
 -keepnames class com.fasterxml.jackson.** { *; }
 -dontwarn com.fasterxml.jackson.databind.**
+-keep public class inc.flide.vim8.structures.** {
+    *;
+}
