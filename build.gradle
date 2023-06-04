@@ -6,9 +6,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
-
-
+        classpath 'com.android.tools.build:gradle:7.4.2'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -31,4 +29,24 @@ allprojects {
 
         classpath = files()
     }
+}
+ext {
+    androidMaterialVersion = "1.9.0"
+    androidXConstraintlayoutVersion = "2.1.4"
+    androidXLifecycleViewmodelVersion = "2.6.1"
+    androidXPreferenceVersion = "1.2.0"
+    androidXTestCoreVersion = "1.5.0"
+    androidXTestExtJUnitVersion = "1.1.5"
+//    androidXTesExtTruthVersion = "1.1.5"
+    androidXTestRunnerVersion = "1.5.2"
+    apacheCommonTextVersion = "1.7"
+    assertJVersion = "3.24.2"
+    colorPreferenceVersion = "1.1.0"
+    espressoVersion = "3.5.1"
+    jacksonYamlVersion = "2.14.2"
+    jqwikVersion = "1.7.3"
+    junit4Version = "4.13.2"
+    junit5Version = "5.9.3"
+    materialDialogs = "3.3.0"
+    mockitoVersion = "5.3.1"
 }

@@ -6,7 +6,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="enable_ime_dialog_title">Please Enable IME</string>
     <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "&appname; Keyboard" there.</string>
-    <string name="enable_ime_dialog_neutral_button_text">Enable</string>
     <string name="activate_ime_dialog_title">Please Activate IME</string>
     <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname; Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
@@ -16,43 +15,41 @@
     <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
     <string name="share_app">Share &appname;</string>
     <string name="select_preferred_emoticon_keyboard_dialog_title">Choose the input method</string>
-    <string name="select_preferred_keyboard_layout_dialog_title">Choose the diacritics</string>
+    <string name="select_preferred_keyboard_layout_dialog_title">Choose the language</string>
     <string-array name="keyboard_layouts_id">
-        <item>af_regular_afrikaans</item>
-        <item>br_regular_breton</item>
-        <item>bs_regular_bosnian</item>
-        <item>ca_regular_catalan</item>
-        <item>cz_regular_czech</item>
-        <item>da_regular_danish</item>
-        <item>de_regular_german</item>
-        <item>dk_regular_danish</item>
-        <item>en_regular_8pen</item>
-        <item>eo_regular_esperanto</item>
-        <item>es_regular_spanish</item>
-        <item>fi_regular_finnish</item>
-        <item>fo_regular_faroese</item>
-        <item>fr_regular_french</item>
-        <item>ga_regular_irish</item>
-        <item>he_regular_hebrew</item>
-        <item>hr_regular_croatian</item>
-        <item>hu_regular_hungarian</item>
-        <item>is_regular_islandic</item>
-        <item>it_regular_italian</item>
-        <item>lt_regular_lithuanian</item>
-        <item>lv_regular_latvian</item>
-        <item>nl_regular_dutch</item>
-        <item>no_regular_norwegian</item>
-        <item>pl_regular_polish</item>
-        <item>pt_regular_portuguese</item>
-        <item>sk_regular_slovak</item>
-        <item>sq_regular_albanian</item>
-        <item>sr_regular_serbian</item>
-        <item>sv_regular_swedish</item>
-        <item>tr_regular_turkish</item>
+        <item>af</item>
+        <item>br</item>
+        <item>bs</item>
+        <item>ca</item>
+        <item>cs</item>
+        <item>da</item>
+        <item>de</item>
+        <item>en</item>
+        <item>eo</item>
+        <item>es</item>
+        <item>fi</item>
+        <item>fo</item>
+        <item>fr</item>
+        <item>ga</item>
+        <item>he</item>
+        <item>hr</item>
+        <item>hu</item>
+        <item>is</item>
+        <item>it</item>
+        <item>lt</item>
+        <item>lv</item>
+        <item>nl</item>
+        <item>no</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>sk</item>
+        <item>sq</item>
+        <item>sr</item>
+        <item>sv</item>
+        <item>tr</item>
+        <item>uk</item>
     </string-array>
-    <string name="select_custom_keyboard_layout_dialog_title">Load the layout file from disk</string>
     <string name="generic_okay_text">OK</string>
-    <string name="generic_cancel_text">Cancel</string>
 
     <!--   preferences categories -->
     <string name="pref_category_general">General</string>
@@ -67,7 +64,7 @@
 
     <!--    preferences shown in gui UI-->
     <string name="pref_select_keyboard_layout_key">select_keyboard_layout</string>
-    <string name="pref_select_keyboard_layout_title">Select diacritics layout</string>
+    <string name="pref_select_keyboard_layout_title">Select language layout</string>
     <string name="pref_select_keyboard_layout_summary">Chosen language will decide which diacritics can be entered </string>
 
     <string name="pref_select_custom_keyboard_layout_key">select_custom_keyboard_layout</string>

@@ -1,0 +1,22 @@
+layers:
+  hidden:
+    - type: input_key
+      movement_sequence:
+        - top
+        - no_touch
+      key_code: shift_toggle
+  default:
+    sectors:
+      right:
+        parts:
+          bottom:
+            - lower_case: n
+  extra_layers:
+    first:
+      sectors:
+        right:
+          parts:
+            bottom:
+              - null
+              - lower_case: m
+                upper_case: a

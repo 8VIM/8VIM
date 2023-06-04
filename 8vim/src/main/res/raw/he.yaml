@@ -1,0 +1,140 @@
+layers:
+  default:
+    sectors:
+      right:
+        parts:
+          bottom:
+            - lower_case: ל
+              upper_case: n
+            - lower_case: מ
+              upper_case: m
+            - lower_case: ח
+              upper_case: f
+            - lower_case: "!"
+              upper_case: "!!!"
+          top:
+            - lower_case: א
+              upper_case: a
+            - lower_case: ר
+              upper_case: r
+            - lower_case: ז
+              upper_case: x
+            - lower_case: "?"
+              upper_case: "*"
+      top:
+        parts:
+          right:
+            - lower_case: נ
+              upper_case: y
+            - lower_case: ם
+              upper_case: b
+            - lower_case: ס
+              upper_case: p
+            - lower_case: צ
+              upper_case: q
+          left:
+            - lower_case: ש
+              upper_case: s
+            - lower_case: ע
+              upper_case: d
+            - lower_case: ף
+              upper_case: g
+            - lower_case: ץ
+              upper_case: "'"
+      left:
+        parts:
+          top:
+            - lower_case: ב
+              upper_case: t
+            - lower_case: פ
+              upper_case: c
+            - lower_case: ך
+              upper_case: z
+            - lower_case: .
+              upper_case: "-"
+          bottom:
+            - lower_case: כ
+              upper_case: i
+            - lower_case: ק
+              upper_case: h
+            - lower_case: ט
+              upper_case: j
+            - lower_case: ","
+              upper_case: _
+      bottom:
+        parts:
+          left:
+            - lower_case: י
+              upper_case: e
+            - lower_case: ו
+              upper_case: l
+            - lower_case: ן
+              upper_case: k
+            - lower_case: "@"
+              upper_case: "@gmail.com"
+          right:
+            - lower_case: ה
+              upper_case: o
+            - lower_case: ת
+              upper_case: u
+            - lower_case: ד
+              upper_case: v
+            - lower_case: ג
+              upper_case: w
+  extra_layers:
+    first:
+      sectors:
+        right:
+          parts:
+            bottom:
+              - lower_case: n
+              - lower_case: m
+              - lower_case: f
+              - lower_case: "!"
+                upper_case: "!!!"
+            top:
+              - lower_case: a
+              - lower_case: r
+              - lower_case: x
+              - lower_case: "?"
+                upper_case: "*"
+        top:
+          parts:
+            right:
+              - lower_case: y
+              - lower_case: b
+              - lower_case: p
+              - lower_case: q
+            left:
+              - lower_case: s
+              - lower_case: d
+              - lower_case: g
+              - lower_case: "'"
+                upper_case: '"'
+        left:
+          parts:
+            top:
+              - lower_case: t
+              - lower_case: c
+              - lower_case: z
+              - lower_case: .
+                upper_case: "-"
+            bottom:
+              - lower_case: i
+              - lower_case: h
+              - lower_case: j
+              - lower_case: ","
+                upper_case: _
+        bottom:
+          parts:
+            left:
+              - lower_case: e
+              - lower_case: l
+              - lower_case: k
+              - lower_case: "@"
+                upper_case: "@gmail.com"
+            right:
+              - lower_case: o
+              - lower_case: u
+              - lower_case: v
+              - lower_case: w

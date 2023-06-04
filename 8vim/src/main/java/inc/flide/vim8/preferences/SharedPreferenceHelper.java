@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Set;
 
 public final class SharedPreferenceHelper implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
     private static SharedPreferenceHelper singleton = null;
+    private final Set<String> prefKeys = new HashSet<>();
+    private final List<Listener> listeners = new ArrayList<>();
 
     public interface Listener {
         void onPreferenceChanged();
@@ -30,9 +32,6 @@ public final class SharedPreferenceHelper implements SharedPreferences.OnSharedP
         }
         return singleton;
     }
-
-    private Set<String> prefKeys = new HashSet<>();
-    private List<Listener> listeners = new ArrayList<>();
 
     public void addListener(Listener note) {
         listeners.add(note);
@@ -85,17 +84,5 @@ public final class SharedPreferenceHelper implements SharedPreferences.OnSharedP
         }
 
         return preferenceBoolean;
-    }
-
-    public float getFloat(String preferenceId, float defaultValue) {
-        prefKeys.add(preferenceId);
-        float preferenceFloat;
-        try {
-            preferenceFloat = this.sharedPreferences.getFloat(preferenceId, defaultValue);
-        } catch (ClassCastException e) {
-            return defaultValue;
-        }
-
-        return preferenceFloat;
     }
 }

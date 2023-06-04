@@ -5,41 +5,72 @@ import java.util.List;
 import java.util.Map;
 
 public class KeyboardData {
-    private Map<List<FingerPosition>, KeyboardAction> actionMap;
-    private String lowerCaseCharacters;
-    private String upperCaseCharacters;
-
-    public KeyboardData() {
-        actionMap = new HashMap<>();
-        lowerCaseCharacters = "";
-        upperCaseCharacters = "";
-    }
+    private final Map<List<FingerPosition>, KeyboardAction> actionMap = new HashMap<>();
+    private final CharacterSet[] characterSets = new CharacterSet[Constants.MAX_LAYERS + 1];
+    private int totalLayers = 0;
 
     public Map<List<FingerPosition>, KeyboardAction> getActionMap() {
         return actionMap;
     }
 
-    public void setActionMap(Map<List<FingerPosition>, KeyboardAction> actionMap) {
-        this.actionMap = actionMap;
+    public void addActionMap(List<FingerPosition> movementSequence, KeyboardAction keyboardAction) {
+        this.actionMap.put(movementSequence, keyboardAction);
     }
 
     public void addAllToActionMap(Map<List<FingerPosition>, KeyboardAction> actionMapAddition) {
         this.actionMap.putAll(actionMapAddition);
     }
 
-    public String getLowerCaseCharacters() {
-        return lowerCaseCharacters;
+    public int getTotalLayers() {
+        return totalLayers;
     }
 
-    public void setLowerCaseCharacters(String lowerCaseCharacters) {
-        this.lowerCaseCharacters = lowerCaseCharacters;
+    public String getLowerCaseCharacters(int layer) {
+        if (layer < 0 || layer > totalLayers || characterSets[layer] == null) {
+            return "";
+        }
+        return characterSets[layer].getLowerCaseCharacters();
     }
 
-    public String getUpperCaseCharacters() {
-        return upperCaseCharacters;
+
+    public void setLowerCaseCharacters(String lowerCaseCharacters, int layer) {
+        if (layer < 0 || layer > Constants.MAX_LAYERS) {
+            return;
+        }
+
+        updateCharacterSets(layer);
+        characterSets[layer].setLowerCaseCharacters(lowerCaseCharacters);
     }
 
-    public void setUpperCaseCharacters(String upperCaseCharacters) {
-        this.upperCaseCharacters = upperCaseCharacters;
+    public String getUpperCaseCharacters(int layer) {
+        if (layer < 0 || layer > totalLayers || characterSets[layer] == null) {
+            return "";
+        }
+        return characterSets[layer].getUpperCaseCharacters();
+    }
+
+
+    public void setUpperCaseCharacters(String upperCaseCharacters, int layer) {
+        if (layer < 0 || layer > Constants.MAX_LAYERS) {
+            return;
+        }
+
+        updateCharacterSets(layer);
+        characterSets[layer].setUpperCaseCharacters(upperCaseCharacters);
+    }
+
+    public int findLayer(List<FingerPosition> movementSequence) {
+        KeyboardAction action = actionMap.get(movementSequence);
+        if (action == null) {
+            return Constants.DEFAULT_LAYER;
+        }
+        return action.getLayer();
+    }
+
+    private void updateCharacterSets(int layer) {
+        totalLayers = Math.max(totalLayers, layer);
+        if (characterSets[layer] == null) {
+            characterSets[layer] = new CharacterSet();
+        }
     }
 }
