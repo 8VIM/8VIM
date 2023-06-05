@@ -5,6 +5,18 @@ on:
     branches: [ prerelease ]
 
 jobs:
+  check_file:
+    runs-on: ubuntu-latest
+    outputs:
+     whatsnew: ${{ steps.vars.outputs.file }} 
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set output
+        id: vars
+        run: |
+          version=$(cat ./8vim/build.gradle | grep -oE 'versionCode.+' | cut -f2- -d' ')
+          file="metadata/en-US/changelogs/${version}.txt"
+          [[ -f "$file" ]] && echo "file=${file}" >> $GITHUB_OUTPUT
   build:
     runs-on: ubuntu-latest
     name: Build release
@@ -28,6 +40,47 @@ jobs:
           VIM8_BUILD_KEY_ALIAS:  ${{ secrets.ALIAS }}
           VIM8_BUILD_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew assembleRelease
+      - name: Upload artifact apk
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk
+          path: 8vim/build/outputs/apk/release/8vim-release.apk
+          retention-days: 1
+      - name: Upload artifact mapping
+        uses: actions/upload-artifact@v3
+        with:
+          name: mapping
+          path: 8vim/build/outputs/mapping/release/mapping.txt
+          retention-days: 1
+  changelog:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download artifact
+        id: apk
+        uses: actions/download-artifact@v3
+        with:
+          name: apk
+      - name: Create Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v3
+        with:
+          configuration: changelog-configuration.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          prerelease: true
+          body: ${{steps.github_release.outputs.changelog}}
+          files: |
+            ${{ steps.apk.outputs.download-paths }}
+  playstore:
+    runs-on: ubuntu-latest
+    name: Upload to Google Playstore
+    needs: [check_file, build]
+    steps:
       - name: Google play release
         uses: r0adkll/upload-google-play@v1
         with:

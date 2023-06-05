@@ -2,13 +2,25 @@ name: Android Release
 
 on:
   push:
-    branches: [ master ]
-    tags: [ ".*" ]
+    tags: [ "*" ]
 
 jobs:
+  check_file:
+    runs-on: ubuntu-latest
+    outputs:
+     whatsnew: ${{ steps.vars.outputs.file }} 
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set output
+        id: vars
+        run: |
+          version=$(cat ./8vim/build.gradle | grep -oE 'versionCode.+' | cut -f2- -d' ')
+          file="metadata/en-US/changelogs/${version}.txt"
+          [[ -f "$file" ]] && echo "file=${file}" >> $GITHUB_OUTPUT
   build:
     runs-on: ubuntu-latest
     name: Build release
+    needs: check_file
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
@@ -65,11 +77,14 @@ jobs:
           files: |
             ${{ steps.apk.outputs.download-paths }}
   playstore:
-    needs: build
+    needs: [check_file, build]
     runs-on: ubuntu-latest
     name: Upload to Google Playstore
     steps:
       - uses: actions/checkout@v3
+      - run: |
+          mkdir -p distribution/whatsnew
+          mv ${{ needs.check_file.outputs.whatsnew }} distribution/whatsnew/whatsnew-en-US
       - name: Download APK artifact
         id: apk
         uses: actions/download-artifact@v3
