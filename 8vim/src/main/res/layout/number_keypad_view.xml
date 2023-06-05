@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:keyWidth="20%p"
-    android:keyHeight="12%p">
+    android:keyHeight="8%p">
 
     <Row>
 
