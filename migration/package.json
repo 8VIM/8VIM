@@ -1,0 +1,21 @@
+{
+  "name": "8vim-migration",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "8vim-migration": "index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "xml-js": "^1.6.11",
+    "yaml": "^2.3.1",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "prettier": "2.8.8"
+  }
+}
