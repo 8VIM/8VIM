@@ -69,6 +69,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.androidXConstraintlayoutVersion}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${rootProject.androidXLifecycleViewmodelVersion}"
     implementation "androidx.preference:preference:${rootProject.androidXPreferenceVersion}"
+    //noinspection GradleDependency
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${rootProject.jacksonYamlVersion}"
     implementation "com.github.kizitonwose.colorpreference:support:${rootProject.colorPreferenceVersion}"
     implementation "com.google.android.material:material:${rootProject.androidMaterialVersion}"
