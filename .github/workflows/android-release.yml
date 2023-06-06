@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
      whatsnew: ${{ steps.vars.outputs.file }} 
+     version: ${{ steps.vars.outputs.version }} 
     steps:
       - uses: actions/checkout@v3
       - name: Set output
@@ -17,6 +18,7 @@ jobs:
           version=$(cat ./8vim/build.gradle | grep -oE 'versionCode.+' | cut -f2- -d' ')
           file="metadata/en-US/changelogs/${version}.txt"
           [[ -f "$file" ]] && echo "file=${file}" >> $GITHUB_OUTPUT
+          echo "version=${version}" >> $GITHUB_OUTPUT
   build:
     runs-on: ubuntu-latest
     name: Build release
