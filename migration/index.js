@@ -1,13 +1,13 @@
+#!/usr/bin/env node
 import yargs from "yargs";
 import chalk from "chalk";
 import * as path from "path";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 import { hideBin } from "yargs/helpers";
 import YAML from "yaml";
 import { xml2js } from "xml-js";
-
-const error = chalk.bold.red;
-const debug = chalk.yellow;
+import { cleanYaml, processAction } from "./functions.js";
+import { confirm } from "@inquirer/prompts";
 
 const argv = yargs(hideBin(process.argv))
   .command("$0 <xml> [output]", "Migrate XML to YAML", (yargs) =>
@@ -32,116 +32,26 @@ const argv = yargs(hideBin(process.argv))
   .version(false).argv;
 
 const invalidXML = "Invalid XML layout file";
-const properties = {
-  keyboardActionType: "type",
-  movementSequence: "movement_sequence",
-  inputString: "lower_case",
-  inputCapsLockString: "upper_case",
-  inputKey: "key_code",
-};
+const output = path.resolve(argv.output, `${path.parse(argv.xml).name}.yaml`);
 
-function extractProperty(elements, prop) {
-  return text;
-}
-
-function processAction(elements, yaml) {
-  const data = {};
-  Object.entries(properties).forEach(([prop, entry]) => {
-    const find = elements.find(({ name }) => name === prop);
-    if (!find) return;
-    let {
-      elements: [{ text }],
-    } = find;
-
-    if (!text) return;
-
-    switch (entry) {
-      case "type":
-      case "key_code":
-        text = text.toLowerCase();
-        break;
-      case "movement_sequence":
-        text = text
-          .toLowerCase()
-          .split(";")
-          .filter((s) => s !== "");
-        break;
-      default:
+async function checkOutput() {
+  try {
+    const stat = await fs.stat(output);
+    if (!argv.force && stat.isFile()) {
+      const answer = await confirm({
+        message: `${output} already exists. Do you want to overwrite it`,
+      });
+      if (!answer) process.exit(0);
     }
-
-    data[entry] = text;
-  });
-
-  const find = elements.find(({ name }) => name === "flags");
-
-  if (find) {
-    const flags = find.elements
-      .filter(({ name }) => name === "flag")
-      .reduce(
-        (flags, { elements: [{ text }] }) => flags | parseInt(text, 10),
-        0
-      );
-    if (flags) {
-      data.flags = flags;
-    }
-  }
-  switch (data.type) {
-    case "input_key":
-      if (!yaml.layers.hidden) {
-        yaml.layers.hidden = [];
-      }
-      yaml.layers.hidden.push(data);
-      break;
-    case "input_text":
-      delete data.type;
-      if (data.lower_case.toUpperCase() === data.upper_case) {
-        delete data.upper_case;
-      }
-      const quadrant = detectQuadrant(data.movement_sequence);
-      if (quadrant) {
-        delete data.movement_sequence;
-        if (!yaml.layers.default) {
-          yaml.layers.default = { sectors: {} };
-          const [sector, part, position] = quadrant;
-          if (!yaml.layers.default.sectors[sector]) {
-            yaml.layers.default.sectors[sector] = { parts: {} };
-          }
-          if (!yaml.layers.default.sectors[sector].parts[part]) {
-            yaml.layers.default.sectors[sector].parts[part] = [
-              null,
-              null,
-              null,
-              null,
-            ];
-          }
-          yaml.layers.default.sectors[sector].parts[part][position] = data;
-        } else {
-          if (!yaml.layers.hidden) {
-            yaml.layers.hidden = [];
-          }
-          yaml.layers.hidden.push(data);
-        }
-      }
-      break;
-  }
-  console.log(debug(JSON.stringify(data)));
+  } catch (error) {}
 }
-function detectQuadrant(movementSequence) {
-  if (
-    movementSequence[0] !== "inside_circle" ||
-    movementSequence[movementSequence.length - 1] !== "inside_circle"
-  )
-    return null;
-  movementSequence.pop();
-  movementSequence.shift();
-  const result = [];
-  result.push(movementSequence.shift());
-  result.push();
-}
+
 try {
+  await checkOutput();
+  console.log(chalk.yellow(`Migrating ${argv.xml} to ${output}`));
   const yaml = { layers: {} };
-  const xml = fs.readFileSync(argv.xml, "utf8");
-  const result = xml2js(xml);
+  const xml = await fs.readFile(argv.xml, "utf8");
+  const result = xml2js(xml, { ignoreComment: true, nativeType: true });
   if (
     !result.elements.length ||
     result.elements[0].type !== "element" ||
@@ -159,9 +69,11 @@ try {
     .forEach(({ elements }) => {
       if (elements) processAction(elements, yaml);
     });
-  console.log(yaml);
-  //   console.log(JSON.stringify(result, null, 2));
+  cleanYaml(yaml);
+  await fs.writeFile(output, YAML.stringify(yaml));
+  console.log(chalk.green("Migration successful"));
 } catch (e) {
-  console.error(error(e));
+  console.error(chalk.bold.red(e));
+  console.error(chalk.bold.red(e.stack));
   process.exit(1);
 }
