@@ -1,17 +1,14 @@
 package inc.flide.vim8.structures.yaml;
 
 import android.view.KeyEvent;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
 import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardActionType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class Action {
     @JsonProperty(value = "type")
@@ -81,6 +78,7 @@ public class Action {
             try {
                 keyCode = CustomKeycode.valueOf(keyCodeString).getKeyCode();
             } catch (IllegalArgumentException error) {
+                keyCode = 0;
             }
         }
     }
@@ -95,8 +93,8 @@ public class Action {
 
     public boolean isEmpty() {
         return (lowerCase == null || lowerCase.isEmpty())
-            && (upperCase == null || upperCase.isEmpty())
-            && movementSequence.isEmpty()
-            && flags == 0;
+                && (upperCase == null || upperCase.isEmpty())
+                && movementSequence.isEmpty()
+                && flags == 0;
     }
 }

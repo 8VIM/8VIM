@@ -14,16 +14,16 @@ import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
-
-import java.util.List;
-
-import inc.flide.vim8.keyboardHelpers.InputMethodServiceHelper;
-import inc.flide.vim8.structures.KeyboardData;
+import androidx.appcompat.app.AppCompatDelegate;
+import com.google.android.material.color.DynamicColors;
+import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
-import inc.flide.vim8.views.mainKeyboard.MainKeyboardView;
+import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
+import java.util.List;
 
 public class MainInputMethodService extends InputMethodService {
 
@@ -46,6 +46,26 @@ public class MainInputMethodService extends InputMethodService {
         setInputView(currentKeypadView);
     }
 
+    @Override
+    public void onCreate() {
+        DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
+        Context applicationContext = getApplicationContext();
+        switch (SharedPreferenceHelper.getInstance(applicationContext)
+                .getString(getString(R.string.pref_color_mode_key), "system")) {
+            case "dark":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                setTheme(R.style.AppThemeDark_NoActionBar);
+                break;
+            case "light":
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                setTheme(R.style.AppThemeLight_NoActionBar);
+                break;
+            default:
+                setTheme(R.style.AppTheme_NoActionBar);
+        }
+        super.onCreate();
+    }
+
     /**
      * Lifecycle of IME
      * <p>
@@ -64,12 +84,13 @@ public class MainInputMethodService extends InputMethodService {
      * 13. InputMethodService stops
      */
 
+
     @Override
     public View onCreateInputView() {
-        numberKeypadView = new NumberKeypadView(this, null);
-        selectionKeypadView = new SelectionKeypadView(this, null);
-        symbolKeypadView = new SymbolKeypadView(this, null);
-        mainKeyboardView = new MainKeyboardView(this, null);
+        numberKeypadView = new NumberKeypadView(this);
+        selectionKeypadView = new SelectionKeypadView(this);
+        symbolKeypadView = new SymbolKeypadView(this);
+        mainKeyboardView = new MainKeyboardView(this);
         setCurrentKeypadView(mainKeyboardView);
         return currentKeypadView;
     }
@@ -157,13 +178,14 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public void switchToExternalEmoticonKeyboard() {
-        InputMethodManager inputMethodManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        IBinder iBinder = this.getWindow().getWindow().getAttributes().token;
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        IBinder tokenIBinder = this.getWindow().getWindow().getAttributes().token;
         String keyboardId = getSelectedEmoticonKeyboardId();
         if (keyboardId.isEmpty()) {
-            inputMethodManager.switchToLastInputMethod(iBinder);
+            inputMethodManager.switchToLastInputMethod(tokenIBinder);
         } else {
-            inputMethodManager.setInputMethod(iBinder, keyboardId);
+            inputMethodManager.setInputMethod(tokenIBinder, keyboardId);
         }
 
     }
@@ -199,7 +221,8 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public void switchAnchor() {
-        ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), InputConnection.GET_EXTRACTED_TEXT_MONITOR);
+        ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(),
+                InputConnection.GET_EXTRACTED_TEXT_MONITOR);
         int start = extractedText.selectionStart;
         int end = extractedText.selectionEnd;
         inputConnection.setSelection(end, start);
@@ -283,7 +306,7 @@ public class MainInputMethodService extends InputMethodService {
 
     /*
      * |-------|-------|-------|-------|
-             *                              1111 IME_MASK_ACTION
+     *                              1111 IME_MASK_ACTION
      * |-------|-------|-------|-------|
      *                                   IME_ACTION_UNSPECIFIED
      *                                 1 IME_ACTION_NONE

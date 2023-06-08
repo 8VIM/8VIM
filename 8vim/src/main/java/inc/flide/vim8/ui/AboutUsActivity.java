@@ -6,10 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.ImageView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import inc.flide.vim8.R;
 
 public class AboutUsActivity extends AppCompatActivity {
@@ -55,6 +53,7 @@ public class AboutUsActivity extends AppCompatActivity {
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
                     break;
+                default:
             }
 
             return true;

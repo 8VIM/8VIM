@@ -69,10 +69,14 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.androidXConstraintlayoutVersion}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${rootProject.androidXLifecycleViewmodelVersion}"
     implementation "androidx.preference:preference:${rootProject.androidXPreferenceVersion}"
+    implementation "com.afollestad.material-dialogs:core:${rootProject.materialDialogs}"
+    implementation "com.afollestad.material-dialogs:color:${rootProject.materialDialogs}"
+
     //noinspection GradleDependency
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${rootProject.jacksonYamlVersion}"
     implementation "com.github.kizitonwose.colorpreference:support:${rootProject.colorPreferenceVersion}"
     implementation "com.google.android.material:material:${rootProject.androidMaterialVersion}"
+    implementation "io.github.hijamoya:keyboardview:0.0.2"
     implementation "org.apache.commons:commons-text:${rootProject.apacheCommonTextVersion}"
 
     androidTestImplementation "androidx.test:core:${rootProject.androidXTestCoreVersion}"
@@ -94,5 +98,4 @@ dependencies {
     testImplementation "org.mockito:mockito-core:${rootProject.mockitoVersion}"
     testImplementation "org.mockito:mockito-junit-jupiter:${rootProject.mockitoVersion}"
 
-    api "com.afollestad.material-dialogs:core:${rootProject.materialDialogs}"
 }

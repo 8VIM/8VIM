@@ -3,16 +3,13 @@ package inc.flide.vim8.structures;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
-
-import org.apache.commons.lang3.StringUtils;
-
+import inc.flide.vim8.keyboardhelpers.KeyboardDataYamlParser;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-
-import inc.flide.vim8.keyboardHelpers.KeyboardDataYamlParser;
+import org.apache.commons.lang3.StringUtils;
 
 public class LayoutFileName {
     private static final Set<String> ISO_LANGUAGES = new HashSet<>(Arrays.asList(Locale.getISOLanguages()));
@@ -33,6 +30,7 @@ public class LayoutFileName {
         totalLayers = 1;
     }
 
+    @SuppressLint("DiscouragedApi")
     public LayoutFileName(Resources resources, Context context, String fileName) {
         this();
         if (ISO_LANGUAGES.contains(fileName)) {
@@ -40,7 +38,8 @@ public class LayoutFileName {
             languageCode = fileName;
             languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
             layoutDisplayName = StringUtils.capitalize(languageName);
-            @SuppressLint("DiscouragedApi") int resourceId = resources.getIdentifier(fileName, "raw", context.getPackageName());
+            @SuppressLint("DiscouragedApi") int resourceId =
+                    resources.getIdentifier(fileName, "raw", context.getPackageName());
             try (InputStream inputStream = resources.openRawResource(resourceId)) {
                 totalLayers = KeyboardDataYamlParser.isValidFile(inputStream);
                 isValidLayout = true;

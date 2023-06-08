@@ -1,4 +1,4 @@
-package inc.flide.vim8.views.mainKeyboard;
+package inc.flide.vim8.views.mainkeyboard;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -21,10 +21,11 @@ import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
-import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
+import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.utils.ColorsHelper;
 import java.util.Random;
 
 public class XpadView extends View {
@@ -116,13 +117,12 @@ public class XpadView extends View {
         Resources resources = getResources();
         SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
 
-        int backgroundColor = sharedPreferenceHelper.getInt(
-                resources.getString(R.string.pref_board_bg_color_key),
-                resources.getColor(R.color.defaultBoardBg));
-
-        foregroundColor = sharedPreferenceHelper.getInt(
-                resources.getString(R.string.pref_board_fg_color_key),
-                resources.getColor(R.color.defaultBoardFg));
+        int backgroundColor =
+                ColorsHelper.getThemeColor(context, R.attr.backgroundColor, R.string.pref_board_bg_color_key,
+                        R.color.defaultBoardBg);
+        foregroundColor =
+                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground, R.string.pref_board_fg_color_key,
+                        R.color.defaultBoardFg);
 
         userPreferRandomTrailColor = sharedPreferenceHelper.getBoolean(
                 resources.getString(R.string.pref_random_trail_color_key),
@@ -143,10 +143,10 @@ public class XpadView extends View {
         float spRadiusValue = pref.getInt(context.getString(R.string.pref_circle_scale_factor), 3);
         float radius = (spRadiusValue / circleRadiusFactor * keypadDimension.getWidth()) / 2;
 
-        int xOffset = (pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0)) * circleOffsetFactor;
-        int yOffset = (pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0)) * circleOffsetFactor;
-        circleCenter.x = (keypadDimension.getWidth() / 2f) + xOffset;
-        circleCenter.y = (keypadDimension.getHeight() / 2f) + yOffset;
+        int offsetX = (pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0)) * circleOffsetFactor;
+        int offsetY = (pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0)) * circleOffsetFactor;
+        circleCenter.x = (keypadDimension.getWidth() / 2f) + offsetX;
+        circleCenter.y = (keypadDimension.getHeight() / 2f) + offsetY;
 
         circle.setCentre(circleCenter);
         circle.setRadius(radius);
@@ -156,10 +156,10 @@ public class XpadView extends View {
         // this introduces a bit of asymmetry which we have to compensate for here.
         int keypadXOffset = fullWidth - keypadDimension.getWidth();
         // If the xOffset is to the right, we can spread into the extra padding space.
-        int smallDim = Math.min(xOffset > 0 ? fullWidth / 2 - xOffset + keypadXOffset
+        int smallDim = Math.min(offsetX > 0 ? fullWidth / 2 - offsetX + keypadXOffset
                         // If xOffset goes to the left, restrict to keypadDimension.
-                        : keypadDimension.getWidth() / 2 + xOffset,
-                fullHeight / 2 - Math.abs(yOffset));
+                        : keypadDimension.getWidth() / 2 + offsetX,
+                fullHeight / 2 - Math.abs(offsetY));
         // Compute the length of sector lines, such that they stop a little before hitting the edge of the view.
         float lengthOfLineDemarcatingSectors = (float) Math.hypot(smallDim, smallDim)
                 - radius - characterHeight;

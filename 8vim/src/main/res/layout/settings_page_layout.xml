@@ -44,7 +44,6 @@
             android:id="@+id/keyboard_text_test_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/cardview_light_background"
             android:clipToPadding="false"
             android:elevation="8dp"
             android:padding="6dp"
@@ -63,10 +62,10 @@
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="6"
                 android:paddingLeft="18dp"
-                android:paddingRight="18dp"
                 android:paddingTop="8dp"
+                android:paddingRight="18dp"
                 android:paddingBottom="8dp"
-                android:textSize="18sp" />
+                android:textSize="25sp" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -76,7 +75,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:itemIconTint="#000000"
         app:menu="@menu/activity_launcher_drawer" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

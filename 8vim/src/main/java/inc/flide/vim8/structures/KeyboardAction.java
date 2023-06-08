@@ -10,7 +10,8 @@ public class KeyboardAction {
     private final int keyFlags;
     private final int layer;
 
-    public KeyboardAction(KeyboardActionType keyboardActionType, String text, String capsLockText, int keyEventCode, int keyFlags, int layer) {
+    public KeyboardAction(KeyboardActionType keyboardActionType, String text, String capsLockText, int keyEventCode,
+                          int keyFlags, int layer) {
         this.keyboardActionType = keyboardActionType;
         this.text = text;
         this.keyEventCode = keyEventCode;
@@ -57,11 +58,11 @@ public class KeyboardAction {
         }
         KeyboardAction that = (KeyboardAction) o;
         return keyEventCode == that.keyEventCode
-            && keyFlags == that.keyFlags
-            && layer == that.layer
-            && keyboardActionType == that.keyboardActionType
-            && Objects.equals(text, that.text)
-            && Objects.equals(capsLockText, that.capsLockText);
+                && keyFlags == that.keyFlags
+                && layer == that.layer
+                && keyboardActionType == that.keyboardActionType
+                && Objects.equals(text, that.text)
+                && Objects.equals(capsLockText, that.capsLockText);
     }
 
     @Override

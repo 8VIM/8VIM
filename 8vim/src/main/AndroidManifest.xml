@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="false"
@@ -13,10 +12,10 @@
         tools:replace="android:supportsRtl"
         tools:targetApi="s">
         <service
-
             android:name="inc.flide.vim8.MainInputMethodService"
             android:exported="true"
-            android:permission="android.permission.BIND_INPUT_METHOD">
+            android:permission="android.permission.BIND_INPUT_METHOD"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.view.InputMethod" />
             </intent-filter>

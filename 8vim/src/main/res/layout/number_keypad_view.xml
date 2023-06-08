@@ -1,233 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:keyWidth="20%p"
-    android:keyHeight="8%p">
+    app:keyHeight="8%p"
+    app:keyWidth="20%p">
 
     <Row>
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="left"
-            android:keyLabel="#"
-            android:keyOutputText="#" />
+            app:isRepeatable="true"
+            app:keyEdgeFlags="left"
+            app:keyLabel="#"
+            app:keyOutputText="#"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="@string/currencySymbol" />
+            app:isRepeatable="true"
+            app:keyLabel="@string/currencySymbol"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="&amp;"
-            android:keyOutputText="&amp;" />
+            app:isRepeatable="true"
+            app:keyLabel="&amp;"
+            app:keyOutputText="&amp;"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="("
-            android:keyOutputText="(" />
+            app:isRepeatable="true"
+            app:keyLabel="("
+            app:keyOutputText="("
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel=")"
-            android:keyOutputText=")" />
+            app:isRepeatable="true"
+            app:keyLabel=")"
+            app:keyOutputText=")"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="1"
-            android:keyOutputText="1" />
+            app:isRepeatable="true"
+            app:keyLabel="1"
+            app:keyOutputText="1"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="2"
-            android:keyOutputText="2" />
+            app:isRepeatable="true"
+            app:keyLabel="2"
+            app:keyOutputText="2"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="3"
-            android:keyOutputText="3" />
+            app:isRepeatable="true"
+            app:keyLabel="3"
+            app:keyOutputText="3"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="right"
-            android:keyLabel="\?"
-            android:keyOutputText="\?" />
+            app:isRepeatable="true"
+            app:keyEdgeFlags="right"
+            app:keyLabel="\?"
+            app:keyOutputText="\?"
+            app:keyWidth="25%p" />
     </Row>
 
     <Row>
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="left"
-            android:keyLabel="\@"
-            android:keyOutputText="\@" />
+            app:isRepeatable="true"
+            app:keyEdgeFlags="left"
+            app:keyLabel="\@"
+            app:keyOutputText="\@"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="="
-            android:keyOutputText="=" />
+            app:isRepeatable="true"
+            app:keyLabel="="
+            app:keyOutputText="="
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="_"
-            android:keyOutputText="_" />
+            app:isRepeatable="true"
+            app:keyLabel="_"
+            app:keyOutputText="_"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="/"
-            android:keyOutputText="/" />
+            app:isRepeatable="true"
+            app:keyLabel="/"
+            app:keyOutputText="/"
+            app:keyWidth="25%p" />
 
         <Key
-            android:codes="@integer/SWITCH_TO_SYMBOLS_KEYPAD"
-            android:keyWidth="25%p"
-            android:keyLabel="@string/symbolPadIcon" />
+            app:codes="@integer/SWITCH_TO_SYMBOLS_KEYPAD"
+            app:keyLabel="@string/symbolPadIcon"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="4"
-            android:keyOutputText="4" />
+            app:isRepeatable="true"
+            app:keyLabel="4"
+            app:keyOutputText="4"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="5"
-            android:keyOutputText="5" />
+            app:isRepeatable="true"
+            app:keyLabel="5"
+            app:keyOutputText="5"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="6"
-            android:keyOutputText="6" />
+            app:isRepeatable="true"
+            app:keyLabel="6"
+            app:keyOutputText="6"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="right"
-            android:keyLabel="!"
-            android:keyOutputText="!" />
+            app:isRepeatable="true"
+            app:keyEdgeFlags="right"
+            app:keyLabel="!"
+            app:keyOutputText="!"
+            app:keyWidth="25%p" />
     </Row>
 
     <Row>
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="left"
-            android:keyLabel="%"
-            android:keyOutputText="%" />
+            app:isRepeatable="true"
+            app:keyEdgeFlags="left"
+            app:keyLabel="%"
+            app:keyOutputText="%"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyLabel="*"
-            android:keyOutputText="*" />
+            app:isRepeatable="true"
+            app:keyLabel="*"
+            app:keyOutputText="*" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="-"
-            android:keyOutputText="-" />
+            app:isRepeatable="true"
+            app:keyLabel="-"
+            app:keyOutputText="-"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="+"
-            android:keyOutputText="+" />
+            app:isRepeatable="true"
+            app:keyLabel="+"
+            app:keyOutputText="+"
+            app:keyWidth="25%p" />
 
         <Key
-            android:codes="@integer/SWITCH_TO_MAIN_KEYPAD"
-            android:keyWidth="25%p"
-            android:keyIcon="@drawable/ic_viii" />
+            app:codes="@integer/SWITCH_TO_MAIN_KEYPAD"
+            app:keyIcon="@drawable/ic_viii"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="7"
-            android:keyOutputText="7" />
+            app:isRepeatable="true"
+            app:keyLabel="7"
+            app:keyOutputText="7"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="8"
-            android:keyOutputText="8" />
+            app:isRepeatable="true"
+            app:keyLabel="8"
+            app:keyOutputText="8"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="9"
-            android:keyOutputText="9" />
+            app:isRepeatable="true"
+            app:keyLabel="9"
+            app:keyOutputText="9"
+            app:keyWidth="25%p" />
 
         <Key
-            android:codes="@integer/KEYCODE_DEL"
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="right"
-            android:keyIcon="@drawable/ic_backspace" />
+            app:codes="@integer/KEYCODE_DEL"
+            app:isRepeatable="true"
+            app:keyEdgeFlags="right"
+            app:keyIcon="@drawable/ic_backspace"
+            app:keyWidth="25%p" />
     </Row>
 
     <Row>
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="left"
-            android:keyLabel=":"
-            android:keyOutputText=":" />
+            app:isRepeatable="true"
+            app:keyEdgeFlags="left"
+            app:keyLabel=":"
+            app:keyOutputText=":"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="&quot;"
-            android:keyOutputText="&quot;" />
+            app:isRepeatable="true"
+            app:keyLabel="&quot;"
+            app:keyOutputText="&quot;"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="'"
-            android:keyOutputText="'" />
+            app:isRepeatable="true"
+            app:keyLabel="'"
+            app:keyOutputText="'"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="50%p"
-            android:keyLabel="@string/spaceBarSymbol"
-            android:keyOutputText=" " />
+            app:isRepeatable="true"
+            app:keyLabel="@string/spaceBarSymbol"
+            app:keyOutputText=" "
+            app:keyWidth="50%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel=","
-            android:keyOutputText="," />
+            app:isRepeatable="true"
+            app:keyLabel=","
+            app:keyOutputText=","
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="0"
-            android:keyOutputText="0" />
+            app:isRepeatable="true"
+            app:keyLabel="0"
+            app:keyOutputText="0"
+            app:keyWidth="25%p" />
 
         <Key
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyLabel="."
-            android:keyOutputText="." />
+            app:isRepeatable="true"
+            app:keyLabel="."
+            app:keyOutputText="."
+            app:keyWidth="25%p" />
 
         <Key
-            android:codes="@integer/KEYCODE_ENTER"
-            android:isRepeatable="true"
-            android:keyWidth="25%p"
-            android:keyEdgeFlags="right"
-            android:keyIcon="@drawable/ic_keyboard_return" />
+            app:codes="@integer/KEYCODE_ENTER"
+            app:isRepeatable="true"
+            app:keyEdgeFlags="right"
+            app:keyIcon="@drawable/ic_keyboard_return"
+            app:keyWidth="25%p" />
     </Row>
 </Keyboard>
