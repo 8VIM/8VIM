@@ -52,7 +52,7 @@ layers:
           right:
             - lower_case: о
             - lower_case: у
-            - lower_case: л
+            - lower_case: ш
             - lower_case: ф
   extra_layers:
     first:
@@ -78,6 +78,7 @@ layers:
             right:
               - null
               - lower_case: ю
+              - lower_case: щ
     second:
       sectors:
         right:
