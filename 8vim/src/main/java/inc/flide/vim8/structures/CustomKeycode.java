@@ -1,5 +1,7 @@
 package inc.flide.vim8.structures;
 
+import android.view.KeyEvent;
+import inc.flide.vim8.MainInputMethodService;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,5 +43,70 @@ public enum CustomKeycode {
 
     public int getKeyCode() {
         return keyCode;
+    }
+
+    public boolean handleKeyCode(MainInputMethodService mainInputMethodService) {
+        switch (this) {
+            case MOVE_CURRENT_END_POINT_LEFT:
+            case MOVE_CURRENT_END_POINT_RIGHT:
+            case MOVE_CURRENT_END_POINT_UP:
+            case MOVE_CURRENT_END_POINT_DOWN:
+                mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+                mainInputMethodService.sendDownAndUpKeyEvent(getDPadKeyCodeFromCustom(), 0);
+                mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+                break;
+            case SELECTION_START:
+                mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, 0);
+                mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+                break;
+            case SELECT_ALL:
+                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
+                break;
+            case TOGGLE_SELECTION_ANCHOR:
+                mainInputMethodService.switchAnchor();
+                break;
+            case SHIFT_TOGGLE:
+                mainInputMethodService.performShiftToggle();
+                break;
+            case SWITCH_TO_MAIN_KEYPAD:
+                mainInputMethodService.switchToMainKeypad();
+                break;
+            case SWITCH_TO_NUMBER_KEYPAD:
+                mainInputMethodService.switchToNumberPad();
+                break;
+            case SWITCH_TO_SYMBOLS_KEYPAD:
+                mainInputMethodService.switchToSymbolsKeypad();
+                break;
+            case SWITCH_TO_SELECTION_KEYPAD:
+                mainInputMethodService.switchToSelectionKeypad();
+                break;
+            case SWITCH_TO_EMOTICON_KEYBOARD:
+                mainInputMethodService.switchToExternalEmoticonKeyboard();
+                break;
+            case HIDE_KEYBOARD:
+                mainInputMethodService.hideKeyboard();
+                break;
+            case NO_OPERATION:
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
+
+    private int getDPadKeyCodeFromCustom() {
+        switch (this) {
+            case MOVE_CURRENT_END_POINT_LEFT:
+                return KeyEvent.KEYCODE_DPAD_LEFT;
+            case MOVE_CURRENT_END_POINT_RIGHT:
+                return KeyEvent.KEYCODE_DPAD_RIGHT;
+            case MOVE_CURRENT_END_POINT_UP:
+                return KeyEvent.KEYCODE_DPAD_UP;
+            case MOVE_CURRENT_END_POINT_DOWN:
+                return KeyEvent.KEYCODE_DPAD_DOWN;
+            default:
+                return 0;
+        }
     }
 }

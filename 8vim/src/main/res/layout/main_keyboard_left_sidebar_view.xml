@@ -10,22 +10,22 @@
         layout="@layout/x_keypad_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHorizontal_weight="5"
-        app:layout_constraintVertical_weight="1"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="5"
         app:layout_constraintStart_toEndOf="@+id/sidebarButtonsLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="1" />
 
     <include
         android:id="@+id/sidebarButtonsLayout"
         layout="@layout/sidebar_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintTop_toTopOf="@id/xboardView"
         app:layout_constraintBottom_toBottomOf="@id/xboardView"
+        app:layout_constraintEnd_toStartOf="@id/xboardView"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/xboardView" />
+        app:layout_constraintTop_toTopOf="@id/xboardView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

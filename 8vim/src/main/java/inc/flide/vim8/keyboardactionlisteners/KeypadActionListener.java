@@ -1,4 +1,4 @@
-package inc.flide.vim8.keyboardActionListners;
+package inc.flide.vim8.keyboardactionlisteners;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -9,11 +9,12 @@ import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.KeyboardAction;
 
-public class KeypadActionListener {
-
+public abstract class KeypadActionListener {
+    public static final int KEYCODE_PROFILE_SWITCH = 288;
     private final AudioManager audioManager;
     protected MainInputMethodService mainInputMethodService;
     protected View view;
@@ -25,12 +26,9 @@ public class KeypadActionListener {
     }
 
     private boolean keyCodeIsValid(int keyCode) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= KeyEvent.KEYCODE_PROFILE_SWITCH;
-        } else {
-            int keycodeProfileSwitch = 288;
-            return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= keycodeProfileSwitch;
-        }
+        int keycodeProfileSwitch = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? KeyEvent.KEYCODE_PROFILE_SWITCH :
+                KEYCODE_PROFILE_SWITCH;
+        return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= keycodeProfileSwitch;
     }
 
     public void handleInputKey(KeyboardAction keyboardAction) {
@@ -38,15 +36,16 @@ public class KeypadActionListener {
     }
 
     public void handleInputKey(int keyCode, int keyFlags) {
-
         boolean actionHandled = handleKeyEventKeyCodes(keyCode, keyFlags);
         if (!actionHandled) {
-            actionHandled = handleCustomKeyCodes(keyCode);
+            CustomKeycode customKeycode = CustomKeycode.fromIntValue(keyCode);
+            if (customKeycode != null) {
+                actionHandled = customKeycode.handleKeyCode(mainInputMethodService);
+            }
         }
         if (!actionHandled) {
             onText(String.valueOf((char) keyCode));
-        }
-        if (actionHandled) {
+        } else {
             performInputAcceptedFeedback(keySound(keyCode));
         }
     }
@@ -60,8 +59,9 @@ public class KeypadActionListener {
                 return AudioManager.FX_KEYPRESS_DELETE;
             case KeyEvent.KEYCODE_SPACE:
                 return AudioManager.FX_KEYPRESS_SPACEBAR;
+            default:
+                return AudioManager.FX_KEYPRESS_STANDARD;
         }
-        return AudioManager.FX_KEYPRESS_STANDARD;
     }
 
     private void performInputAcceptedFeedback(int keySound) {
@@ -83,61 +83,7 @@ public class KeypadActionListener {
         }
     }
 
-    private boolean handleCustomKeyCodes(int customKeyEventCode) {
-        switch (CustomKeycode.fromIntValue(customKeyEventCode)) {
-            case MOVE_CURRENT_END_POINT_LEFT:
-                moveSelection(KeyEvent.KEYCODE_DPAD_LEFT);
-                break;
-            case MOVE_CURRENT_END_POINT_RIGHT:
-                moveSelection(KeyEvent.KEYCODE_DPAD_RIGHT);
-                break;
-            case MOVE_CURRENT_END_POINT_UP:
-                moveSelection(KeyEvent.KEYCODE_DPAD_UP);
-                break;
-            case MOVE_CURRENT_END_POINT_DOWN:
-                moveSelection(KeyEvent.KEYCODE_DPAD_DOWN);
-                break;
-            case SELECTION_START:
-                mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, 0);
-                mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-                break;
-            case SELECT_ALL:
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON);
-                break;
-            case TOGGLE_SELECTION_ANCHOR:
-                mainInputMethodService.switchAnchor();
-                break;
-            case SHIFT_TOGGLE:
-                mainInputMethodService.performShiftToggle();
-                break;
-            case SWITCH_TO_MAIN_KEYPAD:
-                mainInputMethodService.switchToMainKeypad();
-                break;
-            case SWITCH_TO_NUMBER_KEYPAD:
-                mainInputMethodService.switchToNumberPad();
-                break;
-            case SWITCH_TO_SYMBOLS_KEYPAD:
-                mainInputMethodService.switchToSymbolsKeypad();
-                break;
-            case SWITCH_TO_SELECTION_KEYPAD:
-                mainInputMethodService.switchToSelectionKeypad();
-                break;
-            case SWITCH_TO_EMOTICON_KEYBOARD:
-                mainInputMethodService.switchToExternalEmoticonKeyboard();
-                break;
-            case HIDE_KEYBOARD:
-                mainInputMethodService.hideKeyboard();
-                break;
-            case NO_OPERATION:
-                break;
-            default:
-                return false;
-        }
-        return true;
-    }
-
-    public boolean handleKeyEventKeyCodes(int primaryCode, int keyFlags) {
+    private boolean handleKeyEventKeyCodes(int primaryCode, int keyFlags) {
         if (keyCodeIsValid(primaryCode)) {
             switch (primaryCode) {
                 case KeyEvent.KEYCODE_CUT:
@@ -172,17 +118,10 @@ public class KeypadActionListener {
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
-        if ((isShiftSet() || isCapsLockSet()) && !keyboardAction.getCapsLockText().isEmpty()) {
-            onText(keyboardAction.getCapsLockText());
-        } else {
-            onText(keyboardAction.getText());
-        }
-    }
-
-    private void moveSelection(int dpadKeyCode) {
-        mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
-        mainInputMethodService.sendDownAndUpKeyEvent(dpadKeyCode, 0);
-        mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0);
+        boolean isUpperCase = isShiftSet() || isCapsLockSet();
+        String text = (isUpperCase && !keyboardAction.getCapsLockText().isEmpty()) ? keyboardAction.getCapsLockText() :
+                keyboardAction.getText();
+        onText(text);
     }
 
     public boolean areCharactersCapitalized() {
@@ -202,6 +141,6 @@ public class KeypadActionListener {
     }
 
     public int findLayer() {
-        return 0;
+        return Constants.DEFAULT_LAYER;
     }
 }

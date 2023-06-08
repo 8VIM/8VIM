@@ -5,9 +5,12 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="enable_ime_dialog_title">Please Enable IME</string>
-    <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "&appname; Keyboard" there.</string>
+    <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "&appname;
+        Keyboard" there.</string>
+    <string name="enable_ime_dialog_neutral_button_text">Enable</string>
     <string name="activate_ime_dialog_title">Please Activate IME</string>
-    <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname; Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
+    <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname;
+        Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
 
@@ -50,6 +53,7 @@
         <item>uk</item>
     </string-array>
     <string name="generic_okay_text">OK</string>
+    <string name="generic_cancel_text">Cancel</string>
 
     <!--   preferences categories -->
     <string name="pref_category_general">General</string>
@@ -128,6 +132,10 @@
 
     <string name="pref_trail_color_key">trail_color</string>
     <string name="pref_trail_color_title">Touch trail color</string>
+
+    <string name="pref_color_mode_key">color_mode</string>
+    <string name="pref_color_mode_title">Keyboard color</string>
+    <string name="pref_color_mode_default">system</string>
 
     <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
     <string name="about_us_label">About Us</string>

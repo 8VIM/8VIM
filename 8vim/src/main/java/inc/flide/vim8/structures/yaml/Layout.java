@@ -2,7 +2,6 @@ package inc.flide.vim8.structures.yaml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

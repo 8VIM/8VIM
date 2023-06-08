@@ -26,6 +26,7 @@ public class Quadrant {
             case BOTTOM:
                 index = part == Direction.RIGHT ? 1 : 2;
                 break;
+            default:
         }
         int base = index / 2 * (Constants.NUMBER_OF_SECTORS * 2);
         int delta = index % 2;

@@ -1,17 +1,11 @@
-package inc.flide.vim8.keyboardHelpers;
+package inc.flide.vim8.keyboardhelpers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
-
 import androidx.preference.PreferenceManager;
-
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
-
 import inc.flide.vim8.R;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
@@ -19,6 +13,9 @@ import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.LayoutFileName;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 public final class InputMethodServiceHelper {
 
@@ -26,12 +23,12 @@ public final class InputMethodServiceHelper {
 
         SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
         boolean useCustomSelectedKeyboardLayout = sharedPreferenceHelper.getBoolean(
-            context.getString(R.string.pref_use_custom_selected_keyboard_layout),
-            false);
+                context.getString(R.string.pref_use_custom_selected_keyboard_layout),
+                false);
         if (useCustomSelectedKeyboardLayout) {
             String customKeyboardLayoutString = sharedPreferenceHelper.getString(
-                context.getString(R.string.pref_selected_custom_keyboard_layout_uri),
-                "");
+                    context.getString(R.string.pref_selected_custom_keyboard_layout_uri),
+                    "");
             if (!customKeyboardLayoutString.isEmpty()) {
                 Uri customKeyboardLayout = Uri.parse(customKeyboardLayoutString);
                 return initializeKeyboardActionMapForCustomLayout(resources, context, customKeyboardLayout);
@@ -42,18 +39,20 @@ public final class InputMethodServiceHelper {
 
         int languageLayoutResourceId = loadTheSelectedLanguageLayout(resources, context);
         addToKeyboardActionsMapUsingResourceId(
-            mainKeyboardData,
-            resources,
-            languageLayoutResourceId);
+                mainKeyboardData,
+                resources,
+                languageLayoutResourceId);
 
         return mainKeyboardData;
     }
 
-    public static KeyboardData initializeKeyboardActionMapForCustomLayout(Resources resources, Context context, Uri customLayoutUri) {
+    public static KeyboardData initializeKeyboardActionMapForCustomLayout(Resources resources, Context context,
+                                                                          Uri customLayoutUri) {
         if (customLayoutUri == null) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putBoolean(context.getString(R.string.pref_use_custom_selected_keyboard_layout), false);
+            sharedPreferencesEditor.putBoolean(context.getString(R.string.pref_use_custom_selected_keyboard_layout),
+                    false);
             sharedPreferencesEditor.apply();
 
             return initializeKeyboardActionMap(resources, context);
@@ -61,9 +60,9 @@ public final class InputMethodServiceHelper {
 
         KeyboardData mainKeyboardData = getLayoutIndependentKeyboardData(resources);
         addToKeyboardActionsMapUsingUri(
-            mainKeyboardData,
-            context,
-            customLayoutUri);
+                mainKeyboardData,
+                context,
+                customLayoutUri);
 
         return mainKeyboardData;
     }
@@ -71,17 +70,17 @@ public final class InputMethodServiceHelper {
     private static KeyboardData getLayoutIndependentKeyboardData(Resources resources) {
         KeyboardData layoutIndependentKeyboardData = new KeyboardData();
         addToKeyboardActionsMapUsingResourceId(
-            layoutIndependentKeyboardData,
-            resources,
-            R.raw.sector_circle_buttons);
+                layoutIndependentKeyboardData,
+                resources,
+                R.raw.sector_circle_buttons);
         addToKeyboardActionsMapUsingResourceId(
-            layoutIndependentKeyboardData,
-            resources,
-            R.raw.d_pad_actions);
+                layoutIndependentKeyboardData,
+                resources,
+                R.raw.d_pad_actions);
         addToKeyboardActionsMapUsingResourceId(
-            layoutIndependentKeyboardData,
-            resources,
-            R.raw.special_core_gestures);
+                layoutIndependentKeyboardData,
+                resources,
+                R.raw.special_core_gestures);
 
         return layoutIndependentKeyboardData;
     }
@@ -89,14 +88,15 @@ public final class InputMethodServiceHelper {
     @SuppressLint("DiscouragedApi")
     private static int loadTheSelectedLanguageLayout(Resources resources, Context context) {
         String currentLanguageLayout = SharedPreferenceHelper
-            .getInstance(context)
-            .getString(resources.getString(R.string.pref_selected_keyboard_layout),
-                new LayoutFileName().getResourceName());
+                .getInstance(context)
+                .getString(resources.getString(R.string.pref_selected_keyboard_layout),
+                        new LayoutFileName().getResourceName());
 
         return resources.getIdentifier(currentLanguageLayout, "raw", context.getPackageName());
     }
 
-    private static void addToKeyboardActionsMapUsingResourceId(KeyboardData keyboardData, Resources resources, int resourceId) {
+    private static void addToKeyboardActionsMapUsingResourceId(KeyboardData keyboardData, Resources resources,
+                                                               int resourceId) {
         try (InputStream inputStream = resources.openRawResource(resourceId)) {
             addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream);
         } catch (Exception exception) {
@@ -104,7 +104,8 @@ public final class InputMethodServiceHelper {
         }
     }
 
-    private static void addToKeyboardActionsMapUsingUri(KeyboardData keyboardData, Context context, Uri customLayoutUri) {
+    private static void addToKeyboardActionsMapUsingUri(KeyboardData keyboardData, Context context,
+                                                        Uri customLayoutUri) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(customLayoutUri)) {
             addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream);
         } catch (Exception exception) {
@@ -112,7 +113,8 @@ public final class InputMethodServiceHelper {
         }
     }
 
-    private static void addToKeyboardActionsMapUsingInputStream(KeyboardData keyboardData, InputStream inputStream) throws Exception {
+    private static void addToKeyboardActionsMapUsingInputStream(KeyboardData keyboardData, InputStream inputStream)
+            throws Exception {
         KeyboardDataYamlParser keyboardDataYamlParser = new KeyboardDataYamlParser(inputStream);
         KeyboardData tempKeyboardData = keyboardDataYamlParser.readKeyboardData();
         if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.getActionMap())) {
@@ -121,11 +123,11 @@ public final class InputMethodServiceHelper {
 
         for (int i = 0; i <= Constants.MAX_LAYERS; i++) {
             if (keyboardData.getLowerCaseCharacters(i).isEmpty()
-                && !tempKeyboardData.getLowerCaseCharacters(i).isEmpty()) {
+                    && !tempKeyboardData.getLowerCaseCharacters(i).isEmpty()) {
                 keyboardData.setLowerCaseCharacters(tempKeyboardData.getLowerCaseCharacters(i), i);
             }
             if (keyboardData.getUpperCaseCharacters(i).isEmpty()
-                && !tempKeyboardData.getUpperCaseCharacters(i).isEmpty()) {
+                    && !tempKeyboardData.getUpperCaseCharacters(i).isEmpty()) {
                 keyboardData.setUpperCaseCharacters(tempKeyboardData.getUpperCaseCharacters(i), i);
             }
 
@@ -133,8 +135,8 @@ public final class InputMethodServiceHelper {
     }
 
     private static boolean validateNoConflictingActions(
-        Map<List<FingerPosition>, KeyboardAction> mainKeyboardActionsMap,
-        Map<List<FingerPosition>, KeyboardAction> newKeyboardActionsMap) {
+            Map<List<FingerPosition>, KeyboardAction> mainKeyboardActionsMap,
+            Map<List<FingerPosition>, KeyboardAction> newKeyboardActionsMap) {
 
         if (mainKeyboardActionsMap == null || mainKeyboardActionsMap.isEmpty()) {
             return true;

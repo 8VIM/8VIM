@@ -1,12 +1,10 @@
-package inc.flide.vim8.keyboardActionListners;
+package inc.flide.vim8.keyboardactionlisteners;
 
-import android.inputmethodservice.KeyboardView;
 import android.view.View;
-
+import com.hijamoya.keyboardview.KeyboardView;
 import inc.flide.vim8.MainInputMethodService;
 
 public class ButtonKeypadActionListener extends KeypadActionListener implements KeyboardView.OnKeyboardActionListener {
-
     public ButtonKeypadActionListener(MainInputMethodService mainInputMethodService, View view) {
         super(mainInputMethodService, view);
     }
@@ -17,10 +15,12 @@ public class ButtonKeypadActionListener extends KeypadActionListener implements 
     }
 
     @Override
-    public void swipeLeft() { }
+    public void swipeLeft() {
+    }
 
     @Override
-    public void swipeRight() { }
+    public void swipeRight() {
+    }
 
     @Override
     public void swipeDown() {
@@ -28,11 +28,14 @@ public class ButtonKeypadActionListener extends KeypadActionListener implements 
     }
 
     @Override
-    public void swipeUp() { }
+    public void swipeUp() {
+    }
 
     @Override
-    public void onPress(int primaryCode) { }
+    public void onPress(int primaryCode) {
+    }
 
     @Override
-    public void onRelease(int primaryCode) { }
+    public void onRelease(int primaryCode) {
+    }
 }

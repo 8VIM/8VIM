@@ -2,9 +2,7 @@ package inc.flide.vim8.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import androidx.preference.PreferenceManager;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -41,6 +39,7 @@ public final class SharedPreferenceHelper implements SharedPreferences.OnSharedP
         this.sharedPreferences = sharedPreferences;
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         if (prefKeys.contains(s)) {

@@ -1,4 +1,4 @@
-package inc.flide.vim8.keyboardHelpers;
+package inc.flide.vim8.keyboardhelpers;
 
 import inc.flide.vim8.geometry.Dimension;
 
@@ -15,6 +15,7 @@ public final class InputMethodViewHelper {
         return new Dimension(width, height);
     }
 
-    private InputMethodViewHelper() { }
+    private InputMethodViewHelper() {
+    }
 
 }

@@ -1,25 +1,23 @@
-package inc.flide.vim8.views.mainKeyboard;
+package inc.flide.vim8.views.mainkeyboard;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.widget.ImageButton;
-
 import androidx.constraintlayout.widget.ConstraintLayout;
-
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
-import inc.flide.vim8.keyboardActionListners.MainKeypadActionListener;
-import inc.flide.vim8.keyboardHelpers.InputMethodViewHelper;
-import inc.flide.vim8.structures.KeyboardAction;
+import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
+import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.CustomKeycode;
+import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.ui.SettingsActivity;
+import inc.flide.vim8.utils.ColorsHelper;
 
 
 public class MainKeyboardView extends ConstraintLayout {
@@ -48,7 +46,7 @@ public class MainKeyboardView extends ConstraintLayout {
         setColors();
         setHapticFeedbackEnabled(true);
 
-        SharedPreferenceHelper.getInstance(getContext()).addListener(this::setColors);
+        SharedPreferenceHelper.getInstance(context).addListener(this::setColors);
     }
 
     private void setupMainKeyboardView(Context context) {
@@ -79,16 +77,15 @@ public class MainKeyboardView extends ConstraintLayout {
         ImageButton button = findViewById(id);
         button.setColorFilter(tintColor);
     }
-    private void setColors() {
-        Resources resources = getResources();
-        SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(getContext());
-        int backgroundColor = pref.getInt(
-                resources.getString(R.string.pref_board_bg_color_key),
-                resources.getColor(R.color.defaultBoardBg));
 
-        int tintColor = pref.getInt(
-                resources.getString(R.string.pref_board_fg_color_key),
-                resources.getColor(R.color.defaultBoardFg));
+    private void setColors() {
+        Context context = getContext();
+        int backgroundColor =
+                ColorsHelper.getThemeColor(context, R.attr.backgroundColor, R.string.pref_board_bg_color_key,
+                        R.color.defaultBoardBg);
+        int tintColor =
+                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground, R.string.pref_board_fg_color_key,
+                        R.color.defaultBoardFg);
 
         this.setBackgroundColor(backgroundColor);
         setImageButtonTint(tintColor, R.id.ctrlButton);

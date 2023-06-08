@@ -1,4 +1,4 @@
-package inc.flide.vim8.keyboardHelpers;
+package inc.flide.vim8.keyboardhelpers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
