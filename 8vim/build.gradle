@@ -71,6 +71,7 @@ dependencies {
     implementation "androidx.preference:preference:${rootProject.androidXPreferenceVersion}"
     implementation "com.afollestad.material-dialogs:core:${rootProject.materialDialogs}"
     implementation "com.afollestad.material-dialogs:color:${rootProject.materialDialogs}"
+
     //noinspection GradleDependency
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${rootProject.jacksonYamlVersion}"
     implementation "com.github.kizitonwose.colorpreference:support:${rootProject.colorPreferenceVersion}"
