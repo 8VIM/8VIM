@@ -18,8 +18,8 @@ android {
         applicationId "inc.flide.vi8"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 15
-        versionName "iteration-12.2"
+        versionCode 16
+        versionName "iteration-13"
 
         vectorDrawables.useSupportLibrary = true
 
