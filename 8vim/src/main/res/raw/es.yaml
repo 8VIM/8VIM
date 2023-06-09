@@ -67,13 +67,29 @@ layers:
               - lower_case: ¡
                 upper_case: "!!!"
             top:
-              - null
+              - lower_case: á
               - null
               - null
               - lower_case: ¿
                 upper_case: "*"
+        left:
+          parts:
+            bottom:
+              - lower_case: í
+        bottom:
+          parts:
+            left:
+              - lower_case: é
+            right:
+              - lower_case: ó
+              - lower_case: ú
+    second:
+      sectors:
         bottom:
           parts:
             left:
               - lower_case: €
                 upper_case: ¢
+            right:
+              - null
+              - lower_case: ü
