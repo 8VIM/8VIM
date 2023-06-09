@@ -1,0 +1,16 @@
+name: Bump version
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  bump_version:
+    runs-on: ubuntu-latest
+    if: startsWith(github.head_ref, 'releases')
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set output
+        id: vars
+        run: |
+          version=$(cat ./8vim/build.gradle | grep -oE 'versionCode.+' | cut -f2- -d' ')
+          file="metadata/en-US/changelogs/${version}.txt"
+          [[ -f "$file" ]] && echo "file=${file}" >> $GITHUB_OUTPUT

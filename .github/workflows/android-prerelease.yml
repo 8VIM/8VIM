@@ -2,7 +2,7 @@ name: Android Pre Release
 
 on:
   push:
-    branches: [prerelease]
+    branches: [release]
 
 jobs:
   check_file:
