@@ -12,14 +12,16 @@ check.dependsOn('checkstyle')
 android {
 
     compileSdkVersion 33
-
+    def versionPropsFile = file('version.properties')
+    def Properties versionProps = new Properties()
+    versionProps.load(new FileInputStream(versionPropsFile))
     defaultConfig {
 
         applicationId "inc.flide.vi8"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode 16
-        versionName "iteration-13"
+        versionCode versionProps['VERSION_CODE'].toInteger()
+        versionName versionProps['VERSION_NAME']
 
         vectorDrawables.useSupportLibrary = true
 
@@ -97,5 +99,4 @@ dependencies {
     testImplementation "org.assertj:assertj-core:${rootProject.assertJVersion}"
     testImplementation "org.mockito:mockito-core:${rootProject.mockitoVersion}"
     testImplementation "org.mockito:mockito-junit-jupiter:${rootProject.mockitoVersion}"
-
 }
