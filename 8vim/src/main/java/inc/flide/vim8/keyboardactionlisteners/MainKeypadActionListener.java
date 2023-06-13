@@ -112,7 +112,9 @@ public class MainKeypadActionListener extends KeypadActionListener {
                 return i + 2;
             }
         }
-        return Constants.DEFAULT_LAYER;
+        List<FingerPosition> tempMovementSequence = new ArrayList<>(movementSequence);
+        tempMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
+        return keyboardData.findLayer(tempMovementSequence);
     }
 
     private boolean isFullRotation() {

@@ -5,17 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import android.view.KeyEvent;
-
 import com.fasterxml.jackson.databind.DatabindException;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-
+import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.CustomKeycode;
+import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.KeyboardAction;
+import inc.flide.vim8.structures.KeyboardActionType;
+import inc.flide.vim8.structures.KeyboardData;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,13 +19,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.CustomKeycode;
-import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardActionType;
-import inc.flide.vim8.structures.KeyboardData;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class KeyboardDataYamlParserTest {
@@ -50,14 +46,23 @@ public class KeyboardDataYamlParserTest {
     void parse_valid_file() throws IOException {
         Map<List<FingerPosition>, KeyboardAction> movementSequences = new HashMap<>();
         movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.TOP, FingerPosition.NO_TOUCH)),
-            new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0, 0));
-        movementSequences.put(
-            new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE)),
-            new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, 0, 1));
+                new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0,
+                        0));
         movementSequences.put(new ArrayList<>(
-                Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                    FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.INSIDE_CIRCLE)),
-            new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0, 0, 2));
+                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                                FingerPosition.INSIDE_CIRCLE)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, 0, 1));
+        movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.LEFT, FingerPosition.TOP)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "c", "C", 0, 0, 2));
+        movementSequences.put(new ArrayList<>(
+                        Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM,
+                                FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                                FingerPosition.INSIDE_CIRCLE)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0, 0, 2));
+        movementSequences.put(new ArrayList<>(
+                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                                FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0, 0, 2));
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.setLength(Constants.CHARACTER_SET_SIZE);
@@ -70,11 +75,11 @@ public class KeyboardDataYamlParserTest {
 
         assertThat(keyboardData.getLowerCaseCharacters(Constants.DEFAULT_LAYER)).isEqualTo(stringBuilder.toString());
 
-        stringBuilder.setCharAt(0, '\0');
+        stringBuilder.setCharAt(0, 'C');
         stringBuilder.setCharAt(2, 'a');
 
         assertThat(keyboardData.getUpperCaseCharacters(2)).isEqualTo(stringBuilder.toString());
-        assertThat(keyboardData.getActionMap()).containsAllEntriesOf(movementSequences);
+        assertThat(keyboardData.getActionMap()).containsExactlyEntriesOf(movementSequences);
     }
 
     @Test

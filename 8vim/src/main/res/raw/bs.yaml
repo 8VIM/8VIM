@@ -62,7 +62,6 @@ layers:
           parts:
             left:
               - lower_case: š
-              - lower_case: đ
         left:
           parts:
             top:

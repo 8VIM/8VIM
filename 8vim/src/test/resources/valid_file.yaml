@@ -17,6 +17,9 @@ layers:
         right:
           parts:
             bottom:
-              - null
+              - lower_case: c
+                movement_sequence:
+                  - left
+                  - top
               - lower_case: m
                 upper_case: a

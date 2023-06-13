@@ -65,7 +65,6 @@ layers:
               - lower_case: ü
             left:
               - lower_case: ë
-                upper_case: Ě
         left:
           parts:
             bottom:

@@ -148,6 +148,11 @@ public class KeyboardDataYamlParser {
                             layer);
 
             keyboardData.addActionMap(movementSequence, actionMap);
+            if (layer > Constants.DEFAULT_LAYER && action.getMovementSequence().isEmpty()) {
+                keyboardData.addActionMap(
+                        MovementSequenceHelper.computeQuickMovementSequence(layer, quadrant, characterPosition),
+                        actionMap);
+            }
         }
     }
 }

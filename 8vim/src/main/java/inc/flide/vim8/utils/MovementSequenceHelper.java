@@ -7,6 +7,7 @@ import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.Quadrant;
 import inc.flide.vim8.structures.yaml.ExtraLayer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class MovementSequenceHelper {
@@ -29,6 +30,44 @@ public final class MovementSequenceHelper {
         }
 
         movementSequence.add(FingerPosition.INSIDE_CIRCLE);
+        return movementSequence;
+    }
+
+    public static List<FingerPosition> computeQuickMovementSequence(int layer, Quadrant quadrant,
+                                                                    CharacterPosition position) {
+        if (layer <= Constants.DEFAULT_LAYER) {
+            return Collections.emptyList();
+        }
+        List<FingerPosition> movementSequence = new ArrayList<>();
+
+        List<FingerPosition> movementSequenceForExtraLayer = movementSequenceForExtraLayer(layer, quadrant, position);
+        movementSequence.add(FingerPosition.INSIDE_CIRCLE);
+        movementSequence.addAll(movementSequenceForExtraLayer);
+        movementSequence.add(FingerPosition.INSIDE_CIRCLE);
+        return movementSequence;
+    }
+
+    private static List<FingerPosition> movementSequenceForExtraLayer(int layer, Quadrant quadrant,
+                                                                      CharacterPosition position) {
+        Quadrant oppositeQuadrant = quadrant.getOppositeQuadrant(position);
+        List<FingerPosition> movementSequence = new ArrayList<>();
+
+        int maxMovements = position.ordinal() + 1;
+        for (int i = 0; i <= maxMovements; i++) {
+            FingerPosition lastPosition =
+                    movementSequence.isEmpty() ? FingerPosition.INSIDE_CIRCLE :
+                            movementSequence.get(movementSequence.size() - 1);
+            FingerPosition nextPosition = getNextPosition(quadrant, lastPosition);
+            movementSequence.add(nextPosition);
+        }
+        for (int i = Constants.DEFAULT_LAYER + 1; i <= layer; i++) {
+            FingerPosition lastPosition =
+                    movementSequence.isEmpty() ? FingerPosition.INSIDE_CIRCLE :
+                            movementSequence.get(movementSequence.size() - 1);
+
+            FingerPosition nextPosition = getNextPosition(oppositeQuadrant, lastPosition);
+            movementSequence.add(nextPosition);
+        }
         return movementSequence;
     }
 
