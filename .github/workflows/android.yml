@@ -38,9 +38,14 @@ jobs:
           -s \
           "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{github.run_id}}" \
           | jq -r '{"check_suite_id": .check_suite_id, "artifacts_url": .artifacts_url}' > run.json
-          cat run.json
           check_suite_id=$(jq -j '.check_suite_id' run.json)
           artifacts_url=$(jq -j '.artifacts_url' run.json)
+
+          curl \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ github.token }}" \
+          -s \
+          ${artifacts_url}
 
           curl \
           -H "Accept: application/vnd.github+json" \
