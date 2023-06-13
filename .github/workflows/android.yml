@@ -23,6 +23,6 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
-          name: 8vim-debug-${{github.head_ref}}
+          name: 8vim-debug-${{github.event.pull_request.id}}
           path: 8vim/build/outputs/apk/debug/8vim-debug.apk
           retention-days: 7
