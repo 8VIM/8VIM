@@ -8,6 +8,8 @@ on:
 
 jobs:
   test:
+    permissions:
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,7 +21,7 @@ jobs:
           cache: gradle
       - name: Test with Gradle
         run: ./gradlew checkstyle lint test assembleDebug
-      - name: Build nightly
+      - name: Build artifact
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
