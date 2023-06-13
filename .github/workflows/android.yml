@@ -21,14 +21,14 @@ jobs:
           cache: gradle
       - name: Test with Gradle
         run: ./gradlew checkstyle lint test assembleDebug
-      - name: Build artifact
+      - name: Upload artifact
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
           name: 8vim-debug-${{github.event.pull_request.id}}
           path: 8vim/build/outputs/apk/debug/8vim-debug.apk
           retention-days: 7
-      - name: Add artifacts links to commit status
+      - name: Get artifact link
         if: github.event_name == 'pull_request'
         id: artifact
         run: |
@@ -48,7 +48,11 @@ jobs:
           -s \
           ${artifacts_url} \
           | jq -j '.artifacts[0]' > artifact.json
-
+          curl \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ github.token }}" \
+          -s \
+          ${artifacts_url} 
           echo "url=https://github.com/flide/8VIM/suites/${check_suite_id}/artifacts/$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
           echo "expires=$(jq -j '.expires_at' artifact.json)" >> $GITHUB_OUTPUT
       - name: Update comment
