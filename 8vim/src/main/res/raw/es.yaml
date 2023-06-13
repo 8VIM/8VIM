@@ -62,7 +62,7 @@ layers:
           parts:
             bottom:
               - lower_case: ñ
-              - null
+              - lower_case: ü
               - null
               - lower_case: ¡
                 upper_case: "!!!"
@@ -93,3 +93,13 @@ layers:
             right:
               - null
               - lower_case: ü
+        top:
+          parts:
+            right:
+              - lower_case: á
+                movement_sequence:
+                  - inside_circle
+                  - right
+                  - top
+                  - right
+                  - inside_circle

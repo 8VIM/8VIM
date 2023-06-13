@@ -40,7 +40,7 @@ jobs:
           -H "Authorization: Bearer ${{ github.token }}" \
           -s \
           "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts" \
-          | jq -c '.artifacts[] | select(.nane !="pr_number")' > artifact.json
+          | jq -c '.artifacts[] | select(.nane =="8vim-debug")' > artifact.json
 
           echo "url=https://github.com/flide/8VIM/suites/${{ github.event.workflow_run.check_suite_id }}/artifacts/$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
           echo "expires=$(jq -j '.expires_at' artifact.json)" >> $GITHUB_OUTPUT
