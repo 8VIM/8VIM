@@ -17,7 +17,12 @@ jobs:
           java-version: "17"
           distribution: "temurin"
           cache: gradle
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
       - name: Test with Gradle
-        run: ./gradlew checkstyle lint test
+        run: ./gradlew checkstyle lint test assembleDebug
+      - name: Build nightly
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v3
+        with:
+          name: 8vim-debug-${{github.head_ref}}
+          path: 8vim/build/outputs/apk/debug/8vim-debug.apk
+          retention-days: 7
