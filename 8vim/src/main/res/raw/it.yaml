@@ -4,74 +4,89 @@ layers:
       right:
         parts:
           bottom:
-            - lower_case: n
-            - lower_case: m
-            - lower_case: f
-            - lower_case: "!"
-              upper_case: "!!!"
-          top:
             - lower_case: a
+            - lower_case: p
+            - lower_case: b
+            - lower_case: w
+          top:
             - lower_case: r
-            - lower_case: x
-            - lower_case: "?"
-              upper_case: "*"
+            - lower_case: m
+            - lower_case: j
+            - lower_case: "'"
+              upper_case: '"'
       top:
         parts:
           right:
-            - lower_case: y
-            - lower_case: b
-            - lower_case: p
-            - lower_case: q
+            - lower_case: n
+            - lower_case: u
+            - lower_case: f
+            - lower_case: "*"
+              upper_case: "#"
           left:
-            - lower_case: s
-            - lower_case: d
+            - lower_case: l
             - lower_case: g
-            - lower_case: "'"
-              upper_case: '"'
+            - lower_case: z
+            - lower_case: x
       left:
         parts:
           top:
             - lower_case: t
-            - lower_case: c
-            - lower_case: z
-            - lower_case: .
-              upper_case: "-"
+            - lower_case: s
+            - lower_case: q
+            - lower_case: "-"
+              upper_case: "_"
           bottom:
-            - lower_case: i
+            - lower_case: o
+            - lower_case: c
             - lower_case: h
-            - lower_case: j
             - lower_case: ","
-              upper_case: _
+              upper_case: ":"
       bottom:
         parts:
           left:
             - lower_case: e
-            - lower_case: l
-            - lower_case: k
+            - lower_case: d
+            - lower_case: y
             - lower_case: "@"
-              upper_case: "@gmail.com"
+              upper_case: "my@e.mail"
           right:
-            - lower_case: o
-            - lower_case: u
+            - lower_case: i
             - lower_case: v
-            - lower_case: w
+            - lower_case: k
+            - lower_case: "!"
+              upper_case: "!!!"
   extra_layers:
     first:
       sectors:
         right:
           parts:
-            top:
+            bottom:
               - lower_case: à
         left:
           parts:
             bottom:
-              - lower_case: ì
+              - lower_case: ò
+              - lower_case: ch
+                upper_case: Ch
+            top:
+              - lower_case: null
+              - lower_case: null
+              - lower_case: qu
+                upper_case: Qu
         bottom:
           parts:
             left:
               - lower_case: è
             right:
-              - lower_case: ò
+              - lower_case: ì
+        top:
+          parts:
+            left:
+              - lower_case: null
+              - lower_case: gh
+                upper_case: Gh
+            right:
+              - lower_case: null
               - lower_case: ù
     second:
       sectors:
@@ -82,13 +97,13 @@ layers:
         left:
           parts:
             bottom:
-              - lower_case: í
+              - lower_case: ó
         bottom:
           parts:
             left:
               - lower_case: é
             right:
-              - lower_case: ó
+              - lower_case: í
     third:
       sectors:
         bottom:
