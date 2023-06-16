@@ -1,0 +1,198 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "action": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "pattern": "^(?i)(input_text|input_key)$"
+        },
+        "flags": {
+          "type": "integer"
+        },
+        "key_code": {
+          "type": "string"
+        },
+        "lower_case": {
+          "type": "string"
+        },
+        "movement_sequence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?i)(no_touch|inside_circle|top|left|bottom|right|long_press|long_press_end)$"
+          }
+        },
+        "upper_case": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "if": {
+        "anyOf": [
+          {
+            "not": {
+              "required": [
+                "type"
+              ]
+            }
+          },
+          {
+            "properties": {
+              "type": {
+                "pattern": "^(?i)(input_text)$"
+              }
+            }
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "lower_case"
+        ]
+      }
+    },
+    "sectors": {
+      "type": "object",
+      "properties": {
+        "sectors": {
+          "type": "object",
+          "patternProperties": {
+            "^(?i)(left|right)$": {
+              "type": "object",
+              "properties": {
+                "parts": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^(?i)(top|bottom)$": {
+                      "$ref": "#/definitions/actionList"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "parts"
+              ],
+              "additionalProperties": false
+            },
+            "^(?i)(top|bottom)$": {
+              "type": "object",
+              "properties": {
+                "parts": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^(?i)(left|right)$": {
+                      "$ref": "#/definitions/actionList"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "parts"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "actionList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/action"
+      },
+      "maxItems": 4
+    }
+  },
+  "type": "object",
+  "properties": {
+    "info": {
+      "type": "object",
+      "properties": {
+        "contact": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "layers": {
+      "type": "object",
+      "properties": {
+        "default": {
+          "$ref": "#/definitions/sectors"
+        },
+        "extra_layers": {
+          "type": "object",
+          "patternProperties": {
+            "^(?i)(first|second|third|forth|fifth)$": {
+              "$ref": "#/definitions/sectors"
+            }
+          },
+          "additionalProperties": false
+        },
+        "hidden": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/action"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "if": {
+        "required": [
+          "extra_layers"
+        ]
+      },
+      "then": {
+        "required": [
+          "default"
+        ]
+      },
+      "else": {
+        "if": {
+          "required": [
+            "hidden"
+          ]
+        },
+        "then": {
+          "required": [
+            "hidden"
+          ]
+        },
+        "else": {
+          "required": [
+            "default"
+          ]
+        }
+      }
+    }
+  },
+  "required": [
+    "layers"
+  ],
+  "additionalProperties": false
+}

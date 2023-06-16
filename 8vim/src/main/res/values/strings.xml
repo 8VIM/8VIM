@@ -52,6 +52,8 @@
         <item>tr</item>
         <item>uk</item>
     </string-array>
+    <string name="yaml_error_title">Couldn\'t load layout file</string>
+    <string name="generic_error_text">Error</string>
     <string name="generic_okay_text">OK</string>
     <string name="generic_cancel_text">Cancel</string>
 

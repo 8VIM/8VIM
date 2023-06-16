@@ -2,12 +2,24 @@ package inc.flide.vim8.keyboardhelpers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import android.view.KeyEvent;
-
-import com.fasterxml.jackson.databind.DatabindException;
-
+import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.CustomKeycode;
+import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.KeyboardAction;
+import inc.flide.vim8.structures.KeyboardActionType;
+import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.structures.exceptions.InvalidYamlException;
+import inc.flide.vim8.structures.exceptions.YamlException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,21 +27,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.CustomKeycode;
-import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardActionType;
-import inc.flide.vim8.structures.KeyboardData;
 
 @ExtendWith(MockitoExtension.class)
 public class KeyboardDataYamlParserTest {
@@ -47,25 +44,30 @@ public class KeyboardDataYamlParserTest {
     }
 
     @Test
-    void parse_valid_file() throws IOException {
+    void parse_valid_file() throws YamlException {
         Map<List<FingerPosition>, KeyboardAction> movementSequences = new HashMap<>();
         movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.TOP, FingerPosition.NO_TOUCH)),
-            new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0, 0));
+                new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0,
+                        0));
         movementSequences.put(
-            new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE)),
-            new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, 0, 1));
+                new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                        FingerPosition.INSIDE_CIRCLE)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, 0, 1));
         movementSequences.put(new ArrayList<>(
-                Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                    FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.INSIDE_CIRCLE)),
-            new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0, 0, 2));
+                        Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM,
+                                FingerPosition.INSIDE_CIRCLE,
+                                FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                                FingerPosition.INSIDE_CIRCLE)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0, 0, 2));
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.setLength(Constants.CHARACTER_SET_SIZE);
         stringBuilder.setCharAt(0, 'n');
 
+        InputStream schemaInputStream = getClass().getResourceAsStream("/schema.json");
         InputStream inputStream = getClass().getResourceAsStream("/valid_file.yaml");
-        KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
-        KeyboardData keyboardData = parser.readKeyboardData();
+        KeyboardDataYamlParser parser = KeyboardDataYamlParser.getInstance(schemaInputStream);
+        KeyboardData keyboardData = parser.readKeyboardData(inputStream);
         assertThat(keyboardData.getTotalLayers()).isEqualTo(2);
 
         assertThat(keyboardData.getLowerCaseCharacters(Constants.DEFAULT_LAYER)).isEqualTo(stringBuilder.toString());
@@ -78,22 +80,48 @@ public class KeyboardDataYamlParserTest {
     }
 
     @Test
+    void parse_only_hidden() {
+        InputStream schemaInputStream = getClass().getResourceAsStream("/schema.json");
+        InputStream inputStream = getClass().getResourceAsStream("/hidden_layer.yaml");
+        KeyboardDataYamlParser parser = KeyboardDataYamlParser.getInstance(schemaInputStream);
+        assertThatNoException().isThrownBy(() -> parser.readKeyboardData(inputStream));
+    }
+
+    @Test
+    void parse_only_default() {
+        InputStream schemaInputStream = getClass().getResourceAsStream("/schema.json");
+        InputStream inputStream = getClass().getResourceAsStream("/one_layer.yaml");
+        KeyboardDataYamlParser parser = KeyboardDataYamlParser.getInstance(schemaInputStream);
+        assertThatNoException().isThrownBy(() -> parser.readKeyboardData(inputStream));
+    }
+    @Test
     void parse_invalid_file_format() {
+        InputStream schemaInputStream = getClass().getResourceAsStream("/schema.json");
         InputStream inputStream = getClass().getResourceAsStream("/invalid_file.yaml");
-        KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
-        assertThatExceptionOfType(DatabindException.class).isThrownBy(parser::readKeyboardData);
+        KeyboardDataYamlParser parser = KeyboardDataYamlParser.getInstance(schemaInputStream);
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> parser.readKeyboardData(inputStream));
+    }
+
+    @Test
+    void parse_invalid_extra_layers() {
+        InputStream schemaInputStream = getClass().getResourceAsStream("/schema.json");
+        InputStream inputStream = getClass().getResourceAsStream("/extra_layers.yaml");
+        KeyboardDataYamlParser parser = KeyboardDataYamlParser.getInstance(schemaInputStream);
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> parser.readKeyboardData(inputStream));
+    }
+    @Test
+    void parse_no_layers_format() {
+        InputStream schemaInputStream = getClass().getResourceAsStream("/schema.json");
+        InputStream inputStream = getClass().getResourceAsStream("/no_layers.yaml");
+        KeyboardDataYamlParser parser = KeyboardDataYamlParser.getInstance(schemaInputStream);
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> parser.readKeyboardData(inputStream));
     }
 
     @Test
     void parse_non_yaml_file() {
+        InputStream schemaInputStream = getClass().getResourceAsStream("/schema.json");
         InputStream inputStream = getClass().getResourceAsStream("/invalid_file.xml");
-        KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
-        assertThatExceptionOfType(DatabindException.class).isThrownBy(parser::readKeyboardData);
-    }
-
-    @Test
-    void isValidFile() throws IOException {
-        InputStream inputStream = getClass().getResourceAsStream("/valid_file.yaml");
-        assertThat(KeyboardDataYamlParser.isValidFile(inputStream)).isEqualTo(2);
+        KeyboardDataYamlParser parser = KeyboardDataYamlParser.getInstance(schemaInputStream);
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> parser.readKeyboardData(inputStream));
     }
 }

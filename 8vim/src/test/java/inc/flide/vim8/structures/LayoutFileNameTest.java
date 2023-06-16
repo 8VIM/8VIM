@@ -8,14 +8,12 @@ import static org.mockito.Mockito.when;
 
 import android.content.Context;
 import android.content.res.Resources;
-
+import java.io.InputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.InputStream;
 
 @ExtendWith(MockitoExtension.class)
 public class LayoutFileNameTest {
@@ -63,6 +61,8 @@ public class LayoutFileNameTest {
 
     void setupInputStream(String file) {
         InputStream inputStream = getClass().getResourceAsStream(file);
-        when(resources.openRawResource(anyInt())).thenReturn(inputStream);
+        when(resources.openRawResource(anyInt()))
+                .thenReturn(getClass().getResourceAsStream("/schema.json"))
+                .thenReturn(inputStream);
     }
 }

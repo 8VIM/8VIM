@@ -3,6 +3,9 @@ package inc.flide.vim8.keyboardhelpers;
 import inc.flide.vim8.geometry.Dimension;
 
 public final class InputMethodViewHelper {
+    private InputMethodViewHelper() {
+    }
+
     public static Dimension onMeasureHelper(int width, int height, int orientation) {
 
         if (orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
@@ -13,9 +16,6 @@ public final class InputMethodViewHelper {
             height = Math.round(0.8f * (width - (60 * 3)));
         }
         return new Dimension(width, height);
-    }
-
-    private InputMethodViewHelper() {
     }
 
 }

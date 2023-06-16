@@ -3,6 +3,7 @@ package inc.flide.vim8.structures;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
+import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardhelpers.KeyboardDataYamlParser;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -34,26 +35,33 @@ public class LayoutFileName {
     public LayoutFileName(Resources resources, Context context, String fileName) {
         this();
         if (ISO_LANGUAGES.contains(fileName)) {
-            resourceName = fileName;
-            languageCode = fileName;
-            languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
-            layoutDisplayName = StringUtils.capitalize(languageName);
-            @SuppressLint("DiscouragedApi") int resourceId =
-                    resources.getIdentifier(fileName, "raw", context.getPackageName());
-            try (InputStream inputStream = resources.openRawResource(resourceId)) {
-                totalLayers = KeyboardDataYamlParser.isValidFile(inputStream);
-                isValidLayout = true;
-                if (totalLayers == 0) {
+            try (InputStream schemaInputStream = resources.openRawResource(R.raw.schema)) {
+                resourceName = fileName;
+                languageCode = fileName;
+                languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
+                layoutDisplayName = StringUtils.capitalize(languageName);
+
+                @SuppressLint("DiscouragedApi") int resourceId =
+                        resources.getIdentifier(fileName, "raw", context.getPackageName());
+                try (InputStream inputStream = resources.openRawResource(resourceId)) {
+                    totalLayers = KeyboardDataYamlParser.getInstance(schemaInputStream).readKeyboardData(inputStream)
+                            .getTotalLayers();
+                    isValidLayout = true;
+                    if (totalLayers == 0) {
+                        setLayoutValidityFalse();
+                    } else if (totalLayers > 1) {
+                        layoutDisplayName += " (" + totalLayers + " layers)";
+                    }
+                } catch (Exception e) {
                     setLayoutValidityFalse();
-                } else if (totalLayers > 1) {
-                    layoutDisplayName += " (" + totalLayers + " layers)";
                 }
             } catch (Exception e) {
-                setLayoutValidityFalse();
+                e.printStackTrace();
             }
         } else {
             setLayoutValidityFalse();
         }
+
     }
 
     private void setLayoutValidityFalse() {

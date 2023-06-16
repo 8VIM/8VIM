@@ -134,7 +134,8 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public KeyboardData buildKeyboardActionMap() {
-        return InputMethodServiceHelper.initializeKeyboardActionMap(getResources(), getApplicationContext());
+        return InputMethodServiceHelper.getInstance(getResources())
+                .initializeKeyboardActionMap(getApplicationContext());
     }
 
     public void sendText(String text) {
@@ -196,7 +197,8 @@ public class MainInputMethodService extends InputMethodService {
                 .getString(getString(R.string.pref_selected_emoticon_keyboard), "");
 
         // Before returning verify that this keyboard Id we have does exist in the system.
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         List<InputMethodInfo> enabledInputMethodList = inputMethodManager.getEnabledInputMethodList();
         for (InputMethodInfo inputMethodInfo : enabledInputMethodList) {
             if (inputMethodInfo.getId().compareTo(emoticonKeyboardId) == 0) {
@@ -207,7 +209,8 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public void sendKey(int keyEventCode, int flags) {
-        sendDownAndUpKeyEvent(keyEventCode, getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags);
+        sendDownAndUpKeyEvent(keyEventCode,
+                getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags);
         clearModifierFlags();
     }
 

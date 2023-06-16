@@ -9,13 +9,14 @@ import java.util.List;
 import java.util.Set;
 
 public final class SharedPreferenceHelper implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private final SharedPreferences sharedPreferences;
     private static SharedPreferenceHelper singleton = null;
+    private final SharedPreferences sharedPreferences;
     private final Set<String> prefKeys = new HashSet<>();
     private final List<Listener> listeners = new ArrayList<>();
 
-    public interface Listener {
-        void onPreferenceChanged();
+    private SharedPreferenceHelper(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     public static SharedPreferenceHelper getInstance(Context context) {
@@ -33,11 +34,6 @@ public final class SharedPreferenceHelper implements SharedPreferences.OnSharedP
 
     public void addListener(Listener note) {
         listeners.add(note);
-    }
-
-    private SharedPreferenceHelper(SharedPreferences sharedPreferences) {
-        this.sharedPreferences = sharedPreferences;
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -83,5 +79,9 @@ public final class SharedPreferenceHelper implements SharedPreferences.OnSharedP
         }
 
         return preferenceBoolean;
+    }
+
+    public interface Listener {
+        void onPreferenceChanged();
     }
 }

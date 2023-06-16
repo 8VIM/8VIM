@@ -1,3 +1,11 @@
+info:
+  name: Test
+  description: |
+    Multiline
+    description
+  contact:
+    name: 8VIM
+    email: contact@8vim.com
 layers:
   hidden:
     - type: input_key

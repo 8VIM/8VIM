@@ -74,12 +74,12 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     public static void rebuildKeyboardData(Resources resource, Context context) {
-        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resource, context);
+        keyboardData = InputMethodServiceHelper.getInstance(resource).initializeKeyboardActionMap(context);
     }
 
     public static void rebuildKeyboardData(Resources resource, Context context, Uri customLayoutUri) {
-        keyboardData =
-                InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resource, context, customLayoutUri);
+        keyboardData = InputMethodServiceHelper.getInstance(resource)
+                .initializeKeyboardActionMapForCustomLayout(context, customLayoutUri);
     }
 
     public String getLowerCaseCharacters(int layer) {
@@ -120,9 +120,11 @@ public class MainKeypadActionListener extends KeypadActionListener {
         int size = FULL_ROTATION_STEPS;
         int start = 1;
         boolean layerCondition = movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
+
         if (layer > Constants.DEFAULT_LAYER) {
             ExtraLayer extraLayer = ExtraLayer.values()[layer - 2];
             List<FingerPosition> extraLayerMovementSequence = ExtraLayer.MOVEMENT_SEQUENCES.get(extraLayer);
+
             if (extraLayerMovementSequence != null) {
                 size += extraLayerMovementSequence.size();
                 start += extraLayerMovementSequence.size();

@@ -23,7 +23,11 @@ import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.keyboardhelpers.KeyboardDataYamlParser;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.LayoutFileName;
+import inc.flide.vim8.structures.exceptions.YamlException;
+import inc.flide.vim8.utils.AlertHelper;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,36 +39,50 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function3;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
-    private static final String[] LAYOUT_FILTER = {"*/*"};
+    private static final String[] LAYOUT_FILTER = {"application/octet-stream"};
     private Context context;
+    private KeyboardDataYamlParser keyboardDataYamlParser;
     private final ActivityResultLauncher<String[]> openContent =
-            registerForActivityResult(new ActivityResultContracts.OpenDocument(), selectedCustomLayoutFile -> {
-                if (selectedCustomLayoutFile == null || context == null) {
-                    return;
-                }
-
-                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-
-                final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
-                context.getContentResolver().takePersistableUriPermission(selectedCustomLayoutFile, takeFlags);
-                try (InputStream inputStream = context.getContentResolver().openInputStream(selectedCustomLayoutFile)) {
-                    if (KeyboardDataYamlParser.isValidFile(inputStream) == 0) {
-                        return;
-                    }
-                } catch (Exception e) {
-                    return;
-                }
-                sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), true);
-                sharedPreferencesEditor.putString(getString(R.string.pref_selected_custom_keyboard_layout_uri),
-                        selectedCustomLayoutFile.toString());
-                sharedPreferencesEditor.apply();
-                MainKeypadActionListener.rebuildKeyboardData(getResources(), context, selectedCustomLayoutFile);
-            });
+            registerForActivityResult(new ActivityResultContracts.OpenDocument(),
+                    selectedCustomLayoutFile -> {
+                        if (selectedCustomLayoutFile == null || context == null) {
+                            return;
+                        }
+                        SharedPreferences sharedPreferences =
+                                PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                        final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
+                        context.getContentResolver()
+                                .takePersistableUriPermission(selectedCustomLayoutFile, takeFlags);
+                        try (InputStream inputStream = context.getContentResolver()
+                                .openInputStream(selectedCustomLayoutFile)) {
+                            KeyboardData keyboardData = keyboardDataYamlParser.readKeyboardData(inputStream);
+                            if (keyboardData.getTotalLayers() == 0) {
+                                AlertHelper.showAlert(context, R.string.yaml_error_title,
+                                        "The layout requires at least one layer");
+                                return;
+                            }
+                        } catch (YamlException e) {
+                            AlertHelper.showAlert(context, R.string.yaml_error_title, e.getMessage());
+                            return;
+                        } catch (IOException e) {
+                            AlertHelper.showAlert(context, R.string.generic_error_text, e.getMessage());
+                            return;
+                        }
+                        sharedPreferencesEditor.putBoolean(
+                                getString(R.string.pref_use_custom_selected_keyboard_layout), true);
+                        sharedPreferencesEditor.putString(
+                                getString(R.string.pref_selected_custom_keyboard_layout_uri),
+                                selectedCustomLayoutFile.toString());
+                        sharedPreferencesEditor.apply();
+                        MainKeypadActionListener.rebuildKeyboardData(getResources(), context,
+                                selectedCustomLayoutFile);
+                    });
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         context = getContext();
+        keyboardDataYamlParser = KeyboardDataYamlParser.getInstance(getResources().openRawResource(R.raw.schema));
         setPreferencesFromResource(R.xml.preferences, rootKey);
         setupPreferenceButtonActions();
         setupPreferenceCallbacks();
@@ -81,7 +99,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             preferenceTrailColor.setVisible(!((boolean) value));
             return true;
         });
-        preferenceTrailColor.setVisible(!defaultSharedPreferences.getBoolean(prefRandomTrailKey, false));
+        preferenceTrailColor.setVisible(
+                !defaultSharedPreferences.getBoolean(prefRandomTrailKey, false));
         setColorsSelectionVisible(defaultSharedPreferences.getString(prefColorModeKey, "system"));
 
         findPreference(prefColorModeKey).setOnPreferenceChangeListener((pref, value) -> {
@@ -167,14 +186,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 sharedPreferences.edit().remove(getString(R.string.pref_selected_keyboard_layout)).apply();
             }
         }
-        createItemsChoice(R.string.select_preferred_keyboard_layout_dialog_title, inputMethodsNameAndId.keySet(),
+        createItemsChoice(R.string.select_preferred_keyboard_layout_dialog_title,
+                inputMethodsNameAndId.keySet(),
                 selectedKeyboardIndex,
                 (dialog, which, text) -> {
                     if (which != -1) {
                         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
                         sharedPreferencesEditor.putString(getString(R.string.pref_selected_keyboard_layout),
                                 keyboardIds.get(which));
-                        sharedPreferencesEditor.putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout),
+                        sharedPreferencesEditor.putBoolean(
+                                getString(R.string.pref_use_custom_selected_keyboard_layout),
                                 false);
                         sharedPreferencesEditor.apply();
                         MainKeypadActionListener.rebuildKeyboardData(getResources(), getContext());
@@ -200,7 +221,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void askUserPreferredEmoticonKeyboard() {
-        InputMethodManager imeManager = (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
+        InputMethodManager imeManager =
+                (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
         List<InputMethodInfo> inputMethods = imeManager.getEnabledInputMethodList();
 
         Map<String, String> inputMethodsNameAndId = new HashMap<>();
@@ -221,10 +243,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
             if (selectedKeyboardIndex == -1) {
                 // seems like we have a stale selection, it should be removed.
-                sharedPreferences.edit().remove(getString(R.string.pref_selected_emoticon_keyboard)).apply();
+                sharedPreferences.edit().remove(getString(R.string.pref_selected_emoticon_keyboard))
+                        .apply();
             }
         }
-        createItemsChoice(R.string.select_preferred_emoticon_keyboard_dialog_title, inputMethodsNameAndId.keySet(),
+        createItemsChoice(R.string.select_preferred_emoticon_keyboard_dialog_title,
+                inputMethodsNameAndId.keySet(),
                 selectedKeyboardIndex,
                 (dialog, which, text) -> {
                     if (which != -1) {
@@ -237,7 +261,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 }).show();
     }
 
-    private MaterialDialog createItemsChoice(int titleRes, Collection<String> items, int selectedIndex,
+    private MaterialDialog createItemsChoice(int titleRes, Collection<String> items,
+                                             int selectedIndex,
                                              Function3<MaterialDialog, Integer, CharSequence, Unit> callback) {
         return DialogSingleChoiceExtKt.listItemsSingleChoice(
                 new MaterialDialog(context, MaterialDialog.getDEFAULT_BEHAVIOR()).title(titleRes, null)
