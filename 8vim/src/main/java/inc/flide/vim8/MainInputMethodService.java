@@ -217,7 +217,7 @@ public class MainInputMethodService extends InputMethodService {
         if (TextUtils.isEmpty(sel)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 inputConnection.deleteSurroundingTextInCodePoints(1, 0);
-            }else{
+            } else {
                 inputConnection.deleteSurroundingText(1, 0);
             }
         } else {
