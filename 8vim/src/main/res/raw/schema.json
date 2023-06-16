@@ -9,7 +9,10 @@
       "properties": {
         "type": {
           "type": "string",
-          "pattern": "^(?i)(input_text|input_key)$"
+          "pattern": "^(?i)(input_text|input_key)$",
+          "message": {
+            "pattern": "type can only be input_text or input_key"
+          }
         },
         "flags": {
           "type": "integer"
@@ -24,7 +27,10 @@
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^(?i)(no_touch|inside_circle|top|left|bottom|right|long_press|long_press_end)$"
+            "pattern": "^(?i)(no_touch|inside_circle|top|left|bottom|right|long_press|long_press_end)$",
+            "message": {
+              "pattern": "Finger position can only one of: [no_touch, inside_circle, top, left, bottom right, long_press, long_press_end]"
+            }
           }
         },
         "upper_case": {
@@ -53,7 +59,10 @@
       "then": {
         "required": [
           "lower_case"
-        ]
+        ],
+        "message": {
+          "required": "lower_case is required for input_text type"
+        }
       }
     },
     "sectors": {
@@ -72,7 +81,10 @@
                       "$ref": "#/definitions/actionList"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "message": {
+                    "additionalProperties": "Only top/bottom parts are valid for left/right sectors"
+                  }
                 }
               },
               "required": [
@@ -90,7 +102,10 @@
                       "$ref": "#/definitions/actionList"
                     }
                   },
-                  "additionalProperties": false
+                  "additionalProperties": false,
+                  "message": {
+                    "additionalProperties": "Only left/right parts are valid for top/bottom sectors"
+                  }
                 }
               },
               "required": [
@@ -109,7 +124,10 @@
       "items": {
         "$ref": "#/definitions/action"
       },
-      "maxItems": 4
+      "maxItems": 4,
+      "message": {
+        "maxItems": "There is only up to 4 actions per sectors/parts"
+      }
     }
   },
   "type": "object",
@@ -148,11 +166,14 @@
         "extra_layers": {
           "type": "object",
           "patternProperties": {
-            "^(?i)(first|second|third|forth|fifth)$": {
+            "^(?i)(first|second|third|fourth|fifth)$": {
               "$ref": "#/definitions/sectors"
             }
           },
-          "additionalProperties": false
+          "additionalProperties": false,
+          "message": {
+            "additionalProperties": "extra_layers can only have [first, second, third, fourth, fifth]"
+          }
         },
         "hidden": {
           "type": "array",
@@ -170,7 +191,10 @@
       "then": {
         "required": [
           "default"
-        ]
+        ],
+        "message": {
+          "required": "Default layer is required if extra_layers is defined"
+        }
       },
       "else": {
         "if": {
@@ -186,7 +210,10 @@
         "else": {
           "required": [
             "default"
-          ]
+          ],
+          "message": {
+            "required": "default or hidden is required"
+          }
         }
       }
     }
