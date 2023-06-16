@@ -17,6 +17,7 @@ android {
 
         applicationId "inc.flide.vi8"
         minSdkVersion 21
+        //noinspection OldTargetApi
         targetSdkVersion 33
         versionCode 16
         versionName "iteration-13"
