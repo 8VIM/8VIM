@@ -1,16 +1,47 @@
-name: Bump version
-on:
-  pull_request:
-    types: [closed]
+name: Bump version for release
+on: workflow_dispatch
 jobs:
   bump_version:
     runs-on: ubuntu-latest
-    if: startsWith(github.head_ref, 'releases')
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
       - name: Set output
         id: vars
         run: |
-          version=$(cat ./8vim/build.gradle | grep -oE 'versionCode.+' | cut -f2- -d' ')
-          file="metadata/en-US/changelogs/${version}.txt"
-          [[ -f "$file" ]] && echo "file=${file}" >> $GITHUB_OUTPUT
+          set +a
+          . ./8vim/version.properties
+          set -a
+          VERSION_CODE=$((VERSION_CODE+1))
+          VERSION_NAME=$(echo iteration-$((${VERSION_NAME/iteration-/}+1)))
+          echo "VERSION_CODE=$VERSION_CODE" > ./8vim/version.properties
+          echo "VERSION_NAME=$VERSION_NAME" >> ./8vim/version.properties
+          echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
+          echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+      - name: Create Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configuration: changelog-configuration.json
+          toTag: ${{github.sha}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+      - run: |
+          result=$(echo "$CHANGELOG" | sed "s/${{github.sha}}/v${{steps.vars.outputs.version_name}}/g")
+          echo "$result" > metadata/en-US/changelogs/${{steps.vars.outputs.version_code}}.txt
+        env:
+          CHANGELOG: ${{steps.github_release.outputs.changelog}}
+      - name: Commit files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add metadata/en-US/changelogs/${{steps.vars.outputs.version_code}}.txt
+          git commit -a -m "chore(bump): release ${{steps.vars.outputs.version_name}}"
+          git tag ${{steps.vars.outputs.version_name}}
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          tags: true
