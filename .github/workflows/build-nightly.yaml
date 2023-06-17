@@ -22,12 +22,12 @@ jobs:
         env:
           ENCODED_STRING: ${{ secrets.SIGNING_KEYSTORE_BASE64 }}
         run: |
-          DATE=$(date +'%Y-%m-%d')
+          DATE=$(date +"%Y-%m-%dT%H:%M:%SZ")
           TS=$(date +%s)
           echo "date=$DATE" >> $GITHUB_OUTPUT
           echo "ts=$TS" >> $GITHUB_OUTPUT
           echo "VERSION_CODE=${TS}" > ./8vim/version.properties
-          echo "VERSION_NAME=nightly-${DATE}" >> ./8vim/version.properties
+          echo "VERSION_NAME=nightly-${TS}" >> ./8vim/version.properties
           echo "$ENCODED_STRING" > keystore-b64.txt
           base64 -d keystore-b64.txt > 8vim/8vim.jks
       - name: Build APK
