@@ -2,6 +2,11 @@ name: Bump version for release
 on: workflow_dispatch
 jobs:
   bump_version:
+    permissions:
+      actions: read
+      issues: read
+      pull-requests: read
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

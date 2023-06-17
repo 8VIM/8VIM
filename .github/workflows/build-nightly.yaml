@@ -1,4 +1,4 @@
-name: Merge test
+name: Build nightly
 
 on:
   pull_request:
