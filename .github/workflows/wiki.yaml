@@ -1,0 +1,25 @@
+name: Wiki update
+on: gollum
+
+jobs:
+  wiki:
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          persist-credentials: false
+      - name: Update submodules
+        id: update
+        run: git submodule update --remote --recursive
+      - run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          git commit -m "chore(wiki): page ${{github.event.pages[0].action}}: ${{github.event.pages[0].title}}"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
