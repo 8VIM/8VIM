@@ -1,5 +1,14 @@
 name: Bump version for release
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      whatsnew:
+        required: true
+        description: Store release message
+      version:
+        description: |
+          Release version.
+          If not specifid it will bump the previous version_name
 jobs:
   bump_version:
     permissions:
@@ -15,29 +24,21 @@ jobs:
           fetch-depth: 0
       - name: Set output
         id: vars
+        env:
+          PROVIDED_VERSION: ${{ github.event.inputs.version }}
         run: |
           set +a
           . ./8vim/version.properties
           set -a
           VERSION_CODE=$((VERSION_CODE+1))
           VERSION_NAME=$(echo iteration-$((${VERSION_NAME/iteration-/}+1)))
+          VERSION_NAME=${PROVIDED_VERSION:-$VERSION_NAME}
           echo "VERSION_CODE=$VERSION_CODE" > ./8vim/version.properties
           echo "VERSION_NAME=$VERSION_NAME" >> ./8vim/version.properties
           echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
           echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
-      - name: Create Changelog
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@v4
-        with:
-          configuration: changelog-configuration.json
-          toTag: ${{github.sha}}
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
       - run: |
-          result=$(echo "$CHANGELOG" | sed "s/${{github.sha}}/v${{steps.vars.outputs.version_name}}/g")
-          echo "$result" > metadata/en-US/changelogs/${{steps.vars.outputs.version_code}}.txt
-        env:
-          CHANGELOG: ${{steps.github_release.outputs.changelog}}
+          echo "${{ github.event.inputs.whatsnew }}" > metadata/en-US/changelogs/${{steps.vars.outputs.version_code}}.txt
       - name: Commit files
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
