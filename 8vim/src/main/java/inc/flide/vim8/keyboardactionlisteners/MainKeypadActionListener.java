@@ -177,6 +177,12 @@ public class MainKeypadActionListener extends KeypadActionListener {
                 currentLetter = null;
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT;
                 movementSequence.add(currentFingerPosition);
+            } else if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE &&
+                    movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE) {
+                movementSequence.clear();
+                currentLetter = null;
+                currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT;
+                movementSequence.add(currentFingerPosition);
             } else if (currentFingerPosition != FingerPosition.INSIDE_CIRCLE) {
                 List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
                 modifiedMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
