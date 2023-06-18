@@ -5,7 +5,8 @@ on:
     branches: [master]
     types: [closed]
 jobs:
-  test:
+  build:
+    name: Build nightly version
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -24,8 +25,8 @@ jobs:
         run: |
           DATE=$(date +"%Y-%m-%dT%H:%M:%SZ")
           TS=$(date +%s)
-          echo "date=$DATE" >> $GITHUB_OUTPUT
-          echo "ts=$TS" >> $GITHUB_OUTPUT
+          echo "date=$DATE" >> $GITHUB_ENV
+          echo "ts=$TS" >> $GITHUB_ENV
           echo "VERSION_CODE=${TS}" > ./8vim/version.properties
           echo "VERSION_NAME=nightly-${TS}" >> ./8vim/version.properties
           echo "$ENCODED_STRING" > keystore-b64.txt
@@ -46,8 +47,8 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
-          name: Nightly - ${{ steps.vars.outputs.date }}
-          tag_name: nightly-${{ steps.vars.outputs.ts }}
+          name: Nightly - ${{ env.date }}
+          tag_name: nightly-${{ env.ts }}
           body: ${{steps.github_release.outputs.changelog}}
           files: 8vim/build/outputs/apk/release/8vim-release.apk
           prerelease: true

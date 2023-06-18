@@ -3,6 +3,7 @@ on: gollum
 
 jobs:
   wiki:
+    name: Update Wiki submodule
     permissions:
       contents: read
     runs-on: ubuntu-latest

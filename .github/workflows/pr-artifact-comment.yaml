@@ -5,6 +5,7 @@ on:
     types: [completed]
 jobs:
   update_pr:
+    name: Create PR comment with the artifact
     permissions:
       pull-requests: write
       actions: read
