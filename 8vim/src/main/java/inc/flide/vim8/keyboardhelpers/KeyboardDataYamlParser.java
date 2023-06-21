@@ -75,7 +75,7 @@ public class KeyboardDataYamlParser {
     public KeyboardData readKeyboardData(InputStream inputStream) throws YamlException {
         try {
             JsonNode node = mapper.readTree(inputStream);
-            checkSchema(node);
+            validateYaml(node);
             Layout layout = mapper.treeToValue(node, Layout.class);
             KeyboardData keyboardData = new KeyboardData();
             keyboardData.setInfo(layout.info);
@@ -105,7 +105,7 @@ public class KeyboardDataYamlParser {
         }
     }
 
-    private void checkSchema(JsonNode node) {
+    private void validateYaml(JsonNode node) {
         Set<ValidationMessage> result = schema.validate(node);
         if (!result.isEmpty()) {
             Set<ValidationMessage> errors = new HashSet<>();
