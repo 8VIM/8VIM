@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaException;
@@ -22,12 +23,15 @@ import inc.flide.vim8.structures.exceptions.YamlException;
 import inc.flide.vim8.structures.exceptions.YamlParsingException;
 import inc.flide.vim8.structures.yaml.Action;
 import inc.flide.vim8.structures.yaml.ExtraLayer;
+import inc.flide.vim8.structures.yaml.Flags;
 import inc.flide.vim8.structures.yaml.Layer;
 import inc.flide.vim8.structures.yaml.Layout;
 import inc.flide.vim8.structures.yaml.Part;
 import inc.flide.vim8.utils.MovementSequenceHelper;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -35,9 +39,12 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class KeyboardDataYamlParser {
+    private static final SimpleModule module =
+            new SimpleModule().addDeserializer(Flags.class, new Flags.FlagsDeserializer());
     private static final ObjectMapper mapper =
             YAMLMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-                    .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE).build();
+                    .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                    .addModule(module).build();
     private static KeyboardDataYamlParser singleton = null;
     private final JsonSchema schema;
 
@@ -45,9 +52,9 @@ public class KeyboardDataYamlParser {
         this.schema = schema;
     }
 
-    public static KeyboardDataYamlParser getInstance(InputStream schemaInputStream) {
+    public static KeyboardDataYamlParser getInstance() {
         if (singleton == null) {
-            try {
+            try (InputStream schemaInputStream = KeyboardDataYamlParser.class.getResourceAsStream("/schema.json")) {
                 JsonNode schemaJson = mapper.readTree(schemaInputStream);
                 JsonSchemaFactory factory =
                         JsonSchemaFactory.builder(
@@ -99,8 +106,23 @@ public class KeyboardDataYamlParser {
     }
 
     private void checkSchema(JsonNode node) {
-        Set<ValidationMessage> errors = schema.validate(node);
-        if (!errors.isEmpty()) {
+        Set<ValidationMessage> result = schema.validate(node);
+        if (!result.isEmpty()) {
+            Set<ValidationMessage> errors = new HashSet<>();
+            for (ValidationMessage error : result) {
+                if (error.getMessage().startsWith("$")) {
+                    errors.add(error);
+                } else {
+                    errors.add(new ValidationMessage.Builder()
+                            .type(error.getType())
+                            .code(error.getCode())
+                            .path(error.getPath())
+                            .details(error.getDetails())
+                            .arguments(error.getMessage())
+                            .format(new MessageFormat("{0}: {1}"))
+                            .build());
+                }
+            }
             throw new InvalidYamlException(errors);
         }
     }
@@ -135,7 +157,7 @@ public class KeyboardDataYamlParser {
 
             KeyboardAction actionMap =
                     new KeyboardAction(action.actionType, action.lowerCase, action.upperCase,
-                            action.getKeyCode(), action.flags,
+                            action.getKeyCode(), action.flags.getValue(),
                             Constants.HIDDEN_LAYER);
             keyboardData.addActionMap(movementSequence, actionMap);
         }
@@ -183,7 +205,7 @@ public class KeyboardDataYamlParser {
 
             KeyboardAction actionMap =
                     new KeyboardAction(action.actionType, action.lowerCase, action.upperCase,
-                            action.getKeyCode(), action.flags,
+                            action.getKeyCode(), action.flags.getValue(),
                             layer);
 
             keyboardData.addActionMap(movementSequence, actionMap);

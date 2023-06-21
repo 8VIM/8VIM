@@ -13,12 +13,19 @@ layers:
         - top
         - no_touch
       key_code: shift_toggle
+    - type: input_key
+      movement_sequence:
+        - no_touch
+      key_code: keycode_a
+      flags: 4096
+
   default:
     sectors:
       right:
         parts:
           bottom:
             - lower_case: n
+              flags: meta_ctrl_on
   extra_layers:
     first:
       sectors:
@@ -28,3 +35,6 @@ layers:
               - null
               - lower_case: m
                 upper_case: a
+                flags:
+                  - meta_ctrl_on
+                  - meta_function_on

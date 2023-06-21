@@ -82,7 +82,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         context = getContext();
-        keyboardDataYamlParser = KeyboardDataYamlParser.getInstance(getResources().openRawResource(R.raw.schema));
+        keyboardDataYamlParser = KeyboardDataYamlParser.getInstance();
         setPreferencesFromResource(R.xml.preferences, rootKey);
         setupPreferenceButtonActions();
         setupPreferenceCallbacks();

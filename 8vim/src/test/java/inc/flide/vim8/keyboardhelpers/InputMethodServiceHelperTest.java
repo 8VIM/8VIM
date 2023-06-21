@@ -58,7 +58,6 @@ public class InputMethodServiceHelperTest {
     Resources resources;
     @Mock
     SharedPreferences sharedPreferences;
-    private InputMethodServiceHelper inputMethodServiceHelper;
 
     @BeforeAll
     static void setup() {
@@ -73,8 +72,7 @@ public class InputMethodServiceHelperTest {
         lenient().when(keyboardDataYamlParser.readKeyboardData(any())).thenReturn(keyboardDataMock);
 
         keyboardDataYamlParserMockedStatic = mockStatic(KeyboardDataYamlParser.class);
-        keyboardDataYamlParserMockedStatic.when(() -> KeyboardDataYamlParser.getInstance(any()))
-                .thenReturn(keyboardDataYamlParser);
+        keyboardDataYamlParserMockedStatic.when(KeyboardDataYamlParser::getInstance).thenReturn(keyboardDataYamlParser);
 
         sharedPreferenceHelper = mock(SharedPreferenceHelper.class);
         when(sharedPreferenceHelper.getString(anyString(), anyString())).thenReturn("en");
@@ -146,13 +144,12 @@ public class InputMethodServiceHelperTest {
                     entries.stream().filter((e) -> e.getValue().getLayer() == layer).map(Map.Entry::getValue)
                             .map(KeyboardAction::getCapsLockText).findFirst().orElse(""));
         }
-        inputMethodServiceHelper = InputMethodServiceHelper.getInstance(resources);
     }
 
     @Test
     void initializeKeyboardActionMap_not_using_custom_keyboard_layout() {
         when(sharedPreferenceHelper.getBoolean(anyString(), anyBoolean())).thenReturn(false);
-        KeyboardData keyboardData = inputMethodServiceHelper.initializeKeyboardActionMap(context);
+        KeyboardData keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
 
         assertThat(keyboardData.getActionMap()).containsAllEntriesOf(expectedMovementSequences);
     }
@@ -160,7 +157,7 @@ public class InputMethodServiceHelperTest {
     @Test
     void initializeKeyboardActionMap_using_custom_keyboard_layout() {
         when(sharedPreferenceHelper.getBoolean(anyString(), anyBoolean())).thenReturn(true);
-        KeyboardData keyboardData = inputMethodServiceHelper.initializeKeyboardActionMap(context);
+        KeyboardData keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
 
         assertThat(keyboardData.getActionMap()).containsAllEntriesOf(expectedMovementSequences);
     }
@@ -184,7 +181,7 @@ public class InputMethodServiceHelperTest {
             when(sharedPreferenceHelper.getBoolean(anyString(), anyBoolean())).thenReturn(false);
 
             KeyboardData keyboardData =
-                    inputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(context, null);
+                    InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resources, context, null);
 
             assertThat(keyboardData.getActionMap()).containsAllEntriesOf(expectedMovementSequences);
         }

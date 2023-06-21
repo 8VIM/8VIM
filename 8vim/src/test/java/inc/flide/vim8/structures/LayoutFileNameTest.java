@@ -61,8 +61,6 @@ public class LayoutFileNameTest {
 
     void setupInputStream(String file) {
         InputStream inputStream = getClass().getResourceAsStream(file);
-        when(resources.openRawResource(anyInt()))
-                .thenReturn(getClass().getResourceAsStream("/schema.json"))
-                .thenReturn(inputStream);
+        when(resources.openRawResource(anyInt())).thenReturn(inputStream);
     }
 }

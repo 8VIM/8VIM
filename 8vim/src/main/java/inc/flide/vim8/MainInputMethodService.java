@@ -134,8 +134,7 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public KeyboardData buildKeyboardActionMap() {
-        return InputMethodServiceHelper.getInstance(getResources())
-                .initializeKeyboardActionMap(getApplicationContext());
+        return InputMethodServiceHelper.initializeKeyboardActionMap(getResources(), getApplicationContext());
     }
 
     public void sendText(String text) {

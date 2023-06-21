@@ -16,7 +16,7 @@ public class Action {
     public String lowerCase = "";
     public String upperCase = "";
     public List<FingerPosition> movementSequence = new ArrayList<>();
-    public int flags = 0;
+    public Flags flags = Flags.empty();
     private int keyCode = 0;
 
     public int getKeyCode() {
@@ -45,6 +45,6 @@ public class Action {
         return (lowerCase == null || lowerCase.isEmpty())
                 && (upperCase == null || upperCase.isEmpty())
                 && movementSequence.isEmpty()
-                && flags == 0;
+                && flags.getValue() == 0;
     }
 }

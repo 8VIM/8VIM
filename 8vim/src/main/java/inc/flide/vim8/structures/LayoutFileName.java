@@ -3,7 +3,6 @@ package inc.flide.vim8.structures;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
-import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardhelpers.KeyboardDataYamlParser;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -35,28 +34,24 @@ public class LayoutFileName {
     public LayoutFileName(Resources resources, Context context, String fileName) {
         this();
         if (ISO_LANGUAGES.contains(fileName)) {
-            try (InputStream schemaInputStream = resources.openRawResource(R.raw.schema)) {
-                resourceName = fileName;
-                languageCode = fileName;
-                languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
-                layoutDisplayName = StringUtils.capitalize(languageName);
+            resourceName = fileName;
+            languageCode = fileName;
+            languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
+            layoutDisplayName = StringUtils.capitalize(languageName);
 
-                @SuppressLint("DiscouragedApi") int resourceId =
-                        resources.getIdentifier(fileName, "raw", context.getPackageName());
-                try (InputStream inputStream = resources.openRawResource(resourceId)) {
-                    totalLayers = KeyboardDataYamlParser.getInstance(schemaInputStream).readKeyboardData(inputStream)
-                            .getTotalLayers();
-                    isValidLayout = true;
-                    if (totalLayers == 0) {
-                        setLayoutValidityFalse();
-                    } else if (totalLayers > 1) {
-                        layoutDisplayName += " (" + totalLayers + " layers)";
-                    }
-                } catch (Exception e) {
+            @SuppressLint("DiscouragedApi") int resourceId =
+                    resources.getIdentifier(fileName, "raw", context.getPackageName());
+            try (InputStream inputStream = resources.openRawResource(resourceId)) {
+                totalLayers = KeyboardDataYamlParser.getInstance().readKeyboardData(inputStream)
+                        .getTotalLayers();
+                isValidLayout = true;
+                if (totalLayers == 0) {
                     setLayoutValidityFalse();
+                } else if (totalLayers > 1) {
+                    layoutDisplayName += " (" + totalLayers + " layers)";
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                setLayoutValidityFalse();
             }
         } else {
             setLayoutValidityFalse();

@@ -73,13 +73,13 @@ public class MainKeypadActionListener extends KeypadActionListener {
         currentFingerPosition = FingerPosition.NO_TOUCH;
     }
 
-    public static void rebuildKeyboardData(Resources resource, Context context) {
-        keyboardData = InputMethodServiceHelper.getInstance(resource).initializeKeyboardActionMap(context);
+    public static void rebuildKeyboardData(Resources resources, Context context) {
+        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
     }
 
-    public static void rebuildKeyboardData(Resources resource, Context context, Uri customLayoutUri) {
-        keyboardData = InputMethodServiceHelper.getInstance(resource)
-                .initializeKeyboardActionMapForCustomLayout(context, customLayoutUri);
+    public static void rebuildKeyboardData(Resources resources, Context context, Uri customLayoutUri) {
+        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resources, context,
+                customLayoutUri);
     }
 
     public String getLowerCaseCharacters(int layer) {
