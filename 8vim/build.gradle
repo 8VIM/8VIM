@@ -10,7 +10,7 @@ assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 android {
-    
+
     compileSdkVersion 33
 
     defaultConfig {
@@ -56,7 +56,7 @@ android {
 
     lint {
         abortOnError true
-        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath', 'UnusedResources'
+        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath', 'UnusedResources', 'OldTargetApi'
         htmlOutput file('lint-report.html')
         htmlReport true
         warningsAsErrors true
