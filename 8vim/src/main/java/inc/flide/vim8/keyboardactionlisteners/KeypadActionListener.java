@@ -67,9 +67,7 @@ public abstract class KeypadActionListener {
     private void performInputAcceptedFeedback(int keySound) {
         SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(mainInputMethodService);
         boolean userEnabledHapticFeedback =
-                pref.getBoolean(
-                        mainInputMethodService.getString(R.string.pref_haptic_feedback_key),
-                        true);
+                pref.getBoolean(mainInputMethodService.getString(R.string.pref_haptic_feedback_key), true);
         if (userEnabledHapticFeedback) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
                     HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);

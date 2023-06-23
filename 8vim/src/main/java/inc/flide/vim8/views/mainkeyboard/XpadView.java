@@ -107,7 +107,8 @@ public class XpadView extends View {
         circleRadiusFactor = outValue.getFloat();
         circleOffsetFactor = resources.getInteger(R.integer.xpad_circle_offset_factor);
         iconAlpha =
-                Math.max(Math.min(resources.getInteger(R.integer.xpad_icon_alpha), Constants.MAX_RGB_COMPONENT_VALUE),
+                Math.max(Math.min(resources.getInteger(R.integer.xpad_icon_alpha),
+                                Constants.MAX_RGB_COMPONENT_VALUE),
                         0);
         resources.getValue(R.dimen.xpad_letter_highlight_roundness, outValue, true);
         letterHighlightRoundness = outValue.getFloat();
@@ -118,10 +119,12 @@ public class XpadView extends View {
         SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
 
         int backgroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.backgroundColor, R.string.pref_board_bg_color_key,
+                ColorsHelper.getThemeColor(context, R.attr.backgroundColor,
+                        R.string.pref_board_bg_color_key,
                         R.color.defaultBoardBg);
         foregroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground, R.string.pref_board_fg_color_key,
+                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground,
+                        R.string.pref_board_fg_color_key,
                         R.color.defaultBoardFg);
 
         userPreferRandomTrailColor = sharedPreferenceHelper.getBoolean(
@@ -143,15 +146,18 @@ public class XpadView extends View {
         float spRadiusValue = pref.getInt(context.getString(R.string.pref_circle_scale_factor), 3);
         float radius = (spRadiusValue / circleRadiusFactor * keypadDimension.getWidth()) / 2;
 
-        int offsetX = (pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0)) * circleOffsetFactor;
-        int offsetY = (pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0)) * circleOffsetFactor;
+        int offsetX =
+                (pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0)) * circleOffsetFactor;
+        int offsetY =
+                (pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0)) * circleOffsetFactor;
         circleCenter.x = (keypadDimension.getWidth() / 2f) + offsetX;
         circleCenter.y = (keypadDimension.getHeight() / 2f) + offsetY;
 
         circle.setCentre(circleCenter);
         circle.setRadius(radius);
 
-        float characterHeight = foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
+        float characterHeight =
+                foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
         // We chop off a bit of the right side of the view width from the keypadDimension (see onMeasure),
         // this introduces a bit of asymmetry which we have to compensate for here.
         int keypadXOffset = fullWidth - keypadDimension.getWidth();
@@ -204,7 +210,8 @@ public class XpadView extends View {
         sectorLines.computeBounds(sectorLineBounds, false); // Used to position icons
     }
 
-    private void computeLettersPositions(float characterHeight, float lengthOfLineDemarcatingSectors) {
+    private void computeLettersPositions(float characterHeight,
+                                         float lengthOfLineDemarcatingSectors) {
         float eastEdge = circleCenter.x + circle.getRadius() + characterHeight / 2;
         for (int i = 0; i < Constants.NUMBER_OF_SECTORS; i++) {
             float dx = i * lengthOfLineDemarcatingSectors / ((float) Constants.NUMBER_OF_SECTORS);
@@ -249,7 +256,8 @@ public class XpadView extends View {
         foregroundPaint.setStyle(Paint.Style.STROKE);
 
         //The centre circle
-        canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(), foregroundPaint);
+        canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(),
+                foregroundPaint);
         canvas.drawPath(sectorLines, foregroundPaint); //The lines demarcating the sectors
 
         // Converting float value to int
@@ -277,7 +285,8 @@ public class XpadView extends View {
             // Make the color the same as the typing trail, but blend it with white
             // because it's too hard to see a black font on dark backgrounds.
             int letterBackgroundColor =
-                    ColorUtils.blendARGB(typingTrailPaint.getColor(), Color.WHITE, LETTER_BACKGROUND_BLEND_RATIO);
+                    ColorUtils.blendARGB(typingTrailPaint.getColor(), Color.WHITE,
+                            LETTER_BACKGROUND_BLEND_RATIO);
 
             letterBackgroundPaint.setColor(letterBackgroundColor);
 

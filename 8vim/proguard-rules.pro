@@ -16,12 +16,20 @@
 #   public *;
 #}
 # Proguard configuration for Jackson 2.x
+-dontwarn org.slf4j.impl.StaticLoggerBinder
 -keepattributes *Annotation*,EnclosingMethod,Signature
 -keep class com.fasterxml.jackson.databind.ObjectMapper {
     public <methods>;
     protected <methods>;
 }
 -keepnames class com.fasterxml.jackson.** { *; }
+-keep class com.networknt.schema.** { *; }
+-dontwarn org.jcodings.Encoding
+-dontwarn org.jcodings.specific.UTF8Encoding
+-dontwarn org.joni.Matcher
+-dontwarn org.joni.Regex
+-dontwarn org.joni.Syntax
+-dontwarn org.joni.exception.SyntaxException
 -dontwarn com.fasterxml.jackson.databind.**
 -keep public class inc.flide.vim8.structures.** {
     *;
