@@ -19,7 +19,6 @@ android {
 
         applicationId "inc.flide.vi8"
         minSdkVersion 21
-        //noinspection OldTargetApi
         targetSdkVersion 33
         versionCode 16
         versionName "iteration-13"
@@ -59,7 +58,7 @@ android {
 
     lint {
         abortOnError true
-        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath', 'UnusedResources', 'GradleDependency'
+        disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath', 'UnusedResources', 'GradleDependency', 'OldTargetApi'
         htmlOutput file('lint-report.html')
         htmlReport true
         warningsAsErrors true
