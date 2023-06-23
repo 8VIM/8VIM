@@ -7,7 +7,6 @@ on:
     paths:
       - "**.gradle"
       - "8vim/**"
-      - "!8vim/src/main/**.yaml"
 jobs:
   build:
     name: Build nightly version
