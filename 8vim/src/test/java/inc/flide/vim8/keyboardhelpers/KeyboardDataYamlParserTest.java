@@ -2,12 +2,25 @@ package inc.flide.vim8.keyboardhelpers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.mockito.ArgumentMatchers.anyString;
 
 import android.view.KeyEvent;
-
-import com.fasterxml.jackson.databind.DatabindException;
-
+import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.CustomKeycode;
+import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.KeyboardAction;
+import inc.flide.vim8.structures.KeyboardActionType;
+import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.structures.exceptions.InvalidYamlException;
+import inc.flide.vim8.structures.exceptions.YamlException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,21 +28,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.CustomKeycode;
-import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardActionType;
-import inc.flide.vim8.structures.KeyboardData;
 
 @ExtendWith(MockitoExtension.class)
 public class KeyboardDataYamlParserTest {
@@ -57,36 +55,34 @@ public class KeyboardDataYamlParserTest {
         movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.TOP, FingerPosition.NO_TOUCH)),
                 new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0,
                         0));
+        movementSequences.put(new ArrayList<>(Collections.singletonList(FingerPosition.NO_TOUCH)),
+                new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON, 0));
+        movementSequences.put(new ArrayList<>(Collections.singletonList(FingerPosition.NO_TOUCH)),
+                new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON, 0));
         movementSequences.put(new ArrayList<>(
                         Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
                                 FingerPosition.INSIDE_CIRCLE)),
-                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, 0, 1));
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, KeyEvent.META_CTRL_ON, 1));
         movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.LEFT, FingerPosition.TOP)),
                 new KeyboardAction(KeyboardActionType.INPUT_TEXT, "c", "C", 0, 0, 2));
-                new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0,
-                        0));
-        movementSequences.put(new ArrayList<>(Collections.singletonList(FingerPosition.NO_TOUCH)),
-                new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON,
-                        0));
-        movementSequences.put(
-                new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
-                        FingerPosition.INSIDE_CIRCLE)),
-                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, KeyEvent.META_CTRL_ON, 1));
+        movementSequences.put(new ArrayList<>(
+                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                                FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0,
+                        KeyEvent.META_CTRL_ON | KeyEvent.META_FUNCTION_ON, 2));
         movementSequences.put(new ArrayList<>(
                         Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM,
                                 FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
                                 FingerPosition.INSIDE_CIRCLE)),
-                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0, 0, 2));
-        movementSequences.put(new ArrayList<>(
-                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
-                                FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE)),
-                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0, 0, 2));
-                        Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM,
-                                FingerPosition.INSIDE_CIRCLE,
-                                FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                                FingerPosition.INSIDE_CIRCLE)),
                 new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0,
                         KeyEvent.META_CTRL_ON | KeyEvent.META_FUNCTION_ON, 2));
+
+
+        movementSequences.put(
+                new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                        FingerPosition.INSIDE_CIRCLE)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, KeyEvent.META_CTRL_ON, 1));
+
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.setLength(Constants.CHARACTER_SET_SIZE);
@@ -120,24 +116,28 @@ public class KeyboardDataYamlParserTest {
     @Test
     void parse_invalid_file_format() {
         InputStream inputStream = getClass().getResourceAsStream("/invalid_file.yaml");
-        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> KeyboardDataYamlParser.readKeyboardData(inputStream));
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(
+                () -> KeyboardDataYamlParser.readKeyboardData(inputStream));
     }
 
     @Test
     void parse_invalid_extra_layers() {
         InputStream inputStream = getClass().getResourceAsStream("/extra_layers.yaml");
-        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> KeyboardDataYamlParser.readKeyboardData(inputStream));
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(
+                () -> KeyboardDataYamlParser.readKeyboardData(inputStream));
     }
 
     @Test
     void parse_no_layers_format() {
         InputStream inputStream = getClass().getResourceAsStream("/no_layers.yaml");
-        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> KeyboardDataYamlParser.readKeyboardData(inputStream));
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(
+                () -> KeyboardDataYamlParser.readKeyboardData(inputStream));
     }
 
     @Test
     void parse_non_yaml_file() {
         InputStream inputStream = getClass().getResourceAsStream("/invalid_file.xml");
-        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> KeyboardDataYamlParser.readKeyboardData(inputStream));
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(
+                () -> KeyboardDataYamlParser.readKeyboardData(inputStream));
     }
 }
