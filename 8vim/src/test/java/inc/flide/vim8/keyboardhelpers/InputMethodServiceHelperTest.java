@@ -48,7 +48,6 @@ public class InputMethodServiceHelperTest {
     static Map<List<FingerPosition>, KeyboardAction> expectedMovementSequences;
     static MockedStatic<KeyEvent> keyEvent;
     static MockedStatic<KeyboardDataYamlParser> keyboardDataYamlParserMockedStatic;
-    static KeyboardDataYamlParser keyboardDataYamlParser;
     static KeyboardData keyboardDataMock;
     static SharedPreferenceHelper sharedPreferenceHelper;
     static MockedStatic<SharedPreferenceHelper> sharedPreferenceHelperMockedStatic;
@@ -68,11 +67,9 @@ public class InputMethodServiceHelperTest {
         keyEvent.when(() -> KeyEvent.keyCodeFromString(anyString())).thenReturn(KeyEvent.KEYCODE_UNKNOWN);
 
         keyboardDataMock = mock(KeyboardData.class);
-        keyboardDataYamlParser = mock(KeyboardDataYamlParser.class);
-        lenient().when(keyboardDataYamlParser.readKeyboardData(any())).thenReturn(keyboardDataMock);
 
         keyboardDataYamlParserMockedStatic = mockStatic(KeyboardDataYamlParser.class);
-        keyboardDataYamlParserMockedStatic.when(KeyboardDataYamlParser::getInstance).thenReturn(keyboardDataYamlParser);
+        keyboardDataYamlParserMockedStatic.when(() -> KeyboardDataYamlParser.readKeyboardData(any())).thenReturn(keyboardDataMock);
 
         sharedPreferenceHelper = mock(SharedPreferenceHelper.class);
         when(sharedPreferenceHelper.getString(anyString(), anyString())).thenReturn("en");

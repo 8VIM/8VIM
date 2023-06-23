@@ -42,8 +42,7 @@ public class LayoutFileName {
             @SuppressLint("DiscouragedApi") int resourceId =
                     resources.getIdentifier(fileName, "raw", context.getPackageName());
             try (InputStream inputStream = resources.openRawResource(resourceId)) {
-                totalLayers = KeyboardDataYamlParser.getInstance().readKeyboardData(inputStream)
-                        .getTotalLayers();
+                totalLayers = KeyboardDataYamlParser.readKeyboardData(inputStream).getTotalLayers();
                 isValidLayout = true;
                 if (totalLayers == 0) {
                     setLayoutValidityFalse();

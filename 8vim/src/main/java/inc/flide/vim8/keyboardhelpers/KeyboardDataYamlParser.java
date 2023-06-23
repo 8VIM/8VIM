@@ -45,34 +45,25 @@ public class KeyboardDataYamlParser {
             YAMLMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
                     .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
                     .addModule(module).build();
-    private static KeyboardDataYamlParser singleton = null;
-    private final JsonSchema schema;
+    private static final JsonSchema schema;
 
-    private KeyboardDataYamlParser(JsonSchema schema) {
-        this.schema = schema;
-    }
-
-    public static KeyboardDataYamlParser getInstance() {
-        if (singleton == null) {
-            try (InputStream schemaInputStream = KeyboardDataYamlParser.class.getResourceAsStream("/schema.json")) {
-                JsonNode schemaJson = mapper.readTree(schemaInputStream);
-                JsonSchemaFactory factory =
-                        JsonSchemaFactory.builder(
-                                        JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaJson)))
-                                .objectMapper(mapper)
-                                .build();
-                JsonSchema schema = factory.getSchema(schemaJson);
-                singleton = new KeyboardDataYamlParser(schema);
-            } catch (IOException e) {
-                throw new YamlParsingException(e);
-            } catch (JsonSchemaException e) {
-                throw new InvalidYamlException(e.getMessage());
-            }
+    static {
+        try (InputStream schemaInputStream = KeyboardDataYamlParser.class.getResourceAsStream("/schema.json")) {
+            JsonNode schemaJson = mapper.readTree(schemaInputStream);
+            JsonSchemaFactory factory =
+                    JsonSchemaFactory.builder(
+                                    JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaJson)))
+                            .objectMapper(mapper)
+                            .build();
+            schema = factory.getSchema(schemaJson);
+        } catch (IOException e) {
+            throw new YamlParsingException(e);
+        } catch (JsonSchemaException e) {
+            throw new InvalidYamlException(e.getMessage());
         }
-        return singleton;
     }
 
-    public KeyboardData readKeyboardData(InputStream inputStream) throws YamlException {
+    public static KeyboardData readKeyboardData(InputStream inputStream) throws YamlException {
         try {
             JsonNode node = mapper.readTree(inputStream);
             validateYaml(node);
@@ -105,7 +96,7 @@ public class KeyboardDataYamlParser {
         }
     }
 
-    private void validateYaml(JsonNode node) {
+    private static void validateYaml(JsonNode node) {
         Set<ValidationMessage> result = schema.validate(node);
         if (!result.isEmpty()) {
             Set<ValidationMessage> errors = new HashSet<>();
@@ -127,7 +118,7 @@ public class KeyboardDataYamlParser {
         }
     }
 
-    private void addLayer(KeyboardData keyboardData, int layer, Layer layerData) {
+    private static void addLayer(KeyboardData keyboardData, int layer, Layer layerData) {
         StringBuilder lowerCaseCharacters = new StringBuilder();
         StringBuilder upperCaseCharacters = new StringBuilder();
         Pair<StringBuilder, StringBuilder> characterSets =
@@ -147,7 +138,7 @@ public class KeyboardDataYamlParser {
         keyboardData.setUpperCaseCharacters(String.valueOf(upperCaseCharacters), layer);
     }
 
-    private void addKeyboardActions(KeyboardData keyboardData, List<Action> actions) {
+    private static void addKeyboardActions(KeyboardData keyboardData, List<Action> actions) {
         for (Action action : actions) {
             List<FingerPosition> movementSequence = action.movementSequence;
 
@@ -163,9 +154,9 @@ public class KeyboardDataYamlParser {
         }
     }
 
-    private void addKeyboardActions(KeyboardData keyboardData, int layer, Quadrant quadrant,
-                                    List<Action> actions,
-                                    Pair<StringBuilder, StringBuilder> characterSets) {
+    private static void addKeyboardActions(KeyboardData keyboardData, int layer, Quadrant quadrant,
+                                           List<Action> actions,
+                                           Pair<StringBuilder, StringBuilder> characterSets) {
         int actionsSize = Math.min(actions.size(), 4);
 
         for (int i = 0; i < actionsSize; i++) {

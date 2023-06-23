@@ -98,7 +98,7 @@ public final class InputMethodServiceHelper {
 
     private static void addToKeyboardActionsMapUsingInputStream(KeyboardData keyboardData, InputStream inputStream)
             throws YamlException {
-        KeyboardData tempKeyboardData = KeyboardDataYamlParser.getInstance().readKeyboardData(inputStream);
+        KeyboardData tempKeyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
         keyboardData.setInfo(tempKeyboardData.getInfo());
 
         Map<List<FingerPosition>, KeyboardAction> tempKeyboardDataActionMap =
