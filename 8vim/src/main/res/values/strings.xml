@@ -52,6 +52,8 @@
         <item>tr</item>
         <item>uk</item>
     </string-array>
+    <string name="yaml_error_title">Couldn\'t load layout file</string>
+    <string name="generic_error_text">Error</string>
     <string name="generic_okay_text">OK</string>
     <string name="generic_cancel_text">Cancel</string>
 
@@ -64,6 +66,7 @@
     <string name="pref_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
     <string name="pref_selected_keyboard_layout">selected_keyboard_layout</string>
     <string name="pref_use_custom_selected_keyboard_layout">use_custom_selected_keyboard_layout</string>
+    <string name="pref_selected_custom_keyboard_layout_history">pref_selected_custom_keyboard_layout_history</string>
     <string name="pref_selected_custom_keyboard_layout_uri">pref_selected_custom_keyboard_layout_uri</string>
 
     <!--    preferences shown in gui UI-->

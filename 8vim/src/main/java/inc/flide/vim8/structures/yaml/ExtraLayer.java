@@ -9,7 +9,8 @@ import java.util.List;
 public enum ExtraLayer {
     FIRST, SECOND, THIRD, FOURTH, FIFTH;
 
-    public static final HashMap<ExtraLayer, List<FingerPosition>> MOVEMENT_SEQUENCES = new HashMap<>();
+    public static final HashMap<ExtraLayer, List<FingerPosition>> MOVEMENT_SEQUENCES =
+            new HashMap<>();
 
     static {
         List<FingerPosition> movementSequence =
