@@ -10,7 +10,9 @@
         android:id="@+id/constraintLayout_outer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/activity_vertical_margin">
+        android:padding="@dimen/activity_vertical_margin"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="-85dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout_aboutus"
@@ -357,62 +359,6 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.478"
                         tools:layout_editor_absoluteX="200sp" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout14"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5sp"
-                    android:layout_marginTop="5sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout_matrix">
-
-                    <com.google.android.material.divider.MaterialDivider
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraintLayout_website"
-                    android:layout_width="match_parent"
-                    android:layout_height="35sp"
-                    android:layout_marginTop="5sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraintLayout14">
-
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="15sp"
-                        android:layout_height="15sp"
-                        android:layout_marginStart="4sp"
-                        android:contentDescription="@string/website_icon_content_description"
-                        android:src="@drawable/link_vd_vector"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textView5"
-                        app:layout_constraintHorizontal_bias="0.065"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.481" />
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="45sp"
-                        android:text="@string/connect_using_website_label"
-                        android:textSize="15sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="@+id/constraintLayout_website"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.478"
-                        tools:layout_editor_absoluteX="192sp" />
-
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
