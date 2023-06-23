@@ -17,7 +17,6 @@ public class AboutUsActivity extends AppCompatActivity {
 
         setupLink(R.id.constraintLayout_github, "https://github.com/flide/8vim");
         setupLink(R.id.constraintLayout_matrix, "https://app.element.io/#/room/#8vim/lobby:matrix.org");
-        setupLink(R.id.constraintLayout_website, "https://8vim.com");
         setupLink(R.id.constraintLayout_twitter, "https://twitter.com/8vim_?s=09");
         setupLink(R.id.constraintLayout_playstore, "https://play.google.com/store/apps/details?id=inc.flide.vi8");
         setupBackArrow();
