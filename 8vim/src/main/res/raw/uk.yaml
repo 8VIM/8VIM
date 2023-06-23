@@ -4,9 +4,9 @@ layers:
       right:
         parts:
           top:
-            - lower_case: a
+            - lower_case: а
             - lower_case: ь
-            - lower_case: x
+            - lower_case: х
             - lower_case: "?"
               upper_case: "*"
           bottom:
@@ -23,10 +23,11 @@ layers:
             - lower_case: б
             - lower_case: ц
           left:
-            - lower_case: p
+            - lower_case: р
             - lower_case: д
             - lower_case: г
-            - lower_case: ґ
+            - lower_case: "'"
+              upper_case: '"'
       left:
         parts:
           top:
@@ -36,7 +37,7 @@ layers:
             - lower_case: .
               upper_case: "-"
           bottom:
-            - lower_case: i
+            - lower_case: і
             - lower_case: п
             - lower_case: ч
             - lower_case: ","
@@ -46,13 +47,13 @@ layers:
           left:
             - lower_case: в
             - lower_case: л
-            - lower_case: e
+            - lower_case: е
             - lower_case: "@"
               upper_case: "@gmail.com"
           right:
-            - lower_case: o
-            - lower_case: y
-            - lower_case: л
+            - lower_case: о
+            - lower_case: у
+            - lower_case: ш
             - lower_case: ф
   extra_layers:
     first:
@@ -65,6 +66,10 @@ layers:
           parts:
             right:
               - lower_case: й
+            left:
+              - null
+              - null
+              - lower_case: ґ
         left:
           parts:
             bottom:
@@ -78,6 +83,7 @@ layers:
             right:
               - null
               - lower_case: ю
+              - lower_case: щ
     second:
       sectors:
         right:
