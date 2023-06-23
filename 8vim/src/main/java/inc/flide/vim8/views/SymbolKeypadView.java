@@ -23,7 +23,8 @@ public class SymbolKeypadView extends ButtonKeypadView {
         setColors(keyboard);
         this.setKeyboard(keyboard);
 
-        ButtonKeypadActionListener actionListener = new ButtonKeypadActionListener(mainInputMethodService, this);
+        ButtonKeypadActionListener actionListener =
+                new ButtonKeypadActionListener(mainInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
 
         SharedPreferenceHelper.getInstance(context).addListener(() -> setColors(keyboard));
@@ -31,7 +32,8 @@ public class SymbolKeypadView extends ButtonKeypadView {
 
     private void setColors(Keyboard keyboard) {
         int foregroundColor =
-                ColorsHelper.getThemeColor(getContext(), R.attr.colorOnBackground, R.string.pref_board_fg_color_key,
+                ColorsHelper.getThemeColor(getContext(), R.attr.colorOnBackground,
+                        R.string.pref_board_fg_color_key,
                         R.color.defaultBoardFg);
 
         // Tint icon keys
