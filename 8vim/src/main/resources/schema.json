@@ -1,0 +1,251 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "action": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "pattern": "^(?i)(input_text|input_key)$",
+          "message": {
+            "type": "Invalid type",
+            "pattern": "type can only be one of: [input_text, input_key]"
+          }
+        },
+        "flags": {
+          "type": [
+            "integer",
+            "string",
+            "array"
+          ],
+          "pattern": "^(?i)(meta_shift_on|meta_alt_on|meta_sym_on|meta_function_on|meta_alt_left_on|meta_alt_right_on|meta_shift_left_on|meta_shift_right_on|meta_ctrl_on|meta_ctrl_left_on|meta_ctrl_right_on|meta_meta_on|meta_meta_left_on|meta_meta_right_on|meta_caps_lock_on|meta_num_lock_on|meta_scroll_lock_on)$",
+          "minimum": 0,
+          "items": {
+            "type": [
+              "integer",
+              "string"
+            ],
+            "minimum": 0,
+            "pattern": "^(?i)(meta_shift_on|meta_alt_on|meta_sym_on|meta_function_on|meta_alt_left_on|meta_alt_right_on|meta_shift_left_on|meta_shift_right_on|meta_ctrl_on|meta_ctrl_left_on|meta_ctrl_right_on|meta_meta_on|meta_meta_left_on|meta_meta_right_on|meta_caps_lock_on|meta_num_lock_on|meta_scroll_lock_on)$",
+            "message": {
+              "pattern": "Valid flag: [meta_shift_on, meta_alt_on, meta_sym_on, meta_function_on, meta_alt_left_on, meta_alt_right_on, meta_shift_left_on, meta_shift_right_on, meta_ctrl_on, meta_ctrl_left_on, meta_ctrl_right_on, meta_meta_on, meta_meta_left_on, meta_meta_right_on, meta_caps_lock_on, meta_num_lock_on, meta_scroll_lock_on]"
+            }
+          },
+          "message": {
+            "pattern": "Valid flag: [meta_shift_on, meta_alt_on, meta_sym_on, meta_function_on, meta_alt_left_on, meta_alt_right_on, meta_shift_left_on, meta_shift_right_on, meta_ctrl_on, meta_ctrl_left_on, meta_ctrl_right_on, meta_meta_on, meta_meta_left_on, meta_meta_right_on, meta_caps_lock_on, meta_num_lock_on, meta_scroll_lock_on]"
+          }
+        },
+        "key_code": {
+          "type": "string",
+          "pattern": "^(?i)(keycode_.+|move_current_end_point_left|move_current_end_point_right|move_current_end_point_up|move_current_end_point_down|selection_start|select_all|toggle_selection_anchor|shift_toggle|switch_to_main_keypad|switch_to_number_keypad|switch_to_symbols_keypad|switch_to_selection_keypad|switch_to_emoticon_keyboard|hide_keyboard|no_operation)$",
+          "message": {
+            "pattern": "Must be one of a valid android KeyCode or one of: [move_current_end_point_left, move_current_end_point_right, move_current_end_point_up, move_current_end_point_down, selection_start, select_all, toggle_selection_anchor, shift_toggle, switch_to_main_keypad, switch_to_number_keypad, switch_to_symbols_keypad, switch_to_selection_keypad, switch_to_emoticon_keyboard, hide_keyboard, no_operation]"
+          }
+        },
+        "lower_case": {
+          "type": "string"
+        },
+        "movement_sequence": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?i)(no_touch|inside_circle|top|left|bottom|right|long_press|long_press_end)$",
+            "message": {
+              "pattern": "Finger position can only be one of: [no_touch, inside_circle, top, left, bottom right, long_press, long_press_end]"
+            }
+          }
+        },
+        "upper_case": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "if": {
+        "anyOf": [
+          {
+            "not": {
+              "required": [
+                "type"
+              ]
+            }
+          },
+          {
+            "properties": {
+              "type": {
+                "type": "string",
+                "pattern": "^(?i)(input_text)$"
+              }
+            }
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "lower_case"
+        ],
+        "message": {
+          "required": "lower_case is required for input_text type"
+        }
+      }
+    },
+    "sectors": {
+      "type": "object",
+      "properties": {
+        "sectors": {
+          "type": "object",
+          "patternProperties": {
+            "^(?i)(left|right)$": {
+              "type": "object",
+              "properties": {
+                "parts": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^(?i)(top|bottom)$": {
+                      "$ref": "#/definitions/actionList"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "message": {
+                    "additionalProperties": "Only top/bottom parts are valid for left/right sectors"
+                  }
+                }
+              },
+              "required": [
+                "parts"
+              ],
+              "additionalProperties": false
+            },
+            "^(?i)(top|bottom)$": {
+              "type": "object",
+              "properties": {
+                "parts": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^(?i)(left|right)$": {
+                      "$ref": "#/definitions/actionList"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "message": {
+                    "additionalProperties": "Only left/right parts are valid for top/bottom sectors"
+                  }
+                }
+              },
+              "required": [
+                "parts"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "actionList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/action"
+      },
+      "maxItems": 4,
+      "message": {
+        "maxItems": "There is only up to 4 actions per sectors/parts"
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "info": {
+      "type": "object",
+      "properties": {
+        "contact": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "layers": {
+      "type": "object",
+      "properties": {
+        "default": {
+          "$ref": "#/definitions/sectors"
+        },
+        "extra_layers": {
+          "type": "object",
+          "patternProperties": {
+            "^(?i)(first|second|third|fourth|fifth)$": {
+              "$ref": "#/definitions/sectors"
+            }
+          },
+          "additionalProperties": false,
+          "message": {
+            "additionalProperties": "extra_layers can only have [first, second, third, fourth, fifth]"
+          }
+        },
+        "hidden": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/action"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "if": {
+        "required": [
+          "extra_layers"
+        ]
+      },
+      "then": {
+        "required": [
+          "default"
+        ],
+        "message": {
+          "required": "Default layer is required if extra_layers is defined"
+        }
+      },
+      "else": {
+        "if": {
+          "required": [
+            "hidden"
+          ]
+        },
+        "then": {
+          "required": [
+            "hidden"
+          ]
+        },
+        "else": {
+          "required": [
+            "default"
+          ],
+          "message": {
+            "required": "default or hidden is required"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "layers"
+  ],
+  "additionalProperties": false
+}

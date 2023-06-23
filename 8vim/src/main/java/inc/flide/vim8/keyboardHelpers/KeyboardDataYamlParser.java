@@ -1,10 +1,16 @@
 package inc.flide.vim8.keyboardhelpers;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaException;
+import com.networknt.schema.JsonSchemaFactory;
+import com.networknt.schema.SpecVersionDetector;
+import com.networknt.schema.ValidationMessage;
 import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.Direction;
@@ -12,72 +18,116 @@ import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.Quadrant;
+import inc.flide.vim8.structures.exceptions.InvalidYamlException;
+import inc.flide.vim8.structures.exceptions.YamlException;
+import inc.flide.vim8.structures.exceptions.YamlParsingException;
 import inc.flide.vim8.structures.yaml.Action;
 import inc.flide.vim8.structures.yaml.ExtraLayer;
+import inc.flide.vim8.structures.yaml.Flags;
 import inc.flide.vim8.structures.yaml.Layer;
 import inc.flide.vim8.structures.yaml.Layout;
 import inc.flide.vim8.structures.yaml.Part;
 import inc.flide.vim8.utils.MovementSequenceHelper;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class KeyboardDataYamlParser {
-    private final ObjectMapper mapper;
-    private final InputStream inputStream;
+    private static final SimpleModule module =
+            new SimpleModule().addDeserializer(Flags.class, new Flags.FlagsDeserializer());
+    private static final ObjectMapper mapper =
+            YAMLMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+                    .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
+                    .addModule(module).build();
+    private static final JsonSchema schema;
 
-    public KeyboardDataYamlParser(InputStream inputStream) {
-        mapper =
-                YAMLMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-                        .enable(DeserializationFeature.UNWRAP_ROOT_VALUE)
-                        .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE).build();
-        this.inputStream = inputStream;
-    }
-
-    public static int isValidFile(InputStream inputStream) throws IOException {
-        KeyboardDataYamlParser parser = new KeyboardDataYamlParser(inputStream);
-        KeyboardData keyboardData = parser.readKeyboardData();
-        return keyboardData.getTotalLayers();
-    }
-
-    public KeyboardData readKeyboardData() throws IOException {
-        Layout layout = mapper.readValue(inputStream, Layout.class);
-        KeyboardData keyboardData = new KeyboardData();
-        if (!layout.getHidden().isEmpty()) {
-            addKeyboardActions(keyboardData, layout.getHidden());
+    static {
+        try (InputStream schemaInputStream = KeyboardDataYamlParser.class.getResourceAsStream("/schema.json")) {
+            JsonNode schemaJson = mapper.readTree(schemaInputStream);
+            JsonSchemaFactory factory =
+                    JsonSchemaFactory.builder(
+                                    JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaJson)))
+                            .objectMapper(mapper)
+                            .build();
+            schema = factory.getSchema(schemaJson);
+        } catch (IOException e) {
+            throw new YamlParsingException(e);
+        } catch (JsonSchemaException e) {
+            throw new InvalidYamlException(e.getMessage());
         }
+    }
 
-        Layer defaultLayer = layout.getDefaultLayer();
-        Map<ExtraLayer, Layer> extraLayers = layout.getExtraLayers();
+    public static KeyboardData readKeyboardData(InputStream inputStream) throws YamlException {
+        try {
+            JsonNode node = mapper.readTree(inputStream);
+            validateYaml(node);
+            Layout layout = mapper.treeToValue(node, Layout.class);
+            KeyboardData keyboardData = new KeyboardData();
+            keyboardData.setInfo(layout.info);
 
-        if (!extraLayers.isEmpty() && defaultLayer == null) {
+            if (!layout.layers.hidden.isEmpty()) {
+                addKeyboardActions(keyboardData, layout.layers.hidden);
+            }
+
+            Layer defaultLayer = layout.layers.defaultLayer;
+            Map<ExtraLayer, Layer> extraLayers = layout.layers.extraLayers;
+
+            if (!extraLayers.isEmpty() && defaultLayer == null) {
+                return keyboardData;
+            }
+
+            if (defaultLayer != null) {
+                addLayer(keyboardData, Constants.DEFAULT_LAYER, defaultLayer);
+            }
+
+            for (Map.Entry<ExtraLayer, Layer> extraLayerMapEntry : extraLayers.entrySet()) {
+                int layer = extraLayerMapEntry.getKey().ordinal() + 2;
+                addLayer(keyboardData, layer, extraLayerMapEntry.getValue());
+            }
             return keyboardData;
+        } catch (IOException exception) {
+            throw new YamlParsingException(exception);
         }
-
-        if (defaultLayer != null) {
-            addLayer(keyboardData, Constants.DEFAULT_LAYER, defaultLayer);
-        }
-
-        for (Map.Entry<ExtraLayer, Layer> extraLayerMapEntry : extraLayers.entrySet()) {
-            int layer = extraLayerMapEntry.getKey().ordinal() + 2;
-            addLayer(keyboardData, layer, extraLayerMapEntry.getValue());
-        }
-
-        return keyboardData;
     }
 
-    private void addLayer(KeyboardData keyboardData, int layer, Layer layerData) {
+    private static void validateYaml(JsonNode node) {
+        Set<ValidationMessage> result = schema.validate(node);
+        if (!result.isEmpty()) {
+            Set<ValidationMessage> errors = new HashSet<>();
+            for (ValidationMessage error : result) {
+                if (error.getMessage().startsWith("$")) {
+                    errors.add(error);
+                } else {
+                    errors.add(new ValidationMessage.Builder()
+                            .type(error.getType())
+                            .code(error.getCode())
+                            .path(error.getPath())
+                            .details(error.getDetails())
+                            .arguments(error.getMessage())
+                            .format(new MessageFormat("{0}: {1}"))
+                            .build());
+                }
+            }
+            throw new InvalidYamlException(errors);
+        }
+    }
+
+    private static void addLayer(KeyboardData keyboardData, int layer, Layer layerData) {
         StringBuilder lowerCaseCharacters = new StringBuilder();
         StringBuilder upperCaseCharacters = new StringBuilder();
-        Pair<StringBuilder, StringBuilder> characterSets = Pair.of(lowerCaseCharacters, upperCaseCharacters);
+        Pair<StringBuilder, StringBuilder> characterSets =
+                Pair.of(lowerCaseCharacters, upperCaseCharacters);
 
-        for (Map.Entry<Direction, Part> sectorEntry : layerData.getSectors().entrySet()) {
+        for (Map.Entry<Direction, Part> sectorEntry : layerData.sectors.entrySet()) {
             Direction sector = sectorEntry.getKey();
 
-            for (Map.Entry<Direction, List<Action>> partEntry : sectorEntry.getValue().getParts().entrySet()) {
+            for (Map.Entry<Direction, List<Action>> partEntry : sectorEntry.getValue().parts.entrySet()) {
                 Direction part = partEntry.getKey();
                 Quadrant quadrant = new Quadrant(sector, part);
                 addKeyboardActions(keyboardData, layer, quadrant, partEntry.getValue(), characterSets);
@@ -88,24 +138,25 @@ public class KeyboardDataYamlParser {
         keyboardData.setUpperCaseCharacters(String.valueOf(upperCaseCharacters), layer);
     }
 
-    private void addKeyboardActions(KeyboardData keyboardData, List<Action> actions) {
+    private static void addKeyboardActions(KeyboardData keyboardData, List<Action> actions) {
         for (Action action : actions) {
-            List<FingerPosition> movementSequence = action.getMovementSequence();
+            List<FingerPosition> movementSequence = action.movementSequence;
 
             if (movementSequence.isEmpty()) {
                 continue;
             }
 
             KeyboardAction actionMap =
-                    new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(),
-                            action.getKeyCode(), action.getFlags(),
+                    new KeyboardAction(action.actionType, action.lowerCase, action.upperCase,
+                            action.getKeyCode(), action.flags.getValue(),
                             Constants.HIDDEN_LAYER);
             keyboardData.addActionMap(movementSequence, actionMap);
         }
     }
 
-    private void addKeyboardActions(KeyboardData keyboardData, int layer, Quadrant quadrant, List<Action> actions,
-                                    Pair<StringBuilder, StringBuilder> characterSets) {
+    private static void addKeyboardActions(KeyboardData keyboardData, int layer, Quadrant quadrant,
+                                           List<Action> actions,
+                                           Pair<StringBuilder, StringBuilder> characterSets) {
         int actionsSize = Math.min(actions.size(), 4);
 
         for (int i = 0; i < actionsSize; i++) {
@@ -116,35 +167,36 @@ public class KeyboardDataYamlParser {
 
             CharacterPosition characterPosition = CharacterPosition.values()[i];
 
-            List<FingerPosition> movementSequence = action.getMovementSequence();
+            List<FingerPosition> movementSequence = action.movementSequence;
 
             if (movementSequence.isEmpty()) {
-                movementSequence = MovementSequenceHelper.computeMovementSequence(layer, quadrant, characterPosition);
+                movementSequence =
+                        MovementSequenceHelper.computeMovementSequence(layer, quadrant, characterPosition);
             }
 
             int characterSetIndex = quadrant.getCharacterIndexInString(characterPosition);
 
-            if (!action.getLowerCase().isEmpty()) {
+            if (!action.lowerCase.isEmpty()) {
                 if (characterSets.getLeft().length() == 0) {
                     characterSets.getLeft().setLength(Constants.CHARACTER_SET_SIZE);
                 }
-                characterSets.getLeft().setCharAt(characterSetIndex, action.getLowerCase().charAt(0));
+                characterSets.getLeft().setCharAt(characterSetIndex, action.lowerCase.charAt(0));
 
-                if (action.getUpperCase().isEmpty()) {
-                    action.setUpperCase(action.getLowerCase().toUpperCase(Locale.ROOT));
+                if (action.upperCase.isEmpty()) {
+                    action.upperCase = action.lowerCase.toUpperCase(Locale.ROOT);
                 }
             }
 
-            if (!action.getUpperCase().isEmpty()) {
+            if (!action.upperCase.isEmpty()) {
                 if (characterSets.getRight().length() == 0) {
                     characterSets.getRight().setLength(Constants.CHARACTER_SET_SIZE);
                 }
-                characterSets.getRight().setCharAt(characterSetIndex, action.getUpperCase().charAt(0));
+                characterSets.getRight().setCharAt(characterSetIndex, action.upperCase.charAt(0));
             }
 
             KeyboardAction actionMap =
-                    new KeyboardAction(action.getActionType(), action.getLowerCase(), action.getUpperCase(),
-                            action.getKeyCode(), action.getFlags(),
+                    new KeyboardAction(action.actionType, action.lowerCase, action.upperCase,
+                            action.getKeyCode(), action.flags.getValue(),
                             layer);
 
             keyboardData.addActionMap(movementSequence, actionMap);

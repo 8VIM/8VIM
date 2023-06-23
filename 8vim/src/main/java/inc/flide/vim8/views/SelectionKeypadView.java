@@ -18,7 +18,8 @@ public class SelectionKeypadView extends ButtonKeypadView {
 
     public void initialize(Context context) {
         int foregroundColor =
-                ColorsHelper.getThemeColor(getContext(), R.attr.colorOnBackground, R.string.pref_board_fg_color_key,
+                ColorsHelper.getThemeColor(getContext(), R.attr.colorOnBackground,
+                        R.string.pref_board_fg_color_key,
                         R.color.defaultBoardFg);
 
         MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
@@ -36,7 +37,8 @@ public class SelectionKeypadView extends ButtonKeypadView {
         }
         setKeyboard(keyboard);
 
-        ButtonKeypadActionListener actionListener = new ButtonKeypadActionListener(mainInputMethodService, this);
+        ButtonKeypadActionListener actionListener =
+                new ButtonKeypadActionListener(mainInputMethodService, this);
         setOnKeyboardActionListener(actionListener);
     }
 }

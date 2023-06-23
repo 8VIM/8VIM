@@ -5,17 +5,21 @@ import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public final class SharedPreferenceHelper implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private final SharedPreferences sharedPreferences;
     private static SharedPreferenceHelper singleton = null;
+    private final SharedPreferences sharedPreferences;
     private final Set<String> prefKeys = new HashSet<>();
     private final List<Listener> listeners = new ArrayList<>();
 
-    public interface Listener {
-        void onPreferenceChanged();
+    private SharedPreferenceHelper(SharedPreferences sharedPreferences) {
+        this.sharedPreferences = sharedPreferences;
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     public static SharedPreferenceHelper getInstance(Context context) {
@@ -35,13 +39,8 @@ public final class SharedPreferenceHelper implements SharedPreferences.OnSharedP
         listeners.add(note);
     }
 
-    private SharedPreferenceHelper(SharedPreferences sharedPreferences) {
-        this.sharedPreferences = sharedPreferences;
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-    }
-
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+    public void onSharedPreferenceChanged(SharedPreferences pref, String s) {
         if (prefKeys.contains(s)) {
             for (Listener n : listeners) {
                 n.onPreferenceChanged();
@@ -83,5 +82,22 @@ public final class SharedPreferenceHelper implements SharedPreferences.OnSharedP
         }
 
         return preferenceBoolean;
+    }
+
+    public Set<String> getStringSet(String preferenceId, Set<String> defaultValue) {
+        prefKeys.add(preferenceId);
+        try {
+            return sharedPreferences.getStringSet(preferenceId, defaultValue);
+        } catch (Exception e) {
+            return defaultValue;
+        }
+    }
+
+    public SharedPreferences.Editor edit() {
+        return sharedPreferences.edit();
+    }
+
+    public interface Listener {
+        void onPreferenceChanged();
     }
 }

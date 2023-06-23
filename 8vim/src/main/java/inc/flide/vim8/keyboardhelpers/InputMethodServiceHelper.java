@@ -13,14 +13,30 @@ import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.LayoutFileName;
+import inc.flide.vim8.structures.exceptions.YamlException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
 public final class InputMethodServiceHelper {
+    private static boolean validateNoConflictingActions(
+            Map<List<FingerPosition>, KeyboardAction> mainKeyboardActionsMap,
+            Map<List<FingerPosition>, KeyboardAction> newKeyboardActionsMap) {
+
+        if (mainKeyboardActionsMap == null || mainKeyboardActionsMap.isEmpty()) {
+            return true;
+        }
+        for (Map.Entry<List<FingerPosition>, KeyboardAction> newKeyboardAction : newKeyboardActionsMap.entrySet()) {
+            if (mainKeyboardActionsMap.containsKey(newKeyboardAction.getKey())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     public static KeyboardData initializeKeyboardActionMap(Resources resources, Context context) {
-
         SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
         boolean useCustomSelectedKeyboardLayout = sharedPreferenceHelper.getBoolean(
                 context.getString(R.string.pref_use_custom_selected_keyboard_layout),
@@ -38,10 +54,7 @@ public final class InputMethodServiceHelper {
         KeyboardData mainKeyboardData = getLayoutIndependentKeyboardData(resources);
 
         int languageLayoutResourceId = loadTheSelectedLanguageLayout(resources, context);
-        addToKeyboardActionsMapUsingResourceId(
-                mainKeyboardData,
-                resources,
-                languageLayoutResourceId);
+        addToKeyboardActionsMapUsingResourceId(mainKeyboardData, resources, languageLayoutResourceId);
 
         return mainKeyboardData;
     }
@@ -51,7 +64,8 @@ public final class InputMethodServiceHelper {
         if (customLayoutUri == null) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putBoolean(context.getString(R.string.pref_use_custom_selected_keyboard_layout),
+            sharedPreferencesEditor.putBoolean(
+                    context.getString(R.string.pref_use_custom_selected_keyboard_layout),
                     false);
             sharedPreferencesEditor.apply();
 
@@ -59,66 +73,38 @@ public final class InputMethodServiceHelper {
         }
 
         KeyboardData mainKeyboardData = getLayoutIndependentKeyboardData(resources);
-        addToKeyboardActionsMapUsingUri(
-                mainKeyboardData,
-                context,
-                customLayoutUri);
+        addToKeyboardActionsMapUsingUri(mainKeyboardData, context, customLayoutUri);
 
         return mainKeyboardData;
     }
 
     private static KeyboardData getLayoutIndependentKeyboardData(Resources resources) {
         KeyboardData layoutIndependentKeyboardData = new KeyboardData();
-        addToKeyboardActionsMapUsingResourceId(
-                layoutIndependentKeyboardData,
-                resources,
-                R.raw.sector_circle_buttons);
-        addToKeyboardActionsMapUsingResourceId(
-                layoutIndependentKeyboardData,
-                resources,
-                R.raw.d_pad_actions);
-        addToKeyboardActionsMapUsingResourceId(
-                layoutIndependentKeyboardData,
-                resources,
-                R.raw.special_core_gestures);
+        addToKeyboardActionsMapUsingResourceId(layoutIndependentKeyboardData, resources, R.raw.sector_circle_buttons);
+        addToKeyboardActionsMapUsingResourceId(layoutIndependentKeyboardData, resources, R.raw.d_pad_actions);
+        addToKeyboardActionsMapUsingResourceId(layoutIndependentKeyboardData, resources, R.raw.special_core_gestures);
 
         return layoutIndependentKeyboardData;
-    }
-
-    @SuppressLint("DiscouragedApi")
-    private static int loadTheSelectedLanguageLayout(Resources resources, Context context) {
-        String currentLanguageLayout = SharedPreferenceHelper
-                .getInstance(context)
-                .getString(resources.getString(R.string.pref_selected_keyboard_layout),
-                        new LayoutFileName().getResourceName());
-
-        return resources.getIdentifier(currentLanguageLayout, "raw", context.getPackageName());
-    }
-
-    private static void addToKeyboardActionsMapUsingResourceId(KeyboardData keyboardData, Resources resources,
-                                                               int resourceId) {
-        try (InputStream inputStream = resources.openRawResource(resourceId)) {
-            addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream);
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
     }
 
     private static void addToKeyboardActionsMapUsingUri(KeyboardData keyboardData, Context context,
                                                         Uri customLayoutUri) {
         try (InputStream inputStream = context.getContentResolver().openInputStream(customLayoutUri)) {
             addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream);
-        } catch (Exception exception) {
+        } catch (IOException exception) {
             exception.printStackTrace();
         }
     }
 
     private static void addToKeyboardActionsMapUsingInputStream(KeyboardData keyboardData, InputStream inputStream)
-            throws Exception {
-        KeyboardDataYamlParser keyboardDataYamlParser = new KeyboardDataYamlParser(inputStream);
-        KeyboardData tempKeyboardData = keyboardDataYamlParser.readKeyboardData();
-        if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardData.getActionMap())) {
-            keyboardData.addAllToActionMap(tempKeyboardData.getActionMap());
+            throws YamlException {
+        KeyboardData tempKeyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
+        keyboardData.setInfo(tempKeyboardData.getInfo());
+
+        Map<List<FingerPosition>, KeyboardAction> tempKeyboardDataActionMap =
+                tempKeyboardData.getActionMap();
+        if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardDataActionMap)) {
+            keyboardData.addAllToActionMap(tempKeyboardDataActionMap);
         }
 
         for (int i = 0; i <= Constants.MAX_LAYERS; i++) {
@@ -130,26 +116,25 @@ public final class InputMethodServiceHelper {
                     && !tempKeyboardData.getUpperCaseCharacters(i).isEmpty()) {
                 keyboardData.setUpperCaseCharacters(tempKeyboardData.getUpperCaseCharacters(i), i);
             }
-
         }
     }
 
-    private static boolean validateNoConflictingActions(
-            Map<List<FingerPosition>, KeyboardAction> mainKeyboardActionsMap,
-            Map<List<FingerPosition>, KeyboardAction> newKeyboardActionsMap) {
-
-        if (mainKeyboardActionsMap == null || mainKeyboardActionsMap.isEmpty()) {
-            return true;
+    private static void addToKeyboardActionsMapUsingResourceId(KeyboardData keyboardData, Resources resources,
+                                                               int resourceId) {
+        try (InputStream inputStream = resources.openRawResource(resourceId)) {
+            addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream);
+        } catch (IOException exception) {
+            exception.printStackTrace();
         }
-        for (Map.Entry<List<FingerPosition>, KeyboardAction> newKeyboardAction : newKeyboardActionsMap.entrySet()) {
-            if (mainKeyboardActionsMap.containsKey(newKeyboardAction.getKey())) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
-    private InputMethodServiceHelper() {
+    @SuppressLint("DiscouragedApi")
+    private static int loadTheSelectedLanguageLayout(Resources resources, Context context) {
+        String currentLanguageLayout = SharedPreferenceHelper
+                .getInstance(context)
+                .getString(resources.getString(R.string.pref_selected_keyboard_layout),
+                        new LayoutFileName().getResourceName());
+
+        return resources.getIdentifier(currentLanguageLayout, "raw", context.getPackageName());
     }
 }
