@@ -17,7 +17,7 @@ android {
 
     compileSdkVersion 33
     def versionPropsFile = file('version.properties')
-    def Properties versionProps = new Properties()
+    Properties versionProps = new Properties()
     versionProps.load(new FileInputStream(versionPropsFile))
     defaultConfig {
 
