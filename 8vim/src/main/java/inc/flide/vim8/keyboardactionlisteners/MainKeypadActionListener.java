@@ -108,8 +108,9 @@ public class MainKeypadActionListener extends KeypadActionListener {
             }
 
             List<FingerPosition> startWith = movementSequence.subList(0, extraLayerMovementSequence.size());
-            if (extraLayerMovementSequences.contains(startWith)) {
-                return i + 2;
+            int layer = i + 2;
+            if (extraLayerMovementSequences.contains(startWith) && layer <= keyboardData.getTotalLayers()) {
+                return layer;
             }
         }
         List<FingerPosition> tempMovementSequence = new ArrayList<>(movementSequence);
