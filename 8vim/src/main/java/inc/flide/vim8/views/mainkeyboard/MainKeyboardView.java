@@ -50,7 +50,8 @@ public class MainKeyboardView extends ConstraintLayout {
     }
 
     private void setupMainKeyboardView(Context context) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater =
+                (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         boolean preferredSidebarLeft = SharedPreferenceHelper
                 .getInstance(context)
@@ -81,10 +82,12 @@ public class MainKeyboardView extends ConstraintLayout {
     private void setColors() {
         Context context = getContext();
         int backgroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.backgroundColor, R.string.pref_board_bg_color_key,
+                ColorsHelper.getThemeColor(context, R.attr.backgroundColor,
+                        R.string.pref_board_bg_color_key,
                         R.color.defaultBoardBg);
         int tintColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground, R.string.pref_board_fg_color_key,
+                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground,
+                        R.string.pref_board_fg_color_key,
                         R.color.defaultBoardFg);
 
         this.setBackgroundColor(backgroundColor);
@@ -97,7 +100,8 @@ public class MainKeyboardView extends ConstraintLayout {
 
     private void setupCtrlKey() {
         ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
-        ctrlKeyButton.setOnClickListener(view -> actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK));
+        ctrlKeyButton.setOnClickListener(
+                view -> actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK));
     }
 
     private void setupGoToSettingsButton() {

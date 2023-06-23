@@ -37,10 +37,12 @@ public abstract class ButtonKeypadView extends KeyboardView {
         Context context = getContext();
 
         int backgroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.backgroundColor, R.string.pref_board_bg_color_key,
+                ColorsHelper.getThemeColor(context, R.attr.backgroundColor,
+                        R.string.pref_board_bg_color_key,
                         R.color.defaultBoardBg);
         int foregroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground, R.string.pref_board_fg_color_key,
+                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground,
+                        R.string.pref_board_fg_color_key,
                         R.color.defaultBoardFg);
 
         this.setBackgroundColor(backgroundColor);
@@ -65,7 +67,8 @@ public abstract class ButtonKeypadView extends KeyboardView {
     public void onDraw(Canvas canvas) {
         for (Keyboard.Key key : getKeyboard().getKeys()) {
             if (key.label != null) {
-                canvas.drawText(key.label.toString(), (key.x * 2 + key.width) / 2f, (key.y * 2 + key.height) / 2f,
+                canvas.drawText(key.label.toString(), (key.x * 2 + key.width) / 2f,
+                        (key.y * 2 + key.height) / 2f,
                         this.foregroundPaint);
             }
             if (key.icon != null) {

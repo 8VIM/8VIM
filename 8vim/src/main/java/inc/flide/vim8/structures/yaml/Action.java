@@ -12,54 +12,12 @@ import java.util.Locale;
 
 public class Action {
     @JsonProperty(value = "type")
-    private KeyboardActionType actionType;
-    private String lowerCase;
-    private String upperCase;
-    private List<FingerPosition> movementSequence;
-    private int keyCode;
-
-    private int flags;
-
-    public Action() {
-        actionType = KeyboardActionType.INPUT_TEXT;
-        flags = 0;
-        lowerCase = "";
-        upperCase = "";
-        movementSequence = new ArrayList<>();
-        keyCode = 0;
-    }
-
-    public KeyboardActionType getActionType() {
-        return actionType;
-    }
-
-    public void setActionType(KeyboardActionType actionType) {
-        this.actionType = actionType;
-    }
-
-    public String getLowerCase() {
-        return lowerCase;
-    }
-
-    public void setLowerCase(String lowerCase) {
-        this.lowerCase = lowerCase;
-    }
-
-    public String getUpperCase() {
-        return upperCase;
-    }
-
-    public void setUpperCase(String upperCase) {
-        this.upperCase = upperCase;
-    }
-
-    public List<FingerPosition> getMovementSequence() {
-        return movementSequence;
-    }
-
-    public void setMovementSequence(List<FingerPosition> movementSequence) {
-        this.movementSequence = movementSequence;
-    }
+    public KeyboardActionType actionType = KeyboardActionType.INPUT_TEXT;
+    public String lowerCase = "";
+    public String upperCase = "";
+    public List<FingerPosition> movementSequence = new ArrayList<>();
+    public Flags flags = Flags.empty();
+    private int keyCode = 0;
 
     public int getKeyCode() {
         return keyCode;
@@ -83,18 +41,10 @@ public class Action {
         }
     }
 
-    public int getFlags() {
-        return flags;
-    }
-
-    public void setFlags(int flags) {
-        this.flags = flags;
-    }
-
     public boolean isEmpty() {
         return (lowerCase == null || lowerCase.isEmpty())
                 && (upperCase == null || upperCase.isEmpty())
                 && movementSequence.isEmpty()
-                && flags == 0;
+                && flags.getValue() == 0;
     }
 }

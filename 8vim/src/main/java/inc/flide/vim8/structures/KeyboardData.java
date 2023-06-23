@@ -1,5 +1,6 @@
 package inc.flide.vim8.structures;
 
+import inc.flide.vim8.structures.yaml.Layout;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ public class KeyboardData {
     private final Map<List<FingerPosition>, KeyboardAction> actionMap = new HashMap<>();
     private final CharacterSet[] characterSets = new CharacterSet[Constants.MAX_LAYERS + 1];
     private int totalLayers = 0;
+    private Layout.LayoutInfo info;
 
     public Map<List<FingerPosition>, KeyboardAction> getActionMap() {
         return actionMap;
@@ -72,5 +74,13 @@ public class KeyboardData {
         if (characterSets[layer] == null) {
             characterSets[layer] = new CharacterSet();
         }
+    }
+
+    public Layout.LayoutInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(Layout.LayoutInfo info) {
+        this.info = info;
     }
 }
