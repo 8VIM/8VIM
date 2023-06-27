@@ -68,6 +68,7 @@ android {
 }
 
 dependencies {
+    implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "androidx.constraintlayout:constraintlayout:${rootProject.androidXConstraintlayoutVersion}"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${rootProject.androidXLifecycleViewmodelVersion}"
     implementation "androidx.preference:preference:${rootProject.androidXPreferenceVersion}"
@@ -78,6 +79,12 @@ dependencies {
     implementation "com.google.android.material:material:${rootProject.androidMaterialVersion}"
     implementation "io.github.hijamoya:keyboardview:0.0.2"
     implementation "org.apache.commons:commons-text:${rootProject.apacheCommonTextVersion}"
+
+    implementation "androidx.emoji2:emoji2:${rootProject.emoji2Version}"
+    implementation "androidx.emoji2:emoji2-bundled:${rootProject.emoji2Version}"
+    implementation "androidx.emoji2:emoji2-emojipicker:${rootProject.emoji2Version}"
+    implementation "androidx.emoji2:emoji2-views:${rootProject.emoji2Version}"
+    implementation "androidx.emoji2:emoji2-views-helper:${rootProject.emoji2Version}"
 
     androidTestImplementation "androidx.test:core:${rootProject.androidXTestCoreVersion}"
     androidTestImplementation "androidx.test.ext:junit:${rootProject.androidXTestExtJUnitVersion}"

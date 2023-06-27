@@ -15,10 +15,13 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.emoji2.bundled.BundledEmojiCompatConfig;
+import androidx.emoji2.text.EmojiCompat;
 import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.views.EmojiView;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
@@ -34,6 +37,7 @@ public class MainInputMethodService extends InputMethodService {
     private NumberKeypadView numberKeypadView;
     private SelectionKeypadView selectionKeypadView;
     private SymbolKeypadView symbolKeypadView;
+    private EmojiView emojiView;
     private View currentKeypadView;
 
     private int shiftLockFlag;
@@ -91,6 +95,7 @@ public class MainInputMethodService extends InputMethodService {
         selectionKeypadView = new SelectionKeypadView(this);
         symbolKeypadView = new SymbolKeypadView(this);
         mainKeyboardView = new MainKeyboardView(this);
+        emojiView = new EmojiView(this);
         setCurrentKeypadView(mainKeyboardView);
         return currentKeypadView;
     }
@@ -245,6 +250,10 @@ public class MainInputMethodService extends InputMethodService {
 
     public void switchToNumberPad() {
         setCurrentKeypadView(numberKeypadView);
+    }
+
+    public void switchToEmoji() {
+        setCurrentKeypadView(emojiView);
     }
 
     public void cut() {
