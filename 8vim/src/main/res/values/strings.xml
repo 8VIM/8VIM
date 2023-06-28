@@ -21,6 +21,7 @@
     <string name="select_preferred_keyboard_layout_dialog_title">Choose the language</string>
     <string-array name="keyboard_layouts_id">
         <item>af</item>
+        <item>ar</item>
         <item>br</item>
         <item>bs</item>
         <item>ca</item>
