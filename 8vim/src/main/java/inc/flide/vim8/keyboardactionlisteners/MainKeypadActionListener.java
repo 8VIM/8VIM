@@ -22,24 +22,23 @@ import java.util.Set;
 
 public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 7;
-    private static final FingerPosition[][] ROTATION_MOVEMENT_SEQUENCES = {
-            {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+    private static final FingerPosition[][] ROTATION_MOVEMENT_SEQUENCES =
+            {{FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
                     FingerPosition.BOTTOM, FingerPosition.LEFT},
-            {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
-                    FingerPosition.BOTTOM, FingerPosition.RIGHT},
-            {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                    FingerPosition.TOP},
-            {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
-                    FingerPosition.BOTTOM},
-            {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
-                    FingerPosition.LEFT},
-            {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
-                    FingerPosition.RIGHT},
-            {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
-                    FingerPosition.TOP},
-            {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
-                    FingerPosition.BOTTOM},
-    };
+                    {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+                            FingerPosition.BOTTOM, FingerPosition.RIGHT},
+                    {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                            FingerPosition.LEFT, FingerPosition.TOP},
+                    {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
+                            FingerPosition.LEFT, FingerPosition.BOTTOM},
+                    {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
+                            FingerPosition.TOP, FingerPosition.LEFT},
+                    {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                            FingerPosition.TOP, FingerPosition.RIGHT},
+                    {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM,
+                            FingerPosition.RIGHT, FingerPosition.TOP},
+                    {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
+                            FingerPosition.RIGHT, FingerPosition.BOTTOM},};
     private static KeyboardData keyboardData;
     private final Set<List<FingerPosition>> extraLayerMovementSequences = new HashSet<>();
     private final Handler longPressHandler = new Handler();
@@ -179,7 +178,25 @@ public class MainKeypadActionListener extends KeypadActionListener {
                 currentLetter = null;
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT;
                 movementSequence.add(currentFingerPosition);
-            } else if (currentFingerPosition != FingerPosition.INSIDE_CIRCLE) {
+            } else if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
+                int layer = findLayer();
+                List<FingerPosition> extraLayerMovementSequences = new ArrayList<>();
+                int layerSize = 0;
+                if (layer > Constants.DEFAULT_LAYER) {
+                    extraLayerMovementSequences = ExtraLayer.MOVEMENT_SEQUENCES.get(ExtraLayer.values()[layer - 2]);
+                    layerSize = extraLayerMovementSequences.size() + 1;
+                }
+                boolean defaultLayerCondition =
+                        layer == Constants.DEFAULT_LAYER && movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
+                boolean extraLayerCondition = layer > Constants.DEFAULT_LAYER && movementSequence.size() > layerSize;
+                if (defaultLayerCondition || extraLayerCondition) {
+                    movementSequence.clear();
+                    currentLetter = null;
+                    currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT;
+                    movementSequence.addAll(extraLayerMovementSequences);
+                    movementSequence.add(currentFingerPosition);
+                }
+            } else {
                 List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
                 modifiedMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
                 KeyboardAction action = keyboardData.getActionMap().get(modifiedMovementSequence);
