@@ -107,11 +107,14 @@ public class MainKeypadActionListener extends KeypadActionListener {
             }
 
             List<FingerPosition> startWith = movementSequence.subList(0, extraLayerMovementSequence.size());
-            if (extraLayerMovementSequences.contains(startWith)) {
-                return i + 2;
+            int layer = i + 2;
+            if (extraLayerMovementSequences.contains(startWith) && layer <= keyboardData.getTotalLayers()) {
+                return layer;
             }
         }
-        return Constants.DEFAULT_LAYER;
+        List<FingerPosition> tempMovementSequence = new ArrayList<>(movementSequence);
+        tempMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
+        return keyboardData.findLayer(tempMovementSequence);
     }
 
     private boolean isFullRotation() {

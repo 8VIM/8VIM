@@ -76,4 +76,3 @@ layers:
             top:
               - null
               - lower_case: ć
-              - lower_case: ž

@@ -2,6 +2,7 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.8.10'
     id 'de.mannodermaus.android-junit5' version '1.9.3.0'
 }
+
 apply plugin: 'com.android.application'
 apply plugin: 'checkstyle'
 

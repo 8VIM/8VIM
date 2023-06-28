@@ -58,6 +58,10 @@ layers:
   extra_layers:
     first:
       sectors:
+        right:
+          parts:
+            top:
+              - lower_case: â
         top:
           parts:
             left:
@@ -75,3 +79,4 @@ layers:
           parts:
             right:
               - lower_case: ö
+              - lower_case: ü
