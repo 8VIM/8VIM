@@ -1,0 +1,112 @@
+layers:
+  default:
+    sectors:
+      right:
+        parts:
+          bottom:
+            - lower_case: "و"
+              upper_case: "ؤ"
+            - lower_case: "ر"
+            - lower_case: "ح"
+            - lower_case: "؟"
+              upper_case: "!"
+          top:
+            - lower_case: "ا"
+              upper_case: "أ"
+            - lower_case: "ع"
+            - lower_case: "ج"
+            - lower_case: "ظ"
+      top:
+        parts:
+          right:
+            - lower_case: "ه"
+            - lower_case: "ف"
+            - lower_case: "ص"
+              upper_case: 'ﷺ'
+            - lower_case: "ط"
+          left:
+            - lower_case: "م"
+            - lower_case: "ق"
+            - lower_case: "ذ"
+            - lower_case: "'"
+              upper_case: '"'
+      left:
+        parts:
+          top:
+            - lower_case: "ن"
+            - lower_case: "د"
+            - lower_case: "ث"
+            - lower_case: .
+              upper_case: "-"
+          bottom:
+            - lower_case: "ي"
+              upper_case: "ئ"
+            - lower_case: "ت"
+              upper_case: "ة"
+            - lower_case: "خ"
+            - lower_case: ","
+              upper_case: _
+      bottom:
+        parts:
+          left:
+            - lower_case: "ل"
+            - lower_case: "س"
+            - lower_case: "ش"
+            - lower_case: "ض"
+          right:
+            - lower_case: "ب"
+              upper_case: '﷽'
+            - lower_case: "ك"
+            - lower_case: "ز"
+            - lower_case: "غ"
+  extra_layers:
+    first:
+      sectors:
+        top:
+          parts:
+            left:
+              - lower_case: "٢"
+              - lower_case: "٣"
+              - lower_case: "٤"
+              - lower_case: "٥"
+            right:
+              - lower_case: "٦"
+              - lower_case: "٧"
+              - lower_case: "٨"
+              - lower_case: "٩"
+        right:
+          parts:
+            top:
+              - lower_case: "َ"
+              - lower_case: "ً"
+              - lower_case: "آ"
+              - lower_case: "إ"
+            bottom:
+              - lower_case: "ُ"
+              - lower_case: "ٌ"
+              - lower_case: "’"
+              - lower_case: null
+        bottom:
+          parts:
+            right:
+              - lower_case: "ى"
+              - lower_case: null
+              - lower_case: null
+              - lower_case: null
+            left:
+              - lower_case: "ـ"
+              - lower_case: null
+              - lower_case: null
+              - lower_case: null
+        left:
+          parts:
+            bottom:
+              - lower_case: "ِ"
+              - lower_case: "ٍ"
+              - lower_case: null
+              - lower_case: null
+            top:
+              - lower_case: "ّ"
+              - lower_case: "٠"
+              - lower_case: "١"
+              - lower_case: null
