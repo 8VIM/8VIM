@@ -1,4 +1,4 @@
-package inc.flide.vim8.views;
+package inc.flide.vim8.ui.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import com.hijamoya.keyboardview.Keyboard;
 import com.hijamoya.keyboardview.KeyboardView;
+import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
@@ -15,34 +16,37 @@ import inc.flide.vim8.utils.ColorsHelper;
 public abstract class ButtonKeypadView extends KeyboardView {
 
     private final Paint foregroundPaint = new Paint();
+    protected MainInputMethodService mainInputMethodService;
     private Typeface font;
 
     public ButtonKeypadView(Context context) {
         super(context, null, R.attr.keyboardViewStyle, R.style.KeyboardView);
-        initialize();
+        mainInputMethodService = (MainInputMethodService) context;
+        initialize(context);
     }
 
-    protected void initialize() {
+    protected void initialize(Context context) {
         this.setHapticFeedbackEnabled(true);
 
-        font = Typeface.createFromAsset(getContext().getAssets(),
-                "SF-UI-Display-Regular.otf");
+        font = Typeface.createFromAsset(getContext().getAssets(), "SF-UI-Display-Regular.otf");
 
         setColors();
-        SharedPreferenceHelper.getInstance(getContext()).addListener(this::setColors);
+        SharedPreferenceHelper.getInstance(getContext())
+                .addListener(this::setColors,
+                        context.getString(R.string.pref_board_fg_color_key),
+                        context.getString(R.string.pref_board_bg_color_key),
+                        context.getString(R.string.pref_color_mode_key));
+
         this.setPreviewEnabled(false);
     }
 
     private void setColors() {
         Context context = getContext();
 
-        int backgroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.backgroundColor,
-                        R.string.pref_board_bg_color_key,
-                        R.color.defaultBoardBg);
+        int backgroundColor = ColorsHelper.getThemeColor(context, R.attr.colorSurface, R.string.pref_board_bg_color_key,
+                R.color.defaultBoardBg);
         int foregroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground,
-                        R.string.pref_board_fg_color_key,
+                ColorsHelper.getThemeColor(context, R.attr.colorOnSurface, R.string.pref_board_fg_color_key,
                         R.color.defaultBoardFg);
 
         this.setBackgroundColor(backgroundColor);
@@ -55,20 +59,17 @@ public abstract class ButtonKeypadView extends KeyboardView {
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
-                MeasureSpec.getSize(widthMeasureSpec),
-                MeasureSpec.getSize(heightMeasureSpec),
-                getResources().getConfiguration().orientation);
-
+        Dimension computedDimension = InputMethodViewHelper.computeDimension(getResources());
         setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
+        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         for (Keyboard.Key key : getKeyboard().getKeys()) {
             if (key.label != null) {
-                canvas.drawText(key.label.toString(), (key.x * 2 + key.width) / 2f,
-                        (key.y * 2 + key.height) / 2f,
+                canvas.drawText(key.label.toString(), (key.x * 2 + key.width) / 2f, (key.y * 2 + key.height) / 2f,
                         this.foregroundPaint);
             }
             if (key.icon != null) {

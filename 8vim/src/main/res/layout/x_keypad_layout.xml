@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<inc.flide.vim8.views.mainkeyboard.XpadView xmlns:android="http://schemas.android.com/apk/res/android"
+<inc.flide.vim8.ui.views.mainkeyboard.XpadView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_alignParentBottom="true"
     android:layout_gravity="bottom"
-    android:elevation="10dp"
-    android:outlineProvider="bounds"
-    />
+    android:outlineProvider="bounds" />

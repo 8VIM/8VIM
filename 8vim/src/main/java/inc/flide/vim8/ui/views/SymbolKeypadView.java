@@ -1,8 +1,7 @@
-package inc.flide.vim8.views;
+package inc.flide.vim8.ui.views;
 
 import android.content.Context;
 import com.hijamoya.keyboardview.Keyboard;
-import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardactionlisteners.ButtonKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
@@ -17,8 +16,7 @@ public class SymbolKeypadView extends ButtonKeypadView {
     }
 
     public void initialize(Context context) {
-        MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
-
+        super.initialize(context);
         Keyboard keyboard = new Keyboard(context, R.layout.symbols_keypad_view);
         setColors(keyboard);
         this.setKeyboard(keyboard);
@@ -27,12 +25,15 @@ public class SymbolKeypadView extends ButtonKeypadView {
                 new ButtonKeypadActionListener(mainInputMethodService, this);
         this.setOnKeyboardActionListener(actionListener);
 
-        SharedPreferenceHelper.getInstance(context).addListener(() -> setColors(keyboard));
+        SharedPreferenceHelper.getInstance(context).addListener(() -> setColors(keyboard),
+                context.getString(R.string.pref_board_fg_color_key),
+                context.getString(R.string.pref_board_bg_color_key),
+                context.getString(R.string.pref_color_mode_key));
     }
 
     private void setColors(Keyboard keyboard) {
         int foregroundColor =
-                ColorsHelper.getThemeColor(getContext(), R.attr.colorOnBackground,
+                ColorsHelper.getThemeColor(getContext(), R.attr.colorOnSurface,
                         R.string.pref_board_fg_color_key,
                         R.color.defaultBoardFg);
 

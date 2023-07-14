@@ -1,11 +1,15 @@
 package inc.flide.vim8;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.inputmethodservice.InputMethodService;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -15,21 +19,17 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.emoji2.bundled.BundledEmojiCompatConfig;
-import androidx.emoji2.text.EmojiCompat;
 import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.KeyboardData;
-import inc.flide.vim8.views.EmojiView;
-import inc.flide.vim8.views.NumberKeypadView;
-import inc.flide.vim8.views.SelectionKeypadView;
-import inc.flide.vim8.views.SymbolKeypadView;
-import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
+import inc.flide.vim8.ui.views.NumberKeypadView;
+import inc.flide.vim8.ui.views.SelectionKeypadView;
+import inc.flide.vim8.ui.views.SymbolKeypadView;
+import inc.flide.vim8.ui.views.mainkeyboard.MainKeyboardView;
 import java.util.List;
 
 public class MainInputMethodService extends InputMethodService {
-
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
 
@@ -37,7 +37,6 @@ public class MainInputMethodService extends InputMethodService {
     private NumberKeypadView numberKeypadView;
     private SelectionKeypadView selectionKeypadView;
     private SymbolKeypadView symbolKeypadView;
-    private EmojiView emojiView;
     private View currentKeypadView;
 
     private int shiftLockFlag;
@@ -54,8 +53,9 @@ public class MainInputMethodService extends InputMethodService {
     public void onCreate() {
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         Context applicationContext = getApplicationContext();
-        switch (SharedPreferenceHelper.getInstance(applicationContext)
-                .getString(getString(R.string.pref_color_mode_key), "system")) {
+        String colorMode = SharedPreferenceHelper.getInstance(applicationContext)
+                .getString(getString(R.string.pref_color_mode_key), "system");
+        switch (colorMode) {
             case "dark":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                 setTheme(R.style.AppThemeDark_NoActionBar);
@@ -65,6 +65,9 @@ public class MainInputMethodService extends InputMethodService {
                 setTheme(R.style.AppThemeLight_NoActionBar);
                 break;
             default:
+                if (colorMode.equals("system")) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                }
                 setTheme(R.style.AppTheme_NoActionBar);
         }
         super.onCreate();
@@ -95,7 +98,6 @@ public class MainInputMethodService extends InputMethodService {
         selectionKeypadView = new SelectionKeypadView(this);
         symbolKeypadView = new SymbolKeypadView(this);
         mainKeyboardView = new MainKeyboardView(this);
-        emojiView = new EmojiView(this);
         setCurrentKeypadView(mainKeyboardView);
         return currentKeypadView;
     }
@@ -109,6 +111,14 @@ public class MainInputMethodService extends InputMethodService {
     @Override
     public void onBindInput() {
         inputConnection = getCurrentInputConnection();
+    }
+
+    @Override
+    public boolean onEvaluateFullscreenMode() {
+        int orientation = getResources().getConfiguration().orientation;
+        DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
+        float heightDp = displayMetrics.heightPixels / displayMetrics.density;
+        return orientation == Configuration.ORIENTATION_LANDSCAPE && heightDp < 480f;
     }
 
     @Override
@@ -153,28 +163,14 @@ public class MainInputMethodService extends InputMethodService {
 
     public void sendDownKeyEvent(int keyEventCode, int flags) {
         inputConnection.sendKeyEvent(
-                new KeyEvent(
-                        SystemClock.uptimeMillis(),
-                        SystemClock.uptimeMillis(),
-                        KeyEvent.ACTION_DOWN,
-                        keyEventCode,
-                        0,
-                        flags
-                )
-        );
+                new KeyEvent(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), KeyEvent.ACTION_DOWN, keyEventCode,
+                        0, flags));
     }
 
     public void sendUpKeyEvent(int keyEventCode, int flags) {
         inputConnection.sendKeyEvent(
-                new KeyEvent(
-                        SystemClock.uptimeMillis(),
-                        SystemClock.uptimeMillis(),
-                        KeyEvent.ACTION_UP,
-                        keyEventCode,
-                        0,
-                        flags
-                )
-        );
+                new KeyEvent(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), KeyEvent.ACTION_UP, keyEventCode,
+                        0, flags));
     }
 
     public void sendDownAndUpKeyEvent(int keyEventCode, int flags) {
@@ -183,26 +179,28 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public void switchToExternalEmoticonKeyboard() {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        IBinder tokenIBinder = this.getWindow().getWindow().getAttributes().token;
         String keyboardId = getSelectedEmoticonKeyboardId();
         if (keyboardId.isEmpty()) {
-            inputMethodManager.switchToLastInputMethod(tokenIBinder);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                switchToPreviousInputMethod();
+            } else {
+                InputMethodManager inputMethodManager =
+                        (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                IBinder tokenIBinder = this.getWindow().getWindow().getAttributes().token;
+                inputMethodManager.switchToLastInputMethod(tokenIBinder);
+            }
         } else {
-            inputMethodManager.setInputMethod(tokenIBinder, keyboardId);
+            switchInputMethod(keyboardId);
         }
 
     }
 
     private String getSelectedEmoticonKeyboardId() {
-        String emoticonKeyboardId = SharedPreferenceHelper
-                .getInstance(getApplicationContext())
+        String emoticonKeyboardId = SharedPreferenceHelper.getInstance(getApplicationContext())
                 .getString(getString(R.string.pref_selected_emoticon_keyboard), "");
 
         // Before returning verify that this keyboard Id we have does exist in the system.
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         List<InputMethodInfo> enabledInputMethodList = inputMethodManager.getEnabledInputMethodList();
         for (InputMethodInfo inputMethodInfo : enabledInputMethodList) {
             if (inputMethodInfo.getId().compareTo(emoticonKeyboardId) == 0) {
@@ -213,8 +211,7 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public void sendKey(int keyEventCode, int flags) {
-        sendDownAndUpKeyEvent(keyEventCode,
-                getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags);
+        sendDownAndUpKeyEvent(keyEventCode, getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags);
         clearModifierFlags();
     }
 
@@ -246,14 +243,11 @@ public class MainInputMethodService extends InputMethodService {
 
     public void switchToMainKeypad() {
         setCurrentKeypadView(mainKeyboardView);
+        mainKeyboardView.switchToXPad();
     }
 
     public void switchToNumberPad() {
         setCurrentKeypadView(numberKeypadView);
-    }
-
-    public void switchToEmoji() {
-        setCurrentKeypadView(emojiView);
     }
 
     public void cut() {

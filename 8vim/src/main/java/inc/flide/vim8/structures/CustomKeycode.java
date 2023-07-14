@@ -82,8 +82,7 @@ public enum CustomKeycode {
                 mainInputMethodService.switchToSelectionKeypad();
                 break;
             case SWITCH_TO_EMOTICON_KEYBOARD:
-                mainInputMethodService.switchToEmoji();
-//                mainInputMethodService.switchToExternalEmoticonKeyboard();
+                mainInputMethodService.switchToExternalEmoticonKeyboard();
                 break;
             case HIDE_KEYBOARD:
                 mainInputMethodService.hideKeyboard();

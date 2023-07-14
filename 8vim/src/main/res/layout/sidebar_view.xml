@@ -2,11 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    android:background="@color/translucent"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:ignore="Overdraw">
+
 
     <ImageButton
         android:id="@+id/switchToEmojiKeyboard"
@@ -58,11 +57,48 @@
         android:contentDescription="@string/open_keyboard_settings_button_content_description"
         android:scaleType="centerInside"
         android:src="@drawable/key_icon_settings"
-        app:layout_constraintBottom_toTopOf="@id/ctrlButton"
+        app:layout_constraintBottom_toTopOf="@id/language_vf_wrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/switchToSelectionKeyboard"
         app:layout_constraintVertical_weight="1" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/language_vf_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/ctrlButton"
+        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_weight="1">
+
+        <ViewFlipper
+            android:id="@+id/language_selection_buttons_view_flipper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/language_selection_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ripple"
+                android:contentDescription="@string/open_language_selection_button_description"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_language">
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/x_pad_view_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ripple"
+                android:contentDescription="@string/switch_back_to_keyboard_button_description"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_viii">
+            </ImageButton>
+        </ViewFlipper>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageButton
         android:id="@+id/ctrlButton"
@@ -75,7 +111,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton"
+        app:layout_constraintTop_toBottomOf="@id/language_vf_wrapper"
         app:layout_constraintVertical_weight="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

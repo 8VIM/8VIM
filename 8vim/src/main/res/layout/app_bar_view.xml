@@ -7,7 +7,7 @@
     android:clipToPadding="false"
     android:elevation="10dp"
     android:outlineProvider="bounds"
-    tools:context="inc.flide.vim8.ui.SettingsActivity">
+    tools:context="inc.flide.vim8.ui.activities.SettingsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"

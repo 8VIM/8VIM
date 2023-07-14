@@ -1,4 +1,4 @@
-package inc.flide.vim8.views.mainkeyboard;
+package inc.flide.vim8.ui.views.mainkeyboard;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,12 +9,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import inc.flide.vim8.MainInputMethodService;
@@ -27,6 +29,8 @@ import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.utils.ColorsHelper;
 import java.util.Random;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class XpadView extends View {
     public static final float FOREGROUND_STROKE_FACTOR = 0.75f;
@@ -39,6 +43,7 @@ public class XpadView extends View {
     private static final short TRAIL_STEPS = 150;
     private static final byte TRAIL_STEP_DISTANCE = 5;
     private static final byte TRAIL_MAX_RADIUS = 14;
+    private final Logger log = LoggerFactory.getLogger(XpadView.class);
     private final Random rnd = new Random();
     private final Path typingTrailPath = new Path();
     private final Paint backgroundPaint = new Paint();
@@ -66,6 +71,12 @@ public class XpadView extends View {
     private int circleOffsetFactor;
     private int iconAlpha;
     private float letterHighlightRoundness;
+    private String prefCircleScalaFactor;
+    private String prefTrailColorKey;
+    private String prefRandomTrailColorKey;
+    private String prefCircleXOffsetKey;
+    private String prefCircleYOffsetKey;
+    private SharedPreferenceHelper sharedPreferenceHelper;
 
     public XpadView(Context context) {
         super(context);
@@ -83,11 +94,27 @@ public class XpadView extends View {
     }
 
     private void initialize(Context context) {
-        SharedPreferenceHelper.getInstance(context).addListener(() -> {
-            this.updateColors(context);
-            this.computeComponentPositions(this.getWidth(), this.getHeight());
-            this.invalidate();
-        });
+        prefCircleScalaFactor = context.getString(R.string.pref_circle_scale_factor);
+        String prefBoardFgColorKey = context.getString(R.string.pref_board_fg_color_key);
+        String prefBoardBgColorKey = context.getString(R.string.pref_board_bg_color_key);
+        prefTrailColorKey = context.getString(R.string.pref_trail_color_key);
+        prefRandomTrailColorKey = context.getString(R.string.pref_random_trail_color_key);
+        String prefColorModeKey = context.getString(R.string.pref_color_mode_key);
+        prefCircleXOffsetKey = context.getString(R.string.pref_circle_x_offset_key);
+        prefCircleYOffsetKey = context.getString(R.string.pref_circle_y_offset_key);
+
+        sharedPreferenceHelper = SharedPreferenceHelper
+                .getInstance(context)
+                .addListener(() -> updateColors(context),
+                        prefBoardFgColorKey,
+                        prefBoardBgColorKey,
+                        prefTrailColorKey,
+                        prefRandomTrailColorKey,
+                        prefColorModeKey)
+                .addListener(() -> {
+                    this.computeComponentPositions(this.getWidth(), this.getHeight());
+                    this.invalidate();
+                }, prefCircleScalaFactor, prefCircleXOffsetKey, prefCircleYOffsetKey);
         Typeface font = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Regular.otf");
         Typeface fontBold = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Bold.otf");
 
@@ -97,6 +124,7 @@ public class XpadView extends View {
         setForegroundPaint(foregroundHighlightPaint, fontBold);
 
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
+        actionListener.startLongPressHandler();
         setHapticFeedbackEnabled(true);
     }
 
@@ -116,24 +144,19 @@ public class XpadView extends View {
 
     private void updateColors(Context context) {
         Resources resources = getResources();
-        SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
-
         int backgroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.backgroundColor,
+                ColorsHelper.getThemeColor(context, R.attr.colorSurface,
                         R.string.pref_board_bg_color_key,
                         R.color.defaultBoardBg);
         foregroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground,
+                ColorsHelper.getThemeColor(context, R.attr.colorOnSurface,
                         R.string.pref_board_fg_color_key,
                         R.color.defaultBoardFg);
 
-        userPreferRandomTrailColor = sharedPreferenceHelper.getBoolean(
-                resources.getString(R.string.pref_random_trail_color_key),
-                false);
+        userPreferRandomTrailColor = sharedPreferenceHelper.getBoolean(prefRandomTrailColorKey, false);
 
-        int trailColor = sharedPreferenceHelper.getInt(
-                resources.getString(R.string.pref_trail_color_key),
-                resources.getColor(R.color.defaultTrail));
+        int trailColor =
+                sharedPreferenceHelper.getInt(prefTrailColorKey, resources.getColor(R.color.defaultTrail, null));
 
         backgroundPaint.setColor(backgroundColor);
         foregroundPaint.setColor(foregroundColor);
@@ -141,15 +164,13 @@ public class XpadView extends View {
     }
 
     private void computeComponentPositions(int fullWidth, int fullHeight) {
-        Context context = getContext();
-        SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(context);
-        float spRadiusValue = pref.getInt(context.getString(R.string.pref_circle_scale_factor), 3);
-        float radius = (spRadiusValue / circleRadiusFactor * keypadDimension.getWidth()) / 2;
+        float spRadiusValue = sharedPreferenceHelper.getInt(prefCircleScalaFactor, 3);
+        float radius = (spRadiusValue / circleRadiusFactor * keypadDimension.getHeight()) / 2;
 
         int offsetX =
-                (pref.getInt(context.getString(R.string.pref_circle_x_offset_key), 0)) * circleOffsetFactor;
+                (sharedPreferenceHelper.getInt(prefCircleXOffsetKey, 0)) * circleOffsetFactor;
         int offsetY =
-                (pref.getInt(context.getString(R.string.pref_circle_y_offset_key), 0)) * circleOffsetFactor;
+                (sharedPreferenceHelper.getInt(prefCircleYOffsetKey, 0)) * circleOffsetFactor;
         circleCenter.x = (keypadDimension.getWidth() / 2f) + offsetX;
         circleCenter.y = (keypadDimension.getHeight() / 2f) + offsetY;
 
@@ -225,11 +246,16 @@ public class XpadView extends View {
     }
 
     @Override
+    protected void onFocusChanged(boolean gainFocus, int direction, @Nullable Rect previouslyFocusedRect) {
+        super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
+    }
+
+    @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
         int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-        keypadDimension.setWidth((parentWidth / 6) * 5);
+        keypadDimension.setWidth((parentWidth));
         keypadDimension.setHeight(parentHeight);
 
         setMeasuredDimension(keypadDimension.getWidth(), keypadDimension.getHeight());
@@ -264,8 +290,7 @@ public class XpadView extends View {
         int centreXValue = (int) circle.getCentre().x;
         int centreYValue = (int) circle.getCentre().y;
 
-        boolean userPrefersSectorIcons = SharedPreferenceHelper
-                .getInstance(getContext())
+        boolean userPrefersSectorIcons = sharedPreferenceHelper
                 .getBoolean(
                         this.getContext().getString(R.string.pref_display_sector_icons_key),
                         true);
@@ -275,8 +300,7 @@ public class XpadView extends View {
         }
 
         //the text along the lines
-        boolean userPreferWheelLetters = SharedPreferenceHelper
-                .getInstance(getContext())
+        boolean userPreferWheelLetters = sharedPreferenceHelper
                 .getBoolean(
                         this.getContext().getString(R.string.pref_display_wheel_characters_key),
                         true);
@@ -483,4 +507,10 @@ public class XpadView extends View {
         }
     }
 
+    @Override
+    public void onScreenStateChanged(int screenState) {
+        if (screenState == SCREEN_STATE_OFF) {
+            actionListener.pauseLongPressHandler();
+        }
+    }
 }

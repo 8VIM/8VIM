@@ -69,7 +69,8 @@ public class InputMethodServiceHelperTest {
         keyboardDataMock = mock(KeyboardData.class);
 
         keyboardDataYamlParserMockedStatic = mockStatic(KeyboardDataYamlParser.class);
-        keyboardDataYamlParserMockedStatic.when(() -> KeyboardDataYamlParser.readKeyboardData(any())).thenReturn(keyboardDataMock);
+        keyboardDataYamlParserMockedStatic.when(() -> KeyboardDataYamlParser.readKeyboardData(any()))
+                .thenReturn(keyboardDataMock);
 
         sharedPreferenceHelper = mock(SharedPreferenceHelper.class);
         when(sharedPreferenceHelper.getString(anyString(), anyString())).thenReturn("en");

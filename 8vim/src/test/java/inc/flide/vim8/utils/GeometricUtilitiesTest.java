@@ -4,12 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import android.graphics.PointF;
-
+import inc.flide.vim8.structures.Direction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import inc.flide.vim8.structures.Direction;
 
 @ExtendWith(MockitoExtension.class)
 public class GeometricUtilitiesTest {

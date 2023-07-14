@@ -1,33 +1,45 @@
 plugins {
-    id 'org.jetbrains.kotlin.android' version '1.8.10'
-    id 'de.mannodermaus.android-junit5' version '1.9.3.0'
+    alias(libs.plugins.agp.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.mannodermaus.android.junit5)
 }
-apply plugin: 'com.android.application'
+
+
+def countCommitsSinceLastRelease = { ->
+    def lastTag = "git rev-list --tags --no-walk --max-count=1".execute().text.trim()
+    return "git rev-list ${lastTag}..master --count".execute().text.trim()
+}
+
 apply plugin: 'checkstyle'
+
+check.dependsOn('checkstyle')
 
 checkstyle {
     toolVersion = '10.12.0'
 }
-assemble.dependsOn('lint')
-check.dependsOn('checkstyle')
 
 android {
-
+    namespace 'inc.flide.vim8'
     compileSdkVersion 33
 
-    defaultConfig {
+    def versionMajor = 0
+    def versionMinor = 13
+    def versionPatch = 0
 
+    defaultConfig {
         applicationId "inc.flide.vi8"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 33
-        versionCode 16
-        versionName "iteration-13"
+        versionCode versionMajor * 1000 + versionMinor * 100 + versionPatch
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         vectorDrawables.useSupportLibrary = true
-
         resValue "string", "version_name", versionName
+        resValue "string", "app_name_with_flavour", "8Vim"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    bundle.language.enableSplit false
 
     if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
         signingConfigs {
@@ -50,58 +62,77 @@ android {
         }
     }
 
+    flavorDimensions "version"
+    productFlavors {
+        prod {
+            dimension "version"
+        }
+
+        rc {
+            dimension "version"
+            applicationIdSuffix ".rc"
+            versionNameSuffix "-rc.${countCommitsSinceLastRelease()}"
+            resValue "string", "version_name", android.defaultConfig.versionName + versionNameSuffix
+            resValue "string", "app_name_with_flavour", "8Vim RC"
+            versionCode 10000 + android.defaultConfig.versionCode
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-
     }
 
     lint {
         abortOnError true
         disable 'ObsoleteLintCustomCheck', 'ClickableViewAccessibility', 'VectorPath', 'UnusedResources', 'GradleDependency', 'OldTargetApi'
-        htmlOutput file('lint-report.html')
         htmlReport true
         warningsAsErrors true
     }
-
-    namespace 'inc.flide.vim8'
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:1.6.1"
-    implementation "androidx.constraintlayout:constraintlayout:${rootProject.androidXConstraintlayoutVersion}"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${rootProject.androidXLifecycleViewmodelVersion}"
-    implementation "androidx.preference:preference:${rootProject.androidXPreferenceVersion}"
-    implementation "com.afollestad.material-dialogs:core:${rootProject.materialDialogs}"
-    implementation 'com.networknt:json-schema-validator:1.0.73'
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${rootProject.jacksonYamlVersion}"
-    implementation "com.github.kizitonwose.colorpreference:support:${rootProject.colorPreferenceVersion}"
-    implementation "com.google.android.material:material:${rootProject.androidMaterialVersion}"
-    implementation "io.github.hijamoya:keyboardview:0.0.2"
-    implementation "org.apache.commons:commons-text:${rootProject.apacheCommonTextVersion}"
+    implementation(libs.android.material)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.preference)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.apache.commons.text)
+    implementation(libs.colorpreference)
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.json.schema.validator)
+    implementation(libs.keyboardview)
+    implementation(libs.logback.android)
+    implementation(libs.material.dialog.core)
+    implementation(libs.slf4j.api)
 
-    implementation "androidx.emoji2:emoji2:${rootProject.emoji2Version}"
-    implementation "androidx.emoji2:emoji2-bundled:${rootProject.emoji2Version}"
-    implementation "androidx.emoji2:emoji2-emojipicker:${rootProject.emoji2Version}"
-    implementation "androidx.emoji2:emoji2-views:${rootProject.emoji2Version}"
-    implementation "androidx.emoji2:emoji2-views-helper:${rootProject.emoji2Version}"
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.ext)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.junit4)
 
-    androidTestImplementation "androidx.test:core:${rootProject.androidXTestCoreVersion}"
-    androidTestImplementation "androidx.test.ext:junit:${rootProject.androidXTestExtJUnitVersion}"
-//    androidTestImplementation "androidx.test.ext:truth:${rootProject.androidXTesExtTruthVersion}"
-    androidTestImplementation "androidx.test:runner:${rootProject.androidXTestRunnerVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-core:${rootProject.espressoVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-contrib:${rootProject.espressoVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:${rootProject.espressoVersion}"
-    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:${rootProject.espressoVersion}"
-    androidTestImplementation "org.mockito:mockito-android:${rootProject.mockitoVersion}"
+    testImplementation(libs.logback.classic)
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.junit5.api)
+    testRuntimeOnly(libs.junit5.jupiter.engine)
+    testRuntimeOnly(libs.junit5.vintage.engine)
+    testImplementation(libs.jqwik)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.junit5)
+}
 
-    androidTestImplementation "junit:junit:${rootProject.junit4Version}"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:${rootProject.junit5Version}"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${rootProject.junit5Version}"
-    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:${rootProject.junit5Version}"
-    testImplementation "net.jqwik:jqwik:${rootProject.jqwikVersion}"
-    testImplementation "org.assertj:assertj-core:${rootProject.assertJVersion}"
-    testImplementation "org.mockito:mockito-core:${rootProject.mockitoVersion}"
-    testImplementation "org.mockito:mockito-junit-jupiter:${rootProject.mockitoVersion}"
+configurations.testImplementation {
+    exclude module: 'logback-android'
+}
+
+task checkstyle(type: Checkstyle) {
+    showViolations = true
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    exclude '**/R.java'
+
+    classpath = files()
 }

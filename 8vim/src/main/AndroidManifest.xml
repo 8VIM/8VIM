@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="false"
         android:icon="@drawable/app_icon"
-        android:label="@string/app_name"
+        android:label="@string/app_name_with_flavour"
         android:supportsRtl="false"
         tools:replace="android:supportsRtl"
         tools:targetApi="s">
@@ -25,7 +26,7 @@
         </service>
 
         <activity
-            android:name="inc.flide.vim8.ui.SettingsActivity"
+            android:name="inc.flide.vim8.ui.activities.SettingsActivity"
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize">
@@ -37,16 +38,17 @@
                 <category android:name="android.intent.category.OPENABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:scheme="file" />
-                <data android:mimeType="application/octet-stream" />
+                <data
+                    android:host="*"
+                    android:mimeType="application/octet-stream"
+                    android:scheme="file" />
                 <data android:pathPattern=".*\\.yaml" />
                 <data android:pathPattern=".*\\.yml" />
-                <data android:host="*" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name=".ui.AboutUsActivity"
+            android:name=".ui.activities.AboutUsActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
 

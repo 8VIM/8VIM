@@ -102,24 +102,28 @@ public class KeyboardDataYamlParserTest {
     @Test
     void parse_invalid_file_format() {
         InputStream inputStream = getClass().getResourceAsStream("/invalid_file.yaml");
-        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> KeyboardDataYamlParser.readKeyboardData(inputStream));
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(
+                () -> KeyboardDataYamlParser.readKeyboardData(inputStream));
     }
 
     @Test
     void parse_invalid_extra_layers() {
         InputStream inputStream = getClass().getResourceAsStream("/extra_layers.yaml");
-        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> KeyboardDataYamlParser.readKeyboardData(inputStream));
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(
+                () -> KeyboardDataYamlParser.readKeyboardData(inputStream));
     }
 
     @Test
     void parse_no_layers_format() {
         InputStream inputStream = getClass().getResourceAsStream("/no_layers.yaml");
-        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> KeyboardDataYamlParser.readKeyboardData(inputStream));
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(
+                () -> KeyboardDataYamlParser.readKeyboardData(inputStream));
     }
 
     @Test
     void parse_non_yaml_file() {
         InputStream inputStream = getClass().getResourceAsStream("/invalid_file.xml");
-        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(() -> KeyboardDataYamlParser.readKeyboardData(inputStream));
+        assertThatExceptionOfType(InvalidYamlException.class).isThrownBy(
+                () -> KeyboardDataYamlParser.readKeyboardData(inputStream));
     }
 }

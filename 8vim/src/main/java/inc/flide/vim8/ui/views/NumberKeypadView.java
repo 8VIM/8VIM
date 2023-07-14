@@ -1,4 +1,4 @@
-package inc.flide.vim8.views;
+package inc.flide.vim8.ui.views;
 
 import android.content.Context;
 import com.hijamoya.keyboardview.Keyboard;
@@ -19,8 +19,7 @@ public class NumberKeypadView extends ButtonKeypadView {
     }
 
     public void initialize(Context context) {
-        MainInputMethodService mainInputMethodService = (MainInputMethodService) context;
-
+        super.initialize(context);
         Keyboard keyboard = new Keyboard(context, R.layout.number_keypad_view);
         setCurrencySymbolBasedOnLocale(keyboard);
         setColors(keyboard);
@@ -29,7 +28,9 @@ public class NumberKeypadView extends ButtonKeypadView {
         ButtonKeypadActionListener actionListener =
                 new ButtonKeypadActionListener(mainInputMethodService, this);
         setOnKeyboardActionListener(actionListener);
-        SharedPreferenceHelper.getInstance(getContext()).addListener(() -> setColors(keyboard));
+        SharedPreferenceHelper.getInstance(getContext()).addListener(() -> setColors(keyboard),
+                context.getString(R.string.pref_board_fg_color_key),
+                context.getString(R.string.pref_color_mode_key));
     }
 
     private void setCurrencySymbolBasedOnLocale(Keyboard keyboard) {
@@ -44,7 +45,7 @@ public class NumberKeypadView extends ButtonKeypadView {
 
     private void setColors(Keyboard keyboard) {
         int foregroundColor =
-                ColorsHelper.getThemeColor(getContext(), R.attr.colorOnBackground,
+                ColorsHelper.getThemeColor(getContext(), R.attr.colorOnSurface,
                         R.string.pref_board_fg_color_key,
                         R.color.defaultBoardFg);
 

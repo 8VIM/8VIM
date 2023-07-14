@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
@@ -19,32 +20,42 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 7;
-    private static final FingerPosition[][] ROTATION_MOVEMENT_SEQUENCES = {
-            {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
-                    FingerPosition.BOTTOM, FingerPosition.LEFT},
-            {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
-                    FingerPosition.BOTTOM, FingerPosition.RIGHT},
-            {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                    FingerPosition.TOP},
-            {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
-                    FingerPosition.BOTTOM},
-            {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
-                    FingerPosition.LEFT},
-            {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
-                    FingerPosition.RIGHT},
-            {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
-                    FingerPosition.TOP},
-            {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
-                    FingerPosition.BOTTOM},
-    };
+    private final static Set<List<FingerPosition>> extraLayerMovementSequences =
+            new HashSet<>(ExtraLayer.MOVEMENT_SEQUENCES.values());
+    private final static Set<List<FingerPosition>> ROTATION_MOVEMENT_SEQUENCES = Arrays
+            .stream(new FingerPosition[][] {
+                    {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+                            FingerPosition.BOTTOM, FingerPosition.LEFT},
+                    {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+                            FingerPosition.BOTTOM, FingerPosition.RIGHT},
+                    {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                            FingerPosition.LEFT,
+                            FingerPosition.TOP},
+                    {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
+                            FingerPosition.LEFT,
+                            FingerPosition.BOTTOM},
+                    {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
+                            FingerPosition.TOP,
+                            FingerPosition.LEFT},
+                    {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                            FingerPosition.TOP,
+                            FingerPosition.RIGHT},
+                    {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM,
+                            FingerPosition.RIGHT,
+                            FingerPosition.TOP},
+                    {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
+                            FingerPosition.RIGHT,
+                            FingerPosition.BOTTOM},
+            })
+            .map(Arrays::asList).collect(Collectors.toSet());
     private static KeyboardData keyboardData;
-    private final Set<List<FingerPosition>> extraLayerMovementSequences = new HashSet<>();
-    private final Handler longPressHandler = new Handler();
+    private final HandlerThread longPressHandlerThread = new HandlerThread("LongPressHandlerThread");
     private final List<FingerPosition> movementSequence;
-    private final Set<List<FingerPosition>> rotationMovementSequences = new HashSet<>();
+    private Handler longPressHandler;
     private FingerPosition currentFingerPosition;
     private String currentLetter;
     private boolean isLongPressCallbackSet;
@@ -61,13 +72,6 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     public MainKeypadActionListener(MainInputMethodService inputMethodService, View view) {
         super(inputMethodService, view);
-
-        for (FingerPosition[] movementSequences : ROTATION_MOVEMENT_SEQUENCES) {
-            rotationMovementSequences.add(Arrays.asList(movementSequences));
-        }
-
-        extraLayerMovementSequences.addAll(ExtraLayer.MOVEMENT_SEQUENCES.values());
-
         keyboardData = mainInputMethodService.buildKeyboardActionMap();
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
@@ -80,6 +84,16 @@ public class MainKeypadActionListener extends KeypadActionListener {
     public static void rebuildKeyboardData(Resources resources, Context context, Uri customLayoutUri) {
         keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resources, context,
                 customLayoutUri);
+    }
+
+    public void startLongPressHandler() {
+        longPressHandlerThread.start();
+        longPressHandler = new Handler(longPressHandlerThread.getLooper(), null);
+
+    }
+
+    public void pauseLongPressHandler() {
+        longPressHandler.removeCallbacks(longPressRunnable);
     }
 
     public String getLowerCaseCharacters(int layer) {
@@ -133,7 +147,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
             }
         }
         if (movementSequence.size() == size && layerCondition) {
-            return rotationMovementSequences.contains(movementSequence.subList(start, size));
+            return ROTATION_MOVEMENT_SEQUENCES.contains(movementSequence.subList(start, size));
         }
         return false;
     }
@@ -241,7 +255,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
         if (keyboardAction.getKeyboardActionType() == KeyboardActionType.INPUT_TEXT) {
             handleInputText(keyboardAction);
         } else {
-            handleInputKey(keyboardAction);
+            handleInputKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
         }
     }
 }

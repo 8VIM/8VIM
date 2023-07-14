@@ -1,5 +1,6 @@
 package inc.flide.vim8.structures;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -7,21 +8,28 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.OpenableColumns;
 import inc.flide.vim8.R;
+import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.keyboardhelpers.KeyboardDataYamlParser;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 
 public class AvailableLayouts {
-    private final Context context;
+    private static final String DEFAULT_FILENAME = "en";
+    private static AvailableLayouts singleton;
+    private final List<BiConsumer<Integer, Integer>> listeners = new ArrayList<>();
+    private final ContentResolver contentResolver;
     private final SharedPreferenceHelper sharedPreferences;
     private final String selectKeyboardLayout;
     private final String customKeyboardLayoutUri;
+    private final String customKeyboardLayoutHistory;
     private final String customSelectedKeyboardLayout;
     private Map<String, String> embeddedLayouts;
     private ArrayList<String> embeddedLayoutIds;
@@ -29,17 +37,26 @@ public class AvailableLayouts {
     private ArrayList<String> customLayoutHistoryUris;
     private Set<String> displayNames;
     private int index = -1;
+    private int defaultIndex;
 
-    public AvailableLayouts(SharedPreferenceHelper sharedPreferences, Context context, Resources resources) {
-        this.sharedPreferences = sharedPreferences;
-        this.context = context;
+    private AvailableLayouts(Context context, Resources resources) {
+        this.sharedPreferences = SharedPreferenceHelper.getInstance(context);
+        this.contentResolver = context.getContentResolver();
         selectKeyboardLayout = context.getString(R.string.pref_selected_keyboard_layout);
         customSelectedKeyboardLayout = context.getString(R.string.pref_use_custom_selected_keyboard_layout);
         customKeyboardLayoutUri = context.getString(R.string.pref_selected_custom_keyboard_layout_uri);
-        listEmbeddedLayouts(resources);
+        customKeyboardLayoutHistory = context.getString(R.string.pref_custom_keyboard_layout_history);
+        listEmbeddedLayouts(context, resources);
         listCustomLayoutHistory();
         updateDisplayNames();
         findIndex();
+    }
+
+    public static AvailableLayouts getInstance(Context context, Resources resources) {
+        if (singleton == null) {
+            singleton = new AvailableLayouts(context, resources);
+        }
+        return singleton;
     }
 
     public void reloadCustomLayouts() {
@@ -48,7 +65,7 @@ public class AvailableLayouts {
         findIndex();
     }
 
-    public void selectLayout(int which) {
+    public void selectLayout(Context context, Resources resources, int which) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         int embeddedLayoutSize = embeddedLayouts.size();
         if (which < embeddedLayoutSize) {
@@ -61,7 +78,11 @@ public class AvailableLayouts {
                     .putString(customKeyboardLayoutUri, customLayoutHistoryUris.get(which - embeddedLayoutSize));
         }
         editor.apply();
+        for (BiConsumer<Integer, Integer> listener : listeners) {
+            listener.accept(index, which);
+        }
         index = which;
+        MainKeypadActionListener.rebuildKeyboardData(resources, context);
     }
 
     public Set<String> getDisplayNames() {
@@ -72,16 +93,26 @@ public class AvailableLayouts {
         return index;
     }
 
+    public int getEmbeddedLayoutSize() {
+        return embeddedLayoutIds.size();
+    }
+
+    public boolean hasCustomLayouts() {
+        return !customLayoutHistoryUris.isEmpty();
+    }
+
+    public void onChange(BiConsumer<Integer, Integer> listener) {
+        listeners.add(listener);
+    }
+
     private void listCustomLayoutHistory() {
         LinkedHashSet<String> uris =
-                new LinkedHashSet<>(sharedPreferences.getStringSet(
-                        context.getString(R.string.pref_selected_custom_keyboard_layout_history),
-                        new LinkedHashSet<>()));
+                new LinkedHashSet<>(sharedPreferences.getStringSet(customKeyboardLayoutHistory, new LinkedHashSet<>()));
         customLayoutsHistory = new LinkedHashMap<>();
         LinkedHashSet<String> newUris = new LinkedHashSet<>();
         for (String customLayoutUriString : uris) {
             Uri customLayoutUri = Uri.parse(customLayoutUriString);
-            try (InputStream inputStream = context.getContentResolver().openInputStream(customLayoutUri)) {
+            try (InputStream inputStream = contentResolver.openInputStream(customLayoutUri)) {
                 KeyboardData keyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
                 int totalLayers = keyboardData.getTotalLayers();
                 if (totalLayers == 0) {
@@ -99,8 +130,10 @@ public class AvailableLayouts {
             } catch (Exception ignored) {
             }
         }
-        sharedPreferences.edit()
-                .putStringSet(context.getString(R.string.pref_selected_custom_keyboard_layout_history), newUris);
+        sharedPreferences
+                .edit()
+                .putStringSet(customKeyboardLayoutHistory, newUris)
+                .apply();
         customLayoutHistoryUris = new ArrayList<>(customLayoutsHistory.values());
     }
 
@@ -111,7 +144,7 @@ public class AvailableLayouts {
             if (scheme.equals("file")) {
                 fileName = uri.getLastPathSegment();
             } else if (scheme.equals("content")) {
-                Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+                Cursor cursor = contentResolver.query(uri, null, null, null, null);
                 if (cursor != null && cursor.getCount() != 0) {
                     int columnIndex = cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME);
                     cursor.moveToFirst();
@@ -127,7 +160,7 @@ public class AvailableLayouts {
         }
     }
 
-    private void listEmbeddedLayouts(Resources resources) {
+    private void listEmbeddedLayouts(Context context, Resources resources) {
         embeddedLayouts = new TreeMap<>();
         Context applicationContext = context.getApplicationContext();
         String[] fields = resources.getStringArray(R.array.keyboard_layouts_id);
@@ -139,6 +172,7 @@ public class AvailableLayouts {
             }
         }
         embeddedLayoutIds = new ArrayList<>(embeddedLayouts.values());
+        defaultIndex = embeddedLayoutIds.indexOf(DEFAULT_FILENAME);
     }
 
     private void findIndex() {
@@ -146,7 +180,7 @@ public class AvailableLayouts {
         boolean isCustom = sharedPreferences.getBoolean(customSelectedKeyboardLayout, false);
 
         String customLayoutUri = sharedPreferences.getString(customKeyboardLayoutUri, "");
-        String selectedKeyboardId = sharedPreferences.getString(selectKeyboardLayout, "");
+        String selectedKeyboardId = sharedPreferences.getString(selectKeyboardLayout, DEFAULT_FILENAME);
 
         index = -1;
         int embeddedLayoutSize = embeddedLayouts.size();
@@ -160,7 +194,13 @@ public class AvailableLayouts {
             index = customLayoutHistoryUris.indexOf(customLayoutUri);
             if (index == -1) {
                 // seems like we have a stale selection, it should be removed.
-                sharedPreferences.edit().remove(customKeyboardLayoutUri).remove(customSelectedKeyboardLayout).apply();
+                sharedPreferences
+                        .edit()
+                        .remove(customKeyboardLayoutUri)
+                        .putString(selectKeyboardLayout, DEFAULT_FILENAME)
+                        .putBoolean(customSelectedKeyboardLayout, false)
+                        .apply();
+                index = defaultIndex;
             } else {
                 index += embeddedLayoutSize;
             }
