@@ -1,0 +1,42 @@
+name: Merged pull request
+
+concurrency: release
+
+on:
+  pull_request_target:
+    branches: [master]
+    types: [closed]
+    paths:
+      - "**.gradle"
+      - "8vim/**"
+jobs:
+  changes:
+    if: ${{ github.event.pull_request.merged == true }}
+    name: Detect changed files
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      src: ${{ steps.changes.outputs.src }}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - 8vim/**/*.java
+              - 8vim/**/*.kt
+              - 8vim/**/*.xml
+              - 8vim/**/*.pro
+              - "**.gradle"
+              - 8vim/src/main/res/raw/*.ya?ml
+              - modified: '8vim/src/main/resources/schema.json'
+  bump_version:
+    needs: changes
+    if: ${{ needs.changes.outputs.src == 'true' }}
+    name: Update version
+    uses: ./.github/workflows/bump-version.yaml
+    with:
+      message: ${{github.event.pull_request.title}}
+      version: rc
+    secrets: inherit

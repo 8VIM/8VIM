@@ -14,22 +14,28 @@ assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 android {
-
-    compileSdkVersion 33
     def versionPropsFile = file('version.properties')
     Properties versionProps = new Properties()
     versionProps.load(new FileInputStream(versionPropsFile))
+    
+    def versionMajor = versionProps['MAJOR'].toInteger()
+    def versionMinor = versionProps['MINOR'].toInteger()
+    def versionPatch = versionProps['PATCH'].toInteger()
+    def versionRc = versionProps['RC'].toInteger()
+
+    compileSdkVersion 33
+    
     defaultConfig {
 
         applicationId "inc.flide.vi8"
         minSdkVersion 21
         targetSdkVersion 33
-        versionCode versionProps['VERSION_CODE'].toInteger()
-        versionName versionProps['VERSION_NAME']
 
+        versionCode versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - versionRc
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        resValue "string", "app_name_with_flavour", "My Application"
+        
         vectorDrawables.useSupportLibrary = true
-
-        resValue "string", "version_name", versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -51,6 +57,14 @@ android {
             if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
                 signingConfig signingConfigs.release
             }
+        }
+
+        create("rc") {
+            initWith release
+            applicationIdSuffix ".rc"
+            versionNameSuffix "-rc.${versionRc}"
+            resValue "string", "version_name", android.defaultConfig.versionName + versionNameSuffix
+            resValue "string", "app_name_with_flavour", "8VIM RC"
         }
     }
 

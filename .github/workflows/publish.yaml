@@ -1,0 +1,125 @@
+name: Publish 8VIM
+
+concurrency: release
+
+on:
+  push:
+    tags: ["v*"]
+jobs:
+  version:
+    name: Get app version
+    uses: ./.github/workflows/extract-version.yaml
+  build:
+    name: Build app
+    needs: version
+    runs-on: ubuntu-latest
+    env:
+      target: ${{needs.version.outputs.rc > 0 && 'rc' || 'release'}}
+      cmd: ${{needs.version.outputs.rc > 0 && 'bundleRc assembleRc' || 'bundleRelease assembleRelease'}}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: temurin
+          cache: gradle
+      - name: Setup env
+        run: |
+          echo "${{ secrets.SIGNING_KEYSTORE_BASE64 }}" > keystore-b64.txt
+          base64 -d keystore-b64.txt > 8vim/8vim.jks
+      - name: Build APK
+        env:
+          VIM8_BUILD_KEYSTORE_FILE: ./8vim.jks
+          VIM8_BUILD_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          VIM8_BUILD_KEY_ALIAS: ${{ secrets.ALIAS }}
+          VIM8_BUILD_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew ${{env.cmd}}
+      - name: Upload artifact aab
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: |
+            8vim/build/outputs/*/${{env.target}}/8vim-${{env.target}}.*
+            8vim/build/outputs/mapping/${{env.target}}/mapping.txt
+  playstore:
+    if: ${{needs.version.outputs.rc == 0}}
+    name: Deploy the app to Google playstore
+    needs: [build, version]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download artifact
+        id: artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: artifact/
+      - name: Setup env
+        run: |
+          mkdir -p distribution/whatsnew
+          cp metadata/en-US/changelogs/${{needs.version.outputs.version_code}}.txt distribution/whatsnew/whatsnew-en-US
+      - name: Google play release
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: tech.maethornaur.myapplication
+          releaseFiles: |
+            ${{ steps.artifact.outputs.download-paths }}/8vim-release.aab
+            ${{ steps.artifact.outputs.download-paths }}/8vim-release.apk
+          track: alpha
+          whatsNewDirectory: distribution/whatsnew
+          mappingFile: ${{ steps.artifact.outputs.download-paths }}/mapping.txt
+  f_droid:
+    name: Release to F-droid
+    needs: version
+    if: ${{needs.version.outputs.rc == 0}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{secrets.PAT}}
+          repository: MaethorNaur/MaethorNaur.github.io
+          persist-credentials: false
+      - run: |
+          echo "{\"version_code\": ${{needs.version.outputs.version_code}}, \"version_name\": \"${{needs.version.outputs.version_name}}\"}" > version.json
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add version.json
+          git commit -a -m "chore: release ${{needs.version.outputs.version_name}}"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          repository: 8VIM/8VIM.github.io
+  release:
+    name: Create github release
+    needs: [build, playstore, f_droid, version]
+    if: ${{ !cancelled() && needs.playstore.result != 'failure' && needs.f_droid.result != 'failure' }}
+    permissions:
+      actions: read
+      issues: read
+      pull-requests: read
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download artifact
+        id: artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: artifact/
+      - name: Create Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configuration: changelog-configuration.json
+          ignorePreReleases: "${{needs.version.outputs.rc == 0}}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{steps.github_release.outputs.changelog}}
+          files: ${{ steps.artifact.outputs.download-paths }}/*.apk
+          prerelease: ${{needs.version.outputs.rc > 0}}

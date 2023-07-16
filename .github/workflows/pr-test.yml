@@ -6,10 +6,47 @@ on:
     paths:
       - "**.gradle"
       - "8vim/**"
-      - "!8vim/src/main/**.yaml"
 jobs:
+  changes:
+    name: Detect changed files
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      src: ${{ steps.changes.outputs.src }}
+      yaml: ${{ steps.changes.outputs.yaml }}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - 8vim/**/*.java
+              - 8vim/**/*.kt
+              - 8vim/**/*.xml
+              - 8vim/**/*.pro
+              - "**.gradle"
+            yaml:
+              - added|modified: '8vim/src/main/res/raw/*.ya?ml'
+              - modified: '8vim/src/main/resources/schema.json'
+  validate_layouts:
+    needs: changes
+    if: ${{ needs.changes.outputs.yaml == 'true' }}
+    name: Validate language layouts
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: 8VIM/json-yaml-validate@main
+        with:
+          json_schema: ./8vim/src/main/resources/schema.json
+          yaml_as_json: "true"
+          base_dir: ./8vim/src/main/res/raw
   test:
-    name: Run test on PR
+    name: 8VIM tests
+    needs: changes
+    if: ${{ needs.changes.outputs.src == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -18,21 +55,25 @@ jobs:
           java-version: "17"
           distribution: temurin
           cache: gradle
-      - name: Test with Gradle
-        run: ./gradlew checkstyle lint test assembleDebug
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - run: ./gradlew check
+  upload_artifact:
+    if: ${{ !cancelled() && (needs.test.result == 'success' || needs.validate_layouts.result == 'success') }}
+    needs: [validate_layouts, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
-          name: 8vim-debug
-          path: 8vim/build/outputs/apk/debug/8vim-debug.apk
-          retention-days: 7
-      - name: Save PR number
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-        run: |
-          mkdir -p ./pr
-          echo $PR_NUMBER > ./pr/pr_number
+          java-version: "17"
+          distribution: temurin
+          cache: gradle
+      - run: |
+          echo ${{ github.event.number }} > ./pr_number
+          ./gradlew assembleDebug
       - uses: actions/upload-artifact@v3
         with:
-          name: pr_number
-          path: pr/
+          name: apk
+          path: |
+            pr_number
+            8vim/build/outputs/apk/debug/8vim-debug.apk
+          retention-days: 7
