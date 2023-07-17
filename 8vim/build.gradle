@@ -10,7 +10,6 @@ checkstyle {
     toolVersion = '10.12.0'
 }
 
-assemble.dependsOn('lint')
 check.dependsOn('checkstyle')
 
 android {
