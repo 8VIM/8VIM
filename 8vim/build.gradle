@@ -31,9 +31,15 @@ android {
         minSdkVersion 21
         targetSdkVersion 33
 
-        versionCode versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - versionRc
+        versionCode versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - (versionRc>0?100 - versionRc:0)
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
-        resValue "string", "app_name_with_flavour", "My Application"
+        
+        resValue "string", "version_name", versionName
+        
+        if(versionRc > 0) {
+            versionNameSuffix "-rc.${versionRc}"
+            resValue "string", "version_name", versionName + versionNameSuffix
+        }
         
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -62,9 +68,6 @@ android {
         create("rc") {
             initWith release
             applicationIdSuffix ".rc"
-            versionNameSuffix "-rc.${versionRc}"
-            resValue "string", "version_name", android.defaultConfig.versionName + versionNameSuffix
-            resValue "string", "app_name_with_flavour", "8VIM RC"
         }
     }
 
