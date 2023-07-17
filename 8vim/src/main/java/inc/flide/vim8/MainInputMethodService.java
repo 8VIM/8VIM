@@ -12,6 +12,8 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
@@ -19,6 +21,8 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.graphics.ColorUtils;
+import androidx.core.view.WindowInsetsControllerCompat;
 import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
@@ -27,6 +31,7 @@ import inc.flide.vim8.ui.views.NumberKeypadView;
 import inc.flide.vim8.ui.views.SelectionKeypadView;
 import inc.flide.vim8.ui.views.SymbolKeypadView;
 import inc.flide.vim8.ui.views.mainkeyboard.MainKeyboardView;
+import inc.flide.vim8.utils.ColorsHelper;
 import java.util.List;
 
 public class MainInputMethodService extends InputMethodService {
@@ -91,7 +96,6 @@ public class MainInputMethodService extends InputMethodService {
      * 13. InputMethodService stops
      */
 
-
     @Override
     public View onCreateInputView() {
         numberKeypadView = new NumberKeypadView(this);
@@ -99,7 +103,28 @@ public class MainInputMethodService extends InputMethodService {
         symbolKeypadView = new SymbolKeypadView(this);
         mainKeyboardView = new MainKeyboardView(this);
         setCurrentKeypadView(mainKeyboardView);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
+            Window window = getWindow().getWindow();
+            WindowInsetsControllerCompat windowInsetsControllerCompat =
+                    new WindowInsetsControllerCompat(window, window.getDecorView());
+            SharedPreferenceHelper.getInstance(getApplicationContext())
+                    .addListener(() -> setNavigationBarColor(window, windowInsetsControllerCompat),
+                            getString(R.string.pref_board_bg_color_key),
+                            getString(R.string.pref_color_mode_key));
+            setNavigationBarColor(window, windowInsetsControllerCompat);
+        }
         return currentKeypadView;
+    }
+
+    private void setNavigationBarColor(Window window, WindowInsetsControllerCompat windowInsetsControllerCompat) {
+        int navigationBarColor = ColorsHelper.getThemeColor(getApplicationContext(), R.attr.colorSurface,
+                R.string.pref_board_bg_color_key,
+                R.color.defaultBoardBg);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setNavigationBarColor(navigationBarColor);
+        boolean isLight = ColorUtils.calculateLuminance(navigationBarColor) >= 0.5;
+        windowInsetsControllerCompat.setAppearanceLightNavigationBars(isLight);
     }
 
     @Override

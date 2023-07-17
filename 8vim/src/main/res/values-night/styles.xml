@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.Material3.DynamicColors.Dark" />
-
-    <style name="AppTheme.NoActionBar">
-        <item name="backgroundColor">?colorSurface</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
-        <item name="toolbarStyle">@style/MaterialToolbar</item>
-    </style>
+    <style name="AppTheme" parent="AppThemeDark" />
 
     <style name="MaterialToolbar" parent="Widget.Material3.Toolbar">
         <item name="titleTextColor">?colorOnPrimary</item>

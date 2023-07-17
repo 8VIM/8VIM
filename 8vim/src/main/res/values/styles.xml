@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-    <style name="AppTheme" parent="Theme.Material3.DynamicColors.Light" />
-
-    <style name="AppTheme.NoActionBar">
-        <item name="backgroundColor">?colorSurface</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="toolbarStyle">@style/MaterialToolbar</item>
-        <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
-    </style>
+<resources>
 
     <style name="AppThemeLight" parent="Theme.Material3.DynamicColors.Light" />
 
@@ -20,12 +7,13 @@
         <item name="backgroundColor">?colorSurface</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
         <item name="toolbarStyle">@style/MaterialToolbar</item>
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
     </style>
+
+    <style name="AppThemeDarkBase" parent="Theme.Material3.DynamicColors.Dark" />
 
     <style name="AppThemeDark" parent="Theme.Material3.DynamicColors.Dark" />
 
@@ -33,12 +21,13 @@
         <item name="backgroundColor">?colorSurface</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
         <item name="toolbarStyle">@style/MaterialToolbar</item>
     </style>
+
+    <style name="AppTheme" parent="AppThemeLight" />
 
 
     <style name="MaterialToolbar" parent="Widget.Material3.Toolbar">

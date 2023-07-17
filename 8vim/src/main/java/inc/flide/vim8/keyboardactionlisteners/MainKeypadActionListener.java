@@ -53,9 +53,8 @@ public class MainKeypadActionListener extends KeypadActionListener {
             })
             .map(Arrays::asList).collect(Collectors.toSet());
     private static KeyboardData keyboardData;
-    private final HandlerThread longPressHandlerThread = new HandlerThread("LongPressHandlerThread");
     private final List<FingerPosition> movementSequence;
-    private Handler longPressHandler;
+    private final Handler longPressHandler;
     private FingerPosition currentFingerPosition;
     private String currentLetter;
     private boolean isLongPressCallbackSet;
@@ -75,6 +74,9 @@ public class MainKeypadActionListener extends KeypadActionListener {
         keyboardData = mainInputMethodService.buildKeyboardActionMap();
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
+        HandlerThread longPressHandlerThread = new HandlerThread("LongPressHandlerThread");
+        longPressHandlerThread.start();
+        longPressHandler = new Handler(longPressHandlerThread.getLooper(), null);
     }
 
     public static void rebuildKeyboardData(Resources resources, Context context) {
@@ -84,16 +86,6 @@ public class MainKeypadActionListener extends KeypadActionListener {
     public static void rebuildKeyboardData(Resources resources, Context context, Uri customLayoutUri) {
         keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resources, context,
                 customLayoutUri);
-    }
-
-    public void startLongPressHandler() {
-        longPressHandlerThread.start();
-        longPressHandler = new Handler(longPressHandlerThread.getLooper(), null);
-
-    }
-
-    public void pauseLongPressHandler() {
-        longPressHandler.removeCallbacks(longPressRunnable);
     }
 
     public String getLowerCaseCharacters(int layer) {

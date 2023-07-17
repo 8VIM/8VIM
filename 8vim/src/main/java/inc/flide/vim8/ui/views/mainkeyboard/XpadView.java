@@ -29,8 +29,6 @@ import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.utils.ColorsHelper;
 import java.util.Random;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class XpadView extends View {
     public static final float FOREGROUND_STROKE_FACTOR = 0.75f;
@@ -43,7 +41,6 @@ public class XpadView extends View {
     private static final short TRAIL_STEPS = 150;
     private static final byte TRAIL_STEP_DISTANCE = 5;
     private static final byte TRAIL_MAX_RADIUS = 14;
-    private final Logger log = LoggerFactory.getLogger(XpadView.class);
     private final Random rnd = new Random();
     private final Path typingTrailPath = new Path();
     private final Paint backgroundPaint = new Paint();
@@ -103,9 +100,14 @@ public class XpadView extends View {
         prefCircleXOffsetKey = context.getString(R.string.pref_circle_x_offset_key);
         prefCircleYOffsetKey = context.getString(R.string.pref_circle_y_offset_key);
 
+        SharedPreferenceHelper.Listener updateColor = () -> {
+            updateColors(context);
+            this.invalidate();
+        };
+
         sharedPreferenceHelper = SharedPreferenceHelper
                 .getInstance(context)
-                .addListener(() -> updateColors(context),
+                .addListener(updateColor,
                         prefBoardFgColorKey,
                         prefBoardBgColorKey,
                         prefTrailColorKey,
@@ -124,7 +126,6 @@ public class XpadView extends View {
         setForegroundPaint(foregroundHighlightPaint, fontBold);
 
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
-        actionListener.startLongPressHandler();
         setHapticFeedbackEnabled(true);
     }
 
@@ -504,13 +505,6 @@ public class XpadView extends View {
 
             default:
                 return false;
-        }
-    }
-
-    @Override
-    public void onScreenStateChanged(int screenState) {
-        if (screenState == SCREEN_STATE_OFF) {
-            actionListener.pauseLongPressHandler();
         }
     }
 }
