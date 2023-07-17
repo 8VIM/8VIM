@@ -142,9 +142,7 @@
 
     <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
     <string name="about_us_label">About Us</string>
-    <string name="open_language_selection_button_description">Open the language selection panel</string>
     <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>
-    <string name="switch_back_to_keyboard_button_description">Switch back to the keyboard view</string>
     <string name="tab_button_content_description">Tab</string>
     <string name="open_selection_keypad_button_content_description">Open Selection Keypad</string>
     <string name="open_keyboard_settings_button_content_description">Open Keyboard Settings</string>

@@ -243,7 +243,6 @@ public class MainInputMethodService extends InputMethodService {
 
     public void switchToMainKeypad() {
         setCurrentKeypadView(mainKeyboardView);
-        mainKeyboardView.switchToXPad();
     }
 
     public void switchToNumberPad() {

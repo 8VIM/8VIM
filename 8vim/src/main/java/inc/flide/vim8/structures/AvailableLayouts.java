@@ -15,16 +15,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.function.BiConsumer;
 
 public class AvailableLayouts {
     private static final String DEFAULT_FILENAME = "en";
     private static AvailableLayouts singleton;
-    private final List<BiConsumer<Integer, Integer>> listeners = new ArrayList<>();
     private final ContentResolver contentResolver;
     private final SharedPreferenceHelper sharedPreferences;
     private final String selectKeyboardLayout;
@@ -78,9 +75,6 @@ public class AvailableLayouts {
                     .putString(customKeyboardLayoutUri, customLayoutHistoryUris.get(which - embeddedLayoutSize));
         }
         editor.apply();
-        for (BiConsumer<Integer, Integer> listener : listeners) {
-            listener.accept(index, which);
-        }
         index = which;
         MainKeypadActionListener.rebuildKeyboardData(resources, context);
     }
@@ -91,18 +85,6 @@ public class AvailableLayouts {
 
     public int getIndex() {
         return index;
-    }
-
-    public int getEmbeddedLayoutSize() {
-        return embeddedLayoutIds.size();
-    }
-
-    public boolean hasCustomLayouts() {
-        return !customLayoutHistoryUris.isEmpty();
-    }
-
-    public void onChange(BiConsumer<Integer, Integer> listener) {
-        listeners.add(listener);
     }
 
     private void listCustomLayoutHistory() {

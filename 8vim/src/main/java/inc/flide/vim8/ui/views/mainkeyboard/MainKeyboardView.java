@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ViewFlipper;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
@@ -25,8 +24,6 @@ import java.util.stream.IntStream;
 
 public class MainKeyboardView extends ConstraintLayout {
     private MainKeypadActionListener actionListener;
-    private ViewFlipper subView;
-    private ViewFlipper languageView;
     private List<ImageButton> imageButtons;
     private SharedPreferenceHelper sharedPreferenceHelper;
     private LayoutInflater inflater;
@@ -59,10 +56,6 @@ public class MainKeyboardView extends ConstraintLayout {
                         context.getString(R.string.pref_color_mode_key))
                 .addListener(this::initializeView, prefSidebarLeftKey);
         initializeView();
-    }
-
-    public void switchToXPad() {
-        switchToView(SubView.X_PAD);
     }
 
     private void initializeView() {
@@ -103,22 +96,14 @@ public class MainKeyboardView extends ConstraintLayout {
             inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);
         }
         imageButtons = getImageButtons(this);
-        subView = findViewById(R.id.subview_flipper);
-        languageView = findViewById(R.id.language_selection_buttons_view_flipper);
     }
 
     private void setupButtonsOnSideBar() {
-        setupViewFlipperButtons();
         setupSwitchToEmojiKeyboardButton();
         setupSwitchToSelectionKeyboardButton();
         setupTabKey();
         setupGoToSettingsButton();
         setupCtrlKey();
-    }
-
-    private void setupViewFlipperButtons() {
-        setupViewFlipperButton(findViewById(R.id.language_selection_button), SubView.LANGUAGE);
-        setupViewFlipperButton(findViewById(R.id.x_pad_view_button), SubView.X_PAD);
     }
 
     private void setColors() {
@@ -136,19 +121,6 @@ public class MainKeyboardView extends ConstraintLayout {
         ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
         switchToSelectionKeyboardButton.setOnClickListener(
                 view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(), 0));
-    }
-
-
-    private void setupViewFlipperButton(ImageButton button, SubView subView) {
-        button.setOnClickListener(view -> switchToView(subView));
-    }
-
-    private void switchToView(SubView subView) {
-        int languageChild = subView.ordinal();
-        int subViewChild = (languageChild - 1) * -1;
-        this.subView.setDisplayedChild(subViewChild);
-        languageView.setDisplayedChild(subViewChild);
-
     }
 
     private void setupCtrlKey() {
@@ -182,9 +154,5 @@ public class MainKeyboardView extends ConstraintLayout {
         setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
         super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
-    }
-
-    public enum SubView {
-        LANGUAGE, X_PAD
     }
 }
