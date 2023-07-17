@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
@@ -30,11 +31,13 @@ public class MainInputMethodService extends InputMethodService {
 
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
+    private ClipboardManagerService clipboardManagerService;
 
     private MainKeyboardView mainKeyboardView;
     private NumberKeypadView numberKeypadView;
     private SelectionKeypadView selectionKeypadView;
     private SymbolKeypadView symbolKeypadView;
+    //private ClipPadView clipPadView;
     private View currentKeypadView;
 
     private int shiftLockFlag;
@@ -51,6 +54,7 @@ public class MainInputMethodService extends InputMethodService {
     public void onCreate() {
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         Context applicationContext = getApplicationContext();
+        this.clipboardManagerService = new ClipboardManagerService(applicationContext);
         switch (SharedPreferenceHelper.getInstance(applicationContext)
                 .getString(getString(R.string.pref_color_mode_key), "system")) {
             case "dark":
