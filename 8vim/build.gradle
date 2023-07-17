@@ -4,12 +4,6 @@ plugins {
     alias(libs.plugins.mannodermaus.android.junit5)
 }
 
-
-def countCommitsSinceLastRelease = { ->
-    def lastTag = "git rev-list --tags --no-walk --max-count=1".execute().text.trim()
-    return "git rev-list ${lastTag}..master --count".execute().text.trim()
-}
-
 apply plugin: 'checkstyle'
 
 check.dependsOn('checkstyle')
@@ -22,20 +16,15 @@ android {
     namespace 'inc.flide.vim8'
     compileSdkVersion 33
 
-    def versionMajor = 0
-    def versionMinor = 13
-    def versionPatch = 0
-
     defaultConfig {
         applicationId "inc.flide.vi8"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode versionMajor * 1000 + versionMinor * 100 + versionPatch
-        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionCode 16
+        versionName "iteration-13"
 
         vectorDrawables.useSupportLibrary = true
         resValue "string", "version_name", versionName
-        resValue "string", "app_name_with_flavour", "8Vim"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -59,22 +48,6 @@ android {
             if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
                 signingConfig signingConfigs.release
             }
-        }
-    }
-
-    flavorDimensions "version"
-    productFlavors {
-        prod {
-            dimension "version"
-        }
-
-        rc {
-            dimension "version"
-            applicationIdSuffix ".rc"
-            versionNameSuffix "-rc.${countCommitsSinceLastRelease()}"
-            resValue "string", "version_name", android.defaultConfig.versionName + versionNameSuffix
-            resValue "string", "app_name_with_flavour", "8Vim RC"
-            versionCode 10000 + android.defaultConfig.versionCode
         }
     }
 
