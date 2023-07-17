@@ -56,19 +56,33 @@ public class KeyboardDataYamlParserTest {
                 new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0,
                         0));
         movementSequences.put(new ArrayList<>(Collections.singletonList(FingerPosition.NO_TOUCH)),
-                new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON,
-                        0));
+                new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON, 0));
+        movementSequences.put(new ArrayList<>(Collections.singletonList(FingerPosition.NO_TOUCH)),
+                new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON, 0));
+        movementSequences.put(new ArrayList<>(
+                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                                FingerPosition.INSIDE_CIRCLE)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, KeyEvent.META_CTRL_ON, 1));
+        movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.LEFT, FingerPosition.TOP)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "c", "C", 0, 0, 2));
+        movementSequences.put(new ArrayList<>(
+                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                                FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0,
+                        KeyEvent.META_CTRL_ON | KeyEvent.META_FUNCTION_ON, 2));
+        movementSequences.put(new ArrayList<>(
+                        Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM,
+                                FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                                FingerPosition.INSIDE_CIRCLE)),
+                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0,
+                        KeyEvent.META_CTRL_ON | KeyEvent.META_FUNCTION_ON, 2));
+
+
         movementSequences.put(
                 new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
                         FingerPosition.INSIDE_CIRCLE)),
                 new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, KeyEvent.META_CTRL_ON, 1));
-        movementSequences.put(new ArrayList<>(
-                        Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM,
-                                FingerPosition.INSIDE_CIRCLE,
-                                FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                                FingerPosition.INSIDE_CIRCLE)),
-                new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0,
-                        KeyEvent.META_CTRL_ON | KeyEvent.META_FUNCTION_ON, 2));
+
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.setLength(Constants.CHARACTER_SET_SIZE);
@@ -80,11 +94,11 @@ public class KeyboardDataYamlParserTest {
 
         assertThat(keyboardData.getLowerCaseCharacters(Constants.DEFAULT_LAYER)).isEqualTo(stringBuilder.toString());
 
-        stringBuilder.setCharAt(0, '\0');
+        stringBuilder.setCharAt(0, 'C');
         stringBuilder.setCharAt(2, 'a');
 
         assertThat(keyboardData.getUpperCaseCharacters(2)).isEqualTo(stringBuilder.toString());
-        assertThat(keyboardData.getActionMap()).containsAllEntriesOf(movementSequences);
+        assertThat(keyboardData.getActionMap()).containsExactlyEntriesOf(movementSequences);
     }
 
     @Test

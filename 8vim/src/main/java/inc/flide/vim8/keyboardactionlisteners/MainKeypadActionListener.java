@@ -24,32 +24,32 @@ import java.util.stream.Collectors;
 
 public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 7;
-    private final static Set<List<FingerPosition>> extraLayerMovementSequences =
-            new HashSet<>(ExtraLayer.MOVEMENT_SEQUENCES.values());
+    private final static Set<List<FingerPosition>> extraLayerMovementSequences = new HashSet<>(
+            ExtraLayer.MOVEMENT_SEQUENCES.values());
     private final static Set<List<FingerPosition>> ROTATION_MOVEMENT_SEQUENCES = Arrays
             .stream(new FingerPosition[][] {
-                    {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
-                            FingerPosition.BOTTOM, FingerPosition.LEFT},
-                    {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
-                            FingerPosition.BOTTOM, FingerPosition.RIGHT},
-                    {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                    { FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+                            FingerPosition.BOTTOM, FingerPosition.LEFT },
+                    { FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+                            FingerPosition.BOTTOM, FingerPosition.RIGHT },
+                    { FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM,
                             FingerPosition.LEFT,
-                            FingerPosition.TOP},
-                    {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
+                            FingerPosition.TOP },
+                    { FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
                             FingerPosition.LEFT,
-                            FingerPosition.BOTTOM},
-                    {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
+                            FingerPosition.BOTTOM },
+                    { FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
                             FingerPosition.TOP,
-                            FingerPosition.LEFT},
-                    {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                            FingerPosition.LEFT },
+                    { FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
                             FingerPosition.TOP,
-                            FingerPosition.RIGHT},
-                    {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM,
+                            FingerPosition.RIGHT },
+                    { FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM,
                             FingerPosition.RIGHT,
-                            FingerPosition.TOP},
-                    {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
+                            FingerPosition.TOP },
+                    { FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
                             FingerPosition.RIGHT,
-                            FingerPosition.BOTTOM},
+                            FingerPosition.BOTTOM },
             })
             .map(Arrays::asList).collect(Collectors.toSet());
     private static KeyboardData keyboardData;
@@ -122,11 +122,14 @@ public class MainKeypadActionListener extends KeypadActionListener {
             }
 
             List<FingerPosition> startWith = movementSequence.subList(0, extraLayerMovementSequence.size());
-            if (extraLayerMovementSequences.contains(startWith)) {
-                return i + 2;
+            int layer = i + 2;
+            if (extraLayerMovementSequences.contains(startWith) && layer <= keyboardData.getTotalLayers()) {
+                return layer;
             }
         }
-        return Constants.DEFAULT_LAYER;
+        List<FingerPosition> tempMovementSequence = new ArrayList<>(movementSequence);
+        tempMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
+        return keyboardData.findLayer(tempMovementSequence);
     }
 
     private boolean isFullRotation() {
@@ -193,7 +196,25 @@ public class MainKeypadActionListener extends KeypadActionListener {
                 currentLetter = null;
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT;
                 movementSequence.add(currentFingerPosition);
-            } else if (currentFingerPosition != FingerPosition.INSIDE_CIRCLE) {
+            } else if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
+                int layer = findLayer();
+                List<FingerPosition> extraLayerMovementSequences = new ArrayList<>();
+                int layerSize = 0;
+                if (layer > Constants.DEFAULT_LAYER) {
+                    extraLayerMovementSequences = ExtraLayer.MOVEMENT_SEQUENCES.get(ExtraLayer.values()[layer - 2]);
+                    layerSize = extraLayerMovementSequences.size() + 1;
+                }
+                boolean defaultLayerCondition = layer == Constants.DEFAULT_LAYER
+                        && movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
+                boolean extraLayerCondition = layer > Constants.DEFAULT_LAYER && movementSequence.size() > layerSize;
+                if (defaultLayerCondition || extraLayerCondition) {
+                    movementSequence.clear();
+                    currentLetter = null;
+                    currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT;
+                    movementSequence.addAll(extraLayerMovementSequences);
+                    movementSequence.add(currentFingerPosition);
+                }
+            } else {
                 List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);
                 modifiedMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
                 KeyboardAction action = keyboardData.getActionMap().get(modifiedMovementSequence);

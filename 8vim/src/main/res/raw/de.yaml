@@ -66,7 +66,6 @@ layers:
           parts:
             left:
               - lower_case: ß
-                upper_case: ẞ
         bottom:
           parts:
             left:
