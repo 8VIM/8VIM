@@ -1,0 +1,62 @@
+name: Build 8Vim
+on:
+  workflow_call:
+    inputs:
+      target:
+        default: debug
+        type: string
+      ref:
+        type: string
+        required: true
+jobs:
+  build:
+    name: Build app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get gradle command
+        id: gradle
+        run: |
+          case "${{inputs.target}}" in
+            debug)
+              echo "cmd=assembleDebug" >> $GITHUB_OUTPUT
+              ;;
+            release)
+              echo "cmd=bundleRelease assembleRelease" >> $GITHUB_OUTPUT
+              ;;
+            rc)
+              echo "cmd=bundleRc assembleRc" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              exit 1
+              ;;
+          esac
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{inputs.ref}}
+          fetch-depth: 0
+      - uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: temurin
+          cache: gradle
+      - name: Get keystore
+        if: ${{inputs.target!='debug'}}
+        run: |
+          echo "${{ secrets.SIGNING_KEYSTORE_BASE64 }}" > keystore-b64.txt
+          base64 -d keystore-b64.txt > 8vim/8vim.jks
+      - name: Build APK
+        env:
+          VIM8_BUILD_KEYSTORE_FILE: ./8vim.jks
+          VIM8_BUILD_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          VIM8_BUILD_KEY_ALIAS: ${{ secrets.ALIAS }}
+          VIM8_BUILD_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew ${{steps.gradle.outputs.cmd}}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          if-no-files-found: ignore
+          path: |
+            8vim/build/outputs/*/${{inputs.target}}/8vim-${{inputs.target}}.*
+            8vim/build/outputs/mapping/${{inputs.target}}/mapping.txt
+          retention-days: 7

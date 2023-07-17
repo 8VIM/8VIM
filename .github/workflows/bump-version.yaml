@@ -7,6 +7,11 @@ on:
       version:
         required: true
         type: string
+    outputs:
+      version_code:
+        value: ${{jobs.bump_version.outputs.version_code}}
+      version_name:
+        value: ${{jobs.bump_version.outputs.version_name}}
 jobs:
   version:
     name: Get version
@@ -14,12 +19,14 @@ jobs:
   bump_version:
     needs: version
     runs-on: ubuntu-latest
+    name: Bump 8VIM version
     outputs:
       version_code: ${{steps.vars.outputs.version_code}}
       version_name: ${{steps.vars.outputs.version_name}}
     steps:
       - uses: actions/checkout@v3
         with:
+          ref: master
           persist-credentials: false
           fetch-depth: 0
       - name: bump version
@@ -31,10 +38,12 @@ jobs:
           RC: ${{needs.version.outputs.RC}}
           VERSION: ${{ inputs.version }}
         run: |
+          RC_CODE=0
           if [ $VERSION = "rc" ]
           then
             RC=$(($RC+1))
             echo "version_name=$MAJOR.$MINOR.$PATCH-rc.$RC" >> $GITHUB_OUTPUT
+            RC_CODE=$((100-$RC))
           else
             RC=0
             if [ $VERSION = "patch" ]
@@ -59,9 +68,9 @@ jobs:
           echo "MAJOR=$MAJOR" > 8vim/version.properties
           echo "MINOR=$MINOR" >> 8vim/version.properties
           echo "PATCH=$PATCH" >> 8vim/version.properties
-          echo "RC=$RC" >> 8vim/version.properties
+          echo -n "RC=$RC" >> 8vim/version.properties
 
-          echo "version_code=$(( 1000000 * $MAJOR + 10000 * $MINOR + 100 * $PATCH - $RC))" >> $GITHUB_OUTPUT
+          echo "version_code=$(( 1000000 * $MAJOR + 10000 * $MINOR + 100 * $PATCH - $RC_CODE))" >> $GITHUB_OUTPUT
       - name: Commit files
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -69,7 +78,7 @@ jobs:
 
           if [ -n "${{inputs.message}}" ]
           then
-            echo "${{ inputs.message }}" > metadata/en-US/changelogs/${{steps.vars.outputs.version_code}}.txt
+            echo -n "${{ inputs.message }}" > metadata/en-US/changelogs/${{steps.vars.outputs.version_code}}.txt
             git add metadata/en-US/changelogs/${{steps.vars.outputs.version_code}}.txt
           fi
 
@@ -77,7 +86,10 @@ jobs:
           git commit -a -m "chore(bump): release v${{steps.vars.outputs.version_name}}"
           set -e
 
-          [ -n "${{inputs.message}}" ] && git tag v${{steps.vars.outputs.version_name}}
+          if [ -n "${{inputs.message}}" ]
+          then
+            git tag v${{steps.vars.outputs.version_name}}
+          fi
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:

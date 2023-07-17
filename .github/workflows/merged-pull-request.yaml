@@ -29,7 +29,8 @@ jobs:
               - 8vim/**/*.xml
               - 8vim/**/*.pro
               - "**.gradle"
-              - 8vim/src/main/res/raw/*.ya?ml
+              - 8vim/src/main/res/raw/*.yaml
+              - 8vim/src/main/res/raw/*.yml
               - modified: '8vim/src/main/resources/schema.json'
   bump_version:
     needs: changes
@@ -40,3 +41,16 @@ jobs:
       message: ${{github.event.pull_request.title}}
       version: rc
     secrets: inherit
+  release:
+    needs: bump_version
+    name: Release
+    uses: ./.github/workflows/publish.yaml
+    with:
+      version_code: ${{needs.bump_version.outputs.version_code}}
+      version_name: ${{needs.bump_version.outputs.version_name}}
+    secrets: inherit
+    permissions:
+      actions: read
+      issues: read
+      pull-requests: read
+      contents: write

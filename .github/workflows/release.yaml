@@ -32,3 +32,16 @@ jobs:
     with:
       version: ${{github.event.inputs.version}}
     secrets: inherit
+  release:
+    needs: [update_version, next_version]
+    name: Release
+    uses: ./.github/workflows/publish.yaml
+    with:
+      version_code: ${{needs.update_version.outputs.version_code}}
+      version_name: ${{needs.update_version.outputs.version_name}}
+    secrets: inherit
+    permissions:
+      actions: read
+      issues: read
+      pull-requests: read
+      contents: write
