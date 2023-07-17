@@ -72,8 +72,8 @@ public class KeyboardDataYamlParserTest {
                         KeyEvent.META_CTRL_ON | KeyEvent.META_FUNCTION_ON, 2));
         movementSequences.put(new ArrayList<>(
                         Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM,
-                                FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                                FingerPosition.INSIDE_CIRCLE)),
+                                FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                                FingerPosition.LEFT, FingerPosition.INSIDE_CIRCLE)),
                 new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0,
                         KeyEvent.META_CTRL_ON | KeyEvent.META_FUNCTION_ON, 2));
 

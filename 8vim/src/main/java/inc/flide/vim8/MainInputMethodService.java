@@ -218,11 +218,7 @@ public class MainInputMethodService extends InputMethodService {
     public void delete() {
         CharSequence sel = inputConnection.getSelectedText(0);
         if (TextUtils.isEmpty(sel)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                inputConnection.deleteSurroundingTextInCodePoints(1, 0);
-            } else {
-                inputConnection.deleteSurroundingText(1, 0);
-            }
+            inputConnection.deleteSurroundingTextInCodePoints(1, 0);
         } else {
             inputConnection.commitText("", 0);
         }

@@ -24,32 +24,32 @@ import java.util.stream.Collectors;
 
 public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 7;
-    private final static Set<List<FingerPosition>> extraLayerMovementSequences = new HashSet<>(
+    private static final Set<List<FingerPosition>> extraLayerMovementSequences = new HashSet<>(
             ExtraLayer.MOVEMENT_SEQUENCES.values());
-    private final static Set<List<FingerPosition>> ROTATION_MOVEMENT_SEQUENCES = Arrays
+    private static final Set<List<FingerPosition>> ROTATION_MOVEMENT_SEQUENCES = Arrays
             .stream(new FingerPosition[][] {
-                    { FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
-                            FingerPosition.BOTTOM, FingerPosition.LEFT },
-                    { FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
-                            FingerPosition.BOTTOM, FingerPosition.RIGHT },
-                    { FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                    {FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT,
+                            FingerPosition.BOTTOM, FingerPosition.LEFT},
+                    {FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT,
+                            FingerPosition.BOTTOM, FingerPosition.RIGHT},
+                    {FingerPosition.LEFT, FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM,
                             FingerPosition.LEFT,
-                            FingerPosition.TOP },
-                    { FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
+                            FingerPosition.TOP},
+                    {FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT, FingerPosition.TOP,
                             FingerPosition.LEFT,
-                            FingerPosition.BOTTOM },
-                    { FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
+                            FingerPosition.BOTTOM},
+                    {FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.RIGHT,
                             FingerPosition.TOP,
-                            FingerPosition.LEFT },
-                    { FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                            FingerPosition.LEFT},
+                    {FingerPosition.TOP, FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT,
                             FingerPosition.TOP,
-                            FingerPosition.RIGHT },
-                    { FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM,
+                            FingerPosition.RIGHT},
+                    {FingerPosition.RIGHT, FingerPosition.TOP, FingerPosition.LEFT, FingerPosition.BOTTOM,
                             FingerPosition.RIGHT,
-                            FingerPosition.TOP },
-                    { FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
+                            FingerPosition.TOP},
+                    {FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
                             FingerPosition.RIGHT,
-                            FingerPosition.BOTTOM },
+                            FingerPosition.BOTTOM},
             })
             .map(Arrays::asList).collect(Collectors.toSet());
     private static KeyboardData keyboardData;
