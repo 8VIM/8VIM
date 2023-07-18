@@ -21,7 +21,8 @@ public enum CustomKeycode {
     SWITCH_TO_SELECTION_KEYPAD(-12),
     SWITCH_TO_EMOTICON_KEYBOARD(-13),
     HIDE_KEYBOARD(-14),
-    NO_OPERATION(-15);
+    NO_OPERATION(-15),
+    SWITCH_TO_CLIPPAD_KEYBOARD(-16);
 
     private static final Map<Integer, CustomKeycode> KEY_CODE_TO_STRING_CODE_MAP = new HashMap<>();
 
@@ -89,6 +90,8 @@ public enum CustomKeycode {
                 break;
             case NO_OPERATION:
                 break;
+            case SWITCH_TO_CLIPPAD_KEYBOARD:
+                mainInputMethodService.switchToClipboardKeypad();
             default:
                 return false;
         }
