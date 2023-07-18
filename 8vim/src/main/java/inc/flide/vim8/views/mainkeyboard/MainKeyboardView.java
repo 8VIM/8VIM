@@ -71,7 +71,7 @@ public class MainKeyboardView extends ConstraintLayout {
         setupSwitchToSelectionKeyboardButton();
         setupTabKey();
         setupGoToSettingsButton();
-        setupCtrlKey();
+        setupSwitchToClipboardKeypadButton();
     }
 
     private void setImageButtonTint(int tintColor, int id) {
@@ -91,17 +91,26 @@ public class MainKeyboardView extends ConstraintLayout {
                         R.color.defaultBoardFg);
 
         this.setBackgroundColor(backgroundColor);
-        setImageButtonTint(tintColor, R.id.ctrlButton);
+        setImageButtonTint(tintColor, R.id.clipboardButton);
         setImageButtonTint(tintColor, R.id.goToSettingsButton);
         setImageButtonTint(tintColor, R.id.tabButton);
         setImageButtonTint(tintColor, R.id.switchToSelectionKeyboard);
         setImageButtonTint(tintColor, R.id.switchToEmojiKeyboard);
     }
 
-    private void setupCtrlKey() {
-        ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
-        ctrlKeyButton.setOnClickListener(
-                view -> actionListener.setModifierFlags(KeyEvent.META_CTRL_MASK));
+    private void setupSwitchToClipboardKeypadButton() {
+        ImageButton switchToClipboardButton = findViewById(R.id.clipboardButton);
+        switchToClipboardButton.setOnClickListener(
+                view -> {
+                    KeyboardAction switchToClipboardKeyboard = new KeyboardAction(
+                            KeyboardActionType.INPUT_KEY,
+                            "",
+                            null,
+                            CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.getKeyCode(),
+                            0,
+                            0);
+                    actionListener.handleInputKey(switchToClipboardKeyboard);
+                });
     }
 
     private void setupGoToSettingsButton() {
