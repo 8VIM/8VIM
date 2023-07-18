@@ -28,7 +28,7 @@ import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
 import java.util.List;
 
-public class MainInputMethodService extends InputMethodService {
+public class MainInputMethodService extends InputMethodService implements ClipboardManagerService.ClipboardHistoryListener {
 
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
@@ -58,6 +58,7 @@ public class MainInputMethodService extends InputMethodService {
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         Context applicationContext = getApplicationContext();
         this.clipboardManagerService = new ClipboardManagerService(applicationContext);
+        this.clipboardManagerService.setClipboardHistoryListener(this::onClipboardHistoryChanged);
         switch (SharedPreferenceHelper.getInstance(applicationContext)
                 .getString(getString(R.string.pref_color_mode_key), "system")) {
             case "dark":
@@ -367,4 +368,8 @@ public class MainInputMethodService extends InputMethodService {
         }
     }
 
+    @Override
+    public void onClipboardHistoryChanged() {
+        clipboardKeypadView.updateClipHistory();
+    }
 }

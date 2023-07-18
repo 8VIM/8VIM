@@ -10,12 +10,12 @@ import inc.flide.vim8.preferences.SharedPreferenceHelper;
 
 public class ClipboardManagerService {
 
-    private static final String CLIPBOARD_PREFS = "clipboard_prefs";
     private static final String CLIPBOARD_HISTORY = "clipboard_history";
     private static final int MAX_HISTORY_SIZE = 10; // This could be made user-configurable
 
     private final ClipboardManager clipboardManager;
     private final SharedPreferenceHelper sharedPreferenceHelper;
+    private ClipboardHistoryListener clipboardHistoryListener;
 
     public ClipboardManagerService(Context context) {
         this.sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
@@ -26,6 +26,9 @@ public class ClipboardManagerService {
             public void onPrimaryClipChanged() {
                 String newClip = clipboardManager.getPrimaryClip().getItemAt(0).getText().toString();
                 addClipToHistory(newClip);
+                if (clipboardHistoryListener != null) {
+                    clipboardHistoryListener.onClipboardHistoryChanged();
+                }
             }
         });
     }
@@ -48,4 +51,11 @@ public class ClipboardManagerService {
         return sharedPreferenceHelper.getStringSet(CLIPBOARD_HISTORY, new HashSet<String>());
     }
 
+    public void setClipboardHistoryListener(ClipboardHistoryListener listener) {
+        this.clipboardHistoryListener = listener;
+    }
+
+    public interface ClipboardHistoryListener {
+        void onClipboardHistoryChanged();
+    }
 }
