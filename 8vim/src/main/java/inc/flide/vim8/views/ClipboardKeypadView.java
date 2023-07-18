@@ -2,9 +2,13 @@ package inc.flide.vim8.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -36,7 +40,17 @@ public class ClipboardKeypadView extends ListView {
         actionListener = new ClipboardActionListener((MainInputMethodService) context, this);
 
         Set<String> clipHistory = actionListener.getClipHistory();
-        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, new ArrayList<>(clipHistory));
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, new ArrayList<>(clipHistory)){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView textView1 = view.findViewById(android.R.id.text1);
+                textView1.setText(MessageFormat.format("{0}{1}{2}", String.valueOf(position + 1), ". ", getItem(position))); // Display the position number
+                textView1.setMaxLines(2); // Limit the clip display to two lines of text
+                return view;
+            }
+        };
+        ;
         setAdapter(adapter);
 
         setOnItemClickListener((parent, view, position, id) -> {
