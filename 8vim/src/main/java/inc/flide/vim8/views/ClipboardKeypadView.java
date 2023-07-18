@@ -16,6 +16,7 @@ import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 public class ClipboardKeypadView extends ListView {
 
     private ClipboardActionListener actionListener;
+    private ArrayAdapter<String> adapter;
 
     public ClipboardKeypadView(Context context) {
         super(context);
@@ -35,13 +36,20 @@ public class ClipboardKeypadView extends ListView {
         actionListener = new ClipboardActionListener((MainInputMethodService) context, this);
 
         Set<String> clipHistory = actionListener.getClipHistory();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, new ArrayList<>(clipHistory));
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, new ArrayList<>(clipHistory));
         setAdapter(adapter);
 
         setOnItemClickListener((parent, view, position, id) -> {
             String selectedClip = adapter.getItem(position);
             actionListener.onClipSelected(selectedClip);
         });
+    }
+
+    public void updateClipHistory() {
+        Set<String> clipHistory = actionListener.getClipHistory();
+        adapter.clear();
+        adapter.addAll(new ArrayList<>(clipHistory));
+        adapter.notifyDataSetChanged();
     }
 
     @Override
