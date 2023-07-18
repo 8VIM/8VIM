@@ -2,6 +2,7 @@ package inc.flide.vim8.keyboardactionlisteners;
 
 import android.view.View;
 
+import java.util.List;
 import java.util.Set;
 
 import inc.flide.vim8.MainInputMethodService;
@@ -11,7 +12,7 @@ public class ClipboardActionListener extends KeypadActionListener{
         super(mainInputMethodService, view);
     }
 
-    public Set<String> getClipHistory() {
+    public List<String> getClipHistory() {
        return mainInputMethodService.getClipboardManagerService().getClipHistory();
     }
 

@@ -47,8 +47,16 @@ public class ClipboardManagerService {
         sharedPreferenceHelper.edit().putStringSet(CLIPBOARD_HISTORY, history).apply();
     }
 
-    public Set<String> getClipHistory() {
-        return sharedPreferenceHelper.getStringSet(CLIPBOARD_HISTORY, new HashSet<String>());
+    public List<String> getClipHistory() {
+        Set<String> history = sharedPreferenceHelper.getStringSet(CLIPBOARD_HISTORY, new HashSet<>());
+        List<String> timestampedClipHistory = new ArrayList<>(history);
+        timestampedClipHistory.sort(Comparator.comparingLong(this::getTimestampFromTimestampedClip).reversed()); // Reverse the order so the most recent clip is at the top
+        // remove timestamps from the clips
+        List<String> clipHistory = new ArrayList<>();
+        for (String timestampedClip:timestampedClipHistory) {
+            clipHistory.add(getClipFromTimestampedClip(timestampedClip));
+        }
+        return clipHistory;
     }
 
     public void setClipboardHistoryListener(ClipboardHistoryListener listener) {

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import inc.flide.vim8.MainInputMethodService;
@@ -39,8 +40,8 @@ public class ClipboardKeypadView extends ListView {
     public void initialize(Context context) {
         actionListener = new ClipboardActionListener((MainInputMethodService) context, this);
 
-        Set<String> clipHistory = actionListener.getClipHistory();
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, new ArrayList<>(clipHistory)){
+        List<String> clipHistory = actionListener.getClipHistory();
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, (clipHistory)){
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
@@ -60,9 +61,9 @@ public class ClipboardKeypadView extends ListView {
     }
 
     public void updateClipHistory() {
-        Set<String> clipHistory = actionListener.getClipHistory();
+        List<String> clipHistory = actionListener.getClipHistory();
         adapter.clear();
-        adapter.addAll(new ArrayList<>(clipHistory));
+        adapter.addAll(clipHistory);
         adapter.notifyDataSetChanged();
     }
 
