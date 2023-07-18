@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="AppThemeDark" />
-
+    <style name="AppTheme.NoActionBar" parent="AppThemeDark.NoActionBar" />
     <style name="MaterialToolbar" parent="Widget.Material3.Toolbar">
         <item name="titleTextColor">?colorOnPrimary</item>
     </style>

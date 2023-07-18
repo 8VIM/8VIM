@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppThemeLight" parent="Theme.Material3.DynamicColors.Light" />
+    <style name="AppThemeLightBase" parent="Theme.Material3.DynamicColors.Light" />
 
-    <style name="AppThemeLight.NoActionBar">
+    <style name="AppThemeLight" parent="AppThemeLightBase" />
+
+    <style name="AppThemeLightBase.NoActionBar" parent="AppThemeLight">
         <item name="backgroundColor">?colorSurface</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
         <item name="android:statusBarColor">?colorPrimary</item>
         <item name="toolbarStyle">@style/MaterialToolbar</item>
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
     </style>
+
+    <style name="AppThemeLight.NoActionBar" parent="AppThemeLightBase.NoActionBar" />
 
     <style name="AppThemeDarkBase" parent="Theme.Material3.DynamicColors.Dark" />
 
-    <style name="AppThemeDark" parent="Theme.Material3.DynamicColors.Dark" />
+    <style name="AppThemeDark" parent="AppThemeDarkBase" />
 
-    <style name="AppThemeDark.NoActionBar">
+    <style name="AppThemeDarkBase.NoActionBar" parent="AppThemeDark">
         <item name="backgroundColor">?colorSurface</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
         <item name="android:statusBarColor">?colorPrimary</item>
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
         <item name="toolbarStyle">@style/MaterialToolbar</item>
     </style>
 
-    <style name="AppTheme" parent="AppThemeLight" />
+    <style name="AppThemeDark.NoActionBar" parent="AppThemeDarkBase.NoActionBar" />
+
+    <style name="AppTheme.NoActionBar" parent="AppThemeLight.NoActionBar" />
 
 
     <style name="MaterialToolbar" parent="Widget.Material3.Toolbar">

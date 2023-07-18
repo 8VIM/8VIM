@@ -63,18 +63,14 @@ public class MainInputMethodService extends InputMethodService {
         switch (colorMode) {
             case "dark":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                setTheme(R.style.AppThemeDark_NoActionBar);
                 break;
             case "light":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                setTheme(R.style.AppThemeLight_NoActionBar);
                 break;
             default:
-                if (colorMode.equals("system")) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                }
-                setTheme(R.style.AppTheme_NoActionBar);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
+        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate();
     }
 
