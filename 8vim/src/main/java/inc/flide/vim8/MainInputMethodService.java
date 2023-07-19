@@ -28,13 +28,17 @@ import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
 import java.util.List;
 
-public class MainInputMethodService extends InputMethodService implements ClipboardManagerService.ClipboardHistoryListener {
+public class MainInputMethodService
+        extends InputMethodService
+        implements ClipboardManagerService.ClipboardHistoryListener {
 
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
     private ClipboardManagerService clipboardManagerService;
 
-    public ClipboardManagerService getClipboardManagerService() {return clipboardManagerService;}
+    public ClipboardManagerService getClipboardManagerService() {
+        return clipboardManagerService;
+    }
 
     private MainKeyboardView mainKeyboardView;
     private NumberKeypadView numberKeypadView;
@@ -248,6 +252,7 @@ public class MainInputMethodService extends InputMethodService implements Clipbo
     public void switchToSelectionKeypad() {
         setCurrentKeypadView(selectionKeypadView);
     }
+
     public void switchToClipboardKeypad() {
         setCurrentKeypadView(clipboardKeypadView);
     }

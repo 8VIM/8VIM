@@ -7,16 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.ClipboardActionListener;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
+import java.text.MessageFormat;
+import java.util.List;
 
 public class ClipboardKeypadView extends ListView {
 
@@ -37,21 +33,26 @@ public class ClipboardKeypadView extends ListView {
         super(context, attrs, defStyleAttr);
         initialize(context);
     }
+
     public void initialize(Context context) {
         actionListener = new ClipboardActionListener((MainInputMethodService) context, this);
 
         List<String> clipHistory = actionListener.getClipHistory();
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, (clipHistory)){
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, (clipHistory)) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
-                TextView textView1 = view.findViewById(android.R.id.text1);
-                textView1.setText(MessageFormat.format("{0}{1}{2}", String.valueOf(position + 1), ". ", getItem(position))); // Display the position number
-                textView1.setMaxLines(2); // Limit the clip display to two lines of text
+                TextView textView = view.findViewById(android.R.id.text1);
+                textView.setText(
+                        MessageFormat.format(
+                                "{0}{1}{2}",
+                                String.valueOf(position + 1),
+                                ". ",
+                                getItem(position)));
+                textView.setMaxLines(2);
                 return view;
             }
         };
-        ;
         setAdapter(adapter);
 
         setOnItemClickListener((parent, view, position, id) -> {
@@ -77,14 +78,7 @@ public class ClipboardKeypadView extends ListView {
         setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
 
         super.onMeasure(
-                MeasureSpec.makeMeasureSpec(
-                        computedDimension.getWidth(),
-                        MeasureSpec.EXACTLY
-                ),
-                MeasureSpec.makeMeasureSpec(
-                        computedDimension.getHeight(),
-                        MeasureSpec.EXACTLY
-                )
-        );
+                MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
     }
 }
