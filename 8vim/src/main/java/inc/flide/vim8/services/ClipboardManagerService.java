@@ -5,7 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
-
+import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,8 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import inc.flide.vim8.preferences.SharedPreferenceHelper;
 
 public class ClipboardManagerService {
 
@@ -51,13 +49,16 @@ public class ClipboardManagerService {
         String timestampString = timestampedClip.substring(1, timestampedClip.indexOf("] "));
         return Long.parseLong(timestampString);
     }
+
     private String getClipFromTimestampedClip(String timestampedClip) {
         String clip = timestampedClip.substring(timestampedClip.indexOf("] ") + 2);
         return clip;
     }
 
     private void addClipToHistory(String newClip) {
-        if (TextUtils.isEmpty(newClip)) return;
+        if (TextUtils.isEmpty(newClip)) {
+            return;
+        }
 
         Set<String> history = new HashSet<>(sharedPreferenceHelper.getStringSet(CLIPBOARD_HISTORY, new HashSet<>()));
         String timestampedClip = "[" + System.currentTimeMillis() + "] " + newClip;
@@ -68,12 +69,12 @@ public class ClipboardManagerService {
         for (String clip: history) {
             String cleanedClip = getClipFromTimestampedClip(clip);
             Long timestamp = getTimestampFromTimestampedClip(clip);
-            if (clipsWithTimestampsMap.containsKey(cleanedClip)){
+            if (clipsWithTimestampsMap.containsKey(cleanedClip)) {
                 Long existingTimestamp = clipsWithTimestampsMap.get(cleanedClip);
                 if (timestamp > existingTimestamp) {
                     clipsWithTimestampsMap.put(cleanedClip, timestamp);
                 }
-            }else {
+            } else {
                 clipsWithTimestampsMap.put(cleanedClip, timestamp);
             }
         }
@@ -85,7 +86,10 @@ public class ClipboardManagerService {
 
         // If history size exceeds max, remove oldest clip
         while (history.size() > MAX_HISTORY_SIZE) {
-            String oldestClip = Collections.min(history, Comparator.comparingLong(this::getTimestampFromTimestampedClip));
+            String oldestClip = Collections.min(
+                    history,
+                    Comparator.comparingLong(this::getTimestampFromTimestampedClip)
+            );
             history.remove(oldestClip);
         }
 
@@ -95,8 +99,13 @@ public class ClipboardManagerService {
     public List<String> getClipHistory() {
         Set<String> history = sharedPreferenceHelper.getStringSet(CLIPBOARD_HISTORY, new HashSet<>());
         List<String> timestampedClipHistory = new ArrayList<>(history);
-        timestampedClipHistory.sort(Comparator.comparingLong(this::getTimestampFromTimestampedClip).reversed()); // Reverse the order so the most recent clip is at the top
-        // remove timestamps from the clips
+
+        // Reverse the order so the most recent clip is at the top
+        timestampedClipHistory.sort(
+                Comparator.comparingLong(this::getTimestampFromTimestampedClip).reversed()
+        );
+
+        // Remove timestamps from the clips
         List<String> clipHistory = new ArrayList<>();
         for (String timestampedClip:timestampedClipHistory) {
             clipHistory.add(getClipFromTimestampedClip(timestampedClip));
