@@ -92,6 +92,7 @@ public enum CustomKeycode {
                 break;
             case SWITCH_TO_CLIPPAD_KEYBOARD:
                 mainInputMethodService.switchToClipboardKeypad();
+                break;
             default:
                 return false;
         }
