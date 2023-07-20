@@ -10,6 +10,10 @@ public final class Constants {
     public static final int NUMBER_OF_SECTORS = 4;
     public static final int CHARACTER_SET_SIZE = 4 * 4 * 2; // 4 sectors, 2 parts, 4 characters per parts
     public static final int MAX_RGB_COMPONENT_VALUE = 255;
+    public static final int XPAD_ICON_ALPHA = 85;
+    public static final int XPAD_CIRCLE_OFFSET_FACTOR = 26;
+    public static final float XPAD_CIRCLE_RADIUS_FACTOR = 40f;
+    public static final float XPAD_LETTER_HIGHLIGHT_ROUNDNESS = 25f;
 
     private Constants() {
     }

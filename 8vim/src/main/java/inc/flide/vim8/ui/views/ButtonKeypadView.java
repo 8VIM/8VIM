@@ -10,12 +10,12 @@ import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
-import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import inc.flide.vim8.utils.ColorsHelper;
+import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.ui.Theme;
 
 public abstract class ButtonKeypadView extends KeyboardView {
-
     private final Paint foregroundPaint = new Paint();
+    protected Keyboard keyboard;
     protected MainInputMethodService mainInputMethodService;
     private Typeface font;
 
@@ -29,32 +29,37 @@ public abstract class ButtonKeypadView extends KeyboardView {
         this.setHapticFeedbackEnabled(true);
 
         font = Typeface.createFromAsset(getContext().getAssets(), "SF-UI-Display-Regular.otf");
-
+        keyboard = new Keyboard(context, getLayoutView());
         setColors();
-        SharedPreferenceHelper.getInstance(getContext())
-                .addListener(this::setColors,
-                        context.getString(R.string.pref_board_fg_color_key),
-                        context.getString(R.string.pref_board_bg_color_key),
-                        context.getString(R.string.pref_color_mode_key));
+        Theme
+                .getInstance(getContext())
+                .onChange(this::setColors);
 
         this.setPreviewEnabled(false);
+        setKeyboard(keyboard);
+    }
+
+    protected int getLayoutView() {
+        return 0;
     }
 
     private void setColors() {
-        Context context = getContext();
+        this.setBackgroundColor(Theme.getBackgroundColor());
 
-        int backgroundColor = ColorsHelper.getThemeColor(context, R.attr.colorSurface, R.string.pref_board_bg_color_key,
-                R.color.defaultBoardBg);
-        int foregroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorOnSurface, R.string.pref_board_fg_color_key,
-                        R.color.defaultBoardFg);
-
-        this.setBackgroundColor(backgroundColor);
-
-        foregroundPaint.setColor(foregroundColor);
+        foregroundPaint.setColor(Theme.getForegroundColor());
         foregroundPaint.setTextAlign(Paint.Align.CENTER);
         foregroundPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
         foregroundPaint.setTypeface(font);
+        for (Keyboard.Key key : keyboard.getKeys()) {
+            if (key.icon != null) {
+                // Has to be mutated, otherwise icon has linked alpha to same key
+                // on xpad view
+                key.icon = key.icon.mutate();
+                key.icon.setTint(Theme.getForegroundColor());
+                key.icon.setAlpha(Constants.MAX_RGB_COMPONENT_VALUE);
+            }
+        }
+        invalidate();
     }
 
     @Override

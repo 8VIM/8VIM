@@ -1,6 +1,7 @@
 package inc.flide.vim8.ui.views.mainkeyboard;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,7 +14,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.Nullable;
@@ -27,7 +27,7 @@ import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.utils.ColorsHelper;
+import inc.flide.vim8.ui.Theme;
 import java.util.Random;
 
 public class XpadView extends View {
@@ -62,13 +62,9 @@ public class XpadView extends View {
     private final float[] trialPathPos = new float[2];
     private final PathMeasure pathMeasure = new PathMeasure();
     private MainKeypadActionListener actionListener;
-    private int foregroundColor;
     private boolean userPreferRandomTrailColor = false;
-    private float circleRadiusFactor;
-    private int circleOffsetFactor;
-    private int iconAlpha;
-    private float letterHighlightRoundness;
     private String prefCircleScalaFactor;
+    private String prefSidebarLeftKey;
     private String prefTrailColorKey;
     private String prefRandomTrailColorKey;
     private String prefCircleXOffsetKey;
@@ -92,27 +88,18 @@ public class XpadView extends View {
 
     private void initialize(Context context) {
         prefCircleScalaFactor = context.getString(R.string.pref_circle_scale_factor);
-        String prefBoardFgColorKey = context.getString(R.string.pref_board_fg_color_key);
-        String prefBoardBgColorKey = context.getString(R.string.pref_board_bg_color_key);
+        prefSidebarLeftKey = context.getString(R.string.pref_sidebar_left_key);
         prefTrailColorKey = context.getString(R.string.pref_trail_color_key);
         prefRandomTrailColorKey = context.getString(R.string.pref_random_trail_color_key);
-        String prefColorModeKey = context.getString(R.string.pref_color_mode_key);
         prefCircleXOffsetKey = context.getString(R.string.pref_circle_x_offset_key);
         prefCircleYOffsetKey = context.getString(R.string.pref_circle_y_offset_key);
 
-        SharedPreferenceHelper.Listener updateColor = () -> {
-            updateColors(context);
-            this.invalidate();
-        };
-
+        Theme.getInstance(context).onChange(this::updateColors);
         sharedPreferenceHelper = SharedPreferenceHelper
                 .getInstance(context)
-                .addListener(updateColor,
-                        prefBoardFgColorKey,
-                        prefBoardBgColorKey,
+                .addListener(this::updateColors,
                         prefTrailColorKey,
-                        prefRandomTrailColorKey,
-                        prefColorModeKey)
+                        prefRandomTrailColorKey)
                 .addListener(() -> {
                     this.computeComponentPositions(this.getWidth(), this.getHeight());
                     this.invalidate();
@@ -120,8 +107,7 @@ public class XpadView extends View {
         Typeface font = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Regular.otf");
         Typeface fontBold = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Bold.otf");
 
-        loadResources();
-        updateColors(context);
+        updateColors();
         setForegroundPaint(foregroundPaint, font);
         setForegroundPaint(foregroundHighlightPaint, fontBold);
 
@@ -129,54 +115,30 @@ public class XpadView extends View {
         setHapticFeedbackEnabled(true);
     }
 
-    private void loadResources() {
+    private void updateColors() {
         Resources resources = getResources();
-        TypedValue outValue = new TypedValue();
-        resources.getValue(R.dimen.xpad_circle_radius_factor, outValue, true);
-        circleRadiusFactor = outValue.getFloat();
-        circleOffsetFactor = resources.getInteger(R.integer.xpad_circle_offset_factor);
-        iconAlpha =
-                Math.max(Math.min(resources.getInteger(R.integer.xpad_icon_alpha),
-                                Constants.MAX_RGB_COMPONENT_VALUE),
-                        0);
-        resources.getValue(R.dimen.xpad_letter_highlight_roundness, outValue, true);
-        letterHighlightRoundness = outValue.getFloat();
-    }
-
-    private void updateColors(Context context) {
-        Resources resources = getResources();
-        int backgroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorSurface,
-                        R.string.pref_board_bg_color_key,
-                        R.color.defaultBoardBg);
-        foregroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorOnSurface,
-                        R.string.pref_board_fg_color_key,
-                        R.color.defaultBoardFg);
 
         userPreferRandomTrailColor = sharedPreferenceHelper.getBoolean(prefRandomTrailColorKey, false);
 
         int trailColor =
                 sharedPreferenceHelper.getInt(prefTrailColorKey, resources.getColor(R.color.defaultTrail, null));
 
-        backgroundPaint.setColor(backgroundColor);
-        foregroundPaint.setColor(foregroundColor);
+        backgroundPaint.setColor(Theme.getBackgroundColor());
+        foregroundPaint.setColor(Theme.getForegroundColor());
         typingTrailPaint.setColor(trailColor);
+        invalidate();
     }
 
     private void computeComponentPositions(int fullWidth, int fullHeight) {
         float spRadiusValue = sharedPreferenceHelper.getInt(prefCircleScalaFactor, 3);
-        float radius = (spRadiusValue / circleRadiusFactor * keypadDimension.getHeight()) / 2;
+        boolean preferredSidebarLeft = sharedPreferenceHelper.getBoolean(prefSidebarLeftKey, true);
+
+        float radius = (spRadiusValue / Constants.XPAD_CIRCLE_RADIUS_FACTOR * keypadDimension.getHeight()) / 2;
 
         int offsetX =
-                (sharedPreferenceHelper.getInt(prefCircleXOffsetKey, 0)) * circleOffsetFactor;
+                (sharedPreferenceHelper.getInt(prefCircleXOffsetKey, 0)) * Constants.XPAD_CIRCLE_OFFSET_FACTOR;
         int offsetY =
-                (sharedPreferenceHelper.getInt(prefCircleYOffsetKey, 0)) * circleOffsetFactor;
-        circleCenter.x = (keypadDimension.getWidth() / 2f) + offsetX;
-        circleCenter.y = (keypadDimension.getHeight() / 2f) + offsetY;
-
-        circle.setCentre(circleCenter);
-        circle.setRadius(radius);
+                (sharedPreferenceHelper.getInt(prefCircleYOffsetKey, 0)) * Constants.XPAD_CIRCLE_OFFSET_FACTOR;
 
         float characterHeight =
                 foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
@@ -191,6 +153,19 @@ public class XpadView extends View {
         // Compute the length of sector lines, such that they stop a little before hitting the edge of the view.
         float lengthOfLineDemarcatingSectors = (float) Math.hypot(smallDim, smallDim)
                 - radius - characterHeight;
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            circleCenter.x = lengthOfLineDemarcatingSectors + offsetX;
+            if (!preferredSidebarLeft) {
+                circleCenter.x = keypadDimension.getWidth() - circleCenter.x;
+            }
+        } else {
+            circleCenter.x = (keypadDimension.getWidth() / 2f) + offsetX;
+        }
+        circleCenter.y = (keypadDimension.getHeight() / 2f) + offsetY;
+
+        circle.setCentre(circleCenter);
+        circle.setRadius(radius);
+
 
         // Compute sector demarcation lines as if they were all going orthogonal (like a "+").
         // This is easier to compute.  Later we apply rotation to orient the lines properly (like an "x").
@@ -342,7 +317,8 @@ public class XpadView extends View {
                             letterPositions[i * 2 + 1] - characterHeightWidth,
                             letterPositions[i * 2] + (characterHeightWidth / 2),
                             letterPositions[i * 2 + 1] + (characterHeightWidth / 2),
-                            letterHighlightRoundness, letterHighlightRoundness, letterBackgroundPaint
+                            Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS, Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS,
+                            letterBackgroundPaint
                     );
 
                     canvas.drawRoundRect(
@@ -350,7 +326,8 @@ public class XpadView extends View {
                             letterPositions[i * 2 + 1] - characterHeightWidth,
                             letterPositions[i * 2] + (characterHeightWidth / 2),
                             letterPositions[i * 2 + 1] + (characterHeightWidth / 2),
-                            letterHighlightRoundness, letterHighlightRoundness, letterBackgroundOutlinePaint
+                            Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS, Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS,
+                            letterBackgroundOutlinePaint
                     );
                 }
                 canvas.drawText(letter, letterPositions[i * 2], letterPositions[i * 2 + 1], paint);
@@ -428,8 +405,8 @@ public class XpadView extends View {
                 coordinateY,
                 coordinateX + iconSize,
                 coordinateY + iconSize);
-        iconVectorDrawable.setTint(foregroundColor);
-        iconVectorDrawable.setAlpha(iconAlpha);
+        iconVectorDrawable.setTint(Theme.getForegroundColor());
+        iconVectorDrawable.setAlpha(Constants.XPAD_ICON_ALPHA);
         iconVectorDrawable.draw(canvas);
     }
 

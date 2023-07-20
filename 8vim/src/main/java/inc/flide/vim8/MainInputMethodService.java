@@ -27,11 +27,11 @@ import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.ui.Theme;
 import inc.flide.vim8.ui.views.NumberKeypadView;
 import inc.flide.vim8.ui.views.SelectionKeypadView;
 import inc.flide.vim8.ui.views.SymbolKeypadView;
 import inc.flide.vim8.ui.views.mainkeyboard.MainKeyboardView;
-import inc.flide.vim8.utils.ColorsHelper;
 import java.util.List;
 
 public class MainInputMethodService extends InputMethodService {
@@ -104,22 +104,17 @@ public class MainInputMethodService extends InputMethodService {
             Window window = getWindow().getWindow();
             WindowInsetsControllerCompat windowInsetsControllerCompat =
                     new WindowInsetsControllerCompat(window, window.getDecorView());
-            SharedPreferenceHelper.getInstance(getApplicationContext())
-                    .addListener(() -> setNavigationBarColor(window, windowInsetsControllerCompat),
-                            getString(R.string.pref_board_bg_color_key),
-                            getString(R.string.pref_color_mode_key));
+            Theme.getInstance(getApplicationContext())
+                    .onChange(() -> setNavigationBarColor(window, windowInsetsControllerCompat));
             setNavigationBarColor(window, windowInsetsControllerCompat);
         }
         return currentKeypadView;
     }
 
     private void setNavigationBarColor(Window window, WindowInsetsControllerCompat windowInsetsControllerCompat) {
-        int navigationBarColor = ColorsHelper.getThemeColor(getApplicationContext(), R.attr.colorSurface,
-                R.string.pref_board_bg_color_key,
-                R.color.defaultBoardBg);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setNavigationBarColor(navigationBarColor);
-        boolean isLight = ColorUtils.calculateLuminance(navigationBarColor) >= 0.5;
+        window.setNavigationBarColor(Theme.getBackgroundColor());
+        boolean isLight = ColorUtils.calculateLuminance(Theme.getBackgroundColor()) >= 0.5;
         windowInsetsControllerCompat.setAppearanceLightNavigationBars(isLight);
     }
 

@@ -16,8 +16,8 @@ import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.CustomKeycode;
+import inc.flide.vim8.ui.Theme;
 import inc.flide.vim8.ui.activities.SettingsActivity;
-import inc.flide.vim8.utils.ColorsHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -48,12 +48,9 @@ public class MainKeyboardView extends ConstraintLayout {
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         prefSidebarLeftKey = context.getString(R.string.pref_sidebar_left_key);
+        Theme.getInstance(context).onChange(this::setColors);
         sharedPreferenceHelper = SharedPreferenceHelper
                 .getInstance(context)
-                .addListener(this::setColors,
-                        context.getString(R.string.pref_board_fg_color_key),
-                        context.getString(R.string.pref_board_bg_color_key),
-                        context.getString(R.string.pref_color_mode_key))
                 .addListener(this::initializeView, prefSidebarLeftKey);
         initializeView();
     }
@@ -107,14 +104,8 @@ public class MainKeyboardView extends ConstraintLayout {
     }
 
     private void setColors() {
-        Context context = getContext();
-        int backgroundColor = ColorsHelper.getThemeColor(context, R.attr.colorSurface, R.string.pref_board_bg_color_key,
-                R.color.defaultBoardBg);
-        int tintColor = ColorsHelper.getThemeColor(context, R.attr.colorOnSurface, R.string.pref_board_fg_color_key,
-                R.color.defaultBoardFg);
-
-        this.setBackgroundColor(backgroundColor);
-        imageButtons.forEach(button -> button.setColorFilter(tintColor));
+        this.setBackgroundColor(Theme.getBackgroundColor());
+        imageButtons.forEach(button -> button.setColorFilter(Theme.getForegroundColor()));
     }
 
     private void setupSwitchToSelectionKeyboardButton() {
