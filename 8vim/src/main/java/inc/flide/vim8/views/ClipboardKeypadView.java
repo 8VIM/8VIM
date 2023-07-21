@@ -69,7 +69,6 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
 
     public void setupClipboardListView() {
 
-        Log.d("clipboard_history", "setup clipboard list view called");
         List<String> clipHistory = actionListener.getClipHistory();
         ListView clipboardItemsList = this.findViewById(R.id.clipboardItemsList);
 
@@ -89,7 +88,6 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
             }
         };
         clipboardItemsList.setAdapter(adapter);
-        Log.d("clipboard_history", "adapter created and set");
 
         clipboardItemsList.setOnItemClickListener((parent, itemView, position, id) -> {
             String selectedClip = adapter.getItem(position);
