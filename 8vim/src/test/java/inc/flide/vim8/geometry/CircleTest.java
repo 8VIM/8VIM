@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import android.graphics.PointF;
-
+import inc.flide.vim8.structures.FingerPosition;
 import net.jqwik.api.Data;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.FromData;
@@ -12,8 +12,6 @@ import net.jqwik.api.Property;
 import net.jqwik.api.Table;
 import net.jqwik.api.Tuple;
 import net.jqwik.api.lifecycle.BeforeContainer;
-
-import inc.flide.vim8.structures.FingerPosition;
 
 public class CircleTest {
     private static final Circle circle = new Circle();
@@ -33,10 +31,10 @@ public class CircleTest {
     @Data
     Iterable<Tuple.Tuple2<FingerPosition, PointF>> sectorPositions() {
         return Table.of(
-            Tuple.of(FingerPosition.TOP, mockPointF(0f, -10f)),
-            Tuple.of(FingerPosition.LEFT, mockPointF(-10f, 0f)),
-            Tuple.of(FingerPosition.BOTTOM, mockPointF(0f, 10f)),
-            Tuple.of(FingerPosition.RIGHT, mockPointF(10f, 0f))
+                Tuple.of(FingerPosition.TOP, mockPointF(0f, -10f)),
+                Tuple.of(FingerPosition.LEFT, mockPointF(-10f, 0f)),
+                Tuple.of(FingerPosition.BOTTOM, mockPointF(0f, 10f)),
+                Tuple.of(FingerPosition.RIGHT, mockPointF(10f, 0f))
         );
     }
 

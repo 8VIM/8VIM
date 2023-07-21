@@ -13,10 +13,8 @@ import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.KeypadActionListener;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.structures.CustomKeycode;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardActionType;
-import inc.flide.vim8.ui.SettingsActivity;
-import inc.flide.vim8.utils.ColorsHelper;
+import inc.flide.vim8.ui.Theme;
+import inc.flide.vim8.ui.activities.SettingsActivity;
 
 public class ConstraintLayoutWithSidebar extends ConstraintLayout {
     protected KeypadActionListener actionListener;
@@ -45,16 +43,7 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
     private void setupSwitchToClipboardKeypadButton() {
         ImageButton switchToClipboardButton = findViewById(R.id.clipboardButton);
         switchToClipboardButton.setOnClickListener(
-                view -> {
-                    KeyboardAction switchToClipboardKeyboard = new KeyboardAction(
-                            KeyboardActionType.INPUT_KEY,
-                            "",
-                            null,
-                            CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.getKeyCode(),
-                            0,
-                            0);
-                    actionListener.handleInputKey(switchToClipboardKeyboard);
-                });
+                view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.getKeyCode(), 0));
     }
 
     private void setupGoToSettingsButton() {
@@ -73,68 +62,37 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
 
     private void setupSwitchToSelectionKeyboardButton() {
         ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
-        switchToSelectionKeyboardButton.setOnClickListener(view -> {
-            KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
-                    KeyboardActionType.INPUT_KEY,
-                    "",
-                    null,
-                    CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(),
-                    0,
-                    0);
-            actionListener.handleInputKey(switchToSelectionKeyboard);
-        });
+        switchToSelectionKeyboardButton.setOnClickListener(
+                view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(), 0));
     }
 
     private void setupSwitchToEmojiKeyboardButton() {
         ImageButton switchToEmojiKeyboardButton = findViewById(R.id.switchToEmojiKeyboard);
-        switchToEmojiKeyboardButton.setOnClickListener(view -> {
-            KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
-                    KeyboardActionType.INPUT_KEY,
-                    "",
-                    null,
-                    CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(),
-                    0,
-                    0);
-            actionListener.handleInputKey(switchToEmojiKeyboard);
-        });
+        switchToEmojiKeyboardButton.setOnClickListener(
+                view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(), 0));
     }
 
-    protected void setImageButtonTint(int tintColor, int id) {
+    protected void setImageButtonTint(int id) {
         ImageButton button = findViewById(id);
-        button.setColorFilter(tintColor);
+        button.setColorFilter(Theme.getForegroundColor());
     }
 
     protected void setColors() {
-        Context context = getContext();
-        int backgroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.backgroundColor,
-                        R.string.pref_board_bg_color_key,
-                        R.color.defaultBoardBg);
-        int tintColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground,
-                        R.string.pref_board_fg_color_key,
-                        R.color.defaultBoardFg);
-
-        this.setBackgroundColor(backgroundColor);
-        setImageButtonTint(tintColor, R.id.clipboardButton);
-        setImageButtonTint(tintColor, R.id.goToSettingsButton);
-        setImageButtonTint(tintColor, R.id.tabButton);
-        setImageButtonTint(tintColor, R.id.switchToSelectionKeyboard);
-        setImageButtonTint(tintColor, R.id.switchToEmojiKeyboard);
+        this.setBackgroundColor(Theme.getBackgroundColor());
+        setImageButtonTint(R.id.clipboardButton);
+        setImageButtonTint(R.id.goToSettingsButton);
+        setImageButtonTint(R.id.tabButton);
+        setImageButtonTint(R.id.switchToSelectionKeyboard);
+        setImageButtonTint(R.id.switchToEmojiKeyboard);
     }
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
-                MeasureSpec.getSize(widthMeasureSpec),
-                MeasureSpec.getSize(heightMeasureSpec),
-                getResources().getConfiguration().orientation);
-
+        Dimension computedDimension = InputMethodViewHelper.computeDimension(getResources());
         setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
-
-        super.onMeasure(
-                MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
+        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
+
     }
 
 }

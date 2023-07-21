@@ -1,4 +1,4 @@
-package inc.flide.vim8.ui;
+package inc.flide.vim8.ui.activities;
 
 import android.content.Intent;
 import android.graphics.Color;

@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.preference.PreferenceManager;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,8 +15,7 @@ import java.util.Set;
 public final class SharedPreferenceHelper implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static SharedPreferenceHelper singleton = null;
     private final SharedPreferences sharedPreferences;
-    private final Set<String> prefKeys = new HashSet<>();
-    private final List<Listener> listeners = new ArrayList<>();
+    private final Map<String, List<Listener>> listeners = new HashMap<>();
 
     private SharedPreferenceHelper(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
@@ -35,60 +35,50 @@ public final class SharedPreferenceHelper implements SharedPreferences.OnSharedP
         return singleton;
     }
 
-    public void addListener(Listener note) {
-        listeners.add(note);
+    public SharedPreferenceHelper addListener(Listener note, String firstKey, String... otherKeys) {
+        List<String> keys = new ArrayList<>(Collections.singletonList(firstKey));
+        keys.addAll(Arrays.asList(otherKeys));
+        keys.forEach(key -> {
+            listeners.putIfAbsent(key, new LinkedList<>());
+            listeners.get(key).add(note);
+        });
+        return this;
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences pref, String s) {
-        if (prefKeys.contains(s)) {
-            for (Listener n : listeners) {
-                n.onPreferenceChanged();
-            }
-        }
+        listeners.getOrDefault(s, Collections.emptyList())
+                .forEach(Listener::onPreferenceChanged);
     }
 
     public String getString(String preferenceId, String defaultValue) {
-        prefKeys.add(preferenceId);
-        String preferencesString;
         try {
-            preferencesString = this.sharedPreferences.getString(preferenceId, defaultValue);
-        } catch (ClassCastException e) {
+            return this.sharedPreferences.getString(preferenceId, defaultValue);
+        } catch (ClassCastException ignored) {
             return defaultValue;
         }
-
-        return preferencesString;
     }
 
     public int getInt(String preferenceId, int defaultValue) {
-        prefKeys.add(preferenceId);
-        int preferenceInt;
         try {
-            preferenceInt = this.sharedPreferences.getInt(preferenceId, defaultValue);
-        } catch (ClassCastException e) {
+            return this.sharedPreferences.getInt(preferenceId, defaultValue);
+        } catch (ClassCastException ignored) {
             return defaultValue;
         }
-
-        return preferenceInt;
     }
 
     public boolean getBoolean(String preferenceId, boolean defaultValue) {
-        prefKeys.add(preferenceId);
-        boolean preferenceBoolean;
         try {
-            preferenceBoolean = this.sharedPreferences.getBoolean(preferenceId, defaultValue);
-        } catch (ClassCastException e) {
+            return this.sharedPreferences.getBoolean(preferenceId, defaultValue);
+        } catch (ClassCastException ignored) {
             return defaultValue;
         }
-
-        return preferenceBoolean;
     }
 
     public Set<String> getStringSet(String preferenceId, Set<String> defaultValue) {
-        prefKeys.add(preferenceId);
         try {
-            return sharedPreferences.getStringSet(preferenceId, defaultValue);
-        } catch (Exception e) {
+            return this.sharedPreferences.getStringSet(preferenceId, defaultValue);
+        } catch (ClassCastException ignored) {
             return defaultValue;
         }
     }
