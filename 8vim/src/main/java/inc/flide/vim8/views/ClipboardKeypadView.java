@@ -46,6 +46,7 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
 
         SharedPreferenceHelper.getInstance(context).addListener(this::setColors);
     }
+
     private void setupOverallView(Context context) {
         LayoutInflater inflater =
                 (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -96,15 +97,10 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
     }
 
     public void updateClipHistory() {
-        if (adapter == null) {
-            Log.e("clipboard_history", "adapter seems to be null for no reason");
-        } else {
-
         List<String> clipHistory = actionListener.getClipHistory();
         adapter.clear();
         adapter.addAll(clipHistory);
         adapter.notifyDataSetChanged();
-        }
     }
 
 }

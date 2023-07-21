@@ -20,6 +20,7 @@ import inc.flide.vim8.utils.ColorsHelper;
 
 public class ConstraintLayoutWithSidebar extends ConstraintLayout {
     protected KeypadActionListener actionListener;
+
     public ConstraintLayoutWithSidebar(@NonNull Context context) {
         super(context);
     }
@@ -32,10 +33,6 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public ConstraintLayoutWithSidebar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     protected void setupButtonsOnSideBar(KeypadActionListener actionListener) {
         this.actionListener = actionListener;
         setupSwitchToEmojiKeyboardButton();
@@ -44,6 +41,7 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
         setupGoToSettingsButton();
         setupSwitchToClipboardKeypadButton();
     }
+
     private void setupSwitchToClipboardKeypadButton() {
         ImageButton switchToClipboardButton = findViewById(R.id.clipboardButton);
         switchToClipboardButton.setOnClickListener(
@@ -100,10 +98,12 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
             actionListener.handleInputKey(switchToEmojiKeyboard);
         });
     }
+
     protected void setImageButtonTint(int tintColor, int id) {
         ImageButton button = findViewById(id);
         button.setColorFilter(tintColor);
     }
+
     protected void setColors() {
         Context context = getContext();
         int backgroundColor =
@@ -122,6 +122,7 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
         setImageButtonTint(tintColor, R.id.switchToSelectionKeyboard);
         setImageButtonTint(tintColor, R.id.switchToEmojiKeyboard);
     }
+
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
