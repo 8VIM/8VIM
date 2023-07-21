@@ -26,8 +26,10 @@ import androidx.core.view.WindowInsetsControllerCompat;
 import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.ui.Theme;
+import inc.flide.vim8.views.ClipboardKeypadView;
 import inc.flide.vim8.ui.views.NumberKeypadView;
 import inc.flide.vim8.ui.views.SelectionKeypadView;
 import inc.flide.vim8.ui.views.SymbolKeypadView;
@@ -37,11 +39,17 @@ import java.util.List;
 public class MainInputMethodService extends InputMethodService {
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
+    private ClipboardManagerService clipboardManagerService;
+
+    public ClipboardManagerService getClipboardManagerService() {
+        return clipboardManagerService;
+    }
 
     private MainKeyboardView mainKeyboardView;
     private NumberKeypadView numberKeypadView;
     private SelectionKeypadView selectionKeypadView;
     private SymbolKeypadView symbolKeypadView;
+    private ClipboardKeypadView clipboardKeypadView;
     private View currentKeypadView;
 
     private int shiftLockFlag;
@@ -58,6 +66,8 @@ public class MainInputMethodService extends InputMethodService {
     public void onCreate() {
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         Context applicationContext = getApplicationContext();
+        this.clipboardManagerService = new ClipboardManagerService(applicationContext);
+        this.clipboardManagerService.setClipboardHistoryListener(this::onClipboardHistoryChanged);
         String colorMode = SharedPreferenceHelper.getInstance(applicationContext)
                 .getString(getString(R.string.pref_color_mode_key), "system");
         switch (colorMode) {
@@ -77,16 +87,17 @@ public class MainInputMethodService extends InputMethodService {
     /**
      * Lifecycle of IME
      * <p>
-     * 01.  InputMethodService Starts
-     * 02.  onCreate()
-     * 03.  onCreateInputView()
-     * 04.  onCreateCandidateViews()
-     * 05.  onStartInputViews()
-     * 06.  Text input gets the current input method subtype
-     * 07.  InputMethodManager#getCurrentInputMethodSubtype()
-     * 08.  Text input has started
-     * 09.  onCurrentInputMethodSubtypeChanged()
-     * 10. Detect the current input method subtype has been changed -> can go to step 6
+     * 01. InputMethodService Starts
+     * 02. onCreate()
+     * 03. onCreateInputView()
+     * 04. onCreateCandidateViews()
+     * 05. onStartInputViews()
+     * 06. Text input gets the current input method subtype
+     * 07. InputMethodManager#getCurrentInputMethodSubtype()
+     * 08. Text input has started
+     * 09. onCurrentInputMethodSubtypeChanged()
+     * 10. Detect the current input method subtype has been changed -> can go to
+     * step 6
      * 11. onFinishInput() -> cursor can Move to an additional field -> step 5
      * 12. onDestroy()
      * 13. InputMethodService stops
@@ -96,14 +107,15 @@ public class MainInputMethodService extends InputMethodService {
     public View onCreateInputView() {
         numberKeypadView = new NumberKeypadView(this);
         selectionKeypadView = new SelectionKeypadView(this);
+        clipboardKeypadView = new ClipboardKeypadView(this);
         symbolKeypadView = new SymbolKeypadView(this);
         mainKeyboardView = new MainKeyboardView(this);
         setCurrentKeypadView(mainKeyboardView);
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
             Window window = getWindow().getWindow();
-            WindowInsetsControllerCompat windowInsetsControllerCompat =
-                    new WindowInsetsControllerCompat(window, window.getDecorView());
+            WindowInsetsControllerCompat windowInsetsControllerCompat = new WindowInsetsControllerCompat(window,
+                    window.getDecorView());
             Theme.getInstance(getApplicationContext())
                     .onChange(() -> setNavigationBarColor(window, windowInsetsControllerCompat));
             setNavigationBarColor(window, windowInsetsControllerCompat);
@@ -200,8 +212,8 @@ public class MainInputMethodService extends InputMethodService {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 switchToPreviousInputMethod();
             } else {
-                InputMethodManager inputMethodManager =
-                        (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager inputMethodManager = (InputMethodManager) this
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
                 IBinder tokenIBinder = this.getWindow().getWindow().getAttributes().token;
                 inputMethodManager.switchToLastInputMethod(tokenIBinder);
             }
@@ -215,7 +227,8 @@ public class MainInputMethodService extends InputMethodService {
         String emoticonKeyboardId = SharedPreferenceHelper.getInstance(getApplicationContext())
                 .getString(getString(R.string.pref_selected_emoticon_keyboard), "");
 
-        // Before returning verify that this keyboard Id we have does exist in the system.
+        // Before returning verify that this keyboard Id we have does exist in the
+        // system.
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         List<InputMethodInfo> enabledInputMethodList = inputMethodManager.getEnabledInputMethodList();
         for (InputMethodInfo inputMethodInfo : enabledInputMethodList) {
@@ -248,9 +261,12 @@ public class MainInputMethodService extends InputMethodService {
         inputConnection.setSelection(end, start);
     }
 
-
     public void switchToSelectionKeypad() {
         setCurrentKeypadView(selectionKeypadView);
+    }
+
+    public void switchToClipboardKeypad() {
+        setCurrentKeypadView(clipboardKeypadView);
     }
 
     public void switchToSymbolsKeypad() {
@@ -282,9 +298,9 @@ public class MainInputMethodService extends InputMethodService {
     }
 
     public void performShiftToggle() {
-        //single press locks the shift key,
-        //double press locks the caps key
-        //a third press unlocks both.
+        // single press locks the shift key,
+        // double press locks the caps key
+        // a third press unlocks both.
         if (getShiftLockFlag() == KeyEvent.META_SHIFT_ON) {
             setShiftLockFlag(0);
             setCapsLockFlag(KeyEvent.META_CAPS_LOCK_ON);
@@ -326,24 +342,24 @@ public class MainInputMethodService extends InputMethodService {
 
     /*
      * |-------|-------|-------|-------|
-     *                              1111 IME_MASK_ACTION
+     * 1111 IME_MASK_ACTION
      * |-------|-------|-------|-------|
-     *                                   IME_ACTION_UNSPECIFIED
-     *                                 1 IME_ACTION_NONE
-     *                                1  IME_ACTION_GO
-     *                                11 IME_ACTION_SEARCH
-     *                               1   IME_ACTION_SEND
-     *                               1 1 IME_ACTION_NEXT
-     *                               11  IME_ACTION_DONE
-     *                               111 IME_ACTION_PREVIOUS
-     *         1                         IME_FLAG_NO_PERSONALIZED_LEARNING
-     *        1                          IME_FLAG_NO_FULLSCREEN
-     *       1                           IME_FLAG_NAVIGATE_PREVIOUS
-     *      1                            IME_FLAG_NAVIGATE_NEXT
-     *     1                             IME_FLAG_NO_EXTRACT_UI
-     *    1                              IME_FLAG_NO_ACCESSORY_ACTION
-     *   1                               IME_FLAG_NO_ENTER_ACTION
-     *  1                                IME_FLAG_FORCE_ASCII
+     * IME_ACTION_UNSPECIFIED
+     * 1 IME_ACTION_NONE
+     * 1 IME_ACTION_GO
+     * 11 IME_ACTION_SEARCH
+     * 1 IME_ACTION_SEND
+     * 1 1 IME_ACTION_NEXT
+     * 11 IME_ACTION_DONE
+     * 111 IME_ACTION_PREVIOUS
+     * 1 IME_FLAG_NO_PERSONALIZED_LEARNING
+     * 1 IME_FLAG_NO_FULLSCREEN
+     * 1 IME_FLAG_NAVIGATE_PREVIOUS
+     * 1 IME_FLAG_NAVIGATE_NEXT
+     * 1 IME_FLAG_NO_EXTRACT_UI
+     * 1 IME_FLAG_NO_ACCESSORY_ACTION
+     * 1 IME_FLAG_NO_ENTER_ACTION
+     * 1 IME_FLAG_FORCE_ASCII
      * |-------|-------|-------|-------|
      */
     public void commitImeOptionsBasedEnter() {
@@ -369,4 +385,8 @@ public class MainInputMethodService extends InputMethodService {
         }
     }
 
+    @Override
+    public void onClipboardHistoryChanged() {
+        clipboardKeypadView.updateClipHistory();
+    }
 }
