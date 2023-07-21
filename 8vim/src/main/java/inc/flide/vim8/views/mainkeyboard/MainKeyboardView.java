@@ -1,23 +1,12 @@
 package inc.flide.vim8.views.mainkeyboard;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.widget.ImageButton;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
-import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import inc.flide.vim8.structures.CustomKeycode;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardActionType;
-import inc.flide.vim8.ui.SettingsActivity;
-import inc.flide.vim8.utils.ColorsHelper;
 import inc.flide.vim8.views.ConstraintLayoutWithSidebar;
 
 

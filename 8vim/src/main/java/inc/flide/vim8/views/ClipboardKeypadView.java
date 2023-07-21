@@ -7,21 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.ClipboardActionListener;
-import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import inc.flide.vim8.structures.CustomKeycode;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardActionType;
-import inc.flide.vim8.utils.ColorsHelper;
-
 import java.text.MessageFormat;
 import java.util.List;
 

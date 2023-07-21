@@ -5,13 +5,9 @@ import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.widget.ImageButton;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-
-import java.security.Key;
-
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.KeypadActionListener;
