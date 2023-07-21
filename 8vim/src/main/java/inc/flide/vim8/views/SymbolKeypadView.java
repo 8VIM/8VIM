@@ -1,4 +1,4 @@
-package inc.flide.vim8.ui.views;
+package inc.flide.vim8.views;
 
 import android.content.Context;
 import inc.flide.vim8.R;

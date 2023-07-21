@@ -31,6 +31,7 @@ public abstract class KeypadActionListener {
         return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= keycodeProfileSwitch;
     }
 
+
     public void handleInputKey(int keyCode, int keyFlags) {
         boolean actionHandled = handleKeyEventKeyCodes(keyCode, keyFlags);
         if (!actionHandled) {

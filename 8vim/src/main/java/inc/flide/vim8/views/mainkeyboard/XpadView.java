@@ -1,4 +1,4 @@
-package inc.flide.vim8.ui.views.mainkeyboard;
+package inc.flide.vim8.views.mainkeyboard;
 
 import android.content.Context;
 import android.content.res.Configuration;

@@ -1,12 +1,8 @@
-package inc.flide.vim8.ui.views;
+package inc.flide.vim8.views;
 
 import android.content.Context;
-import com.hijamoya.keyboardview.Keyboard;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardactionlisteners.ButtonKeypadActionListener;
-import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.utils.ColorsHelper;
 
 public class SelectionKeypadView extends ButtonKeypadView {
     public SelectionKeypadView(Context context) {

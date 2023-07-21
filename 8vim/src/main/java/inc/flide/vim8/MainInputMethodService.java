@@ -30,31 +30,30 @@ import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.ui.Theme;
 import inc.flide.vim8.views.ClipboardKeypadView;
-import inc.flide.vim8.ui.views.NumberKeypadView;
-import inc.flide.vim8.ui.views.SelectionKeypadView;
-import inc.flide.vim8.ui.views.SymbolKeypadView;
-import inc.flide.vim8.ui.views.mainkeyboard.MainKeyboardView;
+import inc.flide.vim8.views.NumberKeypadView;
+import inc.flide.vim8.views.SelectionKeypadView;
+import inc.flide.vim8.views.SymbolKeypadView;
+import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
 import java.util.List;
 
-public class MainInputMethodService extends InputMethodService {
+public class MainInputMethodService extends InputMethodService
+        implements ClipboardManagerService.ClipboardHistoryListener {
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
     private ClipboardManagerService clipboardManagerService;
-
-    public ClipboardManagerService getClipboardManagerService() {
-        return clipboardManagerService;
-    }
-
     private MainKeyboardView mainKeyboardView;
     private NumberKeypadView numberKeypadView;
     private SelectionKeypadView selectionKeypadView;
     private SymbolKeypadView symbolKeypadView;
     private ClipboardKeypadView clipboardKeypadView;
     private View currentKeypadView;
-
     private int shiftLockFlag;
     private int capsLockFlag;
     private int modifierFlags;
+
+    public ClipboardManagerService getClipboardManagerService() {
+        return clipboardManagerService;
+    }
 
     private void setCurrentKeypadView(View view) {
         this.currentKeypadView = view;

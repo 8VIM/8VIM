@@ -13,6 +13,7 @@ import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardactionlisteners.ClipboardActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.ui.Theme;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
         setColors();
         setHapticFeedbackEnabled(true);
 
-        SharedPreferenceHelper.getInstance(context).addListener(this::setColors);
+        Theme.getInstance(context).onChange(this::setColors);
     }
 
     private void setupOverallView(Context context) {
