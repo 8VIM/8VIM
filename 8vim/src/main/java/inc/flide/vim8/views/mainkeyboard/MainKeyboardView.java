@@ -18,9 +18,10 @@ import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.ui.SettingsActivity;
 import inc.flide.vim8.utils.ColorsHelper;
+import inc.flide.vim8.views.ConstraintLayoutWithSidebar;
 
 
-public class MainKeyboardView extends ConstraintLayout {
+public class MainKeyboardView extends ConstraintLayoutWithSidebar {
 
     private MainKeypadActionListener actionListener;
 
@@ -42,7 +43,7 @@ public class MainKeyboardView extends ConstraintLayout {
     public void initialize(Context context) {
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setupMainKeyboardView(context);
-        setupButtonsOnSideBar();
+        setupButtonsOnSideBar(actionListener);
         setColors();
         setHapticFeedbackEnabled(true);
 
@@ -66,13 +67,6 @@ public class MainKeyboardView extends ConstraintLayout {
         }
     }
 
-    private void setupButtonsOnSideBar() {
-        setupSwitchToEmojiKeyboardButton();
-        setupSwitchToSelectionKeyboardButton();
-        setupTabKey();
-        setupGoToSettingsButton();
-        setupSwitchToClipboardKeypadButton();
-    }
 
     private void setImageButtonTint(int tintColor, int id) {
         ImageButton button = findViewById(id);
@@ -98,62 +92,6 @@ public class MainKeyboardView extends ConstraintLayout {
         setImageButtonTint(tintColor, R.id.switchToEmojiKeyboard);
     }
 
-    private void setupSwitchToClipboardKeypadButton() {
-        ImageButton switchToClipboardButton = findViewById(R.id.clipboardButton);
-        switchToClipboardButton.setOnClickListener(
-                view -> {
-                    KeyboardAction switchToClipboardKeyboard = new KeyboardAction(
-                            KeyboardActionType.INPUT_KEY,
-                            "",
-                            null,
-                            CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.getKeyCode(),
-                            0,
-                            0);
-                    actionListener.handleInputKey(switchToClipboardKeyboard);
-                });
-    }
-
-    private void setupGoToSettingsButton() {
-        ImageButton goToSettingsButton = findViewById(R.id.goToSettingsButton);
-        goToSettingsButton.setOnClickListener(view -> {
-            Intent vim8SettingsIntent = new Intent(getContext(), SettingsActivity.class);
-            vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getContext().startActivity(vim8SettingsIntent);
-        });
-    }
-
-    private void setupTabKey() {
-        ImageButton tabKeyButton = findViewById(R.id.tabButton);
-        tabKeyButton.setOnClickListener(view -> actionListener.handleInputKey(KeyEvent.KEYCODE_TAB, 0));
-    }
-
-    private void setupSwitchToSelectionKeyboardButton() {
-        ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
-        switchToSelectionKeyboardButton.setOnClickListener(view -> {
-            KeyboardAction switchToSelectionKeyboard = new KeyboardAction(
-                    KeyboardActionType.INPUT_KEY,
-                    "",
-                    null,
-                    CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(),
-                    0,
-                    0);
-            actionListener.handleInputKey(switchToSelectionKeyboard);
-        });
-    }
-
-    private void setupSwitchToEmojiKeyboardButton() {
-        ImageButton switchToEmojiKeyboardButton = findViewById(R.id.switchToEmojiKeyboard);
-        switchToEmojiKeyboardButton.setOnClickListener(view -> {
-            KeyboardAction switchToEmojiKeyboard = new KeyboardAction(
-                    KeyboardActionType.INPUT_KEY,
-                    "",
-                    null,
-                    CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(),
-                    0,
-                    0);
-            actionListener.handleInputKey(switchToEmojiKeyboard);
-        });
-    }
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
