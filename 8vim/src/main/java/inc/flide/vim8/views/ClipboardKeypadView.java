@@ -73,30 +73,6 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
         setupClipboardListView();
     }
 
-    private void setImageButtonTint(int tintColor, int id) {
-        ImageButton button = findViewById(id);
-        button.setColorFilter(tintColor);
-    }
-
-    private void setColors() {
-        Context context = getContext();
-        int backgroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.backgroundColor,
-                        R.string.pref_board_bg_color_key,
-                        R.color.defaultBoardBg);
-        int tintColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground,
-                        R.string.pref_board_fg_color_key,
-                        R.color.defaultBoardFg);
-
-        this.setBackgroundColor(backgroundColor);
-        setImageButtonTint(tintColor, R.id.clipboardButton);
-        setImageButtonTint(tintColor, R.id.goToSettingsButton);
-        setImageButtonTint(tintColor, R.id.tabButton);
-        setImageButtonTint(tintColor, R.id.switchToSelectionKeyboard);
-        setImageButtonTint(tintColor, R.id.switchToEmojiKeyboard);
-    }
-
 
     public void setupClipboardListView() {
 
@@ -140,17 +116,4 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
         }
     }
 
-    @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
-                MeasureSpec.getSize(widthMeasureSpec),
-                MeasureSpec.getSize(heightMeasureSpec),
-                getResources().getConfiguration().orientation);
-
-        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
-
-        super.onMeasure(
-                MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
-    }
 }
