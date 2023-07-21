@@ -19,22 +19,32 @@ import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.views.ClipboardKeypadView;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
 import java.util.List;
 
-public class MainInputMethodService extends InputMethodService {
+public class MainInputMethodService
+        extends InputMethodService
+        implements ClipboardManagerService.ClipboardHistoryListener {
 
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
+    private ClipboardManagerService clipboardManagerService;
+
+    public ClipboardManagerService getClipboardManagerService() {
+        return clipboardManagerService;
+    }
 
     private MainKeyboardView mainKeyboardView;
     private NumberKeypadView numberKeypadView;
     private SelectionKeypadView selectionKeypadView;
     private SymbolKeypadView symbolKeypadView;
+    private ClipboardKeypadView clipboardKeypadView;
     private View currentKeypadView;
 
     private int shiftLockFlag;
@@ -51,6 +61,8 @@ public class MainInputMethodService extends InputMethodService {
     public void onCreate() {
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         Context applicationContext = getApplicationContext();
+        this.clipboardManagerService = new ClipboardManagerService(applicationContext);
+        this.clipboardManagerService.setClipboardHistoryListener(this::onClipboardHistoryChanged);
         switch (SharedPreferenceHelper.getInstance(applicationContext)
                 .getString(getString(R.string.pref_color_mode_key), "system")) {
             case "dark":
@@ -90,6 +102,7 @@ public class MainInputMethodService extends InputMethodService {
     public View onCreateInputView() {
         numberKeypadView = new NumberKeypadView(this);
         selectionKeypadView = new SelectionKeypadView(this);
+        clipboardKeypadView = new ClipboardKeypadView(this);
         symbolKeypadView = new SymbolKeypadView(this);
         mainKeyboardView = new MainKeyboardView(this);
         setCurrentKeypadView(mainKeyboardView);
@@ -217,11 +230,7 @@ public class MainInputMethodService extends InputMethodService {
     public void delete() {
         CharSequence sel = inputConnection.getSelectedText(0);
         if (TextUtils.isEmpty(sel)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                inputConnection.deleteSurroundingTextInCodePoints(1, 0);
-            } else {
-                inputConnection.deleteSurroundingText(1, 0);
-            }
+            inputConnection.deleteSurroundingTextInCodePoints(1, 0);
         } else {
             inputConnection.commitText("", 0);
         }
@@ -238,6 +247,10 @@ public class MainInputMethodService extends InputMethodService {
 
     public void switchToSelectionKeypad() {
         setCurrentKeypadView(selectionKeypadView);
+    }
+
+    public void switchToClipboardKeypad() {
+        setCurrentKeypadView(clipboardKeypadView);
     }
 
     public void switchToSymbolsKeypad() {
@@ -356,4 +369,8 @@ public class MainInputMethodService extends InputMethodService {
         }
     }
 
+    @Override
+    public void onClipboardHistoryChanged() {
+        clipboardKeypadView.updateClipHistory();
+    }
 }

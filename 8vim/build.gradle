@@ -27,7 +27,7 @@ android {
     defaultConfig {
 
         applicationId "inc.flide.vi8"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 33
 
         versionCode versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - (versionRc>0?100 - versionRc:0)
