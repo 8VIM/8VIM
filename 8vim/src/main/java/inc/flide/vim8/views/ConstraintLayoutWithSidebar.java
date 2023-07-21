@@ -13,11 +13,14 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import java.security.Key;
 
 import inc.flide.vim8.R;
+import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.KeypadActionListener;
+import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.ui.SettingsActivity;
+import inc.flide.vim8.utils.ColorsHelper;
 
 public class ConstraintLayoutWithSidebar extends ConstraintLayout {
     protected KeypadActionListener actionListener;
@@ -101,4 +104,40 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
             actionListener.handleInputKey(switchToEmojiKeyboard);
         });
     }
+    protected void setImageButtonTint(int tintColor, int id) {
+        ImageButton button = findViewById(id);
+        button.setColorFilter(tintColor);
+    }
+    protected void setColors() {
+        Context context = getContext();
+        int backgroundColor =
+                ColorsHelper.getThemeColor(context, R.attr.backgroundColor,
+                        R.string.pref_board_bg_color_key,
+                        R.color.defaultBoardBg);
+        int tintColor =
+                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground,
+                        R.string.pref_board_fg_color_key,
+                        R.color.defaultBoardFg);
+
+        this.setBackgroundColor(backgroundColor);
+        setImageButtonTint(tintColor, R.id.clipboardButton);
+        setImageButtonTint(tintColor, R.id.goToSettingsButton);
+        setImageButtonTint(tintColor, R.id.tabButton);
+        setImageButtonTint(tintColor, R.id.switchToSelectionKeyboard);
+        setImageButtonTint(tintColor, R.id.switchToEmojiKeyboard);
+    }
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Dimension computedDimension = InputMethodViewHelper.onMeasureHelper(
+                MeasureSpec.getSize(widthMeasureSpec),
+                MeasureSpec.getSize(heightMeasureSpec),
+                getResources().getConfiguration().orientation);
+
+        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
+
+        super.onMeasure(
+                MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
+    }
+
 }
