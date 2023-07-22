@@ -1,0 +1,26 @@
+{
+  "categories": [
+    {
+      "title": "## What's Changed",
+      "empty_content": "- no matching PRs",
+      "rules": [
+        {
+          "pattern": "merged",
+          "on_property": "status",
+          "flags": "gu"
+        }
+      ],
+      "exclude_labels": ["release"]
+    }
+  ],
+  "template": "${{CHANGELOG}}\n**Full Changelog**: [${{FROM_TAG}}...${{TO_TAG}}](https://github.com/${{OWNER}}/${{REPO}}/compare/${{FROM_TAG}}...${{TO_TAG}})",
+  "pr_template": "- ${{TITLE}} by @${{AUTHOR}} in #${{NUMBER}}",
+  "base_branches": ["master"],
+  "tag_resolver": {
+    "method": "semver",
+    "transformer": {
+      "pattern": "iteration-(\\d+)(\\.\\d+)?",
+      "target": "v0.$1.0$2"
+    }
+  }
+}

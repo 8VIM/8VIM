@@ -13,18 +13,33 @@ checkstyle {
 }
 
 android {
-    namespace 'inc.flide.vim8'
-    compileSdkVersion 33
+    def versionPropsFile = file('version.properties')
+    Properties versionProps = new Properties()
+    versionProps.load(new FileInputStream(versionPropsFile))
+    
+    def versionMajor = versionProps['MAJOR'].toInteger()
+    def versionMinor = versionProps['MINOR'].toInteger()
+    def versionPatch = versionProps['PATCH'].toInteger()
+    def versionRc = versionProps['RC'].toInteger()
 
+    compileSdkVersion 33
+    
     defaultConfig {
         applicationId "inc.flide.vi8"
         minSdkVersion 24
         targetSdkVersion 33
-        versionCode 16
-        versionName "iteration-13"
 
-        vectorDrawables.useSupportLibrary = true
+        versionCode versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - (versionRc>0?100 - versionRc:0)
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+        
         resValue "string", "version_name", versionName
+        
+        if(versionRc > 0) {
+            versionNameSuffix "-rc.${versionRc}"
+            resValue "string", "version_name", versionName + versionNameSuffix
+        }
+        
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -48,6 +63,11 @@ android {
             if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
                 signingConfig signingConfigs.release
             }
+        }
+
+        create("rc") {
+            initWith release
+            applicationIdSuffix ".rc"
         }
     }
 
@@ -85,15 +105,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.junit4)
-
-    testImplementation(libs.logback.classic)
-    testImplementation(libs.assertj.core)
-    testImplementation(libs.junit5.api)
-    testRuntimeOnly(libs.junit5.jupiter.engine)
-    testRuntimeOnly(libs.junit5.vintage.engine)
-    testImplementation(libs.jqwik)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.junit5)
 }
 
 configurations.testImplementation {

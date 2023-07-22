@@ -1,0 +1,44 @@
+name: Update PR comment
+
+on:
+  workflow_run:
+    workflows: [PR test]
+    types: [completed]
+
+jobs:
+  update_pr_comment:
+    permissions:
+      actions: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
+    steps:
+      - name: Get artifact link
+        id: artifact
+        run: |
+          curl \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ github.token }}" \
+          -s \
+          "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts" \
+          | jq -c '.artifacts[0]' > artifact.json
+
+          curl \
+          -L \
+          -H "Accept: application/vnd.github+json" \
+          -H "Authorization: Bearer ${{ github.token }}" \
+          -s \
+          -o artifact.zip \
+          $(jq -j '.archive_download_url' artifact.json)
+          unzip artifact.zip
+
+          echo "pr_number=$(cat pr_number)" >> $GITHUB_OUTPUT
+          echo "url=https://github.com/${{ github.repository }}/suites/${{ github.event.workflow_run.check_suite_id }}/artifacts/$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
+          echo "expires=$(jq -j '.expires_at' artifact.json)" >> $GITHUB_OUTPUT
+      - name: Update comment
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Artifact [8vim-debug](${{steps.artifact.outputs.url}}) available until: ${{steps.artifact.outputs.expires}}
+          comment_tag: artifact
+          pr_number: ${{steps.artifact.outputs.pr_number}}

@@ -1,0 +1,113 @@
+name: Publish 8VIM
+
+on:
+  workflow_call:
+    inputs:
+      version_code:
+        required: true
+        type: string
+      version_name:
+        required: true
+        type: string
+jobs:
+  build_rc:
+    if: ${{contains(inputs.version_name, 'rc')}}
+    name: Build release candidate app
+    uses: ./.github/workflows/build.yaml
+    with:
+      ref: v${{inputs.version_name}}
+      target: rc
+    secrets: inherit
+  build:
+    name: Build app
+    uses: ./.github/workflows/build.yaml
+    with:
+      ref: v${{inputs.version_name}}
+      target: release
+    secrets: inherit
+  playstore:
+    name: Deploy the app to Google playstore
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: v${{inputs.version_name}}
+      - name: Download artifact
+        id: artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: artifact/
+      - name: Setup env
+        run: |
+          mkdir -p distribution/whatsnew
+          cp metadata/en-US/changelogs/${{inputs.version_code}}.txt distribution/whatsnew/whatsnew-en-US
+      - name: Google play release
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: tech.maethornaur.myapplication
+          releaseFiles: ${{ steps.artifact.outputs.download-path }}/bundle/release/8vim-release.aab
+          track: ${{contains(inputs.version_name, 'rc') && 'internal' || 'alpha'}}
+          whatsNewDirectory: distribution/whatsnew
+          mappingFile: ${{ steps.artifact.outputs.download-path }}/mapping/release/mapping.txt
+  f_droid:
+    name: Release to F-droid
+    if: ${{!contains(inputs.version_name, 'rc')}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{secrets.PAT}}
+          repository: MaethorNaur/MaethorNaur.github.io
+          persist-credentials: false
+      - run: |
+          echo "{\"version_code\": ${{inputs.version_code}}, \"version_name\": \"${{inputs.version_name}}\"}" > version.json
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add version.json
+          set +e
+          git commit -a -m "chore: release ${{inputs.version_name}}"
+          set -e
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          repository: 8VIM/8VIM.github.io
+  release:
+    name: Create github release
+    needs: [build, build_rc, playstore, f_droid]
+    if: ${{ !cancelled() && needs.build.result !='failure' && needs.build_rc.result !='failure' && needs.playstore.result != 'failure' && needs.f_droid.result != 'failure' }}
+    permissions:
+      actions: read
+      issues: read
+      pull-requests: read
+      contents: write
+    env:
+      target: ${{contains(inputs.version_name, 'rc') && 'rc' || 'release'}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download artifact
+        id: artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: artifact/
+      - name: Create Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configuration: changelog-configuration.json
+          ignorePreReleases: "${{!contains(inputs.version_name, 'rc')}}"
+          toTag: v${{inputs.version_name}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          body: ${{steps.github_release.outputs.changelog}}
+          files: ${{ steps.artifact.outputs.download-path }}/apk/${{env.target}}/8vim-${{env.target}}.apk
+          prerelease: ${{contains(inputs.version_name, 'rc')}}
+          tag_name: v${{inputs.version_name}}
