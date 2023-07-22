@@ -9,44 +9,42 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 
-public abstract class Flags {
+public final class Flags {
+
+    private final int value;
+
+    public Flags(int value) {
+        this.value = value;
+    }
 
     public static Flags empty() {
-        return new IntFlags(0);
-
+        return new Flags(0);
     }
 
     public int getValue() {
-        return 0;
+        return value;
     }
 
     public static class FlagsDeserializer extends JsonDeserializer<Flags> {
 
         @Override
-        public Flags deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
-            JsonNode node = (JsonNode) p.getCodec().readTree(p);
-            if (node.isInt()) {
-                return new IntFlags(node.intValue());
-            } else if (node.isTextual()) {
-                return new IntFlags(getArrayFlag(node, p));
+        public Flags deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, NullPointerException {
+            JsonNode node = p.getCodec().readTree(p);
+            if (node.isInt() || node.isTextual()) {
+                return new Flags(getArrayFlag(node, p));
             } else if (node.isArray()) {
                 ArrayNode arrayNode = (ArrayNode) node;
                 Iterator<JsonNode> iterator = arrayNode.elements();
-                if (!iterator.hasNext()) {
-                    return Flags.empty();
-                }
-                List<Integer> flags = new ArrayList<>();
 
+                int result = 0;
                 while (iterator.hasNext()) {
                     JsonNode current = iterator.next();
-                    flags.add(getArrayFlag(current, p));
+                    result |= getArrayFlag(current, p);
                 }
-                return new ArrayFlags(flags);
+                return new Flags(result);
             }
 
             throw MismatchedInputException.from(p, (Class<?>) null,
@@ -104,35 +102,4 @@ public abstract class Flags {
             }
         }
     }
-
-    public static class IntFlags extends Flags {
-        private final int value;
-
-        public IntFlags(int value) {
-            this.value = value;
-        }
-
-        @Override
-        public int getValue() {
-            return value;
-        }
-    }
-
-    public static class ArrayFlags extends Flags {
-        public List<Integer> flags;
-
-        public ArrayFlags(List<Integer> flags) {
-            this.flags = flags;
-        }
-
-        @Override
-        public int getValue() {
-            int value = 0;
-            for (Integer flag : flags) {
-                value |= flag;
-            }
-            return value;
-        }
-    }
-
 }

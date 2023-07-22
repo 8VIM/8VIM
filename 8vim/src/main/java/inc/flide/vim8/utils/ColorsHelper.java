@@ -22,9 +22,9 @@ public class ColorsHelper {
         int color;
         TypedValue value = new TypedValue();
         Resources.Theme theme;
-        String system = SharedPreferenceHelper.getInstance(context)
-                .getString(context.getString(R.string.pref_color_mode_key), "system");
-        switch (system) {
+        String colorMode = sharedPreferenceHelper.getString(context.getString(R.string.pref_color_mode_key), "system");
+
+        switch (colorMode) {
             case "system":
                 theme = context.getResources().newTheme();
                 theme.applyStyle(R.style.AppTheme_NoActionBar, true);
@@ -46,7 +46,7 @@ public class ColorsHelper {
             default:
                 color = sharedPreferenceHelper.getInt(
                         resources.getString(defaultColorKey),
-                        resources.getColor(defaultColorValue));
+                        resources.getColor(defaultColorValue, null));
         }
         return color;
     }

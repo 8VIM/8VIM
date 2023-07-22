@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.Material3.DynamicColors.Light" />
+    <style name="AppThemeLightBase" parent="Theme.Material3.DynamicColors.Light" />
 
-    <style name="AppTheme.NoActionBar">
-        <item name="backgroundColor">@android:color/background_light</item>
+    <style name="AppThemeLight" parent="AppThemeLightBase" />
+
+    <style name="AppThemeLightBase.NoActionBar" parent="AppThemeLight">
+        <item name="backgroundColor">?colorSurface</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
+        <item name="toolbarStyle">@style/MaterialToolbar</item>
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
     </style>
 
-    <style name="AppThemeLight" parent="Theme.Material3.DynamicColors.Light" />
+    <style name="AppThemeLight.NoActionBar" parent="AppThemeLightBase.NoActionBar" />
 
-    <style name="AppThemeLight.NoActionBar">
-        <item name="backgroundColor">@android:color/background_light</item>
+    <style name="AppThemeDarkBase" parent="Theme.Material3.DynamicColors.Dark" />
+
+    <style name="AppThemeDark" parent="AppThemeDarkBase" />
+
+    <style name="AppThemeDarkBase.NoActionBar" parent="AppThemeDark">
+        <item name="backgroundColor">?colorSurface</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
         <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
+        <item name="toolbarStyle">@style/MaterialToolbar</item>
     </style>
 
-    <style name="AppThemeDark" parent="Theme.Material3.DynamicColors.Dark" />
+    <style name="AppThemeDark.NoActionBar" parent="AppThemeDarkBase.NoActionBar" />
 
-    <style name="AppThemeDark.NoActionBar">
-        <item name="backgroundColor">@android:color/background_dark</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
+    <style name="AppTheme.NoActionBar" parent="AppThemeLight.NoActionBar" />
+
+
+    <style name="MaterialToolbar" parent="Widget.Material3.Toolbar">
+        <item name="titleTextColor">?colorOnPrimary</item>
     </style>
 
     <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="color">?android:colorBackground</item>
+        <item name="color">?colorOnPrimary</item>
     </style>
 
     <style name="KeyboardView" parent="android:Widget">

@@ -4,4 +4,7 @@
     <dimen name="activity_vertical_margin">16sp</dimen>
     <dimen name="font_size">20sp</dimen>
     <dimen name="icon_size">25sp</dimen>
+    <fraction name="inputView_minHeightFraction">38.2%p</fraction>
+    <fraction name="inputView_maxHeightFraction">46%p</fraction>
+    <dimen name="inputView_baseHeight">248dp</dimen>
 </resources>

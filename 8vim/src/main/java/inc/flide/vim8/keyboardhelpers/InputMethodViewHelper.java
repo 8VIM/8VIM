@@ -1,21 +1,30 @@
 package inc.flide.vim8.keyboardhelpers;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
+import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 
 public final class InputMethodViewHelper {
     private InputMethodViewHelper() {
     }
 
-    public static Dimension onMeasureHelper(int width, int height, int orientation) {
-
-        if (orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
-            //Landscape is just un-usable right now.
-            // TODO: Landscape mode requires more clarity, what exactly do you want to do?
-            width = Math.round(1.33f * height);
-        } else { // Portrait mode
-            height = Math.round(0.8f * (width - (60 * 3)));
+    public static Dimension computeDimension(Resources resources) {
+        DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+        float minBaseSize;
+        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            minBaseSize = resources.getFraction(R.fraction.inputView_minHeightFraction, displayMetrics.heightPixels,
+                    displayMetrics.heightPixels);
+        } else {
+            minBaseSize = resources.getFraction(R.fraction.inputView_minHeightFraction, displayMetrics.widthPixels,
+                    displayMetrics.widthPixels);
         }
-        return new Dimension(width, height);
+        float maxBaseSize = resources.getFraction(R.fraction.inputView_maxHeightFraction, displayMetrics.heightPixels,
+                displayMetrics.heightPixels);
+        int height = (int) (Math.max((minBaseSize + maxBaseSize) / 2.0f,
+                resources.getDimension(R.dimen.inputView_baseHeight)));
+        return new Dimension(displayMetrics.widthPixels, height);
     }
 
 }

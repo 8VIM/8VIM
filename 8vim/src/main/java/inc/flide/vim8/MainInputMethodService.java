@@ -1,14 +1,19 @@
 package inc.flide.vim8;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.inputmethodservice.InputMethodService;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
@@ -16,11 +21,14 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.graphics.ColorUtils;
+import androidx.core.view.WindowInsetsControllerCompat;
 import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.ui.Theme;
 import inc.flide.vim8.views.ClipboardKeypadView;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
@@ -28,28 +36,24 @@ import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
 import java.util.List;
 
-public class MainInputMethodService
-        extends InputMethodService
+public class MainInputMethodService extends InputMethodService
         implements ClipboardManagerService.ClipboardHistoryListener {
-
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
     private ClipboardManagerService clipboardManagerService;
-
-    public ClipboardManagerService getClipboardManagerService() {
-        return clipboardManagerService;
-    }
-
     private MainKeyboardView mainKeyboardView;
     private NumberKeypadView numberKeypadView;
     private SelectionKeypadView selectionKeypadView;
     private SymbolKeypadView symbolKeypadView;
     private ClipboardKeypadView clipboardKeypadView;
     private View currentKeypadView;
-
     private int shiftLockFlag;
     private int capsLockFlag;
     private int modifierFlags;
+
+    public ClipboardManagerService getClipboardManagerService() {
+        return clipboardManagerService;
+    }
 
     private void setCurrentKeypadView(View view) {
         this.currentKeypadView = view;
@@ -63,40 +67,40 @@ public class MainInputMethodService
         Context applicationContext = getApplicationContext();
         this.clipboardManagerService = new ClipboardManagerService(applicationContext);
         this.clipboardManagerService.setClipboardHistoryListener(this::onClipboardHistoryChanged);
-        switch (SharedPreferenceHelper.getInstance(applicationContext)
-                .getString(getString(R.string.pref_color_mode_key), "system")) {
+        String colorMode = SharedPreferenceHelper.getInstance(applicationContext)
+                .getString(getString(R.string.pref_color_mode_key), "system");
+        switch (colorMode) {
             case "dark":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                setTheme(R.style.AppThemeDark_NoActionBar);
                 break;
             case "light":
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                setTheme(R.style.AppThemeLight_NoActionBar);
                 break;
             default:
-                setTheme(R.style.AppTheme_NoActionBar);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
+        setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate();
     }
 
     /**
      * Lifecycle of IME
      * <p>
-     * 01.  InputMethodService Starts
-     * 02.  onCreate()
-     * 03.  onCreateInputView()
-     * 04.  onCreateCandidateViews()
-     * 05.  onStartInputViews()
-     * 06.  Text input gets the current input method subtype
-     * 07.  InputMethodManager#getCurrentInputMethodSubtype()
-     * 08.  Text input has started
-     * 09.  onCurrentInputMethodSubtypeChanged()
-     * 10. Detect the current input method subtype has been changed -> can go to step 6
+     * 01. InputMethodService Starts
+     * 02. onCreate()
+     * 03. onCreateInputView()
+     * 04. onCreateCandidateViews()
+     * 05. onStartInputViews()
+     * 06. Text input gets the current input method subtype
+     * 07. InputMethodManager#getCurrentInputMethodSubtype()
+     * 08. Text input has started
+     * 09. onCurrentInputMethodSubtypeChanged()
+     * 10. Detect the current input method subtype has been changed -> can go to
+     * step 6
      * 11. onFinishInput() -> cursor can Move to an additional field -> step 5
      * 12. onDestroy()
      * 13. InputMethodService stops
      */
-
 
     @Override
     public View onCreateInputView() {
@@ -106,7 +110,23 @@ public class MainInputMethodService
         symbolKeypadView = new SymbolKeypadView(this);
         mainKeyboardView = new MainKeyboardView(this);
         setCurrentKeypadView(mainKeyboardView);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
+            Window window = getWindow().getWindow();
+            WindowInsetsControllerCompat windowInsetsControllerCompat = new WindowInsetsControllerCompat(window,
+                    window.getDecorView());
+            Theme.getInstance(getApplicationContext())
+                    .onChange(() -> setNavigationBarColor(window, windowInsetsControllerCompat));
+            setNavigationBarColor(window, windowInsetsControllerCompat);
+        }
         return currentKeypadView;
+    }
+
+    private void setNavigationBarColor(Window window, WindowInsetsControllerCompat windowInsetsControllerCompat) {
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setNavigationBarColor(Theme.getBackgroundColor());
+        boolean isLight = ColorUtils.calculateLuminance(Theme.getBackgroundColor()) >= 0.5;
+        windowInsetsControllerCompat.setAppearanceLightNavigationBars(isLight);
     }
 
     @Override
@@ -118,6 +138,14 @@ public class MainInputMethodService
     @Override
     public void onBindInput() {
         inputConnection = getCurrentInputConnection();
+    }
+
+    @Override
+    public boolean onEvaluateFullscreenMode() {
+        int orientation = getResources().getConfiguration().orientation;
+        DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
+        float heightDp = displayMetrics.heightPixels / displayMetrics.density;
+        return orientation == Configuration.ORIENTATION_LANDSCAPE && heightDp < 480f;
     }
 
     @Override
@@ -162,28 +190,14 @@ public class MainInputMethodService
 
     public void sendDownKeyEvent(int keyEventCode, int flags) {
         inputConnection.sendKeyEvent(
-                new KeyEvent(
-                        SystemClock.uptimeMillis(),
-                        SystemClock.uptimeMillis(),
-                        KeyEvent.ACTION_DOWN,
-                        keyEventCode,
-                        0,
-                        flags
-                )
-        );
+                new KeyEvent(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), KeyEvent.ACTION_DOWN, keyEventCode,
+                        0, flags));
     }
 
     public void sendUpKeyEvent(int keyEventCode, int flags) {
         inputConnection.sendKeyEvent(
-                new KeyEvent(
-                        SystemClock.uptimeMillis(),
-                        SystemClock.uptimeMillis(),
-                        KeyEvent.ACTION_UP,
-                        keyEventCode,
-                        0,
-                        flags
-                )
-        );
+                new KeyEvent(SystemClock.uptimeMillis(), SystemClock.uptimeMillis(), KeyEvent.ACTION_UP, keyEventCode,
+                        0, flags));
     }
 
     public void sendDownAndUpKeyEvent(int keyEventCode, int flags) {
@@ -192,26 +206,29 @@ public class MainInputMethodService
     }
 
     public void switchToExternalEmoticonKeyboard() {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-        IBinder tokenIBinder = this.getWindow().getWindow().getAttributes().token;
         String keyboardId = getSelectedEmoticonKeyboardId();
         if (keyboardId.isEmpty()) {
-            inputMethodManager.switchToLastInputMethod(tokenIBinder);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                switchToPreviousInputMethod();
+            } else {
+                InputMethodManager inputMethodManager = (InputMethodManager) this
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
+                IBinder tokenIBinder = this.getWindow().getWindow().getAttributes().token;
+                inputMethodManager.switchToLastInputMethod(tokenIBinder);
+            }
         } else {
-            inputMethodManager.setInputMethod(tokenIBinder, keyboardId);
+            switchInputMethod(keyboardId);
         }
 
     }
 
     private String getSelectedEmoticonKeyboardId() {
-        String emoticonKeyboardId = SharedPreferenceHelper
-                .getInstance(getApplicationContext())
+        String emoticonKeyboardId = SharedPreferenceHelper.getInstance(getApplicationContext())
                 .getString(getString(R.string.pref_selected_emoticon_keyboard), "");
 
-        // Before returning verify that this keyboard Id we have does exist in the system.
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        // Before returning verify that this keyboard Id we have does exist in the
+        // system.
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         List<InputMethodInfo> enabledInputMethodList = inputMethodManager.getEnabledInputMethodList();
         for (InputMethodInfo inputMethodInfo : enabledInputMethodList) {
             if (inputMethodInfo.getId().compareTo(emoticonKeyboardId) == 0) {
@@ -222,8 +239,7 @@ public class MainInputMethodService
     }
 
     public void sendKey(int keyEventCode, int flags) {
-        sendDownAndUpKeyEvent(keyEventCode,
-                getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags);
+        sendDownAndUpKeyEvent(keyEventCode, getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags);
         clearModifierFlags();
     }
 
@@ -243,7 +259,6 @@ public class MainInputMethodService
         int end = extractedText.selectionEnd;
         inputConnection.setSelection(end, start);
     }
-
 
     public void switchToSelectionKeypad() {
         setCurrentKeypadView(selectionKeypadView);
@@ -282,9 +297,9 @@ public class MainInputMethodService
     }
 
     public void performShiftToggle() {
-        //single press locks the shift key,
-        //double press locks the caps key
-        //a third press unlocks both.
+        // single press locks the shift key,
+        // double press locks the caps key
+        // a third press unlocks both.
         if (getShiftLockFlag() == KeyEvent.META_SHIFT_ON) {
             setShiftLockFlag(0);
             setCapsLockFlag(KeyEvent.META_CAPS_LOCK_ON);
@@ -326,24 +341,24 @@ public class MainInputMethodService
 
     /*
      * |-------|-------|-------|-------|
-     *                              1111 IME_MASK_ACTION
+     * 1111 IME_MASK_ACTION
      * |-------|-------|-------|-------|
-     *                                   IME_ACTION_UNSPECIFIED
-     *                                 1 IME_ACTION_NONE
-     *                                1  IME_ACTION_GO
-     *                                11 IME_ACTION_SEARCH
-     *                               1   IME_ACTION_SEND
-     *                               1 1 IME_ACTION_NEXT
-     *                               11  IME_ACTION_DONE
-     *                               111 IME_ACTION_PREVIOUS
-     *         1                         IME_FLAG_NO_PERSONALIZED_LEARNING
-     *        1                          IME_FLAG_NO_FULLSCREEN
-     *       1                           IME_FLAG_NAVIGATE_PREVIOUS
-     *      1                            IME_FLAG_NAVIGATE_NEXT
-     *     1                             IME_FLAG_NO_EXTRACT_UI
-     *    1                              IME_FLAG_NO_ACCESSORY_ACTION
-     *   1                               IME_FLAG_NO_ENTER_ACTION
-     *  1                                IME_FLAG_FORCE_ASCII
+     * IME_ACTION_UNSPECIFIED
+     * 1 IME_ACTION_NONE
+     * 1 IME_ACTION_GO
+     * 11 IME_ACTION_SEARCH
+     * 1 IME_ACTION_SEND
+     * 1 1 IME_ACTION_NEXT
+     * 11 IME_ACTION_DONE
+     * 111 IME_ACTION_PREVIOUS
+     * 1 IME_FLAG_NO_PERSONALIZED_LEARNING
+     * 1 IME_FLAG_NO_FULLSCREEN
+     * 1 IME_FLAG_NAVIGATE_PREVIOUS
+     * 1 IME_FLAG_NAVIGATE_NEXT
+     * 1 IME_FLAG_NO_EXTRACT_UI
+     * 1 IME_FLAG_NO_ACCESSORY_ACTION
+     * 1 IME_FLAG_NO_ENTER_ACTION
+     * 1 IME_FLAG_FORCE_ASCII
      * |-------|-------|-------|-------|
      */
     public void commitImeOptionsBasedEnter() {
