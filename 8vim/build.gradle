@@ -13,6 +13,7 @@ checkstyle {
 }
 
 android {
+    namespace 'inc.flide.vim8'
     def versionPropsFile = file('version.properties')
     Properties versionProps = new Properties()
     versionProps.load(new FileInputStream(versionPropsFile))

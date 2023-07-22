@@ -21,10 +21,10 @@ jobs:
               echo "cmd=assembleDebug" >> $GITHUB_OUTPUT
               ;;
             release)
-              echo "cmd=bundleRelease assembleRelease" >> $GITHUB_OUTPUT
+              echo "cmd=assembleRelease" >> $GITHUB_OUTPUT
               ;;
             rc)
-              echo "cmd=bundleRc assembleRc" >> $GITHUB_OUTPUT
+              echo "cmd=assembleRc" >> $GITHUB_OUTPUT
               ;;
             *)
               exit 1
