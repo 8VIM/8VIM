@@ -47,9 +47,9 @@ jobs:
       - name: Build APK
         env:
           VIM8_BUILD_KEYSTORE_FILE: ./8vim.jks
-          VIM8_BUILD_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          VIM8_BUILD_KEY_ALIAS: ${{ secrets.ALIAS }}
-          VIM8_BUILD_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          VIM8_BUILD_KEYSTORE_PASSWORD: ${{ secrets.VIM8_BUILD_KEYSTORE_PASSWORD }}
+          VIM8_BUILD_KEY_ALIAS: ${{ secrets.VIM8_BUILD_KEY_ALIAS }}
+          VIM8_BUILD_KEY_PASSWORD: ${{ secrets.VIM8_BUILD_KEY_PASSWORD }}
         run: ./gradlew ${{steps.gradle.outputs.cmd}}
       - name: Upload artifact
         uses: actions/upload-artifact@v3
