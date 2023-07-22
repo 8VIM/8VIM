@@ -38,7 +38,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: artifact
-          path: artifact/
+          path: artifact/ 
       - name: Setup env
         run: |
           mkdir -p distribution/whatsnew
@@ -47,9 +47,9 @@ jobs:
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-          packageName: inc.flide.vim8
+          packageName: inc.flide.vi8
           releaseFiles: ${{ steps.artifact.outputs.download-path }}/apk/release/8vim-release.apk
-          track: ${{contains(inputs.version_name, 'rc') && 'internal' || 'alpha'}}
+          track: ${{contains(inputs.version_name, 'rc') && 'internal' || 'production'}}
           whatsNewDirectory: distribution/whatsnew
           mappingFile: ${{ steps.artifact.outputs.download-path }}/mapping/release/mapping.txt
   f_droid:
