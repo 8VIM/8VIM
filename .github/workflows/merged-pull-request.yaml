@@ -3,6 +3,7 @@ name: Merged pull request
 concurrency: release
 
 on:
+  workflow_dispatch:
   pull_request_target:
     branches: [master]
     types: [closed]
@@ -11,7 +12,7 @@ on:
       - "8vim/**"
 jobs:
   changes:
-    if: ${{ github.event.pull_request.merged == true }}
+    if: ${{ github.event_name=='pull_request_target' && github.event.pull_request.merged == true }}
     name: Detect changed files
     runs-on: ubuntu-latest
     permissions:
@@ -48,6 +49,23 @@ jobs:
     with:
       version_code: ${{needs.bump_version.outputs.version_code}}
       version_name: ${{needs.bump_version.outputs.version_name}}
+    secrets: inherit
+    permissions:
+      actions: read
+      issues: read
+      pull-requests: read
+      contents: write
+  version:
+    if: ${{ github.event_name!='pull_request_target'}}
+    name: Get version
+    uses: ./.github/workflows/extract-version.yaml
+  release_manual:
+    needs: version
+    name: Release
+    uses: ./.github/workflows/publish.yaml
+    with:
+      version_code: ${{needs.version.outputs.version_code}}
+      version_name: ${{needs.version.outputs.version_name}}
     secrets: inherit
     permissions:
       actions: read
