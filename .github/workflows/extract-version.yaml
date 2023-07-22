@@ -33,9 +33,17 @@ jobs:
           set +a
           . ./8vim/version.properties
           set -a
+          RC_CODE=0
+          if [ $RC -gt 0 ]
+          then
+            echo "version_name=$MAJOR.$MINOR.$PATCH-rc.$RC" >> $GITHUB_OUTPUT
+            RC_CODE=$((100-$RC))
+          else
+            echo "version_name=$MAJOR.$MINOR.$PATCH" >> $GITHUB_OUTPUT
+          fi
+
           echo "major=$MAJOR" >> $GITHUB_OUTPUT
           echo "minor=$MINOR" >> $GITHUB_OUTPUT
           echo "patch=$PATCH" >> $GITHUB_OUTPUT
           echo "rc=$RC" >> $GITHUB_OUTPUT
-          echo "version_code=$(( 1000000 * $MAJOR + 10000 * $MINOR + 100 * $PATCH - $RC))" >> $GITHUB_OUTPUT
-          echo "version_name=$MAJOR.$MINOR.$PATCH" >> $GITHUB_OUTPUT
+          echo "version_code=$(( 1000000 * $MAJOR + 10000 * $MINOR + 100 * $PATCH - $RC_CODE))" >> $GITHUB_OUTPUT
