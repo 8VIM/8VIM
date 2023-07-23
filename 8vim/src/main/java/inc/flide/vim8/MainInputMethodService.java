@@ -1,11 +1,14 @@
 package inc.flide.vim8;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.inputmethodservice.InputMethodService;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.provider.UserDictionary;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -78,7 +81,19 @@ public class MainInputMethodService extends InputMethodService
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
         setTheme(R.style.AppTheme_NoActionBar);
+        printUserDictionaryWords(getContentResolver());
         super.onCreate();
+    }
+
+    public void printUserDictionaryWords(ContentResolver contentResolver) {
+        Cursor cursor = contentResolver.query(UserDictionary.Words.CONTENT_URI, null, null, null, null);
+        if (cursor != null) {
+            int index = cursor.getColumnIndex(UserDictionary.Words.WORD);
+            while (cursor.moveToNext()) {
+                String word = cursor.getString(index);
+            }
+            cursor.close();
+        }
     }
 
     /**
