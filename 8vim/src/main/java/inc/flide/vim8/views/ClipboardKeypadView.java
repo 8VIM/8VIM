@@ -41,6 +41,7 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
         actionListener = new ClipboardActionListener((MainInputMethodService) context, this);
         setupOverallView(context);
         setupButtonsOnSideBar(actionListener);
+        setupSwitchToMainKeyboardButton();
         setColors();
         setHapticFeedbackEnabled(true);
 
