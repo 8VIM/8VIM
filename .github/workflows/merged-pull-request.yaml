@@ -42,30 +42,18 @@ jobs:
       message: ${{github.event.pull_request.title}}
       version: rc
     secrets: inherit
-  release:
-    needs: bump_version
-    name: Release
-    uses: ./.github/workflows/publish.yaml
-    with:
-      version_code: ${{needs.bump_version.outputs.version_code}}
-      version_name: ${{needs.bump_version.outputs.version_name}}
-    secrets: inherit
-    permissions:
-      actions: read
-      issues: read
-      pull-requests: read
-      contents: write
   version:
     if: ${{ github.event_name!='pull_request_target'}}
     name: Get version
     uses: ./.github/workflows/extract-version.yaml
-  release_manual:
-    needs: version
+  release:
+    needs: [bump_version, version]
+    if: ${{ !cancelled() && (needs.bump_version.result == 'success' || needs.version.result == 'success') }}
     name: Release
     uses: ./.github/workflows/publish.yaml
     with:
-      version_code: ${{needs.version.outputs.version_code}}
-      version_name: ${{needs.version.outputs.version_name}}
+      version_code: ${{needs.bump_version.result == 'success' && needs.bump_version.outputs.version_code || needs.version.outputs.version_code}}
+      version_name: ${{needs.bump_version.result == 'success' && needs.bump_version.outputs.version_name || needs.version.outputs.version_name}}
     secrets: inherit
     permissions:
       actions: read
