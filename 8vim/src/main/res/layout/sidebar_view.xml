@@ -67,6 +67,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/ripple"
+        android:contentDescription="@string/open_keyboard_settings_button_content_description"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
