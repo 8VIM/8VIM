@@ -30,6 +30,7 @@ import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.ui.Theme;
+import inc.flide.vim8.utils.PredictiveTextHelper;
 import inc.flide.vim8.views.ClipboardKeypadView;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
@@ -51,6 +52,8 @@ public class MainInputMethodService extends InputMethodService
     private int shiftLockFlag;
     private int capsLockFlag;
     private int modifierFlags;
+
+    private PredictiveTextHelper predictiveTextHelper;
 
     public ClipboardManagerService getClipboardManagerService() {
         return clipboardManagerService;
@@ -81,21 +84,11 @@ public class MainInputMethodService extends InputMethodService
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
         setTheme(R.style.AppTheme_NoActionBar);
-        printUserDictionaryWords(getContentResolver());
+        predictiveTextHelper = new PredictiveTextHelper(getContentResolver());
         super.onCreate();
     }
 
-    public void printUserDictionaryWords(ContentResolver contentResolver) {
-        Cursor cursor = contentResolver.query(UserDictionary.Words.CONTENT_URI, null, null, null, null);
-        if (cursor != null) {
-            int index = cursor.getColumnIndex(UserDictionary.Words.WORD);
-            while (cursor.moveToNext()) {
-                String word = cursor.getString(index);
-            }
-            cursor.close();
-        }
-    }
-    private String currentWord = "";
+
 
     @Override
     public void onUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd) {
@@ -104,22 +97,14 @@ public class MainInputMethodService extends InputMethodService
         InputConnection inputConnection = getCurrentInputConnection();
         if (inputConnection != null && newSelEnd > 0) {
             CharSequence textBeforeCursor = inputConnection.getTextBeforeCursor(newSelEnd, 0);
-            Log.d("UserDictionary", "Text Before cursor : " + textBeforeCursor );
             if (textBeforeCursor != null) {
-                currentWord = extractCurrentWord(textBeforeCursor.toString());
-                Log.d("UserDictionary", "Current word : " + currentWord );
+                predictiveTextHelper.setTextBeforeCursor(textBeforeCursor);
+            } else {
+                predictiveTextHelper.setTextBeforeCursor("");
             }
         }
-
     }
 
-    private String extractCurrentWord(String textBeforeCursor) {
-        String[] words = textBeforeCursor.split("\\s+");
-        return words.length > 0 ? words[words.length - 1] : "";
-    }
-    public String getCurrentWord() {
-        return currentWord;
-    }
 
     /**
      * Lifecycle of IME
