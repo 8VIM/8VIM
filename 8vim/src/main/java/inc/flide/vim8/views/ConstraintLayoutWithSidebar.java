@@ -14,8 +14,8 @@ import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.KeypadActionListener;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.structures.CustomKeycode;
-import inc.flide.vim8.ui.Theme;
 import inc.flide.vim8.ui.activities.SettingsActivity;
+import inc.flide.vim8.utils.ColorsHelper;
 
 public class ConstraintLayoutWithSidebar extends ConstraintLayout {
     protected KeypadActionListener actionListener;
@@ -50,14 +50,7 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
         );
         switchToMainKeyboardButton.setOnClickListener(
                 view -> {
-                    KeyboardAction switchToClipboardKeyboard = new KeyboardAction(
-                            KeyboardActionType.INPUT_KEY,
-                            "",
-                            null,
-                            CustomKeycode.SWITCH_TO_MAIN_KEYPAD.getKeyCode(),
-                            0,
-                            0);
-                    actionListener.handleInputKey(switchToClipboardKeyboard);
+                    actionListener.handleInputKey(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.getKeyCode(), 0);
                 });
     }
 
@@ -99,9 +92,9 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
                 view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(), 0));
     }
 
-    protected void setImageButtonTint(int id) {
+    protected void setImageButtonTint(int tintColor, int id) {
         ImageButton button = findViewById(id);
-        button.setColorFilter(Theme.getForegroundColor());
+        button.setColorFilter(tintColor);
     }
 
     protected void setColors() {
