@@ -95,6 +95,31 @@ public class MainInputMethodService extends InputMethodService
             cursor.close();
         }
     }
+    private String currentWord = "";
+
+    @Override
+    public void onUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd) {
+        super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
+
+        InputConnection inputConnection = getCurrentInputConnection();
+        if (inputConnection != null && newSelEnd > 0) {
+            CharSequence textBeforeCursor = inputConnection.getTextBeforeCursor(newSelEnd, 0);
+            Log.d("UserDictionary", "Text Before cursor : " + textBeforeCursor );
+            if (textBeforeCursor != null) {
+                currentWord = extractCurrentWord(textBeforeCursor.toString());
+                Log.d("UserDictionary", "Current word : " + currentWord );
+            }
+        }
+
+    }
+
+    private String extractCurrentWord(String textBeforeCursor) {
+        String[] words = textBeforeCursor.split("\\s+");
+        return words.length > 0 ? words[words.length - 1] : "";
+    }
+    public String getCurrentWord() {
+        return currentWord;
+    }
 
     /**
      * Lifecycle of IME
