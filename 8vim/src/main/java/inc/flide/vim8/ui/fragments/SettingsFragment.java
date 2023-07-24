@@ -1,4 +1,4 @@
-package inc.flide.vim8.ui;
+package inc.flide.vim8.ui.fragments;
 
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
@@ -14,8 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.list.DialogSingleChoiceExtKt;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.keyboardhelpers.KeyboardDataYamlParser;
@@ -25,22 +23,21 @@ import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.exceptions.YamlException;
 import inc.flide.vim8.utils.AlertHelper;
+import inc.flide.vim8.utils.DialogsHelper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function3;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private static final String[] LAYOUT_FILTER = {"application/octet-stream"};
     private Context context;
     private SharedPreferenceHelper sharedPreferences;
     private AvailableLayouts availableLayouts;
+    private String customKeyboardLayoutHistory;
     private final ActivityResultLauncher<String[]> openContent =
             registerForActivityResult(new ActivityResultContracts.OpenDocument(),
                     selectedCustomLayoutFile -> {
@@ -58,17 +55,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                         "The layout requires at least one layer");
                                 return;
                             }
-                            ArrayList<String> history = new ArrayList<>(sharedPreferences.getStringSet(
-                                    getString(R.string.pref_selected_custom_keyboard_layout_history),
-                                    new LinkedHashSet<>()));
+                            ArrayList<String> history = new ArrayList<>(
+                                    sharedPreferences.getStringSet(customKeyboardLayoutHistory, new LinkedHashSet<>()));
                             history.add(0, selectedCustomLayoutFile.toString());
+
                             sharedPreferences.edit()
-                                    .putStringSet(getString(R.string.pref_selected_custom_keyboard_layout_history),
-                                            new LinkedHashSet<>(history))
+                                    .putStringSet(customKeyboardLayoutHistory, new LinkedHashSet<>(history))
                                     .putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), true)
                                     .putString(getString(R.string.pref_selected_custom_keyboard_layout_uri),
                                             selectedCustomLayoutFile.toString())
                                     .apply();
+
                             availableLayouts.reloadCustomLayouts();
                             MainKeypadActionListener.rebuildKeyboardData(getResources(), context,
                                     selectedCustomLayoutFile);
@@ -84,7 +81,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         context = getContext();
         assert context != null;
         sharedPreferences = SharedPreferenceHelper.getInstance(context.getApplicationContext());
-        availableLayouts = new AvailableLayouts(sharedPreferences, context, getResources());
+        customKeyboardLayoutHistory = context.getString(R.string.pref_custom_keyboard_layout_history);
+        availableLayouts = AvailableLayouts.getInstance(context, getResources());
         setPreferencesFromResource(R.xml.preferences, rootKey);
         setupPreferenceButtonActions();
         setupPreferenceCallbacks();
@@ -111,9 +109,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         colorModePreference.setOnPreferenceChangeListener((pref, value) -> {
             switch ((String) value) {
-                case "system":
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                    break;
                 case "dark":
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     break;
@@ -121,6 +116,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     break;
                 default:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
             }
             setColorsSelectionVisible((String) value);
             return true;
@@ -180,13 +176,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void askUserPreferredKeyboardLayout() {
-        createItemsChoice(R.string.select_preferred_keyboard_layout_dialog_title,
+        DialogsHelper.createItemsChoice(context, R.string.select_preferred_keyboard_layout_dialog_title,
                 availableLayouts.getDisplayNames(),
                 availableLayouts.getIndex(),
                 (dialog, which, text) -> {
                     if (which != -1) {
-                        availableLayouts.selectLayout(which);
-                        MainKeypadActionListener.rebuildKeyboardData(getResources(), getContext());
+                        availableLayouts.selectLayout(context, getResources(), which);
                     }
                     return null;
                 }).show();
@@ -217,7 +212,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         .apply();
             }
         }
-        createItemsChoice(R.string.select_preferred_emoticon_keyboard_dialog_title,
+        DialogsHelper.createItemsChoice(context, R.string.select_preferred_emoticon_keyboard_dialog_title,
                 inputMethodsNameAndId.keySet(),
                 selectedKeyboardIndex,
                 (dialog, which, text) -> {
@@ -231,13 +226,4 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 }).show();
     }
 
-    private MaterialDialog createItemsChoice(int titleRes, Collection<String> items,
-                                             int selectedIndex,
-                                             Function3<MaterialDialog, Integer, CharSequence, Unit> callback) {
-        return DialogSingleChoiceExtKt.listItemsSingleChoice(
-                new MaterialDialog(context, MaterialDialog.getDEFAULT_BEHAVIOR()).title(titleRes, null)
-                        .positiveButton(R.string.generic_okay_text, null, null)
-                        .negativeButton(R.string.generic_cancel_text, null, null), null,
-                new ArrayList<>(items), null, selectedIndex, true, -1, -1, callback);
-    }
 }

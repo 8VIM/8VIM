@@ -2,10 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="0dp"
-    android:layout_height="0dp"
-    android:background="@color/translucent"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:ignore="Overdraw">
 
     <ImageButton
@@ -58,20 +56,18 @@
         android:contentDescription="@string/open_keyboard_settings_button_content_description"
         android:scaleType="centerInside"
         android:src="@drawable/key_icon_settings"
-        app:layout_constraintBottom_toTopOf="@id/ctrlButton"
+        app:layout_constraintBottom_toTopOf="@id/switchKeypadButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/switchToSelectionKeyboard"
         app:layout_constraintVertical_weight="1" />
 
     <ImageButton
-        android:id="@+id/ctrlButton"
+        android:id="@+id/switchKeypadButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/ripple"
-        android:contentDescription="@string/ctrl_button_content_description"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_ctrl"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

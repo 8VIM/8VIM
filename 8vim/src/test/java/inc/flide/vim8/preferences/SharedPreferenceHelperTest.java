@@ -13,7 +13,6 @@ import static org.mockito.Mockito.when;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -54,7 +53,7 @@ public class SharedPreferenceHelperTest {
     void listener_called() {
         SharedPreferenceHelper helper = SharedPreferenceHelper.getInstance(context);
         SharedPreferenceHelper.Listener listener = mock(SharedPreferenceHelper.Listener.class);
-        helper.addListener(listener);
+        helper.addListener(listener, "test");
         assertThat(helper.getString("test", "")).isEqualTo("test");
 
         helper.onSharedPreferenceChanged(sharedPreferences, "test");

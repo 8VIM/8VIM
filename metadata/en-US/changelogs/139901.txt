@@ -1,0 +1,1 @@
+Use github action to auto release

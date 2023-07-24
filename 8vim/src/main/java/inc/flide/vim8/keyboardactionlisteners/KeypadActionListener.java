@@ -31,9 +31,6 @@ public abstract class KeypadActionListener {
         return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= keycodeProfileSwitch;
     }
 
-    public void handleInputKey(KeyboardAction keyboardAction) {
-        handleInputKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
-    }
 
     public void handleInputKey(int keyCode, int keyFlags) {
         boolean actionHandled = handleKeyEventKeyCodes(keyCode, keyFlags);
@@ -64,6 +61,7 @@ public abstract class KeypadActionListener {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void performInputAcceptedFeedback(int keySound) {
         SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(mainInputMethodService);
         boolean userEnabledHapticFeedback =
@@ -72,10 +70,8 @@ public abstract class KeypadActionListener {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
                     HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
-        boolean userEnabledSoundFeedback = pref
-                .getBoolean(
-                        mainInputMethodService.getString(R.string.pref_sound_feedback_key),
-                        true);
+        boolean userEnabledSoundFeedback =
+                pref.getBoolean(mainInputMethodService.getString(R.string.pref_sound_feedback_key), true);
         if (userEnabledSoundFeedback) {
             audioManager.playSoundEffect(keySound);
         }

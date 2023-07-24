@@ -1,15 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY appname "8Vim">]>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY appname "8Vim">
+]>
 <resources>
     <string name="app_name">&appname;</string>
     <string name="version_name_label">Version : </string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="enable_ime_dialog_title">Please Enable IME</string>
-    <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable the keyboard first. Once you click on the enable button, you will be taken to the input method settings screen. Please enable the "&appname;
+    <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable
+        the keyboard first. Once you click on the enable button, you will be taken to the input
+        method settings screen. Please enable the "&appname;
         Keyboard" there.</string>
     <string name="enable_ime_dialog_neutral_button_text">Enable</string>
     <string name="activate_ime_dialog_title">Please Activate IME</string>
-    <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting and verify them, if "&appname;
+    <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting
+        and verify them, if "&appname;
         Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
@@ -67,21 +73,24 @@
     <string name="pref_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
     <string name="pref_selected_keyboard_layout">selected_keyboard_layout</string>
     <string name="pref_use_custom_selected_keyboard_layout">use_custom_selected_keyboard_layout</string>
-    <string name="pref_selected_custom_keyboard_layout_history">pref_selected_custom_keyboard_layout_history</string>
+    <string name="pref_custom_keyboard_layout_history">pref_custom_keyboard_layout_history</string>
     <string name="pref_selected_custom_keyboard_layout_uri">pref_selected_custom_keyboard_layout_uri</string>
 
     <!--    preferences shown in gui UI-->
     <string name="pref_select_keyboard_layout_key">select_keyboard_layout</string>
     <string name="pref_select_keyboard_layout_title">Select language layout</string>
-    <string name="pref_select_keyboard_layout_summary">Chosen language will decide which diacritics can be entered </string>
+    <string name="pref_select_keyboard_layout_summary">Chosen language will decide which diacritics
+        can be entered </string>
 
     <string name="pref_select_custom_keyboard_layout_key">select_custom_keyboard_layout</string>
     <string name="pref_select_custom_keyboard_layout_title">Select layout file from device</string>
-    <string name="pref_select_custom_keyboard_layout_summary">Layout file from the device memory will be loaded. Please note this is experimental and might not work.</string>
+    <string name="pref_select_custom_keyboard_layout_summary">Layout file from the device memory
+        will be loaded. Please note this is experimental and might not work.</string>
 
     <string name="pref_select_emoji_keyboard_key">select_emoji_keyboard</string>
     <string name="pref_select_emoji_keyboard_title">Select emoji keyboard</string>
-    <string name="pref_select_emoji_keyboard_summary">Chosen keyboard will be accessible through keyboard\'s emoji icon </string>
+    <string name="pref_select_emoji_keyboard_summary">Chosen keyboard will be accessible through
+        keyboard\'s emoji icon </string>
 
     <string name="pref_circle_scale_factor">x_board_circle_radius_size_factor</string>
     <string name="pref_circle_scale_factor_title">Circle size</string>
@@ -144,13 +153,17 @@
     <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
     <string name="about_us_label">About Us</string>
     <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>
-    <string name="tab_button_content_description">Tab button</string>
+    <string name="tab_button_content_description">Tab</string>
     <string name="open_selection_keypad_button_content_description">Open Selection Keypad</string>
     <string name="open_keyboard_settings_button_content_description">Open Keyboard Settings</string>
-    <string name="ctrl_button_content_description">Ctrl button</string>
+    <string name="ctrl_button_content_description">Ctrl</string>
+    <string name="clipboard_button_content_description">Open Clipboard keypad</string>
+    <string name="main_keyboard_button_content_description">Open Main keypad</string>
     <string name="generic_back_button_content_description">Go Back</string>
     <string name="owner_text">Designed and Developed by flide</string>
     <string name="connect_with_us_label">Connect with us</string>
+    <string name="embedded_layouts_label">Embedded layouts</string>
+    <string name="custom_layouts_label">Custom layouts</string>
 
     <!--    github-->
     <string name="github_icon_content_description">Github Icon</string>
@@ -173,5 +186,6 @@
     <string name="connect_using_twitter_label">Follow us on Twitter</string>
 
     <string name="choose_the_8vim">Choose 8Vim above.We will NEVER collect any personal data.</string>
+    <string name="language_selected_label">Selected</string>
 
 </resources>

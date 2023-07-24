@@ -16,7 +16,6 @@
 #   public *;
 #}
 # Proguard configuration for Jackson 2.x
--dontwarn org.slf4j.impl.StaticLoggerBinder
 -keepattributes *Annotation*,EnclosingMethod,Signature
 -keep class com.fasterxml.jackson.databind.ObjectMapper {
     public <methods>;
@@ -34,3 +33,7 @@
 -keep public class inc.flide.vim8.structures.** {
     *;
 }
+-keepclassmembers class ch.qos.logback.classic.pattern.* { <init>(); }
+-keepclassmembers class ch.qos.logback.** { *; }
+-keepclassmembers class org.slf4j.impl.** { *; }
+-dontwarn ch.qos.logback.core.net.*

@@ -1,10 +1,11 @@
-package inc.flide.vim8.ui;
+package inc.flide.vim8.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodInfo;
@@ -18,26 +19,30 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.ui.fragments.SettingsFragment;
+import inc.flide.vim8.utils.DialogsHelper;
 import java.util.List;
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
 
 public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private final HandlerThread handlerThread = new HandlerThread("SettingsActivityBackPress");
+    private Handler backPressHandler;
     private boolean isKeyboardEnabled;
     private boolean pressBackTwice;
+    private final Runnable runnable = () -> pressBackTwice = false;
     private ActivityResultLauncher<Intent> launchInputMethodSettings;
     private InputMethodManager inputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        handlerThread.start();
+        backPressHandler = new Handler(handlerThread.getLooper(), null);
         switch (SharedPreferenceHelper.getInstance(getApplicationContext())
                 .getString(getString(R.string.pref_color_mode_key), "system")) {
             case "system":
@@ -75,13 +80,25 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handlerThread.quit();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        backPressHandler.removeCallbacks(runnable);
+    }
+
+    @Override
     public void onBackPressed() {
         if (pressBackTwice) {
             finishAndRemoveTask();
         } else {
             pressBackTwice = true;
             Toast.makeText(SettingsActivity.this, "Please press Back again to exit", Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(() -> pressBackTwice = false, 2000);
+            backPressHandler.postDelayed(runnable, 2000);
         }
     }
 
@@ -145,16 +162,12 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void enableInputMethodDialog() {
-        createMaterialDialog(R.string.enable_ime_dialog_title, R.string.enable_ime_dialog_content,
+        DialogsHelper.createMaterialDialog(this, R.string.enable_ime_dialog_title, R.string.enable_ime_dialog_content,
                 R.string.enable_ime_dialog_neutral_button_text,
                 (dialog) -> {
                     Snackbar.make(findViewById(android.R.id.content), getString(R.string.choose_the_8vim),
                                     Snackbar.LENGTH_LONG)
                             .addCallback(new Snackbar.Callback() {
-                                @Override
-                                public void onShown(Snackbar sb) {
-                                }
-
                                 @Override
                                 public void onDismissed(Snackbar transientBottomBar, @DismissEvent int event) {
                                     launchInputMethodSettings.launch(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
@@ -165,20 +178,12 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void activateInputMethodDialog() {
-        createMaterialDialog(R.string.activate_ime_dialog_title, R.string.activate_ime_dialog_content,
+        DialogsHelper.createMaterialDialog(this, R.string.activate_ime_dialog_title,
+                R.string.activate_ime_dialog_content,
                 R.string.activate_ime_dialog_positive_button_text,
                 (dialog) -> {
                     inputMethodManager.showInputMethodPicker();
                     return null;
                 }).show();
-    }
-
-    private MaterialDialog createMaterialDialog(int titleRes, int messageRes, int positiveButtonRes,
-                                                Function1<MaterialDialog, Unit> callback) {
-        return new MaterialDialog(this, MaterialDialog.getDEFAULT_BEHAVIOR()).title(titleRes, null)
-                .message(messageRes, null, null).cancelable(false)
-                .cancelOnTouchOutside(false)
-                .positiveButton(positiveButtonRes, null, callback)
-                .negativeButton(R.string.activate_ime_dialog_negative_button_text, null, null);
     }
 }

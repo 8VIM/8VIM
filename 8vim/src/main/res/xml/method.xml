@@ -2,4 +2,4 @@
 <input-method xmlns:android="http://schemas.android.com/apk/res/android"
     android:isDefault="false"
     android:settingsActivity="inc.flide.vim8.ui.SettingsActivity"
-    android:supportsSwitchingToNextInputMethod="false" />
+    android:supportsSwitchingToNextInputMethod="true" />
