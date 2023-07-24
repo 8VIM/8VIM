@@ -69,8 +69,8 @@ layers:
               - lower_case: ch
                 upper_case: Ch
             top:
-              - lower_case: null
-              - lower_case: null
+              - null
+              - null
               - lower_case: qu
                 upper_case: Qu
         bottom:
@@ -82,11 +82,11 @@ layers:
         top:
           parts:
             left:
-              - lower_case: null
+              - null
               - lower_case: gh
                 upper_case: Gh
             right:
-              - lower_case: null
+              - null
               - lower_case: ù
     second:
       sectors:
