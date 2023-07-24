@@ -14,9 +14,17 @@ name: "CodeQL"
 on:
   push:
     branches: [master]
+    paths:
+      - "**.gradle"
+      - "8vim/**/*.java"
+      - "8vim/**/*.xml"
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [master]
+    paths:
+      - "**.gradle"
+      - "8vim/**/*.java"
+      - "8vim/**/*.xml"
   schedule:
     - cron: "29 3 * * 1"
 
