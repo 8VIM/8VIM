@@ -84,7 +84,7 @@ public class MainInputMethodService extends InputMethodService
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
         setTheme(R.style.AppTheme_NoActionBar);
-        predictiveTextHelper = new PredictiveTextHelper(getContentResolver());
+        predictiveTextHelper = new PredictiveTextHelper(applicationContext);
         super.onCreate();
     }
 
