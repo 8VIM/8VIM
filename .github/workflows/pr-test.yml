@@ -60,7 +60,7 @@ jobs:
           cache: gradle
       - run: ./gradlew check
   build:
-    if: ${{ !cancelled() && (needs.test.result == 'success' || needs.validate_layouts.result == 'success') }}
+    if: ${{ !cancelled() && needs.test.result != 'failure' && needs.validate_layouts.result != 'failure' }}
     needs: [validate_layouts, test]
     uses: ./.github/workflows/build.yaml
     with:
@@ -68,7 +68,7 @@ jobs:
       target: debug
     secrets: inherit
   upload_artifact:
-    if: ${{ !cancelled() && needs.build.result=='success' && (needs.test.result == 'success' || needs.validate_layouts.result == 'success') }}
+    if: ${{ !cancelled() && needs.build.result=='success' && needs.test.result != 'failure' && needs.validate_layouts.result != 'failure' }}
     needs: [build, validate_layouts, test]
     runs-on: ubuntu-latest
     steps:
