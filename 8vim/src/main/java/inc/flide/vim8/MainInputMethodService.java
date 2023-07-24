@@ -2,14 +2,12 @@ package inc.flide.vim8;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.inputmethodservice.InputMethodService;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -66,7 +64,7 @@ public class MainInputMethodService extends InputMethodService
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         Context applicationContext = getApplicationContext();
         this.clipboardManagerService = new ClipboardManagerService(applicationContext);
-        this.clipboardManagerService.setClipboardHistoryListener(this::onClipboardHistoryChanged);
+        this.clipboardManagerService.setClipboardHistoryListener(this);
         String colorMode = SharedPreferenceHelper.getInstance(applicationContext)
                 .getString(getString(R.string.pref_color_mode_key), "system");
         switch (colorMode) {
@@ -142,10 +140,8 @@ public class MainInputMethodService extends InputMethodService
 
     @Override
     public boolean onEvaluateFullscreenMode() {
-        int orientation = getResources().getConfiguration().orientation;
-        DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
-        float heightDp = displayMetrics.heightPixels / displayMetrics.density;
-        return orientation == Configuration.ORIENTATION_LANDSCAPE && heightDp < 480f;
+        Configuration configuration = getResources().getConfiguration();
+        return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && configuration.screenHeightDp < 480;
     }
 
     @Override

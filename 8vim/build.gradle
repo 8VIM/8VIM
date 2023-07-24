@@ -106,6 +106,15 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.junit4)
+
+    testImplementation(libs.logback.classic)
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.junit5.api)
+    testRuntimeOnly(libs.junit5.jupiter.engine)
+    testRuntimeOnly(libs.junit5.vintage.engine)
+    testImplementation(libs.jqwik)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.junit5)
 }
 
 configurations.testImplementation {
