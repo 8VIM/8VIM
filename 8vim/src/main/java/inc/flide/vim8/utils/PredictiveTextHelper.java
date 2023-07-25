@@ -129,6 +129,7 @@ public class PredictiveTextHelper {
         suggestedWords.addAll(candidateFrequencies.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .map(Map.Entry::getKey)
+                .limit(12)
                 .collect(Collectors.toList()));
     }
 
