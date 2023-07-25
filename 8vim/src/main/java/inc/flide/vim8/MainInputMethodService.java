@@ -103,6 +103,7 @@ public class MainInputMethodService extends InputMethodService
                 predictiveTextHelper.setTextBeforeCursor("");
             }
         }
+        Log.d("PredictiveText", predictiveTextHelper.getSuggestedWords().toString());
     }
 
 

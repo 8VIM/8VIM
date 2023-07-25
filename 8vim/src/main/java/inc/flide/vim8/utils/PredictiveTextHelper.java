@@ -10,26 +10,26 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import inc.flide.vim8.R;
 
 public class PredictiveTextHelper {
-    private final List<String> englishDictionary;
+    private final Map<String, Long> wordFrequencyMap;
     private final List<String> personalDictionary;
     private final List<String> suggestedWords;
-    private CharSequence textBeforeCursor;
-    private String currentWord;
 
     public PredictiveTextHelper(Context context) {
-        englishDictionary = new ArrayList<>();
+        wordFrequencyMap = new HashMap<>();
         personalDictionary = new ArrayList<>();
         suggestedWords = new ArrayList<>();
-        textBeforeCursor = "";
-        currentWord = "";
 
         loadDictionaries(context);
     }
@@ -38,11 +38,9 @@ public class PredictiveTextHelper {
         return suggestedWords;
     }
 
-    public void setTextBeforeCursor(CharSequence text) {
-        textBeforeCursor = text;
-        currentWord = extractCurrentWord(textBeforeCursor.toString());
-        generateWordSuggestions();
-        Log.d("PredictiveText", suggestedWords.toString());
+    public void setTextBeforeCursor(CharSequence textBeforeCursor) {
+        String currentWord = extractCurrentWord(textBeforeCursor.toString());
+        generateWordSuggestions(currentWord);
     }
 
     private void loadDictionaries(Context context) {
@@ -51,11 +49,19 @@ public class PredictiveTextHelper {
     }
 
     private void loadEnglishDictionaryWords(Context context) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(context.getResources().openRawResource(R.raw.english_dictionary)))) {
-            String word;
-            while ((word = reader.readLine()) != null) {
-                englishDictionary.add(word);
+        InputStream inputStream = context.getResources().openRawResource(R.raw.english_word_frequency);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    String word = parts[0];
+                    Long frequency = Long.parseLong(parts[1].trim());
+                    wordFrequencyMap.put(word, frequency);
+                }
             }
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,25 +82,54 @@ public class PredictiveTextHelper {
         String[] words = textBeforeCursor.split("\\s+");
         return words.length > 0 ? words[words.length - 1] : "";
     }
-    private void generateWordSuggestions() {
-        List<String> suggestions = new ArrayList<>();
+
+    private List<String> getClosestWords(String input) {
+        final int ACCEPTABLE_LEVENSHTEIN_DISTANCE = 3;
+        List<String> candidateWords = new ArrayList<>();
         LevenshteinDistance levenshteinDistance = new LevenshteinDistance();
 
-        for (String word : englishDictionary) {
-            if (levenshteinDistance.apply(currentWord, word) <= 2) {
-                suggestions.add(word);
+        for (String word : wordFrequencyMap.keySet()) {
+            if (levenshteinDistance.apply(input, word) <= ACCEPTABLE_LEVENSHTEIN_DISTANCE) {
+                candidateWords.add(word);
             }
         }
 
         for (String word : personalDictionary) {
-            if (levenshteinDistance.apply(currentWord, word) <= 2) {
-                suggestions.add(word);
+            if (levenshteinDistance.apply(input, word) <= ACCEPTABLE_LEVENSHTEIN_DISTANCE) {
+                candidateWords.add(word);
             }
         }
 
-        suggestions.sort(Comparator.comparingInt(word -> levenshteinDistance.apply(currentWord, word)));
+        candidateWords.sort(Comparator.comparingInt(word -> levenshteinDistance.apply(input, word)));
+        return candidateWords;
+    }
+
+    private void generateWordSuggestions(String currentWord) {
         suggestedWords.clear();
-        suggestedWords.addAll(suggestions.subList(0, 5));
+        if (currentWord == null || currentWord.isEmpty()) {
+            return;
+        }
+
+        // Get a list of candidate words based on Levenshtein distance
+        List<String> candidateWords = getClosestWords(currentWord);
+
+        // Create a map to store the candidates and their frequencies
+        Map<String, Long> candidateFrequencies = new HashMap<>();
+        for (String word : candidateWords) {
+            Long frequency = wordFrequencyMap.get(word);
+            if (frequency != null) {
+                candidateFrequencies.put(word, frequency);
+            } else {
+                // If the word is not in the frequency map, assign it a low frequency
+                candidateFrequencies.put(word, 1L);
+            }
+        }
+
+        // Sort the candidates based on their frequencies
+        suggestedWords.addAll(candidateFrequencies.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList()));
     }
 
 }
