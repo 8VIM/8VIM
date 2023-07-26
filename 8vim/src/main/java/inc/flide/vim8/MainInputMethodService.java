@@ -34,7 +34,6 @@ import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
 import inc.flide.vim8.views.mainkeyboard.SuggestionView;
-
 import java.util.List;
 
 public class MainInputMethodService extends InputMethodService
@@ -91,7 +90,12 @@ public class MainInputMethodService extends InputMethodService
 
 
     @Override
-    public void onUpdateSelection(int oldSelStart, int oldSelEnd, int newSelStart, int newSelEnd, int candidatesStart, int candidatesEnd) {
+    public void onUpdateSelection(int oldSelStart,
+                                  int oldSelEnd,
+                                  int newSelStart,
+                                  int newSelEnd,
+                                  int candidatesStart,
+                                  int candidatesEnd) {
         super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
 
         InputConnection inputConnection = getCurrentInputConnection();

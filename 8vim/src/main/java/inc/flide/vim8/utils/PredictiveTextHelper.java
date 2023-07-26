@@ -4,10 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.UserDictionary;
-import android.util.Log;
-
-import org.apache.commons.text.similarity.LevenshteinDistance;
-
+import inc.flide.vim8.R;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,8 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import inc.flide.vim8.R;
+import org.apache.commons.text.similarity.LevenshteinDistance;
 
 public class PredictiveTextHelper {
     private final Map<String, Long> wordFrequencyMap;
@@ -66,6 +62,7 @@ public class PredictiveTextHelper {
             e.printStackTrace();
         }
     }
+
     private void loadUserDictionaryWords(ContentResolver contentResolver) {
         Cursor cursor = contentResolver.query(UserDictionary.Words.CONTENT_URI, null, null, null, null);
         if (cursor != null) {

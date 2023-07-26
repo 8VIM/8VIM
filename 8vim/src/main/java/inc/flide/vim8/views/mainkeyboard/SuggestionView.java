@@ -6,10 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.List;
-
 import inc.flide.vim8.R;
+import java.util.List;
 
 public class SuggestionView extends LinearLayout {
 
