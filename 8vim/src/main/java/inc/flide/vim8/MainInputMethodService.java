@@ -8,7 +8,6 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
@@ -34,6 +33,8 @@ import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
+import inc.flide.vim8.views.mainkeyboard.SuggestionView;
+
 import java.util.List;
 
 public class MainInputMethodService extends InputMethodService
@@ -50,6 +51,7 @@ public class MainInputMethodService extends InputMethodService
     private int shiftLockFlag;
     private int capsLockFlag;
     private int modifierFlags;
+    private SuggestionView suggestionView;
 
     private PredictiveTextHelper predictiveTextHelper;
 
@@ -101,7 +103,13 @@ public class MainInputMethodService extends InputMethodService
                 predictiveTextHelper.setTextBeforeCursor("");
             }
         }
-        Log.d("PredictiveText", predictiveTextHelper.getSuggestedWords().toString());
+        suggestionView.setSuggestions(predictiveTextHelper.getSuggestedWords());
+    }
+
+    @Override
+    public View onCreateCandidatesView() {
+        suggestionView = new SuggestionView(this);
+        return suggestionView;
     }
 
 
@@ -184,6 +192,8 @@ public class MainInputMethodService extends InputMethodService
                 switchToMainKeypad();
                 break;
         }
+
+        setCandidatesViewShown(true);
     }
 
     @Override
