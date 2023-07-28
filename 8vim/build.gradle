@@ -100,8 +100,6 @@ dependencies {
     implementation(libs.logback.android)
     implementation(libs.material.dialog.core)
     implementation(libs.slf4j.api)
-    implementation("org.apache.commons:commons-text:1.10.0")
-
 
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext)
