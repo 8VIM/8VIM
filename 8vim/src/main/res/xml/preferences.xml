@@ -62,6 +62,16 @@
             app:summaryOff="@string/pref_sidebar_left_summary_off"
             app:summaryOn="@string/pref_sidebar_left_summary_on"
             app:title="@string/pref_sidebar_left_title" />
+
+        <SwitchPreferenceCompat
+            android:widgetLayout="@layout/material_switch"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_sidebar_visibility_key"
+            app:summaryOff="@string/pref_sidebar_visibility_summary_off"
+            app:summaryOn="@string/pref_sidebar_visibility_summary_on"
+            app:title="@string/pref_sidebar_visibility_title" />
+
     </PreferenceCategory>
 
     <PreferenceCategory
@@ -112,6 +122,7 @@
             app:summaryOff="@string/pref_sound_feedback_summary_off"
             app:summaryOn="@string/pref_sound_feedback_summary_on"
             app:title="@string/pref_sound_feedback_title" />
+
         <ListPreference
             android:entries="@array/pref_color_mode_labels"
             android:entryValues="@array/pref_color_mode_values"
