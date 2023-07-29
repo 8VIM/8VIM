@@ -18,6 +18,7 @@ public class MainKeyboardView extends ConstraintLayoutWithSidebar {
     private MainKeypadActionListener actionListener;
     private String prefSidebarLeftKey;
     private String prefSidebarVisibilityKey;
+    private String prefKeyboardHeightKey;
     private SharedPreferenceHelper sharedPreferenceHelper;
     private LayoutInflater inflater;
 
@@ -41,11 +42,12 @@ public class MainKeyboardView extends ConstraintLayoutWithSidebar {
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         prefSidebarLeftKey = context.getString(R.string.pref_sidebar_left_key);
         prefSidebarVisibilityKey = context.getString(R.string.pref_sidebar_visibility_key);
+        prefKeyboardHeightKey = context.getString(R.string.pref_keyboard_height);
+
         Theme.getInstance(context).onChange(this::setColors);
         sharedPreferenceHelper = SharedPreferenceHelper
                 .getInstance(context)
-                .addListener(this::initializeView, prefSidebarLeftKey)
-                .addListener(this::initializeView, prefSidebarVisibilityKey);
+                .addListener(this::initializeView, prefSidebarLeftKey, prefSidebarVisibilityKey, prefKeyboardHeightKey);
 
         initializeView();
     }
