@@ -54,6 +54,16 @@
             app:showSeekBarValue="true"
             app:title="@string/pref_circle_y_offset_title" />
 
+        <SeekBarPreference
+            android:max="200"
+            app:defaultValue="100"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_keyboard_height"
+            app:min="1"
+            app:showSeekBarValue="true"
+            app:summary="@string/pref_keyboard_height_summary"
+            app:title="@string/pref_keyboard_height_title" />
+
         <SwitchPreferenceCompat
             android:widgetLayout="@layout/material_switch"
             app:defaultValue="true"
