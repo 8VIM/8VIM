@@ -47,6 +47,7 @@ public class MainKeyboardView extends ConstraintLayoutWithSidebar {
     private void initializeView() {
         setupMainKeyboardView();
         setupButtonsOnSideBar(actionListener);
+        setupSwitchToClipboardKeypadButton();
         setColors();
         setHapticFeedbackEnabled(true);
     }
@@ -59,8 +60,5 @@ public class MainKeyboardView extends ConstraintLayoutWithSidebar {
         } else {
             inflater.inflate(R.layout.main_keyboard_right_sidebar_view, this, true);
         }
-
     }
-
-
 }

@@ -2,7 +2,6 @@ package inc.flide.vim8.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +41,7 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
         actionListener = new ClipboardActionListener((MainInputMethodService) context, this);
         setupOverallView(context);
         setupButtonsOnSideBar(actionListener);
+        setupSwitchToMainKeyboardButton();
         setColors();
         setHapticFeedbackEnabled(true);
 
@@ -69,7 +69,6 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
 
     public void setupClipboardListView() {
 
-        Log.d("clipboard_history", "setup clipboard list view called");
         List<String> clipHistory = actionListener.getClipHistory();
         ListView clipboardItemsList = this.findViewById(R.id.clipboardItemsList);
 
@@ -89,7 +88,6 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar {
             }
         };
         clipboardItemsList.setAdapter(adapter);
-        Log.d("clipboard_history", "adapter created and set");
 
         clipboardItemsList.setOnItemClickListener((parent, itemView, position, id) -> {
             String selectedClip = adapter.getItem(position);

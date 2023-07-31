@@ -153,7 +153,7 @@ public class XpadView extends View {
         // Compute the length of sector lines, such that they stop a little before hitting the edge of the view.
         float lengthOfLineDemarcatingSectors = (float) Math.hypot(smallDim, smallDim)
                 - radius - characterHeight;
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (isTabletInLandscape()) {
             circleCenter.x = lengthOfLineDemarcatingSectors + offsetX;
             if (!preferredSidebarLeft) {
                 circleCenter.x = keypadDimension.getWidth() - circleCenter.x;
@@ -205,6 +205,11 @@ public class XpadView extends View {
         xformMatrix.mapPoints(letterPositions);
 
         sectorLines.computeBounds(sectorLineBounds, false); // Used to position icons
+    }
+
+    private boolean isTabletInLandscape() {
+        Configuration configuration = getResources().getConfiguration();
+        return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && configuration.screenHeightDp >= 480;
     }
 
     private void computeLettersPositions(float characterHeight,

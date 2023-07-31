@@ -7,14 +7,15 @@ import android.view.KeyEvent;
 import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.KeypadActionListener;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.structures.CustomKeycode;
-import inc.flide.vim8.ui.Theme;
 import inc.flide.vim8.ui.activities.SettingsActivity;
+import inc.flide.vim8.utils.ColorsHelper;
 
 public class ConstraintLayoutWithSidebar extends ConstraintLayout {
     protected KeypadActionListener actionListener;
@@ -37,11 +38,30 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
         setupSwitchToSelectionKeyboardButton();
         setupTabKey();
         setupGoToSettingsButton();
-        setupSwitchToClipboardKeypadButton();
     }
 
-    private void setupSwitchToClipboardKeypadButton() {
-        ImageButton switchToClipboardButton = findViewById(R.id.clipboardButton);
+    protected void setupSwitchToMainKeyboardButton() {
+        ImageButton switchToMainKeyboardButton = findViewById(R.id.switchKeypadButton);
+        switchToMainKeyboardButton.setContentDescription(
+                this.getContext().getString(R.string.main_keyboard_button_content_description)
+        );
+        switchToMainKeyboardButton.setImageDrawable(
+                AppCompatResources.getDrawable(this.getContext(),R.drawable.ic_viii)
+        );
+        switchToMainKeyboardButton.setOnClickListener(
+                view -> {
+                    actionListener.handleInputKey(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.getKeyCode(), 0);
+                });
+    }
+
+    protected void setupSwitchToClipboardKeypadButton() {
+        ImageButton switchToClipboardButton = findViewById(R.id.switchKeypadButton);
+        switchToClipboardButton.setContentDescription(
+                this.getContext().getString(R.string.clipboard_button_content_description)
+        );
+        switchToClipboardButton.setImageDrawable(
+                AppCompatResources.getDrawable(this.getContext(),R.drawable.clipboard)
+        );
         switchToClipboardButton.setOnClickListener(
                 view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.getKeyCode(), 0));
     }
@@ -72,18 +92,28 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
                 view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(), 0));
     }
 
-    protected void setImageButtonTint(int id) {
+    protected void setImageButtonTint(int tintColor, int id) {
         ImageButton button = findViewById(id);
-        button.setColorFilter(Theme.getForegroundColor());
+        button.setColorFilter(tintColor);
     }
 
     protected void setColors() {
-        this.setBackgroundColor(Theme.getBackgroundColor());
-        setImageButtonTint(R.id.clipboardButton);
-        setImageButtonTint(R.id.goToSettingsButton);
-        setImageButtonTint(R.id.tabButton);
-        setImageButtonTint(R.id.switchToSelectionKeyboard);
-        setImageButtonTint(R.id.switchToEmojiKeyboard);
+        Context context = getContext();
+        int backgroundColor =
+                ColorsHelper.getThemeColor(context, R.attr.backgroundColor,
+                        R.string.pref_board_bg_color_key,
+                        R.color.defaultBoardBg);
+        int tintColor =
+                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground,
+                        R.string.pref_board_fg_color_key,
+                        R.color.defaultBoardFg);
+
+        this.setBackgroundColor(backgroundColor);
+        setImageButtonTint(tintColor, R.id.switchKeypadButton);
+        setImageButtonTint(tintColor, R.id.goToSettingsButton);
+        setImageButtonTint(tintColor, R.id.tabButton);
+        setImageButtonTint(tintColor, R.id.switchToSelectionKeyboard);
+        setImageButtonTint(tintColor, R.id.switchToEmojiKeyboard);
     }
 
     @Override

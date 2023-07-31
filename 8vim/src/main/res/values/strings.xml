@@ -154,6 +154,7 @@
     <string name="open_keyboard_settings_button_content_description">Open Keyboard Settings</string>
     <string name="ctrl_button_content_description">Ctrl</string>
     <string name="clipboard_button_content_description">Open Clipboard keypad</string>
+    <string name="main_keyboard_button_content_description">Open Main keypad</string>
     <string name="generic_back_button_content_description">Go Back</string>
     <string name="owner_text">Designed and Developed by flide</string>
     <string name="connect_with_us_label">Connect with us</string>

@@ -1,0 +1,47 @@
+name: Release
+run-name: |
+  Releasing 8VIM with next version: ${{inputs.version}}
+concurrency: release
+on:
+  workflow_dispatch:
+    inputs:
+      whatsnew:
+        required: true
+        description: Store release message
+      version:
+        required: true
+        default: minor
+        type: choice
+        options:
+          - major
+          - minor
+          - patch
+        description: Next version
+jobs:
+  update_version:
+    name: Update app version
+    uses: ./.github/workflows/bump-version.yaml
+    with:
+      message: ${{github.event.inputs.whatsnew}}
+      version: next
+    secrets: inherit
+  next_version:
+    needs: update_version
+    name: Next version
+    uses: ./.github/workflows/bump-version.yaml
+    with:
+      version: ${{github.event.inputs.version}}
+    secrets: inherit
+  release:
+    needs: [update_version, next_version]
+    name: Release
+    uses: ./.github/workflows/publish.yaml
+    with:
+      version_code: ${{needs.update_version.outputs.version_code}}
+      version_name: ${{needs.update_version.outputs.version_name}}
+    secrets: inherit
+    permissions:
+      actions: read
+      issues: read
+      pull-requests: read
+      contents: write
