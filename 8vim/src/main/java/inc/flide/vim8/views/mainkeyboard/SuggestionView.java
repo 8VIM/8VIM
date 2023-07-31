@@ -6,11 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
+import inc.flide.vim8.keyboardactionlisteners.SuggestionViewActionListener;
 import java.util.List;
 
 public class SuggestionView extends LinearLayout {
 
+    private SuggestionViewActionListener actionListener;
     private TextView suggestion1;
     private TextView suggestion2;
     private TextView suggestion3;
@@ -31,12 +34,17 @@ public class SuggestionView extends LinearLayout {
     }
 
     private void initialize(Context context) {
+        actionListener = new SuggestionViewActionListener((MainInputMethodService) context, this);
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.suggestion_view, this, true);
 
         suggestion1 = view.findViewById(R.id.suggestion1);
         suggestion2 = view.findViewById(R.id.suggestion2);
         suggestion3 = view.findViewById(R.id.suggestion3);
+
+        suggestion1.setOnClickListener(new OnSuggestionClick());
+        suggestion2.setOnClickListener(new OnSuggestionClick());
+        suggestion3.setOnClickListener(new OnSuggestionClick());
     }
 
     public void setSuggestions(List<String> suggestions) {
@@ -57,5 +65,11 @@ public class SuggestionView extends LinearLayout {
         }
         invalidate();
     }
-}
 
+    class OnSuggestionClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            actionListener.onText(((TextView) v).getText().toString());
+        }
+    }
+}
