@@ -14,7 +14,7 @@ checkstyle {
 
 android {
     namespace 'inc.flide.vim8'
-    compileSdkVersion 33
+    compileSdk 33
 
     defaultConfig {
         applicationId "inc.flide.vi8"
@@ -29,7 +29,22 @@ android {
     }
 
     bundle.language.enableSplit false
+    buildFeatures {
+        compose = true
+    }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+        freeCompilerArgs = List.of(
+                "-Xallow-result-return-type",
+                "-opt-in=kotlin.contracts.ExperimentalContracts",
+                "-Xjvm-default=all-compatibility",
+        )
+    }
     if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
         signingConfigs {
             release {
@@ -65,10 +80,20 @@ android {
 }
 
 dependencies {
+    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.android.material)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+//    implementation(libs.androidx.compose.ui.tooling)
+//    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.preference)
     implementation(libs.androidx.recyclerview)
     implementation(libs.apache.commons.text)
@@ -76,8 +101,12 @@ dependencies {
     implementation(libs.jackson.dataformat.yaml)
     implementation(libs.json.schema.validator)
     implementation(libs.keyboardview)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.logback.android)
     implementation(libs.material.dialog.core)
+    implementation(libs.patrickgold.jetpref.datastore.model)
+    implementation(libs.patrickgold.jetpref.datastore.ui)
+//    implementation(libs.patrickgold.jetpref.material.ui)
     implementation(libs.slf4j.api)
 
     androidTestImplementation(libs.androidx.test.core)

@@ -43,19 +43,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         super.onCreate(savedInstanceState);
         handlerThread.start();
         backPressHandler = new Handler(handlerThread.getLooper(), null);
-        switch (SharedPreferenceHelper.getInstance(getApplicationContext())
-                .getString(getString(R.string.pref_color_mode_key), "system")) {
-            case "system":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-                break;
-            case "dark":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-            case "light":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
-            default:
-        }
+
         setContentView(R.layout.settings_page_layout);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

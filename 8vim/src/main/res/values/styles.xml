@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppThemeLightBase" parent="Theme.Material3.DynamicColors.Light" />
 
@@ -35,6 +35,13 @@
 
     <style name="AppTheme.NoActionBar" parent="AppThemeLight.NoActionBar" />
 
+    <style name="AppTheme.Splash" parent="Theme.SplashScreen.IconBackground">
+        <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/app_icon</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
 
     <style name="MaterialToolbar" parent="Widget.Material3.Toolbar">
         <item name="titleTextColor">?colorOnPrimary</item>

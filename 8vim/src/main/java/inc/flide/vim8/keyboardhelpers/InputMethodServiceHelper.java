@@ -36,6 +36,13 @@ public final class InputMethodServiceHelper {
         return true;
     }
 
+    public static KeyboardData initializeKeyboardActionMap(Resources resources, InputStream inputStream) {
+
+        KeyboardData mainKeyboardData = getLayoutIndependentKeyboardData(resources);
+        addToKeyboardActionsMapUsingInputStream(mainKeyboardData, inputStream);
+        return mainKeyboardData;
+    }
+
     public static KeyboardData initializeKeyboardActionMap(Resources resources, Context context) {
         SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
         boolean useCustomSelectedKeyboardLayout = sharedPreferenceHelper.getBoolean(

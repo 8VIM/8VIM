@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE resources [
-    <!ENTITY appname "8Vim">
-]>
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY appname "8Vim">]>
 <resources>
     <string name="app_name">&appname;</string>
     <string name="version_name_label">Version : </string>
@@ -10,13 +7,12 @@
     <string name="enable_ime_dialog_title">Please Enable IME</string>
     <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable
         the keyboard first. Once you click on the enable button, you will be taken to the input
-        method settings screen. Please enable the "&appname;
-        Keyboard" there.</string>
+        method settings screen. Please enable the "&appname; Keyboard" there.</string>
     <string name="enable_ime_dialog_neutral_button_text">Enable</string>
     <string name="activate_ime_dialog_title">Please Activate IME</string>
     <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting
-        and verify them, if "&appname;
-        Keyboard" is active. Would you like to switch to &appname; keyboard now? </string>
+        and verify them, if "&appname; Keyboard" is active. Would you like to switch to &appname;
+        keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
 
@@ -69,6 +65,7 @@
     <string name="pref_category_look_and_feel">Look &amp; Feel</string>
 
     <!--    hidden/internal preferences-->
+    <string name="pref_is_8vim_setup">is_8vim_setup</string>
     <string name="pref_selected_emoticon_keyboard">selected_emoticon_keyboard</string>
     <string name="pref_selected_keyboard_layout">selected_keyboard_layout</string>
     <string name="pref_use_custom_selected_keyboard_layout">use_custom_selected_keyboard_layout</string>
@@ -186,4 +183,34 @@
     <string name="choose_the_8vim">Choose 8Vim above.We will NEVER collect any personal data.</string>
     <string name="language_selected_label">Selected</string>
 
+    <string name="floris8Vim__privacy_policy_url" translatable="false">https://florisboard.org/legal/privacy/</string>
+    <string name="general__no_browser_app_found_for_url">No browser app found for handling URL {url}</string>
+    <!-- Setup UI strings -->
+    <string name="setup__title" comment="Title of Setup">Welcome!</string>
+    <string name="setup__intro_message" comment="Short intro message welcoming new users">Thanks for using {app_name}! This quick setup guides you through the required steps to use {app_name} on your device.</string>
+    <string name="setup__footer__privacy_policy" comment="Privacy policy label for URL">Privacy policy</string>
+    <string name="setup__footer__repository" comment="Repository label for URL">Repository</string>
+
+    <string name="setup__enable_ime__title">Enable {app_name}</string>
+    <string name="setup__enable_ime__description">Android requires that every custom keyboard is separately enabled before you can use it. Open the System <i>Language &amp; Input</i> Settings, there enable "{app_name}".</string>
+    <string name="setup__enable_ime__open_settings_btn">Open System Settings</string>
+
+    <string name="setup__select_ime__title">Select {app_name}</string>
+    <string name="setup__select_ime__description">{app_name} is now enabled in your system. To actively use it, switch to {app_name} by selecting it in the input selector dialog!</string>
+    <string name="setup__select_ime__switch_keyboard_btn">Switch Keyboard</string>
+
+    <string name="setup__finish_up__title">Finish Up</string>
+    <string name="setup__finish_up__description_p1">{app_name} is now enabled in the system and ready to be customized by you.</string>
+    <string name="setup__finish_up__description_p2">If you encounter any issues, bugs, crashes or just want to make a suggestion, check out the project repository from the about screen!</string>
+    <string name="setup__finish_up__finish_btn">Start Customizing</string>
+    <string name="settings__home__title" comment="Title of the Home screen">Welcome to {app_name}</string>
+    <string name="settings__home__ime_not_enabled" comment="Error message shown in Home fragment when FlorisBoard is not enabled in the system">{app_name} is not enabled in the system and thus won\'t be available as an input method in the input picker. Click here to resolve this issue.</string>
+    <string name="settings__home__ime_not_selected" comment="Warning message shown in Home fragment when FlorisBoard is not selected as the default keyboard">{app_name} is not selected as the default input method. Click here to resolve this issue.</string>
+
+    <string name="settings__layouts__title">Languages &amp; Layouts</string>
+
+    <string name="enum__theme_mode__always_light" comment="Enum value label">Always light</string>
+    <string name="enum__theme_mode__always_dark" comment="Enum value label">Always dark</string>
+    <string name="enum__theme_mode__follow_system" comment="Enum value label">Follow system</string>
+    <string name="enum__theme_mode__custom" comment="Enum value label">Custom</string>
 </resources>

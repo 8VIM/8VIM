@@ -3,7 +3,6 @@ package inc.flide.vim8;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.inputmethodservice.InputMethodService;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -25,6 +24,7 @@ import androidx.core.graphics.ColorUtils;
 import androidx.core.view.WindowInsetsControllerCompat;
 import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
+import inc.flide.vim8.lifecycle.LifecycleInputMethodService;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.structures.KeyboardData;
@@ -36,7 +36,7 @@ import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
 import java.util.List;
 
-public class MainInputMethodService extends InputMethodService
+public class MainInputMethodService extends LifecycleInputMethodService
         implements ClipboardManagerService.ClipboardHistoryListener {
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
@@ -51,6 +51,11 @@ public class MainInputMethodService extends InputMethodService
     private int capsLockFlag;
     private int modifierFlags;
 
+    public MainInputMethodService() {
+        super();
+        setTheme(R.style.AppTheme_NoActionBar);
+    }
+
     public ClipboardManagerService getClipboardManagerService() {
         return clipboardManagerService;
     }
@@ -63,10 +68,11 @@ public class MainInputMethodService extends InputMethodService
 
     @Override
     public void onCreate() {
+        super.onCreate();
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         Context applicationContext = getApplicationContext();
         this.clipboardManagerService = new ClipboardManagerService(applicationContext);
-        this.clipboardManagerService.setClipboardHistoryListener(this::onClipboardHistoryChanged);
+        this.clipboardManagerService.setClipboardHistoryListener(this);
         String colorMode = SharedPreferenceHelper.getInstance(applicationContext)
                 .getString(getString(R.string.pref_color_mode_key), "system");
         switch (colorMode) {
@@ -79,8 +85,6 @@ public class MainInputMethodService extends InputMethodService
             default:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
-        setTheme(R.style.AppTheme_NoActionBar);
-        super.onCreate();
     }
 
     /**
@@ -104,6 +108,7 @@ public class MainInputMethodService extends InputMethodService
 
     @Override
     public View onCreateInputView() {
+        super.installViewTreeOwners();
         numberKeypadView = new NumberKeypadView(this);
         selectionKeypadView = new SelectionKeypadView(this);
         clipboardKeypadView = new ClipboardKeypadView(this);
@@ -120,6 +125,12 @@ public class MainInputMethodService extends InputMethodService
             setNavigationBarColor(window, windowInsetsControllerCompat);
         }
         return currentKeypadView;
+    }
+
+    @Override
+    public View onCreateExtractTextView() {
+        super.installViewTreeOwners();
+        return super.onCreateExtractTextView();
     }
 
     private void setNavigationBarColor(Window window, WindowInsetsControllerCompat windowInsetsControllerCompat) {
@@ -205,6 +216,7 @@ public class MainInputMethodService extends InputMethodService
         sendUpKeyEvent(keyEventCode, flags);
     }
 
+    @SuppressWarnings("DEPRECATION")
     public void switchToExternalEmoticonKeyboard() {
         String keyboardId = getSelectedEmoticonKeyboardId();
         if (keyboardId.isEmpty()) {
