@@ -5,4 +5,5 @@
     android:layout_height="wrap_content"
     android:padding="8dp"
     android:gravity="center"
-    android:textSize="18sp" />
+    android:textSize="18sp"
+    android:background="@drawable/border"/>
