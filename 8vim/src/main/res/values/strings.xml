@@ -102,10 +102,19 @@
     <string name="pref_circle_y_offset_key">x_board_circle_centre_y_offset</string>
     <string name="pref_circle_y_offset_title">Circle offset Y axis</string>
 
+    <string name="pref_keyboard_height">x_board_keyboard_height</string>
+    <string name="pref_keyboard_height_title">Keyboard size</string>
+    <string name="pref_keyboard_height_summary">Resize keyboard to your needs</string>
+
     <string name="pref_sidebar_left_key">user_preferred_sidebar_left</string>
     <string name="pref_sidebar_left_title">Sidebar on the left</string>
     <string name="pref_sidebar_left_summary_on">Sidebar is currently on the left</string>
     <string name="pref_sidebar_left_summary_off">Sidebar is currently on the right</string>
+
+    <string name="pref_sidebar_visibility_key">user_preferred_sidebar_visibility</string>
+    <string name="pref_sidebar_visibility_title">Sidebar visibility</string>
+    <string name="pref_sidebar_visibility_summary_on">Sidebar is currently visible</string>
+    <string name="pref_sidebar_visibility_summary_off">Sidebar is currently hidden</string>
 
     <string name="pref_display_sector_icons_key">user_preferred_display_icons_in</string>
     <string name="pref_display_sector_icons_title">Display sector icons</string>
