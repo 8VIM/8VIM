@@ -1,6 +1,6 @@
 package inc.flide.vim8.arbitaries;
 
-import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.models.FingerPosition;
 import java.util.List;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;

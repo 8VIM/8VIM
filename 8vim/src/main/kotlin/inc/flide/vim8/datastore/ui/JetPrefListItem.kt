@@ -22,16 +22,16 @@ internal inline fun whenNotNullOrBlank(
 @Composable
 fun JetPrefListItem(
     modifier: Modifier = Modifier,
-    icon: (@Composable () -> Unit)? = null,
+    leadingContent: (@Composable () -> Unit)? = null,
     overlineText: String? = null,
     text: String,
     secondaryText: String? = null,
     enabled: Boolean = true,
-    trailing: (@Composable () -> Unit)? = null,
+    trailingContent: (@Composable () -> Unit)? = null,
 ) {
     ListItem(
         modifier = modifier.alpha(if (enabled) 1.0f else 0.38f),
-        leadingContent = icon,
+        leadingContent = leadingContent,
         overlineContent = whenNotNullOrBlank(overlineText) { str ->
             Text(text = str)
         },
@@ -42,6 +42,6 @@ fun JetPrefListItem(
                 text = str,
             )
         },
-        trailingContent = trailing,
+        trailingContent = trailingContent,
     )
 }

@@ -3,7 +3,7 @@ package inc.flide.vim8
 import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
-import inc.flide.vim8.ui.appPreferenceModel
+import inc.flide.vim8.models.appPreferenceModel
 import inc.flide.vim8.lib.android.tryOrNull
 import java.lang.ref.WeakReference
 
@@ -32,3 +32,4 @@ private tailrec fun Context.application(): VIM8Application {
 }
 
 fun Context.appContext() = lazyOf(this.application())
+//fun Context.keyboardManager() = this.appContext().keyboardManager

@@ -1,8 +1,8 @@
 package inc.flide.vim8.arbitaries;
 
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardActionType;
+import inc.flide.vim8.models.KeyboardAction;
+import inc.flide.vim8.models.KeyboardActionType;
 import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
 import net.jqwik.api.ArbitrarySupplier;

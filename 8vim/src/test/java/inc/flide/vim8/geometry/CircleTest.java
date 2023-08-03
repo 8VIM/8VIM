@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
 import android.graphics.PointF;
-import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.models.FingerPosition;
 import net.jqwik.api.Data;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.FromData;

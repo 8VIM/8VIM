@@ -43,7 +43,7 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.MaterialSwitchPreference(
                 summary != null -> summary
                 else -> null
             },
-            trailing = {
+            trailingContent = {
                 Switch(
                     checked = prefValue,
                     onCheckedChange = null,

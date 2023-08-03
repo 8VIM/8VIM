@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.agp.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.mannodermaus.android.junit5)
 }
 
@@ -17,29 +18,29 @@ android {
     def versionPropsFile = file('version.properties')
     Properties versionProps = new Properties()
     versionProps.load(new FileInputStream(versionPropsFile))
-    
+
     def versionMajor = versionProps['MAJOR'].toInteger()
     def versionMinor = versionProps['MINOR'].toInteger()
     def versionPatch = versionProps['PATCH'].toInteger()
     def versionRc = versionProps['RC'].toInteger()
 
     compileSdk 33
-    
+
     defaultConfig {
         applicationId "inc.flide.vi8"
         minSdkVersion 24
         targetSdkVersion 33
 
-        versionCode versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - (versionRc>0?100 - versionRc:0)
+        versionCode versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - (versionRc > 0 ? 100 - versionRc : 0)
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
-        
+
         resValue "string", "version_name", versionName
-        
-        if(versionRc > 0) {
+
+        if (versionRc > 0) {
             versionNameSuffix "-rc.${versionRc}"
             resValue "string", "version_name", versionName + versionNameSuffix
         }
-        
+
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -54,7 +55,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
         freeCompilerArgs = List.of(
                 "-Xallow-result-return-type",
                 "-opt-in=kotlin.contracts.ExperimentalContracts",
@@ -88,8 +89,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     lint {
@@ -108,8 +109,6 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.ui)
-//    implementation(libs.androidx.compose.ui.tooling)
-//    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.constraintlayout)
@@ -118,8 +117,12 @@ dependencies {
     implementation(libs.androidx.preference)
     implementation(libs.androidx.recyclerview)
     implementation(libs.apache.commons.text)
+    implementation(libs.arrow.core)
+    implementation(libs.arrow.optics)
     implementation(libs.colorpreference)
     implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.module.arrow.kotlin)
+    implementation(libs.jackson.module.kotlin)
     implementation(libs.json.schema.validator)
     implementation(libs.keyboardview)
     implementation(libs.kotlinx.coroutines)
@@ -127,8 +130,9 @@ dependencies {
     implementation(libs.material.dialog.core)
     implementation(libs.patrickgold.jetpref.datastore.model)
     implementation(libs.patrickgold.jetpref.datastore.ui)
-//    implementation(libs.patrickgold.jetpref.material.ui)
     implementation(libs.slf4j.api)
+
+    ksp(libs.arrow.ksp)
 
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.ext)
@@ -144,6 +148,7 @@ dependencies {
     testImplementation(libs.jqwik)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.junit5)
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
 
 configurations.testImplementation {

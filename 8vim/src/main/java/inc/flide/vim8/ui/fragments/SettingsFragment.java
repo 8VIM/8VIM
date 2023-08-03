@@ -15,12 +15,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import inc.flide.vim8.R;
-import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
-import inc.flide.vim8.keyboardhelpers.KeyboardDataYamlParser;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.AvailableLayouts;
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.exceptions.YamlException;
 import inc.flide.vim8.utils.AlertHelper;
 import inc.flide.vim8.utils.DialogsHelper;
@@ -28,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +45,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 .takePersistableUriPermission(selectedCustomLayoutFile, takeFlags);
                         try (InputStream inputStream = context.getContentResolver()
                                 .openInputStream(selectedCustomLayoutFile)) {
-                            KeyboardData keyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
+                  /*          KeyboardData keyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
                             if (keyboardData.getTotalLayers() == 0) {
                                 AlertHelper.showAlert(context, R.string.yaml_error_title,
                                         "The layout requires at least one layer");
@@ -68,7 +64,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
                             availableLayouts.reloadCustomLayouts();
                             MainKeypadActionListener.rebuildKeyboardData(getResources(), context,
-                                    selectedCustomLayoutFile);
+                                    selectedCustomLayoutFile);*/
                         } catch (YamlException e) {
                             AlertHelper.showAlert(context, R.string.yaml_error_title, e.getMessage());
                         } catch (IOException e) {

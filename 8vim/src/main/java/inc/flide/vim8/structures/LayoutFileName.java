@@ -3,7 +3,7 @@ package inc.flide.vim8.structures;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
-import inc.flide.vim8.keyboardhelpers.KeyboardDataYamlParser;
+import inc.flide.vim8.ime.KeyboardDataYamlParser;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -42,7 +42,8 @@ public class LayoutFileName {
             @SuppressLint("DiscouragedApi") int resourceId =
                     resources.getIdentifier(fileName, "raw", context.getPackageName());
             try (InputStream inputStream = resources.openRawResource(resourceId)) {
-                totalLayers = KeyboardDataYamlParser.readKeyboardData(inputStream).getTotalLayers();
+                totalLayers = 0;
+//                KeyboardDataYamlParser.readKeyboardData(inputStream).getTotalLayers();
                 isValidLayout = true;
                 if (totalLayers == 0) {
                     setLayoutValidityFalse();

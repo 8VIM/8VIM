@@ -9,9 +9,7 @@ import android.net.Uri;
 import android.provider.OpenableColumns;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
-import inc.flide.vim8.keyboardhelpers.KeyboardDataYamlParser;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -88,35 +86,35 @@ public class AvailableLayouts {
     }
 
     private void listCustomLayoutHistory() {
-        LinkedHashSet<String> uris =
-                new LinkedHashSet<>(sharedPreferences.getStringSet(customKeyboardLayoutHistory, new LinkedHashSet<>()));
-        customLayoutsHistory = new LinkedHashMap<>();
-        LinkedHashSet<String> newUris = new LinkedHashSet<>();
-        for (String customLayoutUriString : uris) {
-            Uri customLayoutUri = Uri.parse(customLayoutUriString);
-            try (InputStream inputStream = contentResolver.openInputStream(customLayoutUri)) {
-                KeyboardData keyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
-                int totalLayers = keyboardData.getTotalLayers();
-                if (totalLayers == 0) {
-                    continue;
-                }
-                String name = getFileName(customLayoutUri);
-                if (keyboardData.getInfo() != null && !keyboardData.getInfo().name.isEmpty()) {
-                    name = keyboardData.getInfo().name;
-                }
-                if (totalLayers > 1) {
-                    name += " (" + totalLayers + " layers)";
-                }
-                customLayoutsHistory.put(name, customLayoutUriString);
-                newUris.add(customLayoutUriString);
-            } catch (Exception ignored) {
-            }
-        }
-        sharedPreferences
-                .edit()
-                .putStringSet(customKeyboardLayoutHistory, newUris)
-                .apply();
-        customLayoutHistoryUris = new ArrayList<>(customLayoutsHistory.values());
+//        LinkedHashSet<String> uris =
+//                new LinkedHashSet<>(sharedPreferences.getStringSet(customKeyboardLayoutHistory, new LinkedHashSet<>()));
+//        customLayoutsHistory = new LinkedHashMap<>();
+//        LinkedHashSet<String> newUris = new LinkedHashSet<>();
+//        for (String customLayoutUriString : uris) {
+//            Uri customLayoutUri = Uri.parse(customLayoutUriString);
+//            try (InputStream inputStream = contentResolver.openInputStream(customLayoutUri)) {
+//                KeyboardData keyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
+//                int totalLayers = keyboardData.getTotalLayers();
+//                if (totalLayers == 0) {
+//                    continue;
+//                }
+//                String name = getFileName(customLayoutUri);
+//                if (keyboardData.info != null && !keyboardData.info.name.isEmpty()) {
+//                    name = keyboardData.info.name;
+//                }
+//                if (totalLayers > 1) {
+//                    name += " (" + totalLayers + " layers)";
+//                }
+//                customLayoutsHistory.put(name, customLayoutUriString);
+//                newUris.add(customLayoutUriString);
+//            } catch (Exception ignored) {
+//            }
+//        }
+//        sharedPreferences
+//                .edit()
+//                .putStringSet(customKeyboardLayoutHistory, newUris)
+//                .apply();
+//        customLayoutHistoryUris = new ArrayList<>(customLayoutsHistory.values());
     }
 
     private String getFileName(Uri uri) {
@@ -124,6 +122,7 @@ public class AvailableLayouts {
             String scheme = uri.getScheme();
             String fileName = "";
             if (scheme.equals("file")) {
+                Class<R.raw> rawClass = R.raw.class;
                 fileName = uri.getLastPathSegment();
             } else if (scheme.equals("content")) {
                 Cursor cursor = contentResolver.query(uri, null, null, null, null);

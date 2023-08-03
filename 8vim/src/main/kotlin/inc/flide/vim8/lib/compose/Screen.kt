@@ -15,9 +15,9 @@ import androidx.compose.ui.res.painterResource
 import inc.flide.vim8.R
 import inc.flide.vim8.datastore.ui.PreferenceLayout
 import inc.flide.vim8.datastore.ui.PreferenceUiContent
-import inc.flide.vim8.ui.AppPrefs
-import inc.flide.vim8.ui.LocalNavController
-import inc.flide.vim8.ui.appPreferenceModel
+import inc.flide.vim8.models.AppPrefs
+import inc.flide.vim8.app.LocalNavController
+import inc.flide.vim8.models.appPreferenceModel
 
 @Composable
 fun Screen(builder: @Composable ScreenScope.() -> Unit) {

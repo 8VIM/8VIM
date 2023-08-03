@@ -9,9 +9,9 @@ import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.models.CustomKeycode;
+import inc.flide.vim8.models.KeyboardAction;
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.CustomKeycode;
-import inc.flide.vim8.structures.KeyboardAction;
 
 public abstract class KeypadActionListener {
     public static final int KEYCODE_PROFILE_SWITCH = 288;

@@ -2,7 +2,6 @@ package inc.flide.vim8;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.inputmethodservice.InputMethodService;
 import android.os.Build;
 import android.os.IBinder;
@@ -23,11 +22,9 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.WindowInsetsControllerCompat;
 import com.google.android.material.color.DynamicColors;
-import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
-import inc.flide.vim8.lifecycle.LifecycleInputMethodService;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.services.ClipboardManagerService;
-import inc.flide.vim8.structures.KeyboardData;
+import inc.flide.vim8.models.KeyboardData;
 import inc.flide.vim8.ui.Theme;
 import inc.flide.vim8.views.ClipboardKeypadView;
 import inc.flide.vim8.views.NumberKeypadView;
@@ -36,7 +33,7 @@ import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
 import java.util.List;
 
-public class MainInputMethodService extends LifecycleInputMethodService
+public class MainInputMethodService extends InputMethodService
         implements ClipboardManagerService.ClipboardHistoryListener {
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
@@ -108,7 +105,6 @@ public class MainInputMethodService extends LifecycleInputMethodService
 
     @Override
     public View onCreateInputView() {
-        super.installViewTreeOwners();
         numberKeypadView = new NumberKeypadView(this);
         selectionKeypadView = new SelectionKeypadView(this);
         clipboardKeypadView = new ClipboardKeypadView(this);
@@ -129,7 +125,6 @@ public class MainInputMethodService extends LifecycleInputMethodService
 
     @Override
     public View onCreateExtractTextView() {
-        super.installViewTreeOwners();
         return super.onCreateExtractTextView();
     }
 
@@ -185,7 +180,8 @@ public class MainInputMethodService extends LifecycleInputMethodService
     }
 
     public KeyboardData buildKeyboardActionMap() {
-        return InputMethodServiceHelper.initializeKeyboardActionMap(getResources(), getApplicationContext());
+        return null;
+//        return InputMethodServiceHelper.initializeKeyboardActionMap(getResources(), getApplicationContext());
     }
 
     public void sendText(String text) {

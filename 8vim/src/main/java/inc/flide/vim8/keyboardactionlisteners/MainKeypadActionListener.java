@@ -7,14 +7,13 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
-import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
+import inc.flide.vim8.models.FingerPosition;
+import inc.flide.vim8.models.KeyboardAction;
+import inc.flide.vim8.models.KeyboardActionType;
+import inc.flide.vim8.models.KeyboardData;
+import inc.flide.vim8.models.MovementSequenceType;
+import inc.flide.vim8.models.yaml.ExtraLayer;
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardActionType;
-import inc.flide.vim8.structures.KeyboardData;
-import inc.flide.vim8.structures.MovementSequenceType;
-import inc.flide.vim8.structures.yaml.ExtraLayer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -80,20 +79,20 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     public static void rebuildKeyboardData(Resources resources, Context context) {
-        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
+//        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
     }
 
     public static void rebuildKeyboardData(Resources resources, Context context, Uri customLayoutUri) {
-        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resources, context,
-                customLayoutUri);
+       /* keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resources, context,
+                customLayoutUri);*/
     }
 
     public String getLowerCaseCharacters(int layer) {
-        return keyboardData.getLowerCaseCharacters(layer);
+        return keyboardData.lowerCaseCharacters(layer).getOrNull();
     }
 
     public String getUpperCaseCharacters(int layer) {
-        return keyboardData.getUpperCaseCharacters(layer);
+        return keyboardData.upperCaseCharacters(layer).getOrNull();
     }
 
     public String getCurrentLetter() {

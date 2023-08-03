@@ -18,7 +18,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.google.accompanist.systemuicontroller.SystemUiController
-import inc.flide.vim8.ui.apptheme.isLightTheme
+import inc.flide.vim8.lib.android.AndroidVersion
+import inc.flide.vim8.theme.isLightTheme
 
 @Composable
 fun SystemUiApp() {
@@ -30,11 +31,32 @@ fun SystemUiApp() {
             color = Color.Transparent,
             darkIcons = useDarkIcons,
         )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (AndroidVersion.ATLEAST_API26_O) {
             systemUiController.setNavigationBarColor(
                 color = Color.Transparent,
                 darkIcons = useDarkIcons,
                 navigationBarContrastEnforced = false,
+            )
+        }
+    }
+}
+
+@Composable
+fun SystemUiIme() {
+    val systemUiController = rememberSystemUiController()
+    val useDarkIcons = MaterialTheme.colorScheme.isLightTheme()
+    val backgroundColor = MaterialTheme.colorScheme.background
+
+    SideEffect {
+        systemUiController.setStatusBarColor(
+            color = backgroundColor,
+            darkIcons = useDarkIcons,
+        )
+        if (AndroidVersion.ATLEAST_API26_O) {
+            systemUiController.setNavigationBarColor(
+                color = backgroundColor,
+                darkIcons = useDarkIcons,
+                navigationBarContrastEnforced = true,
             )
         }
     }

@@ -13,7 +13,7 @@ import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.KeypadActionListener;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
-import inc.flide.vim8.structures.CustomKeycode;
+import inc.flide.vim8.models.CustomKeycode;
 import inc.flide.vim8.ui.activities.SettingsActivity;
 import inc.flide.vim8.utils.ColorsHelper;
 
@@ -50,7 +50,7 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
         );
         switchToMainKeyboardButton.setOnClickListener(
                 view -> {
-                    actionListener.handleInputKey(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.getKeyCode(), 0);
+                    actionListener.handleInputKey(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.keyCode, 0);
                 });
     }
 
@@ -63,7 +63,7 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
                 AppCompatResources.getDrawable(this.getContext(),R.drawable.clipboard)
         );
         switchToClipboardButton.setOnClickListener(
-                view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.getKeyCode(), 0));
+                view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.keyCode, 0));
     }
 
     private void setupGoToSettingsButton() {
@@ -83,13 +83,13 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
     private void setupSwitchToSelectionKeyboardButton() {
         ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
         switchToSelectionKeyboardButton.setOnClickListener(
-                view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode(), 0));
+                view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.keyCode, 0));
     }
 
     private void setupSwitchToEmojiKeyboardButton() {
         ImageButton switchToEmojiKeyboardButton = findViewById(R.id.switchToEmojiKeyboard);
         switchToEmojiKeyboardButton.setOnClickListener(
-                view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode(), 0));
+                view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.keyCode, 0));
     }
 
     protected void setImageButtonTint(int tintColor, int id) {

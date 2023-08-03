@@ -3,6 +3,9 @@ package inc.flide.vim8.structures;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import inc.flide.vim8.models.CharacterPosition;
+import inc.flide.vim8.models.Direction;
+import inc.flide.vim8.models.Quadrant;
 import net.jqwik.api.Data;
 import net.jqwik.api.ForAll;
 import net.jqwik.api.FromData;
@@ -29,6 +32,6 @@ class QuadrantTest {
     @Property
     @FromData("getCharacterIndexInStringTable")
     public void getCharacterIndexInString(@ForAll Quadrant quadrant, @ForAll Integer characterIndex) {
-        assertThat(quadrant.getCharacterIndexInString(CharacterPosition.FIRST)).isEqualTo(characterIndex);
+        assertThat(quadrant.characterIndexInString(CharacterPosition.FIRST)).isEqualTo(characterIndex);
     }
 }

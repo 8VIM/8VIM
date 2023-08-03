@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import inc.flide.vim8.lib.android.AndroidSettings
+import inc.flide.vim8.lib.android.systemServiceOrNull
 import kotlin.reflect.KClass
 
 private const val DELIMITER = ':'
@@ -72,19 +73,5 @@ object InputMethodUtils {
         } else {
             false
         }
-    }
-}
-
-@Throws(NullPointerException::class, ClassCastException::class)
-fun <T : Any> Context.systemService(kClass: KClass<T>): T {
-    val serviceName = this.getSystemServiceName(kClass.java)!!
-    @Suppress("UNCHECKED_CAST")
-    return this.getSystemService(serviceName) as T
-}
-fun <T : Any> Context.systemServiceOrNull(kClass: KClass<T>): T? {
-    return try {
-        this.systemService(kClass)
-    } catch (e: Exception) {
-        null
     }
 }

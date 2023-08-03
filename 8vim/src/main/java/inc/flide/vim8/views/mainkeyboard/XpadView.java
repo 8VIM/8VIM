@@ -26,7 +26,7 @@ import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.models.FingerPosition;
 import inc.flide.vim8.ui.Theme;
 import java.util.Random;
 

@@ -34,10 +34,10 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.Preference(
             } else {
                 modifier
             },
-            icon = maybeJetIcon(iconId, iconSpaceReserved),
+            leadingContent = maybeJetIcon(iconId, iconSpaceReserved),
             text = title,
             secondaryText = summary,
-            trailing = trailing,
+            trailingContent = trailing,
             enabled = isEnabled,
         )
     }

@@ -214,4 +214,5 @@
     <string name="enum__theme_mode__always_dark" comment="Enum value label">Always dark</string>
     <string name="enum__theme_mode__follow_system" comment="Enum value label">Follow system</string>
     <string name="enum__theme_mode__custom" comment="Enum value label">Custom</string>
+    <string name="action__save">Save</string>
 </resources>

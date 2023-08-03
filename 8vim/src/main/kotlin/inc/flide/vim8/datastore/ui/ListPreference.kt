@@ -182,7 +182,7 @@ fun <T : PreferenceModel, V : Any> PreferenceUiScope<T>.ListPreference(
                         isDialogOpen.value = true
                     }
                 ),
-            icon = maybeJetIcon(iconId, iconSpaceReserved),
+            leadingContent = maybeJetIcon(iconId, iconSpaceReserved),
             text = title,
             secondaryText = entries.find {
                 it.key == listPrefValue
