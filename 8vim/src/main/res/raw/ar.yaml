@@ -85,28 +85,18 @@ layers:
               - lower_case: "ُ"
               - lower_case: "ٌ"
               - lower_case: "’"
-              - lower_case: null
         bottom:
           parts:
             right:
               - lower_case: "ى"
-              - lower_case: null
-              - lower_case: null
-              - lower_case: null
             left:
               - lower_case: "ـ"
-              - lower_case: null
-              - lower_case: null
-              - lower_case: null
         left:
           parts:
             bottom:
               - lower_case: "ِ"
               - lower_case: "ٍ"
-              - lower_case: null
-              - lower_case: null
             top:
               - lower_case: "ّ"
               - lower_case: "٠"
               - lower_case: "١"
-              - lower_case: null
