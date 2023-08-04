@@ -29,14 +29,14 @@ import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
 import inc.flide.vim8.models.KeyboardData
 import inc.flide.vim8.models.Quadrant
-import inc.flide.vim8.structures.info
+import inc.flide.vim8.models.info
 import inc.flide.vim8.models.yaml.Action
 import inc.flide.vim8.models.yaml.Flags
 import inc.flide.vim8.models.yaml.Flags.FlagsDeserializer
 import inc.flide.vim8.models.yaml.Layer
 import inc.flide.vim8.models.yaml.Layout
 import inc.flide.vim8.models.yaml.isEmpty
-import inc.flide.vim8.structures.yaml.upperCase
+import inc.flide.vim8.models.yaml.upperCase
 import inc.flide.vim8.structures.Constants
 import inc.flide.vim8.structures.exceptions.InvalidYamlException
 import inc.flide.vim8.structures.exceptions.YamlParsingException

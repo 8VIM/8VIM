@@ -2,6 +2,7 @@ package inc.flide.vim8.models
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -13,15 +14,15 @@ import arrow.core.raise.catch
 import arrow.core.raise.either
 import arrow.core.right
 import arrow.core.some
-import dev.patrickgold.jetpref.datastore.model.PreferenceSerializer
 import inc.flide.vim8.R
+import inc.flide.vim8.datastore.model.PreferenceSerDe
 import inc.flide.vim8.datastore.ui.ListPreferenceEntry
 import inc.flide.vim8.datastore.ui.listPrefEntries
 import inc.flide.vim8.ime.InputMethodServiceHelper
+import inc.flide.vim8.lib.android.tryOrNull
 import inc.flide.vim8.models.error.ExceptionWrapperError
 import inc.flide.vim8.models.error.LayoutError
-import inc.flide.vim8.structures.info
-import inc.flide.vim8.structures.yaml.name
+import inc.flide.vim8.models.yaml.name
 import java.io.InputStream
 import java.util.Locale
 import java.util.TreeMap
@@ -59,6 +60,7 @@ fun rememberEmbeddedLayouts(): TreeMap<String, EmbeddedLayout> {
         })
     }
 }
+
 interface Layout<T> {
     val path: T
     fun inputStream(context: Context): Either<LayoutError, InputStream>
@@ -90,25 +92,38 @@ fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, Keyboa
     }
 }
 
-object LayoutSerializer : PreferenceSerializer<Layout<*>> {
-    override fun deserialize(value: String): Layout<*>? {
-        if (value.length < 2) return null
-        val path = value.substring(1)
-        return when (value[0]) {
-            'e' -> EmbeddedLayout(path)
-            'c' -> CustomLayout(Uri.parse(path))
-            else -> null
-        }
-    }
-
-    override fun serialize(value: Layout<*>): String? {
-        return when (value) {
+object LayoutSerDe : PreferenceSerDe<Layout<*>> {
+    override fun serialize(editor: SharedPreferences.Editor, key: String, value: Layout<*>) {
+        val encodedValue = when (value) {
             is EmbeddedLayout -> "e${value.path}"
             is CustomLayout -> "c${value.path}"
             else -> null
         }
+
+        editor.putString(key, encodedValue)
     }
 
+    override fun deserialize(
+        sharedPreferences: SharedPreferences,
+        key: String,
+        default: Layout<*>
+    ): Layout<*> {
+        return tryOrNull { sharedPreferences.getString(key, null) }
+            ?.let { deserialize(it) } ?: default
+    }
+
+    override fun deserialize(value: Any?): Layout<*>? {
+        return value?.toString()?.let {
+            if (it.length >= 2) {
+                val path = it.substring(1)
+                when (it[0]) {
+                    'e' -> EmbeddedLayout(path)
+                    'c' -> CustomLayout(Uri.parse(path))
+                    else -> null
+                }
+            } else null
+        }
+    }
 }
 
 data class EmbeddedLayout(override val path: String) : Layout<String> {

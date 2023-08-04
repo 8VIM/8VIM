@@ -6,11 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
-import dev.patrickgold.jetpref.datastore.model.PreferenceData
-import dev.patrickgold.jetpref.datastore.model.PreferenceDataEvaluator
-import dev.patrickgold.jetpref.datastore.model.PreferenceDataEvaluatorScope
-import dev.patrickgold.jetpref.datastore.model.PreferenceModel
-import dev.patrickgold.jetpref.datastore.model.observeAsState
+import inc.flide.vim8.datastore.model.PreferenceData
+import inc.flide.vim8.datastore.model.PreferenceDataEvaluator
+import inc.flide.vim8.datastore.model.PreferenceDataEvaluatorScope
+import inc.flide.vim8.datastore.model.PreferenceModel
+import inc.flide.vim8.datastore.model.observeAsState
 
 @Composable
 fun <T : PreferenceModel> PreferenceUiScope<T>.MaterialSwitchPreference(

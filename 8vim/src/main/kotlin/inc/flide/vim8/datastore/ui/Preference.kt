@@ -5,9 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
-import dev.patrickgold.jetpref.datastore.model.PreferenceDataEvaluator
-import dev.patrickgold.jetpref.datastore.model.PreferenceDataEvaluatorScope
-import dev.patrickgold.jetpref.datastore.model.PreferenceModel
+import inc.flide.vim8.datastore.model.PreferenceDataEvaluator
+import inc.flide.vim8.datastore.model.PreferenceDataEvaluatorScope
+import inc.flide.vim8.datastore.model.PreferenceModel
 
 @Composable
 fun <T : PreferenceModel> PreferenceUiScope<T>.Preference(

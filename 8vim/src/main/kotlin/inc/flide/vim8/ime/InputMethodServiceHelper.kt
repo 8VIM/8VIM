@@ -14,7 +14,7 @@ import inc.flide.vim8.models.error.LayoutError
 import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
 import inc.flide.vim8.models.KeyboardData
-import inc.flide.vim8.structures.info
+import inc.flide.vim8.models.info
 import inc.flide.vim8.structures.Constants
 import java.io.InputStream
 
@@ -32,6 +32,7 @@ object InputMethodServiceHelper {
             .isNone()
     }
 
+    @JvmStatic
     fun initializeKeyboardActionMap(
         resources: Resources,
         inputStream: InputStream

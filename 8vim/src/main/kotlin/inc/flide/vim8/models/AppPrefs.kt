@@ -5,47 +5,46 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.graphics.toColorInt
 import arrow.core.Either
-import dev.patrickgold.jetpref.datastore.JetPref
-import dev.patrickgold.jetpref.datastore.model.PreferenceModel
-import dev.patrickgold.jetpref.datastore.model.PreferenceSerializer
-import dev.patrickgold.jetpref.datastore.model.observeAsState
+import inc.flide.vim8.datastore.Datastore
+import inc.flide.vim8.datastore.model.PreferenceMigrationEntry
+import inc.flide.vim8.datastore.model.PreferenceModel
+import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.models.error.LayoutError
 import inc.flide.vim8.theme.ThemeMode
 import inc.flide.vim8.theme.darkColorPalette
 import inc.flide.vim8.theme.lightColorPalette
-import kotlin.math.roundToInt
 
-fun appPreferenceModel() = JetPref.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
-class AppPrefs : PreferenceModel("vim8-app-prefs") {
+fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
+class AppPrefs : PreferenceModel(1) {
     val layout = Layout()
     val theme = Theme()
+    val cliboard = Clipboard()
+
+    inner class Clipboard {
+        val history = stringSet(
+            key = "clipboard_history",
+            default = HashSet()
+        )
+    }
+
     val keyboard = Keyboard()
     val inputFeedback = InputFeedback()
 
     inner class Layout {
         val current = custom(
-            key = "language_layout__custom",
+            key = "select_keyboard_layout",
             default = EmbeddedLayout("en"),
-            serializer = LayoutSerializer
+            serde = LayoutSerDe
         )
         val custom = Custom()
 
         inner class Custom {
-            val history = custom(
-                key = "language_layout__custom_history",
-                default = emptyList(),
-                serializer = object : PreferenceSerializer<List<String>> {
-                    override fun deserialize(value: String): List<String> {
-                        return value.split('|')
-                    }
-
-                    override fun serialize(value: List<String>): String {
-                        return value.joinToString("|")
-                    }
-                }
+            val history = stringSet(
+                key = "pref_custom_keyboard_layout_history",
+                default = emptySet(),
             )
         }
 
@@ -59,11 +58,11 @@ class AppPrefs : PreferenceModel("vim8-app-prefs") {
 
     inner class InputFeedback {
         val soundEnabled = boolean(
-            key = "input_feedback__sound_enabled",
+            key = "user_preferred_haptic_feedback_enabled",
             default = true,
         )
         val hapticEnabled = boolean(
-            key = "input_feedback__haptic_enabled",
+            key = "user_preferred_sound_feedback_enabled",
             default = true,
         )
     }
@@ -72,7 +71,7 @@ class AppPrefs : PreferenceModel("vim8-app-prefs") {
 
     inner class Theme {
         val mode = enum(
-            key = "theme__mode",
+            key = "color_mode",
             default = ThemeMode.SYSTEM
         )
 
@@ -93,7 +92,7 @@ class AppPrefs : PreferenceModel("vim8-app-prefs") {
 
     inner class Keyboard {
         val isSidebarOnLeft = boolean(
-            key = "keyboard__is_sidebar_on_left",
+            key = "user_preferred_sidebar_left",
             default = true
         )
         val customColors = CustomColors()
@@ -103,29 +102,27 @@ class AppPrefs : PreferenceModel("vim8-app-prefs") {
 
         inner class Circle {
             val radiusSizeFactor = int(
-                key = "keyboard__circle__radius_size_factor",
+                key = "pref_circle_scale_factor",
                 default = 12
             )
             val xCentreOffset = int(
-                key = "keyboard__circle__x_centre_offset",
+                key = "x_board_circle_centre_x_offset",
                 default = 0
             )
             val yCentreOffset = int(
-                key = "keyboard__circle__y_centre_offset",
+                key = "x_board_circle_centre_y_offset",
                 default = 0
             )
         }
 
         inner class CustomColors {
-            val background = custom(
+            val background = int(
                 key = "keyboard__custom_colors__background",
-                default = Color.White,
-                serializer = ColorPreferenceSerializer
+                default = Color(0xFA, 0xFA, 0xFA).toArgb(),
             )
-            val foreground = custom(
+            val foreground = int(
                 key = "keyboard__custom_colors__foreground",
-                default = Color.Black,
-                serializer = ColorPreferenceSerializer
+                default = Color(21, 21, 21).toArgb(),
             )
 
         }
@@ -137,35 +134,34 @@ class AppPrefs : PreferenceModel("vim8-app-prefs") {
             val foreground by customColors.foreground.observeAsState()
             val colorScheme = theme.colorScheme()
             return if (mode == ThemeMode.CUSTOM) colorScheme.copy(
-                onSurface = foreground,
-                surface = background
+                onSurface = Color(foreground),
+                surface = Color(background)
             ) else colorScheme
         }
 
         inner class Display {
             val showSectorIcons = boolean(
-                key = "keyboard__display__show_sector_icons",
+                key = "user_preferred_display_icons_in",
                 default = true
             )
             val showLettersOnWheel = boolean(
-                key = "keyboard__display__show_letters_on_wheel",
+                key = "user_preferred_display_letters_on_wheel",
                 default = true
             )
         }
 
         inner class Trail {
             val isVisible = boolean(
-                key = "keyboard__trail__visibility",
+                key = "user_preferred_typing_trail_visibility",
                 default = true
             )
             val useRandomColor = boolean(
-                key = "keyboard__trail__use_random_color",
+                key = "user_preferred_random_trail_color_enabled",
                 default = true
             )
-            val color = custom(
-                "keyboard__trail__color",
-                default = Color(61, 90, 254),
-                serializer = ColorPreferenceSerializer
+            val color = int(
+                "trail_color",
+                default = Color(0x3D, 0x5A, 0xFE).toArgb()
             )
         }
     }
@@ -173,21 +169,18 @@ class AppPrefs : PreferenceModel("vim8-app-prefs") {
     inner class Internal {
         val isImeSetup = boolean(key = "internal__is_ime_set_up", default = false)
     }
-}
 
-object ColorPreferenceSerializer : PreferenceSerializer<Color> {
-    override fun deserialize(value: String): Color? {
-        return try {
-            Color(value.toColorInt())
-        } catch (_: Exception) {
-            null
+    override fun migrate(
+        previousVersion: Int,
+        entry: PreferenceMigrationEntry
+    ): PreferenceMigrationEntry {
+        return when (previousVersion) {
+            0 -> when (entry.key) {
+                "color_mode" -> entry.transform(rawValue = entry.rawValue.toString().uppercase())
+                else -> entry.keepAsIs()
+            }
+
+            else -> entry.keepAsIs()
         }
     }
-
-    override fun serialize(value: Color): String? {
-        return "#${value.alpha.toStringComponent()}${value.red.toStringComponent()}${value.green.toStringComponent()}${value.green.toStringComponent()}"
-    }
-
-    private fun Float.toStringComponent(): String =
-        (this * 255).roundToInt().toString(16).let { if (it.length == 1) "0${it}" else it }
 }

@@ -1,5 +1,7 @@
 package inc.flide.vim8;
 
+import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.inputmethodservice.InputMethodService;
@@ -22,9 +24,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.WindowInsetsControllerCompat;
 import com.google.android.material.color.DynamicColors;
+import inc.flide.vim8.ime.InputMethodServiceHelper;
+import inc.flide.vim8.models.KeyboardData;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.services.ClipboardManagerService;
-import inc.flide.vim8.models.KeyboardData;
 import inc.flide.vim8.ui.Theme;
 import inc.flide.vim8.views.ClipboardKeypadView;
 import inc.flide.vim8.views.NumberKeypadView;
@@ -32,6 +35,7 @@ import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
 import java.util.List;
+import java.util.Objects;
 
 public class MainInputMethodService extends InputMethodService
         implements ClipboardManagerService.ClipboardHistoryListener {
@@ -180,8 +184,11 @@ public class MainInputMethodService extends InputMethodService
     }
 
     public KeyboardData buildKeyboardActionMap() {
-        return null;
-//        return InputMethodServiceHelper.initializeKeyboardActionMap(getResources(), getApplicationContext());
+        return InputMethodServiceHelper
+                .initializeKeyboardActionMap(getResources(),
+                        Objects.requireNonNull(appPreferenceModel().java().getLayout().getCurrent().get()
+                                .inputStream(getApplicationContext()).getOrNull())).getOrNull();
+
     }
 
     public void sendText(String text) {
@@ -392,6 +399,8 @@ public class MainInputMethodService extends InputMethodService
 
     @Override
     public void onClipboardHistoryChanged() {
-        clipboardKeypadView.updateClipHistory();
+        if (clipboardKeypadView != null) {
+            clipboardKeypadView.updateClipHistory();
+        }
     }
 }

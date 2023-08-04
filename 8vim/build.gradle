@@ -125,11 +125,9 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
     implementation(libs.json.schema.validator)
     implementation(libs.keyboardview)
-    implementation(libs.kotlinx.coroutines)
+//    implementation(libs.kotlinx.coroutines)
     implementation(libs.logback.android)
     implementation(libs.material.dialog.core)
-    implementation(libs.patrickgold.jetpref.datastore.model)
-    implementation(libs.patrickgold.jetpref.datastore.ui)
     implementation(libs.slf4j.api)
 
     ksp(libs.arrow.ksp)

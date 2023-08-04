@@ -23,13 +23,11 @@ gradle = "8.0.2"
 jackson = "2.13.5"
 json-schema-validator = "1.0.73"
 keyboardview = "0.0.2"
-kotlinx-coroutines = "1.7.0"
 kotlin = "1.8.21"
 ksp = "1.8.21-1.0.11"
 logback-android = "3.0.0"
 mannodermaus-android-junit5 = "1.9.3.0"
 material-dialog = "3.3.0"
-patrickgold-jetpref = "0.1.0-beta14"
 slf4j = "2.0.7"
 
 # Testing
@@ -68,16 +66,12 @@ material-dialog-core = { module = "com.afollestad.material-dialogs:core", versio
 jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jackson-module-arrow-kotlin = { module = "io.arrow-kt:arrow-integrations-jackson-module", version.ref = "arrow-jackson" }
-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 colorpreference = { module = "com.github.kizitonwose.colorpreference:support", version.ref = "colorpreference" }
 logback-android = { module = "com.github.tony19:logback-android", version.ref = "logback-android" }
 android-material = { module = "com.google.android.material:material", version.ref = "android-material" }
 json-schema-validator = { module = "com.networknt:json-schema-validator", version.ref = "json-schema-validator" }
 keyboardview = { module = "io.github.hijamoya:keyboardview", version.ref = "keyboardview" }
 apache-commons-text = { module = "org.apache.commons:commons-text", version.ref = "apache-commons" }
-patrickgold-jetpref-datastore-model = { module = "dev.patrickgold.jetpref:jetpref-datastore-model", version.ref = "patrickgold-jetpref" }
-patrickgold-jetpref-datastore-ui = { module = "dev.patrickgold.jetpref:jetpref-datastore-ui", version.ref = "patrickgold-jetpref" }
-#patrickgold-jetpref-material-ui = { module = "dev.patrickgold.jetpref:jetpref-material-ui", version.ref = "patrickgold-jetpref" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 
 # Testing

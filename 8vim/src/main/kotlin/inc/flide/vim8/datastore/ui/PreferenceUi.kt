@@ -3,17 +3,15 @@ package inc.flide.vim8.datastore.ui
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import dev.patrickgold.jetpref.datastore.CachedPreferenceModel
-import dev.patrickgold.jetpref.datastore.model.PreferenceDataEvaluator
-import dev.patrickgold.jetpref.datastore.model.PreferenceDataEvaluatorScope
-import dev.patrickgold.jetpref.datastore.model.PreferenceModel
+import inc.flide.vim8.datastore.CachedPreferenceModel
+import inc.flide.vim8.datastore.model.PreferenceDataEvaluator
+import inc.flide.vim8.datastore.model.PreferenceDataEvaluatorScope
+import inc.flide.vim8.datastore.model.PreferenceModel
 
 @DslMarker
 @Target(AnnotationTarget.TYPE)

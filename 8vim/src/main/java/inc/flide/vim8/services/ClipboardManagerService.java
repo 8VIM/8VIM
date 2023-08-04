@@ -28,19 +28,16 @@ public class ClipboardManagerService {
         this.sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
         clipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
-        clipboardManager.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
-            @Override
-            public void onPrimaryClipChanged() {
-                ClipData primaryClip = clipboardManager.getPrimaryClip();
-                if (primaryClip != null) {
-                    String newClip = primaryClip.getItemAt(0).getText().toString();
-                    addClipToHistory(newClip);
-                    if (clipboardHistoryListener != null) {
-                        clipboardHistoryListener.onClipboardHistoryChanged();
-                    }
-                } else {
-                    Log.e("Clipboard Manager", "Unable to access the primary clip");
+        clipboardManager.addPrimaryClipChangedListener(() -> {
+            ClipData primaryClip = clipboardManager.getPrimaryClip();
+            if (primaryClip != null) {
+                String newClip = primaryClip.getItemAt(0).getText().toString();
+                addClipToHistory(newClip);
+                if (clipboardHistoryListener != null) {
+                    clipboardHistoryListener.onClipboardHistoryChanged();
                 }
+            } else {
+                Log.e("Clipboard Manager", "Unable to access the primary clip");
             }
         });
     }

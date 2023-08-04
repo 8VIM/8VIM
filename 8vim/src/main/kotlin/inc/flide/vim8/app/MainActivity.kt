@@ -22,7 +22,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import dev.patrickgold.jetpref.datastore.model.observeAsState
+import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.lib.compose.LocalPreviewFieldController
 import inc.flide.vim8.lib.compose.PreviewKeyboardField
 import inc.flide.vim8.lib.compose.ProvideLocalizedResources
@@ -42,15 +42,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen().apply {
-            setKeepOnScreenCondition { !prefs.datastoreReadyStatus.get() }
+            setKeepOnScreenCondition { !prefs.isReady() }
         }
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         resourcesContext = createConfigurationContext(Configuration(resources.configuration))
 
 
-        prefs.datastoreReadyStatus.observe(this) { isModelLoaded ->
-            if (!isModelLoaded) return@observe
+        prefs.onReady(this) { isModelLoaded ->
+            if (!isModelLoaded) return@onReady
             setContent {
                 rememberEmbeddedLayouts()
                 val prefs by appPreferenceModel()

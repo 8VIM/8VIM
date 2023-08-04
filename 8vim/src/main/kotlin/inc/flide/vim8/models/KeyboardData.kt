@@ -8,10 +8,6 @@ import arrow.optics.optics
 import arrow.optics.typeclasses.Index
 import inc.flide.vim8.models.yaml.LayoutInfo
 import inc.flide.vim8.structures.Constants
-import inc.flide.vim8.structures.actionMap
-import inc.flide.vim8.structures.characterSets
-import inc.flide.vim8.structures.lowerCaseCharacters
-import inc.flide.vim8.structures.upperCaseCharacters
 
 @optics
 data class KeyboardData(

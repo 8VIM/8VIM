@@ -1,12 +1,15 @@
 package inc.flide.vim8.keyboardactionlisteners;
 
+import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
+
 import android.content.Context;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
+import inc.flide.vim8.ime.InputMethodServiceHelper;
+import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.FingerPosition;
 import inc.flide.vim8.models.KeyboardAction;
 import inc.flide.vim8.models.KeyboardActionType;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,6 +56,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
             })
             .map(Arrays::asList).collect(Collectors.toSet());
     private static KeyboardData keyboardData;
+    private static AppPrefs prefs;
     private final List<FingerPosition> movementSequence;
     private final Handler longPressHandler;
     private FingerPosition currentFingerPosition;
@@ -70,7 +75,9 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     public MainKeypadActionListener(MainInputMethodService inputMethodService, View view) {
         super(inputMethodService, view);
+        prefs = appPreferenceModel().java();
         keyboardData = mainInputMethodService.buildKeyboardActionMap();
+
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
         HandlerThread longPressHandlerThread = new HandlerThread("LongPressHandlerThread");
@@ -79,12 +86,10 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     public static void rebuildKeyboardData(Resources resources, Context context) {
-//        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
-    }
-
-    public static void rebuildKeyboardData(Resources resources, Context context, Uri customLayoutUri) {
-       /* keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resources, context,
-                customLayoutUri);*/
+        keyboardData = InputMethodServiceHelper
+                .initializeKeyboardActionMap(resources,
+                        Objects.requireNonNull(Objects.requireNonNull(prefs).getLayout().getCurrent().get()
+                                .inputStream(context).getOrNull())).getOrNull();
     }
 
     public String getLowerCaseCharacters(int layer) {

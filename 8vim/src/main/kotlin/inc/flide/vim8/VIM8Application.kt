@@ -3,8 +3,8 @@ package inc.flide.vim8
 import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
-import inc.flide.vim8.models.appPreferenceModel
 import inc.flide.vim8.lib.android.tryOrNull
+import inc.flide.vim8.models.appPreferenceModel
 import java.lang.ref.WeakReference
 
 private var applicationReference = WeakReference<VIM8Application?>(null)
@@ -14,7 +14,7 @@ class VIM8Application : Application() {
     override fun onCreate() {
         super.onCreate()
         applicationReference = WeakReference(this)
-        prefs.initializeBlocking(this)
+        prefs.initialize(this)
     }
 }
 
