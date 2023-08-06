@@ -51,10 +51,10 @@
         "movement_sequence": {
           "type": "array",
           "items": {
-            "type": "string",
-            "pattern": "^(?i)(no_touch|inside_circle|top|left|bottom|right|long_press|long_press_end)$",
+            "type": ["string", "integer"],
+            "pattern": "^(?i)(no_touch|inside_circle|long_press|long_press_end|(\\d))$",
             "message": {
-              "pattern": "Finger position can only be one of: [no_touch, inside_circle, top, left, bottom right, long_press, long_press_end]"
+              "pattern": "Finger position can only be one of: [no_touch, inside_circle, long_press, long_press_end, or a number]"
             }
           }
         },
@@ -97,6 +97,27 @@
         "sectors": {
           "type": "object",
           "patternProperties": {
+            "^(?i)(\\d)$": {
+              "type": "object",
+              "properties": {
+                "parts": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^(?i)(\\d)$": {
+                      "$ref": "#/definitions/actionList"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "message": {
+                    "additionalProperties": "Only top/bottom parts are valid for left/right sectors"
+                  }
+                }
+              },
+              "required": [
+                "parts"
+              ],
+              "additionalProperties": false
+            },
             "^(?i)(left|right)$": {
               "type": "object",
               "properties": {

@@ -13,12 +13,5 @@ public final class GeometricUtilities {
         double distanceYSquare = Math.pow(a.y - b.y, 2);
         return Math.abs(distanceXSquare + distanceYSquare);
     }
-
-    public static Direction getBaseQuadrant(int continuousQuadrantValue) {
-        int result;
-        // Calculate result with modulus operator
-        result = continuousQuadrantValue % Constants.NUMBER_OF_SECTORS;
-        return Direction.values()[result];
-    }
 }
 

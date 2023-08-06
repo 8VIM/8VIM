@@ -3,31 +3,20 @@ package inc.flide.vim8.structures;
 import java.util.Objects;
 
 public class Quadrant {
-    private final Direction sector;
-    private final Direction part;
+    private final int sector;
+    private final int part;
 
-    public Quadrant(Direction sector, Direction part) {
+    public Quadrant(int sector, int part) {
         this.sector = sector;
         this.part = part;
     }
 
     public int getCharacterIndexInString(CharacterPosition characterPosition) {
-        int index = 0;
-        switch (sector) {
-            case RIGHT:
-                index = part == Direction.BOTTOM ? 0 : 7;
-                break;
-            case TOP:
-                index = part == Direction.LEFT ? 5 : 6;
-                break;
-            case LEFT:
-                index = part == Direction.BOTTOM ? 3 : 4;
-                break;
-            case BOTTOM:
-                index = part == Direction.RIGHT ? 1 : 2;
-                break;
-            default:
-        }
+        int index=0;
+        if ((part-sector+Constants.NUMBER_OF_SECTORS) % Constants.NUMBER_OF_SECTORS == 1)
+            index = ((sector) % Constants.NUMBER_OF_SECTORS)*2;
+        else
+            index = ((sector-1)*2)+1;
         int base = index / 2 * (Constants.NUMBER_OF_SECTORS * 2);
         int delta = index % 2;
         return base + characterPosition.ordinal() * 2 + delta;
@@ -45,11 +34,11 @@ public class Quadrant {
         }
     }
 
-    public Direction getSector() {
+    public int getSector() {
         return sector;
     }
 
-    public Direction getPart() {
+    public int getPart() {
         return part;
     }
 

@@ -1,6 +1,8 @@
 package inc.flide.vim8.geometry;
 
 import android.graphics.PointF;
+
+import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.utils.GeometricUtilities;
@@ -59,6 +61,7 @@ public class Circle {
 
         // Calculate angle with special atan (calculates the correct angle in all quadrants)
         double angle = Math.atan2(y, x);
+        angle-=Math.PI/2;
         // Make all angles positive
         if (angle < 0) {
             angle = Math.PI * 2 + angle;
@@ -69,24 +72,11 @@ public class Circle {
     /**
      * Get the number of the sector that point p is in
      */
-    public FingerPosition getSectorOfPoint(PointF p) {
+    public int getSectorOfPoint(PointF p) {
         double angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p);
-        double angleToSectorValue = angleDouble / (Math.PI / 2);
+        double angleToSectorValue = Math.PI  * 2 -angleDouble / (Math.PI  * 2 / Constants.NUMBER_OF_SECTORS);
         int quadrantCyclic = (int) Math.round(angleToSectorValue);
-        Direction baseQuadrant = GeometricUtilities.getBaseQuadrant(quadrantCyclic);
-        FingerPosition result = null;
-
-        switch (baseQuadrant) {
-            case RIGHT:
-                return FingerPosition.RIGHT;
-            case TOP:
-                return FingerPosition.TOP;
-            case LEFT:
-                return FingerPosition.LEFT;
-            case BOTTOM:
-                return FingerPosition.BOTTOM;
-            default:
-                return null;
-        }
+        quadrantCyclic = quadrantCyclic % Constants.NUMBER_OF_SECTORS + 1;
+        return quadrantCyclic;
     }
 }

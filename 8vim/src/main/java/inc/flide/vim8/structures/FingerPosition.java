@@ -1,5 +1,9 @@
 package inc.flide.vim8.structures;
 
-public enum FingerPosition {
-    NO_TOUCH, INSIDE_CIRCLE, TOP, LEFT, BOTTOM, RIGHT, LONG_PRESS, LONG_PRESS_END
+public class FingerPosition {
+    public static final int NO_TOUCH = -1;
+    public static final int LONG_PRESS = -2;
+    public static final int LONG_PRESS_END = -3;
+    public static final int INSIDE_CIRCLE = 0;
+    public static final int BOTTOM = 1;
 }

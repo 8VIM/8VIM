@@ -124,11 +124,11 @@ public class KeyboardDataYamlParser {
         Pair<StringBuilder, StringBuilder> characterSets =
                 Pair.of(lowerCaseCharacters, upperCaseCharacters);
 
-        for (Map.Entry<Direction, Part> sectorEntry : layerData.sectors.entrySet()) {
-            Direction sector = sectorEntry.getKey();
+        for (Map.Entry<Integer, Part> sectorEntry : layerData.sectors.entrySet()) {
+            int sector = sectorEntry.getKey();
 
-            for (Map.Entry<Direction, List<Action>> partEntry : sectorEntry.getValue().parts.entrySet()) {
-                Direction part = partEntry.getKey();
+            for (Map.Entry<Integer, List<Action>> partEntry : sectorEntry.getValue().parts.entrySet()) {
+                int part = partEntry.getKey();
                 Quadrant quadrant = new Quadrant(sector, part);
                 addKeyboardActions(keyboardData, layer, quadrant, partEntry.getValue(), characterSets);
             }
@@ -140,7 +140,7 @@ public class KeyboardDataYamlParser {
 
     private static void addKeyboardActions(KeyboardData keyboardData, List<Action> actions) {
         for (Action action : actions) {
-            List<FingerPosition> movementSequence = action.movementSequence;
+            List<Integer> movementSequence = action.movementSequence;
 
             if (movementSequence.isEmpty()) {
                 continue;
@@ -167,7 +167,7 @@ public class KeyboardDataYamlParser {
 
             CharacterPosition characterPosition = CharacterPosition.values()[i];
 
-            List<FingerPosition> movementSequence = action.movementSequence;
+            List<Integer> movementSequence = action.movementSequence;
 
             if (movementSequence.isEmpty()) {
                 movementSequence =

@@ -21,13 +21,13 @@ import java.util.Map;
 
 public final class InputMethodServiceHelper {
     private static boolean validateNoConflictingActions(
-            Map<List<FingerPosition>, KeyboardAction> mainKeyboardActionsMap,
-            Map<List<FingerPosition>, KeyboardAction> newKeyboardActionsMap) {
+            Map<List<Integer>, KeyboardAction> mainKeyboardActionsMap,
+            Map<List<Integer>, KeyboardAction> newKeyboardActionsMap) {
 
         if (mainKeyboardActionsMap == null || mainKeyboardActionsMap.isEmpty()) {
             return true;
         }
-        for (Map.Entry<List<FingerPosition>, KeyboardAction> newKeyboardAction : newKeyboardActionsMap.entrySet()) {
+        for (Map.Entry<List<Integer>, KeyboardAction> newKeyboardAction : newKeyboardActionsMap.entrySet()) {
             if (mainKeyboardActionsMap.containsKey(newKeyboardAction.getKey())) {
                 return false;
             }
@@ -101,7 +101,7 @@ public final class InputMethodServiceHelper {
         KeyboardData tempKeyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
         keyboardData.setInfo(tempKeyboardData.getInfo());
 
-        Map<List<FingerPosition>, KeyboardAction> tempKeyboardDataActionMap =
+        Map<List<Integer>, KeyboardAction> tempKeyboardDataActionMap =
                 tempKeyboardData.getActionMap();
         if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardDataActionMap)) {
             keyboardData.addAllToActionMap(tempKeyboardDataActionMap);

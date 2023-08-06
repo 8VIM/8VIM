@@ -6,20 +6,20 @@ import java.util.List;
 import java.util.Map;
 
 public class KeyboardData {
-    private final Map<List<FingerPosition>, KeyboardAction> actionMap = new HashMap<>();
+    private final Map<List<Integer>, KeyboardAction> actionMap = new HashMap<>();
     private final CharacterSet[] characterSets = new CharacterSet[Constants.MAX_LAYERS + 1];
     private int totalLayers = 0;
     private Layout.LayoutInfo info;
 
-    public Map<List<FingerPosition>, KeyboardAction> getActionMap() {
+    public Map<List<Integer>, KeyboardAction> getActionMap() {
         return actionMap;
     }
 
-    public void addActionMap(List<FingerPosition> movementSequence, KeyboardAction keyboardAction) {
+    public void addActionMap(List<Integer> movementSequence, KeyboardAction keyboardAction) {
         this.actionMap.put(movementSequence, keyboardAction);
     }
 
-    public void addAllToActionMap(Map<List<FingerPosition>, KeyboardAction> actionMapAddition) {
+    public void addAllToActionMap(Map<List<Integer>, KeyboardAction> actionMapAddition) {
         this.actionMap.putAll(actionMapAddition);
     }
 
@@ -61,7 +61,7 @@ public class KeyboardData {
         characterSets[layer].setUpperCaseCharacters(upperCaseCharacters);
     }
 
-    public int findLayer(List<FingerPosition> movementSequence) {
+    public int findLayer(List<Integer> movementSequence) {
         KeyboardAction action = actionMap.get(movementSequence);
         if (action == null) {
             return Constants.DEFAULT_LAYER;

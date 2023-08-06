@@ -447,7 +447,7 @@ public class XpadView extends View {
         return actionListener.getLowerCaseCharacters(layer);
     }
 
-    private FingerPosition getCurrentFingerPosition(PointF position) {
+    private Integer getCurrentFingerPosition(PointF position) {
         if (circle.isPointInsideCircle(position)) {
             return FingerPosition.INSIDE_CIRCLE;
         } else {
@@ -458,7 +458,7 @@ public class XpadView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         PointF position = new PointF((int) e.getX(), (int) e.getY());
-        FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
+        Integer currentFingerPosition = getCurrentFingerPosition(position);
         invalidate();
         switch (e.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:

@@ -6,5 +6,5 @@ import java.util.Map;
 
 public class Layer {
     @JsonProperty(required = true)
-    public Map<Direction, Part> sectors;
+    public Map<Integer, Part> sectors;
 }

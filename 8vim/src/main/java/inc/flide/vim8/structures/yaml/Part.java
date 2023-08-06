@@ -7,5 +7,5 @@ import java.util.Map;
 
 public class Part {
     @JsonProperty(required = true)
-    public Map<Direction, List<Action>> parts;
+    public Map<Integer, List<Action>> parts;
 }

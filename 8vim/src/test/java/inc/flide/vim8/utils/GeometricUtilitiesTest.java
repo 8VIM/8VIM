@@ -29,7 +29,7 @@ public class GeometricUtilitiesTest {
 
     @Test
     void getBaseQuadrantTest() {
-        Direction quadrant = GeometricUtilities.getBaseQuadrant(6);
-        assertThat(quadrant).isEqualTo(Direction.LEFT);
+        int quadrant = GeometricUtilities.getBaseQuadrant(6);
+        assertThat(quadrant).isEqualTo(2);
     }
 }
