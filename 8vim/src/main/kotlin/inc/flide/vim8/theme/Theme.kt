@@ -11,29 +11,27 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.luminance
+import inc.flide.vim8.lib.android.AndroidVersion
 
-private fun supportsDynamic(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 fun darkColorPalette(context: Context) =
-    if (supportsDynamic()) {
+    if (AndroidVersion.ATLEAST_API31_S) {
         dynamicDarkColorScheme(context)
     } else {
         darkColorScheme()
     }
 
 fun lightColorPalette(context: Context) =
-    if (supportsDynamic()) {
+    if (AndroidVersion.ATLEAST_API31_S) {
         dynamicLightColorScheme(context)
     } else {
         lightColorScheme()
     }
-
 
 @Composable
 fun AppTheme(
     colorScheme: ColorScheme,
     content: @Composable () -> Unit
 ) {
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = colorScheme.typography(),

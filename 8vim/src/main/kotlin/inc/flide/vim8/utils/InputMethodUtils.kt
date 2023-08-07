@@ -9,24 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import inc.flide.vim8.lib.android.AndroidSettings
 import inc.flide.vim8.lib.android.systemServiceOrNull
-import kotlin.reflect.KClass
 
 private const val DELIMITER = ':'
 private const val IME_SERVICE_CLASS_NAME = "inc.flide.vim8.MainInputMethodService"
 
 object InputMethodUtils {
-    fun is8VimEnabled(context: Context): Boolean {
-        val enabledImeList =
-            AndroidSettings.Secure.getString(context, Settings.Secure.ENABLED_INPUT_METHODS)
-        return enabledImeList != null && parseIs8VimEnabled(context, enabledImeList)
-    }
-
-    fun is8VimSelected(context: Context): Boolean {
-        val selectedIme =
-            AndroidSettings.Secure.getString(context, Settings.Secure.DEFAULT_INPUT_METHOD)
-        return selectedIme != null && parseIs8VimSelected(context, selectedIme)
-    }
-
     @Composable
     fun observeIs8VimEnabled(
         context: Context = LocalContext.current.applicationContext,
@@ -53,7 +40,7 @@ object InputMethodUtils {
         }.any { it?.packageName == context.packageName && it?.className == IME_SERVICE_CLASS_NAME }
     }
 
-    fun parseIs8VimSelected(context: Context, selectedImeId: String): Boolean {
+    private fun parseIs8VimSelected(context: Context, selectedImeId: String): Boolean {
         val component = ComponentName.unflattenFromString(selectedImeId)
         return component?.packageName == context.packageName && component?.className == IME_SERVICE_CLASS_NAME
     }

@@ -20,18 +20,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import inc.flide.vim8.R
+import inc.flide.vim8.app.LocalNavController
+import inc.flide.vim8.app.MainActivity
+import inc.flide.vim8.app.Routes
+import inc.flide.vim8.lib.android.AndroidSettings
 import inc.flide.vim8.lib.android.launchActivity
 import inc.flide.vim8.lib.android.launchUrl
-import inc.flide.vim8.lib.compose.BulletSpacer
 import inc.flide.vim8.lib.compose.Screen
 import inc.flide.vim8.lib.compose.Step
 import inc.flide.vim8.lib.compose.StepLayout
 import inc.flide.vim8.lib.compose.StepState
 import inc.flide.vim8.lib.compose.stringRes
-import inc.flide.vim8.app.LocalNavController
-import inc.flide.vim8.app.MainActivity
-import inc.flide.vim8.app.Routes
-import inc.flide.vim8.lib.android.AndroidSettings
 import inc.flide.vim8.utils.InputMethodUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -150,12 +149,7 @@ fun SetupScreen() = Screen {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    val privacyPolicyUrl = stringRes(R.string.floris8Vim__privacy_policy_url)
-                    TextButton(onClick = { context.launchUrl(privacyPolicyUrl) }) {
-                        Text(text = stringRes(R.string.setup__footer__privacy_policy))
-                    }
-                    BulletSpacer()
-                    val repositoryUrl = stringRes(R.string.floris8Vim__privacy_policy_url)
+                    val repositoryUrl = stringRes(R.string.vim8__repository_url)
                     TextButton(onClick = { context.launchUrl(repositoryUrl) }) {
                         Text(text = stringRes(R.string.setup__footer__repository))
                     }

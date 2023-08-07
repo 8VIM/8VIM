@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,10 +12,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import inc.flide.vim8.R
+import inc.flide.vim8.app.LocalNavController
 import inc.flide.vim8.datastore.ui.PreferenceLayout
 import inc.flide.vim8.datastore.ui.PreferenceUiContent
 import inc.flide.vim8.models.AppPrefs
-import inc.flide.vim8.app.LocalNavController
 import inc.flide.vim8.models.appPreferenceModel
 
 @Composable
@@ -96,12 +95,6 @@ private class ScreenScopeImpl : ScreenScope {
 
     @Composable
     fun Render() {
-        val previewFieldController = LocalPreviewFieldController.current
-
-        SideEffect {
-            previewFieldController?.isVisible = previewFieldVisible
-        }
-
         Scaffold(
             topBar = { AppBar(title, navigationIcon.takeIf { navigationIconVisible }, actions) },
             bottomBar = bottomBar,
@@ -117,7 +110,6 @@ private class ScreenScopeImpl : ScreenScope {
                 modifier = modifier
                     .padding(innerPadding)
                     .fillMaxWidth(),
-                iconSpaceReserved = iconSpaceReserved,
                 content = content,
             )
         }

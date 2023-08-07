@@ -4,10 +4,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -20,37 +17,5 @@ fun AppBar(
         navigationIcon = navigationIcon ?: {},
         title = { Text(text = title) },
         actions = actions,
-        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-//        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
     )
 }
-//@Composable
-//fun BottomAppBar(
-//    modifier: Modifier = Modifier,
-//    containerColor: Color = BottomAppBarDefaults.containerColor,
-//    contentColor: Color = contentColorFor(containerColor),
-//    tonalElevation: Dp = BottomAppBarDefaults.ContainerElevation,
-//    contentPadding: PaddingValues = BottomAppBarDefaults.ContentPadding,
-//    windowInsets: WindowInsets = BottomAppBarDefaults.windowInsets,
-//    content: @Composable RowScope.() -> Unit
-//) {
-//    Surface(
-//        color = containerColor,
-//        contentColor = contentColor,
-//        tonalElevation = tonalElevation,
-//        // TODO(b/209583788): Consider adding a shape parameter if updated design guidance allows
-//        shape = BottomAppBarTokens.ContainerShape.toShape(),
-//        modifier = modifier
-//    ) {
-//        Row(
-//            Modifier
-//                .fillMaxWidth()
-//                .windowInsetsPadding(windowInsets)
-//                .height(BottomAppBarTokens.ContainerHeight)
-//                .padding(contentPadding),
-//            horizontalArrangement = Arrangement.Start,
-//            verticalAlignment = Alignment.CenterVertically,
-//            content = content
-//        )
-//    }
-//}

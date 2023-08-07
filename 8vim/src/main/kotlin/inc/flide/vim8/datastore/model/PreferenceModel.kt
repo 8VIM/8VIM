@@ -36,7 +36,7 @@ abstract class PreferenceModel(val version: Int) {
         if (owner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
             return
         }
-        val eventObserver = LifecycleEventObserver { source, event ->
+        val eventObserver = LifecycleEventObserver { _, _ ->
             var currentState = owner.lifecycle.currentState
             if (currentState == Lifecycle.State.DESTROYED) {
                 onReadyObserver = null
@@ -106,15 +106,6 @@ abstract class PreferenceModel(val version: Int) {
         default: Int,
     ): PreferenceData<Int> {
         val prefData = IntSharedPreferencePreferenceData(this, key, default)
-        registryAdd(prefData)
-        return prefData
-    }
-
-    protected fun long(
-        key: String,
-        default: Long,
-    ): PreferenceData<Long> {
-        val prefData = LongSharedPreferencePreferenceData(this, key, default)
         registryAdd(prefData)
         return prefData
     }

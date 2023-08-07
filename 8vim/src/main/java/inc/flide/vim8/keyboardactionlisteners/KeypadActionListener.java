@@ -8,10 +8,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
+import inc.flide.vim8.models.LayerLevel;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.models.CustomKeycode;
 import inc.flide.vim8.models.KeyboardAction;
-import inc.flide.vim8.structures.Constants;
 
 public abstract class KeypadActionListener {
     public static final int KEYCODE_PROFILE_SWITCH = 288;
@@ -134,7 +134,7 @@ public abstract class KeypadActionListener {
         return mainInputMethodService.getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
     }
 
-    public int findLayer() {
-        return Constants.DEFAULT_LAYER;
+    public LayerLevel findLayer() {
+        return LayerLevel.FIRST;
     }
 }

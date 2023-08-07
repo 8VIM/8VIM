@@ -54,7 +54,7 @@ internal abstract class SharedPreferencePreferenceData<V : Any>(
             return
         }
         val eventObserver =
-            LifecycleEventObserver { source, event ->
+            LifecycleEventObserver { _, _ ->
                 var currentState = owner.lifecycle.currentState
                 if (currentState == Lifecycle.State.DESTROYED) {
                     removeObserver(observer)
@@ -110,14 +110,6 @@ internal class IntSharedPreferencePreferenceData(
     override val default: Int
 ) : SharedPreferencePreferenceData<Int>(model) {
     override val serde: PreferenceSerDe<Int> = IntPreferenceSerde
-}
-
-internal class LongSharedPreferencePreferenceData(
-    model: PreferenceModel,
-    override val key: String,
-    override val default: Long
-) : SharedPreferencePreferenceData<Long>(model) {
-    override val serde: PreferenceSerDe<Long> = LongPreferenceSerde
 }
 
 internal class StringSharedPreferencePreferenceData(

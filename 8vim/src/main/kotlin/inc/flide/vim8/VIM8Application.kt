@@ -1,10 +1,11 @@
 package inc.flide.vim8
 
 import android.app.Application
-import android.content.Context
-import android.content.ContextWrapper
-import inc.flide.vim8.lib.android.tryOrNull
+import androidx.appcompat.app.AppCompatDelegate
+import inc.flide.vim8.ime.KeyboardTheme
 import inc.flide.vim8.models.appPreferenceModel
+import inc.flide.vim8.structures.AvailableLayouts
+import inc.flide.vim8.theme.ThemeMode
 import java.lang.ref.WeakReference
 
 private var applicationReference = WeakReference<VIM8Application?>(null)
@@ -15,21 +16,13 @@ class VIM8Application : Application() {
         super.onCreate()
         applicationReference = WeakReference(this)
         prefs.initialize(this)
-    }
-}
-
-private tailrec fun Context.application(): VIM8Application {
-    return when (this) {
-        is VIM8Application -> this
-        is ContextWrapper -> when {
-            this.baseContext != null -> this.baseContext.application()
-            else -> applicationReference.get()!!
+        AvailableLayouts.initialize(this)
+        KeyboardTheme.initialize(this)
+        when (prefs.theme.mode.get()) {
+            ThemeMode.DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            ThemeMode.LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            else -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         }
 
-        else -> tryOrNull { this.applicationContext as VIM8Application }
-            ?: applicationReference.get()!!
     }
 }
-
-fun Context.appContext() = lazyOf(this.application())
-//fun Context.keyboardManager() = this.appContext().keyboardManager

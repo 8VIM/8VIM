@@ -184,7 +184,7 @@
     <string name="choose_the_8vim">Choose 8Vim above.We will NEVER collect any personal data.</string>
     <string name="language_selected_label">Selected</string>
 
-    <string name="floris8Vim__privacy_policy_url" translatable="false">https://florisboard.org/legal/privacy/</string>
+    <string name="vim8__repository_url" translatable="false">https://github.com/8VIM/8VIM</string>
     <string name="general__no_browser_app_found_for_url">No browser app found for handling URL {url}</string>
     <!-- Setup UI strings -->
     <string name="setup__title" comment="Title of Setup">Welcome!</string>

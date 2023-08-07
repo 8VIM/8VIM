@@ -23,11 +23,8 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import inc.flide.vim8.datastore.model.observeAsState
-import inc.flide.vim8.lib.compose.LocalPreviewFieldController
-import inc.flide.vim8.lib.compose.PreviewKeyboardField
 import inc.flide.vim8.lib.compose.ProvideLocalizedResources
 import inc.flide.vim8.lib.compose.SystemUiApp
-import inc.flide.vim8.lib.compose.rememberPreviewFieldController
 import inc.flide.vim8.models.appPreferenceModel
 import inc.flide.vim8.models.rememberEmbeddedLayouts
 import inc.flide.vim8.theme.AppTheme
@@ -71,11 +68,9 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun AppContent() {
         val navController = rememberNavController()
-        val previewFieldController = rememberPreviewFieldController()
         val isImeSetUp by prefs.internal.isImeSetup.observeAsState()
         CompositionLocalProvider(
             LocalNavController provides navController,
-            LocalPreviewFieldController provides previewFieldController,
         ) {
             Column(
                 modifier = Modifier
@@ -88,7 +83,6 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = if (isImeSetUp) Routes.Settings.Home else Routes.Setup.Screen,
                 )
-                PreviewKeyboardField(previewFieldController)
             }
         }
         SideEffect {

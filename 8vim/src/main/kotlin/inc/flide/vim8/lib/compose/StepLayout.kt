@@ -35,7 +35,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
@@ -73,7 +72,6 @@ data class Step(
 
 class StepLayoutScope(
     columnScope: ColumnScope,
-    private val primaryColor: Color,
 ) : ColumnScope by columnScope {
     @Composable
     fun StepText(
@@ -99,12 +97,9 @@ class StepLayoutScope(
             modifier = modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 16.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = primaryColor,
-            ),
             onClick = onClick,
         ) {
-            Text(text = label)
+            Text(text = label, color = MaterialTheme.colorScheme.onPrimary)
         }
     }
 }
@@ -163,7 +158,7 @@ fun StepLayout(
     Column(
         modifier = modifier.fillMaxSize()
     ) {
-        val scope = StepLayoutScope(this, primaryColor)
+        val scope = StepLayoutScope(this)
         header(scope)
         for (step in steps) {
             key(step.id) {
@@ -174,7 +169,7 @@ fun StepLayout(
                     title = step.title,
                     primaryColor = primaryColor,
                 ) {
-                    step.content(StepLayoutScope(this, primaryColor))
+                    step.content(StepLayoutScope(this))
                 }
             }
         }

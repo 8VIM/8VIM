@@ -1,9 +1,12 @@
 package inc.flide.vim8.views;
 
+import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,29 +14,63 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
+import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.keyboardactionlisteners.KeypadActionListener;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
+import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.CustomKeycode;
 import inc.flide.vim8.ui.activities.SettingsActivity;
-import inc.flide.vim8.utils.ColorsHelper;
 
-public class ConstraintLayoutWithSidebar extends ConstraintLayout {
-    protected KeypadActionListener actionListener;
+public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener> extends ConstraintLayout {
+    protected T actionListener;
+    protected KeyboardTheme keyboardTheme;
+    protected AppPrefs prefs;
+    protected LayoutInflater inflater;
 
     public ConstraintLayoutWithSidebar(@NonNull Context context) {
         super(context);
+        initialize(context);
     }
 
     public ConstraintLayoutWithSidebar(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        initialize(context);
     }
 
     public ConstraintLayoutWithSidebar(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initialize(context);
     }
 
-    protected void setupButtonsOnSideBar(KeypadActionListener actionListener) {
-        this.actionListener = actionListener;
+    protected void initialize(Context context) {
+        prefs = appPreferenceModel().java();
+        keyboardTheme = KeyboardTheme.getInstance();
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        initializeActionListener(context);
+        keyboardTheme.onChange(this::setColors);
+        prefs.getKeyboard().isSidebarOnLeft().observe(newValue -> initializeView());
+        initializeView();
+    }
+
+    protected void initializeView() {
+        setupMainKeyboardView();
+        setupButtonsOnSideBar();
+        setColors();
+        setHapticFeedbackEnabled(true);
+    }
+
+    protected void setupMainKeyboardView() {
+        removeAllViews();
+        Boolean isSidebarOnLeft = prefs.getKeyboard().isSidebarOnLeft().get();
+        int sidebarLayout = getSidebarLayout(isSidebarOnLeft);
+        inflater.inflate(sidebarLayout, this, true);
+    }
+
+    protected abstract void initializeActionListener(Context context);
+
+    protected abstract int getSidebarLayout(boolean isSidebarOnLeft);
+
+    protected void setupButtonsOnSideBar() {
         setupSwitchToEmojiKeyboardButton();
         setupSwitchToSelectionKeyboardButton();
         setupTabKey();
@@ -46,12 +83,10 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
                 this.getContext().getString(R.string.main_keyboard_button_content_description)
         );
         switchToMainKeyboardButton.setImageDrawable(
-                AppCompatResources.getDrawable(this.getContext(),R.drawable.ic_viii)
+                AppCompatResources.getDrawable(this.getContext(), R.drawable.ic_viii)
         );
         switchToMainKeyboardButton.setOnClickListener(
-                view -> {
-                    actionListener.handleInputKey(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.keyCode, 0);
-                });
+                view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.keyCode, 0));
     }
 
     protected void setupSwitchToClipboardKeypadButton() {
@@ -60,7 +95,7 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
                 this.getContext().getString(R.string.clipboard_button_content_description)
         );
         switchToClipboardButton.setImageDrawable(
-                AppCompatResources.getDrawable(this.getContext(),R.drawable.clipboard)
+                AppCompatResources.getDrawable(this.getContext(), R.drawable.clipboard)
         );
         switchToClipboardButton.setOnClickListener(
                 view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.keyCode, 0));
@@ -98,15 +133,8 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
     }
 
     protected void setColors() {
-        Context context = getContext();
-        int backgroundColor =
-                ColorsHelper.getThemeColor(context, R.attr.backgroundColor,
-                        R.string.pref_board_bg_color_key,
-                        R.color.defaultBoardBg);
-        int tintColor =
-                ColorsHelper.getThemeColor(context, R.attr.colorOnBackground,
-                        R.string.pref_board_fg_color_key,
-                        R.color.defaultBoardFg);
+        int backgroundColor = keyboardTheme.getBackgroundColor();
+        int tintColor = keyboardTheme.getForegroundColor();
 
         this.setBackgroundColor(backgroundColor);
         setImageButtonTint(tintColor, R.id.switchKeypadButton);
@@ -119,9 +147,9 @@ public class ConstraintLayoutWithSidebar extends ConstraintLayout {
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Dimension computedDimension = InputMethodViewHelper.computeDimension(getResources());
-        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
-        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
+        setMeasuredDimension(computedDimension.width, computedDimension.height);
+        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.width, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(computedDimension.height, MeasureSpec.EXACTLY));
 
     }
 

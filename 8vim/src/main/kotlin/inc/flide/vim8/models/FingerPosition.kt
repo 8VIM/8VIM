@@ -1,7 +1,9 @@
 package inc.flide.vim8.models
 
-import inc.flide.vim8.models.yaml.ExtraLayer
-import inc.flide.vim8.structures.Constants
+import arrow.core.getOrElse
+import arrow.core.lastOrNone
+
+typealias MovementSequence = List<FingerPosition>
 
 enum class FingerPosition {
     NO_TOUCH, INSIDE_CIRCLE, TOP, LEFT, BOTTOM, RIGHT, LONG_PRESS, LONG_PRESS_END;
@@ -9,77 +11,73 @@ enum class FingerPosition {
     companion object {
 
         fun computeMovementSequence(
-            layer: Int, quadrant: Quadrant,
+            layer: LayerLevel, quadrant: Quadrant,
             position: CharacterPosition
-        ): List<FingerPosition> {
-            if (layer == Constants.HIDDEN_LAYER) {
-                return emptyList()
-            }
-            val movementSequencesForDefaultLayer =
-                movementSequencesForLayer(layer, quadrant, position)
-            return if (movementSequencesForDefaultLayer.isEmpty()) {
-                movementSequencesForDefaultLayer
-            } else {
-                movementSequencesForDefaultLayer + INSIDE_CIRCLE
+        ): MovementSequence {
+            return when (layer) {
+                LayerLevel.HIDDEN -> emptyList()
+                else -> {
+                    val movementSequencesForDefaultLayer =
+                        movementSequencesForLayer(layer, quadrant, position)
+                    if (movementSequencesForDefaultLayer.isEmpty()) emptyList() else movementSequencesForDefaultLayer + INSIDE_CIRCLE
+                }
             }
         }
 
         fun computeQuickMovementSequence(
-            layer: Int, quadrant: Quadrant,
+            layer: LayerLevel, quadrant: Quadrant,
             position: CharacterPosition
-        ): List<FingerPosition> {
-            if (layer <= Constants.DEFAULT_LAYER) {
-                return emptyList()
+        ): MovementSequence {
+            return when (layer) {
+                LayerLevel.HIDDEN -> emptyList()
+                else -> {
+                    val movementSequenceForExtraLayer =
+                        movementSequenceForExtraLayer(layer, quadrant, position)
+                    listOf(INSIDE_CIRCLE) + movementSequenceForExtraLayer + listOf(INSIDE_CIRCLE)
+
+                }
             }
-            val movementSequence: MutableList<FingerPosition> = ArrayList()
-            val movementSequenceForExtraLayer =
-                movementSequenceForExtraLayer(layer, quadrant, position)
-            movementSequence.add(INSIDE_CIRCLE)
-            movementSequence.addAll(movementSequenceForExtraLayer)
-            movementSequence.add(INSIDE_CIRCLE)
-            return movementSequence
         }
 
         private fun movementSequenceForExtraLayer(
-            layer: Int, quadrant: Quadrant,
+            layer: LayerLevel, quadrant: Quadrant,
             position: CharacterPosition
-        ): List<FingerPosition> {
-            val oppositeQuadrant = quadrant.getOppositeQuadrant(position)
-            val movementSequence: MutableList<FingerPosition> = ArrayList()
+        ): MovementSequence {
+            val oppositeQuadrant = quadrant.opposite(position)
             val maxMovements = position.ordinal + 1
-            for (i in 0..maxMovements) {
-                val lastPosition =
-                    if (movementSequence.isEmpty()) INSIDE_CIRCLE else movementSequence[movementSequence.size - 1]
-                val nextPosition = getNextPosition(quadrant, lastPosition)
-                movementSequence.add(nextPosition)
-            }
-            for (i in Constants.DEFAULT_LAYER + 1..layer) {
-                val lastPosition =
-                    if (movementSequence.isEmpty()) INSIDE_CIRCLE else movementSequence[movementSequence.size - 1]
-                val nextPosition = getNextPosition(oppositeQuadrant, lastPosition)
-                movementSequence.add(nextPosition)
-            }
-            return movementSequence
+            val baseMovementSequence: MovementSequence =
+                (0..maxMovements).fold(emptyList()) { acc, _ ->
+                    val lastPosition = acc.lastOrNone().getOrElse { INSIDE_CIRCLE }
+                    val nextPosition = getNextPosition(quadrant, lastPosition)
+                    acc + nextPosition
+                }
+            return (LayerLevel.SECOND.ordinal..layer.ordinal)
+                .fold(baseMovementSequence) { acc, _ ->
+                    val lastPosition = acc.lastOrNone().getOrElse { INSIDE_CIRCLE }
+                    val nextPosition = getNextPosition(oppositeQuadrant, lastPosition)
+                    acc + nextPosition
+                }
         }
 
         private fun movementSequencesForLayer(
-            layer: Int, quadrant: Quadrant,
+            layer: LayerLevel, quadrant: Quadrant,
             position: CharacterPosition
-        ): List<FingerPosition> {
-            val maxMovements = position.ordinal + 1
-            val movementSequence = if (layer > Constants.DEFAULT_LAYER) {
-                val extraLayer = ExtraLayer.values()[layer - 2]
-                ExtraLayer.MOVEMENT_SEQUENCES[extraLayer].orEmpty()
+        ): MovementSequence {
+            return when (layer) {
+                LayerLevel.HIDDEN -> emptyList()
+                else -> {
+                    val maxMovements = position.ordinal + 1
+                    val movementSequence =
+                        LayerLevel.MovementSequences[layer].orEmpty() + INSIDE_CIRCLE
 
-            } else {
-                emptyList()
-            } + INSIDE_CIRCLE
-
-            return (0..maxMovements).fold(movementSequence) { acc, _ ->
-                val lastPosition = acc.last()
-                val nextPosition = getNextPosition(quadrant, lastPosition)
-                acc + nextPosition
+                    return (0..maxMovements).fold(movementSequence) { acc, _ ->
+                        val lastPosition = acc.last()
+                        val nextPosition = getNextPosition(quadrant, lastPosition)
+                        acc + nextPosition
+                    }
+                }
             }
+
         }
 
         private fun getNextPosition(

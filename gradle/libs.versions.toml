@@ -39,8 +39,11 @@ assertj = "3.24.2"
 jqwik = "1.7.3"
 junit4 = "4.13.2"
 junit5 = "5.9.3"
+kotest = "5.6.2"
+kotest-arrow = "1.3.3"
 logback-classic = "1.2.11"
 mockito = "5.3.1"
+mockk = "1.13.5"
 
 [libraries]
 # Main
@@ -86,8 +89,18 @@ assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 junit5-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
 junit5-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
 junit5-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
+kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-extensions-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version.ref = "kotest-arrow" }
+kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+kotest-property-arrow = { module = "io.kotest.extensions:kotest-property-arrow", version.ref = "kotest-arrow" }
+kotest-property-arrow-optics = { module = "io.kotest.extensions:kotest-property-arrow-optics", version.ref = "kotest-arrow" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-junit5 = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
+mockk-core = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
 
 [plugins]
 # Main

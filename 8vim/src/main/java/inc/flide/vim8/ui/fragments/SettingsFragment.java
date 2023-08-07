@@ -2,10 +2,10 @@ package inc.flide.vim8.ui.fragments;
 
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -14,26 +14,32 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import arrow.core.EitherKt;
+import arrow.core.Option;
 import inc.flide.vim8.R;
-import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.datastore.model.PreferenceData;
+import inc.flide.vim8.models.AppPrefs;
+import inc.flide.vim8.models.CustomLayout;
+import inc.flide.vim8.models.LayoutKt;
+import inc.flide.vim8.models.error.ExceptionWrapperError;
 import inc.flide.vim8.structures.AvailableLayouts;
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.exceptions.YamlException;
+import inc.flide.vim8.theme.ThemeMode;
 import inc.flide.vim8.utils.AlertHelper;
 import inc.flide.vim8.utils.DialogsHelper;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import kotlin.Pair;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
     private static final String[] LAYOUT_FILTER = {"application/octet-stream"};
+    private AppPrefs prefs;
+    private Set<String> customLayoutHistory = new LinkedHashSet<>();
     private Context context;
-    private SharedPreferenceHelper sharedPreferences;
-    private AvailableLayouts availableLayouts;
-    private String customKeyboardLayoutHistory;
     private final ActivityResultLauncher<String[]> openContent =
             registerForActivityResult(new ActivityResultContracts.OpenDocument(),
                     selectedCustomLayoutFile -> {
@@ -43,54 +49,54 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
                         context.getContentResolver()
                                 .takePersistableUriPermission(selectedCustomLayoutFile, takeFlags);
-                        try (InputStream inputStream = context.getContentResolver()
-                                .openInputStream(selectedCustomLayoutFile)) {
-                  /*          KeyboardData keyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
-                            if (keyboardData.getTotalLayers() == 0) {
-                                AlertHelper.showAlert(context, R.string.yaml_error_title,
-                                        "The layout requires at least one layer");
-                                return;
-                            }
-                            ArrayList<String> history = new ArrayList<>(
-                                    sharedPreferences.getStringSet(customKeyboardLayoutHistory, new LinkedHashSet<>()));
-                            history.add(0, selectedCustomLayoutFile.toString());
-
-                            sharedPreferences.edit()
-                                    .putStringSet(customKeyboardLayoutHistory, new LinkedHashSet<>(history))
-                                    .putBoolean(getString(R.string.pref_use_custom_selected_keyboard_layout), true)
-                                    .putString(getString(R.string.pref_selected_custom_keyboard_layout_uri),
-                                            selectedCustomLayoutFile.toString())
-                                    .apply();
-
-                            availableLayouts.reloadCustomLayouts();
-                            MainKeypadActionListener.rebuildKeyboardData(getResources(), context,
-                                    selectedCustomLayoutFile);*/
-                        } catch (YamlException e) {
-                            AlertHelper.showAlert(context, R.string.yaml_error_title, e.getMessage());
-                        } catch (IOException e) {
-                            AlertHelper.showAlert(context, R.string.generic_error_text, e.getMessage());
+                        CustomLayout layout = new CustomLayout(selectedCustomLayoutFile);
+                        Pair<Integer, String> errorToShow =
+                                EitherKt.merge(
+                                        LayoutKt
+                                                .loadKeyboardData(layout, context)
+                                                .mapLeft(error -> {
+                                                    int title = R.string.yaml_error_title;
+                                                    if (error instanceof ExceptionWrapperError) {
+                                                        title = R.string.generic_error_text;
+                                                    }
+                                                    return Option.fromNullable(new Pair<>(title, error.getMessage()));
+                                                })
+                                                .map(keyboardData -> {
+                                                    if (keyboardData.getTotalLayers() == 0) {
+                                                        return Option.fromNullable(
+                                                                new Pair<>(R.string.yaml_error_title,
+                                                                        "The layout requires at least one layer"));
+                                                    }
+                                                    return Option.<Pair<Integer, String>>fromNullable(null);
+                                                })).getOrNull();
+                        if (errorToShow != null) {
+                            AlertHelper.showAlert(context, errorToShow.getFirst(), errorToShow.getSecond());
+                            return;
                         }
+                        List<String> history = new ArrayList<>(customLayoutHistory);
+                        history.add(0, selectedCustomLayoutFile.toString());
+                        customLayoutHistory = new LinkedHashSet<>(history);
+                        prefs.getLayout().getCurrent().set(layout, true);
+                        prefs.getLayout().getCustom().getHistory().set(customLayoutHistory, true);
                     });
+    private AvailableLayouts availableLayouts;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         context = getContext();
         assert context != null;
-        sharedPreferences = SharedPreferenceHelper.getInstance(context.getApplicationContext());
-        customKeyboardLayoutHistory = context.getString(R.string.pref_custom_keyboard_layout_history);
-        availableLayouts = AvailableLayouts.getInstance(context, getResources());
+        prefs = appPreferenceModel().java();
+        availableLayouts = AvailableLayouts.getInstance();
         setPreferencesFromResource(R.xml.preferences, rootKey);
         setupPreferenceButtonActions();
         setupPreferenceCallbacks();
     }
 
     private void setupPreferenceCallbacks() {
-        String prefRandomTrailKey = getString(R.string.pref_random_trail_color_key);
-        String prefColorModeKey = getString(R.string.pref_color_mode_key);
-
-        Preference preferenceTrailColor = findPreference(getString(R.string.pref_trail_color_key));
-        Preference colorModePreference = findPreference(prefColorModeKey);
-        Preference randomTrailColorPreference = findPreference(prefRandomTrailKey);
+        AppPrefs.Keyboard.Trail trailPrefs = prefs.getKeyboard().getTrail();
+        Preference preferenceTrailColor = findPreference(trailPrefs.getColor().getKey());
+        Preference colorModePreference = findPreference(prefs.getTheme().getMode().getKey());
+        Preference randomTrailColorPreference = findPreference(trailPrefs.getUseRandomColor().getKey());
 
         assert randomTrailColorPreference != null;
         assert preferenceTrailColor != null;
@@ -100,29 +106,26 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             preferenceTrailColor.setVisible(!((boolean) value));
             return true;
         });
-        preferenceTrailColor.setVisible(!sharedPreferences.getBoolean(prefRandomTrailKey, false));
-        setColorsSelectionVisible(sharedPreferences.getString(prefColorModeKey, "system"));
+        preferenceTrailColor.setVisible(!trailPrefs.getUseRandomColor().get());
+        setColorsSelectionVisible(prefs.getTheme().getMode().get());
 
         colorModePreference.setOnPreferenceChangeListener((pref, value) -> {
-            switch ((String) value) {
-                case "dark":
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    break;
-                case "light":
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    break;
-                default:
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            ThemeMode mode = ThemeMode.valueOf((String) value);
+            switch (mode) {
+                case DARK -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                case LIGHT -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                default -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
             }
-            setColorsSelectionVisible((String) value);
+            setColorsSelectionVisible(mode);
             return true;
         });
     }
 
-    private void setColorsSelectionVisible(String mode) {
-        boolean visible = mode.equals("custom");
-        Preference bgPreference = findPreference(getString(R.string.pref_board_bg_color_key));
-        Preference fgPreference = findPreference(getString(R.string.pref_board_fg_color_key));
+    private void setColorsSelectionVisible(ThemeMode mode) {
+        boolean visible = mode == ThemeMode.CUSTOM;
+        AppPrefs.Keyboard.CustomColors customColors = prefs.getKeyboard().getCustomColors();
+        Preference bgPreference = findPreference(customColors.getBackground().getKey());
+        Preference fgPreference = findPreference(customColors.getForeground().getKey());
         assert bgPreference != null;
         assert fgPreference != null;
         bgPreference.setVisible(visible);
@@ -177,7 +180,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 availableLayouts.getIndex(),
                 (dialog, which, text) -> {
                     if (which != -1) {
-                        availableLayouts.selectLayout(context, getResources(), which);
+                        availableLayouts.selectLayout(context, which);
                     }
                     return null;
                 }).show();
@@ -197,15 +200,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
         ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
 
-        String selectedKeyboardId =
-                sharedPreferences.getString(getString(R.string.pref_selected_emoticon_keyboard), "");
+        PreferenceData<String> emoticonKeyboardPref = prefs.getKeyboard().getEmoticonKeyboard();
+        String selectedKeyboardId = emoticonKeyboardPref.get();
         int selectedKeyboardIndex = -1;
         if (!selectedKeyboardId.isEmpty()) {
             selectedKeyboardIndex = keyboardIds.indexOf(selectedKeyboardId);
             if (selectedKeyboardIndex == -1) {
                 // seems like we have a stale selection, it should be removed.
-                sharedPreferences.edit().remove(getString(R.string.pref_selected_emoticon_keyboard))
-                        .apply();
+                emoticonKeyboardPref.reset();
             }
         }
         DialogsHelper.createItemsChoice(context, R.string.select_preferred_emoticon_keyboard_dialog_title,
@@ -213,10 +215,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 selectedKeyboardIndex,
                 (dialog, which, text) -> {
                     if (which != -1) {
-                        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                        sharedPreferencesEditor.putString(getString(R.string.pref_selected_emoticon_keyboard),
-                                keyboardIds.get(which));
-                        sharedPreferencesEditor.apply();
+                        emoticonKeyboardPref.set(keyboardIds.get(which), true);
                     }
                     return null;
                 }).show();

@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import androidx.annotation.StringRes
 import inc.flide.vim8.R
-import inc.flide.vim8.lib.kotlin.CurlyArg
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
@@ -29,14 +27,6 @@ fun Context.launchUrl(url: String) {
     }
 }
 
-fun Context.launchUrl(@StringRes url: Int) {
-    launchUrl(this.stringRes(url))
-}
-
-fun Context.launchUrl(@StringRes url: Int, vararg args: CurlyArg) {
-    launchUrl(this.stringRes(url, *args))
-}
-
 inline fun <T : Any> Context.launchActivity(
     kClass: KClass<T>,
     intentModifier: (Intent) -> Unit = { }
@@ -46,19 +36,6 @@ inline fun <T : Any> Context.launchActivity(
     }
     try {
         val intent = Intent(this, kClass.java)
-        intentModifier(intent)
-        this.startActivity(intent)
-    } catch (e: ActivityNotFoundException) {
-        Toast.makeText(this, e.localizedMessage, Toast.LENGTH_LONG).show()
-    }
-}
-
-inline fun Context.launchActivity(intentModifier: (Intent) -> Unit) {
-    contract {
-        callsInPlace(intentModifier, InvocationKind.EXACTLY_ONCE)
-    }
-    try {
-        val intent = Intent()
         intentModifier(intent)
         this.startActivity(intent)
     } catch (e: ActivityNotFoundException) {

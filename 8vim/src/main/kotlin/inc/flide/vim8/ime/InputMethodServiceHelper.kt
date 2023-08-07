@@ -9,13 +9,13 @@ import arrow.core.raise.catch
 import arrow.core.raise.either
 import inc.flide.vim8.R
 import inc.flide.vim8.ime.KeyboardDataYamlParser.readKeyboardData
-import inc.flide.vim8.models.error.ExceptionWrapperError
-import inc.flide.vim8.models.error.LayoutError
 import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
 import inc.flide.vim8.models.KeyboardData
+import inc.flide.vim8.models.LayerLevel
+import inc.flide.vim8.models.error.ExceptionWrapperError
+import inc.flide.vim8.models.error.LayoutError
 import inc.flide.vim8.models.info
-import inc.flide.vim8.structures.Constants
 import java.io.InputStream
 
 object InputMethodServiceHelper {
@@ -83,17 +83,17 @@ object InputMethodServiceHelper {
                         emptyMap()
                     }
                 ).let {
-                    (1..Constants.MAX_LAYERS).fold(it) { acc, i ->
+                    LayerLevel.VisibleLayers.fold(it) { acc, layer ->
                         val lowerCase =
-                            tempKeyboardData.lowerCaseCharacters(i).map { characterSets ->
-                                acc.lowerCaseCharacters(i).getOrElse { characterSets }
+                            tempKeyboardData.lowerCaseCharacters(layer).map { characterSets ->
+                                acc.lowerCaseCharacters(layer).getOrElse { characterSets }
                             }.getOrNull().orEmpty()
                         val upperCase =
-                            tempKeyboardData.upperCaseCharacters(i).map { characterSets ->
-                                acc.upperCaseCharacters(i).getOrElse { characterSets }
+                            tempKeyboardData.upperCaseCharacters(layer).map { characterSets ->
+                                acc.upperCaseCharacters(layer).getOrElse { characterSets }
                             }.getOrNull().orEmpty()
-                        acc.setLowerCaseCharacters(lowerCase, i)
-                            .setUpperCaseCharacters(upperCase, i)
+                        acc.setLowerCaseCharacters(lowerCase, layer)
+                            .setUpperCaseCharacters(upperCase, layer)
                     }
                 }
         }

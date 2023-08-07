@@ -1,6 +1,7 @@
 package inc.flide.vim8.models.yaml
 
 import inc.flide.vim8.models.FingerPosition
+import inc.flide.vim8.models.LayerLevel
 
 enum class ExtraLayer {
     FIRST, SECOND, THIRD, FOURTH, FIFTH;
@@ -22,5 +23,15 @@ enum class ExtraLayer {
                 MOVEMENT_SEQUENCES[extraLayer] = ArrayList(movementSequence)
             }
         }
+    }
+}
+
+fun ExtraLayer.toLayerLevel(): LayerLevel {
+    return when (this) {
+        ExtraLayer.FIRST -> LayerLevel.SECOND
+        ExtraLayer.SECOND -> LayerLevel.THIRD
+        ExtraLayer.THIRD -> LayerLevel.FOURTH
+        ExtraLayer.FOURTH -> LayerLevel.FIFTH
+        ExtraLayer.FIFTH -> LayerLevel.SIXTH
     }
 }

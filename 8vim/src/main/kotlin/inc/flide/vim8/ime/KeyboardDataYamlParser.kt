@@ -16,19 +16,19 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.networknt.schema.JsonSchema
-import com.networknt.schema.JsonSchemaException
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersionDetector
 import com.networknt.schema.ValidationMessage
-import inc.flide.vim8.models.error.ExceptionWrapperError
-import inc.flide.vim8.models.error.InvalidLayoutError
-import inc.flide.vim8.models.error.LayoutError
-import inc.flide.vim8.models.error.validationMessages
 import inc.flide.vim8.models.CharacterPosition
 import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
 import inc.flide.vim8.models.KeyboardData
+import inc.flide.vim8.models.LayerLevel
 import inc.flide.vim8.models.Quadrant
+import inc.flide.vim8.models.error.ExceptionWrapperError
+import inc.flide.vim8.models.error.InvalidLayoutError
+import inc.flide.vim8.models.error.LayoutError
+import inc.flide.vim8.models.error.validationMessages
 import inc.flide.vim8.models.info
 import inc.flide.vim8.models.yaml.Action
 import inc.flide.vim8.models.yaml.Flags
@@ -36,10 +36,9 @@ import inc.flide.vim8.models.yaml.Flags.FlagsDeserializer
 import inc.flide.vim8.models.yaml.Layer
 import inc.flide.vim8.models.yaml.Layout
 import inc.flide.vim8.models.yaml.isEmpty
+import inc.flide.vim8.models.yaml.toLayerLevel
 import inc.flide.vim8.models.yaml.upperCase
 import inc.flide.vim8.structures.Constants
-import inc.flide.vim8.structures.exceptions.InvalidYamlException
-import inc.flide.vim8.structures.exceptions.YamlParsingException
 import java.io.IOException
 import java.io.InputStream
 import java.text.MessageFormat
@@ -58,22 +57,16 @@ object KeyboardDataYamlParser {
     private var schema: JsonSchema
 
     init {
-        try {
-            KeyboardDataYamlParser::class.java.getResourceAsStream("/schema.json")
-                .use { schemaInputStream ->
-                    val schemaJson = mapper.readTree(schemaInputStream)
-                    val factory = JsonSchemaFactory.builder(
-                        JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaJson))
-                    )
-                        .objectMapper(mapper)
-                        .build()
-                    schema = factory.getSchema(schemaJson)
-                }
-        } catch (e: IOException) {
-            throw YamlParsingException(e)
-        } catch (e: JsonSchemaException) {
-            throw InvalidYamlException(e.message)
-        }
+        KeyboardDataYamlParser::class.java.getResourceAsStream("/schema.json")
+            .use { schemaInputStream ->
+                val schemaJson = mapper.readTree(schemaInputStream)
+                val factory = JsonSchemaFactory.builder(
+                    JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaJson))
+                )
+                    .objectMapper(mapper)
+                    .build()
+                schema = factory.getSchema(schemaJson)
+            }
     }
 
     @JvmStatic
@@ -93,10 +86,10 @@ object KeyboardDataYamlParser {
                             keyboardWithHiddenLayer
                         else {
                             (layers.defaultLayer
-                                .map { Constants.DEFAULT_LAYER to it }
+                                .map { LayerLevel.FIRST to it }
                                 .toMap() + layers
                                 .extraLayers
-                                .mapKeys { it.key.ordinal + 2 })
+                                .mapKeys { it.key.toLayerLevel() })
                                 .fold(keyboardWithHiddenLayer) { acc, (layerId, layer) ->
                                     addLayer(acc, layerId, layer)
                                 }
@@ -132,7 +125,7 @@ object KeyboardDataYamlParser {
 
     private fun addLayer(
         keyboardData: KeyboardData,
-        layer: Int,
+        layer: LayerLevel,
         layerData: Layer
     ): KeyboardData {
         val lowerCaseCharacters = StringBuilder()
@@ -161,13 +154,13 @@ object KeyboardDataYamlParser {
                 KeyboardAction(
                     it.actionType, it.lowerCase, it.upperCase,
                     it.keyCode, it.flags.value,
-                    Constants.HIDDEN_LAYER
+                    LayerLevel.HIDDEN
                 )
             })
     }
 
     private fun addKeyboardActions(
-        layer: Int, quadrant: Quadrant,
+        layer: LayerLevel, quadrant: Quadrant,
         actions: List<Action?>,
         characterSets: Pair<StringBuilder, StringBuilder>
     ): Map<List<FingerPosition>, KeyboardAction> {
@@ -218,16 +211,19 @@ object KeyboardDataYamlParser {
                     layer
                 )
                 val baseActionMap = movementSequence to keyboardAction
-                val actionMap =
-                    (if (layer > Constants.DEFAULT_LAYER && action.movementSequence.isEmpty()) {
-                        mapOf(
-                            FingerPosition.computeQuickMovementSequence(
-                                layer,
-                                quadrant,
-                                characterPosition
-                            ) to keyboardAction
-                        )
-                    } else emptyMap()) + baseActionMap
+                val actionMap = when {
+                    layer != LayerLevel.FIRST && action.movementSequence.isEmpty() -> mapOf(
+                        baseActionMap,
+                        FingerPosition.computeQuickMovementSequence(
+                            layer,
+                            quadrant,
+                            characterPosition
+                        ) to keyboardAction
+                    )
+
+                    else -> mapOf(baseActionMap)
+                }
+
                 acc + actionMap
             }
     }

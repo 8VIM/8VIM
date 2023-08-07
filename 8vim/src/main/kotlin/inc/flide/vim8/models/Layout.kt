@@ -4,20 +4,21 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
+import android.provider.OpenableColumns
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import arrow.core.Either
-import arrow.core.None
+import arrow.core.Option
+import arrow.core.flatMap
+import arrow.core.flatten
+import arrow.core.getOrElse
 import arrow.core.left
+import arrow.core.none
 import arrow.core.raise.catch
-import arrow.core.raise.either
 import arrow.core.right
-import arrow.core.some
 import inc.flide.vim8.R
 import inc.flide.vim8.datastore.model.PreferenceSerDe
-import inc.flide.vim8.datastore.ui.ListPreferenceEntry
-import inc.flide.vim8.datastore.ui.listPrefEntries
 import inc.flide.vim8.ime.InputMethodServiceHelper
 import inc.flide.vim8.lib.android.tryOrNull
 import inc.flide.vim8.models.error.ExceptionWrapperError
@@ -29,36 +30,28 @@ import java.util.TreeMap
 
 private val isoCodes = Locale.getISOLanguages().toSet()
 
-object AvailableLayouts {
-    @Composable
-    fun listEntries(): List<ListPreferenceEntry<Layout<*>>> = listPrefEntries {
-        val embeddedLayouts = rememberEmbeddedLayouts()
-        embeddedLayouts.map { entry(it.value, it.key) }
-    }
+fun embeddedLayouts(context: Context): TreeMap<String, EmbeddedLayout> {
+    return TreeMap(buildMap {
+        (R.raw::class.java.fields)
+            .filter { isoCodes.contains(it.name) }
+            .map { field ->
+                EmbeddedLayout(field.name)
+                    .let { layout ->
+                        layout
+                            .loadKeyboardData(context)
+                            .getOrNone()
+                            .filterNot { it.totalLayers == 0 }
+                            .map { it.toString() to layout }
+                    }
+            }
+            .forEach { it.onSome { (k, v) -> put(k, v) } }
+    })
 }
 
 @Composable
 fun rememberEmbeddedLayouts(): TreeMap<String, EmbeddedLayout> {
     val context = LocalContext.current
-    return remember {
-        TreeMap(buildMap {
-            (R.raw::class.java.fields)
-                .filter { isoCodes.contains(it.name) }
-                .map { field ->
-                    val layout = EmbeddedLayout(field.name)
-                    layout
-                        .loadKeyboardData(context = context)
-                        .fold({ None }, { it ->
-                            if (it.totalLayers == 0) {
-                                None
-                            } else {
-                                (it.toString() to layout).some()
-                            }
-                        })
-                }
-                .forEach { it.onSome { (k, v) -> put(k, v) } }
-        })
-    }
+    return remember { embeddedLayouts(context) }
 }
 
 interface Layout<T> {
@@ -67,33 +60,65 @@ interface Layout<T> {
 }
 
 fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, KeyboardData> {
-    val that = this
-    return either {
-        val stream = inputStream(context = context).bind()
-
-        val keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(
-            context.resources,
-            stream
-        ).bind()
-        when (that) {
-            is EmbeddedLayout -> {
-                KeyboardData.info.name.modify(keyboardData) { name ->
-                    name.ifEmpty {
-                        val locale = Locale(that.path)
-                        Locale.forLanguageTag(that.path).getDisplayName(locale)
-                            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+    return inputStream(context)
+        .flatMap { InputMethodServiceHelper.initializeKeyboardActionMap(context.resources, it) }
+        .map {
+            KeyboardData.info.name.modify(it) { name ->
+                name.ifEmpty {
+                    when (this) {
+                        is EmbeddedLayout -> this.defaultName()
+                        is CustomLayout -> this.defaultName(context)
+                        else -> ""
                     }
                 }
-
             }
-
-            else -> keyboardData
         }
-    }
+}
+
+private fun EmbeddedLayout.defaultName(): String {
+    val locale = Locale(path)
+    return Locale.forLanguageTag(path).getDisplayName(locale)
+        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+}
+
+private fun CustomLayout.defaultName(context: Context): String {
+    return Option.catch {
+        Option.fromNullable(path.scheme)
+            .flatMap {
+                when (it) {
+                    "file" -> Option.fromNullable(path.lastPathSegment)
+                    "content" -> Option.fromNullable(
+                        context.contentResolver.query(
+                            path,
+                            null,
+                            null,
+                            null,
+                            null
+                        )
+                    ).map { cursor ->
+                        var result = ""
+                        if (cursor.count != 0) {
+                            val columnIndex =
+                                cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME)
+                            cursor.moveToFirst()
+                            result = cursor.getString(columnIndex)
+                        }
+                        cursor.close()
+                        result
+                    }
+
+                    else -> none()
+                }
+            }
+    }.flatten().getOrElse { "" }
 }
 
 object LayoutSerDe : PreferenceSerDe<Layout<*>> {
-    override fun serialize(editor: SharedPreferences.Editor, key: String, value: Layout<*>) {
+    override fun serialize(
+        editor: SharedPreferences.Editor,
+        key: String,
+        value: Layout<*>
+    ) {
         val encodedValue = when (value) {
             is EmbeddedLayout -> "e${value.path}"
             is CustomLayout -> "c${value.path}"

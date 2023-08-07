@@ -41,17 +41,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <category android:name="android.intent.category.OPENABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data
-                    android:host="*"
-                    android:mimeType="application/octet-stream"
-                    android:scheme="file" />
-                <data android:pathPattern=".*\\.yaml" />
-                <data android:pathPattern=".*\\.yml" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -59,10 +48,6 @@
             android:exported="true"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <category android:name="android.intent.category.OPENABLE" />
                 <category android:name="android.intent.category.DEFAULT" />

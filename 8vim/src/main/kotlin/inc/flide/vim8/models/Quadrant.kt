@@ -2,10 +2,9 @@ package inc.flide.vim8.models
 
 import arrow.optics.optics
 import inc.flide.vim8.structures.Constants
-import java.util.Objects
 
 @optics
-data class Quadrant(@JvmField val sector: Direction, @JvmField val part: Direction) {
+data class Quadrant(val sector: Direction, val part: Direction) {
     companion object
 
     fun characterIndexInString(characterPosition: CharacterPosition): Int {
@@ -20,7 +19,7 @@ data class Quadrant(@JvmField val sector: Direction, @JvmField val part: Directi
         return base + characterPosition.ordinal * 2 + delta
     }
 
-    fun getOppositeQuadrant(position: CharacterPosition): Quadrant {
+    fun opposite(position: CharacterPosition): Quadrant {
         return when (position) {
             CharacterPosition.FIRST -> {
                 Quadrant(sector, part.opposite())
@@ -38,20 +37,5 @@ data class Quadrant(@JvmField val sector: Direction, @JvmField val part: Directi
                 Quadrant(part.opposite(), sector.opposite())
             }
         }
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-        if (other == null || javaClass != other.javaClass) {
-            return false
-        }
-        val quadrant = other as Quadrant
-        return sector === quadrant.sector && part === quadrant.part
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(sector, part)
     }
 }

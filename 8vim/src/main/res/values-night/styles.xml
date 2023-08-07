@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <style name="AppThemeDarkBase" parent="Theme.Material3.DynamicColors.Dark" />
+
+    <style name="AppThemeDark" parent="AppThemeDarkBase" />
+
+    <style name="AppThemeDarkBase.NoActionBar" parent="AppThemeDark">
+        <item name="backgroundColor">?colorSurface</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
+        <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
+        <item name="toolbarStyle">@style/MaterialToolbar</item>
+    </style>
+
+    <style name="AppThemeDark.NoActionBar" parent="AppThemeDarkBase.NoActionBar" />
+
     <style name="AppTheme.NoActionBar" parent="AppThemeDark.NoActionBar" />
 
     <style name="AppTheme.Splash" parent="Theme.SplashScreen.IconBackground">

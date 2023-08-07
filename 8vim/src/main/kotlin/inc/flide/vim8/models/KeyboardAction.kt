@@ -9,7 +9,7 @@ data class KeyboardAction(
     val capsLockText: String = "",
     val keyEventCode: Int,
     val keyFlags: Int,
-    val layer: Int
+    val layer: LayerLevel
 ) {
     companion object
 }

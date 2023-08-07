@@ -7,12 +7,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import arrow.core.Either
 import inc.flide.vim8.datastore.Datastore
 import inc.flide.vim8.datastore.model.PreferenceMigrationEntry
 import inc.flide.vim8.datastore.model.PreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
-import inc.flide.vim8.models.error.LayoutError
 import inc.flide.vim8.theme.ThemeMode
 import inc.flide.vim8.theme.darkColorPalette
 import inc.flide.vim8.theme.lightColorPalette
@@ -21,7 +19,7 @@ fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class,
 class AppPrefs : PreferenceModel(1) {
     val layout = Layout()
     val theme = Theme()
-    val cliboard = Clipboard()
+    val clipboard = Clipboard()
 
     inner class Clipboard {
         val history = stringSet(
@@ -49,10 +47,19 @@ class AppPrefs : PreferenceModel(1) {
         }
 
         @Composable
-        fun keyboardData(): Either<LayoutError, KeyboardData> {
+        fun keyboardData(): KeyboardData {
             val context = LocalContext.current
             val currentLayout by current.observeAsState()
-            return currentLayout.loadKeyboardData(context = context)
+            return currentLayout
+                .loadKeyboardData(context = context)
+                .fold({
+                    current.reset()
+                    if (currentLayout is CustomLayout) {
+                        val newHistory = custom.history.get() - currentLayout.path.toString()
+                        custom.history.set(newHistory)
+                    }
+                    current.get().loadKeyboardData(context).getOrNull()!!
+                }, { it })
         }
     }
 
@@ -95,6 +102,10 @@ class AppPrefs : PreferenceModel(1) {
             key = "user_preferred_sidebar_left",
             default = true
         )
+        val emoticonKeyboard = string(
+            key = "selected_emoticon_keyboard",
+            default = ""
+        )
         val customColors = CustomColors()
         val trail = Trail()
         val display = Display()
@@ -102,7 +113,7 @@ class AppPrefs : PreferenceModel(1) {
 
         inner class Circle {
             val radiusSizeFactor = int(
-                key = "pref_circle_scale_factor",
+                key = "x_board_circle_radius_size_factor",
                 default = 12
             )
             val xCentreOffset = int(
@@ -117,11 +128,11 @@ class AppPrefs : PreferenceModel(1) {
 
         inner class CustomColors {
             val background = int(
-                key = "keyboard__custom_colors__background",
+                key = "board_bg_color",
                 default = Color(0xFA, 0xFA, 0xFA).toArgb(),
             )
             val foreground = int(
-                key = "keyboard__custom_colors__foreground",
+                key = "board_fg_color",
                 default = Color(21, 21, 21).toArgb(),
             )
 

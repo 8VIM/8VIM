@@ -42,27 +42,6 @@ fun SystemUiApp() {
 }
 
 @Composable
-fun SystemUiIme() {
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = MaterialTheme.colorScheme.isLightTheme()
-    val backgroundColor = MaterialTheme.colorScheme.background
-
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = backgroundColor,
-            darkIcons = useDarkIcons,
-        )
-        if (AndroidVersion.ATLEAST_API26_O) {
-            systemUiController.setNavigationBarColor(
-                color = backgroundColor,
-                darkIcons = useDarkIcons,
-                navigationBarContrastEnforced = true,
-            )
-        }
-    }
-}
-
-@Composable
 private fun rememberSystemUiController(): SystemUiController {
     val view = LocalView.current
     return remember(view) { AppSystemUiController(view) }

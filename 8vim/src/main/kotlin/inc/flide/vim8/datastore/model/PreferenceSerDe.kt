@@ -72,27 +72,6 @@ object IntPreferenceSerde : PreferenceSerDe<Int> {
 
 }
 
-object LongPreferenceSerde : PreferenceSerDe<Long> {
-    override fun serialize(editor: SharedPreferences.Editor, key: String, value: Long) {
-        editor.putLong(key, value)
-    }
-
-    override fun deserialize(
-        sharedPreferences: SharedPreferences,
-        key: String,
-        default: Long
-    ): Long {
-        return tryOrNull {
-            sharedPreferences.getLong(key, default)
-        } ?: default
-    }
-
-    override fun deserialize(value: Any?): Long? {
-        return tryOrNull { value as Long? }
-    }
-
-}
-
 object StringPreferenceSerde : PreferenceSerDe<String> {
     override fun serialize(editor: SharedPreferences.Editor, key: String, value: String) {
         editor.putString(key, value)
@@ -128,6 +107,7 @@ object StringSetPreferenceSerde : PreferenceSerDe<Set<String>> {
         } ?: default
     }
 
+    @Suppress("unchecked_cast")
     override fun deserialize(value: Any?): Set<String>? {
         return tryOrNull { value as Set<String>? }
     }
