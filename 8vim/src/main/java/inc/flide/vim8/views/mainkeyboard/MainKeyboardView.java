@@ -7,7 +7,6 @@ import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.views.ConstraintLayoutWithSidebar;
 
-
 public class MainKeyboardView extends ConstraintLayoutWithSidebar<MainKeypadActionListener> {
     public MainKeyboardView(Context context) {
         super(context);
@@ -35,6 +34,13 @@ public class MainKeyboardView extends ConstraintLayoutWithSidebar<MainKeypadActi
             return R.layout.main_keyboard_left_sidebar_view;
         } else {
             return R.layout.main_keyboard_right_sidebar_view;
+        }
+        boolean preferredSidebarVisibility = sharedPreferenceHelper.getBoolean(prefSidebarVisibilityKey, true);
+        if (!preferredSidebarVisibility) {
+            View sidebar = this.findViewById(R.id.sidebarButtonsLayout);
+            LayoutParams params = (LayoutParams) sidebar.getLayoutParams();
+            params.horizontalWeight = 0;
+            sidebar.setLayoutParams(params);
         }
     }
 

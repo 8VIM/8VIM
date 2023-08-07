@@ -80,11 +80,9 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
     protected void setupSwitchToMainKeyboardButton() {
         ImageButton switchToMainKeyboardButton = findViewById(R.id.switchKeypadButton);
         switchToMainKeyboardButton.setContentDescription(
-                this.getContext().getString(R.string.main_keyboard_button_content_description)
-        );
+                this.getContext().getString(R.string.main_keyboard_button_content_description));
         switchToMainKeyboardButton.setImageDrawable(
-                AppCompatResources.getDrawable(this.getContext(), R.drawable.ic_viii)
-        );
+                AppCompatResources.getDrawable(this.getContext(), R.drawable.ic_viii));
         switchToMainKeyboardButton.setOnClickListener(
                 view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.keyCode, 0));
     }
@@ -92,11 +90,9 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
     protected void setupSwitchToClipboardKeypadButton() {
         ImageButton switchToClipboardButton = findViewById(R.id.switchKeypadButton);
         switchToClipboardButton.setContentDescription(
-                this.getContext().getString(R.string.clipboard_button_content_description)
-        );
+                this.getContext().getString(R.string.clipboard_button_content_description));
         switchToClipboardButton.setImageDrawable(
-                AppCompatResources.getDrawable(this.getContext(), R.drawable.clipboard)
-        );
+                AppCompatResources.getDrawable(this.getContext(), R.drawable.clipboard));
         switchToClipboardButton.setOnClickListener(
                 view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.keyCode, 0));
     }
@@ -146,10 +142,10 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Dimension computedDimension = InputMethodViewHelper.computeDimension(getResources());
-        setMeasuredDimension(computedDimension.width, computedDimension.height);
-        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.width, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(computedDimension.height, MeasureSpec.EXACTLY));
+        Dimension computedDimension = InputMethodViewHelper.computeDimension(getContext());
+        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
+        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
 
     }
 
