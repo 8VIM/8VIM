@@ -17,21 +17,21 @@ fun AppIconButton(
     icon: Painter,
     enabled: Boolean = true,
     iconModifier: Modifier = Modifier,
-    iconColor: Color = Color.Unspecified,
+    iconColor: Color = Color.Unspecified
 ) {
     IconButton(
         modifier = modifier,
         enabled = enabled,
-        onClick = onClick,
+        onClick = onClick
     ) {
         val contentColor = iconColor.takeOrElse { LocalContentColor.current }
         CompositionLocalProvider(
-            LocalContentColor provides contentColor,
+            LocalContentColor provides contentColor
         ) {
             Icon(
                 modifier = iconModifier,
                 painter = icon,
-                contentDescription = null,
+                contentDescription = null
             )
         }
     }

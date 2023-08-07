@@ -69,7 +69,7 @@ private class ScreenScopeImpl : ScreenScope {
         AppIconButton(
             icon = painterResource(R.drawable.ic_arrow_back),
             onClick = { navController.popBackStack() },
-            modifier = Modifier.autoMirrorForRtl(),
+            modifier = Modifier.autoMirrorForRtl()
         )
     }
 
@@ -98,7 +98,7 @@ private class ScreenScopeImpl : ScreenScope {
         Scaffold(
             topBar = { AppBar(title, navigationIcon.takeIf { navigationIconVisible }, actions) },
             bottomBar = bottomBar,
-            floatingActionButton = fab,
+            floatingActionButton = fab
         ) { innerPadding ->
             val modifier = if (scrollable) {
                 Modifier.verticalScroll()
@@ -110,7 +110,7 @@ private class ScreenScopeImpl : ScreenScope {
                 modifier = modifier
                     .padding(innerPadding)
                     .fillMaxWidth(),
-                content = content,
+                content = content
             )
         }
     }

@@ -28,7 +28,7 @@ private val scrollbarAnimationEasing = CubicBezierEasing(1f, 0f, 0.82f, -0.13f)
 fun Modifier.verticalScroll(
     state: ScrollState? = null,
     showScrollbar: Boolean = true,
-    scrollbarWidth: Dp = defaultScrollbarSize,
+    scrollbarWidth: Dp = defaultScrollbarSize
 ) = composed {
     val scrollState = state ?: rememberScrollState()
     if (showScrollbar) {
@@ -42,7 +42,7 @@ fun Modifier.verticalScroll(
 fun Modifier.scrollbar(
     state: ScrollState,
     scrollbarSize: Dp = defaultScrollbarSize,
-    isVertical: Boolean,
+    isVertical: Boolean
 ): Modifier = composed {
     var isInitial by remember { mutableStateOf(true) }
     val targetAlpha = if (state.isScrollInProgress || isInitial) 1f else 0f
@@ -50,7 +50,7 @@ fun Modifier.scrollbar(
     val alpha by animateFloatAsState(
         targetValue = targetAlpha,
         animationSpec = tween(durationMillis = duration, easing = scrollbarAnimationEasing),
-        label = "",
+        label = ""
     )
     val scrollbarColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.28f)
 
@@ -91,7 +91,7 @@ fun Modifier.scrollbar(
                 color = scrollbarColor,
                 topLeft = Offset(scrollbarOffsetX, scrollbarOffsetY),
                 size = Size(scrollbarWidth, scrollbarHeight),
-                alpha = alpha,
+                alpha = alpha
             )
         }
     }

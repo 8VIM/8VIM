@@ -22,7 +22,7 @@ fun Context.launchUrl(url: String) {
         Toast.makeText(
             this,
             this.stringRes(R.string.general__no_browser_app_found_for_url, "url" to url),
-            Toast.LENGTH_LONG,
+            Toast.LENGTH_LONG
         ).show()
     }
 }

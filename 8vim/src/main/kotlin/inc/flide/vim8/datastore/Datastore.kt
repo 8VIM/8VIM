@@ -11,7 +11,7 @@ object Datastore {
     @Suppress("unchecked_cast")
     fun <T : PreferenceModel> getOrCreatePreferenceModel(
         kClass: KClass<T>,
-        factory: () -> T,
+        factory: () -> T
     ): CachedPreferenceModel<T> = synchronized(preferenceModelCache) {
         return preferenceModelCache.getOrPut(kClass) {
             CachedPreferenceModel(factory())
@@ -20,7 +20,7 @@ object Datastore {
 }
 
 class CachedPreferenceModel<T : PreferenceModel>(
-    private val preferenceModel: T,
+    private val preferenceModel: T
 ) : ReadOnlyProperty<Any?, T> {
     fun java(): T = preferenceModel
     override fun getValue(thisRef: Any?, property: KProperty<*>): T {

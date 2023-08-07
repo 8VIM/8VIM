@@ -33,7 +33,7 @@ class DirectionSpec : FunSpec({
             (1 to Direction.TOP),
             (2 to Direction.LEFT),
             (3 to Direction.BOTTOM),
-            (4 to Direction.RIGHT),
+            (4 to Direction.RIGHT)
         ) { (value, quadrant) ->
             Direction.baseQuadrant(value) shouldBe quadrant
         }

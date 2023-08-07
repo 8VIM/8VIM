@@ -42,7 +42,7 @@ class AppPrefs : PreferenceModel(1) {
         inner class Custom {
             val history = stringSet(
                 key = "pref_custom_keyboard_layout_history",
-                default = emptySet(),
+                default = emptySet()
             )
         }
 
@@ -66,11 +66,11 @@ class AppPrefs : PreferenceModel(1) {
     inner class InputFeedback {
         val soundEnabled = boolean(
             key = "user_preferred_haptic_feedback_enabled",
-            default = true,
+            default = true
         )
         val hapticEnabled = boolean(
             key = "user_preferred_sound_feedback_enabled",
-            default = true,
+            default = true
         )
     }
 
@@ -98,10 +98,23 @@ class AppPrefs : PreferenceModel(1) {
     }
 
     inner class Keyboard {
-        val isSidebarOnLeft = boolean(
-            key = "user_preferred_sidebar_left",
-            default = true
+        val sidebar = SideBar()
+
+        val height = int(
+            key = "x_board_keyboard_height",
+            default = 100
         )
+        inner class SideBar {
+            val isVisible = boolean(
+                key = "user_preferred_sidebar_visibility",
+                default = true
+            )
+            val isOnLeft = boolean(
+                key = "user_preferred_sidebar_left",
+                default = true
+            )
+        }
+
         val emoticonKeyboard = string(
             key = "selected_emoticon_keyboard",
             default = ""
@@ -129,13 +142,12 @@ class AppPrefs : PreferenceModel(1) {
         inner class CustomColors {
             val background = int(
                 key = "board_bg_color",
-                default = Color(0xFA, 0xFA, 0xFA).toArgb(),
+                default = Color(0xFA, 0xFA, 0xFA).toArgb()
             )
             val foreground = int(
                 key = "board_fg_color",
-                default = Color(21, 21, 21).toArgb(),
+                default = Color(21, 21, 21).toArgb()
             )
-
         }
 
         @Composable
@@ -144,10 +156,14 @@ class AppPrefs : PreferenceModel(1) {
             val background by customColors.background.observeAsState()
             val foreground by customColors.foreground.observeAsState()
             val colorScheme = theme.colorScheme()
-            return if (mode == ThemeMode.CUSTOM) colorScheme.copy(
-                onSurface = Color(foreground),
-                surface = Color(background)
-            ) else colorScheme
+            return if (mode == ThemeMode.CUSTOM) {
+                colorScheme.copy(
+                    onSurface = Color(foreground),
+                    surface = Color(background)
+                )
+            } else {
+                colorScheme
+            }
         }
 
         inner class Display {

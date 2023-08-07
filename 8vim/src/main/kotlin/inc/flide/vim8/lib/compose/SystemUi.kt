@@ -29,13 +29,13 @@ fun SystemUiApp() {
     SideEffect {
         systemUiController.setStatusBarColor(
             color = Color.Transparent,
-            darkIcons = useDarkIcons,
+            darkIcons = useDarkIcons
         )
         if (AndroidVersion.ATLEAST_API26_O) {
             systemUiController.setNavigationBarColor(
                 color = Color.Transparent,
                 darkIcons = useDarkIcons,
-                navigationBarContrastEnforced = false,
+                navigationBarContrastEnforced = false
             )
         }
     }
@@ -48,7 +48,7 @@ private fun rememberSystemUiController(): SystemUiController {
 }
 
 private class AppSystemUiController(
-    private val view: View,
+    private val view: View
 ) : SystemUiController {
     private val window = view.context.findWindow()!!
     private val windowInsetsController = WindowInsetsControllerCompat(window, view)

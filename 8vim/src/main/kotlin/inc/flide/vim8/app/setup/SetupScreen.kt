@@ -79,7 +79,7 @@ fun SetupScreen() = Screen {
                 delay(200)
                 val imeIds = AndroidSettings.Secure.getString(
                     context,
-                    Settings.Secure.ENABLED_INPUT_METHODS,
+                    Settings.Secure.ENABLED_INPUT_METHODS
                 ) ?: "(null)"
                 val isEnabled = InputMethodUtils.parseIs8VimEnabled(context, imeIds)
                 if (stepState.getCurrentAuto().value == SetupStep.EnableIme &&
@@ -89,9 +89,11 @@ fun SetupScreen() = Screen {
                     isEnabled
                 ) {
                     context.launchActivity(MainActivity::class) {
-                        it.flags = (Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                        it.flags = (
+                            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
                                 or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                                or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            )
                     }
                 }
             }
@@ -109,7 +111,7 @@ fun SetupScreen() = Screen {
             steps = listOf(
                 Step(
                     id = SetupStep.EnableIme,
-                    title = stringRes(R.string.setup__enable_ime__title),
+                    title = stringRes(R.string.setup__enable_ime__title)
                 ) {
                     StepText(stringRes(R.string.setup__enable_ime__description))
                     StepButton(label = stringRes(R.string.setup__enable_ime__open_settings_btn)) {
@@ -118,7 +120,7 @@ fun SetupScreen() = Screen {
                 },
                 Step(
                     id = SetupStep.SelectIme,
-                    title = stringRes(R.string.setup__select_ime__title),
+                    title = stringRes(R.string.setup__select_ime__title)
                 ) {
                     StepText(stringRes(R.string.setup__select_ime__description))
                     StepButton(label = stringRes(R.string.setup__select_ime__switch_keyboard_btn)) {
@@ -127,7 +129,7 @@ fun SetupScreen() = Screen {
                 },
                 Step(
                     id = SetupStep.FinishUp,
-                    title = stringRes(R.string.setup__finish_up__title),
+                    title = stringRes(R.string.setup__finish_up__title)
                 ) {
                     StepText(stringRes(R.string.setup__finish_up__description_p1))
                     StepText(stringRes(R.string.setup__finish_up__description_p2))
@@ -139,7 +141,7 @@ fun SetupScreen() = Screen {
                             }
                         }
                     }
-                },
+                }
             ),
             footer = {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -147,14 +149,14 @@ fun SetupScreen() = Screen {
                     modifier = Modifier
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     val repositoryUrl = stringRes(R.string.vim8__repository_url)
                     TextButton(onClick = { context.launchUrl(repositoryUrl) }) {
                         Text(text = stringRes(R.string.setup__footer__repository))
                     }
                 }
-            },
+            }
         )
     }
 }

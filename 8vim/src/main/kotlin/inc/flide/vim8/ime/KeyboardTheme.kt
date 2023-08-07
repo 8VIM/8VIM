@@ -24,14 +24,16 @@ class KeyboardTheme private constructor(context: Context) {
     var foregroundColor by Delegates.notNull<Int>()
         private set
     val trailColor: Int
-        get() = if (!prefs.keyboard.trail.useRandomColor.get())
+        get() = if (!prefs.keyboard.trail.useRandomColor.get()) {
             prefs.keyboard.trail.color.get()
-        else Color(
-            Random.nextInt(0..255),
-            Random.nextInt(0..255),
-            Random.nextInt(0..255),
-            255
-        ).toArgb()
+        } else {
+            Color(
+                Random.nextInt(0..255),
+                Random.nextInt(0..255),
+                Random.nextInt(0..255),
+                255
+            ).toArgb()
+        }
     var configuration: Configuration = context.resources.configuration
         set(value) {
             field = value

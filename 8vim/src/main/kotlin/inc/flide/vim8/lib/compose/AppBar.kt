@@ -11,11 +11,11 @@ import androidx.compose.runtime.Composable
 fun AppBar(
     title: String,
     navigationIcon: ScreenNavigationIcon?,
-    actions: @Composable RowScope.() -> Unit = { },
+    actions: @Composable RowScope.() -> Unit = { }
 ) {
     TopAppBar(
         navigationIcon = navigationIcon ?: {},
         title = { Text(text = title) },
-        actions = actions,
+        actions = actions
     )
 }

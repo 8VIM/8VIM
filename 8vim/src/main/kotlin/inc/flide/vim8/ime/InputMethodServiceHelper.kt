@@ -42,7 +42,7 @@ object InputMethodServiceHelper {
     }
 
     private fun getLayoutIndependentKeyboardData(resources: Resources): KeyboardData {
-        if (layoutIndependentKeyboardData == null)
+        if (layoutIndependentKeyboardData == null) {
             layoutIndependentKeyboardData = either {
                 val layoutIndependentKeyboardData = KeyboardData()
                 val sectorCircleButtonsKeyboard = addToKeyboardActionsMapUsingResourceId(
@@ -61,6 +61,7 @@ object InputMethodServiceHelper {
                     R.raw.special_core_gestures
                 ).bind()
             }.getOrNull()
+        }
         return layoutIndependentKeyboardData!!
     }
 
@@ -100,7 +101,8 @@ object InputMethodServiceHelper {
     }
 
     private fun addToKeyboardActionsMapUsingResourceId(
-        keyboardData: KeyboardData, resources: Resources,
+        keyboardData: KeyboardData,
+        resources: Resources,
         resourceId: Int
     ): Either<LayoutError, KeyboardData> {
         catch({

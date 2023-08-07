@@ -31,7 +31,6 @@ fun <T : Any> Context.systemService(kClass: KClass<T>): T {
     return this.getSystemService(serviceName) as T
 }
 
-
 fun <T : Any> Context.systemServiceOrNull(kClass: KClass<T>): T? {
     return try {
         this.systemService(kClass)
@@ -39,7 +38,6 @@ fun <T : Any> Context.systemServiceOrNull(kClass: KClass<T>): T? {
         null
     }
 }
-
 
 @Throws(android.content.res.Resources.NotFoundException::class)
 inline fun Context.stringRes(@StringRes id: Int, vararg args: CurlyArg): String {

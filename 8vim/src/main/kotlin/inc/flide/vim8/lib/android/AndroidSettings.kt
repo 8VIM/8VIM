@@ -31,7 +31,7 @@ inline fun <R> tryOrNull(block: () -> R): R? {
 }
 
 abstract class AndroidSettingsHelper(
-    private val kClass: KClass<*>,
+    private val kClass: KClass<*>
 ) {
     abstract fun getString(context: Context, key: String): String?
 
@@ -69,7 +69,7 @@ abstract class AndroidSettingsHelper(
     fun <R> observeAsState(
         key: String,
         foregroundOnly: Boolean = false,
-        transform: (String?) -> R,
+        transform: (String?) -> R
     ): State<R> {
         val lifecycleOwner = LocalLifecycleOwner.current
         val context = LocalContext.current.applicationContext
@@ -126,7 +126,7 @@ fun interface OnSystemSettingsChangedListener {
 
 class SystemSettingsObserver(
     context: Context,
-    private val listener: OnSystemSettingsChangedListener,
+    private val listener: OnSystemSettingsChangedListener
 ) : ContentObserver(Handler(context.mainLooper)) {
 
     override fun deliverSelfNotifications(): Boolean {

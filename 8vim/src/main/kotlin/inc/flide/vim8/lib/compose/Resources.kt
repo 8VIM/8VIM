@@ -25,7 +25,7 @@ private val localAppNameString = staticCompositionLocalOf {
 fun ProvideLocalizedResources(
     resourcesContext: Context,
     forceLayoutDirection: LayoutDirection? = null,
-    content: @Composable () -> Unit,
+    content: @Composable () -> Unit
 ) {
     val layoutDirection = forceLayoutDirection ?: when (resourcesContext.resources.configuration.layoutDirection) {
         View.LAYOUT_DIRECTION_LTR -> LayoutDirection.Ltr
@@ -35,15 +35,16 @@ fun ProvideLocalizedResources(
     CompositionLocalProvider(
         localResourcesContext provides resourcesContext,
         LocalLayoutDirection provides layoutDirection,
-        localAppNameString provides stringResource(R.string.app_name),
+        localAppNameString provides stringResource(R.string.app_name)
     ) {
         content()
     }
 }
+
 @Composable
 fun stringRes(
     @StringRes id: Int,
-    vararg args: CurlyArg,
+    vararg args: CurlyArg
 ): String {
     val string = localResourcesContext.current.resources
         .getString(id)
@@ -53,7 +54,7 @@ fun stringRes(
 @Composable
 private fun formatString(
     string: String,
-    args: Array<out CurlyArg>,
+    args: Array<out CurlyArg>
 ): String {
     return string.curlyFormat(
         "app_name" to localAppNameString.current,

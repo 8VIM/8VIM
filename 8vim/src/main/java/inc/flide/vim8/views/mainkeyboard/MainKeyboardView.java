@@ -35,13 +35,6 @@ public class MainKeyboardView extends ConstraintLayoutWithSidebar<MainKeypadActi
         } else {
             return R.layout.main_keyboard_right_sidebar_view;
         }
-        boolean preferredSidebarVisibility = sharedPreferenceHelper.getBoolean(prefSidebarVisibilityKey, true);
-        if (!preferredSidebarVisibility) {
-            View sidebar = this.findViewById(R.id.sidebarButtonsLayout);
-            LayoutParams params = (LayoutParams) sidebar.getLayoutParams();
-            params.horizontalWeight = 0;
-            sidebar.setLayoutParams(params);
-        }
     }
 
     @Override

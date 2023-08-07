@@ -1,20 +1,25 @@
 @file:Suppress("DSL_SCOPE_VIOLATION")
 
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
 import java.io.FileInputStream
 import java.util.Properties
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
     alias(libs.plugins.agp.application)
+    alias(libs.plugins.ktlint)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.mannodermaus.android.junit5)
     checkstyle
 }
 
+apply(plugin = "checkstyle")
+
 checkstyle {
     toolVersion = "10.12.0"
+    isShowViolations = true
 }
 
 android {
@@ -40,7 +45,7 @@ android {
         freeCompilerArgs = listOf(
             "-Xallow-result-return-type",
             "-opt-in=kotlin.contracts.ExperimentalContracts",
-            "-Xjvm-default=all-compatibility",
+            "-Xjvm-default=all-compatibility"
         )
     }
 
@@ -52,12 +57,12 @@ android {
         val rcValue = if (versionRc > 0) 100 - versionRc else 0
         versionCode =
             versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - rcValue
-        versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
+        versionName = "$versionMajor.$versionMinor.$versionPatch"
 
         resValue("string", "version_name", versionName.toString())
 
         if (versionRc > 0) {
-            versionNameSuffix = "-rc.${versionRc}"
+            versionNameSuffix = "-rc.$versionRc"
             resValue("string", "version_name", versionName + versionNameSuffix)
         }
 
@@ -78,7 +83,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
-
 
     if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
         signingConfigs {
@@ -106,10 +110,9 @@ android {
         }
     }
 
-
     lint {
         abortOnError = true
-        disable + listOf(
+        disable += listOf(
             "ObsoleteLintCustomCheck",
             "ClickableViewAccessibility",
             "VectorPath",
@@ -125,6 +128,10 @@ android {
         unitTests.all {
             it.useJUnitPlatform()
         }
+    }
+    sourceSets {
+        findByName("main")?.java?.srcDirs(project.file("src/main/kotlin"))
+        findByName("test")?.java?.srcDirs(project.file("src/test/kotlin"))
     }
 }
 
@@ -208,9 +215,20 @@ configurations.testImplementation {
 }
 
 tasks.withType<Checkstyle>().configureEach {
-    isShowViolations = true
     source = fileTree("src")
     includes += "**/*.java"
     excludes += setOf("**/gen/**", "**/R.java")
     classpath = files()
+}
+
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    debug.set(true)
+    verbose.set(true)
+    android.set(true)
+    outputToConsole.set(true)
+    outputColorName.set("RED")
+    reporters {
+        reporter(ReporterType.HTML)
+        reporter(ReporterType.CHECKSTYLE)
+    }
 }

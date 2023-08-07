@@ -23,6 +23,5 @@ enum class LayerLevel {
                 }
                 acc + (layer to movementSequence)
             }
-
     }
 }

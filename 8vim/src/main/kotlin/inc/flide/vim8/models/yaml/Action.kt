@@ -31,13 +31,16 @@ data class Action(
                 val keyCode = KeyEvent.keyCodeFromString(uppercaseKeyCodeString)
                 if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
                     CustomKeycode.valueOf(uppercaseKeyCodeString).keyCode
-                } else keyCode
+                } else {
+                    keyCode
+                }
             }
         } ?: 0
     }
-
 }
 
-fun Action?.isEmpty(): Boolean = this == null || (this.lowerCase.isEmpty()
-        && this.upperCase.isEmpty()
-        && this.movementSequence.isEmpty() && this.flags.value == 0)
+fun Action?.isEmpty(): Boolean = this == null || (
+    this.lowerCase.isEmpty() &&
+        this.upperCase.isEmpty() &&
+        this.movementSequence.isEmpty() && this.flags.value == 0
+    )

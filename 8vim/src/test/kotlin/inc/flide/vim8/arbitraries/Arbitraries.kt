@@ -26,5 +26,4 @@ object Arbitraries {
         KeyboardAction(type, lowerCase, upperCase, keyEventCode, flags, layer)
     }
     val arbKeyboardActions = Arb.map(arbMovementSequence, arbKeyboardAction)
-
 }

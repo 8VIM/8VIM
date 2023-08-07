@@ -17,6 +17,4 @@ class InputMethodServiceHelperTest : DescribeSpec({
 //    InputMethodServiceHelper.initializeKeyboardActionMap()
         }
     }
-
-
 })

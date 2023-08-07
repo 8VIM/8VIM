@@ -23,18 +23,17 @@ object Routes {
     fun AppNavHost(
         modifier: Modifier,
         navController: NavHostController,
-        startDestination: String,
+        startDestination: String
     ) {
         val context = LocalContext.current
         NavHost(
             modifier = modifier,
             navController = navController,
-            startDestination = startDestination,
+            startDestination = startDestination
         ) {
             composable(Setup.Screen) { SetupScreen() }
 
             composable(Settings.Home) { context.launchActivity(SettingsActivity::class) }
         }
-
     }
 }

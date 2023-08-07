@@ -3,7 +3,7 @@ package inc.flide.vim8.datastore.model
 class PreferenceMigrationEntry internal constructor(
     internal val action: Action,
     val key: String,
-    val rawValue: Any?,
+    val rawValue: Any?
 ) {
     /**
      * Keep this entry as is in the migration process.
@@ -20,13 +20,13 @@ class PreferenceMigrationEntry internal constructor(
      */
     fun transform(
         key: String = this.key,
-        rawValue: Any? = this.rawValue,
+        rawValue: Any? = this.rawValue
     ) = PreferenceMigrationEntry(Action.TRANSFORM, key, rawValue)
 
     private fun copy(
         action: Action = this.action,
         key: String = this.key,
-        rawValue: Any? = this.rawValue,
+        rawValue: Any? = this.rawValue
     ) = PreferenceMigrationEntry(action, key, rawValue)
 
     internal enum class Action {

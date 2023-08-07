@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,7 +49,13 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         initializeActionListener(context);
         keyboardTheme.onChange(this::setColors);
-        prefs.getKeyboard().isSidebarOnLeft().observe(newValue -> initializeView());
+        AppPrefs.Keyboard.SideBar sidebarPrefs = prefs.getKeyboard().getSidebar();
+        prefs.getKeyboard().getHeight().observe(newValue -> {
+            initializeView();
+            invalidate();
+        });
+        sidebarPrefs.isOnLeft().observe(newValue -> initializeView());
+        sidebarPrefs.isVisible().observe(newValue -> initializeView());
         initializeView();
     }
 
@@ -61,9 +68,16 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
 
     protected void setupMainKeyboardView() {
         removeAllViews();
-        Boolean isSidebarOnLeft = prefs.getKeyboard().isSidebarOnLeft().get();
+        AppPrefs.Keyboard.SideBar sidebarPrefs = prefs.getKeyboard().getSidebar();
+        Boolean isSidebarOnLeft = sidebarPrefs.isOnLeft().get();
         int sidebarLayout = getSidebarLayout(isSidebarOnLeft);
         inflater.inflate(sidebarLayout, this, true);
+        if (!sidebarPrefs.isVisible().get()) {
+            View sidebar = this.findViewById(R.id.sidebarButtonsLayout);
+            LayoutParams params = (LayoutParams) sidebar.getLayoutParams();
+            params.horizontalWeight = 0;
+            sidebar.setLayoutParams(params);
+        }
     }
 
     protected abstract void initializeActionListener(Context context);
@@ -142,10 +156,10 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Dimension computedDimension = InputMethodViewHelper.computeDimension(getContext());
-        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
-        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
+        Dimension computedDimension = InputMethodViewHelper.computeDimension(getResources());
+        setMeasuredDimension(computedDimension.width, computedDimension.height);
+        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.width, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(computedDimension.height, MeasureSpec.EXACTLY));
 
     }
 

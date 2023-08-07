@@ -31,21 +31,23 @@ import java.util.TreeMap
 private val isoCodes = Locale.getISOLanguages().toSet()
 
 fun embeddedLayouts(context: Context): TreeMap<String, EmbeddedLayout> {
-    return TreeMap(buildMap {
-        (R.raw::class.java.fields)
-            .filter { isoCodes.contains(it.name) }
-            .map { field ->
-                EmbeddedLayout(field.name)
-                    .let { layout ->
-                        layout
-                            .loadKeyboardData(context)
-                            .getOrNone()
-                            .filterNot { it.totalLayers == 0 }
-                            .map { it.toString() to layout }
-                    }
-            }
-            .forEach { it.onSome { (k, v) -> put(k, v) } }
-    })
+    return TreeMap(
+        buildMap {
+            (R.raw::class.java.fields)
+                .filter { isoCodes.contains(it.name) }
+                .map { field ->
+                    EmbeddedLayout(field.name)
+                        .let { layout ->
+                            layout
+                                .loadKeyboardData(context)
+                                .getOrNone()
+                                .filterNot { it.totalLayers == 0 }
+                                .map { it.toString() to layout }
+                        }
+                }
+                .forEach { it.onSome { (k, v) -> put(k, v) } }
+        }
+    )
 }
 
 @Composable
@@ -146,7 +148,9 @@ object LayoutSerDe : PreferenceSerDe<Layout<*>> {
                     'c' -> CustomLayout(Uri.parse(path))
                     else -> null
                 }
-            } else null
+            } else {
+                null
+            }
         }
     }
 }

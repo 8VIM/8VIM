@@ -29,7 +29,8 @@ class Flags(val value: Int) {
                 return Flags(result)
             }
             throw MismatchedInputException.from(
-                p, null as Class<*>?,
+                p,
+                null as Class<*>?,
                 "When using an array for flags, it only support integer or string"
             )
         }
@@ -71,7 +72,8 @@ class Flags(val value: Int) {
                 }
             } else {
                 throw MismatchedInputException.from(
-                    p, null as Class<*>?,
+                    p,
+                    null as Class<*>?,
                     "When using an array for flags, all values must be of the same type"
                 )
             }

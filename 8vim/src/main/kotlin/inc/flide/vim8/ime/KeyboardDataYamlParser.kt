@@ -45,7 +45,8 @@ import java.text.MessageFormat
 
 object KeyboardDataYamlParser {
     private val module = SimpleModule(FlagsDeserializer::class.qualifiedName).addDeserializer(
-        Flags::class.java, FlagsDeserializer()
+        Flags::class.java,
+        FlagsDeserializer()
     )
     private val mapper: ObjectMapper =
         YAMLMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
@@ -77,19 +78,22 @@ object KeyboardDataYamlParser {
                     val keyboardData = KeyboardData.info.set(KeyboardData(), layout.info)
                     layout.layers.map { layers ->
                         val keyboardWithHiddenLayer = keyboardData.addAllToActionMap(
-                            if (layers.hidden.isNotEmpty())
+                            if (layers.hidden.isNotEmpty()) {
                                 addKeyboardActions(layers.hidden)
-                            else
+                            } else {
                                 emptyMap()
+                            }
                         )
-                        if (layers.extraLayers.isNotEmpty() && layers.defaultLayer.isNone())
+                        if (layers.extraLayers.isNotEmpty() && layers.defaultLayer.isNone()) {
                             keyboardWithHiddenLayer
-                        else {
-                            (layers.defaultLayer
-                                .map { LayerLevel.FIRST to it }
-                                .toMap() + layers
-                                .extraLayers
-                                .mapKeys { it.key.toLayerLevel() })
+                        } else {
+                            (
+                                layers.defaultLayer
+                                    .map { LayerLevel.FIRST to it }
+                                    .toMap() + layers
+                                    .extraLayers
+                                    .mapKeys { it.key.toLayerLevel() }
+                                )
                                 .fold(keyboardWithHiddenLayer) { acc, (layerId, layer) ->
                                     addLayer(acc, layerId, layer)
                                 }
@@ -105,14 +109,18 @@ object KeyboardDataYamlParser {
         return schema.validate(node)
             .fold(InvalidLayoutError(emptySet())) { acc, error ->
                 val newError =
-                    if (error.message.startsWith('$')) error else ValidationMessage.Builder()
-                        .type(error.type)
-                        .code(error.code)
-                        .path(error.path)
-                        .details(error.details)
-                        .arguments(error.message)
-                        .format(MessageFormat("{0}: {1}"))
-                        .build()
+                    if (error.message.startsWith('$')) {
+                        error
+                    } else {
+                        ValidationMessage.Builder()
+                            .type(error.type)
+                            .code(error.code)
+                            .path(error.path)
+                            .details(error.details)
+                            .arguments(error.message)
+                            .format(MessageFormat("{0}: {1}"))
+                            .build()
+                    }
                 InvalidLayoutError.validationMessages.modify(acc) { it + newError }
             }.let {
                 if (it.validationMessages.isNotEmpty()) {
@@ -152,15 +160,19 @@ object KeyboardDataYamlParser {
             .filterNot { it.movementSequence.isEmpty() }
             .associateBy({ it.movementSequence }, {
                 KeyboardAction(
-                    it.actionType, it.lowerCase, it.upperCase,
-                    it.keyCode, it.flags.value,
+                    it.actionType,
+                    it.lowerCase,
+                    it.upperCase,
+                    it.keyCode,
+                    it.flags.value,
                     LayerLevel.HIDDEN
                 )
             })
     }
 
     private fun addKeyboardActions(
-        layer: LayerLevel, quadrant: Quadrant,
+        layer: LayerLevel,
+        quadrant: Quadrant,
         actions: List<Action?>,
         characterSets: Pair<StringBuilder, StringBuilder>
     ): Map<List<FingerPosition>, KeyboardAction> {

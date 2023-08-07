@@ -36,7 +36,11 @@ class KeyboardDataYamlParserTest : DescribeSpec({
                     FingerPosition.TOP,
                     FingerPosition.NO_TOUCH
                 ) to KeyboardAction(
-                    KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.keyCode, 0,
+                    KeyboardActionType.INPUT_KEY,
+                    "",
+                    "",
+                    CustomKeycode.SHIFT_TOGGLE.keyCode,
+                    0,
                     LayerLevel.HIDDEN
                 ),
                 listOf(FingerPosition.NO_TOUCH) to KeyboardAction(
@@ -87,8 +91,12 @@ class KeyboardDataYamlParserTest : DescribeSpec({
                     FingerPosition.BOTTOM,
                     FingerPosition.INSIDE_CIRCLE
                 ) to KeyboardAction(
-                    KeyboardActionType.INPUT_TEXT, "m", "a", 0,
-                    KeyEvent.META_CTRL_ON or KeyEvent.META_FUNCTION_ON, LayerLevel.SECOND
+                    KeyboardActionType.INPUT_TEXT,
+                    "m",
+                    "a",
+                    0,
+                    KeyEvent.META_CTRL_ON or KeyEvent.META_FUNCTION_ON,
+                    LayerLevel.SECOND
                 ),
                 listOf(
                     FingerPosition.BOTTOM,
@@ -100,11 +108,17 @@ class KeyboardDataYamlParserTest : DescribeSpec({
                     FingerPosition.LEFT,
                     FingerPosition.INSIDE_CIRCLE
                 ) to KeyboardAction(
-                    KeyboardActionType.INPUT_TEXT, "m", "a", 0,
-                    KeyEvent.META_CTRL_ON or KeyEvent.META_FUNCTION_ON, LayerLevel.SECOND
+                    KeyboardActionType.INPUT_TEXT,
+                    "m",
+                    "a",
+                    0,
+                    KeyEvent.META_CTRL_ON or KeyEvent.META_FUNCTION_ON,
+                    LayerLevel.SECOND
                 ),
                 listOf(
-                    FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                    FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.RIGHT,
+                    FingerPosition.BOTTOM,
                     FingerPosition.INSIDE_CIRCLE
                 ) to KeyboardAction(
                     KeyboardActionType.INPUT_TEXT,

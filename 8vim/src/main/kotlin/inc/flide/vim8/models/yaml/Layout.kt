@@ -15,7 +15,9 @@ data class Layout(
 
 @optics
 data class LayoutInfo(
-    val name: String = "", val description: String = "", val rtl: Boolean = false,
+    val name: String = "",
+    val description: String = "",
+    val rtl: Boolean = false,
     val contact: Contact = Contact()
 ) {
     companion object

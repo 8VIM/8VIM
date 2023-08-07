@@ -26,7 +26,7 @@ class QuadrantSpec : FunSpec({
             (CharacterPosition.FIRST to Quadrant(Direction.RIGHT, Direction.TOP)),
             (CharacterPosition.SECOND to Quadrant(Direction.BOTTOM, Direction.RIGHT)),
             (CharacterPosition.THIRD to Quadrant(Direction.LEFT, Direction.BOTTOM)),
-            (CharacterPosition.FOURTH to Quadrant(Direction.TOP, Direction.LEFT)),
+            (CharacterPosition.FOURTH to Quadrant(Direction.TOP, Direction.LEFT))
         ) { (position, opposite) ->
             quadrant.opposite(position) shouldBe opposite
         }

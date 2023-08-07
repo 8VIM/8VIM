@@ -1,7 +1,6 @@
 package inc.flide.vim8.theme
 
 import android.content.Context
-import android.os.Build
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
@@ -35,7 +34,7 @@ fun AppTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = colorScheme.typography(),
-        content = content,
+        content = content
     )
 }
 
@@ -57,6 +56,6 @@ fun ColorScheme.typography(): Typography {
         bodySmall = current.bodySmall.copy(color = onBackground),
         labelLarge = current.labelLarge.copy(color = onBackground),
         labelMedium = current.labelMedium.copy(color = onBackground),
-        labelSmall = current.labelSmall.copy(color = onBackground),
+        labelSmall = current.labelSmall.copy(color = onBackground)
     )
 }

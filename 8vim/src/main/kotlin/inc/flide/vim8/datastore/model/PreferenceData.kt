@@ -66,9 +66,9 @@ internal abstract class SharedPreferencePreferenceData<V : Any>(
                     currentState = owner.lifecycle.currentState
                 }
             }
-        if (observers.add(observer))
+        if (observers.add(observer)) {
             owner.lifecycle.addObserver(eventObserver)
-
+        }
     }
 
     override fun observe(observer: PreferenceObserver<V>) {
@@ -119,7 +119,6 @@ internal class StringSharedPreferencePreferenceData(
 ) : SharedPreferencePreferenceData<String>(model) {
     override val serde: PreferenceSerDe<String> = StringPreferenceSerde
 }
-
 
 internal class StringSetSharedPreferencePreferenceData(
     model: PreferenceModel,

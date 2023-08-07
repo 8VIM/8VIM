@@ -1,8 +1,5 @@
 package inc.flide.vim8.ui.activities;
 
-import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
-import static inc.flide.vim8.models.LayoutKt.rememberEmbeddedLayouts;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,7 +15,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -26,8 +22,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
-import inc.flide.vim8.models.AppPrefs;
-import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.ui.fragments.SettingsFragment;
 import inc.flide.vim8.utils.DialogsHelper;

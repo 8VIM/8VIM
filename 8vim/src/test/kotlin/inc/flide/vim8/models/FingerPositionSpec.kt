@@ -10,53 +10,83 @@ class FingerPositionSpec : FunSpec({
         withData(
             nameFn = { "for the ${it.first} layer at ${it.second} position" },
             Triple(
-                LayerLevel.FIRST, CharacterPosition.FIRST,
+                LayerLevel.FIRST,
+                CharacterPosition.FIRST,
                 listOf(
-                    FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                    FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.BOTTOM,
+                    FingerPosition.LEFT,
                     FingerPosition.INSIDE_CIRCLE
                 )
             ),
             Triple(
-                LayerLevel.FIRST, CharacterPosition.SECOND, listOf(
-                    FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                LayerLevel.FIRST,
+                CharacterPosition.SECOND,
+                listOf(
+                    FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.BOTTOM,
+                    FingerPosition.LEFT,
                     FingerPosition.TOP,
                     FingerPosition.INSIDE_CIRCLE
                 )
             ),
             Triple(
-                LayerLevel.FIRST, CharacterPosition.THIRD, listOf(
-                    FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                    FingerPosition.TOP, FingerPosition.RIGHT,
-                    FingerPosition.INSIDE_CIRCLE
-                )
-            ),
-            Triple(
-                LayerLevel.FIRST, CharacterPosition.FOURTH, listOf(
-                    FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                    FingerPosition.TOP, FingerPosition.RIGHT,
-                    FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE
-                )
-            ),
-            Triple(
-                LayerLevel.SECOND, CharacterPosition.FIRST,
+                LayerLevel.FIRST,
+                CharacterPosition.THIRD,
                 listOf(
-                    FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                    FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                    FingerPosition.BOTTOM, FingerPosition.LEFT,
+                    FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.BOTTOM,
+                    FingerPosition.LEFT,
+                    FingerPosition.TOP,
+                    FingerPosition.RIGHT,
                     FingerPosition.INSIDE_CIRCLE
                 )
             ),
             Triple(
-                LayerLevel.THIRD, CharacterPosition.FIRST, listOf(
-                    FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                    FingerPosition.BOTTOM, FingerPosition.LEFT,
+                LayerLevel.FIRST,
+                CharacterPosition.FOURTH,
+                listOf(
                     FingerPosition.INSIDE_CIRCLE,
-                    FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.INSIDE_CIRCLE
+                    FingerPosition.BOTTOM,
+                    FingerPosition.LEFT,
+                    FingerPosition.TOP,
+                    FingerPosition.RIGHT,
+                    FingerPosition.BOTTOM,
+                    FingerPosition.INSIDE_CIRCLE
+                )
+            ),
+            Triple(
+                LayerLevel.SECOND,
+                CharacterPosition.FIRST,
+                listOf(
+                    FingerPosition.BOTTOM,
+                    FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.BOTTOM,
+                    FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.BOTTOM,
+                    FingerPosition.LEFT,
+                    FingerPosition.INSIDE_CIRCLE
+                )
+            ),
+            Triple(
+                LayerLevel.THIRD,
+                CharacterPosition.FIRST,
+                listOf(
+                    FingerPosition.BOTTOM,
+                    FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.BOTTOM,
+                    FingerPosition.LEFT,
+                    FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.BOTTOM,
+                    FingerPosition.LEFT,
+                    FingerPosition.INSIDE_CIRCLE
                 )
 
             ),
             Triple(
-                LayerLevel.FOURTH, CharacterPosition.FIRST, listOf(
+                LayerLevel.FOURTH,
+                CharacterPosition.FIRST,
+                listOf(
                     FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
                     FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
                     FingerPosition.INSIDE_CIRCLE,
@@ -65,7 +95,9 @@ class FingerPositionSpec : FunSpec({
 
             ),
             Triple(
-                LayerLevel.FIFTH, CharacterPosition.FIRST, listOf(
+                LayerLevel.FIFTH,
+                CharacterPosition.FIRST,
+                listOf(
                     FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
                     FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
                     FingerPosition.RIGHT, FingerPosition.INSIDE_CIRCLE,
@@ -74,7 +106,9 @@ class FingerPositionSpec : FunSpec({
 
             ),
             Triple(
-                LayerLevel.SIXTH, CharacterPosition.FIRST, listOf(
+                LayerLevel.SIXTH,
+                CharacterPosition.FIRST,
+                listOf(
                     FingerPosition.BOTTOM,
                     FingerPosition.INSIDE_CIRCLE,
                     FingerPosition.BOTTOM,

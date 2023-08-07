@@ -136,7 +136,7 @@
         <ListPreference
             android:entries="@array/pref_color_mode_labels"
             android:entryValues="@array/pref_color_mode_values"
-            app:defaultValue="system"
+            app:defaultValue="SYSTEM"
             app:iconSpaceReserved="false"
             app:key="@string/pref_color_mode_key"
             app:title="@string/pref_color_mode_title"

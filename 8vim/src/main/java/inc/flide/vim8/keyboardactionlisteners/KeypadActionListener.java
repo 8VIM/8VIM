@@ -1,5 +1,7 @@
 package inc.flide.vim8.keyboardactionlisteners;
 
+import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Build;
@@ -7,11 +9,10 @@ import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
-import inc.flide.vim8.R;
-import inc.flide.vim8.models.LayerLevel;
-import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.CustomKeycode;
 import inc.flide.vim8.models.KeyboardAction;
+import inc.flide.vim8.models.LayerLevel;
 
 public abstract class KeypadActionListener {
     public static final int KEYCODE_PROFILE_SWITCH = 288;
@@ -48,31 +49,21 @@ public abstract class KeypadActionListener {
     }
 
     private int keySound(int keyCode) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_ENTER:
-                return AudioManager.FX_KEYPRESS_RETURN;
-            case KeyEvent.KEYCODE_DEL:
-            case KeyEvent.KEYCODE_FORWARD_DEL:
-                return AudioManager.FX_KEYPRESS_DELETE;
-            case KeyEvent.KEYCODE_SPACE:
-                return AudioManager.FX_KEYPRESS_SPACEBAR;
-            default:
-                return AudioManager.FX_KEYPRESS_STANDARD;
-        }
+        return switch (keyCode) {
+            case KeyEvent.KEYCODE_ENTER -> AudioManager.FX_KEYPRESS_RETURN;
+            case KeyEvent.KEYCODE_DEL, KeyEvent.KEYCODE_FORWARD_DEL -> AudioManager.FX_KEYPRESS_DELETE;
+            case KeyEvent.KEYCODE_SPACE -> AudioManager.FX_KEYPRESS_SPACEBAR;
+            default -> AudioManager.FX_KEYPRESS_STANDARD;
+        };
     }
 
-    @SuppressWarnings("deprecation")
     private void performInputAcceptedFeedback(int keySound) {
-        SharedPreferenceHelper pref = SharedPreferenceHelper.getInstance(mainInputMethodService);
-        boolean userEnabledHapticFeedback =
-                pref.getBoolean(mainInputMethodService.getString(R.string.pref_haptic_feedback_key), true);
-        if (userEnabledHapticFeedback) {
+        AppPrefs.InputFeedback prefs = appPreferenceModel().java().getInputFeedback();
+        if (prefs.getHapticEnabled().get()) {
             view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP,
                     HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
         }
-        boolean userEnabledSoundFeedback =
-                pref.getBoolean(mainInputMethodService.getString(R.string.pref_sound_feedback_key), true);
-        if (userEnabledSoundFeedback) {
+        if (prefs.getSoundEnabled().get()) {
             audioManager.playSoundEffect(keySound);
         }
     }
@@ -80,24 +71,15 @@ public abstract class KeypadActionListener {
     private boolean handleKeyEventKeyCodes(int primaryCode, int keyFlags) {
         if (keyCodeIsValid(primaryCode)) {
             switch (primaryCode) {
-                case KeyEvent.KEYCODE_CUT:
-                    mainInputMethodService.cut();
-                    break;
-                case KeyEvent.KEYCODE_COPY:
-                    mainInputMethodService.copy();
-                    break;
-                case KeyEvent.KEYCODE_PASTE:
-                    mainInputMethodService.paste();
-                    break;
-                case KeyEvent.KEYCODE_ENTER:
-                    mainInputMethodService.commitImeOptionsBasedEnter();
-                    break;
-                case KeyEvent.KEYCODE_DEL:
-                    mainInputMethodService.delete();
-                    break;
-                default:
+                case KeyEvent.KEYCODE_CUT -> mainInputMethodService.cut();
+                case KeyEvent.KEYCODE_COPY -> mainInputMethodService.copy();
+                case KeyEvent.KEYCODE_PASTE -> mainInputMethodService.paste();
+                case KeyEvent.KEYCODE_ENTER -> mainInputMethodService.commitImeOptionsBasedEnter();
+                case KeyEvent.KEYCODE_DEL -> mainInputMethodService.delete();
+                default -> {
                     mainInputMethodService.sendKey(primaryCode, keyFlags);
                     mainInputMethodService.setShiftLockFlag(0);
+                }
             }
             return true;
         }
@@ -120,10 +102,6 @@ public abstract class KeypadActionListener {
 
     public boolean areCharactersCapitalized() {
         return mainInputMethodService.areCharactersCapitalized();
-    }
-
-    public void setModifierFlags(int modifierFlags) {
-        this.mainInputMethodService.setModifierFlags(modifierFlags);
     }
 
     public boolean isShiftSet() {

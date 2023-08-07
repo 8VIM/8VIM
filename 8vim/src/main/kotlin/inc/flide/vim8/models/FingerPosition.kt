@@ -11,7 +11,8 @@ enum class FingerPosition {
     companion object {
 
         fun computeMovementSequence(
-            layer: LayerLevel, quadrant: Quadrant,
+            layer: LayerLevel,
+            quadrant: Quadrant,
             position: CharacterPosition
         ): MovementSequence {
             return when (layer) {
@@ -19,13 +20,18 @@ enum class FingerPosition {
                 else -> {
                     val movementSequencesForDefaultLayer =
                         movementSequencesForLayer(layer, quadrant, position)
-                    if (movementSequencesForDefaultLayer.isEmpty()) emptyList() else movementSequencesForDefaultLayer + INSIDE_CIRCLE
+                    if (movementSequencesForDefaultLayer.isEmpty()) {
+                        emptyList()
+                    } else {
+                        movementSequencesForDefaultLayer + INSIDE_CIRCLE
+                    }
                 }
             }
         }
 
         fun computeQuickMovementSequence(
-            layer: LayerLevel, quadrant: Quadrant,
+            layer: LayerLevel,
+            quadrant: Quadrant,
             position: CharacterPosition
         ): MovementSequence {
             return when (layer) {
@@ -34,13 +40,13 @@ enum class FingerPosition {
                     val movementSequenceForExtraLayer =
                         movementSequenceForExtraLayer(layer, quadrant, position)
                     listOf(INSIDE_CIRCLE) + movementSequenceForExtraLayer + listOf(INSIDE_CIRCLE)
-
                 }
             }
         }
 
         private fun movementSequenceForExtraLayer(
-            layer: LayerLevel, quadrant: Quadrant,
+            layer: LayerLevel,
+            quadrant: Quadrant,
             position: CharacterPosition
         ): MovementSequence {
             val oppositeQuadrant = quadrant.opposite(position)
@@ -60,7 +66,8 @@ enum class FingerPosition {
         }
 
         private fun movementSequencesForLayer(
-            layer: LayerLevel, quadrant: Quadrant,
+            layer: LayerLevel,
+            quadrant: Quadrant,
             position: CharacterPosition
         ): MovementSequence {
             return when (layer) {
@@ -77,7 +84,6 @@ enum class FingerPosition {
                     }
                 }
             }
-
         }
 
         private fun getNextPosition(

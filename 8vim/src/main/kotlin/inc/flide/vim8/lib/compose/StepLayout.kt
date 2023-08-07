@@ -67,23 +67,23 @@ private val stepHeaderTextInnerPaddingHorizontal = 16.dp
 data class Step(
     val id: Int,
     val title: String,
-    val content: @Composable StepLayoutScope.() -> Unit,
+    val content: @Composable StepLayoutScope.() -> Unit
 )
 
 class StepLayoutScope(
-    columnScope: ColumnScope,
+    columnScope: ColumnScope
 ) : ColumnScope by columnScope {
     @Composable
     fun StepText(
         text: String,
         modifier: Modifier = Modifier,
-        fontStyle: FontStyle = FontStyle.Normal,
+        fontStyle: FontStyle = FontStyle.Normal
     ) {
         Text(
             modifier = modifier,
             text = text,
             textAlign = TextAlign.Justify,
-            fontStyle = fontStyle,
+            fontStyle = fontStyle
         )
     }
 
@@ -91,13 +91,13 @@ class StepLayoutScope(
     fun StepButton(
         label: String,
         modifier: Modifier = Modifier,
-        onClick: () -> Unit,
+        onClick: () -> Unit
     ) {
         Button(
             modifier = modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 16.dp),
-            onClick = onClick,
+            onClick = onClick
         ) {
             Text(text = label, color = MaterialTheme.colorScheme.onPrimary)
         }
@@ -106,7 +106,7 @@ class StepLayoutScope(
 
 class StepState private constructor(
     private val currentAuto: MutableState<Int>,
-    private val currentManual: MutableState<Int> = mutableStateOf(-1),
+    private val currentManual: MutableState<Int> = mutableStateOf(-1)
 ) {
     companion object {
         fun new(init: Int) = StepState(mutableStateOf(init))
@@ -117,7 +117,7 @@ class StepState private constructor(
             },
             restore = {
                 StepState(mutableStateOf(it[0]), mutableStateOf(it[1]))
-            },
+            }
         )
     }
 
@@ -153,7 +153,7 @@ fun StepLayout(
     modifier: Modifier = Modifier,
     primaryColor: Color = MaterialTheme.colorScheme.primary,
     header: @Composable StepLayoutScope.() -> Unit = { },
-    footer: @Composable StepLayoutScope.() -> Unit = { },
+    footer: @Composable StepLayoutScope.() -> Unit = { }
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -167,7 +167,7 @@ fun StepLayout(
                     totalSteps = steps.size,
                     stepState = stepState,
                     title = step.title,
-                    primaryColor = primaryColor,
+                    primaryColor = primaryColor
                 ) {
                     step.content(StepLayoutScope(this))
                 }
@@ -184,7 +184,7 @@ private fun ColumnScope.Step(
     stepState: StepState,
     title: String,
     primaryColor: Color,
-    content: @Composable ColumnScope.() -> Unit,
+    content: @Composable ColumnScope.() -> Unit
 ) {
     val currentStepId by stepState.getCurrent()
     val autoStepId by stepState.getCurrentAuto()
@@ -195,19 +195,21 @@ private fun ColumnScope.Step(
     val contentVisible = ownStepId == currentStepId
     StepHeader(
         modifier = when {
-            ownStepId <= autoStepId -> Modifier
-                .clickable(enabled = !contentVisible) { stepState.setCurrentManual(ownStepId) }
+            ownStepId <= autoStepId ->
+                Modifier
+                    .clickable(enabled = !contentVisible) { stepState.setCurrentManual(ownStepId) }
 
             else -> Modifier.alpha(0.38f)
         },
         backgroundColor = backgroundColor,
         step = ownStepId,
-        title = title,
+        title = title
     )
     val animSpec = spring<Float>(stiffness = Spring.StiffnessMedium)
     val weight by animateFloatAsState(
         targetValue = if (contentVisible) 1.0f else 0.00001f,
-        animationSpec = animSpec, label = "",
+        animationSpec = animSpec,
+        label = ""
     )
     AnimatedVisibility(
         modifier = Modifier
@@ -215,36 +217,40 @@ private fun ColumnScope.Step(
             .weight(weight),
         visible = contentVisible,
         enter = fadeIn(animationSpec = animSpec),
-        exit = fadeOut(animationSpec = animSpec),
+        exit = fadeOut(animationSpec = animSpec)
     ) {
         val onBackground = MaterialTheme.colorScheme.onSurface
         val modifier = Modifier
             .padding(start = 56.dp)
         Box(
-            modifier = if (currentStepId < totalSteps) modifier.drawBehind {
-                val strokeWidth = 2.dp
-                val x =
-                    -(stepHeaderNumberBoxPaddingEnd + (stepHeaderNumberBoxSize / 2 - strokeWidth / 2))
-                drawLine(
-                    color = onBackground,
-                    start = Offset(x.toPx(), 0f),
-                    end = Offset(x.toPx(), size.height),
-                    strokeWidth = strokeWidth.toPx(),
-                    pathEffect = PathEffect.dashPathEffect(
-                        floatArrayOf(
-                            2.dp.toPx(),
-                            10.dp.toPx()
-                        )
-                    ),
-                    alpha = 0.38f,
-                )
-            } else modifier,
+            modifier = if (currentStepId < totalSteps) {
+                modifier.drawBehind {
+                    val strokeWidth = 2.dp
+                    val x =
+                        -(stepHeaderNumberBoxPaddingEnd + (stepHeaderNumberBoxSize / 2 - strokeWidth / 2))
+                    drawLine(
+                        color = onBackground,
+                        start = Offset(x.toPx(), 0f),
+                        end = Offset(x.toPx(), size.height),
+                        strokeWidth = strokeWidth.toPx(),
+                        pathEffect = PathEffect.dashPathEffect(
+                            floatArrayOf(
+                                2.dp.toPx(),
+                                10.dp.toPx()
+                            )
+                        ),
+                        alpha = 0.38f
+                    )
+                }
+            } else {
+                modifier
+            }
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll()
-                    .padding(end = 8.dp),
+                    .padding(end = 8.dp)
             ) {
                 content()
             }
@@ -258,24 +264,24 @@ private fun StepHeader(
     backgroundColor: Color,
     contentColor: Color = contentColorFor(backgroundColor),
     step: Int,
-    title: String,
+    title: String
 ) {
     Row(
         modifier = modifier
             .padding(vertical = stepHeaderPaddingVertical),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
                 .padding(end = stepHeaderNumberBoxPaddingEnd)
                 .size(stepHeaderNumberBoxSize)
                 .clip(CircleShape)
-                .background(backgroundColor),
+                .background(backgroundColor)
         ) {
             Text(
                 modifier = Modifier.align(Alignment.Center),
                 text = step.toString(),
-                color = contentColor,
+                color = contentColor
             )
         }
 
@@ -284,7 +290,7 @@ private fun StepHeader(
                 .height(stepHeaderTextBoxHeight)
                 .weight(1.0f)
                 .clip(CircleShape)
-                .background(backgroundColor),
+                .background(backgroundColor)
         ) {
             Text(
                 modifier = Modifier
@@ -293,7 +299,7 @@ private fun StepHeader(
                 text = title,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                color = contentColor,
+                color = contentColor
             )
         }
     }

@@ -16,7 +16,6 @@ abstract class PreferenceModel(val version: Int) {
         internal const val DATASTORE_VERSION = "${INTERNAL_PREFIX}_datastore_version"
     }
 
-
     internal val sharedPreferences: AtomicReference<SharedPreferences?> = AtomicReference(null)
 
     /*
@@ -79,13 +78,14 @@ abstract class PreferenceModel(val version: Int) {
 
     private fun <V : Any> PreferenceData<V>.deserialize(rawValue: Any?) {
         val value = serde.deserialize(rawValue)
-        if (value != null)
+        if (value != null) {
             set(value, sync = false)
+        }
     }
 
     protected fun boolean(
         key: String,
-        default: Boolean,
+        default: Boolean
     ): PreferenceData<Boolean> {
         val prefData = BooleanSharedPreferencePreferenceData(this, key, default)
         registryAdd(prefData)
@@ -94,7 +94,7 @@ abstract class PreferenceModel(val version: Int) {
 
     protected fun float(
         key: String,
-        default: Float,
+        default: Float
     ): PreferenceData<Float> {
         val prefData = FloatSharedPreferencePreferenceData(this, key, default)
         registryAdd(prefData)
@@ -103,7 +103,7 @@ abstract class PreferenceModel(val version: Int) {
 
     protected fun int(
         key: String,
-        default: Int,
+        default: Int
     ): PreferenceData<Int> {
         val prefData = IntSharedPreferencePreferenceData(this, key, default)
         registryAdd(prefData)
@@ -112,7 +112,7 @@ abstract class PreferenceModel(val version: Int) {
 
     protected fun string(
         key: String,
-        default: String,
+        default: String
     ): PreferenceData<String> {
         val prefData = StringSharedPreferencePreferenceData(this, key, default)
         registryAdd(prefData)
@@ -121,17 +121,16 @@ abstract class PreferenceModel(val version: Int) {
 
     protected fun stringSet(
         key: String,
-        default: Set<String>,
+        default: Set<String>
     ): PreferenceData<Set<String>> {
         val prefData = StringSetSharedPreferencePreferenceData(this, key, default)
         registryAdd(prefData)
         return prefData
     }
 
-
     protected inline fun <reified V : Enum<V>> enum(
         key: String,
-        default: V,
+        default: V
     ): PreferenceData<V> {
         val serde = object : PreferenceSerDe<V> {
             override fun serialize(editor: SharedPreferences.Editor, key: String, value: V) {
@@ -164,7 +163,6 @@ abstract class PreferenceModel(val version: Int) {
         return prefData
     }
 
-
     fun initialize(context: Context) {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = sharedPreferences.edit()
@@ -182,7 +180,7 @@ abstract class PreferenceModel(val version: Int) {
                     PreferenceMigrationEntry(
                         action = PreferenceMigrationEntry.Action.KEEP_AS_IS,
                         key = prefKey,
-                        rawValue = rawValue,
+                        rawValue = rawValue
                     )
                 )
                 when (migrationResult.action) {
@@ -206,7 +204,6 @@ abstract class PreferenceModel(val version: Int) {
                 Log.d("Datastore", "$prefKey = ${ prefData.getOrNull() }")
                 sharedPreferences.registerOnSharedPreferenceChangeListener(prefData)
             }
-
         }
         editor
             .putInt(DATASTORE_VERSION, version)

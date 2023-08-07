@@ -27,7 +27,6 @@ object BooleanPreferenceSerde : PreferenceSerDe<Boolean> {
     override fun deserialize(value: Any?): Boolean? {
         return tryOrNull { value as Boolean? }
     }
-
 }
 
 object FloatPreferenceSerde : PreferenceSerDe<Float> {
@@ -48,7 +47,6 @@ object FloatPreferenceSerde : PreferenceSerDe<Float> {
     override fun deserialize(value: Any?): Float? {
         return tryOrNull { value as Float? }
     }
-
 }
 
 object IntPreferenceSerde : PreferenceSerDe<Int> {
@@ -69,7 +67,6 @@ object IntPreferenceSerde : PreferenceSerDe<Int> {
     override fun deserialize(value: Any?): Int? {
         return tryOrNull { value as Int? }
     }
-
 }
 
 object StringPreferenceSerde : PreferenceSerDe<String> {

@@ -45,7 +45,6 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         resourcesContext = createConfigurationContext(Configuration(resources.configuration))
 
-
         prefs.onReady(this) { isModelLoaded ->
             if (!isModelLoaded) return@onReady
             setContent {
@@ -64,24 +63,23 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     @Composable
     private fun AppContent() {
         val navController = rememberNavController()
         val isImeSetUp by prefs.internal.isImeSetup.observeAsState()
         CompositionLocalProvider(
-            LocalNavController provides navController,
+            LocalNavController provides navController
         ) {
             Column(
                 modifier = Modifier
                     .statusBarsPadding()
                     .navigationBarsPadding()
-                    .imePadding(),
+                    .imePadding()
             ) {
                 Routes.AppNavHost(
                     modifier = Modifier.weight(1.0f),
                     navController = navController,
-                    startDestination = if (isImeSetUp) Routes.Settings.Home else Routes.Setup.Screen,
+                    startDestination = if (isImeSetUp) Routes.Settings.Home else Routes.Setup.Screen
                 )
             }
         }

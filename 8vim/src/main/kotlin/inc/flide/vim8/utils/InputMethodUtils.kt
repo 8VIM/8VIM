@@ -17,21 +17,21 @@ object InputMethodUtils {
     @Composable
     fun observeIs8VimEnabled(
         context: Context = LocalContext.current.applicationContext,
-        foregroundOnly: Boolean = false,
+        foregroundOnly: Boolean = false
     ) = AndroidSettings.Secure.observeAsState(
         key = Settings.Secure.ENABLED_INPUT_METHODS,
         foregroundOnly = foregroundOnly,
-        transform = { parseIs8VimEnabled(context, it.toString()) },
+        transform = { parseIs8VimEnabled(context, it.toString()) }
     )
 
     @Composable
     fun observeIs8VimSelected(
         context: Context = LocalContext.current.applicationContext,
-        foregroundOnly: Boolean = false,
+        foregroundOnly: Boolean = false
     ) = AndroidSettings.Secure.observeAsState(
         key = Settings.Secure.DEFAULT_INPUT_METHOD,
         foregroundOnly = foregroundOnly,
-        transform = { parseIs8VimSelected(context, it.toString()) },
+        transform = { parseIs8VimSelected(context, it.toString()) }
     )
 
     fun parseIs8VimEnabled(context: Context, activeImeIds: String): Boolean {

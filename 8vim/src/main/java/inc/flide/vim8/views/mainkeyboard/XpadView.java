@@ -124,7 +124,7 @@ public class XpadView extends View {
     private void computeComponentPositions(int fullWidth, int fullHeight) {
         AppPrefs.Keyboard.Circle circlePrefs = prefs.getKeyboard().getCircle();
         float spRadiusValue = circlePrefs.getRadiusSizeFactor().get();
-        boolean preferredSidebarLeft = prefs.getKeyboard().isSidebarOnLeft().get();
+        boolean preferredSidebarLeft = prefs.getKeyboard().getSidebar().isOnLeft().get();
 
         float radius = (spRadiusValue / Constants.XPAD_CIRCLE_RADIUS_FACTOR * keypadDimension.height) / 2;
 
@@ -229,7 +229,7 @@ public class XpadView extends View {
         int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
         int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-        keypadDimension.width = (parentWidth);
+        keypadDimension.width = parentWidth;
         keypadDimension.height = parentHeight;
 
         setMeasuredDimension(keypadDimension.width, keypadDimension.height);

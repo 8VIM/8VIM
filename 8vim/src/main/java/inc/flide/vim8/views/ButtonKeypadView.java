@@ -62,10 +62,10 @@ public abstract class ButtonKeypadView extends KeyboardView {
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Dimension computedDimension = InputMethodViewHelper.computeDimension(getContext());
-        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
-        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
+        Dimension computedDimension = InputMethodViewHelper.computeDimension(getResources());
+        setMeasuredDimension(computedDimension.width, computedDimension.height);
+        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.width, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(computedDimension.height, MeasureSpec.EXACTLY));
     }
 
     @Override
