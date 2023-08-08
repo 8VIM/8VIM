@@ -12,14 +12,20 @@ public class Quadrant {
     }
 
     public int getCharacterIndexInString(CharacterPosition characterPosition) {
+        /*
         int index=0;
         if ((part-sector+Constants.NUMBER_OF_SECTORS) % Constants.NUMBER_OF_SECTORS == 1)
             index = ((sector) % Constants.NUMBER_OF_SECTORS)*2;
         else
             index = ((sector-1)*2)+1;
-        int base = index / 2 * (Constants.NUMBER_OF_SECTORS * 2);
+        int base = index / 2 * (CharacterPosition.values().length * 2);
         int delta = index % 2;
         return base + characterPosition.ordinal() * 2 + delta;
+         */
+        if ((part-sector+Constants.NUMBER_OF_SECTORS) % Constants.NUMBER_OF_SECTORS == 1)
+            return CharacterPosition.values().length *2*(part-1) + characterPosition.ordinal() * 2;
+        else
+            return CharacterPosition.values().length *2*(sector-1) + characterPosition.ordinal() * 2+1;
     }
 
     public Quadrant getOppositeQuadrant(CharacterPosition position) {

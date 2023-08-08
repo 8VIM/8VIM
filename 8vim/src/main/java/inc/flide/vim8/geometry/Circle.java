@@ -61,7 +61,8 @@ public class Circle {
 
         // Calculate angle with special atan (calculates the correct angle in all quadrants)
         double angle = Math.atan2(y, x);
-        angle-=Math.PI/2;
+        double angleCenterFirstSector = - Math.PI/2 + (Math.PI*2/Constants.NUMBER_OF_SECTORS/2) - (Math.PI*2/Constants.NUMBER_OF_SECTORS/2);
+        angle = angle - angleCenterFirstSector;
         // Make all angles positive
         if (angle < 0) {
             angle = Math.PI * 2 + angle;
@@ -74,9 +75,11 @@ public class Circle {
      */
     public int getSectorOfPoint(PointF p) {
         double angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p);
-        double angleToSectorValue = Math.PI  * 2 -angleDouble / (Math.PI  * 2 / Constants.NUMBER_OF_SECTORS);
+        double angleToSectorValue = - angleDouble / (Math.PI  * 2 / Constants.NUMBER_OF_SECTORS);
         int quadrantCyclic = (int) Math.round(angleToSectorValue);
-        quadrantCyclic = quadrantCyclic % Constants.NUMBER_OF_SECTORS + 1;
-        return quadrantCyclic;
+        quadrantCyclic = quadrantCyclic % Constants.NUMBER_OF_SECTORS;
+        if (quadrantCyclic < 0)
+                quadrantCyclic += Constants.NUMBER_OF_SECTORS;
+        return quadrantCyclic+1;
     }
 }

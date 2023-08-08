@@ -9,27 +9,27 @@ import java.util.List;
 public enum ExtraLayer {
     FIRST, SECOND, THIRD, FOURTH, FIFTH;
 
-    public static final HashMap<ExtraLayer, List<FingerPosition>> MOVEMENT_SEQUENCES =
+    public static final HashMap<ExtraLayer, List<Integer>> MOVEMENT_SEQUENCES =
             new HashMap<>();
 
     static {
-        List<FingerPosition> movementSequence =
+        List<Integer> movementSequence =
                 new ArrayList<>(Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE));
 
         for (ExtraLayer extraLayer : ExtraLayer.values()) {
             switch (extraLayer) {
                 case FIRST:
                 case FIFTH:
-                    movementSequence.add(FingerPosition.BOTTOM);
+                    movementSequence.add(5);
                     break;
                 case SECOND:
-                    movementSequence.add(FingerPosition.LEFT);
+                    movementSequence.add(2);
                     break;
                 case THIRD:
-                    movementSequence.add(FingerPosition.TOP);
+                    movementSequence.add(3);
                     break;
                 case FOURTH:
-                    movementSequence.add(FingerPosition.RIGHT);
+                    movementSequence.add(4);
                     break;
                 default:
             }

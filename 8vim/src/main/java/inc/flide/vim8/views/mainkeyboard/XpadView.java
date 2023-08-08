@@ -25,6 +25,7 @@ import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.ui.Theme;
@@ -55,8 +56,10 @@ public class XpadView extends View {
     private final Matrix xformMatrix = new Matrix();
     // There are 4 sectors, each has 4 letters above, and 4 below.
     // Finally, each letter position has an x & y co-ordinate.
+//    private final float[] letterPositions =
+  //          new float[Constants.NUMBER_OF_SECTORS * 2 * CharacterPosition.values().length * 2];
     private final float[] letterPositions =
-            new float[Constants.NUMBER_OF_SECTORS * 2 * Constants.NUMBER_OF_SECTORS * 2];
+            new float[Constants.NUMBER_OF_SECTORS * 2 * CharacterPosition.values().length * 2];
     private final Path sectorLines = new Path();
     private final RectF sectorLineBounds = new RectF();
     private final float[] trialPathPos = new float[2];
@@ -170,32 +173,36 @@ public class XpadView extends View {
         // Compute sector demarcation lines as if they were all going orthogonal (like a "+").
         // This is easier to compute.  Later we apply rotation to orient the lines properly (like an "x").
         sectorLines.rewind();
-        sectorLines.moveTo(circleCenter.x + radius, circleCenter.y);
-        sectorLines.rLineTo(lengthOfLineDemarcatingSectors, 0);
-        sectorLines.moveTo(circleCenter.x - radius, circleCenter.y);
-        sectorLines.rLineTo(-lengthOfLineDemarcatingSectors, 0);
-        sectorLines.moveTo(circleCenter.x, circleCenter.y + radius);
-        sectorLines.rLineTo(0, lengthOfLineDemarcatingSectors);
-        sectorLines.moveTo(circleCenter.x, circleCenter.y - radius);
-        sectorLines.rLineTo(0, -lengthOfLineDemarcatingSectors);
+        for (int i=0; i<Constants.NUMBER_OF_SECTORS; i++) {
+            //double angle = -Math.PI * 2 / Constants.NUMBER_OF_SECTORS * i + Math.PI * 2 / Constants.NUMBER_OF_SECTORS/2;
+            double angle = - Math.PI/2 + (Math.PI*2/Constants.NUMBER_OF_SECTORS/2) - Math.PI * 2 / Constants.NUMBER_OF_SECTORS * i;
+            sectorLines.moveTo((float) (circleCenter.x + radius * Math.cos(angle)), (float) (circleCenter.y - radius * Math.sin(angle)));
+            sectorLines.rLineTo((float) (lengthOfLineDemarcatingSectors * Math.cos(angle)), (float) (-lengthOfLineDemarcatingSectors * Math.sin(angle)));
+        }
 
         // Compute the first set of points going straight to the "east" (aka, rightwards).
         // Then apply repeated rotation (45, then 90 x4) to get the final positions.
         computeLettersPositions(characterHeight, lengthOfLineDemarcatingSectors);
 
+        /*
         xformMatrix.reset();
-        xformMatrix.postRotate(DEGREE_45, circleCenter.x, circleCenter.y);
-        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, 8);
-        sectorLines.transform(xformMatrix);
+        xformMatrix.postRotate(360/Constants.NUMBER_OF_SECTORS/2, circleCenter.x, circleCenter.y);
+        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, CharacterPosition.values().length*2);
+         */
+        xformMatrix.reset();
+        xformMatrix.postRotate(360/Constants.NUMBER_OF_SECTORS, circleCenter.x, circleCenter.y);
+        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, CharacterPosition.values().length*2);
+
 
         xformMatrix.reset();
-        xformMatrix.postRotate(DEGREE_90, circleCenter.x, circleCenter.y);
+        xformMatrix.postRotate(360/Constants.NUMBER_OF_SECTORS, circleCenter.x, circleCenter.y);
+
         for (int i = 1; i < Constants.NUMBER_OF_SECTORS; i++) {
             xformMatrix.mapPoints(letterPositions,
-                    Constants.NUMBER_OF_SECTORS * Constants.NUMBER_OF_SECTORS * i,
+                    CharacterPosition.values().length * 4 * i,
                     letterPositions,
-                    Constants.NUMBER_OF_SECTORS * Constants.NUMBER_OF_SECTORS * (i - 1),
-                    8);
+                    CharacterPosition.values().length * 4 * (i - 1),
+                    CharacterPosition.values().length * 2);
         }
 
         // Canvas.drawPosText() draws from the bottom,
@@ -215,14 +222,12 @@ public class XpadView extends View {
     private void computeLettersPositions(float characterHeight,
                                          float lengthOfLineDemarcatingSectors) {
         float eastEdge = circleCenter.x + circle.getRadius() + characterHeight / 2;
-        for (int i = 0; i < Constants.NUMBER_OF_SECTORS; i++) {
-            float dx = i * lengthOfLineDemarcatingSectors / ((float) Constants.NUMBER_OF_SECTORS);
-            letterPositions[Constants.NUMBER_OF_SECTORS * i] = eastEdge + dx;
-            letterPositions[Constants.NUMBER_OF_SECTORS * i + UPPER_LETTER_Y_IDX_OFFSET] =
-                    circleCenter.y - characterHeight / 2; // upper letter
-            letterPositions[Constants.NUMBER_OF_SECTORS * i + LOWER_LETTER_X_IDX_OFFSET] = eastEdge + dx;
-            letterPositions[Constants.NUMBER_OF_SECTORS * i + LOWER_LETTER_Y_IDX_OFFSET] =
-                    circleCenter.y + characterHeight / 2; // lower letter
+        for (int i = 0; i < CharacterPosition.values().length; i++) {
+            float dx = i * lengthOfLineDemarcatingSectors / ((float) CharacterPosition.values().length);
+            letterPositions[4 * i] = eastEdge + dx;
+            letterPositions[4 * i + UPPER_LETTER_Y_IDX_OFFSET] = circleCenter.y - characterHeight / 2; // upper letter
+            letterPositions[4 * i + LOWER_LETTER_X_IDX_OFFSET] = eastEdge + dx;
+            letterPositions[4 * i + LOWER_LETTER_Y_IDX_OFFSET] = circleCenter.y + characterHeight / 2; // lower letter
         }
     }
 
@@ -447,7 +452,7 @@ public class XpadView extends View {
         return actionListener.getLowerCaseCharacters(layer);
     }
 
-    private Integer getCurrentFingerPosition(PointF position) {
+    private int getCurrentFingerPosition(PointF position) {
         if (circle.isPointInsideCircle(position)) {
             return FingerPosition.INSIDE_CIRCLE;
         } else {
@@ -458,7 +463,7 @@ public class XpadView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         PointF position = new PointF((int) e.getX(), (int) e.getY());
-        Integer currentFingerPosition = getCurrentFingerPosition(position);
+        int currentFingerPosition = getCurrentFingerPosition(position);
         invalidate();
         switch (e.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:

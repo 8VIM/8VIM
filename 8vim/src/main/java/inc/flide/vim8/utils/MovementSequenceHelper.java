@@ -94,6 +94,7 @@ public final class MovementSequenceHelper {
         return movementSequence;
     }
 
+    // TODO: To fix since it dow not work with 6 sectors
     private static int getNextPosition(Quadrant quadrant, int lastPosition) {
         int currentSector = Direction.toFingerPosition(quadrant.getSector());
         int oppositeSector = Direction.toFingerPosition(Direction.getOpposite(quadrant.getSector()));
