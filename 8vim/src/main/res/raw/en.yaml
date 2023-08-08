@@ -26,11 +26,11 @@ layers:
           4:
             - lower_case: t
             - lower_case: c
-            - lower_case: z
+            - lower_case: q
           2:
             - lower_case: s
             - lower_case: m
-            - lower_case: "'"
+            - lower_case: z
       4:
         parts:
           5:

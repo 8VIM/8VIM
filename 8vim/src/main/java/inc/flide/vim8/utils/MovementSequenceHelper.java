@@ -85,11 +85,18 @@ public final class MovementSequenceHelper {
         }
 
         movementSequence.add(FingerPosition.INSIDE_CIRCLE);
-
+        int nextSector = quadrant.getSector();
+        int direction = (quadrant.getPart()-quadrant.getSector())%Constants.NUMBER_OF_SECTORS;
+        if (direction < 0)
+            direction+=Constants.NUMBER_OF_SECTORS;
+        if (direction!=1)
+            direction = -1;
         for (int i = 0; i <= maxMovements; i++) {
-            Integer lastPosition = movementSequence.get(movementSequence.size() - 1);
-            Integer nextPosition = getNextPosition(quadrant, lastPosition);
-            movementSequence.add(nextPosition);
+            movementSequence.add(nextSector);
+            nextSector = ((nextSector-1+direction) % Constants.NUMBER_OF_SECTORS);
+            if (nextSector < 0)
+                nextSector += Constants.NUMBER_OF_SECTORS;
+            nextSector+= 1;
         }
         return movementSequence;
     }
