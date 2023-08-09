@@ -4,60 +4,60 @@ layers:
       1:
         parts:
           2:
-            - lower_case: e
-            - lower_case: j
+            - lower_case: n
+            - lower_case: d
             - lower_case: "8"
           6:
-            - lower_case: o
-            - lower_case: k
+            - lower_case: t
+            - lower_case: c
             - lower_case: "7"
       2:
         parts:
           3:
-            - lower_case: a
-            - lower_case: x
-            - lower_case: "0"
+            - lower_case: h
+            - lower_case: w
+            - lower_case: j
           1:
-            - lower_case: i
-            - lower_case: y
+            - lower_case: s
+            - lower_case: f
             - lower_case: "9"
       3:
         parts:
           4:
-            - lower_case: t
-            - lower_case: c
+            - lower_case: i
+            - lower_case: y
             - lower_case: q
           2:
-            - lower_case: s
+            - lower_case: l
             - lower_case: m
             - lower_case: z
       4:
         parts:
           5:
-            - lower_case: n
-            - lower_case: f
+            - lower_case: e
+            - lower_case: b
             - lower_case: "2"
           3:
-            - lower_case: h
-            - lower_case: w
+            - lower_case: o
+            - lower_case: g
             - lower_case: "1"
       5:
         parts:
           6:
-            - lower_case: r
-            - lower_case: p
+            - lower_case: u
+            - lower_case: q
             - lower_case: "4"
           4:
-            - lower_case: l
-            - lower_case: g
+            - lower_case: a
+            - lower_case: v
             - lower_case: "3"
       6:
         parts:
           1:
-            - lower_case: u
-            - lower_case: b
+            - lower_case: r
+            - lower_case: p
             - lower_case: "6"
           5:
-            - lower_case: d
-            - lower_case: v
+            - lower_case: x
+            - lower_case: k
             - lower_case: "5"
