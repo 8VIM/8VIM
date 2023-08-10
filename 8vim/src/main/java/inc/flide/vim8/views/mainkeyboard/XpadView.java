@@ -184,13 +184,8 @@ public class XpadView extends View {
         // Then apply repeated rotation (45, then 90 x4) to get the final positions.
         computeLettersPositions(characterHeight, lengthOfLineDemarcatingSectors);
 
-        /*
         xformMatrix.reset();
-        xformMatrix.postRotate(360/MainKeypadActionListener.getSectors()/2, circleCenter.x, circleCenter.y);
-        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, CharacterPosition.values().length*2);
-         */
-        xformMatrix.reset();
-        xformMatrix.postRotate(360/MainKeypadActionListener.getSectors(), circleCenter.x, circleCenter.y);
+        xformMatrix.postRotate(90-360/MainKeypadActionListener.getSectors()/2, circleCenter.x, circleCenter.y);
         xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, MainKeypadActionListener.getLayoutPositions()*2);
 
 
