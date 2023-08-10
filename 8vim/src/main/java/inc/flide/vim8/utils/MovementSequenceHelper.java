@@ -1,6 +1,5 @@
 package inc.flide.vim8.utils;
 
-import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
@@ -15,7 +14,7 @@ public final class MovementSequenceHelper {
     }
 
     public static List<Integer> computeMovementSequence(int layer, Quadrant quadrant,
-                                                               CharacterPosition position) {
+                                                               int position) {
         List<Integer> movementSequence = new ArrayList<>();
 
         if (layer == Constants.HIDDEN_LAYER) {
@@ -34,7 +33,7 @@ public final class MovementSequenceHelper {
     }
 
     public static List<Integer> computeQuickMovementSequence(int layer, Quadrant quadrant,
-                                                                    CharacterPosition position) {
+                                                                    int position) {
         if (layer <= Constants.DEFAULT_LAYER) {
             return Collections.emptyList();
         }
@@ -48,11 +47,11 @@ public final class MovementSequenceHelper {
     }
 
     private static List<Integer> movementSequenceForExtraLayer(int layer, Quadrant quadrant,
-                                                                      CharacterPosition position) {
+                                                                      int position) {
         Quadrant oppositeQuadrant = quadrant.getOppositeQuadrant(position);
         List<Integer> movementSequence = new ArrayList<>();
 
-        int maxMovements = position.ordinal() + 1;
+        int maxMovements = position + 1;
         for (int i = 0; i <= maxMovements; i++) {
             int lastPosition =
                     movementSequence.isEmpty() ? FingerPosition.INSIDE_CIRCLE :
@@ -72,9 +71,9 @@ public final class MovementSequenceHelper {
     }
 
     private static List<Integer> movementSequencesForLayer(int layer, Quadrant quadrant,
-                                                                  CharacterPosition position) {
+                                                                  int position) {
         List<Integer> movementSequence = new ArrayList<>();
-        int maxMovements = position.ordinal() + 1;
+        int maxMovements = position + 1;
 
         if (layer > Constants.DEFAULT_LAYER) {
             ExtraLayer extraLayer = ExtraLayer.values()[layer - 2];

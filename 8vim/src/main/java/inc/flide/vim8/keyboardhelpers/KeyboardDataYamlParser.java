@@ -11,10 +11,8 @@ import com.networknt.schema.JsonSchemaException;
 import com.networknt.schema.JsonSchemaFactory;
 import com.networknt.schema.SpecVersionDetector;
 import com.networknt.schema.ValidationMessage;
-import inc.flide.vim8.structures.CharacterPosition;
+
 import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.Direction;
-import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.Quadrant;
@@ -80,6 +78,24 @@ public class KeyboardDataYamlParser {
 
             if (!extraLayers.isEmpty() && defaultLayer == null) {
                 return keyboardData;
+            }
+
+            // Find the longest action chain to suze the keyboard
+            if (defaultLayer != null) {
+                for (Map.Entry<Integer, Part> sectorEntry : defaultLayer.sectors.entrySet()) {
+                    int sector = sectorEntry.getKey();
+                    for (Map.Entry<Integer, List<Action>> partEntry : sectorEntry.getValue().parts.entrySet()) {
+                        keyboardData.layoutPositions = Math.max(keyboardData.layoutPositions, partEntry.getValue().size());
+                    }
+                }
+            }
+            for (Map.Entry<ExtraLayer, Layer> extraLayerMapEntry : extraLayers.entrySet()) {
+                for (Map.Entry<Integer, Part> sectorEntry : extraLayerMapEntry.getValue().sectors.entrySet()) {
+                    int sector = sectorEntry.getKey();
+                    for (Map.Entry<Integer, List<Action>> partEntry : sectorEntry.getValue().parts.entrySet()) {
+                        keyboardData.layoutPositions = Math.max(keyboardData.layoutPositions, partEntry.getValue().size());
+                    }
+                }
             }
 
             if (defaultLayer != null) {
@@ -154,6 +170,10 @@ public class KeyboardDataYamlParser {
         }
     }
 
+    private static int getCharacterSetSize(KeyboardData keyboardData) {
+        return Constants.NUMBER_OF_SECTORS * 2 * keyboardData.layoutPositions;
+    }
+
     private static void addKeyboardActions(KeyboardData keyboardData, int layer, Quadrant quadrant,
                                            List<Action> actions,
                                            Pair<StringBuilder, StringBuilder> characterSets) {
@@ -165,7 +185,7 @@ public class KeyboardDataYamlParser {
                 continue;
             }
 
-            CharacterPosition characterPosition = CharacterPosition.values()[i];
+            int characterPosition = i;
 
             List<Integer> movementSequence = action.movementSequence;
 
@@ -174,11 +194,11 @@ public class KeyboardDataYamlParser {
                         MovementSequenceHelper.computeMovementSequence(layer, quadrant, characterPosition);
             }
 
-            int characterSetIndex = quadrant.getCharacterIndexInString(characterPosition);
+            int characterSetIndex = quadrant.getCharacterIndexInString(characterPosition, keyboardData.layoutPositions);
 
             if (!action.lowerCase.isEmpty()) {
                 if (characterSets.getLeft().length() == 0) {
-                    characterSets.getLeft().setLength(Constants.CHARACTER_SET_SIZE);
+                    characterSets.getLeft().setLength(getCharacterSetSize(keyboardData));
                 }
                 characterSets.getLeft().setCharAt(characterSetIndex, action.lowerCase.charAt(0));
 
@@ -189,7 +209,7 @@ public class KeyboardDataYamlParser {
 
             if (!action.upperCase.isEmpty()) {
                 if (characterSets.getRight().length() == 0) {
-                    characterSets.getRight().setLength(Constants.CHARACTER_SET_SIZE);
+                    characterSets.getRight().setLength(getCharacterSetSize(keyboardData));
                 }
                 characterSets.getRight().setCharAt(characterSetIndex, action.upperCase.charAt(0));
             }

@@ -31,6 +31,7 @@ layers:
             - lower_case: l
             - lower_case: m
             - lower_case: z
+            - lower_case: "@"
       4:
         parts:
           5:

@@ -260,4 +260,8 @@ public class MainKeypadActionListener extends KeypadActionListener {
             handleInputKey(keyboardAction.getKeyEventCode(), keyboardAction.getKeyFlags());
         }
     }
+
+    public static int getLayoutPositions() {
+        return keyboardData.layoutPositions;
+    }
 }

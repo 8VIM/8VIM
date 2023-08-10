@@ -25,7 +25,6 @@ import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.FingerPosition;
 import inc.flide.vim8.ui.Theme;
@@ -58,8 +57,7 @@ public class XpadView extends View {
     // Finally, each letter position has an x & y co-ordinate.
 //    private final float[] letterPositions =
   //          new float[Constants.NUMBER_OF_SECTORS * 2 * CharacterPosition.values().length * 2];
-    private final float[] letterPositions =
-            new float[Constants.NUMBER_OF_SECTORS * 2 * CharacterPosition.values().length * 2];
+    private float[] letterPositions;
     private final Path sectorLines = new Path();
     private final RectF sectorLineBounds = new RectF();
     private final float[] trialPathPos = new float[2];
@@ -116,6 +114,8 @@ public class XpadView extends View {
 
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
+
+        this.letterPositions = new float[Constants.NUMBER_OF_SECTORS * 2 * MainKeypadActionListener.getLayoutPositions() * 2];
     }
 
     private void updateColors() {
@@ -191,7 +191,7 @@ public class XpadView extends View {
          */
         xformMatrix.reset();
         xformMatrix.postRotate(360/Constants.NUMBER_OF_SECTORS, circleCenter.x, circleCenter.y);
-        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, CharacterPosition.values().length*2);
+        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, MainKeypadActionListener.getLayoutPositions()*2);
 
 
         xformMatrix.reset();
@@ -199,10 +199,10 @@ public class XpadView extends View {
 
         for (int i = 1; i < Constants.NUMBER_OF_SECTORS; i++) {
             xformMatrix.mapPoints(letterPositions,
-                    CharacterPosition.values().length * 4 * i,
+                    MainKeypadActionListener.getLayoutPositions() * 4 * i,
                     letterPositions,
-                    CharacterPosition.values().length * 4 * (i - 1),
-                    CharacterPosition.values().length * 2);
+                    MainKeypadActionListener.getLayoutPositions()* 4 * (i - 1),
+                    MainKeypadActionListener.getLayoutPositions() * 2);
         }
 
         // Canvas.drawPosText() draws from the bottom,
@@ -222,8 +222,8 @@ public class XpadView extends View {
     private void computeLettersPositions(float characterHeight,
                                          float lengthOfLineDemarcatingSectors) {
         float eastEdge = circleCenter.x + circle.getRadius() + characterHeight / 2;
-        for (int i = 0; i < CharacterPosition.values().length; i++) {
-            float dx = i * lengthOfLineDemarcatingSectors / ((float) CharacterPosition.values().length);
+        for (int i = 0; i < MainKeypadActionListener.getLayoutPositions(); i++) {
+            float dx = i * lengthOfLineDemarcatingSectors / ((float) MainKeypadActionListener.getLayoutPositions());
             letterPositions[4 * i] = eastEdge + dx;
             letterPositions[4 * i + UPPER_LETTER_Y_IDX_OFFSET] = circleCenter.y - characterHeight / 2; // upper letter
             letterPositions[4 * i + LOWER_LETTER_X_IDX_OFFSET] = eastEdge + dx;

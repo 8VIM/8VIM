@@ -2,7 +2,6 @@ package inc.flide.vim8.utils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import inc.flide.vim8.structures.CharacterPosition;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;

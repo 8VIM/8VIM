@@ -100,7 +100,7 @@ public final class InputMethodServiceHelper {
             throws YamlException {
         KeyboardData tempKeyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
         keyboardData.setInfo(tempKeyboardData.getInfo());
-
+        keyboardData.layoutPositions = tempKeyboardData.layoutPositions;
         Map<List<Integer>, KeyboardAction> tempKeyboardDataActionMap =
                 tempKeyboardData.getActionMap();
         if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardDataActionMap)) {
