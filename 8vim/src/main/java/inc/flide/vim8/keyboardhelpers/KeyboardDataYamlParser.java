@@ -84,6 +84,7 @@ public class KeyboardDataYamlParser {
             if (defaultLayer != null) {
                 for (Map.Entry<Integer, Part> sectorEntry : defaultLayer.sectors.entrySet()) {
                     int sector = sectorEntry.getKey();
+                    keyboardData.sectors = Math.max(keyboardData.sectors, sector);
                     for (Map.Entry<Integer, List<Action>> partEntry : sectorEntry.getValue().parts.entrySet()) {
                         keyboardData.layoutPositions = Math.max(keyboardData.layoutPositions, partEntry.getValue().size());
                     }
@@ -92,6 +93,7 @@ public class KeyboardDataYamlParser {
             for (Map.Entry<ExtraLayer, Layer> extraLayerMapEntry : extraLayers.entrySet()) {
                 for (Map.Entry<Integer, Part> sectorEntry : extraLayerMapEntry.getValue().sectors.entrySet()) {
                     int sector = sectorEntry.getKey();
+                    keyboardData.sectors = Math.max(keyboardData.sectors, sector);
                     for (Map.Entry<Integer, List<Action>> partEntry : sectorEntry.getValue().parts.entrySet()) {
                         keyboardData.layoutPositions = Math.max(keyboardData.layoutPositions, partEntry.getValue().size());
                     }
@@ -171,7 +173,7 @@ public class KeyboardDataYamlParser {
     }
 
     private static int getCharacterSetSize(KeyboardData keyboardData) {
-        return Constants.NUMBER_OF_SECTORS * 2 * keyboardData.layoutPositions;
+        return keyboardData.sectors * 2 * keyboardData.layoutPositions;
     }
 
     private static void addKeyboardActions(KeyboardData keyboardData, int layer, Quadrant quadrant,
@@ -191,10 +193,10 @@ public class KeyboardDataYamlParser {
 
             if (movementSequence.isEmpty()) {
                 movementSequence =
-                        MovementSequenceHelper.computeMovementSequence(layer, quadrant, characterPosition);
+                        MovementSequenceHelper.computeMovementSequence(layer, quadrant, characterPosition, keyboardData);
             }
 
-            int characterSetIndex = quadrant.getCharacterIndexInString(characterPosition, keyboardData.layoutPositions);
+            int characterSetIndex = quadrant.getCharacterIndexInString(characterPosition, keyboardData);
 
             if (!action.lowerCase.isEmpty()) {
                 if (characterSets.getLeft().length() == 0) {
@@ -222,7 +224,7 @@ public class KeyboardDataYamlParser {
             keyboardData.addActionMap(movementSequence, actionMap);
             if (layer > Constants.DEFAULT_LAYER && action.movementSequence.isEmpty()) {
                 keyboardData.addActionMap(
-                        MovementSequenceHelper.computeQuickMovementSequence(layer, quadrant, characterPosition),
+                        MovementSequenceHelper.computeQuickMovementSequence(layer, quadrant, characterPosition, keyboardData),
                         actionMap);
             }
         }

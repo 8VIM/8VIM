@@ -77,6 +77,14 @@ public class MainKeypadActionListener extends KeypadActionListener {
                 customLayoutUri);
     }
 
+    public static int getSectors() {
+        return keyboardData.sectors;
+    }
+
+    public static KeyboardData getKayboardData() {
+        return keyboardData;
+    }
+
     public String getLowerCaseCharacters(int layer) {
         return keyboardData.getLowerCaseCharacters(layer);
     }

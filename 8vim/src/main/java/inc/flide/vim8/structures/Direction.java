@@ -9,8 +9,8 @@ public class Direction {
         return direction;
     }
 
-    public static int getOpposite(int direction) {
-        return ((direction - 1)+Constants.NUMBER_OF_SECTORS/2) % Constants.NUMBER_OF_SECTORS + 1;
+    public static int getOpposite(int direction, KeyboardData keyboardData) {
+        return ((direction - 1)+keyboardData.sectors/2) % keyboardData.sectors + 1;
     }
 
 }

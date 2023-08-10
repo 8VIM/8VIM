@@ -56,7 +56,7 @@ public class XpadView extends View {
     // There are 4 sectors, each has 4 letters above, and 4 below.
     // Finally, each letter position has an x & y co-ordinate.
 //    private final float[] letterPositions =
-  //          new float[Constants.NUMBER_OF_SECTORS * 2 * CharacterPosition.values().length * 2];
+  //          new float[MainKeypadActionListener.getSectors() * 2 * CharacterPosition.values().length * 2];
     private float[] letterPositions;
     private final Path sectorLines = new Path();
     private final RectF sectorLineBounds = new RectF();
@@ -115,7 +115,7 @@ public class XpadView extends View {
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
 
-        this.letterPositions = new float[Constants.NUMBER_OF_SECTORS * 2 * MainKeypadActionListener.getLayoutPositions() * 2];
+        this.letterPositions = new float[MainKeypadActionListener.getSectors() * 2 * MainKeypadActionListener.getLayoutPositions() * 2];
     }
 
     private void updateColors() {
@@ -173,9 +173,9 @@ public class XpadView extends View {
         // Compute sector demarcation lines as if they were all going orthogonal (like a "+").
         // This is easier to compute.  Later we apply rotation to orient the lines properly (like an "x").
         sectorLines.rewind();
-        for (int i=0; i<Constants.NUMBER_OF_SECTORS; i++) {
-            //double angle = -Math.PI * 2 / Constants.NUMBER_OF_SECTORS * i + Math.PI * 2 / Constants.NUMBER_OF_SECTORS/2;
-            double angle = - Math.PI/2 + (Math.PI*2/Constants.NUMBER_OF_SECTORS/2) - Math.PI * 2 / Constants.NUMBER_OF_SECTORS * i;
+        for (int i=0; i<MainKeypadActionListener.getSectors(); i++) {
+            //double angle = -Math.PI * 2 / MainKeypadActionListener.getSectors() * i + Math.PI * 2 / MainKeypadActionListener.getSectors()/2;
+            double angle = - Math.PI/2 + (Math.PI*2/MainKeypadActionListener.getSectors()/2) - Math.PI * 2 / MainKeypadActionListener.getSectors() * i;
             sectorLines.moveTo((float) (circleCenter.x + radius * Math.cos(angle)), (float) (circleCenter.y - radius * Math.sin(angle)));
             sectorLines.rLineTo((float) (lengthOfLineDemarcatingSectors * Math.cos(angle)), (float) (-lengthOfLineDemarcatingSectors * Math.sin(angle)));
         }
@@ -186,18 +186,18 @@ public class XpadView extends View {
 
         /*
         xformMatrix.reset();
-        xformMatrix.postRotate(360/Constants.NUMBER_OF_SECTORS/2, circleCenter.x, circleCenter.y);
+        xformMatrix.postRotate(360/MainKeypadActionListener.getSectors()/2, circleCenter.x, circleCenter.y);
         xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, CharacterPosition.values().length*2);
          */
         xformMatrix.reset();
-        xformMatrix.postRotate(360/Constants.NUMBER_OF_SECTORS, circleCenter.x, circleCenter.y);
+        xformMatrix.postRotate(360/MainKeypadActionListener.getSectors(), circleCenter.x, circleCenter.y);
         xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, MainKeypadActionListener.getLayoutPositions()*2);
 
 
         xformMatrix.reset();
-        xformMatrix.postRotate(360/Constants.NUMBER_OF_SECTORS, circleCenter.x, circleCenter.y);
+        xformMatrix.postRotate(360/MainKeypadActionListener.getSectors(), circleCenter.x, circleCenter.y);
 
-        for (int i = 1; i < Constants.NUMBER_OF_SECTORS; i++) {
+        for (int i = 1; i < MainKeypadActionListener.getSectors(); i++) {
             xformMatrix.mapPoints(letterPositions,
                     MainKeypadActionListener.getLayoutPositions() * 4 * i,
                     letterPositions,
@@ -456,7 +456,7 @@ public class XpadView extends View {
         if (circle.isPointInsideCircle(position)) {
             return FingerPosition.INSIDE_CIRCLE;
         } else {
-            return circle.getSectorOfPoint(position);
+            return circle.getSectorOfPoint(position, MainKeypadActionListener.getKayboardData());
         }
     }
 

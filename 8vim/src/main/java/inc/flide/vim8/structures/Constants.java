@@ -7,7 +7,6 @@ public final class Constants {
     public static final int HIDDEN_LAYER = 0;
     public static final int DEFAULT_LAYER = 1;
     public static final int MAX_LAYERS = 6;
-    public static final int NUMBER_OF_SECTORS = 6;
     public static final int MAX_RGB_COMPONENT_VALUE = 255;
     public static final int XPAD_ICON_ALPHA = 85;
     public static final int XPAD_CIRCLE_OFFSET_FACTOR = 26;

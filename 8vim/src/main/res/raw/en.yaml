@@ -7,7 +7,7 @@ layers:
             - lower_case: n
             - lower_case: d
             - lower_case: "8"
-          6:
+          4:
             - lower_case: t
             - lower_case: c
             - lower_case: "7"
@@ -34,7 +34,7 @@ layers:
             - lower_case: "@"
       4:
         parts:
-          5:
+          1:
             - lower_case: e
             - lower_case: b
             - lower_case: "2"
@@ -42,23 +42,4 @@ layers:
             - lower_case: o
             - lower_case: g
             - lower_case: "1"
-      5:
-        parts:
-          6:
-            - lower_case: u
-            - lower_case: q
-            - lower_case: "4"
-          4:
-            - lower_case: a
-            - lower_case: v
-            - lower_case: "3"
-      6:
-        parts:
-          1:
-            - lower_case: r
-            - lower_case: p
-            - lower_case: "6"
-          5:
-            - lower_case: x
-            - lower_case: k
-            - lower_case: "5"
+

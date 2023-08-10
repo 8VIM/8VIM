@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.structures.Direction;
 import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.utils.GeometricUtilities;
 
 public class Circle {
@@ -54,14 +55,14 @@ public class Circle {
     /**
      * Gets the angle of point p relative to the center
      */
-    private double getAngleInRadiansOfPointWithRespectToCentreOfCircle(PointF point) {
+    private double getAngleInRadiansOfPointWithRespectToCentreOfCircle(PointF point, KeyboardData keyboardData) {
         // Get difference of coordinates
         double x = point.x - centre.x;
         double y = centre.y - point.y;
 
         // Calculate angle with special atan (calculates the correct angle in all quadrants)
         double angle = Math.atan2(y, x);
-        double angleCenterFirstSector = - Math.PI/2 + (Math.PI*2/Constants.NUMBER_OF_SECTORS/2) - (Math.PI*2/Constants.NUMBER_OF_SECTORS/2);
+        double angleCenterFirstSector = - Math.PI/2 + (Math.PI*2/keyboardData.sectors/2) - (Math.PI*2/keyboardData.sectors/2);
         angle = angle - angleCenterFirstSector;
         // Make all angles positive
         if (angle < 0) {
@@ -73,13 +74,13 @@ public class Circle {
     /**
      * Get the number of the sector that point p is in
      */
-    public int getSectorOfPoint(PointF p) {
-        double angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p);
-        double angleToSectorValue = - angleDouble / (Math.PI  * 2 / Constants.NUMBER_OF_SECTORS);
+    public int getSectorOfPoint(PointF p, KeyboardData keyboardData) {
+        double angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p, keyboardData);
+        double angleToSectorValue = - angleDouble / (Math.PI  * 2 / keyboardData.sectors);
         int quadrantCyclic = (int) Math.round(angleToSectorValue);
-        quadrantCyclic = quadrantCyclic % Constants.NUMBER_OF_SECTORS;
+        quadrantCyclic = quadrantCyclic % keyboardData.sectors;
         if (quadrantCyclic < 0)
-                quadrantCyclic += Constants.NUMBER_OF_SECTORS;
+                quadrantCyclic += keyboardData.sectors;
         return quadrantCyclic+1;
     }
 }

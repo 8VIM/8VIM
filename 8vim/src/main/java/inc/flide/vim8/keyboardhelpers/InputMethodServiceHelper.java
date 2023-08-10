@@ -101,6 +101,7 @@ public final class InputMethodServiceHelper {
         KeyboardData tempKeyboardData = KeyboardDataYamlParser.readKeyboardData(inputStream);
         keyboardData.setInfo(tempKeyboardData.getInfo());
         keyboardData.layoutPositions = tempKeyboardData.layoutPositions;
+        keyboardData.sectors = tempKeyboardData.sectors;
         Map<List<Integer>, KeyboardAction> tempKeyboardDataActionMap =
                 tempKeyboardData.getActionMap();
         if (validateNoConflictingActions(keyboardData.getActionMap(), tempKeyboardDataActionMap)) {

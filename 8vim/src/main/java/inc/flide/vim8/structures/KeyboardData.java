@@ -9,6 +9,7 @@ public class KeyboardData {
     private final Map<List<Integer>, KeyboardAction> actionMap = new HashMap<>();
     private final CharacterSet[] characterSets = new CharacterSet[Constants.MAX_LAYERS + 1];
     public int layoutPositions = 0;
+    public int sectors = 1;
     private int totalLayers = 0;
     private Layout.LayoutInfo info;
 
