@@ -25,13 +25,15 @@ jobs:
         with:
           filters: |
             src:
-              - 8vim/**/*.java
-              - 8vim/**/*.kt
-              - 8vim/**/*.xml
-              - 8vim/**/*.pro
-              - "**.gradle"
-              - 8vim/src/main/res/raw/*.yaml
-              - 8vim/src/main/res/raw/*.yml
+              - '8vim/**/*.java'
+              - '8vim/**/*.kt'
+              - '8vim/**/*.xml'
+              - '8vim/**/*.pro'
+              - '**.gradle'
+              - '**.gradle.kts'
+              - 'gradle/libs.version.toml'
+              - '8vim/src/main/res/raw/*.yaml'
+              - '8vim/src/main/res/raw/*.yml'
               - modified: '8vim/src/main/resources/schema.json'
   bump_version:
     needs: changes
