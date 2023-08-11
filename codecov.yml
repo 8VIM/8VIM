@@ -2,3 +2,12 @@ comment:
   layout: "diff, flags, files"
   behavior: default
   require_changes: false
+flags:
+  unit:
+    ignore:
+      - 8vim/src/**/compose
+      - 8vim/src/**/app
+      - 8vim/src/**/ui
+      - 8vim/src/**/views
+      - 8vim/src/**/VIM8Application.kt
+      - 8vim/src/**/MainInputMethodService.java
