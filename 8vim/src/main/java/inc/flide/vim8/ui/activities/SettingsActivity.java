@@ -1,5 +1,8 @@
 package inc.flide.vim8.ui.activities;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -8,33 +11,30 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.provider.Settings;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
-import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.lib.android.AndroidSettings;
+import inc.flide.vim8.lib.android.SystemSettingsObserver;
 import inc.flide.vim8.ui.fragments.SettingsFragment;
-import inc.flide.vim8.utils.DialogsHelper;
-import java.util.List;
+import inc.flide.vim8.utils.InputMethodUtils;
+import inc.flide.vim8.views.MaterialCard;
 
 public class SettingsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private final HandlerThread handlerThread = new HandlerThread("SettingsActivityBackPress");
     private Handler backPressHandler;
-    private boolean isKeyboardEnabled;
     private boolean pressBackTwice;
     private final Runnable runnable = () -> pressBackTwice = false;
-    private ActivityResultLauncher<Intent> launchInputMethodSettings;
-    private InputMethodManager inputMethodManager;
+    private SystemSettingsObserver keyboardEnabledObserver;
+    private SystemSettingsObserver keyboardSelectedObserver;
+    private MaterialCard keyboardNotEnabledCard;
+    private MaterialCard keyboardNotSelectedCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,24 +57,70 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         navigationView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.settings_fragment, new SettingsFragment()).commit();
+        setupCards();
+    }
 
-        launchInputMethodSettings =
-                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                });
+    private void setupCards() {
+        keyboardNotEnabledCard = findViewById(R.id.error_card);
+        keyboardNotSelectedCard = findViewById(R.id.warning_card);
+        keyboardNotEnabledCard.setOnClickListener(
+                (v) -> InputMethodUtils.INSTANCE.showImeEnablerActivity(getApplicationContext()));
+        keyboardNotSelectedCard.setOnClickListener(
+                (v) -> InputMethodUtils.INSTANCE.showImePicker(getApplicationContext()));
+        keyboardEnabledObserver =
+                new SystemSettingsObserver(getApplicationContext(), this::updateCards);
+        keyboardSelectedObserver =
+                new SystemSettingsObserver(getApplicationContext(), this::updateCards);
+        updateCards();
+    }
 
-        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        observe();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        observe();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         handlerThread.quit();
+        removeObservers();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         backPressHandler.removeCallbacks(runnable);
+        removeObservers();
+    }
+
+    private void observe() {
+        observe(Settings.Secure.ENABLED_INPUT_METHODS, keyboardEnabledObserver);
+        observe(Settings.Secure.DEFAULT_INPUT_METHOD, keyboardSelectedObserver);
+    }
+
+    private void observe(String key, SystemSettingsObserver observer) {
+        Uri uri = AndroidSettings.INSTANCE.getSecure().getUriFor(key);
+        if (uri != null) {
+            getApplicationContext().getContentResolver().registerContentObserver(uri, false, observer);
+            observer.dispatchChange(false, uri);
+        }
+    }
+
+    private void removeObservers() {
+        removeObserver(keyboardEnabledObserver);
+        removeObserver(keyboardSelectedObserver);
+    }
+
+    private void removeObserver(SystemSettingsObserver observer) {
+        getApplicationContext().getContentResolver().unregisterContentObserver(observer);
     }
 
     @Override
@@ -116,60 +162,27 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         return true;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        List<InputMethodInfo> enabledInputMethodList = inputMethodManager.getEnabledInputMethodList();
-        isKeyboardEnabled = false;
-        for (InputMethodInfo inputMethodInfo : enabledInputMethodList) {
-            if (inputMethodInfo.getId().equals(Constants.SELF_KEYBOARD_ID)) {
-                isKeyboardEnabled = true;
-            }
-        }
-
-        if (isKeyboardEnabled) {
-            // Ask user to activate the IME while he is using the settings application
-            if (!Constants.SELF_KEYBOARD_ID.equals(
-                    Settings.Secure.getString(getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD))) {
-                activateInputMethodDialog();
-            }
-        }
+    private void updateCards() {
+        updateKeyboardNotEnabledCard();
+        updateKeyboardNotSelectedCard();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Ask user to enable the IME if it is not enabled yet
-        if (!isKeyboardEnabled) {
-            enableInputMethodDialog();
-        }
+    private void updateKeyboardNotEnabledCard() {
+        Context context = getApplicationContext();
+        String imeIds = AndroidSettings.INSTANCE.getSecure().getString(context, Settings.Secure.ENABLED_INPUT_METHODS);
+        int visibility =
+                imeIds != null && InputMethodUtils.INSTANCE.parseIs8VimEnabled(context, imeIds) ? GONE : VISIBLE;
+        keyboardNotEnabledCard.setVisibility(visibility);
     }
 
-    private void enableInputMethodDialog() {
-        DialogsHelper.createMaterialDialog(this, R.string.enable_ime_dialog_title, R.string.enable_ime_dialog_content,
-                R.string.enable_ime_dialog_neutral_button_text,
-                (dialog) -> {
-                    Snackbar.make(findViewById(android.R.id.content), getString(R.string.choose_the_8vim),
-                                    Snackbar.LENGTH_LONG)
-                            .addCallback(new Snackbar.Callback() {
-                                @Override
-                                public void onDismissed(Snackbar transientBottomBar, @DismissEvent int event) {
-                                    launchInputMethodSettings.launch(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS));
-                                }
-                            }).show();
-                    return null;
-                }).show();
-    }
-
-    private void activateInputMethodDialog() {
-        DialogsHelper.createMaterialDialog(this, R.string.activate_ime_dialog_title,
-                R.string.activate_ime_dialog_content,
-                R.string.activate_ime_dialog_positive_button_text,
-                (dialog) -> {
-                    inputMethodManager.showInputMethodPicker();
-                    return null;
-                }).show();
+    private void updateKeyboardNotSelectedCard() {
+        Context context = getApplicationContext();
+        String selectedImeId =
+                AndroidSettings.INSTANCE.getSecure().getString(context, Settings.Secure.DEFAULT_INPUT_METHOD);
+        boolean isSelected =
+                selectedImeId != null && InputMethodUtils.INSTANCE.parseIs8VimSelected(context, selectedImeId);
+        int visibility =
+                keyboardNotEnabledCard.getVisibility() == VISIBLE || isSelected ? GONE : VISIBLE;
+        keyboardNotSelectedCard.setVisibility(visibility);
     }
 }

@@ -5,80 +5,25 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
-import arrow.core.EitherKt;
-import arrow.core.Option;
 import inc.flide.vim8.R;
 import inc.flide.vim8.datastore.model.PreferenceData;
 import inc.flide.vim8.models.AppPrefs;
-import inc.flide.vim8.models.CustomLayout;
-import inc.flide.vim8.models.LayoutKt;
-import inc.flide.vim8.models.error.ExceptionWrapperError;
-import inc.flide.vim8.structures.AvailableLayouts;
+import inc.flide.vim8.models.AvailableLayouts;
 import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.theme.ThemeMode;
-import inc.flide.vim8.utils.AlertHelper;
 import inc.flide.vim8.utils.DialogsHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import kotlin.Pair;
 
-public class SettingsFragment extends PreferenceFragmentCompat {
-    private static final String[] LAYOUT_FILTER = {"application/octet-stream"};
-    private AppPrefs prefs;
-    private Set<String> customLayoutHistory = new LinkedHashSet<>();
+public class SettingsFragment extends LayoutFileSelector {
     private Context context;
-    private final ActivityResultLauncher<String[]> openContent =
-            registerForActivityResult(new ActivityResultContracts.OpenDocument(),
-                    selectedCustomLayoutFile -> {
-                        if (selectedCustomLayoutFile == null || context == null) {
-                            return;
-                        }
-                        final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
-                        context.getContentResolver()
-                                .takePersistableUriPermission(selectedCustomLayoutFile, takeFlags);
-                        CustomLayout layout = new CustomLayout(selectedCustomLayoutFile);
-                        Pair<Integer, String> errorToShow =
-                                EitherKt.merge(
-                                        LayoutKt
-                                                .loadKeyboardData(layout, context)
-                                                .mapLeft(error -> {
-                                                    int title = R.string.yaml_error_title;
-                                                    if (error instanceof ExceptionWrapperError) {
-                                                        title = R.string.generic_error_text;
-                                                    }
-                                                    return Option.fromNullable(new Pair<>(title, error.getMessage()));
-                                                })
-                                                .map(keyboardData -> {
-                                                    if (keyboardData.getTotalLayers() == 0) {
-                                                        return Option.fromNullable(
-                                                                new Pair<>(R.string.yaml_error_title,
-                                                                        "The layout requires at least one layer"));
-                                                    }
-                                                    return Option.<Pair<Integer, String>>fromNullable(null);
-                                                })).getOrNull();
-                        if (errorToShow != null) {
-                            AlertHelper.showAlert(context, errorToShow.getFirst(), errorToShow.getSecond());
-                            return;
-                        }
-                        List<String> history = new ArrayList<>(customLayoutHistory);
-                        history.add(0, selectedCustomLayoutFile.toString());
-                        customLayoutHistory = new LinkedHashSet<>(history);
-                        prefs.getLayout().getCurrent().set(layout, true);
-                        prefs.getLayout().getCustom().getHistory().set(customLayoutHistory, true);
-                    });
     private AvailableLayouts availableLayouts;
 
     @Override
@@ -144,15 +89,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         assert loadCustomKeyboardPreference != null;
 
         loadCustomKeyboardPreference.setOnPreferenceClickListener(preference -> {
-            askUserLoadCustomKeyboardLayout();
+            openFileSelector();
             return true;
         });
     }
 
-
-    private void askUserLoadCustomKeyboardLayout() {
-        openContent.launch(LAYOUT_FILTER);
-    }
 
     private void setupLayoutPreferenceAction() {
         Preference keyboardPref = findPreference(getString(R.string.pref_select_keyboard_layout_key));
@@ -220,5 +161,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     return null;
                 }).show();
     }
+
 
 }

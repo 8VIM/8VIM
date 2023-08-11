@@ -40,7 +40,7 @@ object InputMethodUtils {
         }.any { it?.packageName == context.packageName && it?.className == IME_SERVICE_CLASS_NAME }
     }
 
-    private fun parseIs8VimSelected(context: Context, selectedImeId: String): Boolean {
+    fun parseIs8VimSelected(context: Context, selectedImeId: String): Boolean {
         val component = ComponentName.unflattenFromString(selectedImeId)
         return component?.packageName == context.packageName && component?.className == IME_SERVICE_CLASS_NAME
     }

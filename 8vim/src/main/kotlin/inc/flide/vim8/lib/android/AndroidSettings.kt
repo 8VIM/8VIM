@@ -14,10 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import java.lang.reflect.Modifier
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
-import kotlin.reflect.KClass
 
 inline fun <R> tryOrNull(block: () -> R): R? {
     contract {
@@ -30,29 +28,10 @@ inline fun <R> tryOrNull(block: () -> R): R? {
     }
 }
 
-abstract class AndroidSettingsHelper(
-    private val kClass: KClass<*>
-) {
+abstract class AndroidSettingsHelper {
     abstract fun getString(context: Context, key: String): String?
 
     abstract fun getUriFor(key: String): Uri?
-
-    private fun reflectionGetAllStaticFields(kClass: KClass<*>) = sequence<Pair<String, String>> {
-        for (field in kClass.java.declaredFields) {
-            if (Modifier.isStatic(field.modifiers)) {
-                try {
-                    val value = field.get(null) as? String ?: continue
-                    yield(field.name to value)
-                } catch (e: Exception) {
-                    // Cannot access field, continue on to next one
-                }
-            }
-        }
-    }
-
-    fun getAllKeys(): Sequence<Pair<String, String>> {
-        return reflectionGetAllStaticFields(kClass)
-    }
 
     private fun observe(context: Context, key: String, observer: SystemSettingsObserver) {
         getUriFor(key)?.let { uri ->
@@ -109,7 +88,7 @@ abstract class AndroidSettingsHelper(
 }
 
 object AndroidSettings {
-    val Secure = object : AndroidSettingsHelper(Settings.Secure::class) {
+    val Secure = object : AndroidSettingsHelper() {
         override fun getString(context: Context, key: String): String? {
             return tryOrNull { Settings.Secure.getString(context.contentResolver, key) }
         }

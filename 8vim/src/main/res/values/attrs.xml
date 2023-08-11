@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MaterialCard">
+        <attr name="backgroundColor" format="color" />
+        <attr name="foregroundColor" format="color" />
+        <attr name="text" format="string" />
+        <attr name="android:text" format="string" />
+        <attr name="icon" format="reference" />
+    </declare-styleable>
+</resources>

@@ -1,13 +1,11 @@
 package inc.flide.vim8.datastore.model
 
-import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import java.util.concurrent.atomic.AtomicReference
 
-interface PreferenceData<V : Any> : OnSharedPreferenceChangeListener {
+interface PreferenceData<V : Any> {
     val serde: PreferenceSerDe<V>
     val key: String
     val default: V
@@ -16,6 +14,7 @@ interface PreferenceData<V : Any> : OnSharedPreferenceChangeListener {
     fun set(value: V, sync: Boolean = true)
     fun reset()
     fun hasObservers(): Boolean
+    fun dispatch()
     fun observe(owner: LifecycleOwner, observer: PreferenceObserver<V>)
     fun observe(observer: PreferenceObserver<V>)
     fun removeObserver(observer: PreferenceObserver<V>)
@@ -45,7 +44,7 @@ internal abstract class SharedPreferencePreferenceData<V : Any>(
 
     final override fun hasObservers(): Boolean = observers.isNotEmpty()
     final override fun reset() {
-        model.sharedPreferences.get()!!.edit().remove(key).apply()
+        model.sharedPreferences.get()?.edit()?.remove(key)?.apply()
         cachedValue.set(null)
     }
 
@@ -79,12 +78,10 @@ internal abstract class SharedPreferencePreferenceData<V : Any>(
         observers.remove(observer)
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == this.key) {
-            val newValue = serde.deserialize(model.sharedPreferences.get()!!, key, default)
-            cachedValue.set(newValue)
-            observers.forEach { it.onChanged(newValue) }
-        }
+    override fun dispatch() {
+        val newValue = serde.deserialize(model.sharedPreferences.get()!!, key, default)
+        cachedValue.set(newValue)
+        observers.forEach { it.onChanged(newValue) }
     }
 }
 

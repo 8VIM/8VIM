@@ -2,7 +2,7 @@ package inc.flide.vim8.datastore.model
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
+import android.content.SharedPreferences.Editor
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -10,13 +10,17 @@ import androidx.preference.PreferenceManager
 import inc.flide.vim8.lib.android.tryOrNull
 import java.util.concurrent.atomic.AtomicReference
 
-abstract class PreferenceModel(val version: Int) {
+abstract class PreferenceModel(val version: Int) : SharedPreferences.OnSharedPreferenceChangeListener {
     companion object {
         private const val INTERNAL_PREFIX = "__internal"
         internal const val DATASTORE_VERSION = "${INTERNAL_PREFIX}_datastore_version"
     }
 
     internal val sharedPreferences: AtomicReference<SharedPreferences?> = AtomicReference(null)
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        registry[key]?.dispatch()
+    }
 
     /*
     Allows migration to run if a user already has installed an old version 8VIM
@@ -28,7 +32,7 @@ abstract class PreferenceModel(val version: Int) {
             it.getInt(DATASTORE_VERSION, default)
         } ?: 0
 
-    private val registry: MutableList<PreferenceData<*>> = mutableListOf()
+    private val registry: MutableMap<String, PreferenceData<*>> = mutableMapOf()
     private var onReadyObserver: PreferenceObserver<Boolean>? = null
     fun isReady(): Boolean = sharedPreferences.get() != null
     fun onReady(owner: LifecycleOwner, observer: PreferenceObserver<Boolean>) {
@@ -57,12 +61,12 @@ abstract class PreferenceModel(val version: Int) {
     }
 
     private fun registryAdd(prefData: PreferenceData<*>) {
-        registry.add(prefData)
+        registry[prefData.key] = prefData
     }
 
     @Suppress("Unchecked_cast")
     private fun <V : Any> PreferenceData<V>.serialize(
-        editor: SharedPreferences.Editor,
+        editor: Editor,
         rawValue: Any?
     ) {
         rawValue?.let { serde.serialize(editor, key, it as V) }
@@ -133,7 +137,7 @@ abstract class PreferenceModel(val version: Int) {
         default: V
     ): PreferenceData<V> {
         val serde = object : PreferenceSerDe<V> {
-            override fun serialize(editor: SharedPreferences.Editor, key: String, value: V) {
+            override fun serialize(editor: Editor, key: String, value: V) {
                 editor.putString(key, value.toString())
             }
 
@@ -196,18 +200,17 @@ abstract class PreferenceModel(val version: Int) {
                     }
                 }
             }
-            registry.find { it.key == prefKey }?.let { prefData ->
+            registry[prefKey]?.let { prefData ->
                 prefData.deserialize(rawValue)
                 if (updateValue) {
                     prefData.serialize(editor, prefData.get())
                 }
-                Log.d("Datastore", "$prefKey = ${ prefData.getOrNull() }")
-                sharedPreferences.registerOnSharedPreferenceChangeListener(prefData)
             }
         }
         editor
             .putInt(DATASTORE_VERSION, version)
             .apply()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         onReadyObserver?.onChanged(true)
     }
 }

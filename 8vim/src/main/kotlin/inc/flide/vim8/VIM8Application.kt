@@ -3,8 +3,8 @@ package inc.flide.vim8
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import inc.flide.vim8.ime.KeyboardTheme
+import inc.flide.vim8.models.AvailableLayouts
 import inc.flide.vim8.models.appPreferenceModel
-import inc.flide.vim8.structures.AvailableLayouts
 import inc.flide.vim8.theme.ThemeMode
 import java.lang.ref.WeakReference
 
