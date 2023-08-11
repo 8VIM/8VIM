@@ -21,4 +21,5 @@ jobs:
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: ./8vim/build/reports/jacoco/jacocoTestReportDebug/jacocoTestReportDebug.xml
+          directory: ./8vim/build/reports/jacoco/jacocoTestReportDebug
+          flags: unit
