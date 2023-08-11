@@ -28,7 +28,6 @@ kotlin = "1.8.21"
 ksp = "1.8.21-1.0.11"
 logback-android = "3.0.0"
 mannodermaus-android-junit5 = "1.9.3.0"
-material-dialog = "3.3.0"
 slf4j = "2.0.7"
 
 # Testing
@@ -42,7 +41,7 @@ junit4 = "4.13.2"
 junit5 = "5.9.3"
 kotest = "5.6.2"
 kotest-arrow = "1.3.3"
-logback-classic = "1.2.11"
+logback-classic = "1.3.0"
 mockito = "5.3.1"
 mockk = "1.13.5"
 
@@ -66,7 +65,6 @@ arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-optics = { module = "io.arrow-kt:arrow-optics", version.ref = "arrow" }
 arrow-ksp = { module = "io.arrow-kt:arrow-optics-ksp-plugin", version.ref = "arrow" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
-material-dialog-core = { module = "com.afollestad.material-dialogs:core", version.ref = "material-dialog" }
 jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jackson-module-arrow-kotlin = { module = "io.arrow-kt:arrow-integrations-jackson-module", version.ref = "arrow-jackson" }

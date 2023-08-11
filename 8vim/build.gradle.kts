@@ -179,7 +179,6 @@ dependencies {
     implementation(libs.keyboardview)
 //    implementation(libs.kotlinx.coroutines)
     implementation(libs.logback.android)
-    implementation(libs.material.dialog.core)
     implementation(libs.slf4j.api)
 
     ksp(libs.arrow.ksp)

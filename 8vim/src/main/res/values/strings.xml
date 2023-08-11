@@ -138,7 +138,7 @@
     <string name="connect_using_google_play_store_label">Rate us on the Play Store</string>
 
     <!--    twitter-->
-    <string name="twitter_icon_content_description">"Twitter icon "</string>
+    <string name="twitter_icon_content_description">"Twitter icon"</string>
     <string name="connect_using_twitter_label">Follow us on Twitter</string>
 
     <string name="choose_the_8vim">Choose 8Vim above.We will NEVER collect any personal data.</string>
@@ -162,6 +162,6 @@
     <string name="setup__finish_up__description_p1">{app_name} is now enabled in the system and ready to be customized by you.</string>
     <string name="setup__finish_up__description_p2">If you encounter any issues, bugs, crashes or just want to make a suggestion, check out the project repository from the about screen!</string>
     <string name="setup__finish_up__finish_btn">Start Customizing</string>
-    <string name="ime_not_enabled">&appname; is not enabled in the system and thus won\'t be available as an input method in the input picker. Click here to resolve this issue.</string>
-    <string name="ime_not_selected">&appname; is not selected as the default input method. Click here to resolve this issue.</string>
+    <string name="ime_not_enabled">&appname; is not enabled in the system and thus won\'t be available as an input method in the input picker.\nClick here to resolve this issue.</string>
+    <string name="ime_not_selected">&appname; is not selected as the default input method.\nClick here to resolve this issue.</string>
 </resources>

@@ -119,12 +119,7 @@ public class SettingsFragment extends LayoutFileSelector {
         DialogsHelper.createItemsChoice(context, R.string.select_preferred_keyboard_layout_dialog_title,
                 availableLayouts.getDisplayNames(),
                 availableLayouts.getIndex(),
-                (dialog, which, text) -> {
-                    if (which != -1) {
-                        availableLayouts.selectLayout(context, which);
-                    }
-                    return null;
-                }).show();
+                which -> availableLayouts.selectLayout(context, which)).show();
     }
 
     private void askUserPreferredEmoticonKeyboard() {
@@ -154,12 +149,7 @@ public class SettingsFragment extends LayoutFileSelector {
         DialogsHelper.createItemsChoice(context, R.string.select_preferred_emoticon_keyboard_dialog_title,
                 inputMethodsNameAndId.keySet(),
                 selectedKeyboardIndex,
-                (dialog, which, text) -> {
-                    if (which != -1) {
-                        emoticonKeyboardPref.set(keyboardIds.get(which), true);
-                    }
-                    return null;
-                }).show();
+                 which -> emoticonKeyboardPref.set(keyboardIds.get(which), true)).show();
     }
 
 
