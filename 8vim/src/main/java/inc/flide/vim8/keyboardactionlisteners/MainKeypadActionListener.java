@@ -11,7 +11,6 @@ import inc.flide.vim8.models.KeyboardData;
 import inc.flide.vim8.models.LayerLevel;
 import inc.flide.vim8.models.MovementSequenceType;
 import inc.flide.vim8.models.yaml.ExtraLayer;
-import inc.flide.vim8.structures.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -20,6 +19,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainKeypadActionListener extends KeypadActionListener {
+    private static final int DELAY_MILLIS_LONG_PRESS_CONTINUATION = 50;
+    private static final int DELAY_MILLIS_LONG_PRESS_INITIATION = 500;
     private static final int FULL_ROTATION_STEPS = 7;
     private static final Set<List<FingerPosition>> extraLayerMovementSequences = new HashSet<>(
             ExtraLayer.MOVEMENT_SEQUENCES.values());
@@ -62,7 +63,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
             List<FingerPosition> movementSequenceAugmented = new ArrayList<>(movementSequence);
             movementSequenceAugmented.add(FingerPosition.LONG_PRESS);
             processMovementSequence(movementSequenceAugmented);
-            longPressHandler.postDelayed(this, Constants.DELAY_MILLIS_LONG_PRESS_CONTINUATION);
+            longPressHandler.postDelayed(this, DELAY_MILLIS_LONG_PRESS_CONTINUATION);
         }
     };
 
@@ -230,7 +231,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     private void initiateLongPressDetection() {
         isLongPressCallbackSet = true;
-        longPressHandler.postDelayed(longPressRunnable, Constants.DELAY_MILLIS_LONG_PRESS_INITIATION);
+        longPressHandler.postDelayed(longPressRunnable, DELAY_MILLIS_LONG_PRESS_INITIATION);
     }
 
     private void interruptLongPress() {

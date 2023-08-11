@@ -1,6 +1,7 @@
 package inc.flide.vim8.views.mainkeyboard;
 
 import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
+import static inc.flide.vim8.models.QuadrantKt.NUMBER_OF_SECTORS;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -30,9 +31,12 @@ import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.FingerPosition;
 import inc.flide.vim8.models.LayerLevel;
-import inc.flide.vim8.structures.Constants;
 
 public class XpadView extends View {
+    public static final int XPAD_ICON_ALPHA = 85;
+    public static final int XPAD_CIRCLE_OFFSET_FACTOR = 26;
+    public static final float XPAD_CIRCLE_RADIUS_FACTOR = 40f;
+    public static final float XPAD_LETTER_HIGHLIGHT_ROUNDNESS = 25f;
     public static final float FOREGROUND_STROKE_FACTOR = 0.75f;
     public static final float LETTER_BACKGROUND_BLEND_RATIO = 0.5f;
     public static final int DEGREE_45 = 45;
@@ -57,7 +61,7 @@ public class XpadView extends View {
     // There are 4 sectors, each has 4 letters above, and 4 below.
     // Finally, each letter position has an x & y co-ordinate.
     private final float[] letterPositions =
-            new float[Constants.NUMBER_OF_SECTORS * 2 * Constants.NUMBER_OF_SECTORS * 2];
+            new float[NUMBER_OF_SECTORS * 2 * NUMBER_OF_SECTORS * 2];
     private final Path sectorLines = new Path();
     private final RectF sectorLineBounds = new RectF();
     private final float[] trialPathPos = new float[2];
@@ -126,12 +130,12 @@ public class XpadView extends View {
         float spRadiusValue = circlePrefs.getRadiusSizeFactor().get();
         boolean preferredSidebarLeft = prefs.getKeyboard().getSidebar().isOnLeft().get();
 
-        float radius = (spRadiusValue / Constants.XPAD_CIRCLE_RADIUS_FACTOR * keypadDimension.height) / 2;
+        float radius = (spRadiusValue / XPAD_CIRCLE_RADIUS_FACTOR * keypadDimension.height) / 2;
 
         int offsetX =
-                (circlePrefs.getXCentreOffset().get()) * Constants.XPAD_CIRCLE_OFFSET_FACTOR;
+                (circlePrefs.getXCentreOffset().get()) * XPAD_CIRCLE_OFFSET_FACTOR;
         int offsetY =
-                (circlePrefs.getYCentreOffset().get()) * Constants.XPAD_CIRCLE_OFFSET_FACTOR;
+                (circlePrefs.getYCentreOffset().get()) * XPAD_CIRCLE_OFFSET_FACTOR;
 
         float characterHeight =
                 foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
@@ -183,11 +187,11 @@ public class XpadView extends View {
 
         xformMatrix.reset();
         xformMatrix.postRotate(DEGREE_90, circleCenter.x, circleCenter.y);
-        for (int i = 1; i < Constants.NUMBER_OF_SECTORS; i++) {
+        for (int i = 1; i < NUMBER_OF_SECTORS; i++) {
             xformMatrix.mapPoints(letterPositions,
-                    Constants.NUMBER_OF_SECTORS * Constants.NUMBER_OF_SECTORS * i,
+                    NUMBER_OF_SECTORS * NUMBER_OF_SECTORS * i,
                     letterPositions,
-                    Constants.NUMBER_OF_SECTORS * Constants.NUMBER_OF_SECTORS * (i - 1),
+                    NUMBER_OF_SECTORS * NUMBER_OF_SECTORS * (i - 1),
                     8);
         }
 
@@ -208,13 +212,13 @@ public class XpadView extends View {
     private void computeLettersPositions(float characterHeight,
                                          float lengthOfLineDemarcatingSectors) {
         float eastEdge = circleCenter.x + circle.radius + characterHeight / 2;
-        for (int i = 0; i < Constants.NUMBER_OF_SECTORS; i++) {
-            float dx = i * lengthOfLineDemarcatingSectors / ((float) Constants.NUMBER_OF_SECTORS);
-            letterPositions[Constants.NUMBER_OF_SECTORS * i] = eastEdge + dx;
-            letterPositions[Constants.NUMBER_OF_SECTORS * i + UPPER_LETTER_Y_IDX_OFFSET] =
+        for (int i = 0; i < NUMBER_OF_SECTORS; i++) {
+            float dx = i * lengthOfLineDemarcatingSectors / ((float) NUMBER_OF_SECTORS);
+            letterPositions[NUMBER_OF_SECTORS * i] = eastEdge + dx;
+            letterPositions[NUMBER_OF_SECTORS * i + UPPER_LETTER_Y_IDX_OFFSET] =
                     circleCenter.y - characterHeight / 2; // upper letter
-            letterPositions[Constants.NUMBER_OF_SECTORS * i + LOWER_LETTER_X_IDX_OFFSET] = eastEdge + dx;
-            letterPositions[Constants.NUMBER_OF_SECTORS * i + LOWER_LETTER_Y_IDX_OFFSET] =
+            letterPositions[NUMBER_OF_SECTORS * i + LOWER_LETTER_X_IDX_OFFSET] = eastEdge + dx;
+            letterPositions[NUMBER_OF_SECTORS * i + LOWER_LETTER_Y_IDX_OFFSET] =
                     circleCenter.y + characterHeight / 2; // lower letter
         }
     }
@@ -305,7 +309,7 @@ public class XpadView extends View {
                             letterPositions[i * 2 + 1] - characterHeightWidth,
                             letterPositions[i * 2] + (characterHeightWidth / 2),
                             letterPositions[i * 2 + 1] + (characterHeightWidth / 2),
-                            Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS, Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS,
+                            XPAD_LETTER_HIGHLIGHT_ROUNDNESS, XPAD_LETTER_HIGHLIGHT_ROUNDNESS,
                             letterBackgroundPaint
                     );
 
@@ -314,7 +318,7 @@ public class XpadView extends View {
                             letterPositions[i * 2 + 1] - characterHeightWidth,
                             letterPositions[i * 2] + (characterHeightWidth / 2),
                             letterPositions[i * 2 + 1] + (characterHeightWidth / 2),
-                            Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS, Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS,
+                            XPAD_LETTER_HIGHLIGHT_ROUNDNESS, XPAD_LETTER_HIGHLIGHT_ROUNDNESS,
                             letterBackgroundOutlinePaint
                     );
                 }
@@ -394,7 +398,7 @@ public class XpadView extends View {
                 coordinateX + iconSize,
                 coordinateY + iconSize);
         iconVectorDrawable.setTint(keyboardTheme.getForegroundColor());
-        iconVectorDrawable.setAlpha(Constants.XPAD_ICON_ALPHA);
+        iconVectorDrawable.setAlpha(XPAD_ICON_ALPHA);
         iconVectorDrawable.draw(canvas);
     }
 

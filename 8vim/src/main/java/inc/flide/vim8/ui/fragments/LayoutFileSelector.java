@@ -13,7 +13,7 @@ import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.CustomLayout;
 import inc.flide.vim8.models.LayoutKt;
 import inc.flide.vim8.models.error.ExceptionWrapperError;
-import inc.flide.vim8.utils.AlertHelper;
+import inc.flide.vim8.utils.DialogsHelper;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,7 +39,7 @@ public abstract class LayoutFileSelector extends PreferenceFragmentCompat {
         Set<String> currentHistory = layoutPrefs.getCustom().getHistory().get();
         boolean isInHistory = currentHistory.contains(selectedCustomLayoutFile.toString());
         if (isInHistory) {
-            updateKeyboard(layout);
+            updateKeyboard(layout, context);
         } else {
             Pair<Integer, String> errorToShow =
                     EitherKt.getOrElse(
@@ -59,19 +59,19 @@ public abstract class LayoutFileSelector extends PreferenceFragmentCompat {
                                 return new Pair<>(title, error.getMessage());
                             });
             if (errorToShow != null) {
-                AlertHelper.showAlert(context, errorToShow.getFirst(), errorToShow.getSecond());
+                DialogsHelper.showAlert(context, errorToShow.getFirst(), errorToShow.getSecond());
                 return;
             }
-            updateKeyboard(layout);
+            updateKeyboard(layout, context);
             List<String> history = new ArrayList<>(currentHistory);
             history.add(0, selectedCustomLayoutFile.toString());
             layoutPrefs.getCustom().getHistory().set(new LinkedHashSet<>(history), true);
         }
     }
 
-    private void updateKeyboard(CustomLayout layout) {
+    private void updateKeyboard(CustomLayout layout, Context context) {
         prefs.getLayout().getCurrent().set(layout, true);
-        MainKeypadActionListener.rebuildKeyboardData(LayoutKt.loadKeyboardData(layout, getContext()).getOrNull());
+        MainKeypadActionListener.rebuildKeyboardData(LayoutKt.loadKeyboardData(layout, context).getOrNull());
     }
 
     protected void openFileSelector() {

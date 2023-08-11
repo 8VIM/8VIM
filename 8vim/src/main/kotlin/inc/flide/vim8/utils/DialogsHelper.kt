@@ -9,8 +9,10 @@ import java.util.function.IntConsumer
 object DialogsHelper {
     @JvmStatic
     fun createItemsChoice(
-        context: Context, titleRes: Int,
-        items: Collection<String>, selectedIndex: Int,
+        context: Context,
+        titleRes: Int,
+        items: Collection<String>,
+        selectedIndex: Int,
         callback: IntConsumer
     ): AlertDialog {
         var currentIndex = selectedIndex
@@ -20,12 +22,21 @@ object DialogsHelper {
                 if (currentIndex != -1 && currentIndex != selectedIndex) {
                     callback.accept(currentIndex)
                 }
-
             }
             .setNegativeButton(R.string.generic_cancel_text, null)
             .setSingleChoiceItems(items.toTypedArray(), selectedIndex) { _, which ->
                 currentIndex = which
             }
+            .show()
+    }
+
+    @JvmStatic
+    fun showAlert(context: Context, titleRes: Int, message: String) {
+        MaterialAlertDialogBuilder(context)
+            .setTitle(titleRes)
+            .setMessage(message)
+            .setPositiveButton(R.string.generic_okay_text, null)
+            .show()
             .show()
     }
 }

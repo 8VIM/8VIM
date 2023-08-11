@@ -12,7 +12,8 @@ import java.util.Locale
 
 @optics
 data class Action(
-    @JsonProperty(value = "type") val actionType: KeyboardActionType = KeyboardActionType.INPUT_TEXT,
+    @JsonProperty(value = "type")
+    val actionType: KeyboardActionType = KeyboardActionType.INPUT_TEXT,
     val lowerCase: String = "",
     val upperCase: String = "",
     val movementSequence: List<FingerPosition> = ArrayList(),
@@ -39,8 +40,12 @@ data class Action(
     }
 }
 
-fun Action?.isEmpty(): Boolean = this == null || (
-    this.lowerCase.isEmpty() &&
-        this.upperCase.isEmpty() &&
-        this.movementSequence.isEmpty() && this.flags.value == 0
-    )
+fun Action?.isEmpty(): Boolean {
+    return this?.let {
+        lowerCase.isEmpty() &&
+            upperCase.isEmpty() &&
+            movementSequence.isEmpty() &&
+            flags.value == 0
+    }
+        ?: true
+}

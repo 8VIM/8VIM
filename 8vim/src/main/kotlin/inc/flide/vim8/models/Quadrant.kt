@@ -1,7 +1,8 @@
 package inc.flide.vim8.models
 
 import arrow.optics.optics
-import inc.flide.vim8.structures.Constants
+
+const val NUMBER_OF_SECTORS = 4
 
 @optics
 data class Quadrant(val sector: Direction, val part: Direction) {
@@ -14,7 +15,7 @@ data class Quadrant(val sector: Direction, val part: Direction) {
             Direction.LEFT -> if (part === Direction.BOTTOM) 3 else 4
             Direction.BOTTOM -> if (part === Direction.RIGHT) 1 else 2
         }
-        val base = index / 2 * (Constants.NUMBER_OF_SECTORS * 2)
+        val base = index / 2 * (NUMBER_OF_SECTORS * 2)
         val delta = index % 2
         return base + characterPosition.ordinal * 2 + delta
     }

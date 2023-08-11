@@ -1,6 +1,5 @@
 package inc.flide.vim8.models
 
-import inc.flide.vim8.structures.Constants
 import kotlin.math.abs
 
 enum class Direction {
@@ -9,7 +8,7 @@ enum class Direction {
     companion object {
         @JvmStatic
         fun baseQuadrant(continuousQuadrantValue: Int): Direction {
-            val result = abs(continuousQuadrantValue % Constants.NUMBER_OF_SECTORS)
+            val result = abs(continuousQuadrantValue % NUMBER_OF_SECTORS)
             return values()[result]
         }
     }

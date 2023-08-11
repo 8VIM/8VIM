@@ -11,7 +11,6 @@ import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
-import inc.flide.vim8.structures.Constants;
 
 public abstract class ButtonKeypadView extends KeyboardView {
     private final Paint foregroundPaint = new Paint();
@@ -54,7 +53,7 @@ public abstract class ButtonKeypadView extends KeyboardView {
                 // on xpad view
                 key.icon = key.icon.mutate();
                 key.icon.setTint(keyboardTheme.getForegroundColor());
-                key.icon.setAlpha(Constants.MAX_RGB_COMPONENT_VALUE);
+                key.icon.setAlpha(255);
             }
         }
         invalidate();

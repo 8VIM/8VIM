@@ -2,12 +2,12 @@ package inc.flide.vim8.ime
 
 import android.view.KeyEvent
 import inc.flide.vim8.ime.KeyboardDataYamlParser.readKeyboardData
+import inc.flide.vim8.models.CHARACTER_SET_SIZE
 import inc.flide.vim8.models.CustomKeycode
 import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
 import inc.flide.vim8.models.KeyboardActionType
 import inc.flide.vim8.models.LayerLevel
-import inc.flide.vim8.structures.Constants
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome
@@ -130,16 +130,18 @@ class KeyboardDataYamlParserTest : DescribeSpec({
                 )
             )
             val stringBuilder = StringBuilder()
-            stringBuilder.setLength(Constants.CHARACTER_SET_SIZE)
+            stringBuilder.setLength(CHARACTER_SET_SIZE)
             stringBuilder.setCharAt(0, 'n')
             val inputStream = javaClass.getResourceAsStream("/valid_file.yaml")
             val keyboardData = readKeyboardData(inputStream).shouldBeRight()
             keyboardData.totalLayers shouldBe 2
-            keyboardData.lowerCaseCharacters(LayerLevel.FIRST) shouldBeSome stringBuilder.toString()
+            val lowerCaseCharacters = keyboardData.lowerCaseCharacters(LayerLevel.FIRST)
+            lowerCaseCharacters shouldBeSome stringBuilder.toString()
 
             stringBuilder.setCharAt(0, 'C')
             stringBuilder.setCharAt(2, 'a')
-            keyboardData.upperCaseCharacters(LayerLevel.SECOND) shouldBeSome stringBuilder.toString()
+            val upperCaseCharacters = keyboardData.upperCaseCharacters(LayerLevel.SECOND)
+            upperCaseCharacters shouldBeSome stringBuilder.toString()
             keyboardData.actionMap shouldContainExactly movementSequences
         }
 

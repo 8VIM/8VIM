@@ -10,7 +10,8 @@ import androidx.preference.PreferenceManager
 import inc.flide.vim8.lib.android.tryOrNull
 import java.util.concurrent.atomic.AtomicReference
 
-abstract class PreferenceModel(val version: Int) : SharedPreferences.OnSharedPreferenceChangeListener {
+abstract class PreferenceModel(val version: Int) :
+    SharedPreferences.OnSharedPreferenceChangeListener {
     companion object {
         private const val INTERNAL_PREFIX = "__internal"
         internal const val DATASTORE_VERSION = "${INTERNAL_PREFIX}_datastore_version"

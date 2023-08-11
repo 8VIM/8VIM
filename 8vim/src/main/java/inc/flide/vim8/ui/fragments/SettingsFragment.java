@@ -1,25 +1,20 @@
 package inc.flide.vim8.ui.fragments;
 
 
-import static android.content.Context.INPUT_METHOD_SERVICE;
 import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.inputmethod.InputMethodInfo;
-import android.view.inputmethod.InputMethodManager;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import inc.flide.vim8.R;
 import inc.flide.vim8.datastore.model.PreferenceData;
 import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.AvailableLayouts;
-import inc.flide.vim8.structures.Constants;
 import inc.flide.vim8.theme.ThemeMode;
 import inc.flide.vim8.utils.DialogsHelper;
+import inc.flide.vim8.utils.InputMethodUtils;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SettingsFragment extends LayoutFileSelector {
@@ -123,17 +118,9 @@ public class SettingsFragment extends LayoutFileSelector {
     }
 
     private void askUserPreferredEmoticonKeyboard() {
-        InputMethodManager imeManager =
-                (InputMethodManager) context.getSystemService(INPUT_METHOD_SERVICE);
-        List<InputMethodInfo> inputMethods = imeManager.getEnabledInputMethodList();
 
-        Map<String, String> inputMethodsNameAndId = new HashMap<>();
-        for (InputMethodInfo inputMethodInfo : inputMethods) {
-            if (inputMethodInfo.getId().compareTo(Constants.SELF_KEYBOARD_ID) != 0) {
-                inputMethodsNameAndId.put(inputMethodInfo.loadLabel(context.getPackageManager()).toString(),
-                        inputMethodInfo.getId());
-            }
-        }
+        Map<String, String> inputMethodsNameAndId = InputMethodUtils.INSTANCE.listOtherKeyboard(context);
+
         ArrayList<String> keyboardIds = new ArrayList<>(inputMethodsNameAndId.values());
 
         PreferenceData<String> emoticonKeyboardPref = prefs.getKeyboard().getEmoticonKeyboard();
@@ -149,7 +136,7 @@ public class SettingsFragment extends LayoutFileSelector {
         DialogsHelper.createItemsChoice(context, R.string.select_preferred_emoticon_keyboard_dialog_title,
                 inputMethodsNameAndId.keySet(),
                 selectedKeyboardIndex,
-                 which -> emoticonKeyboardPref.set(keyboardIds.get(which), true)).show();
+                which -> emoticonKeyboardPref.set(keyboardIds.get(which), true)).show();
     }
 
 

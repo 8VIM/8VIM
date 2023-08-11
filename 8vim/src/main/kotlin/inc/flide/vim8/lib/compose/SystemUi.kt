@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.inputmethodservice.InputMethodService
-import android.os.Build
 import android.view.View
 import android.view.Window
 import androidx.compose.material3.MaterialTheme
@@ -138,9 +137,9 @@ private class AppSystemUiController(
         }
 
     override var isNavigationBarContrastEnforced: Boolean
-        get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && window.isNavigationBarContrastEnforced
+        get() = AndroidVersion.ATLEAST_API29_Q && window.isNavigationBarContrastEnforced
         set(value) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (AndroidVersion.ATLEAST_API29_Q) {
                 window.isNavigationBarContrastEnforced = value
             }
         }

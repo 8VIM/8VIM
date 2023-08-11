@@ -63,6 +63,9 @@ private val stepHeaderNumberBoxSize = 40.dp
 private val stepHeaderNumberBoxPaddingEnd = 16.dp
 private val stepHeaderTextBoxHeight = 32.dp
 private val stepHeaderTextInnerPaddingHorizontal = 16.dp
+private val stepStrokeWidth = 2.dp
+private val stepStrokeX =
+    -(stepHeaderNumberBoxPaddingEnd + (stepHeaderNumberBoxSize / 2 - stepStrokeWidth / 2))
 
 data class Step(
     val id: Int,
@@ -225,14 +228,11 @@ private fun ColumnScope.Step(
         Box(
             modifier = if (currentStepId < totalSteps) {
                 modifier.drawBehind {
-                    val strokeWidth = 2.dp
-                    val x =
-                        -(stepHeaderNumberBoxPaddingEnd + (stepHeaderNumberBoxSize / 2 - strokeWidth / 2))
                     drawLine(
                         color = onBackground,
-                        start = Offset(x.toPx(), 0f),
-                        end = Offset(x.toPx(), size.height),
-                        strokeWidth = strokeWidth.toPx(),
+                        start = Offset(stepStrokeX.toPx(), 0f),
+                        end = Offset(stepStrokeX.toPx(), size.height),
+                        strokeWidth = stepStrokeWidth.toPx(),
                         pathEffect = PathEffect.dashPathEffect(
                             floatArrayOf(
                                 2.dp.toPx(),

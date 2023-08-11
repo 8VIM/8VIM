@@ -19,11 +19,13 @@ import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersionDetector
 import com.networknt.schema.ValidationMessage
+import inc.flide.vim8.models.CHARACTER_SET_SIZE
 import inc.flide.vim8.models.CharacterPosition
 import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
 import inc.flide.vim8.models.KeyboardData
 import inc.flide.vim8.models.LayerLevel
+import inc.flide.vim8.models.MovementSequence
 import inc.flide.vim8.models.Quadrant
 import inc.flide.vim8.models.error.ExceptionWrapperError
 import inc.flide.vim8.models.error.InvalidLayoutError
@@ -38,7 +40,6 @@ import inc.flide.vim8.models.yaml.Layout
 import inc.flide.vim8.models.yaml.isEmpty
 import inc.flide.vim8.models.yaml.toLayerLevel
 import inc.flide.vim8.models.yaml.upperCase
-import inc.flide.vim8.structures.Constants
 import java.io.IOException
 import java.io.InputStream
 import java.text.MessageFormat
@@ -87,13 +88,11 @@ object KeyboardDataYamlParser {
                         if (layers.extraLayers.isNotEmpty() && layers.defaultLayer.isNone()) {
                             keyboardWithHiddenLayer
                         } else {
-                            (
-                                layers.defaultLayer
-                                    .map { LayerLevel.FIRST to it }
-                                    .toMap() + layers
-                                    .extraLayers
-                                    .mapKeys { it.key.toLayerLevel() }
-                                )
+                            val layersToAdd = layers.defaultLayer
+                                .map { LayerLevel.FIRST to it }
+                                .toMap() + layers.extraLayers
+                                .mapKeys { it.key.toLayerLevel() }
+                            layersToAdd
                                 .fold(keyboardWithHiddenLayer) { acc, (layerId, layer) ->
                                     addLayer(acc, layerId, layer)
                                 }
@@ -155,7 +154,7 @@ object KeyboardDataYamlParser {
             .setUpperCaseCharacters(upperCaseCharacters.toString(), layer)
     }
 
-    private fun addKeyboardActions(actions: List<Action>): Map<List<FingerPosition>, KeyboardAction> {
+    private fun addKeyboardActions(actions: List<Action>): Map<MovementSequence, KeyboardAction> {
         return actions
             .filterNot { it.movementSequence.isEmpty() }
             .associateBy({ it.movementSequence }, {
@@ -175,14 +174,14 @@ object KeyboardDataYamlParser {
         quadrant: Quadrant,
         actions: List<Action?>,
         characterSets: Pair<StringBuilder, StringBuilder>
-    ): Map<List<FingerPosition>, KeyboardAction> {
+    ): Map<MovementSequence, KeyboardAction> {
         return actions
             .take(4)
             .withIndex()
             .filterNot { it.value.isEmpty() }
             .fold(emptyMap()) { acc, (i, action) ->
                 val characterPosition = CharacterPosition.values()[i]
-                var movementSequence: List<FingerPosition> = action!!.movementSequence
+                var movementSequence: MovementSequence = action!!.movementSequence
                 if (movementSequence.isEmpty()) {
                     movementSequence = FingerPosition.computeMovementSequence(
                         layer,
@@ -194,7 +193,7 @@ object KeyboardDataYamlParser {
                     quadrant.characterIndexInString(characterPosition)
                 val updatedAction = if (action.lowerCase.isNotEmpty()) {
                     if (characterSets.first.isEmpty()) {
-                        characterSets.first.setLength(Constants.CHARACTER_SET_SIZE)
+                        characterSets.first.setLength(CHARACTER_SET_SIZE)
                     }
                     characterSets.first.setCharAt(characterSetIndex, action.lowerCase[0])
                     if (action.upperCase.isEmpty()) {
@@ -207,7 +206,7 @@ object KeyboardDataYamlParser {
                 }
                 if (updatedAction.upperCase.isNotEmpty()) {
                     if (characterSets.second.isEmpty()) {
-                        characterSets.second.setLength(Constants.CHARACTER_SET_SIZE)
+                        characterSets.second.setLength(CHARACTER_SET_SIZE)
                     }
                     characterSets.second.setCharAt(
                         characterSetIndex,

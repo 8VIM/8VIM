@@ -8,9 +8,11 @@ import arrow.optics.optics
 import arrow.optics.typeclasses.Index
 import inc.flide.vim8.models.yaml.LayoutInfo
 
+const val CHARACTER_SET_SIZE = 4 * 4 * 2 // 4 sectors, 2 parts, 4 characters per parts
+
 @optics
 data class KeyboardData(
-    val actionMap: Map<List<FingerPosition>, KeyboardAction> = HashMap(),
+    val actionMap: Map<MovementSequence, KeyboardAction> = HashMap(),
     val characterSets: List<CharacterSet> = List(LayerLevel.VisibleLayers.size) { CharacterSet() },
     val info: LayoutInfo = LayoutInfo()
 ) {
@@ -20,7 +22,7 @@ data class KeyboardData(
         .indexOfLast { it.isNotEmpty() }
         .let { if (it == -1) 0 else it + 1 }
 
-    fun addAllToActionMap(actionMapAddition: Map<List<FingerPosition>, KeyboardAction>): KeyboardData {
+    fun addAllToActionMap(actionMapAddition: Map<MovementSequence, KeyboardAction>): KeyboardData {
         return KeyboardData.actionMap.modify(this) {
             it + actionMapAddition
         }

@@ -27,11 +27,12 @@ fun ProvideLocalizedResources(
     forceLayoutDirection: LayoutDirection? = null,
     content: @Composable () -> Unit
 ) {
-    val layoutDirection = forceLayoutDirection ?: when (resourcesContext.resources.configuration.layoutDirection) {
-        View.LAYOUT_DIRECTION_LTR -> LayoutDirection.Ltr
-        View.LAYOUT_DIRECTION_RTL -> LayoutDirection.Rtl
-        else -> error("Given configuration specifies invalid layout direction!")
-    }
+    val layoutDirection =
+        forceLayoutDirection ?: when (resourcesContext.resources.configuration.layoutDirection) {
+            View.LAYOUT_DIRECTION_LTR -> LayoutDirection.Ltr
+            View.LAYOUT_DIRECTION_RTL -> LayoutDirection.Rtl
+            else -> error("Given configuration specifies invalid layout direction!")
+        }
     CompositionLocalProvider(
         localResourcesContext provides resourcesContext,
         LocalLayoutDirection provides layoutDirection,
