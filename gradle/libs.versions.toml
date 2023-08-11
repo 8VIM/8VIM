@@ -2,7 +2,7 @@
 # Main
 accompanist = "0.30.1"
 androidx-activity = "1.7.2"
-android-gradle-plugin = "8.0.2"
+android-gradle-plugin = "8.1.0"
 android-appcompat = "1.6.1"
 android-material = "1.9.0"
 androidx-compose = "1.4.3"
@@ -19,7 +19,6 @@ apache-commons = "1.7"
 arrow = "1.2.0"
 arrow-jackson = "0.14.0"
 colorpreference = "1.1.0"
-gradle = "8.0.2"
 jackson = "2.13.5"
 json-schema-validator = "1.0.73"
 keyboardview = "0.0.2"
@@ -48,6 +47,7 @@ mockk = "1.13.5"
 [libraries]
 # Main
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+android-material = { module = "com.google.android.material:material", version.ref = "android-material" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "android-appcompat" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
@@ -64,14 +64,13 @@ androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 arrow-optics = { module = "io.arrow-kt:arrow-optics", version.ref = "arrow" }
 arrow-ksp = { module = "io.arrow-kt:arrow-optics-ksp-plugin", version.ref = "arrow" }
-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+colorpreference = { module = "com.github.kizitonwose.colorpreference:support", version.ref = "colorpreference" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
 jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jackson-module-arrow-kotlin = { module = "io.arrow-kt:arrow-integrations-jackson-module", version.ref = "arrow-jackson" }
-colorpreference = { module = "com.github.kizitonwose.colorpreference:support", version.ref = "colorpreference" }
-logback-android = { module = "com.github.tony19:logback-android", version.ref = "logback-android" }
-android-material = { module = "com.google.android.material:material", version.ref = "android-material" }
 json-schema-validator = { module = "com.networknt:json-schema-validator", version.ref = "json-schema-validator" }
+logback-android = { module = "com.github.tony19:logback-android", version.ref = "logback-android" }
 keyboardview = { module = "io.github.hijamoya:keyboardview", version.ref = "keyboardview" }
 apache-commons-text = { module = "org.apache.commons:commons-text", version.ref = "apache-commons" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }

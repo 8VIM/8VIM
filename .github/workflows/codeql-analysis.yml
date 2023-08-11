@@ -13,7 +13,7 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
     paths:
       - "**.gradle"
       - "8vim/**/*.java"
@@ -21,7 +21,7 @@ on:
       - "8vim/**/*.xml"
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [master]
+    branches: [ master ]
     paths:
       - "**.gradle"
       - "8vim/**/*.java"
@@ -42,7 +42,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["java"]
+        language: [ "java" ]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -58,7 +58,7 @@ jobs:
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v2
+      - name: Assemble
+        run: ./gradlew assembleDebug
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
