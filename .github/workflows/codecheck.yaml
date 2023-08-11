@@ -15,7 +15,8 @@ jobs:
         with:
           java-version: "17"
           distribution: temurin
-          cache: gradle
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
       - run: ./gradlew lintDebug ktlintCheck testDebugUnitTest jacocoTestReportDebug
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
