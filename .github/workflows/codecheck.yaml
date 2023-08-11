@@ -1,0 +1,24 @@
+name: Run checkstyle,lint and coverage
+on:
+  workflow_call:
+    inputs:
+      continue-on-error:
+        type: boolean
+        default: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ inputs.continue-on-error }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: temurin
+          cache: gradle
+      - run: ./gradlew check
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./8vim/build/reports/jacocoTestReportDebug/jacocoTestReportDebug.xml

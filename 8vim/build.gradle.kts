@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.mannodermaus.android.junit5)
     checkstyle
+    jacoco
 }
 
 apply(plugin = "checkstyle")
@@ -134,8 +135,14 @@ android {
         findByName("test")?.java?.srcDirs(project.file("src/test/kotlin"))
     }
 }
+tasks.withType<JacocoReport> {
+   reports {
+       csv.required.set(true)
+   }
+}
 
 tasks.withType<Test> {
+    finalizedBy("jacocoTestReport")
     useJUnitPlatform()
 
     testLogging {
