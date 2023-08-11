@@ -136,9 +136,9 @@ android {
     }
 }
 tasks.withType<JacocoReport> {
-   reports {
-       csv.required.set(true)
-   }
+    reports {
+        csv.required.set(true)
+    }
 }
 
 tasks.withType<Test> {
