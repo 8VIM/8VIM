@@ -126,6 +126,17 @@
             app:title="@string/pref_haptic_feedback_title" />
 
         <SwitchPreferenceCompat
+            android:id="@+id/switchPreferenceCompat3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:widgetLayout="@layout/material_switch"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_haptic_rotate_feedback_key"
+            app:summaryOff="@string/pref_haptic_rotate_feedback_summary_off"
+            app:summaryOn="@string/pref_haptic_rotate_feedback_summary_on"
+            app:title="@string/pref_haptic_rotate_feedback_title" />
+        <SwitchPreferenceCompat
             android:widgetLayout="@layout/material_switch"
             app:defaultValue="true"
             app:iconSpaceReserved="false"
