@@ -45,22 +45,6 @@ class AppPrefs : PreferenceModel(1) {
                 default = emptySet()
             )
         }
-
-        @Composable
-        fun keyboardData(): KeyboardData {
-            val context = LocalContext.current
-            val currentLayout by current.observeAsState()
-            return currentLayout
-                .loadKeyboardData(context = context)
-                .fold({
-                    current.reset()
-                    if (currentLayout is CustomLayout) {
-                        val newHistory = custom.history.get() - currentLayout.path.toString()
-                        custom.history.set(newHistory)
-                    }
-                    current.get().loadKeyboardData(context).getOrNull()!!
-                }, { it })
-        }
     }
 
     inner class InputFeedback {
@@ -104,6 +88,7 @@ class AppPrefs : PreferenceModel(1) {
             key = "x_board_keyboard_height",
             default = 100
         )
+
         inner class SideBar {
             val isVisible = boolean(
                 key = "user_preferred_sidebar_visibility",
@@ -148,22 +133,6 @@ class AppPrefs : PreferenceModel(1) {
                 key = "board_fg_color",
                 default = Color(21, 21, 21).toArgb()
             )
-        }
-
-        @Composable
-        fun colorScheme(): ColorScheme {
-            val mode by theme.mode.observeAsState()
-            val background by customColors.background.observeAsState()
-            val foreground by customColors.foreground.observeAsState()
-            val colorScheme = theme.colorScheme()
-            return if (mode == ThemeMode.CUSTOM) {
-                colorScheme.copy(
-                    onSurface = Color(foreground),
-                    surface = Color(background)
-                )
-            } else {
-                colorScheme
-            }
         }
 
         inner class Display {

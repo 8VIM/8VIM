@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener
 
-class AvailableLayouts private constructor(context: Context) {
+class AvailableLayouts internal constructor(context: Context) {
     private val prefs: AppPrefs by appPreferenceModel()
     private val embeddedLayoutsWithName: Map<String, EmbeddedLayout>
     private val defaultIndex: Int
@@ -21,6 +21,7 @@ class AvailableLayouts private constructor(context: Context) {
         embeddedLayouts = embeddedLayoutsWithName.values.toList()
         defaultIndex = embeddedLayouts.indexOf(prefs.layout.current.default as EmbeddedLayout)
         reloadCustomLayouts(context)
+
         prefs.layout.custom.history.observe {
             if (it.size > customLayouts.size) {
                 reloadCustomLayouts(context)
@@ -34,7 +35,7 @@ class AvailableLayouts private constructor(context: Context) {
         findIndex()
     }
 
-    fun selectLayout(context: Context?, which: Int) {
+    fun selectLayout(context: Context, which: Int) {
         val embeddedLayoutSize = embeddedLayoutsWithName.size
         val layoutOption = if (which < embeddedLayoutSize) {
             embeddedLayouts.getOrNull(which)
@@ -44,7 +45,7 @@ class AvailableLayouts private constructor(context: Context) {
         layoutOption?.let {
             prefs.layout.current.set(it, true)
             MainKeypadActionListener.rebuildKeyboardData(
-                it.loadKeyboardData(context!!).getOrNull()
+                it.loadKeyboardData(context).getOrNull()
             )
             index = which
         }

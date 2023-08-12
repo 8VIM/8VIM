@@ -10,4 +10,5 @@ flags:
       - 8vim/src/**/ui
       - 8vim/src/**/views
       - 8vim/src/**/VIM8Application.kt
+      - 8vim/src/**/AppPrefs.kt
       - 8vim/src/**/MainInputMethodService.java
