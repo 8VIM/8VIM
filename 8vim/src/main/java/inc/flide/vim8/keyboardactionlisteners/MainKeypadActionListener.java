@@ -1,20 +1,16 @@
 package inc.flide.vim8.keyboardactionlisteners;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
-import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
-import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.structures.KeyboardActionType;
-import inc.flide.vim8.structures.KeyboardData;
-import inc.flide.vim8.structures.MovementSequenceType;
-import inc.flide.vim8.structures.yaml.ExtraLayer;
+import inc.flide.vim8.models.FingerPosition;
+import inc.flide.vim8.models.KeyboardAction;
+import inc.flide.vim8.models.KeyboardActionType;
+import inc.flide.vim8.models.KeyboardData;
+import inc.flide.vim8.models.LayerLevel;
+import inc.flide.vim8.models.MovementSequenceType;
+import inc.flide.vim8.models.yaml.ExtraLayer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -23,6 +19,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainKeypadActionListener extends KeypadActionListener {
+    private static final int DELAY_MILLIS_LONG_PRESS_CONTINUATION = 50;
+    private static final int DELAY_MILLIS_LONG_PRESS_INITIATION = 500;
     private static final int FULL_ROTATION_STEPS = 7;
     private static final Set<List<FingerPosition>> extraLayerMovementSequences = new HashSet<>(
             ExtraLayer.MOVEMENT_SEQUENCES.values());
@@ -65,13 +63,14 @@ public class MainKeypadActionListener extends KeypadActionListener {
             List<FingerPosition> movementSequenceAugmented = new ArrayList<>(movementSequence);
             movementSequenceAugmented.add(FingerPosition.LONG_PRESS);
             processMovementSequence(movementSequenceAugmented);
-            longPressHandler.postDelayed(this, Constants.DELAY_MILLIS_LONG_PRESS_CONTINUATION);
+            longPressHandler.postDelayed(this, DELAY_MILLIS_LONG_PRESS_CONTINUATION);
         }
     };
 
     public MainKeypadActionListener(MainInputMethodService inputMethodService, View view) {
         super(inputMethodService, view);
         keyboardData = mainInputMethodService.buildKeyboardActionMap();
+
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
         HandlerThread longPressHandlerThread = new HandlerThread("LongPressHandlerThread");
@@ -79,21 +78,16 @@ public class MainKeypadActionListener extends KeypadActionListener {
         longPressHandler = new Handler(longPressHandlerThread.getLooper(), null);
     }
 
-    public static void rebuildKeyboardData(Resources resources, Context context) {
-        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMap(resources, context);
+    public static void rebuildKeyboardData(KeyboardData keyboardData) {
+        MainKeypadActionListener.keyboardData = keyboardData;
     }
 
-    public static void rebuildKeyboardData(Resources resources, Context context, Uri customLayoutUri) {
-        keyboardData = InputMethodServiceHelper.initializeKeyboardActionMapForCustomLayout(resources, context,
-                customLayoutUri);
+    public String getLowerCaseCharacters(LayerLevel layer) {
+        return keyboardData.lowerCaseCharacters(layer).getOrNull();
     }
 
-    public String getLowerCaseCharacters(int layer) {
-        return keyboardData.getLowerCaseCharacters(layer);
-    }
-
-    public String getUpperCaseCharacters(int layer) {
-        return keyboardData.getUpperCaseCharacters(layer);
+    public String getUpperCaseCharacters(LayerLevel layer) {
+        return keyboardData.upperCaseCharacters(layer).getOrNull();
     }
 
     public String getCurrentLetter() {
@@ -101,22 +95,21 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     @Override
-    public int findLayer() {
-        for (int i = ExtraLayer.values().length - 1; i >= 0; i--) {
-            ExtraLayer extraLayer = ExtraLayer.values()[i];
-            List<FingerPosition> extraLayerMovementSequence = ExtraLayer.MOVEMENT_SEQUENCES.get(extraLayer);
+    public LayerLevel findLayer() {
+        for (int i = LayerLevel.Companion.getVisibleLayers().size() - 1; i >= LayerLevel.SECOND.ordinal(); i--) {
+            LayerLevel layerLevel = LayerLevel.values()[i];
+            List<FingerPosition> extraLayerMovementSequence =
+                    LayerLevel.Companion.getMovementSequences().get(layerLevel);
             if (extraLayerMovementSequence == null) {
-                return Constants.DEFAULT_LAYER;
+                return LayerLevel.FIRST;
             }
-
             if (movementSequence.size() < extraLayerMovementSequence.size()) {
                 continue;
             }
-
             List<FingerPosition> startWith = movementSequence.subList(0, extraLayerMovementSequence.size());
-            int layer = i + 2;
-            if (extraLayerMovementSequences.contains(startWith) && layer <= keyboardData.getTotalLayers()) {
-                return layer;
+            if (extraLayerMovementSequences.contains(startWith)
+                    && layerLevel.ordinal() <= keyboardData.getTotalLayers()) {
+                return layerLevel;
             }
         }
         List<FingerPosition> tempMovementSequence = new ArrayList<>(movementSequence);
@@ -125,15 +118,13 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     private boolean isFullRotation() {
-        int layer = findLayer();
+        LayerLevel layer = findLayer();
         int size = FULL_ROTATION_STEPS;
         int start = 1;
         boolean layerCondition = movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
 
-        if (layer > Constants.DEFAULT_LAYER) {
-            ExtraLayer extraLayer = ExtraLayer.values()[layer - 2];
-            List<FingerPosition> extraLayerMovementSequence = ExtraLayer.MOVEMENT_SEQUENCES.get(extraLayer);
-
+        if (layer != LayerLevel.FIRST) {
+            List<FingerPosition> extraLayerMovementSequence = LayerLevel.Companion.getMovementSequences().get(layer);
             if (extraLayerMovementSequence != null) {
                 size += extraLayerMovementSequence.size();
                 start += extraLayerMovementSequence.size();
@@ -168,10 +159,10 @@ public class MainKeypadActionListener extends KeypadActionListener {
             if (isFullRotation()) {
                 int start = 2;
                 int size = FULL_ROTATION_STEPS - 1;
-                int layer = findLayer();
-                if (layer > Constants.DEFAULT_LAYER) {
-                    ExtraLayer extraLayer = ExtraLayer.values()[layer - 2];
-                    List<FingerPosition> extraLayerMovementSequence = ExtraLayer.MOVEMENT_SEQUENCES.get(extraLayer);
+                LayerLevel layer = findLayer();
+                if (layer != LayerLevel.FIRST) {
+                    List<FingerPosition> extraLayerMovementSequence =
+                            LayerLevel.Companion.getMovementSequences().get(layer);
                     if (extraLayerMovementSequence != null) {
                         start += extraLayerMovementSequence.size();
                         size += extraLayerMovementSequence.size();
@@ -189,16 +180,16 @@ public class MainKeypadActionListener extends KeypadActionListener {
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT;
                 movementSequence.add(currentFingerPosition);
             } else if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
-                int layer = findLayer();
+                LayerLevel layer = findLayer();
                 List<FingerPosition> extraLayerMovementSequences = new ArrayList<>();
                 int layerSize = 0;
-                if (layer > Constants.DEFAULT_LAYER) {
-                    extraLayerMovementSequences = ExtraLayer.MOVEMENT_SEQUENCES.get(ExtraLayer.values()[layer - 2]);
+                if (layer != LayerLevel.FIRST) {
+                    extraLayerMovementSequences = LayerLevel.Companion.getMovementSequences().get(layer);
                     layerSize = extraLayerMovementSequences.size() + 1;
                 }
-                boolean defaultLayerCondition = layer == Constants.DEFAULT_LAYER
+                boolean defaultLayerCondition = layer == LayerLevel.FIRST
                         && movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
-                boolean extraLayerCondition = layer > Constants.DEFAULT_LAYER && movementSequence.size() > layerSize;
+                boolean extraLayerCondition = layer != LayerLevel.FIRST && movementSequence.size() > layerSize;
                 if (defaultLayerCondition || extraLayerCondition) {
                     movementSequence.clear();
                     currentLetter = null;
@@ -240,7 +231,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     private void initiateLongPressDetection() {
         isLongPressCallbackSet = true;
-        longPressHandler.postDelayed(longPressRunnable, Constants.DELAY_MILLIS_LONG_PRESS_INITIATION);
+        longPressHandler.postDelayed(longPressRunnable, DELAY_MILLIS_LONG_PRESS_INITIATION);
     }
 
     private void interruptLongPress() {

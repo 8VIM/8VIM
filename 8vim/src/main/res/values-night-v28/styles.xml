@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppThemeDarkBase.V28" parent="AppThemeDarkBase">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
+        <item name="android:navigationBarColor">?colorSurface</item>
+    </style>
+
+    <style name="AppThemeDark" parent="AppThemeDarkBase.V28" />
+
+</resources>

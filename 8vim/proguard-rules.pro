@@ -37,3 +37,5 @@
 -keepclassmembers class ch.qos.logback.** { *; }
 -keepclassmembers class org.slf4j.impl.** { *; }
 -dontwarn ch.qos.logback.core.net.*
+-keep class kotlin.Metadata { *; }
+-keep class kotlin.reflect.** { *; }
