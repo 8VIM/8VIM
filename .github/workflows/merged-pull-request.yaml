@@ -3,16 +3,14 @@ name: Merged pull request
 concurrency: release
 
 on:
-  workflow_dispatch:
-  pull_request_target:
+  push:
     branches: [master]
-    types: [closed]
     paths:
-      - "**.gradle"
+      - "**.gradle.kts"
       - "8vim/**"
 jobs:
   changes:
-    if: ${{ github.event_name=='pull_request_target' && github.event.pull_request.merged == true }}
+    if: ${{ github.event.pusher.name != 'github-actions[bot]' }}
     name: Detect changed files
     runs-on: ubuntu-latest
     permissions:
@@ -48,21 +46,16 @@ jobs:
     name: Update version
     uses: ./.github/workflows/bump-version.yaml
     with:
-      message: ${{github.event.pull_request.title}}
+      message: ${{github.event.commits.message}}
       version: rc
     secrets: inherit
-  version:
-    if: ${{ github.event_name!='pull_request_target'}}
-    name: Get version
-    uses: ./.github/workflows/extract-version.yaml
   release:
-    needs: [bump_version, version]
-    if: ${{ !cancelled() && (needs.bump_version.result == 'success' || needs.version.result == 'success') }}
+    needs: [bump_version]
     name: Release
     uses: ./.github/workflows/publish.yaml
     with:
-      version_code: ${{needs.bump_version.result == 'success' && needs.bump_version.outputs.version_code || needs.version.outputs.version_code}}
-      version_name: ${{needs.bump_version.result == 'success' && needs.bump_version.outputs.version_name || needs.version.outputs.version_name}}
+      version_code: ${{needs.bump_version.outputs.version_code}}
+      version_name: ${{needs.bump_version.outputs.version_name}}
     secrets: inherit
     permissions:
       actions: read
