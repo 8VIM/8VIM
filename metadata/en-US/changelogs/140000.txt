@@ -1,0 +1,10 @@
+By @MaethorNaur 
+- feat: validate custom layout file 
+- fix: correctly delete utf-16 characters 
+- fix: allow to reset movement when back to circle 
+- feat: better support for the landscape mode 
+- feat: add quicker movements for extra layers 
+- Fixing and changing the Ukrainian layout by @binraptor 
+- feat: Clipboard for 8vim by @flide 
+- Update it.yaml - letters disposition follows letter frequency by @flauta 
+- Improve user experience on small phones with narrow screen by @guancio
