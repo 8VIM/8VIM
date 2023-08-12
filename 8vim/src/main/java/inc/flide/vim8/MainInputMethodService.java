@@ -27,11 +27,13 @@ import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.ui.Theme;
+import inc.flide.vim8.utils.PredictiveTextHelper;
 import inc.flide.vim8.views.ClipboardKeypadView;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
+import inc.flide.vim8.views.mainkeyboard.SuggestionView;
 import java.util.List;
 
 public class MainInputMethodService extends InputMethodService
@@ -48,6 +50,9 @@ public class MainInputMethodService extends InputMethodService
     private int shiftLockFlag;
     private int capsLockFlag;
     private int modifierFlags;
+    private SuggestionView suggestionView;
+
+    private PredictiveTextHelper predictiveTextHelper;
 
     public ClipboardManagerService getClipboardManagerService() {
         return clipboardManagerService;
@@ -78,8 +83,39 @@ public class MainInputMethodService extends InputMethodService
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
         setTheme(R.style.AppTheme_NoActionBar);
+        predictiveTextHelper = new PredictiveTextHelper(applicationContext);
         super.onCreate();
     }
+
+
+
+    @Override
+    public void onUpdateSelection(int oldSelStart,
+                                  int oldSelEnd,
+                                  int newSelStart,
+                                  int newSelEnd,
+                                  int candidatesStart,
+                                  int candidatesEnd) {
+        super.onUpdateSelection(oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd);
+
+        InputConnection inputConnection = getCurrentInputConnection();
+        if (inputConnection != null && newSelEnd > 0) {
+            CharSequence textBeforeCursor = inputConnection.getTextBeforeCursor(newSelEnd, 0);
+            if (textBeforeCursor != null) {
+                predictiveTextHelper.setTextBeforeCursor(textBeforeCursor);
+            } else {
+                predictiveTextHelper.setTextBeforeCursor("");
+            }
+        }
+        suggestionView.setSuggestions(predictiveTextHelper.getSuggestedWords());
+    }
+
+    @Override
+    public View onCreateCandidatesView() {
+        suggestionView = new SuggestionView(this);
+        return suggestionView;
+    }
+
 
     /**
      * Lifecycle of IME
@@ -160,6 +196,8 @@ public class MainInputMethodService extends InputMethodService
                 switchToMainKeypad();
                 break;
         }
+
+        setCandidatesViewShown(true);
     }
 
     @Override
