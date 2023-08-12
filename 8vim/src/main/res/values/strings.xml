@@ -135,6 +135,11 @@
     <string name="pref_haptic_feedback_summary_on">Haptic feedback is enabled</string>
     <string name="pref_haptic_feedback_summary_off">Haptic feedback is disabled</string>
 
+    <string name="pref_haptic_rotate_feedback_key">user_preferred_haptic_rotate_feedback_enabled</string>
+    <string name="pref_haptic_rotate_feedback_title">Enable rotation haptic feedback</string>
+    <string name="pref_haptic_rotate_feedback_summary_on">Haptic rotation feedback is enabled</string>
+    <string name="pref_haptic_rotate_feedback_summary_off">Haptic rotation feedback is disabled</string>
+
     <string name="pref_sound_feedback_key">user_preferred_sound_feedback_enabled</string>
     <string name="pref_sound_feedback_summary_off">Sound feedback is disabled</string>
     <string name="pref_sound_feedback_summary_on">Sound feedback is enabled</string>
