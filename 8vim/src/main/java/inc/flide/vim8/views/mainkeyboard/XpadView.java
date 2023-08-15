@@ -33,8 +33,6 @@ import java.util.Random;
 public class XpadView extends View {
     public static final float FOREGROUND_STROKE_FACTOR = 0.75f;
     public static final float LETTER_BACKGROUND_BLEND_RATIO = 0.5f;
-    public static final int DEGREE_45 = 45;
-    public static final int DEGREE_90 = 90;
     public static final int UPPER_LETTER_Y_IDX_OFFSET = 1;
     public static final int LOWER_LETTER_X_IDX_OFFSET = 2;
     public static final int LOWER_LETTER_Y_IDX_OFFSET = 3;
@@ -53,10 +51,8 @@ public class XpadView extends View {
     private final Circle circle = new Circle();
     private final Dimension keypadDimension = new Dimension();
     private final Matrix xformMatrix = new Matrix();
-    // There are 4 sectors, each has 4 letters above, and 4 below.
+    // There are X sectors, each has Y letters above, and Y below.
     // Finally, each letter position has an x & y co-ordinate.
-//    private final float[] letterPositions =
-  //          new float[MainKeypadActionListener.getSectors() * 2 * CharacterPosition.values().length * 2];
     private float[] letterPositions;
     private final Path sectorLines = new Path();
     private final RectF sectorLineBounds = new RectF();
@@ -132,6 +128,7 @@ public class XpadView extends View {
         invalidate();
     }
 
+
     private void computeComponentPositions(int fullWidth, int fullHeight) {
         float spRadiusValue = sharedPreferenceHelper.getInt(prefCircleScalaFactor, 3);
         boolean preferredSidebarLeft = sharedPreferenceHelper.getBoolean(prefSidebarLeftKey, true);
@@ -185,7 +182,7 @@ public class XpadView extends View {
         computeLettersPositions(characterHeight, lengthOfLineDemarcatingSectors);
 
         xformMatrix.reset();
-        xformMatrix.postRotate(90-360/MainKeypadActionListener.getSectors()/2, circleCenter.x, circleCenter.y);
+        xformMatrix.postRotate(getFirstSectorAngle(), circleCenter.x, circleCenter.y);
         xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, MainKeypadActionListener.getLayoutPositions()*2);
 
 
@@ -207,6 +204,10 @@ public class XpadView extends View {
         xformMatrix.mapPoints(letterPositions);
 
         sectorLines.computeBounds(sectorLineBounds, false); // Used to position icons
+    }
+
+    private float getFirstSectorAngle() {
+        return 90-360/MainKeypadActionListener.getSectors()/2;
     }
 
     private boolean isTabletInLandscape() {
@@ -359,31 +360,37 @@ public class XpadView extends View {
         int iconHalfWidth = iconSize / 2;
         int iconHalfHeight = iconSize / 2;
         sectorLines.computeBounds(sectorLineBounds, false);
-        //Number pad icon (left side)
-        int iconCenterX = (int) Math.max(sectorLineBounds.left, 0);
-        int iconCenterY = centreYValue;
-        drawIconInSector(iconCenterX - iconHalfWidth,
-                iconCenterY - iconHalfHeight,
-                canvas,
-                R.drawable.numericpad_vd_vector);
 
-        //for Backspace icon (right side)
-        iconCenterX = (int) Math.min(sectorLineBounds.right, canvas.getWidth());
-        drawIconInSector(iconCenterX - iconHalfWidth,
-                iconCenterY - iconHalfHeight,
-                canvas,
-                R.drawable.ic_backspace);
+
+        float[] coordinates = new float[4];
+        float radius = Math.min(
+                Math.min(sectorLineBounds.right, canvas.getWidth()) - iconHalfWidth,
+                Math.min(sectorLineBounds.bottom, canvas.getHeight()) - iconHalfHeight
+        );
+        coordinates[0] = centreXValue + radius/2;
+        coordinates[1] = centreYValue;
+        xformMatrix.reset();
+        float angle = getFirstSectorAngle() + 360 / MainKeypadActionListener.getSectors() / 2;
+        xformMatrix.postRotate(angle, centreXValue, centreYValue);
+        xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
 
         //for Enter icon (bottom)
-        iconCenterX = centreXValue;
-        iconCenterY = (int) Math.min(sectorLineBounds.bottom, canvas.getHeight());
-        drawIconInSector(iconCenterX - iconHalfWidth,
-                iconCenterY - iconHalfHeight,
+        drawIconInSector((int) coordinates[2] - iconHalfWidth,
+                (int) coordinates[3]-iconHalfHeight,
                 canvas,
                 R.drawable.ic_keyboard_return);
 
+        // Numbers
+        xformMatrix.postRotate(360 / MainKeypadActionListener.getSectors() , centreXValue, centreYValue);
+        xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
+        drawIconInSector((int) coordinates[2] - iconHalfWidth,
+                (int) coordinates[3]-iconHalfHeight,
+                canvas,
+                R.drawable.numericpad_vd_vector);
+
         //for caps lock and shift icon
-        iconCenterY = (int) Math.max(sectorLineBounds.top, 0);
+        xformMatrix.postRotate(360 / MainKeypadActionListener.getSectors() , centreXValue, centreYValue);
+        xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
         int shiftIconToDisplay = R.drawable.ic_no_capslock;
         if (actionListener.isShiftSet()) {
             shiftIconToDisplay = R.drawable.ic_shift_engaged;
@@ -391,10 +398,18 @@ public class XpadView extends View {
         if (actionListener.isCapsLockSet()) {
             shiftIconToDisplay = R.drawable.ic_capslock_engaged;
         }
-        drawIconInSector(iconCenterX - iconHalfWidth,
-                iconCenterY - iconHalfHeight,
+        drawIconInSector((int) coordinates[2] - iconHalfWidth,
+                (int) coordinates[3]-iconHalfHeight,
                 canvas,
                 shiftIconToDisplay);
+
+        //for Backspace icon
+        xformMatrix.postRotate(360 / MainKeypadActionListener.getSectors() , centreXValue, centreYValue);
+        xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
+        drawIconInSector((int) coordinates[2] - iconHalfWidth,
+                (int) coordinates[3]-iconHalfHeight,
+                canvas,
+                R.drawable.ic_backspace);
     }
 
     private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId) {
