@@ -26,6 +26,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
     private static final int FULL_ROTATION_STEPS = 7;
     private static final Set<List<Integer>> extraLayerMovementSequences = new HashSet<>(
             ExtraLayer.MOVEMENT_SEQUENCES.values());
+    // TODO: Fix for more than 6 sectors
     private static final Set<List<Integer>> ROTATION_MOVEMENT_SEQUENCES = Arrays
             .stream(new Integer[][] {
                     {1, 2, 3, 4, 5, 6},

@@ -34,3 +34,13 @@ layers:
         - 4
         - long_press
       key_code: keycode_del
+    - type: input_key
+      movement_sequence:
+        - 5
+        - no_touch
+      key_code: shift_toggle
+    - type: input_key
+      movement_sequence:
+        - 6
+        - no_touch
+      key_code: shift_toggle

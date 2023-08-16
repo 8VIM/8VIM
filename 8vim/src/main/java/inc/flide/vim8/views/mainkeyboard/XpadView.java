@@ -14,6 +14,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.Nullable;
@@ -26,8 +27,14 @@ import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.preferences.SharedPreferenceHelper;
 import inc.flide.vim8.structures.Constants;
+import inc.flide.vim8.structures.CustomKeycode;
 import inc.flide.vim8.structures.FingerPosition;
+import inc.flide.vim8.structures.KeyboardAction;
 import inc.flide.vim8.ui.Theme;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class XpadView extends View {
@@ -370,46 +377,53 @@ public class XpadView extends View {
         coordinates[0] = centreXValue + radius/2;
         coordinates[1] = centreYValue;
         xformMatrix.reset();
-        float angle = getFirstSectorAngle() + 360 / MainKeypadActionListener.getSectors() / 2;
+        float angle = getFirstSectorAngle() + 360 / MainKeypadActionListener.getSectors() / 2 - 360 / MainKeypadActionListener.getSectors();
         xformMatrix.postRotate(angle, centreXValue, centreYValue);
-        xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
 
-        //for Enter icon (bottom)
-        drawIconInSector((int) coordinates[2] - iconHalfWidth,
-                (int) coordinates[3]-iconHalfHeight,
-                canvas,
-                R.drawable.ic_keyboard_return);
+        Map<List<Integer>, KeyboardAction> actionMap = MainKeypadActionListener.getKayboardData().getActionMap();
+        for (int sector=0;  sector < MainKeypadActionListener.getSectors(); sector++) {
+            xformMatrix.postRotate(360 / MainKeypadActionListener.getSectors(), centreXValue, centreYValue);
+            xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
 
-        // Numbers
-        xformMatrix.postRotate(360 / MainKeypadActionListener.getSectors() , centreXValue, centreYValue);
-        xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
-        drawIconInSector((int) coordinates[2] - iconHalfWidth,
-                (int) coordinates[3]-iconHalfHeight,
-                canvas,
-                R.drawable.numericpad_vd_vector);
+            ArrayList<Integer> movements = new ArrayList<Integer>();
+            movements.add(sector+1);
+            movements.add(FingerPosition.NO_TOUCH);
+            KeyboardAction action = actionMap.get(movements);
+            if (action == null)
+                return;
 
-        //for caps lock and shift icon
-        xformMatrix.postRotate(360 / MainKeypadActionListener.getSectors() , centreXValue, centreYValue);
-        xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
-        int shiftIconToDisplay = R.drawable.ic_no_capslock;
-        if (actionListener.isShiftSet()) {
-            shiftIconToDisplay = R.drawable.ic_shift_engaged;
+            //for Enter icon (bottom)
+            if (action.getKeyEventCode() == KeyEvent.KEYCODE_ENTER) {
+                drawIconInSector((int) coordinates[2] - iconHalfWidth,
+                        (int) coordinates[3] - iconHalfHeight,
+                        canvas,
+                        R.drawable.ic_keyboard_return);
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_NUMBER_KEYPAD.getKeyCode()) {
+                drawIconInSector((int) coordinates[2] - iconHalfWidth,
+                        (int) coordinates[3] - iconHalfHeight,
+                        canvas,
+                        R.drawable.numericpad_vd_vector);
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.SHIFT_TOGGLE.getKeyCode()) {
+                int shiftIconToDisplay = R.drawable.ic_no_capslock;
+                if (actionListener.isShiftSet()) {
+                    shiftIconToDisplay = R.drawable.ic_shift_engaged;
+                }
+                if (actionListener.isCapsLockSet()) {
+                    shiftIconToDisplay = R.drawable.ic_capslock_engaged;
+                }
+                drawIconInSector((int) coordinates[2] - iconHalfWidth,
+                        (int) coordinates[3]-iconHalfHeight,
+                        canvas,
+                        shiftIconToDisplay);
+            }
+            else if (action.getKeyEventCode() == KeyEvent.KEYCODE_DEL) {
+                drawIconInSector((int) coordinates[2] - iconHalfWidth,
+                        (int) coordinates[3]-iconHalfHeight,
+                        canvas,
+                        R.drawable.ic_backspace);            }
         }
-        if (actionListener.isCapsLockSet()) {
-            shiftIconToDisplay = R.drawable.ic_capslock_engaged;
-        }
-        drawIconInSector((int) coordinates[2] - iconHalfWidth,
-                (int) coordinates[3]-iconHalfHeight,
-                canvas,
-                shiftIconToDisplay);
-
-        //for Backspace icon
-        xformMatrix.postRotate(360 / MainKeypadActionListener.getSectors() , centreXValue, centreYValue);
-        xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
-        drawIconInSector((int) coordinates[2] - iconHalfWidth,
-                (int) coordinates[3]-iconHalfHeight,
-                canvas,
-                R.drawable.ic_backspace);
     }
 
     private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId) {
