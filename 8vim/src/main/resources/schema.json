@@ -109,49 +109,7 @@
                   },
                   "additionalProperties": false,
                   "message": {
-                    "additionalProperties": "Only top/bottom parts are valid for left/right sectors"
-                  }
-                }
-              },
-              "required": [
-                "parts"
-              ],
-              "additionalProperties": false
-            },
-            "^(?i)(left|right)$": {
-              "type": "object",
-              "properties": {
-                "parts": {
-                  "type": "object",
-                  "patternProperties": {
-                    "^(?i)(top|bottom)$": {
-                      "$ref": "#/definitions/actionList"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "message": {
-                    "additionalProperties": "Only top/bottom parts are valid for left/right sectors"
-                  }
-                }
-              },
-              "required": [
-                "parts"
-              ],
-              "additionalProperties": false
-            },
-            "^(?i)(top|bottom)$": {
-              "type": "object",
-              "properties": {
-                "parts": {
-                  "type": "object",
-                  "patternProperties": {
-                    "^(?i)(left|right)$": {
-                      "$ref": "#/definitions/actionList"
-                    }
-                  },
-                  "additionalProperties": false,
-                  "message": {
-                    "additionalProperties": "Only left/right parts are valid for top/bottom sectors"
+                    "additionalProperties": "Only integer parts are valid"
                   }
                 }
               },
@@ -170,10 +128,6 @@
       "type": "array",
       "items": {
         "$ref": "#/definitions/action"
-      },
-      "maxItems": 4,
-      "message": {
-        "maxItems": "There is only up to 4 actions per sectors/parts"
       }
     }
   },
