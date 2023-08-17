@@ -51,8 +51,8 @@ public class KeyboardDataYamlParserTest {
 
     @Test
     void parse_valid_file() throws YamlException {
-        Map<List<FingerPosition>, KeyboardAction> movementSequences = new HashMap<>();
-        movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.TOP, FingerPosition.NO_TOUCH)),
+        Map<List<Integer>, KeyboardAction> movementSequences = new HashMap<>();
+        movementSequences.put(new ArrayList<>(Arrays.asList(3, FingerPosition.NO_TOUCH)),
                 new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", CustomKeycode.SHIFT_TOGGLE.getKeyCode(), 0,
                         0));
         movementSequences.put(new ArrayList<>(Collections.singletonList(FingerPosition.NO_TOUCH)),
@@ -60,32 +60,32 @@ public class KeyboardDataYamlParserTest {
         movementSequences.put(new ArrayList<>(Collections.singletonList(FingerPosition.NO_TOUCH)),
                 new KeyboardAction(KeyboardActionType.INPUT_KEY, "", "", KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON, 0));
         movementSequences.put(new ArrayList<>(
-                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, 4, 1,
                                 FingerPosition.INSIDE_CIRCLE)),
                 new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, KeyEvent.META_CTRL_ON, 1));
-        movementSequences.put(new ArrayList<>(Arrays.asList(FingerPosition.LEFT, FingerPosition.TOP)),
+        movementSequences.put(new ArrayList<>(Arrays.asList(2, 3)),
                 new KeyboardAction(KeyboardActionType.INPUT_TEXT, "c", "C", 0, 0, 2));
         movementSequences.put(new ArrayList<>(
-                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
-                                FingerPosition.LEFT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE)),
+                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, 4, 1,
+                                2, 1, FingerPosition.INSIDE_CIRCLE)),
                 new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0,
                         KeyEvent.META_CTRL_ON | KeyEvent.META_FUNCTION_ON, 2));
         movementSequences.put(new ArrayList<>(
-                        Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM,
-                                FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
-                                FingerPosition.LEFT, FingerPosition.INSIDE_CIRCLE)),
+                        Arrays.asList(1, FingerPosition.INSIDE_CIRCLE, 1,
+                                FingerPosition.INSIDE_CIRCLE, 4, 1,
+                                2, FingerPosition.INSIDE_CIRCLE)),
                 new KeyboardAction(KeyboardActionType.INPUT_TEXT, "m", "a", 0,
                         KeyEvent.META_CTRL_ON | KeyEvent.META_FUNCTION_ON, 2));
 
 
         movementSequences.put(
-                new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.RIGHT, FingerPosition.BOTTOM,
+                new ArrayList<>(Arrays.asList(FingerPosition.INSIDE_CIRCLE, 4, 1,
                         FingerPosition.INSIDE_CIRCLE)),
                 new KeyboardAction(KeyboardActionType.INPUT_TEXT, "n", "N", 0, KeyEvent.META_CTRL_ON, 1));
 
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.setLength(Constants.CHARACTER_SET_SIZE);
+        stringBuilder.setLength(4*4*2);
         stringBuilder.setCharAt(0, 'n');
 
         InputStream inputStream = getClass().getResourceAsStream("/valid_file.yaml");

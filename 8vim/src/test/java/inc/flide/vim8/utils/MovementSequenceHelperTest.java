@@ -19,68 +19,68 @@ import net.jqwik.api.Tuple;
 
 public class MovementSequenceHelperTest {
     @Data
-    Iterable<Tuple.Tuple2<CharacterPosition, List<FingerPosition>>> defaultLayerSequences() {
+    Iterable<Tuple.Tuple2<Integer, List<Integer>>> defaultLayerSequences() {
         return Table.of(
-                Tuple.of(CharacterPosition.FIRST,
+                Tuple.of(1,
                         new ArrayList<>(
-                                Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.LEFT,
+                                Arrays.asList(FingerPosition.INSIDE_CIRCLE, 1, 2,
                                         FingerPosition.INSIDE_CIRCLE))),
-                Tuple.of(CharacterPosition.SECOND, new ArrayList<>(
-                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                                FingerPosition.TOP,
+                Tuple.of(2, new ArrayList<>(
+                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, 1, 2,
+                                3,
                                 FingerPosition.INSIDE_CIRCLE))),
-                Tuple.of(CharacterPosition.THIRD, new ArrayList<>(
-                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                                FingerPosition.TOP, FingerPosition.RIGHT,
+                Tuple.of(3, new ArrayList<>(
+                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, 1, 2,
+                                3, 4,
                                 FingerPosition.INSIDE_CIRCLE))),
-                Tuple.of(CharacterPosition.FOURTH, new ArrayList<>(
-                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM, FingerPosition.LEFT,
-                                FingerPosition.TOP, FingerPosition.RIGHT,
-                                FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE))));
+                Tuple.of(4, new ArrayList<>(
+                        Arrays.asList(FingerPosition.INSIDE_CIRCLE, 1, 2,
+                                3, 4,
+                                1, FingerPosition.INSIDE_CIRCLE))));
     }
 
     @Data
-    Iterable<Tuple.Tuple2<ExtraLayer, List<FingerPosition>>> extraLayerMovementSequence() {
+    Iterable<Tuple.Tuple2<ExtraLayer, List<Integer>>> extraLayerMovementSequence() {
         return Table.of(
                 Tuple.of(ExtraLayer.FIRST,
                         new ArrayList<>(
-                                Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                                        FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                                        FingerPosition.BOTTOM, FingerPosition.LEFT,
+                                Arrays.asList(1, FingerPosition.INSIDE_CIRCLE,
+                                        1, FingerPosition.INSIDE_CIRCLE,
+                                        1, 2,
                                         FingerPosition.INSIDE_CIRCLE))),
                 Tuple.of(ExtraLayer.SECOND, new ArrayList<>(
                         new ArrayList<>(
-                                Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                                        FingerPosition.BOTTOM, FingerPosition.LEFT,
+                                Arrays.asList(1, FingerPosition.INSIDE_CIRCLE,
+                                        1, 2,
                                         FingerPosition.INSIDE_CIRCLE,
-                                        FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.INSIDE_CIRCLE)))),
+                                        1, 2, FingerPosition.INSIDE_CIRCLE)))),
                 Tuple.of(ExtraLayer.THIRD, new ArrayList<>(
                         new ArrayList<>(
-                                Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                                        FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
+                                Arrays.asList(1, FingerPosition.INSIDE_CIRCLE,
+                                        1, 2, 3,
                                         FingerPosition.INSIDE_CIRCLE,
-                                        FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.INSIDE_CIRCLE)))),
+                                        1, 2, FingerPosition.INSIDE_CIRCLE)))),
                 Tuple.of(ExtraLayer.FOURTH, new ArrayList<>(
                         new ArrayList<>(
-                                Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                                        FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
-                                        FingerPosition.RIGHT, FingerPosition.INSIDE_CIRCLE,
-                                        FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.INSIDE_CIRCLE)))),
+                                Arrays.asList(1, FingerPosition.INSIDE_CIRCLE,
+                                        1, 2, 3,
+                                        4, FingerPosition.INSIDE_CIRCLE,
+                                        1, 2, FingerPosition.INSIDE_CIRCLE)))),
                 Tuple.of(ExtraLayer.FIFTH, new ArrayList<>(
                         new ArrayList<>(
-                                Arrays.asList(FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                                        FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.TOP,
-                                        FingerPosition.RIGHT, FingerPosition.BOTTOM, FingerPosition.INSIDE_CIRCLE,
-                                        FingerPosition.BOTTOM, FingerPosition.LEFT, FingerPosition.INSIDE_CIRCLE)))));
+                                Arrays.asList(1, FingerPosition.INSIDE_CIRCLE,
+                                        1, 2, 3,
+                                        4, 1, FingerPosition.INSIDE_CIRCLE,
+                                        1, 2, FingerPosition.INSIDE_CIRCLE)))));
     }
 
     @Property
     @FromData("defaultLayerSequences")
-    public void computeMovementSequence_forDefaultLayer(@ForAll CharacterPosition characterPosition,
-                                                        @ForAll List<FingerPosition> movementSequence) {
+    public void computeMovementSequence_forDefaultLayer(@ForAll Integer characterPosition,
+                                                        @ForAll List<Integer> movementSequence) {
         List<FingerPosition> computedMovementSequence =
                 MovementSequenceHelper.computeMovementSequence(Constants.DEFAULT_LAYER,
-                        new Quadrant(Direction.BOTTOM, Direction.LEFT),
+                        new Quadrant(1, 2),
                         characterPosition);
         assertThat(computedMovementSequence).containsExactlyElementsOf(movementSequence);
     }
@@ -92,7 +92,7 @@ public class MovementSequenceHelperTest {
         List<FingerPosition> computedMovementSequence =
                 MovementSequenceHelper.computeMovementSequence(extraLayer.ordinal() + 2,
                         new Quadrant(Direction.BOTTOM, Direction.LEFT),
-                        CharacterPosition.FIRST);
+                        1);
         assertThat(computedMovementSequence).containsExactlyElementsOf(movementSequence);
     }
 }

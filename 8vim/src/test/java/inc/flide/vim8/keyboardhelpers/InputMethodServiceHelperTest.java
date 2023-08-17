@@ -45,7 +45,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class InputMethodServiceHelperTest {
-    static Map<List<FingerPosition>, KeyboardAction> expectedMovementSequences;
+    static Map<List<Integer>, KeyboardAction> expectedMovementSequences;
     static MockedStatic<KeyEvent> keyEvent;
     static MockedStatic<KeyboardDataYamlParser> keyboardDataYamlParserMockedStatic;
     static KeyboardData keyboardDataMock;
@@ -97,7 +97,7 @@ public class InputMethodServiceHelperTest {
         JqwikSession.finish();
     }
 
-    private static Map<List<FingerPosition>, KeyboardAction> generateMap() {
+    private static Map<List<Integer>, KeyboardAction> generateMap() {
         AtomicInteger index = new AtomicInteger(0);
         KeyboardActionsEntryArbitrary keyboardActionsArbitrary = new KeyboardActionsEntryArbitrary();
         try {
@@ -115,8 +115,8 @@ public class InputMethodServiceHelperTest {
     }
 
     @NonNull
-    private static Map<List<FingerPosition>, KeyboardAction> getKeyboardActionMap(
-            Set<Map.Entry<List<FingerPosition>, KeyboardAction>> entries, int layer) {
+    private static Map<List<Integer>, KeyboardAction> getKeyboardActionMap(
+            Set<Map.Entry<List<Integer>, KeyboardAction>> entries, int layer) {
         return entries.stream().filter((e) -> e.getValue().getLayer() == layer)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
@@ -129,7 +129,7 @@ public class InputMethodServiceHelperTest {
         ContentResolver contentResolver = mock(ContentResolver.class);
         lenient().when(contentResolver.openInputStream(any())).thenReturn(mock(InputStream.class));
         when(context.getContentResolver()).thenReturn(contentResolver);
-        Set<Map.Entry<List<FingerPosition>, KeyboardAction>> entries = expectedMovementSequences.entrySet();
+        Set<Map.Entry<List<Integer>, KeyboardAction>> entries = expectedMovementSequences.entrySet();
         when(keyboardDataMock.getActionMap()).thenReturn(getKeyboardActionMap(entries, 0))
                 .thenReturn(getKeyboardActionMap(entries, 1)).thenReturn(getKeyboardActionMap(entries, 2))
                 .thenReturn(getKeyboardActionMap(entries, 3));

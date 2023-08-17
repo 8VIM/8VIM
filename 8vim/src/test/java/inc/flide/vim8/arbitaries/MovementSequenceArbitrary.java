@@ -6,9 +6,9 @@ import net.jqwik.api.Arbitraries;
 import net.jqwik.api.Arbitrary;
 import net.jqwik.api.ArbitrarySupplier;
 
-public class MovementSequenceArbitrary implements ArbitrarySupplier<List<FingerPosition>> {
+public class MovementSequenceArbitrary implements ArbitrarySupplier<List<Integer>> {
     @Override
-    public Arbitrary<List<FingerPosition>> get() {
-        return Arbitraries.of(FingerPosition.class).list().ofMinSize(1).ofMaxSize(10);
+    public Arbitrary<List<Integer>> get() {
+        return Arbitraries.of(Integer.class).list().ofMinSize(1).ofMaxSize(10);
     }
 }

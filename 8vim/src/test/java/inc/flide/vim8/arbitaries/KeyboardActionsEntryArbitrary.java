@@ -9,10 +9,10 @@ import net.jqwik.api.Arbitrary;
 import net.jqwik.api.ArbitrarySupplier;
 
 public class KeyboardActionsEntryArbitrary
-        implements ArbitrarySupplier<Map.Entry<List<FingerPosition>, KeyboardAction>> {
+        implements ArbitrarySupplier<Map.Entry<List<Integer>, KeyboardAction>> {
     @Override
-    public Arbitrary<Map.Entry<List<FingerPosition>, KeyboardAction>> get() {
-        Arbitrary<List<FingerPosition>> movementSequenceArbitrary = new MovementSequenceArbitrary().get();
+    public Arbitrary<Map.Entry<List<Integer>, KeyboardAction>> get() {
+        Arbitrary<List<Integer>> movementSequenceArbitrary = new MovementSequenceArbitrary().get();
         Arbitrary<KeyboardAction> keyboardActionArbitrary = new KeyboardActionArbitrary().get();
         return Arbitraries.entries(movementSequenceArbitrary, keyboardActionArbitrary);
     }
