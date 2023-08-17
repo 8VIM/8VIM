@@ -15,6 +15,8 @@ import inc.flide.vim8.structures.KeyboardActionType;
 import inc.flide.vim8.structures.KeyboardData;
 import inc.flide.vim8.structures.MovementSequenceType;
 import inc.flide.vim8.structures.yaml.ExtraLayer;
+import inc.flide.vim8.utils.MovementSequenceHelper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -23,25 +25,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MainKeypadActionListener extends KeypadActionListener {
-    private static final int FULL_ROTATION_STEPS = 7;
     private static final Set<List<Integer>> extraLayerMovementSequences = new HashSet<>(
             ExtraLayer.MOVEMENT_SEQUENCES.values());
-    // TODO: Fix for more than 6 sectors
-    private static final Set<List<Integer>> ROTATION_MOVEMENT_SEQUENCES = Arrays
-            .stream(new Integer[][] {
-                    {1, 2, 3, 4, 5, 6},
-                    {1, 6, 5, 4, 3, 2},
-                    {2, 3, 4, 5, 6, 1},
-                    {2, 1, 6, 5, 4, 3},
-                    {3, 4, 5, 6, 1, 2},
-                    {3, 2, 1, 6, 5, 4},
-                    {4, 5, 6, 1, 2, 3},
-                    {4, 3, 2, 1, 6, 5},
-                    {5, 6, 1, 2, 3, 4},
-                    {5, 4, 3, 2, 1, 6},
-                    {6, 1, 2, 3, 4, 5},
-                    {6, 5, 4, 3, 2, 1}})
-            .map(Arrays::asList).collect(Collectors.toSet());
     private static KeyboardData keyboardData;
     private final List<Integer> movementSequence;
     private final Handler longPressHandler;
@@ -122,9 +107,14 @@ public class MainKeypadActionListener extends KeypadActionListener {
         return keyboardData.findLayer(tempMovementSequence);
     }
 
+    private int getFullRotationSteps() {
+        // center, first sector, full rotation and next step
+        return 1 + 1 + keyboardData.sectors + 1;
+    }
+
     private boolean isFullRotation() {
         int layer = findLayer();
-        int size = FULL_ROTATION_STEPS;
+        int size = getFullRotationSteps();
         int start = 1;
         boolean layerCondition = movementSequence.get(0) == FingerPosition.INSIDE_CIRCLE;
 
@@ -140,7 +130,18 @@ public class MainKeypadActionListener extends KeypadActionListener {
             }
         }
         if (movementSequence.size() == size && layerCondition) {
-            return ROTATION_MOVEMENT_SEQUENCES.contains(movementSequence.subList(start, size));
+            boolean res = true;
+            int direction = MovementSequenceHelper.getDirection(
+                    movementSequence.get(start),
+                    movementSequence.get(start + 1),
+                    keyboardData.sectors
+            );
+            for (int i = 1; i<size && start+i+1 < movementSequence.size(); i++) {
+                if ((movementSequence.get(start + i)  - 1 + direction) % keyboardData.sectors !=
+                    movementSequence.get(start + i + 1) - 1)
+                    return false;
+            }
+            return true;
         }
         return false;
     }
@@ -165,7 +166,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
             movementSequence.add(currentFingerPosition);
             if (isFullRotation()) {
                 int start = 2;
-                int size = FULL_ROTATION_STEPS - 1;
+                int size = getFullRotationSteps() - 1;
                 int layer = findLayer();
                 if (layer > Constants.DEFAULT_LAYER) {
                     ExtraLayer extraLayer = ExtraLayer.values()[layer - 2];

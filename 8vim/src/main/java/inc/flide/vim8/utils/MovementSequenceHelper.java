@@ -71,6 +71,14 @@ public final class MovementSequenceHelper {
         return movementSequence;
     }
 
+    public static int getDirection(int a, int b, int sectors){
+        int direction = (b-a)%sectors;
+        if (direction < 0)
+            direction+=sectors;
+        if (direction!=1)
+            direction = -1;
+        return direction;
+    }
     private static List<Integer> movementSequencesForLayer(int layer, Quadrant quadrant,
                                                                   int position, KeyboardData keyboardData) {
         List<Integer> movementSequence = new ArrayList<>();
@@ -86,11 +94,8 @@ public final class MovementSequenceHelper {
 
         movementSequence.add(FingerPosition.INSIDE_CIRCLE);
         int nextSector = quadrant.getSector();
-        int direction = (quadrant.getPart()-quadrant.getSector())%keyboardData.sectors;
-        if (direction < 0)
-            direction+=keyboardData.sectors;
-        if (direction!=1)
-            direction = -1;
+        int direction = getDirection(quadrant.getSector(), quadrant.getPart(), keyboardData.sectors);
+
         for (int i = 0; i <= maxMovements; i++) {
             movementSequence.add(nextSector);
             nextSector = ((nextSector-1+direction) % keyboardData.sectors);
