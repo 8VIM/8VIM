@@ -1,5 +1,16 @@
 [![Project Dashboard](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/flide8vim/)
 
+# TODO for multi-sector
+- Fix all tests
+- Fix emoji and other gestures for 6 side keyboard
+- Handle exceptional cases (Or cases where layers have different number of sectors)
+
+# Other ideas
+- Complete smart space, with possible option to choose the multi-char
+- Optimize keyboard via genetic programming (both 4 and 6 sides)
+- Single click enter letter
+- Single swipe enter secondary letter
+
 # 8Vim
 
 The application was started essentially as a clone of 8pen, which for some reason they have stopped distributing. (I can no longer install it, even though I paid for it!)

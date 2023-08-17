@@ -1,56 +1,56 @@
 layers:
   default:
     sectors:
-      right:
+      4:
         parts:
-          bottom:
+          1:
             - lower_case: n
             - lower_case: m
             - lower_case: f
             - lower_case: "!"
               upper_case: "!!!"
-          top:
+          3:
             - lower_case: a
             - lower_case: r
             - lower_case: x
             - lower_case: "?"
               upper_case: "*"
-      top:
+      3:
         parts:
-          right:
+          4:
             - lower_case: y
             - lower_case: b
             - lower_case: p
             - lower_case: q
-          left:
+          2:
             - lower_case: s
             - lower_case: d
             - lower_case: g
             - lower_case: "'"
               upper_case: '"'
-      left:
+      2:
         parts:
-          top:
+          3:
             - lower_case: t
             - lower_case: c
             - lower_case: z
             - lower_case: .
               upper_case: "-"
-          bottom:
+          1:
             - lower_case: i
             - lower_case: h
             - lower_case: j
             - lower_case: ","
               upper_case: _
-      bottom:
+      1:
         parts:
-          left:
+          2:
             - lower_case: e
             - lower_case: l
             - lower_case: k
             - lower_case: "@"
               upper_case: "@gmail.com"
-          right:
+          4:
             - lower_case: o
             - lower_case: u
             - lower_case: v
@@ -58,25 +58,25 @@ layers:
   extra_layers:
     first:
       sectors:
-        right:
+        4:
           parts:
-            top:
+            3:
               - lower_case: â
-        top:
+        3:
           parts:
-            left:
+            2:
               - lower_case: ş
               - null
               - lower_case: ğ
-        left:
+        2:
           parts:
-            top:
+            3:
               - null
               - lower_case: ç
-            bottom:
+            1:
               - lower_case: ı
-        bottom:
+        1:
           parts:
-            right:
+            4:
               - lower_case: ö
               - lower_case: ü

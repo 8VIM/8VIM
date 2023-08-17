@@ -33,29 +33,29 @@ public class LayoutFileName {
     @SuppressLint("DiscouragedApi")
     public LayoutFileName(Resources resources, Context context, String fileName) {
         this();
-        if (ISO_LANGUAGES.contains(fileName)) {
-            resourceName = fileName;
-            languageCode = fileName;
-            languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
-            layoutDisplayName = StringUtils.capitalize(languageName);
 
-            @SuppressLint("DiscouragedApi") int resourceId =
-                    resources.getIdentifier(fileName, "raw", context.getPackageName());
-            try (InputStream inputStream = resources.openRawResource(resourceId)) {
-                totalLayers = KeyboardDataYamlParser.readKeyboardData(inputStream).getTotalLayers();
-                isValidLayout = true;
-                if (totalLayers == 0) {
-                    setLayoutValidityFalse();
-                } else if (totalLayers > 1) {
-                    layoutDisplayName += " (" + totalLayers + " layers)";
-                }
-            } catch (Exception e) {
-                setLayoutValidityFalse();
-            }
+        resourceName = fileName;
+        languageCode = fileName;
+        if (ISO_LANGUAGES.contains(fileName)) {
+            languageName = Locale.forLanguageTag(languageCode).getDisplayName(new Locale(languageCode));
         } else {
+            languageName = fileName;
+        }
+        layoutDisplayName = StringUtils.capitalize(languageName);
+
+        @SuppressLint("DiscouragedApi") int resourceId =
+                resources.getIdentifier(fileName, "raw", context.getPackageName());
+        try (InputStream inputStream = resources.openRawResource(resourceId)) {
+            totalLayers = KeyboardDataYamlParser.readKeyboardData(inputStream).getTotalLayers();
+            isValidLayout = true;
+            if (totalLayers == 0) {
+                setLayoutValidityFalse();
+            } else if (totalLayers > 1) {
+                layoutDisplayName += " (" + totalLayers + " layers)";
+            }
+        } catch (Exception e) {
             setLayoutValidityFalse();
         }
-
     }
 
     private void setLayoutValidityFalse() {
