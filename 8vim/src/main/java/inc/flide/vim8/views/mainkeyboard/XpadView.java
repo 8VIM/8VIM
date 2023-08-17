@@ -392,37 +392,63 @@ public class XpadView extends View {
             if (action == null)
                 return;
 
-            //for Enter icon (bottom)
+            int iconToDisplay = 0;
             if (action.getKeyEventCode() == KeyEvent.KEYCODE_ENTER) {
-                drawIconInSector((int) coordinates[2] - iconHalfWidth,
-                        (int) coordinates[3] - iconHalfHeight,
-                        canvas,
-                        R.drawable.ic_keyboard_return);
+                iconToDisplay = R.drawable.ic_keyboard_return;
             }
             else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_NUMBER_KEYPAD.getKeyCode()) {
-                drawIconInSector((int) coordinates[2] - iconHalfWidth,
-                        (int) coordinates[3] - iconHalfHeight,
-                        canvas,
-                        R.drawable.numericpad_vd_vector);
+                iconToDisplay = R.drawable.numericpad_vd_vector;
             }
             else if (action.getKeyEventCode() == CustomKeycode.SHIFT_TOGGLE.getKeyCode()) {
-                int shiftIconToDisplay = R.drawable.ic_no_capslock;
+                iconToDisplay = R.drawable.ic_no_capslock;
                 if (actionListener.isShiftSet()) {
-                    shiftIconToDisplay = R.drawable.ic_shift_engaged;
+                    iconToDisplay = R.drawable.ic_shift_engaged;
                 }
                 if (actionListener.isCapsLockSet()) {
-                    shiftIconToDisplay = R.drawable.ic_capslock_engaged;
+                    iconToDisplay = R.drawable.ic_capslock_engaged;
                 }
-                drawIconInSector((int) coordinates[2] - iconHalfWidth,
-                        (int) coordinates[3]-iconHalfHeight,
-                        canvas,
-                        shiftIconToDisplay);
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_NUMBER_KEYPAD.getKeyCode()) {
+                iconToDisplay = R.drawable.numericpad_vd_vector;
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode()) {
+                iconToDisplay = R.drawable.ic_open_with_black;
             }
             else if (action.getKeyEventCode() == KeyEvent.KEYCODE_DEL) {
+                iconToDisplay = R.drawable.ic_backspace;
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.getKeyCode()) {
+                iconToDisplay = R.drawable.clipboard;
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_LEFT.getKeyCode()) {
+                iconToDisplay = R.drawable.ic_keyboard_arrow_left;
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_RIGHT.getKeyCode()) {
+                iconToDisplay = R.drawable.ic_keyboard_arrow_right;
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_UP.getKeyCode()) {
+                iconToDisplay = R.drawable.ic_keyboard_arrow_up;
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_DOWN.getKeyCode()) {
+                iconToDisplay = R.drawable.ic_keyboard_arrow_down;
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.SELECT_ALL.getKeyCode()) {
+                iconToDisplay = R.drawable.ic_select_all;
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode()) {
+                iconToDisplay = R.drawable.ic_emoji;
+            }
+            else if (action.getKeyEventCode() == CustomKeycode.TOGGLE_SELECTION_ANCHOR.getKeyCode()) {
+                iconToDisplay = R.drawable.pad_center;
+            }
+            if (iconToDisplay != 0)
                 drawIconInSector((int) coordinates[2] - iconHalfWidth,
                         (int) coordinates[3]-iconHalfHeight,
                         canvas,
-                        R.drawable.ic_backspace);            }
+                        iconToDisplay);
+            // switch_to_symbols_keypad (is a special symbol)
+            // selection_start, hide_keyboard (missing icon)
+            // switch_to_main_keypad (no reason to have it here)
         }
     }
 

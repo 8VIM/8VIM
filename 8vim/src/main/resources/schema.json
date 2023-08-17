@@ -40,9 +40,9 @@
         },
         "key_code": {
           "type": "string",
-          "pattern": "^(?i)(keycode_.+|move_current_end_point_left|move_current_end_point_right|move_current_end_point_up|move_current_end_point_down|selection_start|select_all|toggle_selection_anchor|shift_toggle|switch_to_main_keypad|switch_to_number_keypad|switch_to_symbols_keypad|switch_to_selection_keypad|switch_to_emoticon_keyboard|hide_keyboard|no_operation)$",
+          "pattern": "^(?i)(keycode_.+|move_current_end_point_left|move_current_end_point_right|move_current_end_point_up|move_current_end_point_down|selection_start|select_all|toggle_selection_anchor|shift_toggle|switch_to_main_keypad|switch_to_number_keypad|switch_to_symbols_keypad|switch_to_selection_keypad|switch_to_emoticon_keyboard|switch_to_clippad_keyboard|hide_keyboard|no_operation)$",
           "message": {
-            "pattern": "Must be one of a valid android KeyCode or one of: [move_current_end_point_left, move_current_end_point_right, move_current_end_point_up, move_current_end_point_down, selection_start, select_all, toggle_selection_anchor, shift_toggle, switch_to_main_keypad, switch_to_number_keypad, switch_to_symbols_keypad, switch_to_selection_keypad, switch_to_emoticon_keyboard, hide_keyboard, no_operation]"
+            "pattern": "Must be one of a valid android KeyCode or one of: [move_current_end_point_left, move_current_end_point_right, move_current_end_point_up, move_current_end_point_down, selection_start, select_all, toggle_selection_anchor, shift_toggle, switch_to_main_keypad, switch_to_number_keypad, switch_to_symbols_keypad, switch_to_selection_keypad, switch_to_emoticon_keyboard, switch_to_clippad_keyboard, hide_keyboard, no_operation]"
           }
         },
         "lower_case": {

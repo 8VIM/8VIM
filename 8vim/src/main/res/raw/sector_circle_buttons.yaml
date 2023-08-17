@@ -38,9 +38,9 @@ layers:
       movement_sequence:
         - 5
         - no_touch
-      key_code: shift_toggle
+      key_code: switch_to_clippad_keyboard
     - type: input_key
       movement_sequence:
         - 6
         - no_touch
-      key_code: shift_toggle
+      key_code: switch_to_selection_keypad
