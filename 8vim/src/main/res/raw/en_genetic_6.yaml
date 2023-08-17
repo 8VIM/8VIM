@@ -9,8 +9,8 @@ layers:
             - lower_case: z
           6:
             - lower_case: l
-            - lower_case: "0"
-            - lower_case: "9"
+            - lower_case: x
+            - lower_case: "?"
       2:
         parts:
           3:
@@ -20,24 +20,23 @@ layers:
           1:
             - lower_case: c
             - lower_case: p
-            - lower_case: "2"
+            - lower_case: "*"
       3:
         parts:
           4:
             - lower_case: h
             - lower_case: f
-            - lower_case: "6"
+            - lower_case: "@"
           2:
             - lower_case: r
             - lower_case: v
             - lower_case: b
-            - lower_case: "@"
       4:
         parts:
           5:
             - lower_case: o
             - lower_case: j
-            - lower_case: "4"
+            - lower_case: "!"
           3:
             - lower_case: e
             - lower_case: m
@@ -45,9 +44,9 @@ layers:
       5:
         parts:
           6:
-            - lower_case: x
-            - lower_case: "5"
-            - lower_case: "1"
+            - lower_case: "."
+            - lower_case: "-"
+            - lower_case: "'"
           4:
             - lower_case: a
             - lower_case: d
@@ -59,6 +58,6 @@ layers:
             - lower_case: s
             - lower_case: w
           5:
-            - lower_case: "3"
-            - lower_case: "8"
-            - lower_case: "7"
+            - lower_case: ","
+            - lower_case: "_"
+            - lower_case: '"'

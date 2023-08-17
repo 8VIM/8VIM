@@ -1,7 +1,7 @@
 [![Project Dashboard](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/flide8vim/)
 
 # TODO for multi-sector
-- Fix all tests
+- Fix all tests (lot of work to do)
 - Fix emoji and other gestures for 6 side keyboard
 - Handle exceptional cases (Or cases where layers have different number of sectors)
 
