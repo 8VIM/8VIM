@@ -1,22 +1,23 @@
 package inc.flide.vim8.keyboardhelpers;
 
+import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
-import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.models.AppPrefs;
 
 public final class InputMethodViewHelper {
     private InputMethodViewHelper() {
     }
 
-    public static Dimension computeDimension(Context context) {
-        Resources resources = context.getResources();
-        SharedPreferenceHelper sharedPreferenceHelper = SharedPreferenceHelper.getInstance(context);
-
+    public static Dimension computeDimension(Resources resources) {
+        AppPrefs prefs = appPreferenceModel().java();
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
+
         float minBaseSize;
         if (resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             minBaseSize = resources.getFraction(R.fraction.inputView_minHeightFraction, displayMetrics.heightPixels,
@@ -29,7 +30,7 @@ public final class InputMethodViewHelper {
                 displayMetrics.heightPixels);
         int height = (int) (Math.max((minBaseSize + maxBaseSize) / 2.0f,
                 resources.getDimension(R.dimen.inputView_baseHeight)));
-        int scale = sharedPreferenceHelper.getInt(context.getString(R.string.pref_keyboard_height), 100);
+        int scale = prefs.getKeyboard().getHeight().get();
         height = height * scale / 100;
         return new Dimension(displayMetrics.widthPixels, height);
     }

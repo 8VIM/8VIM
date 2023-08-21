@@ -1,8 +1,9 @@
 package inc.flide.vim8.utils;
 
+import static inc.flide.vim8.models.QuadrantKt.NUMBER_OF_SECTORS;
+
 import android.graphics.PointF;
-import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.Direction;
+import inc.flide.vim8.models.Direction;
 
 public final class GeometricUtilities {
     private GeometricUtilities() {
@@ -17,7 +18,7 @@ public final class GeometricUtilities {
     public static Direction getBaseQuadrant(int continuousQuadrantValue) {
         int result;
         // Calculate result with modulus operator
-        result = continuousQuadrantValue % Constants.NUMBER_OF_SECTORS;
+        result = continuousQuadrantValue % NUMBER_OF_SECTORS;
         return Direction.values()[result];
     }
 }

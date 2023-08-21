@@ -77,7 +77,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
 
           if [ -n "${{inputs.message}}" ]
-          thenec
+          then
             echo -en "${{ inputs.message }}" > metadata/en-US/changelogs/${{steps.vars.outputs.version_code}}.txt
             git add metadata/en-US/changelogs/${{steps.vars.outputs.version_code}}.txt
           fi

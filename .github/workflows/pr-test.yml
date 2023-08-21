@@ -31,10 +31,11 @@ jobs:
               - '8vim/**/*.xml'
               - '8vim/**/*.pro'
               - '**.gradle'
+              - '**.gradle.kts'
+              - 'gradle/libs.version.toml'
             yaml:
               - '8vim/src/main/res/raw/*.yaml'
               - '8vim/src/main/res/raw/*.yml'
-              - '8vim/src/main/res/values/strings.xml'
               - modified: '8vim/src/main/resources/schema.json'
       - if: ${{ steps.changes.outputs.metadata == 'true' }}
         run: |
@@ -49,30 +50,6 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v3
-      - uses: mavrosxristoforos/get-xml-info@1.1.1
-        id: xml
-        with:
-          xml-file: 8vim/src/main/res/values/strings.xml
-          xpath: //resources/string-array[@name='keyboard_layouts_id']/item
-      - uses: actions/github-script@v6
-        env:
-          XML: ${{steps.xml.outputs.info}}
-        with:
-          script: |
-            let failed = false
-            const xml = process.env.XML.split(',')
-            for(const lang of xml) {
-              const pattern = [`8vim/src/main/res/raw/${lang}.yaml`,`8vim/src/main/res/raw/${lang}.yml`]
-              const globber = await glob.create(pattern.join("\n"))
-              const files = await globber.glob()
-              if(files.length!=1) {
-                core.error(`Missing language layout for ${lang}`)
-                failed = true
-              }
-            }
-            if(failed) {
-              core.setFailed("Missing layout files")
-            }
       - uses: 8VIM/json-yaml-validate@main
         with:
           json_schema: ./8vim/src/main/resources/schema.json
@@ -82,15 +59,8 @@ jobs:
     name: 8VIM tests
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: "17"
-          distribution: temurin
-          cache: gradle
-      - run: ./gradlew check
+    uses: ./.github/workflows/codecheck.yaml
+    secrets: inherit
   build:
     if: ${{ !cancelled() && (needs.test.result == 'success' || needs.validate_layouts.result == 'success') }}
     needs: [validate_layouts, test]
