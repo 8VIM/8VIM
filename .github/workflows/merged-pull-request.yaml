@@ -3,16 +3,16 @@ name: Merged pull request
 concurrency: release
 
 on:
-  workflow_dispatch:
-  push:
+  pull_request_target:
     branches: [master]
+    types: [closed]
     paths:
       - "gradle/libs.version.toml"
       - "**.gradle.kts"
       - "8vim/**"
 jobs:
   changes:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.pusher.name != 'github-actions[bot]' }}
+    if: ${{ github.event_name=='pull_request_target' && github.event.pull_request.merged == true }}
     name: Detect changed files
     runs-on: ubuntu-latest
     permissions:
@@ -36,20 +36,13 @@ jobs:
               - '8vim/src/main/res/raw/*.yaml'
               - '8vim/src/main/res/raw/*.yml'
               - modified: '8vim/src/main/resources/schema.json'
-  codecheck:
-    needs: changes
-    if: ${{ github.event_name == 'workflow_dispatch' || needs.changes.outputs.src == 'true' }}
-    uses: ./.github/workflows/codecheck.yaml
-    with:
-      continue-on-error: true
-    secrets: inherit
   bump_version:
     needs: changes
-    if: ${{ github.event_name == 'workflow_dispatch' || needs.changes.outputs.src == 'true' }}
+    if: ${{ needs.changes.outputs.src == 'true' }}
     name: Update version
     uses: ./.github/workflows/bump-version.yaml
     with:
-      message: ${{github.event.commits.message}}
+      message: ${{github.event.pull_request.title}}
       version: rc
     secrets: inherit
   release:

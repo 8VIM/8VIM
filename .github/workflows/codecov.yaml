@@ -1,0 +1,17 @@
+name: Codecov on Merged pull request
+
+concurrency: codecov
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "gradle/libs.version.toml"
+      - "**.gradle.kts"
+      - "8vim/src/**"
+jobs:
+  codecheck:
+    uses: ./.github/workflows/codecheck.yaml
+    with:
+      continue-on-error: true
+    secrets: inherit
