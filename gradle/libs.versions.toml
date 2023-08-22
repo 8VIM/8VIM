@@ -2,7 +2,7 @@
 # Main
 accompanist = "0.30.1"
 androidx-activity = "1.7.2"
-android-gradle-plugin = "8.1.0"
+android-gradle-plugin = "8.1.1"
 android-appcompat = "1.6.1"
 android-material = "1.9.0"
 androidx-compose = "1.4.3"
@@ -15,7 +15,7 @@ androidx-lifecycle = "2.6.1"
 androidx-navigation = "2.6.0"
 androidx-preference = "1.2.1"
 android-recyclerview = "1.3.1"
-apache-commons = "1.7"
+apache-commons = "1.10.0"
 arrow = "1.2.0"
 arrow-jackson = "0.14.0"
 colorpreference = "1.1.0"
@@ -26,6 +26,7 @@ ktlint = "11.5.0"
 kotlin = "1.8.21"
 ksp = "1.8.21-1.0.11"
 logback-android = "3.0.0"
+mikepenz-aboutlibraries = "10.2.0"
 mannodermaus-android-junit5 = "1.9.3.0"
 slf4j = "2.0.7"
 
@@ -34,8 +35,6 @@ androidx-test-core = "1.5.0"
 androidx-test-ext = "1.1.5"
 androidx-test-runner = "1.5.2"
 androidx-test-espresso = "3.5.1"
-assertj = "3.24.2"
-jqwik = "1.7.3"
 junit4 = "4.13.2"
 junit5 = "5.9.3"
 kotest = "5.6.2"
@@ -70,10 +69,13 @@ jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-d
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jackson-module-arrow-kotlin = { module = "io.arrow-kt:arrow-integrations-jackson-module", version.ref = "arrow-jackson" }
 json-schema-validator = { module = "com.networknt:json-schema-validator", version.ref = "json-schema-validator" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 logback-android = { module = "com.github.tony19:logback-android", version.ref = "logback-android" }
 keyboardview = { module = "io.github.hijamoya:keyboardview", version.ref = "keyboardview" }
 apache-commons-text = { module = "org.apache.commons:commons-text", version.ref = "apache-commons" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+mikepenz-aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "mikepenz-aboutlibraries" }
+mikepenz-aboutlibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "mikepenz-aboutlibraries" }
 
 # Testing
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test-core" }
@@ -82,8 +84,6 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "android
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 junit4 = { module = "junit:junit", version.ref = "junit4" }
-jqwik = { module = "net.jqwik:jqwik", version.ref = "jqwik" }
-assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 junit5-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
 junit5-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
 junit5-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
@@ -107,3 +107,4 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint"}
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 mannodermaus-android-junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus-android-junit5" }
+mikepenz-aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "mikepenz-aboutlibraries" }

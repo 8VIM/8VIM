@@ -55,22 +55,28 @@ jobs:
           json_schema: ./8vim/src/main/resources/schema.json
           yaml_as_json: "true"
           base_dir: ./8vim/src/main/res/raw
-  test:
+  test_run:
     name: 8VIM tests
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
     secrets: inherit
+  test_check:
+    name: Github action test check workaround
+    needs: test_run
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo OK
   build:
-    if: ${{ !cancelled() && (needs.test.result == 'success' || needs.validate_layouts.result == 'success') }}
-    needs: [validate_layouts, test]
+    if: ${{ !cancelled() && (needs.test_check.result != 'failure' && needs.validate_layouts.result != 'failure') }}
+    needs: [validate_layouts, test_check]
     uses: ./.github/workflows/build.yaml
     with:
       ref: ${{github.ref}}
       target: debug
     secrets: inherit
   upload_artifact:
-    if: ${{ !cancelled() && needs.build.result=='success' }}
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
     needs: [build]
     runs-on: ubuntu-latest
     steps:
