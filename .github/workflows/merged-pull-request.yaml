@@ -42,7 +42,7 @@ jobs:
     name: Update version
     uses: ./.github/workflows/bump-version.yaml
     with:
-      message: ${{github.event.cpull_request.title}}
+      message: ${{github.event.pull_request.title}}
       version: rc
     secrets: inherit
   release:
