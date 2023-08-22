@@ -7,7 +7,9 @@ on:
     branches: [master]
     paths:
       - "metadata/**/changelogs/*.txt"
+      - "gradle/libs.version.toml"
       - "**.gradle"
+      - "**.gradle.kts"
       - "8vim/**"
 jobs:
   changes:
