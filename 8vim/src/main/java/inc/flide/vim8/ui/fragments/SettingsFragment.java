@@ -131,6 +131,7 @@ public class SettingsFragment extends LayoutFileSelector {
                 emoticonKeyboardPref.reset();
             }
         }
+
         DialogsHelper.createItemsChoice(context, R.string.select_preferred_emoticon_keyboard_dialog_title,
                 inputMethodsNameAndId.keySet(),
                 selectedKeyboardIndex,
