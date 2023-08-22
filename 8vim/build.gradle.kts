@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.mannodermaus.android.junit5)
+    alias(libs.plugins.mikepenz.aboutlibraries)
     checkstyle
     jacoco
 }
@@ -34,7 +35,7 @@ android {
     val versionRc = (versionProps["RC"] as String).toInt()
 
     namespace = "inc.flide.vim8"
-    compileSdk = 33
+    compileSdk = 34
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -53,7 +54,7 @@ android {
     defaultConfig {
         applicationId = "inc.flide.vi8"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
 
         val rcValue = if (versionRc > 0) 100 - versionRc else 0
         versionCode =
@@ -71,11 +72,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    bundle {
-        language {
-            enableSplit = false
-        }
-    }
+    bundle.language.enableSplit = false
 
     buildFeatures {
         compose = true
@@ -97,7 +94,16 @@ android {
     }
 
     buildTypes {
-        release {
+        named("debug") {
+            isDebuggable = true
+
+            /* Activate R8 in debug mode, good to check if any new library added works
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            */
+        }
+
+        named("release") {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
@@ -183,8 +189,10 @@ dependencies {
     implementation(libs.jackson.module.kotlin)
     implementation(libs.json.schema.validator)
     implementation(libs.keyboardview)
-//    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlin.reflect)
     implementation(libs.logback.android)
+    implementation(libs.mikepenz.aboutlibraries.core)
+    implementation(libs.mikepenz.aboutlibraries.compose)
     implementation(libs.slf4j.api)
 
     ksp(libs.arrow.ksp)
@@ -196,11 +204,9 @@ dependencies {
     androidTestImplementation(libs.junit4)
 
     testImplementation(libs.logback.classic)
-    testImplementation(libs.assertj.core)
     testImplementation(libs.junit5.api)
     testRuntimeOnly(libs.junit5.jupiter.engine)
     testRuntimeOnly(libs.junit5.vintage.engine)
-    testImplementation(libs.jqwik)
     testImplementation(libs.kotest.assertions)
     testImplementation(libs.kotest.extensions.arrow)
     testImplementation(libs.kotest.framework.datatest)

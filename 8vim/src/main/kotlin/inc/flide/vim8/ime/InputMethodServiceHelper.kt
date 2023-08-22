@@ -13,9 +13,14 @@ import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
 import inc.flide.vim8.models.KeyboardData
 import inc.flide.vim8.models.LayerLevel
+import inc.flide.vim8.models.addAllToActionMap
 import inc.flide.vim8.models.error.ExceptionWrapperError
 import inc.flide.vim8.models.error.LayoutError
 import inc.flide.vim8.models.info
+import inc.flide.vim8.models.lowerCaseCharacters
+import inc.flide.vim8.models.setLowerCaseCharacters
+import inc.flide.vim8.models.setUpperCaseCharacters
+import inc.flide.vim8.models.upperCaseCharacters
 import java.io.InputStream
 
 object InputMethodServiceHelper {
@@ -44,9 +49,8 @@ object InputMethodServiceHelper {
     private fun getLayoutIndependentKeyboardData(resources: Resources): KeyboardData {
         if (layoutIndependentKeyboardData == null) {
             layoutIndependentKeyboardData = either {
-                val layoutIndependentKeyboardData = KeyboardData()
                 val sectorCircleButtonsKeyboard = addToKeyboardActionsMapUsingResourceId(
-                    layoutIndependentKeyboardData,
+                    KeyboardData(),
                     resources,
                     R.raw.sector_circle_buttons
                 ).bind()
@@ -60,6 +64,10 @@ object InputMethodServiceHelper {
                     resources,
                     R.raw.special_core_gestures
                 ).bind()
+            }.onLeft {
+                if (it is ExceptionWrapperError) {
+                    it.exception.printStackTrace()
+                }
             }.getOrNull()
         }
         return layoutIndependentKeyboardData!!

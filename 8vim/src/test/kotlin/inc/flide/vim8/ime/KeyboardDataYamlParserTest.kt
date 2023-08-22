@@ -8,6 +8,8 @@ import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
 import inc.flide.vim8.models.KeyboardActionType
 import inc.flide.vim8.models.LayerLevel
+import inc.flide.vim8.models.lowerCaseCharacters
+import inc.flide.vim8.models.upperCaseCharacters
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome

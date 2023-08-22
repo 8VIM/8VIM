@@ -21,10 +21,12 @@ import java.util.Set;
 import kotlin.Pair;
 
 public abstract class LayoutFileSelector extends PreferenceFragmentCompat {
-    private static final String[] LAYOUT_FILTER = {"application/octet-stream"};
+    private static final String[] LAYOUT_FILTER = { "application/octet-stream" };
+
     protected AppPrefs prefs;
-    private final ActivityResultLauncher<String[]> openContent =
-            registerForActivityResult(new ActivityResultContracts.OpenDocument(), this::callback);
+
+    private final ActivityResultLauncher<String[]> openContent = registerForActivityResult(
+            new ActivityResultContracts.OpenDocument(), this::callback);
 
     private void callback(Uri selectedCustomLayoutFile) {
         AppPrefs.Layout layoutPrefs = prefs.getLayout();
@@ -41,23 +43,23 @@ public abstract class LayoutFileSelector extends PreferenceFragmentCompat {
         if (isInHistory) {
             updateKeyboard(layout, context);
         } else {
-            Pair<Integer, String> errorToShow =
-                    EitherKt.getOrElse(
-                            LayoutKt
-                                    .loadKeyboardData(layout, context)
-                                    .map(keyboardData -> {
-                                        if (keyboardData.getTotalLayers() == 0) {
-                                            return new Pair<>(R.string.yaml_error_title,
-                                                    "The layout requires at least one layer");
-                                        }
-                                        return null;
-                                    }), error -> {
-                                int title = R.string.yaml_error_title;
-                                if (error instanceof ExceptionWrapperError) {
-                                    title = R.string.generic_error_text;
+            Pair<Integer, String> errorToShow = EitherKt.getOrElse(
+                    LayoutKt
+                            .loadKeyboardData(layout, context)
+                            .map(keyboardData -> {
+                                if (keyboardData.getTotalLayers() == 0) {
+                                    return new Pair<>(R.string.yaml_error_title,
+                                            "The layout requires at least one layer");
                                 }
-                                return new Pair<>(title, error.getMessage());
-                            });
+                                return null;
+                            }),
+                    error -> {
+                        int title = R.string.yaml_error_title;
+                        if (error instanceof ExceptionWrapperError) {
+                            title = R.string.generic_error_text;
+                        }
+                        return new Pair<>(title, error.getMessage());
+                    });
             if (errorToShow != null) {
                 DialogsHelper.showAlert(context, errorToShow.getFirst(), errorToShow.getSecond());
                 return;

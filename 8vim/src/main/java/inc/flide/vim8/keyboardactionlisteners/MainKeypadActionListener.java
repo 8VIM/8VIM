@@ -8,6 +8,7 @@ import inc.flide.vim8.models.FingerPosition;
 import inc.flide.vim8.models.KeyboardAction;
 import inc.flide.vim8.models.KeyboardActionType;
 import inc.flide.vim8.models.KeyboardData;
+import inc.flide.vim8.models.KeyboardDataKt;
 import inc.flide.vim8.models.LayerLevel;
 import inc.flide.vim8.models.MovementSequenceType;
 import inc.flide.vim8.models.yaml.ExtraLayer;
@@ -83,11 +84,11 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     public String getLowerCaseCharacters(LayerLevel layer) {
-        return keyboardData.lowerCaseCharacters(layer).getOrNull();
+        return KeyboardDataKt.lowerCaseCharacters(keyboardData, layer).getOrNull();
     }
 
     public String getUpperCaseCharacters(LayerLevel layer) {
-        return keyboardData.upperCaseCharacters(layer).getOrNull();
+        return KeyboardDataKt.upperCaseCharacters(keyboardData, layer).getOrNull();
     }
 
     public String getCurrentLetter() {
@@ -114,7 +115,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
         }
         List<FingerPosition> tempMovementSequence = new ArrayList<>(movementSequence);
         tempMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
-        return keyboardData.findLayer(tempMovementSequence);
+        return KeyboardDataKt.findLayer(keyboardData, tempMovementSequence);
     }
 
     private boolean isFullRotation() {
