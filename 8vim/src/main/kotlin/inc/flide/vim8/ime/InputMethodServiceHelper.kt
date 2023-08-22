@@ -48,10 +48,9 @@ object InputMethodServiceHelper {
 
     private fun getLayoutIndependentKeyboardData(resources: Resources): KeyboardData {
         if (layoutIndependentKeyboardData == null) {
-            val m = either {
-                val layoutIndependentKeyboardData = KeyboardData()
+            layoutIndependentKeyboardData = either {
                 val sectorCircleButtonsKeyboard = addToKeyboardActionsMapUsingResourceId(
-                    layoutIndependentKeyboardData,
+                    KeyboardData(),
                     resources,
                     R.raw.sector_circle_buttons
                 ).bind()
@@ -65,8 +64,7 @@ object InputMethodServiceHelper {
                     resources,
                     R.raw.special_core_gestures
                 ).bind()
-            }
-            layoutIndependentKeyboardData = m.onLeft {
+            }.onLeft {
                 if (it is ExceptionWrapperError) {
                     it.exception.printStackTrace()
                 }
