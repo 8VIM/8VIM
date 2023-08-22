@@ -1,6 +1,5 @@
 package inc.flide.vim8.ui.fragments;
 
-
 import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
 
 import android.content.Context;
@@ -79,8 +78,8 @@ public class SettingsFragment extends LayoutFileSelector {
     }
 
     private void setupLoadCustomLayoutPreferenceAction() {
-        Preference loadCustomKeyboardPreference =
-                findPreference(getString(R.string.pref_select_custom_keyboard_layout_key));
+        Preference loadCustomKeyboardPreference = findPreference(
+                getString(R.string.pref_select_custom_keyboard_layout_key));
         assert loadCustomKeyboardPreference != null;
 
         loadCustomKeyboardPreference.setOnPreferenceClickListener(preference -> {
@@ -88,7 +87,6 @@ public class SettingsFragment extends LayoutFileSelector {
             return true;
         });
     }
-
 
     private void setupLayoutPreferenceAction() {
         Preference keyboardPref = findPreference(getString(R.string.pref_select_keyboard_layout_key));
@@ -138,6 +136,5 @@ public class SettingsFragment extends LayoutFileSelector {
                 selectedKeyboardIndex,
                 which -> emoticonKeyboardPref.set(keyboardIds.get(which), true)).show();
     }
-
 
 }
