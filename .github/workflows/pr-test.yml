@@ -68,7 +68,7 @@ jobs:
     steps:
       - run: echo OK
   build:
-    if: ${{ !cancelled() && (needs.test_check.result == 'success' || needs.validate_layouts.result == 'success') }}
+    if: ${{ !cancelled() && (needs.test_check.result != 'failure' && needs.validate_layouts.result != 'failure') }}
     needs: [validate_layouts, test_check]
     uses: ./.github/workflows/build.yaml
     with:
@@ -76,7 +76,7 @@ jobs:
       target: debug
     secrets: inherit
   upload_artifact:
-    if: ${{ !cancelled() && needs.build.result=='success' }}
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
     needs: [build]
     runs-on: ubuntu-latest
     steps:
