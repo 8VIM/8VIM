@@ -8,6 +8,7 @@ data class CharacterSet(
     val upperCaseCharacters: String = ""
 ) {
     companion object
-
-    fun isNotEmpty(): Boolean = lowerCaseCharacters.isNotEmpty() || upperCaseCharacters.isNotEmpty()
 }
+
+fun CharacterSet.isNotEmpty(): Boolean =
+    lowerCaseCharacters.isNotEmpty() || upperCaseCharacters.isNotEmpty()

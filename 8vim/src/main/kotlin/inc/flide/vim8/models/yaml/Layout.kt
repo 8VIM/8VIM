@@ -1,13 +1,11 @@
 package inc.flide.vim8.models.yaml
 
-import arrow.core.Option
-import arrow.core.none
 import arrow.optics.optics
 import com.fasterxml.jackson.annotation.JsonProperty
 
 @optics
 data class Layout(
-    @JsonProperty(required = true) val layers: Option<Layers> = none(),
+    @JsonProperty(required = true) val layers: Layers = Layers(),
     val info: LayoutInfo = LayoutInfo()
 ) {
     companion object
