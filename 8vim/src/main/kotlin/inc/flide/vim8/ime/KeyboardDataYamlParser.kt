@@ -42,6 +42,7 @@ import inc.flide.vim8.models.yaml.Flags.FlagsDeserializer
 import inc.flide.vim8.models.yaml.Layer
 import inc.flide.vim8.models.yaml.Layout
 import inc.flide.vim8.models.yaml.isEmpty
+import inc.flide.vim8.models.yaml.keyCode
 import inc.flide.vim8.models.yaml.toLayerLevel
 import java.io.IOException
 import java.io.InputStream
@@ -158,7 +159,7 @@ object KeyboardDataYamlParser {
                     it.actionType,
                     it.lowerCase,
                     it.upperCase,
-                    it.keyCode,
+                    it.keyCode(),
                     it.flags.value,
                     LayerLevel.HIDDEN
                 )
@@ -213,7 +214,7 @@ object KeyboardDataYamlParser {
                     updatedAction.actionType,
                     updatedAction.lowerCase,
                     updatedAction.upperCase,
-                    updatedAction.keyCode,
+                    updatedAction.keyCode(),
                     updatedAction.flags.value,
                     layer
                 )
