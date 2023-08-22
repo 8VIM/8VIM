@@ -5,8 +5,9 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 
 class QuadrantSpec : FunSpec({
-    context("get index for a character set string from quadrant") {
+    context("get index for a character set string from quadrant when") {
         withData(
+            nameFn = { "${it.first.sector}/${it.first.part} should have index: ${it.second}" },
             (Quadrant(Direction.RIGHT, Direction.BOTTOM) to 0),
             (Quadrant(Direction.BOTTOM, Direction.RIGHT) to 1),
             (Quadrant(Direction.BOTTOM, Direction.LEFT) to 8),
@@ -20,9 +21,10 @@ class QuadrantSpec : FunSpec({
         }
     }
 
-    context("get opposite quadrant") {
+    context("opposite quadrant of RIGHT/BOTTOM when character position") {
         val quadrant = Quadrant(Direction.RIGHT, Direction.BOTTOM)
         withData(
+            nameFn = { "${it.first} should be ${it.second.sector}/${it.second.part}" },
             (CharacterPosition.FIRST to Quadrant(Direction.RIGHT, Direction.TOP)),
             (CharacterPosition.SECOND to Quadrant(Direction.BOTTOM, Direction.RIGHT)),
             (CharacterPosition.THIRD to Quadrant(Direction.LEFT, Direction.BOTTOM)),

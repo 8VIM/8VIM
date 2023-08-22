@@ -7,6 +7,7 @@ import io.kotest.matchers.shouldBe
 class DirectionSpec : FunSpec({
     context("convert a Direction to a FingerPosition") {
         withData(
+            nameFn = { "${it.first} -> ${it.second}" },
             (Direction.RIGHT to FingerPosition.RIGHT),
             (Direction.LEFT to FingerPosition.LEFT),
             (Direction.TOP to FingerPosition.TOP),
@@ -17,6 +18,7 @@ class DirectionSpec : FunSpec({
     }
     context("get the opposite direction") {
         withData(
+            nameFn = { "${it.first} -> ${it.second}" },
             (Direction.RIGHT to Direction.LEFT),
             (Direction.LEFT to Direction.RIGHT),
             (Direction.TOP to Direction.BOTTOM),
@@ -28,6 +30,7 @@ class DirectionSpec : FunSpec({
 
     context("get a quadrant from an int") {
         withData(
+            nameFn = { "${it.first} -> ${it.second}" },
             (-1 to Direction.TOP),
             (0 to Direction.RIGHT),
             (1 to Direction.TOP),

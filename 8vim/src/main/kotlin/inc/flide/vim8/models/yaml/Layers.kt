@@ -14,3 +14,5 @@ data class Layers(
 ) {
     companion object
 }
+
+fun Layers.hasOnlyHiddenLayer(): Boolean = extraLayers.isNotEmpty() && defaultLayer.isNone()

@@ -19,6 +19,10 @@ class CircleSpec : FunSpec({
     }
     context("get sector from a point") {
         withData(
+            nameFn = {
+                "Finger at (${it.second.x}, ${it.second.y})" +
+                    "should be the ${it.first} sector"
+            },
             (FingerPosition.TOP to mockPointF(0f, -10f)),
             (FingerPosition.LEFT to mockPointF(-10f, 0f)),
             (FingerPosition.BOTTOM to mockPointF(0f, 10f)),

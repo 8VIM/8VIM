@@ -2,7 +2,6 @@ package inc.flide.vim8.ime
 
 import arrow.core.Either
 import arrow.core.fold
-import arrow.core.getOrElse
 import arrow.core.left
 import arrow.core.raise.catch
 import arrow.core.right
@@ -14,6 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
+import com.fasterxml.jackson.module.kotlin.addDeserializer
+import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
@@ -27,11 +28,14 @@ import inc.flide.vim8.models.KeyboardData
 import inc.flide.vim8.models.LayerLevel
 import inc.flide.vim8.models.MovementSequence
 import inc.flide.vim8.models.Quadrant
+import inc.flide.vim8.models.addAllToActionMap
+import inc.flide.vim8.models.characterIndexInString
 import inc.flide.vim8.models.error.ExceptionWrapperError
 import inc.flide.vim8.models.error.InvalidLayoutError
 import inc.flide.vim8.models.error.LayoutError
 import inc.flide.vim8.models.error.validationMessages
-import inc.flide.vim8.models.info
+import inc.flide.vim8.models.setLowerCaseCharacters
+import inc.flide.vim8.models.setUpperCaseCharacters
 import inc.flide.vim8.models.yaml.Action
 import inc.flide.vim8.models.yaml.Flags
 import inc.flide.vim8.models.yaml.Flags.FlagsDeserializer
@@ -39,16 +43,16 @@ import inc.flide.vim8.models.yaml.Layer
 import inc.flide.vim8.models.yaml.Layout
 import inc.flide.vim8.models.yaml.isEmpty
 import inc.flide.vim8.models.yaml.toLayerLevel
-import inc.flide.vim8.models.yaml.upperCase
 import java.io.IOException
 import java.io.InputStream
 import java.text.MessageFormat
 
 object KeyboardDataYamlParser {
-    private val module = SimpleModule(FlagsDeserializer::class.qualifiedName).addDeserializer(
-        Flags::class.java,
-        FlagsDeserializer()
-    )
+    private val module = SimpleModule(FlagsDeserializer::class.qualifiedName)
+        .addDeserializer(
+            Flags::class,
+            FlagsDeserializer()
+        )
     private val mapper: ObjectMapper =
         YAMLMapper.builder().enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
             .propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE)
@@ -76,28 +80,20 @@ object KeyboardDataYamlParser {
         return catch({
             validateYaml(mapper.readTree(inputStream))
                 .map { layout ->
-                    val keyboardData = KeyboardData.info.set(KeyboardData(), layout.info)
-                    layout.layers.map { layers ->
-                        val keyboardWithHiddenLayer = keyboardData.addAllToActionMap(
-                            if (layers.hidden.isNotEmpty()) {
-                                addKeyboardActions(layers.hidden)
-                            } else {
-                                emptyMap()
-                            }
-                        )
-                        if (layers.extraLayers.isNotEmpty() && layers.defaultLayer.isNone()) {
-                            keyboardWithHiddenLayer
-                        } else {
-                            val layersToAdd = layers.defaultLayer
-                                .map { LayerLevel.FIRST to it }
-                                .toMap() + layers.extraLayers
-                                .mapKeys { it.key.toLayerLevel() }
-                            layersToAdd
-                                .fold(keyboardWithHiddenLayer) { acc, (layerId, layer) ->
-                                    addLayer(acc, layerId, layer)
-                                }
+                    val keyboardData = KeyboardData(
+                        info = layout.info,
+                        actionMap = getActionMap(layout.layers.hidden)
+                    )
+
+                    val layersToAdd = layout.layers.defaultLayer
+                        .map { LayerLevel.FIRST to it }
+                        .toMap() + layout.layers.extraLayers
+                        .mapKeys { it.key.toLayerLevel() }
+
+                    layersToAdd
+                        .fold(keyboardData) { acc, (layerId, layer) ->
+                            addLayer(acc, layerId, layer)
                         }
-                    }.getOrElse { keyboardData }
                 }
         }) { exception: IOException ->
             ExceptionWrapperError(exception).left()
@@ -125,7 +121,7 @@ object KeyboardDataYamlParser {
                 if (it.validationMessages.isNotEmpty()) {
                     it.left()
                 } else {
-                    mapper.treeToValue(node, Layout::class.java).right()
+                    mapper.convertValue<Layout>(node).right()
                 }
             }
     }
@@ -141,7 +137,7 @@ object KeyboardDataYamlParser {
         return layerData.sectors.fold(keyboardData) { acc, (sector, value) ->
             value.parts.fold(acc) { acc1, (part, actions) ->
                 acc1.addAllToActionMap(
-                    addKeyboardActions(
+                    getActionMap(
                         layer = layer,
                         quadrant = Quadrant(sector, part),
                         actions = actions,
@@ -154,7 +150,7 @@ object KeyboardDataYamlParser {
             .setUpperCaseCharacters(upperCaseCharacters.toString(), layer)
     }
 
-    private fun addKeyboardActions(actions: List<Action>): Map<MovementSequence, KeyboardAction> {
+    private fun getActionMap(actions: List<Action>): Map<MovementSequence, KeyboardAction> {
         return actions
             .filterNot { it.movementSequence.isEmpty() }
             .associateBy({ it.movementSequence }, {
@@ -169,7 +165,7 @@ object KeyboardDataYamlParser {
             })
     }
 
-    private fun addKeyboardActions(
+    private fun getActionMap(
         layer: LayerLevel,
         quadrant: Quadrant,
         actions: List<Action?>,
@@ -197,7 +193,7 @@ object KeyboardDataYamlParser {
                     }
                     characterSets.first.setCharAt(characterSetIndex, action.lowerCase[0])
                     if (action.upperCase.isEmpty()) {
-                        Action.upperCase.set(action, action.lowerCase.uppercase())
+                        action.copy(upperCase = action.lowerCase.uppercase())
                     } else {
                         action
                     }
