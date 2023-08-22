@@ -35,7 +35,7 @@ android {
     val versionRc = (versionProps["RC"] as String).toInt()
 
     namespace = "inc.flide.vim8"
-    compileSdk = 33
+    compileSdk = 34
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -54,7 +54,7 @@ android {
     defaultConfig {
         applicationId = "inc.flide.vi8"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
 
         val rcValue = if (versionRc > 0) 100 - versionRc else 0
         versionCode =
