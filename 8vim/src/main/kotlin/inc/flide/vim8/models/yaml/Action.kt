@@ -1,9 +1,10 @@
 package inc.flide.vim8.models.yaml
 
 import android.view.KeyEvent
+import arrow.core.Option
+import arrow.core.getOrElse
 import arrow.optics.optics
 import com.fasterxml.jackson.annotation.JsonProperty
-import inc.flide.vim8.lib.android.tryOrNull
 import inc.flide.vim8.models.CustomKeycode
 import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardActionType
@@ -23,21 +24,15 @@ data class Action(
 }
 
 fun Action.keyCode(): Int {
-    return if (keyCodeString.isEmpty()) {
-        0
-    } else {
-        tryOrNull {
-            keyCodeString.let {
-                val uppercaseKeyCodeString = it.uppercase(Locale.getDefault())
-                val keyCode = KeyEvent.keyCodeFromString(uppercaseKeyCodeString)
-                if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
-                    CustomKeycode.valueOf(uppercaseKeyCodeString).keyCode
-                } else {
-                    keyCode
-                }
-            }
-        } ?: 0
-    }
+    return Option.catch {
+        val uppercaseKeyCodeString = keyCodeString.uppercase(Locale.getDefault())
+        val keyCode = KeyEvent.keyCodeFromString(uppercaseKeyCodeString)
+        if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
+            CustomKeycode.valueOf(uppercaseKeyCodeString).keyCode
+        } else {
+            keyCode
+        }
+    }.getOrElse { 0 }
 }
 
 fun Action?.isEmpty(): Boolean {
