@@ -52,7 +52,7 @@
           "type": "array",
           "items": {
             "type": ["string", "integer"],
-            "pattern": "^(?i)(no_touch|inside_circle|top|left|bottom|right|long_press|long_press_end|(\\d))$",
+            "pattern": "^(?i)(no_touch|inside_circle|top|left|bottom|right|long_press|long_press_end|\\d)$",
             "message": {
               "pattern": "Finger position can only be one of: [no_touch, inside_circle, top, left, bottom right, long_press, long_press_end or a number]"
             }
@@ -97,13 +97,13 @@
         "sectors": {
           "type": "object",
           "patternProperties": {
-            "^(?i)(left|right|(\\d))$": {
+            "^(?i)(left|right|\\d)$": {
               "type": "object",
               "properties": {
                 "parts": {
                   "type": "object",
                   "patternProperties": {
-                    "^(?i)(top|bottom)$": {
+                    "^(?i)(top|bottom|\\d)$": {
                       "$ref": "#/definitions/actionList"
                     }
                   },
@@ -118,13 +118,13 @@
               ],
               "additionalProperties": false
             },
-            "^(?i)(top|bottom|(\\d))$": {
+            "^(?i)(top|bottom|\\d)$": {
               "type": "object",
               "properties": {
                 "parts": {
                   "type": "object",
                   "patternProperties": {
-                    "^(?i)(left|right)$": {
+                    "^(?i)(left|right|\\d)$": {
                       "$ref": "#/definitions/actionList"
                     }
                   },
