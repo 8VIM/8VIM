@@ -18,8 +18,9 @@ object FingerPosition {
     @JvmStatic
     fun getDirection(start: Int, end: Int, sectors: Int): Int {
         var direction = (end - start) % sectors
-        if (direction < 0)
+        if (direction < 0) {
             direction += sectors
+        }
         return if (direction != 1) -1 else direction
     }
 
@@ -94,13 +95,15 @@ object FingerPosition {
                 val movementSequence =
                     LayerLevel.movementSequences[layer].orEmpty() + INSIDE_CIRCLE
                 val direction = getDirection(quadrant.sector, quadrant.part, keyboardData.sectors)
-                return (0..maxMovements).fold(movementSequence to quadrant.sector) { (acc, sector), _ ->
-                    var nextSector = ((sector - 1 + direction) % keyboardData.sectors)
-                    if (nextSector < 0)
-                        nextSector += keyboardData.sectors
-                    nextSector += 1
-                    acc + sector to nextSector
-                }.first
+                return (0..maxMovements)
+                    .fold(movementSequence to quadrant.sector) { (acc, sector), _ ->
+                        var nextSector = ((sector - 1 + direction) % keyboardData.sectors)
+                        if (nextSector < 0) {
+                            nextSector += keyboardData.sectors
+                        }
+                        nextSector += 1
+                        acc + sector to nextSector
+                    }.first
             }
         }
     }

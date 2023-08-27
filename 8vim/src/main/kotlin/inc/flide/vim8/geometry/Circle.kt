@@ -63,8 +63,9 @@ class Circle {
         val angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p, keyboardData)
         var quadrantCyclic = (-angleDouble / (Math.PI * 2 / keyboardData.sectors)).roundToInt()
         quadrantCyclic %= keyboardData.sectors
-        if (quadrantCyclic < 0)
+        if (quadrantCyclic < 0) {
             quadrantCyclic += keyboardData.sectors
+        }
         return quadrantCyclic + 1
     }
 }

@@ -13,10 +13,11 @@ fun Quadrant.characterIndexInString(
     characterPosition: CharacterPosition,
     keyboardData: KeyboardData
 ): Int {
-    return if ((part - sector + keyboardData.sectors) % keyboardData.sectors == 1)
+    return if ((part - sector + keyboardData.sectors) % keyboardData.sectors == 1) {
         keyboardData.layoutPositions * 2 * (part - 1) + characterPosition.ordinal * 2
-    else
+    } else {
         keyboardData.layoutPositions * 2 * (sector - 1) + characterPosition.ordinal * 2 + 1
+    }
 }
 
 fun Quadrant.opposite(position: CharacterPosition, keyboardData: KeyboardData): Quadrant {

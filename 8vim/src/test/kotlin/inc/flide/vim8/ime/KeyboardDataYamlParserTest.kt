@@ -2,7 +2,6 @@ package inc.flide.vim8.ime
 
 import android.view.KeyEvent
 import inc.flide.vim8.ime.KeyboardDataYamlParser.readKeyboardData
-import inc.flide.vim8.models.CHARACTER_SET_SIZE
 import inc.flide.vim8.models.CustomKeycode
 import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
@@ -132,7 +131,7 @@ class KeyboardDataYamlParserTest : DescribeSpec({
                 )
             )
             val stringBuilder = StringBuilder()
-            stringBuilder.setLength(CHARACTER_SET_SIZE)
+            stringBuilder.setLength(16)
             stringBuilder.setCharAt(0, 'n')
             val inputStream = javaClass.getResourceAsStream("/valid_file.yaml")
             val keyboardData = readKeyboardData(inputStream).shouldBeRight()

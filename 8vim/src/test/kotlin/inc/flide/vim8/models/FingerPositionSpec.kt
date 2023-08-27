@@ -5,8 +5,9 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 
 class FingerPositionSpec : FunSpec({
+    val keyboardData = KeyboardData(sectors = 4)
     context("computing movement sequence") {
-        val quadrant = Quadrant(Direction.BOTTOM, Direction.LEFT)
+        val quadrant = Quadrant(FingerPosition.BOTTOM, FingerPosition.LEFT)
         withData(
             nameFn = { "for the ${it.first} layer at ${it.second} position" },
             Triple(
@@ -124,7 +125,12 @@ class FingerPositionSpec : FunSpec({
 
             )
         ) { (layer, position, result) ->
-            FingerPosition.computeMovementSequence(layer, quadrant, position) shouldBe result
+            FingerPosition.computeMovementSequence(
+                layer,
+                quadrant,
+                position,
+                keyboardData
+            ) shouldBe result
         }
     }
 })

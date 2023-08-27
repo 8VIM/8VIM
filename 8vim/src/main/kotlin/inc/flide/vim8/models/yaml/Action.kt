@@ -49,9 +49,9 @@ fun Action.keyCode(): Int {
 fun Action?.isEmpty(): Boolean {
     return this?.let {
         lowerCase.isEmpty() &&
-                upperCase.isEmpty() &&
-                movementSequence.isEmpty() &&
-                flags.value == 0
+            upperCase.isEmpty() &&
+            movementSequence.isEmpty() &&
+            flags.value == 0
     }
         ?: true
 }
@@ -60,10 +60,13 @@ class FingerPositionDeserializer : JsonDeserializer<MovementSequence>() {
     @Throws(IOException::class, NullPointerException::class)
     override fun deserialize(p: JsonParser, ctxt: DeserializationContext): List<Int> {
         val node = p.codec.readTree<JsonNode>(p)
-        if (!node.isArray) throw MismatchedInputException.from(
-            p, null as Class<*>?,
-            "Impossible to deserialize this array of FingerPositions"
-        )
+        if (!node.isArray) {
+            throw MismatchedInputException.from(
+                p,
+                null as Class<*>?,
+                "Impossible to deserialize this array of FingerPositions"
+            )
+        }
         val arrayNode = node as ArrayNode
         val iterator = arrayNode.elements()
         val result: MutableList<Int> = ArrayList()
@@ -90,6 +93,10 @@ class FingerPositionDeserializer : JsonDeserializer<MovementSequence>() {
                 "INSIDE_CIRCLE" -> FingerPosition.INSIDE_CIRCLE
                 "LONG_PRESS" -> FingerPosition.LONG_PRESS
                 "LONG_PRESS_END" -> FingerPosition.LONG_PRESS_END
+                "BOTTOM" -> FingerPosition.BOTTOM
+                "TOP" -> FingerPosition.TOP
+                "LEFT" -> FingerPosition.LEFT
+                "RIGHT" -> FingerPosition.RIGHT
                 else -> throw MismatchedInputException.from(
                     p,
                     null as Class<*>?,
@@ -98,7 +105,8 @@ class FingerPositionDeserializer : JsonDeserializer<MovementSequence>() {
             }
         } else {
             throw MismatchedInputException.from(
-                p, null as Class<*>?,
+                p,
+                null as Class<*>?,
                 "Impossible to deserializeFingerPosition"
             )
         }

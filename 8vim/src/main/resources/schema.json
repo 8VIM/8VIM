@@ -52,9 +52,9 @@
           "type": "array",
           "items": {
             "type": ["string", "integer"],
-            "pattern": "^(?i)(no_touch|inside_circle|long_press|long_press_end|(\\d))$",
+            "pattern": "^(?i)(no_touch|inside_circle|top|left|bottom|right|long_press|long_press_end|(\\d))$",
             "message": {
-              "pattern": "Finger position can only be one of: [no_touch, inside_circle, long_press, long_press_end, or a number]"
+              "pattern": "Finger position can only be one of: [no_touch, inside_circle, top, left, bottom right, long_press, long_press_end or a number]"
             }
           }
         },
@@ -97,19 +97,40 @@
         "sectors": {
           "type": "object",
           "patternProperties": {
-            "^(?i)(\\d)$": {
+            "^(?i)(left|right|(\\d))$": {
               "type": "object",
               "properties": {
                 "parts": {
                   "type": "object",
                   "patternProperties": {
-                    "^(?i)(\\d)$": {
+                    "^(?i)(top|bottom)$": {
                       "$ref": "#/definitions/actionList"
                     }
                   },
                   "additionalProperties": false,
                   "message": {
-                    "additionalProperties": "Only integer parts are valid"
+                    "additionalProperties": "Only top/bottom parts are valid for left/right sectors"
+                  }
+                }
+              },
+              "required": [
+                "parts"
+              ],
+              "additionalProperties": false
+            },
+            "^(?i)(top|bottom|(\\d))$": {
+              "type": "object",
+              "properties": {
+                "parts": {
+                  "type": "object",
+                  "patternProperties": {
+                    "^(?i)(left|right)$": {
+                      "$ref": "#/definitions/actionList"
+                    }
+                  },
+                  "additionalProperties": false,
+                  "message": {
+                    "additionalProperties": "Only left/right parts are valid for top/bottom sectors"
                   }
                 }
               },
@@ -128,6 +149,10 @@
       "type": "array",
       "items": {
         "$ref": "#/definitions/action"
+      },
+      "maxItems": 4,
+      "message": {
+        "maxItems": "There is only up to 4 actions per sectors/parts"
       }
     }
   },

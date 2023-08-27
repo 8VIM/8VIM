@@ -2,6 +2,7 @@ package inc.flide.vim8.geometry
 
 import android.graphics.PointF
 import inc.flide.vim8.models.FingerPosition
+import inc.flide.vim8.models.KeyboardData
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
@@ -9,6 +10,7 @@ import io.mockk.mockk
 
 class CircleSpec : FunSpec({
     val circle = Circle()
+    val keyboardData = KeyboardData(sectors = 4)
     circle.radius = 10f
 
     fun mockPointF(x: Float, y: Float): PointF {
@@ -17,6 +19,7 @@ class CircleSpec : FunSpec({
         point.y = y
         return point
     }
+
     context("get sector from a point") {
         withData(
             nameFn = {
@@ -28,7 +31,7 @@ class CircleSpec : FunSpec({
             (FingerPosition.BOTTOM to mockPointF(0f, 10f)),
             (FingerPosition.RIGHT to mockPointF(10f, 0f))
         ) { (position, point) ->
-            circle.getSectorOfPoint(point) shouldBe position
+            circle.getSectorOfPoint(point, keyboardData) shouldBe position
         }
     }
 })

@@ -5,13 +5,12 @@ import arrow.core.elementAtOrNone
 import arrow.core.fold
 import arrow.core.none
 import arrow.core.some
+import arrow.optics.copy
 import arrow.optics.dsl.index
 import arrow.optics.optics
 import arrow.optics.typeclasses.Index
 import inc.flide.vim8.models.yaml.Layer
 import inc.flide.vim8.models.yaml.LayoutInfo
-
-const val CHARACTER_SET_SIZE = 4 * 4 * 2 // 4 sectors, 2 parts, 4 characters per parts
 
 @optics
 data class KeyboardData(
@@ -117,6 +116,11 @@ fun KeyboardData.computeSectorsAndLayouts(layers: Collection<Layer>): KeyboardDa
             }
         }
     return copy(sectors = sectorsAndLayouts.first, layoutPositions = sectorsAndLayouts.second)
+}
+
+fun KeyboardData.updateSectorsAndLayouts(other: KeyboardData): KeyboardData = copy {
+    KeyboardData.sectors transform { it.coerceAtLeast(other.sectors) }
+    KeyboardData.layoutPositions transform { it.coerceAtLeast(other.layoutPositions) }
 }
 
 fun KeyboardData.characterSetSize(): Int {
