@@ -7,9 +7,9 @@
         <item>Custom</item>
     </array>
     <array name="pref_color_mode_values">
-        <item>system</item>
-        <item>dark</item>
-        <item>light</item>
-        <item>custom</item>
+        <item>SYSTEM</item>
+        <item>DARK</item>
+        <item>LIGHT</item>
+        <item>CUSTOM</item>
     </array>
 </resources>

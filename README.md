@@ -13,16 +13,17 @@
 
 # 8Vim
 
+[![Project Dashboard](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/flide8vim/)
+
 The application was started essentially as a clone of 8pen, which for some reason they have stopped distributing. (I can no longer install it, even though I paid for it!)
 
 To exactly understand this keyboard, please watch the [video](https://www.youtube.com/watch?v=q3OuCR0EpGo)
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-     alt="Get it on F-Droid"
-     height="80">](https://f-droid.org/packages/inc.flide.vi8/)
-[<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
-     alt="Get it on Google Play"
-     height="80">](https://play.google.com/store/apps/details?id=inc.flide.vi8)
+|                                                                        Stable [![Stable](https://img.shields.io/github/v/release/8VIM/8VIM)](https://github.com/8VIM/8VIM/releases/latest) ![F-Droid (including pre-releases)](https://img.shields.io/f-droid/v/inc.flide.vi8)                                                                         |                                  Beta [![Beta](https://img.shields.io/github/v/release/8VIM/8VIM?include_prereleases)](https://github.com/8VIM/8VIM/releases)                                   |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80" />](https://f-droid.org/packages/inc.flide.vi8/)  [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="80" />](https://play.google.com/store/apps/details?id=inc.flide.vi8) | [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="80" />](https://play.google.com/store/apps/details?id=inc.flide.vi8) |
+
+**Manual**: Download and install the APK from the release page.
 
 ## Usability Guide
 
@@ -36,22 +37,27 @@ So, what capablities does 8Vim have?
 - left sector acts as a button that takes you to the number pad.
 
 ##### Cursor Movements
+
 If you move your finger from within the circle to any sector, the cursor will move one character in the direction of the sector. For example, if you swipe from the circle to the right sector and then raise your finger, the cursor will move to the right once. If you don't lift up your finger but instead keep pressing on the sector, the cursor will move as long as the sector is pressed.
 
 ##### Selection
+
 There is a selection mode built into the keyboard. If you move your finger from the right sector to the circle and hold, the cursor will start moving left while selecting everything in its path, until you lift your finger. Once you release, the selection mode keyboard will open and show different actions that can then be applied to your selection. (i.e. right-sector->circle->hold->lift-finger)
 
 ##### Paste Functionality
+
 Moving your finger from the left sector to the circle center will paste your clipboard content. (i.e. left-sector->circle->lift-finger)
 
-
 ###### Handwriting Reinvented
+
 The 8vim draws inspiration from handwriting. By mimicking the way our hand moves when constrained to a square canvas, we are able to create a natural and fun writing experience, akin to doodling on a piece of paper.
 
 ###### Designed for Speed
+
 The layout is optimised for fast writing, by allowing for the most common letter sequences to be produced with swift, fluid gestures. Once familiar with the layout, you can reach speeds of over 40 words per minute!
 
 ###### Typos, goodbye
+
 The simplicity of the gestures used to enter words, allow for true blind typing and virtually eliminate typos. Regardless of whether you have small or big fingers. Word suggestions become an optimisation, not a dependency.
 
 ## Extended Idea

@@ -1,21 +1,33 @@
 [versions]
 # Main
-android-gradle-plugin = "8.0.2"
+accompanist = "0.30.1"
+androidx-activity = "1.7.2"
+android-gradle-plugin = "8.1.1"
 android-appcompat = "1.6.1"
-androidx-constraintlayout = "2.1.4"
-androidx-lifecycle = "2.6.1"
-androidx-preference = "1.2.0"
 android-material = "1.9.0"
-android-recyclerview = "1.3.0"
-apache-commons = "1.7"
+androidx-compose = "1.4.3"
+androidx-compose-compiler = "1.4.7"
+androidx-compose-material3 = "1.1.1"
+androidx-constraintlayout = "2.1.4"
+androidx-core = "1.10.1"
+androidx-core-splashscreen = "1.0.1"
+androidx-lifecycle = "2.6.1"
+androidx-navigation = "2.6.0"
+androidx-preference = "1.2.1"
+android-recyclerview = "1.3.1"
+apache-commons = "1.10.0"
+arrow = "1.2.0"
+arrow-jackson = "0.14.0"
 colorpreference = "1.1.0"
 jackson = "2.13.5"
 json-schema-validator = "1.0.73"
 keyboardview = "0.0.2"
-kotlin = "1.8.22"
+ktlint = "11.5.0"
+kotlin = "1.8.21"
+ksp = "1.8.21-1.0.11"
 logback-android = "3.0.0"
+mikepenz-aboutlibraries = "10.2.0"
 mannodermaus-android-junit5 = "1.9.3.0"
-material-dialog = "3.3.0"
 slf4j = "2.0.7"
 
 # Testing
@@ -23,29 +35,47 @@ androidx-test-core = "1.5.0"
 androidx-test-ext = "1.1.5"
 androidx-test-runner = "1.5.2"
 androidx-test-espresso = "3.5.1"
-assertj = "3.24.2"
-jqwik = "1.7.3"
 junit4 = "4.13.2"
 junit5 = "5.9.3"
-logback-classic = "1.2.11"
+kotest = "5.6.2"
+kotest-arrow = "1.3.3"
+logback-classic = "1.3.0"
 mockito = "5.3.1"
+mockk = "1.13.5"
 
 [libraries]
 # Main
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+android-material = { module = "com.google.android.material:material", version.ref = "android-material" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "android-appcompat" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity" }
+androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "androidx-compose" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidx-compose" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-core-splashscreen" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
-androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-preference = { module = "androidx.preference:preference", version.ref = "androidx-preference" }
 androidx-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "android-recyclerview" }
-material-dialog-core = { module = "com.afollestad.material-dialogs:core", version.ref = "material-dialog" }
-jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
+arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
+arrow-optics = { module = "io.arrow-kt:arrow-optics", version.ref = "arrow" }
+arrow-ksp = { module = "io.arrow-kt:arrow-optics-ksp-plugin", version.ref = "arrow" }
 colorpreference = { module = "com.github.kizitonwose.colorpreference:support", version.ref = "colorpreference" }
-logback-android = { module = "com.github.tony19:logback-android", version.ref = "logback-android" }
-android-material = { module = "com.google.android.material:material", version.ref = "android-material" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "android-gradle-plugin" }
+jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+jackson-module-arrow-kotlin = { module = "io.arrow-kt:arrow-integrations-jackson-module", version.ref = "arrow-jackson" }
 json-schema-validator = { module = "com.networknt:json-schema-validator", version.ref = "json-schema-validator" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+logback-android = { module = "com.github.tony19:logback-android", version.ref = "logback-android" }
 keyboardview = { module = "io.github.hijamoya:keyboardview", version.ref = "keyboardview" }
 apache-commons-text = { module = "org.apache.commons:commons-text", version.ref = "apache-commons" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+mikepenz-aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "mikepenz-aboutlibraries" }
+mikepenz-aboutlibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "mikepenz-aboutlibraries" }
 
 # Testing
 androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test-core" }
@@ -54,16 +84,27 @@ androidx-test-runner = { module = "androidx.test:runner", version.ref = "android
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 junit4 = { module = "junit:junit", version.ref = "junit4" }
-jqwik = { module = "net.jqwik:jqwik", version.ref = "jqwik" }
-assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 junit5-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
 junit5-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
 junit5-vintage-engine = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
+kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-extensions-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version.ref = "kotest-arrow" }
+kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+kotest-property-arrow = { module = "io.kotest.extensions:kotest-property-arrow", version.ref = "kotest-arrow" }
+kotest-property-arrow-optics = { module = "io.kotest.extensions:kotest-property-arrow-optics", version.ref = "kotest-arrow" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
 mockito-junit5 = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
+mockk-core = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
 
 [plugins]
 # Main
 agp-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint"}
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 mannodermaus-android-junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus-android-junit5" }
+mikepenz-aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "mikepenz-aboutlibraries" }

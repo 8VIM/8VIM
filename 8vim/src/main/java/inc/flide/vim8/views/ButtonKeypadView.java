@@ -9,15 +9,15 @@ import com.hijamoya.keyboardview.KeyboardView;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
+import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
-import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.ui.Theme;
 
 public abstract class ButtonKeypadView extends KeyboardView {
     private final Paint foregroundPaint = new Paint();
     protected Keyboard keyboard;
     protected MainInputMethodService mainInputMethodService;
     private Typeface font;
+    private KeyboardTheme keyboardTheme;
 
     public ButtonKeypadView(Context context) {
         super(context, null, R.attr.keyboardViewStyle, R.style.KeyboardView);
@@ -27,14 +27,11 @@ public abstract class ButtonKeypadView extends KeyboardView {
 
     protected void initialize(Context context) {
         this.setHapticFeedbackEnabled(true);
-
+        keyboardTheme = KeyboardTheme.getInstance();
         font = Typeface.createFromAsset(getContext().getAssets(), "SF-UI-Display-Regular.otf");
         keyboard = new Keyboard(context, getLayoutView());
         setColors();
-        Theme
-                .getInstance(getContext())
-                .onChange(this::setColors);
-
+        keyboardTheme.onChange(this::setColors);
         this.setPreviewEnabled(false);
         setKeyboard(keyboard);
     }
@@ -44,9 +41,9 @@ public abstract class ButtonKeypadView extends KeyboardView {
     }
 
     private void setColors() {
-        this.setBackgroundColor(Theme.getBackgroundColor());
+        this.setBackgroundColor(keyboardTheme.getBackgroundColor());
 
-        foregroundPaint.setColor(Theme.getForegroundColor());
+        foregroundPaint.setColor(keyboardTheme.getForegroundColor());
         foregroundPaint.setTextAlign(Paint.Align.CENTER);
         foregroundPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.font_size));
         foregroundPaint.setTypeface(font);
@@ -55,8 +52,8 @@ public abstract class ButtonKeypadView extends KeyboardView {
                 // Has to be mutated, otherwise icon has linked alpha to same key
                 // on xpad view
                 key.icon = key.icon.mutate();
-                key.icon.setTint(Theme.getForegroundColor());
-                key.icon.setAlpha(Constants.MAX_RGB_COMPONENT_VALUE);
+                key.icon.setTint(keyboardTheme.getForegroundColor());
+                key.icon.setAlpha(255);
             }
         }
         invalidate();
@@ -64,10 +61,10 @@ public abstract class ButtonKeypadView extends KeyboardView {
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Dimension computedDimension = InputMethodViewHelper.computeDimension(getContext());
-        setMeasuredDimension(computedDimension.getWidth(), computedDimension.getHeight());
-        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.getWidth(), MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(computedDimension.getHeight(), MeasureSpec.EXACTLY));
+        Dimension computedDimension = InputMethodViewHelper.computeDimension(getResources());
+        setMeasuredDimension(computedDimension.width, computedDimension.height);
+        super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.width, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(computedDimension.height, MeasureSpec.EXACTLY));
     }
 
     @Override

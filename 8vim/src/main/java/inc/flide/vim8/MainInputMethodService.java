@@ -1,9 +1,10 @@
 package inc.flide.vim8;
 
+import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.inputmethodservice.InputMethodService;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.text.InputType;
@@ -18,15 +19,15 @@ import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.WindowInsetsControllerCompat;
 import com.google.android.material.color.DynamicColors;
-import inc.flide.vim8.keyboardhelpers.InputMethodServiceHelper;
-import inc.flide.vim8.preferences.SharedPreferenceHelper;
+import inc.flide.vim8.ime.KeyboardTheme;
+import inc.flide.vim8.lib.android.AndroidVersion;
+import inc.flide.vim8.models.AppPrefs;
+import inc.flide.vim8.models.KeyboardData;
+import inc.flide.vim8.models.LayoutKt;
 import inc.flide.vim8.services.ClipboardManagerService;
-import inc.flide.vim8.structures.KeyboardData;
-import inc.flide.vim8.ui.Theme;
 import inc.flide.vim8.views.ClipboardKeypadView;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
@@ -48,6 +49,13 @@ public class MainInputMethodService extends InputMethodService
     private int shiftLockFlag;
     private int capsLockFlag;
     private int modifierFlags;
+    private AppPrefs prefs;
+    private KeyboardTheme keyboardTheme;
+
+    public MainInputMethodService() {
+        super();
+        setTheme(R.style.AppTheme_NoActionBar);
+    }
 
     public ClipboardManagerService getClipboardManagerService() {
         return clipboardManagerService;
@@ -61,24 +69,19 @@ public class MainInputMethodService extends InputMethodService
 
     @Override
     public void onCreate() {
+        super.onCreate();
+        prefs = appPreferenceModel().java();
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         Context applicationContext = getApplicationContext();
         this.clipboardManagerService = new ClipboardManagerService(applicationContext);
         this.clipboardManagerService.setClipboardHistoryListener(this);
-        String colorMode = SharedPreferenceHelper.getInstance(applicationContext)
-                .getString(getString(R.string.pref_color_mode_key), "system");
-        switch (colorMode) {
-            case "dark":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                break;
-            case "light":
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                break;
-            default:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        }
-        setTheme(R.style.AppTheme_NoActionBar);
-        super.onCreate();
+        keyboardTheme = KeyboardTheme.getInstance();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        keyboardTheme.setConfiguration(newConfig);
     }
 
     /**
@@ -109,21 +112,25 @@ public class MainInputMethodService extends InputMethodService
         mainKeyboardView = new MainKeyboardView(this);
         setCurrentKeypadView(mainKeyboardView);
 
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
-            Window window = getWindow().getWindow();
+        Window window = getWindow().getWindow();
+        if (AndroidVersion.INSTANCE.getATLEAST_API28_P() && window != null) {
             WindowInsetsControllerCompat windowInsetsControllerCompat = new WindowInsetsControllerCompat(window,
                     window.getDecorView());
-            Theme.getInstance(getApplicationContext())
-                    .onChange(() -> setNavigationBarColor(window, windowInsetsControllerCompat));
+            keyboardTheme.onChange(() -> setNavigationBarColor(window, windowInsetsControllerCompat));
             setNavigationBarColor(window, windowInsetsControllerCompat);
         }
         return currentKeypadView;
     }
 
+    @Override
+    public View onCreateExtractTextView() {
+        return super.onCreateExtractTextView();
+    }
+
     private void setNavigationBarColor(Window window, WindowInsetsControllerCompat windowInsetsControllerCompat) {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setNavigationBarColor(Theme.getBackgroundColor());
-        boolean isLight = ColorUtils.calculateLuminance(Theme.getBackgroundColor()) >= 0.5;
+        window.setNavigationBarColor(keyboardTheme.getBackgroundColor());
+        boolean isLight = ColorUtils.calculateLuminance(keyboardTheme.getBackgroundColor()) >= 0.5;
         windowInsetsControllerCompat.setAppearanceLightNavigationBars(isLight);
     }
 
@@ -172,7 +179,10 @@ public class MainInputMethodService extends InputMethodService
     }
 
     public KeyboardData buildKeyboardActionMap() {
-        return InputMethodServiceHelper.initializeKeyboardActionMap(getResources(), getApplicationContext());
+
+
+        return LayoutKt.loadKeyboardData(prefs.getLayout().getCurrent().get(),
+                getApplicationContext()).getOrNull();
     }
 
     public void sendText(String text) {
@@ -201,10 +211,11 @@ public class MainInputMethodService extends InputMethodService
         sendUpKeyEvent(keyEventCode, flags);
     }
 
+    @SuppressWarnings("DEPRECATION")
     public void switchToExternalEmoticonKeyboard() {
         String keyboardId = getSelectedEmoticonKeyboardId();
         if (keyboardId.isEmpty()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (AndroidVersion.INSTANCE.getATLEAST_API28_P()) {
                 switchToPreviousInputMethod();
             } else {
                 InputMethodManager inputMethodManager = (InputMethodManager) this
@@ -219,8 +230,7 @@ public class MainInputMethodService extends InputMethodService
     }
 
     private String getSelectedEmoticonKeyboardId() {
-        String emoticonKeyboardId = SharedPreferenceHelper.getInstance(getApplicationContext())
-                .getString(getString(R.string.pref_selected_emoticon_keyboard), "");
+        String emoticonKeyboardId = prefs.getKeyboard().getEmoticonKeyboard().get();
 
         // Before returning verify that this keyboard Id we have does exist in the
         // system.
@@ -382,6 +392,8 @@ public class MainInputMethodService extends InputMethodService
 
     @Override
     public void onClipboardHistoryChanged() {
-        clipboardKeypadView.updateClipHistory();
+        if (clipboardKeypadView != null) {
+            clipboardKeypadView.updateClipHistory();
+        }
     }
 }

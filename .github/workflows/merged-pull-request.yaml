@@ -3,12 +3,12 @@ name: Merged pull request
 concurrency: release
 
 on:
-  workflow_dispatch:
   pull_request_target:
     branches: [master]
     types: [closed]
     paths:
-      - "**.gradle"
+      - "gradle/libs.version.toml"
+      - "**.gradle.kts"
       - "8vim/**"
 jobs:
   changes:
@@ -25,13 +25,15 @@ jobs:
         with:
           filters: |
             src:
-              - 8vim/**/*.java
-              - 8vim/**/*.kt
-              - 8vim/**/*.xml
-              - 8vim/**/*.pro
-              - "**.gradle"
-              - 8vim/src/main/res/raw/*.yaml
-              - 8vim/src/main/res/raw/*.yml
+              - '8vim/**/*.java'
+              - '8vim/**/*.kt'
+              - '8vim/**/*.xml'
+              - '8vim/**/*.pro'
+              - '**.gradle'
+              - '**.gradle.kts'
+              - 'gradle/libs.version.toml'
+              - '8vim/src/main/res/raw/*.yaml'
+              - '8vim/src/main/res/raw/*.yml'
               - modified: '8vim/src/main/resources/schema.json'
   bump_version:
     needs: changes
@@ -42,18 +44,13 @@ jobs:
       message: ${{github.event.pull_request.title}}
       version: rc
     secrets: inherit
-  version:
-    if: ${{ github.event_name!='pull_request_target'}}
-    name: Get version
-    uses: ./.github/workflows/extract-version.yaml
   release:
-    needs: [bump_version, version]
-    if: ${{ !cancelled() && (needs.bump_version.result == 'success' || needs.version.result == 'success') }}
+    needs: [bump_version]
     name: Release
     uses: ./.github/workflows/publish.yaml
     with:
-      version_code: ${{needs.bump_version.result == 'success' && needs.bump_version.outputs.version_code || needs.version.outputs.version_code}}
-      version_name: ${{needs.bump_version.result == 'success' && needs.bump_version.outputs.version_name || needs.version.outputs.version_name}}
+      version_code: ${{needs.bump_version.outputs.version_code}}
+      version_name: ${{needs.bump_version.outputs.version_name}}
     secrets: inherit
     permissions:
       actions: read

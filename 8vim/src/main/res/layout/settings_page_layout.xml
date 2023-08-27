@@ -23,20 +23,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <LinearLayout
             android:id="@+id/prefs_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/keyboard_text_test_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/app_bar_launcher">
 
+
+            <inc.flide.vim8.views.MaterialCard
+                android:id="@+id/error_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ime_not_enabled"
+                app:backgroundColor="?colorErrorContainer"
+                app:foregroundColor="?colorOnErrorContainer"
+                app:icon="@drawable/ic_error_outline" />
+
+            <inc.flide.vim8.views.MaterialCard
+                android:id="@+id/warning_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ime_not_selected"
+                app:backgroundColor="?colorTertiaryContainer"
+                app:foregroundColor="?colorOnTertiaryContainer"
+                app:icon="@drawable/ic_error_outline" />
+
+
             <FrameLayout
                 android:id="@+id/settings_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout

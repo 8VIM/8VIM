@@ -1,8 +1,6 @@
 package inc.flide.vim8.utils;
 
 import android.graphics.PointF;
-import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.Direction;
 
 public final class GeometricUtilities {
     private GeometricUtilities() {

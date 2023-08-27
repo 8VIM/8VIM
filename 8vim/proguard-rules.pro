@@ -1,39 +1,27 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in /home/flide/Programming/Android/adt_linux/sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+-keepattributes Synthetic,Signature,*Annotation*,EnclosingMethod,InnerClasses
 
-# Add any project specific keep options here:
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-# Proguard configuration for Jackson 2.x
--keepattributes *Annotation*,EnclosingMethod,Signature
--keep class com.fasterxml.jackson.databind.ObjectMapper {
-    public <methods>;
-    protected <methods>;
-}
--keepnames class com.fasterxml.jackson.** { *; }
+-keep class com.fasterxml.jackson.** {*; }
 -keep class com.networknt.schema.** { *; }
--dontwarn org.jcodings.Encoding
--dontwarn org.jcodings.specific.UTF8Encoding
--dontwarn org.joni.Matcher
--dontwarn org.joni.Regex
--dontwarn org.joni.Syntax
--dontwarn org.joni.exception.SyntaxException
+
+-dontwarn org.jcodings.**
+-dontwarn org.joni.**
 -dontwarn com.fasterxml.jackson.databind.**
--keep public class inc.flide.vim8.structures.** {
-    *;
-}
+
+-keep,allowobfuscation,allowshrinking class arrow.core.Either
+-keep,allowobfuscation,allowshrinking class arrow.core.Option
+
+-keep class inc.flide.vim8.models.** { *; }
+-keep class inc.flide.vim8.ime.KeyboardDataYamlParser* { *; }
+
+-keep class ch.qos.logback.** { *; }
 -keepclassmembers class ch.qos.logback.classic.pattern.* { <init>(); }
 -keepclassmembers class ch.qos.logback.** { *; }
 -keepclassmembers class org.slf4j.impl.** { *; }
 -dontwarn ch.qos.logback.core.net.*
+-keep class kotlin.Metadata { *; }
+-keep class kotlin.reflect.** { *; }
+
+-keep class inc.flide.vim8.R
+-keep class inc.flide.vim8.R$* {
+    <fields>;
+}

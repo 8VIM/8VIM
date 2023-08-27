@@ -1,8 +1,10 @@
 package inc.flide.vim8.views.mainkeyboard;
 
+import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -24,20 +26,22 @@ import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
+import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
-import inc.flide.vim8.preferences.SharedPreferenceHelper;
-import inc.flide.vim8.structures.Constants;
-import inc.flide.vim8.structures.CustomKeycode;
-import inc.flide.vim8.structures.FingerPosition;
-import inc.flide.vim8.structures.KeyboardAction;
-import inc.flide.vim8.ui.Theme;
-
+import inc.flide.vim8.models.AppPrefs;
+import inc.flide.vim8.models.CustomKeycode;
+import inc.flide.vim8.models.FingerPosition;
+import inc.flide.vim8.models.KeyboardAction;
+import inc.flide.vim8.models.LayerLevel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 public class XpadView extends View {
+    public static final int XPAD_ICON_ALPHA = 85;
+    public static final int XPAD_CIRCLE_OFFSET_FACTOR = 26;
+    public static final float XPAD_CIRCLE_RADIUS_FACTOR = 40f;
+    public static final float XPAD_LETTER_HIGHLIGHT_ROUNDNESS = 25f;
     public static final float FOREGROUND_STROKE_FACTOR = 0.75f;
     public static final float LETTER_BACKGROUND_BLEND_RATIO = 0.5f;
     public static final int UPPER_LETTER_Y_IDX_OFFSET = 1;
@@ -46,7 +50,6 @@ public class XpadView extends View {
     private static final short TRAIL_STEPS = 150;
     private static final byte TRAIL_STEP_DISTANCE = 5;
     private static final byte TRAIL_MAX_RADIUS = 14;
-    private final Random rnd = new Random();
     private final Path typingTrailPath = new Path();
     private final Paint backgroundPaint = new Paint();
     private final Paint foregroundPaint = new Paint();
@@ -58,22 +61,16 @@ public class XpadView extends View {
     private final Circle circle = new Circle();
     private final Dimension keypadDimension = new Dimension();
     private final Matrix xformMatrix = new Matrix();
-    // There are X sectors, each has Y letters above, and Y below.
-    // Finally, each letter position has an x & y co-ordinate.
-    private float[] letterPositions;
     private final Path sectorLines = new Path();
     private final RectF sectorLineBounds = new RectF();
     private final float[] trialPathPos = new float[2];
     private final PathMeasure pathMeasure = new PathMeasure();
+    // There are X sectors, each has Y letters above, and Y below.
+    // Finally, each letter position has an x & y co-ordinate.
+    private float[] letterPositions;
     private MainKeypadActionListener actionListener;
-    private boolean userPreferRandomTrailColor = false;
-    private String prefCircleScalaFactor;
-    private String prefSidebarLeftKey;
-    private String prefTrailColorKey;
-    private String prefRandomTrailColorKey;
-    private String prefCircleXOffsetKey;
-    private String prefCircleYOffsetKey;
-    private SharedPreferenceHelper sharedPreferenceHelper;
+    private AppPrefs prefs;
+    private KeyboardTheme keyboardTheme;
 
     public XpadView(Context context) {
         super(context);
@@ -91,23 +88,19 @@ public class XpadView extends View {
     }
 
     private void initialize(Context context) {
-        prefCircleScalaFactor = context.getString(R.string.pref_circle_scale_factor);
-        prefSidebarLeftKey = context.getString(R.string.pref_sidebar_left_key);
-        prefTrailColorKey = context.getString(R.string.pref_trail_color_key);
-        prefRandomTrailColorKey = context.getString(R.string.pref_random_trail_color_key);
-        prefCircleXOffsetKey = context.getString(R.string.pref_circle_x_offset_key);
-        prefCircleYOffsetKey = context.getString(R.string.pref_circle_y_offset_key);
+        prefs = appPreferenceModel().java();
+        keyboardTheme = KeyboardTheme.getInstance();
+        keyboardTheme.onChange(this::updateColors);
 
-        Theme.getInstance(context).onChange(this::updateColors);
-        sharedPreferenceHelper = SharedPreferenceHelper
-                .getInstance(context)
-                .addListener(this::updateColors,
-                        prefTrailColorKey,
-                        prefRandomTrailColorKey)
-                .addListener(() -> {
-                    this.computeComponentPositions(this.getWidth(), this.getHeight());
-                    this.invalidate();
-                }, prefCircleScalaFactor, prefCircleXOffsetKey, prefCircleYOffsetKey);
+        AppPrefs.Keyboard.Circle circlePrefs = prefs.getKeyboard().getCircle();
+        circlePrefs.getRadiusSizeFactor().observe(this::onCirclePrefsChanged);
+        circlePrefs.getXCentreOffset().observe(this::onCirclePrefsChanged);
+        circlePrefs.getYCentreOffset().observe(this::onCirclePrefsChanged);
+
+        AppPrefs.Keyboard.Display displayPrefs = prefs.getKeyboard().getDisplay();
+        displayPrefs.getShowSectorIcons().observe(this::onDisplayPrefsChanged);
+        displayPrefs.getShowLettersOnWheel().observe(this::onDisplayPrefsChanged);
+
         Typeface font = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Regular.otf");
         Typeface fontBold = Typeface.createFromAsset(context.getAssets(), "SF-UI-Display-Bold.otf");
 
@@ -118,44 +111,47 @@ public class XpadView extends View {
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
 
-        this.letterPositions = new float[MainKeypadActionListener.getSectors() * 2 * MainKeypadActionListener.getLayoutPositions() * 2];
+        int size = MainKeypadActionListener.getSectors() * 2 * MainKeypadActionListener.getLayoutPositions() * 2;
+        this.letterPositions = new float[size];
+    }
+
+    private void onCirclePrefsChanged(int newValue) {
+        this.computeComponentPositions(this.getWidth(), this.getHeight());
+        this.invalidate();
+    }
+
+    private void onDisplayPrefsChanged(boolean newValue) {
+        this.invalidate();
     }
 
     private void updateColors() {
-        Resources resources = getResources();
-
-        userPreferRandomTrailColor = sharedPreferenceHelper.getBoolean(prefRandomTrailColorKey, false);
-
-        int trailColor =
-                sharedPreferenceHelper.getInt(prefTrailColorKey, resources.getColor(R.color.defaultTrail, null));
-
-        backgroundPaint.setColor(Theme.getBackgroundColor());
-        foregroundPaint.setColor(Theme.getForegroundColor());
-        typingTrailPaint.setColor(trailColor);
+        backgroundPaint.setColor(keyboardTheme.getBackgroundColor());
+        foregroundPaint.setColor(keyboardTheme.getForegroundColor());
         invalidate();
     }
 
 
     private void computeComponentPositions(int fullWidth, int fullHeight) {
-        float spRadiusValue = sharedPreferenceHelper.getInt(prefCircleScalaFactor, 3);
-        boolean preferredSidebarLeft = sharedPreferenceHelper.getBoolean(prefSidebarLeftKey, true);
+        AppPrefs.Keyboard.Circle circlePrefs = prefs.getKeyboard().getCircle();
+        float spRadiusValue = circlePrefs.getRadiusSizeFactor().get();
+        boolean preferredSidebarLeft = prefs.getKeyboard().getSidebar().isOnLeft().get();
 
-        float radius = (spRadiusValue / Constants.XPAD_CIRCLE_RADIUS_FACTOR * keypadDimension.getHeight()) / 2;
+        float radius = (spRadiusValue / XPAD_CIRCLE_RADIUS_FACTOR * keypadDimension.height) / 2;
 
         int offsetX =
-                (sharedPreferenceHelper.getInt(prefCircleXOffsetKey, 0)) * Constants.XPAD_CIRCLE_OFFSET_FACTOR;
+                (circlePrefs.getXCentreOffset().get()) * XPAD_CIRCLE_OFFSET_FACTOR;
         int offsetY =
-                (sharedPreferenceHelper.getInt(prefCircleYOffsetKey, 0)) * Constants.XPAD_CIRCLE_OFFSET_FACTOR;
+                (circlePrefs.getYCentreOffset().get()) * XPAD_CIRCLE_OFFSET_FACTOR;
 
         float characterHeight =
                 foregroundPaint.getFontMetrics().descent - foregroundPaint.getFontMetrics().ascent;
         // We chop off a bit of the right side of the view width from the keypadDimension (see onMeasure),
         // this introduces a bit of asymmetry which we have to compensate for here.
-        int keypadXOffset = fullWidth - keypadDimension.getWidth();
+        int keypadXOffset = fullWidth - keypadDimension.width;
         // If the xOffset is to the right, we can spread into the extra padding space.
         int smallDim = Math.min(offsetX > 0 ? fullWidth / 2 - offsetX + keypadXOffset
                         // If xOffset goes to the left, restrict to keypadDimension.
-                        : keypadDimension.getWidth() / 2 + offsetX,
+                        : keypadDimension.width / 2 + offsetX,
                 fullHeight / 2 - Math.abs(offsetY));
         // Compute the length of sector lines, such that they stop a little before hitting the edge of the view.
         float lengthOfLineDemarcatingSectors = (float) Math.hypot(smallDim, smallDim)
@@ -163,25 +159,28 @@ public class XpadView extends View {
         if (isTabletInLandscape()) {
             circleCenter.x = lengthOfLineDemarcatingSectors + offsetX;
             if (!preferredSidebarLeft) {
-                circleCenter.x = keypadDimension.getWidth() - circleCenter.x;
+                circleCenter.x = keypadDimension.width - circleCenter.x;
             }
         } else {
-            circleCenter.x = (keypadDimension.getWidth() / 2f) + offsetX;
+            circleCenter.x = (keypadDimension.width / 2f) + offsetX;
         }
-        circleCenter.y = (keypadDimension.getHeight() / 2f) + offsetY;
+        circleCenter.y = (keypadDimension.height / 2f) + offsetY;
 
-        circle.setCentre(circleCenter);
-        circle.setRadius(radius);
+        circle.centre = circleCenter;
+        circle.radius = radius;
 
 
         // Compute sector demarcation lines as if they were all going orthogonal (like a "+").
         // This is easier to compute.  Later we apply rotation to orient the lines properly (like an "x").
         sectorLines.rewind();
-        for (int i=0; i<MainKeypadActionListener.getSectors(); i++) {
+        for (int i = 0; i < MainKeypadActionListener.getSectors(); i++) {
             //double angle = -Math.PI * 2 / MainKeypadActionListener.getSectors() * i + Math.PI * 2 / MainKeypadActionListener.getSectors()/2;
-            double angle = - Math.PI/2 + (Math.PI*2/MainKeypadActionListener.getSectors()/2) - Math.PI * 2 / MainKeypadActionListener.getSectors() * i;
-            sectorLines.moveTo((float) (circleCenter.x + radius * Math.cos(angle)), (float) (circleCenter.y - radius * Math.sin(angle)));
-            sectorLines.rLineTo((float) (lengthOfLineDemarcatingSectors * Math.cos(angle)), (float) (-lengthOfLineDemarcatingSectors * Math.sin(angle)));
+            double sectorsAngle = Math.PI * 2 / MainKeypadActionListener.getSectors();
+            double angle = -Math.PI / 2 + (sectorsAngle / 2) - sectorsAngle * i;
+            sectorLines.moveTo((float) (circleCenter.x + radius * Math.cos(angle)),
+                    (float) (circleCenter.y - radius * Math.sin(angle)));
+            sectorLines.rLineTo((float) (lengthOfLineDemarcatingSectors * Math.cos(angle)),
+                    (float) (-lengthOfLineDemarcatingSectors * Math.sin(angle)));
         }
 
         // Compute the first set of points going straight to the "east" (aka, rightwards).
@@ -190,17 +189,18 @@ public class XpadView extends View {
 
         xformMatrix.reset();
         xformMatrix.postRotate(getFirstSectorAngle(), circleCenter.x, circleCenter.y);
-        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, MainKeypadActionListener.getLayoutPositions()*2);
+        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0,
+                MainKeypadActionListener.getLayoutPositions() * 2);
 
 
         xformMatrix.reset();
-        xformMatrix.postRotate(360/MainKeypadActionListener.getSectors(), circleCenter.x, circleCenter.y);
+        xformMatrix.postRotate(360f / MainKeypadActionListener.getSectors(), circleCenter.x, circleCenter.y);
 
         for (int i = 1; i < MainKeypadActionListener.getSectors(); i++) {
             xformMatrix.mapPoints(letterPositions,
                     MainKeypadActionListener.getLayoutPositions() * 4 * i,
                     letterPositions,
-                    MainKeypadActionListener.getLayoutPositions()* 4 * (i - 1),
+                    MainKeypadActionListener.getLayoutPositions() * 4 * (i - 1),
                     MainKeypadActionListener.getLayoutPositions() * 2);
         }
 
@@ -214,7 +214,7 @@ public class XpadView extends View {
     }
 
     private float getFirstSectorAngle() {
-        return 90-360/MainKeypadActionListener.getSectors()/2;
+        return 90 - 36f / MainKeypadActionListener.getSectors() / 2;
     }
 
     private boolean isTabletInLandscape() {
@@ -224,7 +224,7 @@ public class XpadView extends View {
 
     private void computeLettersPositions(float characterHeight,
                                          float lengthOfLineDemarcatingSectors) {
-        float eastEdge = circleCenter.x + circle.getRadius() + characterHeight / 2;
+        float eastEdge = circleCenter.x + circle.radius + characterHeight / 2;
         for (int i = 0; i < MainKeypadActionListener.getLayoutPositions(); i++) {
             float dx = i * lengthOfLineDemarcatingSectors / ((float) MainKeypadActionListener.getLayoutPositions());
             letterPositions[4 * i] = eastEdge + dx;
@@ -244,10 +244,10 @@ public class XpadView extends View {
         int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
         int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
 
-        keypadDimension.setWidth((parentWidth));
-        keypadDimension.setHeight(parentHeight);
+        keypadDimension.width = parentWidth;
+        keypadDimension.height = parentHeight;
 
-        setMeasuredDimension(keypadDimension.getWidth(), keypadDimension.getHeight());
+        setMeasuredDimension(keypadDimension.width, keypadDimension.height);
         // this.getWidth() returns 0 at this point, parentWidth (& height) give the correct result.
         computeComponentPositions(parentWidth, parentHeight);
     }
@@ -257,11 +257,7 @@ public class XpadView extends View {
     public void onDraw(Canvas canvas) {
         canvas.drawColor(backgroundPaint.getColor());
 
-        boolean userPrefersTypingTrail = SharedPreferenceHelper
-                .getInstance(getContext())
-                .getBoolean(
-                        this.getContext().getString(R.string.pref_typing_trail_visibility_key),
-                        true);
+        boolean userPrefersTypingTrail = prefs.getKeyboard().getTrail().isVisible().get();
         if (userPrefersTypingTrail) {
             paintTypingTrail(canvas);
         }
@@ -271,28 +267,22 @@ public class XpadView extends View {
         foregroundPaint.setStyle(Paint.Style.STROKE);
 
         //The centre circle
-        canvas.drawCircle(circle.getCentre().x, circle.getCentre().y, circle.getRadius(),
+        canvas.drawCircle(circle.centre.x, circle.centre.y, circle.radius,
                 foregroundPaint);
         canvas.drawPath(sectorLines, foregroundPaint); //The lines demarcating the sectors
 
         // Converting float value to int
-        int centreXValue = (int) circle.getCentre().x;
-        int centreYValue = (int) circle.getCentre().y;
+        int centreXValue = (int) circle.centre.x;
+        int centreYValue = (int) circle.centre.y;
 
-        boolean userPrefersSectorIcons = sharedPreferenceHelper
-                .getBoolean(
-                        this.getContext().getString(R.string.pref_display_sector_icons_key),
-                        true);
+        boolean userPrefersSectorIcons = prefs.getKeyboard().getDisplay().getShowSectorIcons().get();
 
         if (userPrefersSectorIcons) {
             setupSectorIcons(centreXValue, centreYValue, canvas);
         }
 
         //the text along the lines
-        boolean userPreferWheelLetters = sharedPreferenceHelper
-                .getBoolean(
-                        this.getContext().getString(R.string.pref_display_wheel_characters_key),
-                        true);
+        boolean userPreferWheelLetters = prefs.getKeyboard().getDisplay().getShowLettersOnWheel().get();
 
         if (userPreferWheelLetters) {
             // Make the color the same as the typing trail, but blend it with white
@@ -330,7 +320,7 @@ public class XpadView extends View {
                             letterPositions[i * 2 + 1] - characterHeightWidth,
                             letterPositions[i * 2] + (characterHeightWidth / 2),
                             letterPositions[i * 2 + 1] + (characterHeightWidth / 2),
-                            Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS, Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS,
+                            XPAD_LETTER_HIGHLIGHT_ROUNDNESS, XPAD_LETTER_HIGHLIGHT_ROUNDNESS,
                             letterBackgroundPaint
                     );
 
@@ -339,7 +329,7 @@ public class XpadView extends View {
                             letterPositions[i * 2 + 1] - characterHeightWidth,
                             letterPositions[i * 2] + (characterHeightWidth / 2),
                             letterPositions[i * 2 + 1] + (characterHeightWidth / 2),
-                            Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS, Constants.XPAD_LETTER_HIGHLIGHT_ROUNDNESS,
+                            XPAD_LETTER_HIGHLIGHT_ROUNDNESS, XPAD_LETTER_HIGHLIGHT_ROUNDNESS,
                             letterBackgroundOutlinePaint
                     );
                 }
@@ -374,32 +364,32 @@ public class XpadView extends View {
                 Math.min(sectorLineBounds.right, canvas.getWidth()) - iconHalfWidth,
                 Math.min(sectorLineBounds.bottom, canvas.getHeight()) - iconHalfHeight
         );
-        coordinates[0] = centreXValue + radius/2;
+        coordinates[0] = centreXValue + radius / 2;
         coordinates[1] = centreYValue;
         xformMatrix.reset();
-        float angle = getFirstSectorAngle() + 360 / MainKeypadActionListener.getSectors() / 2 - 360 / MainKeypadActionListener.getSectors();
+        float sectorsAngle = 360f / MainKeypadActionListener.getSectors();
+        float angle = getFirstSectorAngle() + sectorsAngle / 2 - sectorsAngle;
         xformMatrix.postRotate(angle, centreXValue, centreYValue);
 
-        Map<List<Integer>, KeyboardAction> actionMap = MainKeypadActionListener.getKayboardData().getActionMap();
-        for (int sector=0;  sector < MainKeypadActionListener.getSectors(); sector++) {
-            xformMatrix.postRotate(360 / MainKeypadActionListener.getSectors(), centreXValue, centreYValue);
+        Map<List<Integer>, KeyboardAction> actionMap = MainKeypadActionListener.getKeyboardData().getActionMap();
+        for (int sector = 0; sector < MainKeypadActionListener.getSectors(); sector++) {
+            xformMatrix.postRotate(sectorsAngle, centreXValue, centreYValue);
             xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
 
-            ArrayList<Integer> movements = new ArrayList<Integer>();
-            movements.add(sector+1);
+            ArrayList<Integer> movements = new ArrayList<>();
+            movements.add(sector + 1);
             movements.add(FingerPosition.NO_TOUCH);
             KeyboardAction action = actionMap.get(movements);
-            if (action == null)
+            if (action == null) {
                 return;
+            }
 
             int iconToDisplay = 0;
             if (action.getKeyEventCode() == KeyEvent.KEYCODE_ENTER) {
                 iconToDisplay = R.drawable.ic_keyboard_return;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_NUMBER_KEYPAD.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_NUMBER_KEYPAD.keyCode) {
                 iconToDisplay = R.drawable.numericpad_vd_vector;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.SHIFT_TOGGLE.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.SHIFT_TOGGLE.keyCode) {
                 iconToDisplay = R.drawable.ic_no_capslock;
                 if (actionListener.isShiftSet()) {
                     iconToDisplay = R.drawable.ic_shift_engaged;
@@ -407,45 +397,35 @@ public class XpadView extends View {
                 if (actionListener.isCapsLockSet()) {
                     iconToDisplay = R.drawable.ic_capslock_engaged;
                 }
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_NUMBER_KEYPAD.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_NUMBER_KEYPAD.keyCode) {
                 iconToDisplay = R.drawable.numericpad_vd_vector;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.keyCode) {
                 iconToDisplay = R.drawable.ic_open_with_black;
-            }
-            else if (action.getKeyEventCode() == KeyEvent.KEYCODE_DEL) {
+            } else if (action.getKeyEventCode() == KeyEvent.KEYCODE_DEL) {
                 iconToDisplay = R.drawable.ic_backspace;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.keyCode) {
                 iconToDisplay = R.drawable.clipboard;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_LEFT.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_LEFT.keyCode) {
                 iconToDisplay = R.drawable.ic_keyboard_arrow_left;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_RIGHT.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_RIGHT.keyCode) {
                 iconToDisplay = R.drawable.ic_keyboard_arrow_right;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_UP.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_UP.keyCode) {
                 iconToDisplay = R.drawable.ic_keyboard_arrow_up;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_DOWN.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_DOWN.keyCode) {
                 iconToDisplay = R.drawable.ic_keyboard_arrow_down;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.SELECT_ALL.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.SELECT_ALL.keyCode) {
                 iconToDisplay = R.drawable.ic_select_all;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.keyCode) {
                 iconToDisplay = R.drawable.ic_emoji;
-            }
-            else if (action.getKeyEventCode() == CustomKeycode.TOGGLE_SELECTION_ANCHOR.getKeyCode()) {
+            } else if (action.getKeyEventCode() == CustomKeycode.TOGGLE_SELECTION_ANCHOR.keyCode) {
                 iconToDisplay = R.drawable.pad_center;
             }
-            if (iconToDisplay != 0)
+            if (iconToDisplay != 0) {
                 drawIconInSector((int) coordinates[2] - iconHalfWidth,
-                        (int) coordinates[3]-iconHalfHeight,
+                        (int) coordinates[3] - iconHalfHeight,
                         canvas,
                         iconToDisplay);
+            }
             // switch_to_symbols_keypad (is a special symbol)
             // selection_start, hide_keyboard (missing icon)
             // switch_to_main_keypad (no reason to have it here)
@@ -465,8 +445,8 @@ public class XpadView extends View {
                 coordinateY,
                 coordinateX + iconSize,
                 coordinateY + iconSize);
-        iconVectorDrawable.setTint(Theme.getForegroundColor());
-        iconVectorDrawable.setAlpha(Constants.XPAD_ICON_ALPHA);
+        iconVectorDrawable.setTint(keyboardTheme.getForegroundColor());
+        iconVectorDrawable.setAlpha(XPAD_ICON_ALPHA);
         iconVectorDrawable.draw(canvas);
     }
 
@@ -486,15 +466,8 @@ public class XpadView extends View {
         }
     }
 
-    private int getRandomColor() {
-        return Color.argb(Constants.MAX_RGB_COMPONENT_VALUE,
-                rnd.nextInt(Constants.MAX_RGB_COMPONENT_VALUE + 1),
-                rnd.nextInt(Constants.MAX_RGB_COMPONENT_VALUE + 1),
-                rnd.nextInt(Constants.MAX_RGB_COMPONENT_VALUE + 1));
-    }
-
     private String getCharacterSetToDisplay() {
-        int layer = actionListener.findLayer();
+        LayerLevel layer = actionListener.findLayer();
         if (actionListener.areCharactersCapitalized()) {
             return actionListener.getUpperCaseCharacters(layer);
         }
@@ -506,42 +479,42 @@ public class XpadView extends View {
         if (circle.isPointInsideCircle(position)) {
             return FingerPosition.INSIDE_CIRCLE;
         } else {
-            return circle.getSectorOfPoint(position, MainKeypadActionListener.getKayboardData());
+            return circle.getSectorOfPoint(position, MainKeypadActionListener.getKeyboardData());
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         PointF position = new PointF((int) e.getX(), (int) e.getY());
         int currentFingerPosition = getCurrentFingerPosition(position);
         invalidate();
         switch (e.getActionMasked()) {
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_DOWN -> {
                 actionListener.movementStarted(currentFingerPosition);
                 typingTrailPath.reset();
                 typingTrailPath.moveTo(e.getX(), e.getY());
-                if (userPreferRandomTrailColor) {
-                    typingTrailPaint.setColor(getRandomColor());
-                }
+                typingTrailPaint.setColor(keyboardTheme.getTrailColor());
                 return true;
-
-            case MotionEvent.ACTION_MOVE:
+            }
+            case MotionEvent.ACTION_MOVE -> {
                 actionListener.movementContinues(currentFingerPosition);
                 typingTrailPath.lineTo(e.getX(), e.getY());
                 return true;
-
-            case MotionEvent.ACTION_UP:
+            }
+            case MotionEvent.ACTION_UP -> {
                 typingTrailPath.reset();
                 actionListener.movementEnds();
                 return true;
-
-            case MotionEvent.ACTION_CANCEL:
+            }
+            case MotionEvent.ACTION_CANCEL -> {
                 typingTrailPath.reset();
                 actionListener.movementCanceled();
                 return true;
-
-            default:
+            }
+            default -> {
                 return false;
+            }
         }
     }
 }

@@ -41,7 +41,7 @@
                     android:layout_gravity="center"
                     android:contentDescription="@string/generic_back_button_content_description"
                     android:padding="5sp"
-                    android:src="@drawable/ic_baseline_arrow_back_24"
+                    android:src="@drawable/ic_arrow_back"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/textView2"
                     app:layout_constraintHorizontal_bias="0.074"

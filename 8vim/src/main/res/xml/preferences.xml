@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <PreferenceCategory
         app:iconSpaceReserved="false"
         app:title="@string/pref_category_general">
@@ -136,7 +137,7 @@
         <ListPreference
             android:entries="@array/pref_color_mode_labels"
             android:entryValues="@array/pref_color_mode_values"
-            app:defaultValue="system"
+            app:defaultValue="SYSTEM"
             app:iconSpaceReserved="false"
             app:key="@string/pref_color_mode_key"
             app:title="@string/pref_color_mode_title"
