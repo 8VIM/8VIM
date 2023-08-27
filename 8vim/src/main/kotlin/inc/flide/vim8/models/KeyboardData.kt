@@ -2,11 +2,13 @@ package inc.flide.vim8.models
 
 import arrow.core.Option
 import arrow.core.elementAtOrNone
+import arrow.core.fold
 import arrow.core.none
 import arrow.core.some
 import arrow.optics.dsl.index
 import arrow.optics.optics
 import arrow.optics.typeclasses.Index
+import inc.flide.vim8.models.yaml.Layer
 import inc.flide.vim8.models.yaml.LayoutInfo
 
 const val CHARACTER_SET_SIZE = 4 * 4 * 2 // 4 sectors, 2 parts, 4 characters per parts
@@ -14,7 +16,9 @@ const val CHARACTER_SET_SIZE = 4 * 4 * 2 // 4 sectors, 2 parts, 4 characters per
 @optics
 data class KeyboardData(
     val actionMap: Map<MovementSequence, KeyboardAction> = HashMap(),
-    val characterSets: List<CharacterSet> = List(LayerLevel.VisibleLayers.size) { CharacterSet() },
+    val characterSets: List<CharacterSet> = List(LayerLevel.visibleLayers.size) { CharacterSet() },
+    val layoutPositions: Int = 0,
+    val sectors: Int = 1,
     val info: LayoutInfo = LayoutInfo()
 ) {
     companion object
@@ -96,4 +100,25 @@ fun KeyboardData.findLayer(movementSequence: MovementSequence): LayerLevel {
             it
         }
     } ?: LayerLevel.FIRST
+}
+
+fun KeyboardData.oppositeDirection(direction: Int): Int {
+    return ((direction - 1) + sectors / 2) % sectors + 1
+}
+
+fun KeyboardData.computeSectorsAndLayouts(layers: Collection<Layer>): KeyboardData {
+    val sectorsAndLayouts =
+        layers.fold(sectors to layoutPositions) { acc, layer ->
+            layer.sectors.fold(acc) { (maxSector, maxLayoutPositions), (sector, value) ->
+                val layoutPositions = value.parts.values.maxByOrNull { it.size }?.size ?: 0
+                maxSector.coerceAtLeast(sector) to maxLayoutPositions.coerceAtLeast(
+                    layoutPositions
+                )
+            }
+        }
+    return copy(sectors = sectorsAndLayouts.first, layoutPositions = sectorsAndLayouts.second)
+}
+
+fun KeyboardData.characterSetSize(): Int {
+    return sectors * 2 * layoutPositions
 }

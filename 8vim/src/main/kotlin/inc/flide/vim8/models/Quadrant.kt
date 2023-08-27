@@ -5,26 +5,24 @@ import arrow.optics.optics
 const val NUMBER_OF_SECTORS = 4
 
 @optics
-data class Quadrant(val sector: Direction, val part: Direction) {
+data class Quadrant(val sector: Int, val part: Int) {
     companion object
 }
 
-fun Quadrant.characterIndexInString(characterPosition: CharacterPosition): Int {
-    val index = when (sector) {
-        Direction.RIGHT -> if (part === Direction.BOTTOM) 0 else 7
-        Direction.TOP -> if (part === Direction.LEFT) 5 else 6
-        Direction.LEFT -> if (part === Direction.BOTTOM) 3 else 4
-        Direction.BOTTOM -> if (part === Direction.RIGHT) 1 else 2
-    }
-    val base = index / 2 * (NUMBER_OF_SECTORS * 2)
-    val delta = index % 2
-    return base + characterPosition.ordinal * 2 + delta
+fun Quadrant.characterIndexInString(
+    characterPosition: CharacterPosition,
+    keyboardData: KeyboardData
+): Int {
+    return if ((part - sector + keyboardData.sectors) % keyboardData.sectors == 1)
+        keyboardData.layoutPositions * 2 * (part - 1) + characterPosition.ordinal * 2
+    else
+        keyboardData.layoutPositions * 2 * (sector - 1) + characterPosition.ordinal * 2 + 1
 }
 
-fun Quadrant.opposite(position: CharacterPosition): Quadrant {
+fun Quadrant.opposite(position: CharacterPosition, keyboardData: KeyboardData): Quadrant {
     return when (position) {
         CharacterPosition.FIRST -> {
-            Quadrant(sector, part.opposite())
+            Quadrant(sector, keyboardData.oppositeDirection(part))
         }
 
         CharacterPosition.SECOND -> {
@@ -32,11 +30,11 @@ fun Quadrant.opposite(position: CharacterPosition): Quadrant {
         }
 
         CharacterPosition.THIRD -> {
-            Quadrant(sector.opposite(), part)
+            Quadrant(keyboardData.oppositeDirection(sector), part)
         }
 
         else -> {
-            Quadrant(part.opposite(), sector.opposite())
+            Quadrant(keyboardData.oppositeDirection(part), keyboardData.oppositeDirection(sector))
         }
     }
 }
