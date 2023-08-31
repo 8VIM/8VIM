@@ -24,10 +24,6 @@ checkstyle {
     isShowViolations = true
 }
 
-jacoco {
-    toolVersion = "0.8.10"
-}
-
 android {
     val versionPropsFile = file("version.properties")
     val versionProps = Properties()
@@ -145,19 +141,8 @@ android {
         findByName("test")?.java?.srcDirs(project.file("src/test/kotlin"))
     }
 }
-tasks.withType<JacocoReport> {
-    afterEvaluate {
-        classDirectories.setFrom(
-            files(
-                classDirectories.files.map {
-                    fileTree(it).apply {
-                        exclude("**/*__Optics*")
-                    }
-                }
-            )
-        )
-    }
 
+tasks.withType<JacocoReport> {
     reports {
         csv.required.set(false)
     }
