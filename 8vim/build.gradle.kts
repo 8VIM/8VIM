@@ -24,6 +24,10 @@ checkstyle {
     isShowViolations = true
 }
 
+jacoco {
+    toolVersion = "0.8.10"
+}
+
 android {
     val versionPropsFile = file("version.properties")
     val versionProps = Properties()
@@ -142,8 +146,20 @@ android {
     }
 }
 tasks.withType<JacocoReport> {
+    afterEvaluate {
+        classDirectories.setFrom(
+            files(
+                classDirectories.files.map {
+                    fileTree(it).apply {
+                        exclude("**/*__Optics*")
+                    }
+                }
+            )
+        )
+    }
+
     reports {
-        csv.required.set(true)
+        csv.required.set(false)
     }
 }
 
@@ -214,8 +230,6 @@ dependencies {
     testImplementation(libs.kotest.property)
     testImplementation(libs.kotest.property.arrow)
     testImplementation(libs.kotest.property.arrow.optics)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.junit5)
     testImplementation(libs.mockk.core)
     testImplementation(libs.mockk.android)
     testImplementation(libs.mockk.agent)

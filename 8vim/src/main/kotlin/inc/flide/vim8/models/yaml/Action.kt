@@ -5,18 +5,20 @@ import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.optics.optics
 import com.fasterxml.jackson.annotation.JsonProperty
+import inc.flide.vim8.lib.ExcludeFromJacocoGeneratedReport
 import inc.flide.vim8.models.CustomKeycode
-import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardActionType
+import inc.flide.vim8.models.MovementSequence
 import java.util.Locale
 
+@ExcludeFromJacocoGeneratedReport
 @optics
 data class Action(
     @JsonProperty(value = "type")
     val actionType: KeyboardActionType = KeyboardActionType.INPUT_TEXT,
     val lowerCase: String = "",
     val upperCase: String = "",
-    val movementSequence: List<FingerPosition> = ArrayList(),
+    val movementSequence: MovementSequence = ArrayList(),
     @JsonProperty("key_code") val keyCodeString: String = "",
     val flags: Flags = Flags.empty()
 ) {
