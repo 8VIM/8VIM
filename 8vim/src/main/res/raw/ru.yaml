@@ -1,0 +1,52 @@
+layers:
+  default:
+    sectors:
+      right:
+        parts:
+          bottom:
+            - lower_case: р
+            - lower_case: д
+            - lower_case: й
+            - lower_case: э
+          top:
+            - lower_case: е
+            - lower_case: п
+            - lower_case: г
+            - lower_case: ш
+      top:
+        parts:
+          right:
+            - lower_case: с
+            - lower_case: я
+            - lower_case: б
+            - lower_case: ц
+          left:
+            - lower_case: н
+            - lower_case: м
+            - lower_case: ч
+            - lower_case: ф
+      left:
+        parts:
+          top:
+            - lower_case: т
+            - lower_case: л
+            - lower_case: ь
+            - lower_case: ю
+          bottom:
+            - lower_case: и
+            - lower_case: к
+            - lower_case: з
+            - lower_case: х
+      bottom:
+        parts:
+          left:
+            - lower_case: о
+            - lower_case: в
+            - lower_case: ы
+            - lower_case: щ
+          right:
+            - lower_case: а
+            - lower_case: у
+            - lower_case: ж
+            - lower_case: ","
+              upper_case: "."
