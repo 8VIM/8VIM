@@ -20,7 +20,7 @@ import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.mockkStatic
 
-class KeyboardDataYamlParserTest : DescribeSpec({
+class KeyboardDataYamlParserSpec : DescribeSpec({
     beforeSpec {
         mockkStatic(KeyEvent::keyCodeFromString)
         every { KeyEvent.keyCodeFromString(any()) } returns KeyEvent.KEYCODE_UNKNOWN

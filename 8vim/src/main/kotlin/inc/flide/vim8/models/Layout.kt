@@ -19,7 +19,7 @@ import arrow.core.raise.catch
 import arrow.core.right
 import inc.flide.vim8.R
 import inc.flide.vim8.datastore.model.PreferenceSerDe
-import inc.flide.vim8.ime.InputMethodServiceHelper
+import inc.flide.vim8.ime.LayoutLoader
 import inc.flide.vim8.lib.android.tryOrNull
 import inc.flide.vim8.models.error.ExceptionWrapperError
 import inc.flide.vim8.models.error.LayoutError
@@ -63,7 +63,7 @@ interface Layout<T> {
 
 fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, KeyboardData> {
     return inputStream(context)
-        .flatMap { InputMethodServiceHelper.initializeKeyboardActionMap(context.resources, it) }
+        .flatMap { LayoutLoader.loadKeyboardData(context.resources, it) }
         .map {
             KeyboardData.info.name.modify(it) { name ->
                 name.ifEmpty {

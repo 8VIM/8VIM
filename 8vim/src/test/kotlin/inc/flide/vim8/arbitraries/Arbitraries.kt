@@ -20,9 +20,10 @@ import io.kotest.property.arbitrary.string
 
 object Arbitraries {
     private val arbMovementSequence: Arb<MovementSequence> = Arb.list(Arb.enum(), 1..10)
+
     val arbCharactersSet = Arb.string(CHARACTER_SET_SIZE)
 
-    private val arbKeyboardAction: Arb<KeyboardAction> = arbitrary {
+    val arbKeyboardAction: Arb<KeyboardAction> = arbitrary {
         val type = Arb.enum<KeyboardActionType>().bind()
         val lowerCase = arbCharactersSet.bind()
         val upperCase = arbCharactersSet.bind()
