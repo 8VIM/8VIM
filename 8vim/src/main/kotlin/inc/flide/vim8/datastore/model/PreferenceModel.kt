@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.preference.PreferenceManager
 import inc.flide.vim8.lib.android.tryOrNull
-import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.atomic.AtomicBoolean
 
 abstract class PreferenceModel(val version: Int) :
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -17,7 +17,8 @@ abstract class PreferenceModel(val version: Int) :
         internal const val DATASTORE_VERSION = "${INTERNAL_PREFIX}_datastore_version"
     }
 
-    internal val sharedPreferences: AtomicReference<SharedPreferences?> = AtomicReference(null)
+    internal lateinit var sharedPreferences: SharedPreferences
+    private val isReady: AtomicBoolean = AtomicBoolean(false)
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         registry[key]?.dispatch()
@@ -27,15 +28,14 @@ abstract class PreferenceModel(val version: Int) :
     Allows migration to run if a user already has installed an old version 8VIM
     This should temporary until
      */
-    private fun detectPreviousDataStoreVersion(): Int =
-        sharedPreferences.get()?.let {
-            val default = if (it.all.isEmpty()) version else 0
-            it.getInt(DATASTORE_VERSION, default)
-        } ?: 0
+    private fun detectPreviousDataStoreVersion(): Int {
+        val default = if (sharedPreferences.all.isEmpty()) version else 0
+        return sharedPreferences.getInt(DATASTORE_VERSION, default)
+    }
 
     private val registry: MutableMap<String, PreferenceData<*>> = mutableMapOf()
     private var onReadyObserver: PreferenceObserver<Boolean>? = null
-    fun isReady(): Boolean = sharedPreferences.get() != null
+    fun isReady(): Boolean = isReady.get()
     fun onReady(owner: LifecycleOwner, observer: PreferenceObserver<Boolean>) {
         if (owner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
             return
@@ -56,7 +56,7 @@ abstract class PreferenceModel(val version: Int) :
             onReadyObserver = observer
             owner.lifecycle.addObserver(eventObserver)
         }
-        if (sharedPreferences.get() != null) {
+        if (isReady()) {
             onReadyObserver?.onChanged(true)
         }
     }
@@ -77,15 +77,11 @@ abstract class PreferenceModel(val version: Int) :
         previousVersion: Int,
         entry: PreferenceMigrationEntry
     ): PreferenceMigrationEntry {
-        // By default keep as is
         return entry.keepAsIs()
     }
 
     private fun <V : Any> PreferenceData<V>.deserialize(rawValue: Any?) {
-        val value = serde.deserialize(rawValue)
-        if (value != null) {
-            set(value, sync = false)
-        }
+        serde.deserialize(rawValue)?.let { set(it, sync = false) }
     }
 
     protected fun boolean(
@@ -147,7 +143,8 @@ abstract class PreferenceModel(val version: Int) :
                 key: String,
                 default: V
             ): V {
-                val stringValue = sharedPreferences.getString(key, default.toString())
+                val stringValue =
+                    StringPreferenceSerde.deserialize(sharedPreferences, key, default.toString())
                 return deserialize(stringValue) ?: default
             }
 
@@ -169,17 +166,15 @@ abstract class PreferenceModel(val version: Int) :
     }
 
     fun initialize(context: Context) {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = sharedPreferences.edit()
-        this.sharedPreferences.set(sharedPreferences)
-        val prefsEntries = sharedPreferences.all.entries
+        val prefsEntries = sharedPreferences.all.entries.toSet()
         val oldVersion = detectPreviousDataStoreVersion()
         prefsEntries.forEach { entry ->
             var prefKey = entry.key
             var rawValue = entry.value
             var updateValue = false
             (oldVersion until version).forEach { fromVersion ->
-
                 val migrationResult = migrate(
                     fromVersion,
                     PreferenceMigrationEntry(
@@ -196,6 +191,9 @@ abstract class PreferenceModel(val version: Int) :
                     PreferenceMigrationEntry.Action.RESET -> editor.remove(prefKey)
                     PreferenceMigrationEntry.Action.TRANSFORM -> {
                         updateValue = true
+                        if (migrationResult.key != prefKey) {
+                            editor.remove(prefKey)
+                        }
                         prefKey = migrationResult.key
                         rawValue = migrationResult.rawValue
                     }
@@ -212,6 +210,7 @@ abstract class PreferenceModel(val version: Int) :
             .putInt(DATASTORE_VERSION, version)
             .apply()
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        isReady.set(true)
         onReadyObserver?.onChanged(true)
     }
 }
