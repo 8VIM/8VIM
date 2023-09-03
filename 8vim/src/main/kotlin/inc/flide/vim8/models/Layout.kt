@@ -167,26 +167,11 @@ data class EmbeddedLayout(override val path: String) : Layout<String> {
     }
 }
 
-class CustomLayout(override val path: Uri) : Layout<Uri> {
+data class CustomLayout(override val path: Uri) : Layout<Uri> {
     @SuppressLint("Recycle")
     override fun inputStream(context: Context): Either<LayoutError, InputStream> {
         return catch({
             context.contentResolver.openInputStream(path)!!.right()
         }) { e: Throwable -> ExceptionWrapperError(e).left() }
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as CustomLayout
-
-        if (path != other.path) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return path.hashCode()
     }
 }

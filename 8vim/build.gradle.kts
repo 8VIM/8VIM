@@ -61,6 +61,7 @@ android {
             versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - rcValue
         versionName = "$versionMajor.$versionMinor.$versionPatch"
 
+        resValue("string", "app_name", "8Vim")
         resValue("string", "version_name", versionName.toString())
 
         if (versionRc > 0) {
@@ -96,7 +97,9 @@ android {
     buildTypes {
         named("debug") {
             isDebuggable = true
+            applicationIdSuffix = ".debug"
 
+            resValue("string", "app_name", "8Vim Debug")
             /* Activate R8 in debug mode, good to check if any new library added works
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
@@ -114,6 +117,7 @@ android {
         create("rc") {
             initWith(getByName("release"))
             applicationIdSuffix = ".rc"
+            resValue("string", "app_name", "8Vim RC")
         }
     }
 
