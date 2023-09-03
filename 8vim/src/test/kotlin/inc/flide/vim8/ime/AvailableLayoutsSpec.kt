@@ -8,9 +8,9 @@ import inc.flide.vim8.arbitraries.Arbitraries.arbEmbeddedLayout
 import inc.flide.vim8.arbitraries.Arbitraries.arbKeyboardData
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
+import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener
 import inc.flide.vim8.models.AppPrefs
 import inc.flide.vim8.models.CustomLayout
-import inc.flide.vim8.models.EmbeddedLayout
 import inc.flide.vim8.models.Layout
 import inc.flide.vim8.models.appPreferenceModel
 import inc.flide.vim8.models.embeddedLayouts
@@ -31,7 +31,9 @@ import io.mockk.mockk
 import io.mockk.mockkClass
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.verify
 import java.util.TreeMap
+import kotlin.random.Random
 
 class AvailableLayoutsSpec : WordSpec({
     val prefs = mockk<AppPrefs>()
@@ -53,10 +55,13 @@ class AvailableLayoutsSpec : WordSpec({
         mockkStatic(::embeddedLayouts)
         mockkStatic(Layout<*>::loadKeyboardData)
         mockkStatic(String::toCustomLayout)
-        val embeddedLayout = mockkClass(EmbeddedLayout::class)
+        mockkStatic(MainKeypadActionListener::rebuildKeyboardData)
+        justRun { MainKeypadActionListener.rebuildKeyboardData(any()) }
         mockkStatic(Uri::parse)
 
-        every { embeddedLayout.loadKeyboardData(any()) } answers { arbKeyboardData.next().right() }
+        embeddedLayouts.forEach { (_, layout) ->
+            every { layout.loadKeyboardData(any()) } returns arbKeyboardData.next().right()
+        }
 
         every { Uri.parse(any()) } answers { mockk() }
 
@@ -74,6 +79,7 @@ class AvailableLayoutsSpec : WordSpec({
         every { currentLayout.default } returns embeddedLayouts.values.first()
         every { currentLayout.get() } returns embeddedLayouts.values.first()
         justRun { currentLayout.reset() }
+        justRun { currentLayout.set(any()) }
         justRun { history.observe(any()) }
         every { history.get() } returns emptySet()
     }
@@ -100,7 +106,6 @@ class AvailableLayoutsSpec : WordSpec({
                 every { currentLayout.get() } returns customLayout
                 every { customLayout.loadKeyboardData(any()) } returns keyboardData.right()
                 every { history.get() } returns setOf(uri)
-                justRun { history.set(any()) }
                 val availableLayouts = AvailableLayouts.instance
                 val strings = embeddedLayouts.keys + keyboardData.toString()
                 availableLayouts.displayNames shouldContainExactly strings
@@ -120,6 +125,38 @@ class AvailableLayoutsSpec : WordSpec({
                 availableLayouts.displayNames shouldContainExactly embeddedLayouts.keys
                 availableLayouts.index shouldBe 0
             }
+        }
+    }
+
+    "Select a layout" should {
+        "which is an embedded layout" {
+            val layouts = embeddedLayouts.values.toList()
+            val index = Random.nextInt(1, layouts.size)
+            val availableLayouts = AvailableLayouts.instance
+            availableLayouts.selectLayout(context, index)
+            verify { MainKeypadActionListener.rebuildKeyboardData(any()) }
+            verify { currentLayout.set(layouts[index]) }
+            availableLayouts.index shouldBe index
+        }
+
+        "which is a custom layout" {
+            val uri = "uri"
+            every { uri.toCustomLayout() } returns customLayout
+            every { customLayout.loadKeyboardData(any()) } returns arbKeyboardData.next().right()
+            every { history.get() } returns setOf(uri)
+            val index = embeddedLayouts.size
+            val availableLayouts = AvailableLayouts.instance
+            availableLayouts.selectLayout(context, index)
+            verify { MainKeypadActionListener.rebuildKeyboardData(any()) }
+            verify { currentLayout.set(customLayout) }
+            availableLayouts.index shouldBe index
+        }
+
+        "which is not a valid index" {
+            val index = embeddedLayouts.size
+            val availableLayouts = AvailableLayouts.instance
+            availableLayouts.selectLayout(context, index)
+            availableLayouts.index shouldBe 0
         }
     }
 

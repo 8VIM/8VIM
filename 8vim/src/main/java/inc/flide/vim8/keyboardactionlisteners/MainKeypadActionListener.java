@@ -83,10 +83,6 @@ public class MainKeypadActionListener extends KeypadActionListener {
         MainKeypadActionListener.keyboardData = keyboardData;
     }
 
-    private void loadKeyboardData() {
-
-    }
-
     public String getLowerCaseCharacters(LayerLevel layer) {
         return KeyboardDataKt.lowerCaseCharacters(keyboardData, layer).getOrNull();
     }

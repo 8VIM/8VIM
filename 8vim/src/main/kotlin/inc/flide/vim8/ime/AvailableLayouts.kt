@@ -43,18 +43,20 @@ class AvailableLayouts internal constructor(context: Context) {
     }
 
     fun selectLayout(context: Context, which: Int) {
-        val embeddedLayoutSize = embeddedLayoutsWithName.size
-        val layoutOption = if (which < embeddedLayoutSize) {
-            embeddedLayouts.getOrNull(which)
-        } else {
-            customLayouts.getOrNull(which - embeddedLayoutSize)
-        }
-        layoutOption?.let {
-            prefs.layout.current.set(it)
-            MainKeypadActionListener.rebuildKeyboardData(
-                it.loadKeyboardData(context).getOrNull()
-            )
-            index = which
+        if (index != which) {
+            val embeddedLayoutSize = embeddedLayoutsWithName.size
+            val layoutOption = if (which < embeddedLayoutSize) {
+                embeddedLayouts.getOrNull(which)
+            } else {
+                customLayouts.getOrNull(which - embeddedLayoutSize)
+            }
+            layoutOption?.let {
+                prefs.layout.current.set(it)
+                MainKeypadActionListener.rebuildKeyboardData(
+                    it.loadKeyboardData(context).getOrNull()
+                )
+                index = which
+            }
         }
     }
 
