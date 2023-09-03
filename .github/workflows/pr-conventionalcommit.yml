@@ -1,7 +1,5 @@
 name: Check PR conventional commit
 
-concurrency: pr-${{github.event.number}}
-
 on:
   pull_request:
     branches: [master]
