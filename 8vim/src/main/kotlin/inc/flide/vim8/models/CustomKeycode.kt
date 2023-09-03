@@ -24,18 +24,13 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
 
     fun handleKeyCode(mainInputMethodService: MainInputMethodService): Boolean {
         when (this) {
+            SELECTION_START,
             MOVE_CURRENT_END_POINT_LEFT,
             MOVE_CURRENT_END_POINT_RIGHT,
             MOVE_CURRENT_END_POINT_UP,
             MOVE_CURRENT_END_POINT_DOWN -> {
                 mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
                 mainInputMethodService.sendDownAndUpKeyEvent(dPadKeyCodeFromCustom, 0)
-                mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-            }
-
-            SELECTION_START -> {
-                mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, 0)
                 mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
             }
 
@@ -60,7 +55,7 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
 
     private val dPadKeyCodeFromCustom: Int
         get() = when (this) {
-            MOVE_CURRENT_END_POINT_LEFT -> KeyEvent.KEYCODE_DPAD_LEFT
+            MOVE_CURRENT_END_POINT_LEFT, SELECTION_START -> KeyEvent.KEYCODE_DPAD_LEFT
             MOVE_CURRENT_END_POINT_RIGHT -> KeyEvent.KEYCODE_DPAD_RIGHT
             MOVE_CURRENT_END_POINT_UP -> KeyEvent.KEYCODE_DPAD_UP
             MOVE_CURRENT_END_POINT_DOWN -> KeyEvent.KEYCODE_DPAD_DOWN
