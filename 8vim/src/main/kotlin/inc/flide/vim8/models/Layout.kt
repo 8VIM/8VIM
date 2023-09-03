@@ -115,6 +115,10 @@ private fun CustomLayout.defaultName(context: Context): String {
     }.flatten().getOrElse { "" }
 }
 
+fun String.toCustomLayout(): CustomLayout {
+    return CustomLayout(Uri.parse(this))
+}
+
 object LayoutSerDe : PreferenceSerDe<Layout<*>> {
     override fun serialize(
         editor: SharedPreferences.Editor,

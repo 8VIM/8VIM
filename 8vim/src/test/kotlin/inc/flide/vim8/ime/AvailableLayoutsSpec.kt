@@ -1,12 +1,22 @@
-package inc.flide.vim8.models
+package inc.flide.vim8.ime
 
 import android.content.Context
 import android.net.Uri
+import arrow.core.left
 import arrow.core.right
 import inc.flide.vim8.arbitraries.Arbitraries.arbEmbeddedLayout
 import inc.flide.vim8.arbitraries.Arbitraries.arbKeyboardData
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
+import inc.flide.vim8.models.AppPrefs
+import inc.flide.vim8.models.CustomLayout
+import inc.flide.vim8.models.EmbeddedLayout
+import inc.flide.vim8.models.Layout
+import inc.flide.vim8.models.appPreferenceModel
+import inc.flide.vim8.models.embeddedLayouts
+import inc.flide.vim8.models.error.ExceptionWrapperError
+import inc.flide.vim8.models.loadKeyboardData
+import inc.flide.vim8.models.toCustomLayout
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -18,6 +28,7 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.mockkClass
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import java.util.TreeMap
@@ -28,6 +39,7 @@ class AvailableLayoutsSpec : WordSpec({
     val customPref = mockk<AppPrefs.Layout.Custom>()
     val currentLayout = mockk<PreferenceData<Layout<*>>>()
     val history = mockk<PreferenceData<Set<String>>>()
+    val customLayout = mockkClass(CustomLayout::class)
 
     val context = mockk<Context>()
 
@@ -40,11 +52,11 @@ class AvailableLayoutsSpec : WordSpec({
         mockkStatic(::appPreferenceModel)
         mockkStatic(::embeddedLayouts)
         mockkStatic(Layout<*>::loadKeyboardData)
+        mockkStatic(String::toCustomLayout)
+        val embeddedLayout = mockkClass(EmbeddedLayout::class)
         mockkStatic(Uri::parse)
 
-        embeddedLayouts.forEach { (_, layout) ->
-            every { layout.loadKeyboardData(any()) } returns arbKeyboardData.next().right()
-        }
+        every { embeddedLayout.loadKeyboardData(any()) } answers { arbKeyboardData.next().right() }
 
         every { Uri.parse(any()) } answers { mockk() }
 
@@ -61,6 +73,7 @@ class AvailableLayoutsSpec : WordSpec({
         every { AvailableLayouts.instance } answers { AvailableLayouts(context) }
         every { currentLayout.default } returns embeddedLayouts.values.first()
         every { currentLayout.get() } returns embeddedLayouts.values.first()
+        justRun { currentLayout.reset() }
         justRun { history.observe(any()) }
         every { history.get() } returns emptySet()
     }
@@ -74,15 +87,43 @@ class AvailableLayoutsSpec : WordSpec({
             }
         }
 
-        "custom layout history is empty" should {
-            "get only embedded layouts" {
+        "custom layout history" should {
+            "get only embedded layouts if the history is empty" {
                 val availableLayouts = AvailableLayouts.instance
                 availableLayouts.displayNames shouldContainExactly embeddedLayouts.keys
+            }
+
+            "get only embedded layouts if the history is not empty" {
+                val uri = "uri"
+                val keyboardData = arbKeyboardData.next()
+                every { uri.toCustomLayout() } returns customLayout
+                every { currentLayout.get() } returns customLayout
+                every { customLayout.loadKeyboardData(any()) } returns keyboardData.right()
+                every { history.get() } returns setOf(uri)
+                justRun { history.set(any()) }
+                val availableLayouts = AvailableLayouts.instance
+                val strings = embeddedLayouts.keys + keyboardData.toString()
+                availableLayouts.displayNames shouldContainExactly strings
+                availableLayouts.index shouldBe embeddedLayouts.size
+            }
+
+            "fallback to default" {
+                val uri = "uri"
+                every { uri.toCustomLayout() } returns customLayout
+                every { currentLayout.get() } returns customLayout
+                every { customLayout.loadKeyboardData(any()) } returns ExceptionWrapperError(
+                    Exception()
+                ).left()
+                every { history.get() } returns setOf(uri)
+                justRun { history.set(any()) }
+                val availableLayouts = AvailableLayouts.instance
+                availableLayouts.displayNames shouldContainExactly embeddedLayouts.keys
+                availableLayouts.index shouldBe 0
             }
         }
     }
 
     afterTest {
-        clearMocks(currentLayout, history)
+        clearMocks(currentLayout, history, currentLayout)
     }
 })

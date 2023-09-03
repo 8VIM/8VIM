@@ -1,8 +1,15 @@
-package inc.flide.vim8.models
+package inc.flide.vim8.ime
 
 import android.content.Context
-import android.net.Uri
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener
+import inc.flide.vim8.models.AppPrefs
+import inc.flide.vim8.models.CustomLayout
+import inc.flide.vim8.models.EmbeddedLayout
+import inc.flide.vim8.models.Layout
+import inc.flide.vim8.models.appPreferenceModel
+import inc.flide.vim8.models.embeddedLayouts
+import inc.flide.vim8.models.loadKeyboardData
+import inc.flide.vim8.models.toCustomLayout
 
 class AvailableLayouts internal constructor(context: Context) {
     private val prefs: AppPrefs by appPreferenceModel()
@@ -43,7 +50,7 @@ class AvailableLayouts internal constructor(context: Context) {
             customLayouts.getOrNull(which - embeddedLayoutSize)
         }
         layoutOption?.let {
-            prefs.layout.current.set(it, true)
+            prefs.layout.current.set(it)
             MainKeypadActionListener.rebuildKeyboardData(
                 it.loadKeyboardData(context).getOrNull()
             )
@@ -56,10 +63,8 @@ class AvailableLayouts internal constructor(context: Context) {
         customLayoutsWithName.clear()
         val newUris = linkedSetOf<String>()
         for (customLayoutUriString in uris) {
-            val customLayoutUri = Uri.parse(customLayoutUriString)
-            val layout = CustomLayout(customLayoutUri)
-            val keyboardData = layout.loadKeyboardData(context)
-                .getOrNull()
+            val layout = customLayoutUriString.toCustomLayout()
+            val keyboardData = layout.loadKeyboardData(context).getOrNull()
             if (keyboardData == null || keyboardData.totalLayers == 0) {
                 continue
             }
@@ -77,6 +82,7 @@ class AvailableLayouts internal constructor(context: Context) {
         index = layouts.indexOf(prefs.layout.current.get())
         if (index == -1) {
             index = defaultIndex
+            prefs.layout.current.reset()
         }
     }
 

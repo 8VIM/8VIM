@@ -21,7 +21,7 @@ import java.util.Set;
 import kotlin.Pair;
 
 public abstract class LayoutFileSelector extends PreferenceFragmentCompat {
-    private static final String[] LAYOUT_FILTER = { "application/octet-stream" };
+    private static final String[] LAYOUT_FILTER = {"application/octet-stream"};
 
     protected AppPrefs prefs;
 

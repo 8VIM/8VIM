@@ -25,7 +25,9 @@ import com.google.android.material.color.DynamicColors;
 import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.lib.android.AndroidVersion;
 import inc.flide.vim8.models.AppPrefs;
+import inc.flide.vim8.models.CustomLayout;
 import inc.flide.vim8.models.KeyboardData;
+import inc.flide.vim8.models.Layout;
 import inc.flide.vim8.models.LayoutKt;
 import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.views.ClipboardKeypadView;
@@ -33,6 +35,8 @@ import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
 import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class MainInputMethodService extends InputMethodService
@@ -178,10 +182,25 @@ public class MainInputMethodService extends InputMethodService
         clearModifierFlags();
     }
 
-    public KeyboardData buildKeyboardActionMap() {
+    public KeyboardData loadKeyboardData() {
+        AppPrefs.Layout layoutPrefs = prefs.getLayout();
+        Layout<?> layout = layoutPrefs.getCurrent().get();
+        KeyboardData keyboardData = LayoutKt.loadKeyboardData(layout, getApplicationContext()).getOrNull();
+        if (keyboardData != null) {
+            return keyboardData;
+        }
+        if (layout instanceof CustomLayout) {
+            String uri = layout.getPath().toString();
+            List<String> history = new ArrayList<>(layoutPrefs.getCustom().getHistory().get());
+            int index = history.indexOf(uri);
+            if (index > -1) {
+                history.remove(index);
+                layoutPrefs.getCustom().getHistory().set(new LinkedHashSet<>(history), true);
+            }
 
-
-        return LayoutKt.loadKeyboardData(prefs.getLayout().getCurrent().get(),
+        }
+        layoutPrefs.getCurrent().reset();
+        return LayoutKt.loadKeyboardData(layoutPrefs.getCurrent().getDefault(),
                 getApplicationContext()).getOrNull();
     }
 
@@ -320,10 +339,6 @@ public class MainInputMethodService extends InputMethodService
 
     public boolean areCharactersCapitalized() {
         return getShiftLockFlag() == KeyEvent.META_SHIFT_ON || getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
-    }
-
-    public void setModifierFlags(int newModifierFlags) {
-        this.modifierFlags = this.modifierFlags | newModifierFlags;
     }
 
     public int getShiftLockFlag() {

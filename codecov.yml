@@ -10,6 +10,8 @@ flags:
       - 8vim/src/**/ui
       - 8vim/src/**/views
       - 8vim/src/**/lib
+      - 8vim/src/**/theme/Theme.kt
+      - 8vim/src/**/models/error/LayoutError.kt
       - 8vim/src/**/VIM8Application.kt
       - 8vim/src/**/PreferenceDataAdapter.kt
       - 8vim/src/**/MainInputMethodService.java

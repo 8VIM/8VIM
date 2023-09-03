@@ -70,7 +70,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     public MainKeypadActionListener(MainInputMethodService inputMethodService, View view) {
         super(inputMethodService, view);
-        keyboardData = mainInputMethodService.buildKeyboardActionMap();
+        keyboardData = mainInputMethodService.loadKeyboardData();
 
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
@@ -81,6 +81,10 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     public static void rebuildKeyboardData(KeyboardData keyboardData) {
         MainKeypadActionListener.keyboardData = keyboardData;
+    }
+
+    private void loadKeyboardData() {
+
     }
 
     public String getLowerCaseCharacters(LayerLevel layer) {

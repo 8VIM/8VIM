@@ -2,7 +2,6 @@ package inc.flide.vim8.keyboardhelpers;
 
 import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
