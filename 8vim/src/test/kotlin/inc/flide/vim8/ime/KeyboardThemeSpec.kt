@@ -57,14 +57,14 @@ class KeyboardThemeSpec : FunSpec({
 
     val prefs = mockk<AppPrefs>()
     val themePref = mockk<AppPrefs.Theme>()
-    val mode = mockk<PreferenceData<ThemeMode>>()
+    val mode = mockk<PreferenceData<ThemeMode>>(relaxed = true)
     val keyboardPref = mockk<AppPrefs.Keyboard>()
     val customColorPref = mockk<AppPrefs.Keyboard.CustomColors>()
-    val backgroundColor = mockk<PreferenceData<Int>>()
-    val foregroundColor = mockk<PreferenceData<Int>>()
+    val backgroundColor = mockk<PreferenceData<Int>>(relaxed = true)
+    val foregroundColor = mockk<PreferenceData<Int>>(relaxed = true)
     val trailPref = mockk<AppPrefs.Keyboard.Trail>()
-    val useRandomColor = mockk<PreferenceData<Boolean>>()
-    val trailColor = mockk<PreferenceData<Int>>()
+    val useRandomColor = mockk<PreferenceData<Boolean>>(relaxed = true)
+    val trailColor = mockk<PreferenceData<Int>>(relaxed = true)
     val context = mockk<Context>()
     val resources = mockk<Resources>()
     val configuration = Configuration()
@@ -87,8 +87,6 @@ class KeyboardThemeSpec : FunSpec({
         every { customColorPref.background } returns backgroundColor
         every { backgroundColor.get() } returns Color.Blue.toArgb()
         every { foregroundColor.get() } returns Color.Red.toArgb()
-        every { backgroundColor.observe(any()) } just Runs
-        every { foregroundColor.observe(any()) } just Runs
 
         every { keyboardPref.trail } returns trailPref
         every { trailPref.color } returns trailColor

@@ -5,7 +5,6 @@ comment:
 flags:
   unit:
     ignore:
-      - 8vim/src/**/compose
       - 8vim/src/**/app
       - 8vim/src/**/ui
       - 8vim/src/**/views

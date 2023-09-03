@@ -5,9 +5,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.provider.OpenableColumns
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import arrow.core.Either
 import arrow.core.Option
 import arrow.core.flatMap
@@ -50,12 +47,6 @@ fun embeddedLayouts(context: Context): TreeMap<String, EmbeddedLayout> {
     )
 }
 
-@Composable
-fun rememberEmbeddedLayouts(): TreeMap<String, EmbeddedLayout> {
-    val context = LocalContext.current
-    return remember { embeddedLayouts(context) }
-}
-
 interface Layout<T> {
     val path: T
     fun inputStream(context: Context): Either<LayoutError, InputStream>
@@ -80,7 +71,7 @@ fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, Keyboa
 private fun EmbeddedLayout.defaultName(): String {
     val locale = Locale(path)
     return Locale.forLanguageTag(path).getDisplayName(locale)
-        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+        .replaceFirstChar { it.titlecase(locale) }
 }
 
 private fun CustomLayout.defaultName(context: Context): String {

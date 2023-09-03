@@ -10,22 +10,19 @@ import inc.flide.vim8.models.yaml.LayoutInfo
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.property.arbitrary.next
-import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.clearStaticMockk
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import java.io.InputStream
 
 class LayoutLoaderSpec : FunSpec({
     val resources = mockk<Resources>()
-    val inputStream = mockk<InputStream>()
+    val inputStream = mockk<InputStream>(relaxed = true)
 
     beforeSpec {
         mockkStatic(KeyboardDataYamlParser::class)
-        every { inputStream.close() } just Runs
     }
 
     beforeTest {

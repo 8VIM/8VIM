@@ -37,10 +37,10 @@ import kotlin.random.Random
 
 class AvailableLayoutsSpec : WordSpec({
     val prefs = mockk<AppPrefs>()
-    val layoutPref = mockk<AppPrefs.Layout>()
-    val customPref = mockk<AppPrefs.Layout.Custom>()
-    val currentLayout = mockk<PreferenceData<Layout<*>>>()
-    val history = mockk<PreferenceData<Set<String>>>()
+    val layoutPref = mockk<AppPrefs.Layout>(relaxed = true)
+    val customPref = mockk<AppPrefs.Layout.Custom>(relaxed = true)
+    val currentLayout = mockk<PreferenceData<Layout<*>>>(relaxed = true)
+    val history = mockk<PreferenceData<Set<String>>>(relaxed = true)
     val customLayout = mockkClass(CustomLayout::class)
 
     val context = mockk<Context>()
@@ -78,9 +78,6 @@ class AvailableLayoutsSpec : WordSpec({
         every { AvailableLayouts.instance } answers { AvailableLayouts(context) }
         every { currentLayout.default } returns embeddedLayouts.values.first()
         every { currentLayout.get() } returns embeddedLayouts.values.first()
-        justRun { currentLayout.reset() }
-        justRun { currentLayout.set(any()) }
-        justRun { history.observe(any()) }
         every { history.get() } returns emptySet()
     }
 

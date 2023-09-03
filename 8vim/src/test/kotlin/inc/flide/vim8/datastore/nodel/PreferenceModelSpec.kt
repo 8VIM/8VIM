@@ -52,8 +52,8 @@ class TestModel : PreferenceModel(1) {
 }
 
 class PreferenceModelSpec : WordSpec({
-    val sharedPreference = mockk<SharedPreferences>()
-    val editor = mockk<SharedPreferences.Editor>()
+    val sharedPreference = mockk<SharedPreferences>(relaxed = true)
+    val editor = mockk<SharedPreferences.Editor>(relaxed = true)
     val context = mockk<Context>()
     val sharedData = hashMapOf<String, Any?>()
     lateinit var pref: TestModel
@@ -87,10 +87,6 @@ class PreferenceModelSpec : WordSpec({
             )
         } answers { readData(it) as Set<String> }
         every { sharedPreference.edit() } returns editor
-        every { sharedPreference.registerOnSharedPreferenceChangeListener(any()) } just Runs
-
-        every { editor.apply() } just Runs
-        every { editor.commit() } returns true
         every { editor.remove(any()) } answers {
             val key = it.invocation.args[0] as String
             sharedData.remove(key)

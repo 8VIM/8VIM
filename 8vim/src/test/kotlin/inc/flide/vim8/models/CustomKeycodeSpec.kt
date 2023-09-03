@@ -4,31 +4,13 @@ import android.view.KeyEvent
 import inc.flide.vim8.MainInputMethodService
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
-import io.mockk.Runs
 import io.mockk.clearMocks
-import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 
 class CustomKeycodeSpec : FunSpec({
-    val mainInputMethodService = mockk<MainInputMethodService>()
+    val mainInputMethodService = mockk<MainInputMethodService>(relaxed = true)
 
-    beforeTest {
-        every { mainInputMethodService.sendDownKeyEvent(any(), any()) } just Runs
-        every { mainInputMethodService.sendDownAndUpKeyEvent(any(), any()) } just Runs
-        every { mainInputMethodService.sendUpKeyEvent(any(), any()) } just Runs
-
-        every { mainInputMethodService.switchAnchor() } just Runs
-        every { mainInputMethodService.performShiftToggle() } just Runs
-        every { mainInputMethodService.switchToMainKeypad() } just Runs
-        every { mainInputMethodService.switchToNumberPad() } just Runs
-        every { mainInputMethodService.switchToSymbolsKeypad() } just Runs
-        every { mainInputMethodService.switchToSelectionKeypad() } just Runs
-        every { mainInputMethodService.switchToExternalEmoticonKeyboard() } just Runs
-        every { mainInputMethodService.hideKeyboard() } just Runs
-        every { mainInputMethodService.switchToClipboardKeypad() } just Runs
-    }
     context("handleKeyCode") {
         withData(
             nameFn = { it.first.name },
