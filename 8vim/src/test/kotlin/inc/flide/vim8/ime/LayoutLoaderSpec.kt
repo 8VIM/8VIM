@@ -9,6 +9,7 @@ import inc.flide.vim8.models.KeyboardData
 import inc.flide.vim8.models.yaml.LayoutInfo
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.property.arbitrary.next
 import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.clearStaticMockk
@@ -39,7 +40,7 @@ class LayoutLoaderSpec : FunSpec({
 
     context("Loading keyboardData") {
         test("without a previous") {
-            val action = Arbitraries.arbKeyboardAction.samples().first().value
+            val action = Arbitraries.arbKeyboardAction.next()
             val first = listOf(FingerPosition.INSIDE_CIRCLE) to action
             val second = listOf(FingerPosition.TOP) to action
             every { KeyboardDataYamlParser.readKeyboardData(any()) } returnsMany listOf(

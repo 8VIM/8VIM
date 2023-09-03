@@ -104,6 +104,7 @@ class AppPrefs : PreferenceModel(1) {
             key = "selected_emoticon_keyboard",
             default = ""
         )
+
         val customColors = CustomColors()
         val trail = Trail()
         val display = Display()

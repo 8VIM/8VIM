@@ -12,9 +12,8 @@ import inc.flide.vim8.theme.darkColorPalette
 import inc.flide.vim8.theme.lightColorPalette
 import kotlin.properties.Delegates
 import kotlin.random.Random
-import kotlin.random.nextInt
 
-class KeyboardTheme private constructor(context: Context) {
+class KeyboardTheme internal constructor(context: Context) {
     private val prefs: AppPrefs by appPreferenceModel()
     private val darkColorScheme: ColorScheme
     private val lightColorScheme: ColorScheme
@@ -28,9 +27,9 @@ class KeyboardTheme private constructor(context: Context) {
             prefs.keyboard.trail.color.get()
         } else {
             Color(
-                Random.nextInt(0..255),
-                Random.nextInt(0..255),
-                Random.nextInt(0..255),
+                Random.nextInt(256),
+                Random.nextInt(256),
+                Random.nextInt(256),
                 255
             ).toArgb()
         }
@@ -91,7 +90,6 @@ class KeyboardTheme private constructor(context: Context) {
     companion object {
         private var singleton: KeyboardTheme? = null
 
-        @JvmStatic
         fun initialize(context: Context) {
             if (singleton == null) {
                 singleton = KeyboardTheme(context)
