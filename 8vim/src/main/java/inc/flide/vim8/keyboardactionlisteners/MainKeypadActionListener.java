@@ -60,14 +60,13 @@ public class MainKeypadActionListener extends KeypadActionListener {
             .map(Arrays::asList).collect(Collectors.toSet());
     private static KeyboardData keyboardData;
     final Vibrator vibrator;
+    private final AppPrefs prefs;
     private final List<FingerPosition> movementSequence;
     private final Handler longPressHandler;
     private FingerPosition currentFingerPosition;
     private String currentLetter;
     private boolean isLongPressCallbackSet;
     private MovementSequenceType currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT;
-    final Vibrator vibrator;
-    final SharedPreferenceHelper sharedPreferenceHelper;
     private final Runnable longPressRunnable = new Runnable() {
         @Override
         public void run() {
@@ -77,7 +76,6 @@ public class MainKeypadActionListener extends KeypadActionListener {
             longPressHandler.postDelayed(this, DELAY_MILLIS_LONG_PRESS_CONTINUATION);
         }
     };
-    private final AppPrefs prefs;
 
     public MainKeypadActionListener(MainInputMethodService inputMethodService, View view) {
         super(inputMethodService, view);
