@@ -66,6 +66,8 @@ public class MainKeypadActionListener extends KeypadActionListener {
     private String currentLetter;
     private boolean isLongPressCallbackSet;
     private MovementSequenceType currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT;
+    final Vibrator vibrator;
+    final SharedPreferenceHelper sharedPreferenceHelper;
     private final Runnable longPressRunnable = new Runnable() {
         @Override
         public void run() {
