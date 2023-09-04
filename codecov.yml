@@ -13,4 +13,4 @@ flags:
       - 8vim/src/**/models/error/LayoutError.kt
       - 8vim/src/**/VIM8Application.kt
       - 8vim/src/**/PreferenceDataAdapter.kt
-      - 8vim/src/**/MainInputMethodService.java
+      - 8vim/src/**/MainInputMethodService.kt

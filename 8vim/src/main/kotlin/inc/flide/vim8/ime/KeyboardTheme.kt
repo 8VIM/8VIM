@@ -55,6 +55,13 @@ class KeyboardTheme internal constructor(context: Context) {
         onChangeCallbacks.add(onChangeCallback)
     }
 
+    fun onChange(onChangeCallback: () -> Unit) {
+        onChange(object : OnChangeCallback {
+            override fun invoke() {
+                onChangeCallback()
+            }
+        })
+    }
     private fun onPrefChanged() {
         updateColors()
         onChangeCallbacks.forEach { it.invoke() }

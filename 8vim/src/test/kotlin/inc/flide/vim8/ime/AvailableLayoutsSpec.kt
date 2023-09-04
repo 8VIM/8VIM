@@ -1,14 +1,13 @@
 package inc.flide.vim8.ime
 
 import android.content.Context
-import android.net.Uri
 import arrow.core.left
 import arrow.core.right
 import inc.flide.vim8.arbitraries.Arbitraries.arbEmbeddedLayout
 import inc.flide.vim8.arbitraries.Arbitraries.arbKeyboardData
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
-import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener
+import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
 import inc.flide.vim8.models.AppPrefs
 import inc.flide.vim8.models.CustomLayout
 import inc.flide.vim8.models.Layout
@@ -53,17 +52,13 @@ class AvailableLayoutsSpec : WordSpec({
     beforeSpec {
         mockkStatic(::appPreferenceModel)
         mockkStatic(::embeddedLayouts)
-        mockkStatic(Layout<*>::loadKeyboardData)
         mockkStatic(String::toCustomLayout)
-        mockkStatic(MainKeypadActionListener::rebuildKeyboardData)
+        mockkObject(MainKeypadActionListener)
         justRun { MainKeypadActionListener.rebuildKeyboardData(any()) }
-        mockkStatic(Uri::parse)
 
         embeddedLayouts.forEach { (_, layout) ->
             every { layout.loadKeyboardData(any()) } returns arbKeyboardData.next().right()
         }
-
-        every { Uri.parse(any()) } answers { mockk() }
 
         every { prefs.layout } returns layoutPref
         every { layoutPref.current } returns currentLayout

@@ -2,7 +2,6 @@ package inc.flide.vim8.models
 
 import android.view.KeyEvent
 import inc.flide.vim8.MainInputMethodService
-import java.util.EnumSet
 
 enum class CustomKeycode(@JvmField val keyCode: Int) {
     MOVE_CURRENT_END_POINT_LEFT(-1),
@@ -63,19 +62,7 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
         }
 
     companion object {
-        private val KEY_CODE_TO_STRING_CODE_MAP: MutableMap<Int, CustomKeycode> = HashMap()
-
-        init {
-            for (customKeycode in EnumSet.allOf(
-                CustomKeycode::class.java
-            )) {
-                KEY_CODE_TO_STRING_CODE_MAP[customKeycode.keyCode] = customKeycode
-            }
-        }
-
-        @JvmStatic
-        fun fromIntValue(value: Int): CustomKeycode? {
-            return KEY_CODE_TO_STRING_CODE_MAP[value]
-        }
+        val KEY_CODE_TO_STRING_CODE_MAP: Map<Int, CustomKeycode> =
+            CustomKeycode.values().associateBy({ it.keyCode }, { it })
     }
 }

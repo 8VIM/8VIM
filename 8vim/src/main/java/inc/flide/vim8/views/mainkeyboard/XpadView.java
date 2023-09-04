@@ -27,7 +27,7 @@ import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
-import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
+import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.FingerPosition;
 import inc.flide.vim8.models.LayerLevel;
@@ -89,6 +89,8 @@ public class XpadView extends View {
         prefs = appPreferenceModel().java();
         keyboardTheme = KeyboardTheme.getInstance();
         keyboardTheme.onChange(this::updateColors);
+
+        prefs.getLayout().getCurrent().observe(value -> invalidate());
 
         AppPrefs.Keyboard.Circle circlePrefs = prefs.getKeyboard().getCircle();
         circlePrefs.getRadiusSizeFactor().observe(this::onCirclePrefsChanged);

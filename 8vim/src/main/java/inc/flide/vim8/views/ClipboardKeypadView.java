@@ -10,12 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.keyboardactionlisteners.ClipboardActionListener;
+import inc.flide.vim8.ime.actionlisteners.ClipboardActionListener;
 import java.text.MessageFormat;
 import java.util.List;
 
 public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardActionListener> {
     private ArrayAdapter<String> adapter;
+    private ListView clipboardItemsList;
 
     public ClipboardKeypadView(Context context) {
         super(context);
@@ -55,10 +56,9 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardAc
         setupSwitchToMainKeyboardButton();
     }
 
-    public void setupClipboardListView() {
-
+    private void setupClipboardListView() {
         List<String> clipHistory = actionListener.getClipHistory();
-        ListView clipboardItemsList = this.findViewById(R.id.clipboardItemsList);
+        clipboardItemsList = this.findViewById(R.id.clipboardItemsList);
         keyboardTheme.onChange(() -> {
             int children = clipboardItemsList.getChildCount();
             for (int i = 0; i < children; i++) {
@@ -86,19 +86,25 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardAc
                 return view;
             }
         };
+
         clipboardItemsList.setAdapter(adapter);
 
         clipboardItemsList.setOnItemClickListener((parent, itemView, position, id) -> {
             String selectedClip = adapter.getItem(position);
+            assert selectedClip != null;
             actionListener.onClipSelected(selectedClip);
         });
     }
 
     public void updateClipHistory() {
         List<String> clipHistory = actionListener.getClipHistory();
+        adapter.setNotifyOnChange(false);
         adapter.clear();
         adapter.addAll(clipHistory);
         adapter.notifyDataSetChanged();
+        if (clipboardItemsList != null) {
+            clipboardItemsList.smoothScrollToPosition(0);
+        }
     }
 
 }

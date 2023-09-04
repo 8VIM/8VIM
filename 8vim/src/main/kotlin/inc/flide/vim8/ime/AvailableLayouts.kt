@@ -1,7 +1,7 @@
 package inc.flide.vim8.ime
 
 import android.content.Context
-import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener
+import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
 import inc.flide.vim8.models.AppPrefs
 import inc.flide.vim8.models.CustomLayout
 import inc.flide.vim8.models.EmbeddedLayout
