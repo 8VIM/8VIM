@@ -89,5 +89,11 @@ fun KeyboardData.setUpperCaseCharacters(
 }
 
 fun KeyboardData.findLayer(movementSequence: MovementSequence): LayerLevel {
-    return actionMap[movementSequence]?.layer ?: LayerLevel.FIRST
+    return actionMap[movementSequence]?.layer.let {
+        if (it == LayerLevel.HIDDEN) {
+            LayerLevel.FIRST
+        } else {
+            it
+        }
+    } ?: LayerLevel.FIRST
 }

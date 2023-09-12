@@ -1,0 +1,1 @@
+fix: 🐛 reading wrong haptic/sound preferences
