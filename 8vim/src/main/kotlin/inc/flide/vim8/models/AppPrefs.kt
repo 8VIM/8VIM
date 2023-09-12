@@ -49,11 +49,11 @@ class AppPrefs : PreferenceModel(1) {
 
     inner class InputFeedback {
         val soundEnabled = boolean(
-            key = "user_preferred_haptic_feedback_enabled",
+            key = "user_preferred_sound_feedback_enabled",
             default = true
         )
         val hapticEnabled = boolean(
-            key = "user_preferred_sound_feedback_enabled",
+            key = "user_preferred_haptic_feedback_enabled",
             default = true
         )
     }
