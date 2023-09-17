@@ -179,10 +179,7 @@ public class MainInputMethodService extends InputMethodService
     }
 
     public KeyboardData buildKeyboardActionMap() {
-
-
-        return LayoutKt.loadKeyboardData(prefs.getLayout().getCurrent().get(),
-                getApplicationContext()).getOrNull();
+        return LayoutKt.safeLoadKeyboardData(prefs.getLayout().getCurrent().get(), getApplicationContext());
     }
 
     public void sendText(String text) {
