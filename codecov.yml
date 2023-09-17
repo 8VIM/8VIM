@@ -1,8 +1,15 @@
-github_checks: false
 comment:
   layout: "diff, flags, files"
   behavior: default
   require_changes: false
+coverage:
+  status:
+    project:
+      default:
+        if_ci_failed: ignore
+    patch:
+      default:
+        if_ci_failed: ignore
 flags:
   unit:
     ignore:
