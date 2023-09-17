@@ -1,3 +1,4 @@
+github_checks: false
 comment:
   layout: "diff, flags, files"
   behavior: default
