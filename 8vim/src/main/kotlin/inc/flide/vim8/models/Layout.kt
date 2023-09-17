@@ -52,6 +52,14 @@ interface Layout<T> {
     fun inputStream(context: Context): Either<LayoutError, InputStream>
 }
 
+fun <T> Layout<T>.safeLoadKeyboardData(context: Context): KeyboardData? {
+    val prefs: AppPrefs by appPreferenceModel()
+    return loadKeyboardData(context).fold({
+        prefs.layout.current.reset()
+        prefs.layout.current.get().loadKeyboardData(context).getOrNull()
+    }, { it })
+}
+
 fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, KeyboardData> {
     return inputStream(context)
         .flatMap { LayoutLoader.loadKeyboardData(context.resources, it) }
