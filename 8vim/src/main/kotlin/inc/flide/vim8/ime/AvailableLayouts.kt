@@ -1,6 +1,7 @@
 package inc.flide.vim8.ime
 
 import android.content.Context
+import arrow.core.elementAtOrNone
 import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
 import inc.flide.vim8.models.AppPrefs
 import inc.flide.vim8.models.CustomLayout
@@ -46,17 +47,20 @@ class AvailableLayouts internal constructor(context: Context) {
         if (index != which) {
             val embeddedLayoutSize = embeddedLayoutsWithName.size
             val layoutOption = if (which < embeddedLayoutSize) {
-                embeddedLayouts.getOrNull(which)
+                embeddedLayouts.elementAtOrNone(which)
             } else {
-                customLayouts.getOrNull(which - embeddedLayoutSize)
+                customLayouts.elementAtOrNone(which - embeddedLayoutSize)
             }
-            layoutOption?.let {
-                prefs.layout.current.set(it)
-                MainKeypadActionListener.rebuildKeyboardData(
-                    it.loadKeyboardData(context).getOrNull()
-                )
-                index = which
-            }
+            layoutOption
+                .flatMap { layout ->
+                    layout.loadKeyboardData(context).getOrNone().map { layout to it }
+                        .onNone { reloadCustomLayouts(context) }
+                }
+                .onSome { (layout, keyboardData) ->
+                    prefs.layout.current.set(layout)
+                    MainKeypadActionListener.rebuildKeyboardData(keyboardData)
+                    index = which
+                }
         }
     }
 
