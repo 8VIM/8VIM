@@ -90,8 +90,7 @@ public class XpadView extends View {
         keyboardTheme = KeyboardTheme.getInstance();
         keyboardTheme.onChange(this::updateColors);
 
-        prefs.getLayout().getCurrent().observe(value -> invalidate());
-
+        prefs.getLayout().getCurrent().observe(newValue -> invalidate());
         AppPrefs.Keyboard.Circle circlePrefs = prefs.getKeyboard().getCircle();
         circlePrefs.getRadiusSizeFactor().observe(this::onCirclePrefsChanged);
         circlePrefs.getXCentreOffset().observe(this::onCirclePrefsChanged);
