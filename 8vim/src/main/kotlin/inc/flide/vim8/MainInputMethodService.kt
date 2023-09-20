@@ -15,17 +15,15 @@ import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowInsetsControllerCompat
-import arrow.core.recover
 import com.google.android.material.color.DynamicColors
 import inc.flide.vim8.ime.KeyboardTheme
 import inc.flide.vim8.ime.KeyboardTheme.Companion.getInstance
 import inc.flide.vim8.ime.services.ClipboardManagerService
 import inc.flide.vim8.ime.services.ClipboardManagerService.ClipboardHistoryListener
 import inc.flide.vim8.lib.android.AndroidVersion.ATLEAST_API28_P
-import inc.flide.vim8.models.CustomLayout
 import inc.flide.vim8.models.KeyboardData
 import inc.flide.vim8.models.appPreferenceModel
-import inc.flide.vim8.models.loadKeyboardData
+import inc.flide.vim8.models.safeLoadKeyboardData
 import inc.flide.vim8.views.ClipboardKeypadView
 import inc.flide.vim8.views.NumberKeypadView
 import inc.flide.vim8.views.SelectionKeypadView
@@ -174,22 +172,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     }
 
     fun loadKeyboardData(): KeyboardData {
-        val layoutPrefs = prefs.layout
-        val layout = layoutPrefs.current.get()
-        return layout.loadKeyboardData(applicationContext)
-            .recover {
-                if (layout is CustomLayout) {
-                    val uri = layout.path.toString()
-                    val history: ArrayList<String> = ArrayList(layoutPrefs.custom.history.get())
-                    val index = history.indexOf(uri)
-                    if (index > -1) {
-                        history.removeAt(index)
-                        layoutPrefs.custom.history.set(LinkedHashSet(history))
-                    }
-                }
-                layoutPrefs.current.reset()
-                layoutPrefs.current.default.loadKeyboardData(applicationContext).bind()
-            }.getOrNull()!!
+        return prefs.layout.current.get().safeLoadKeyboardData(applicationContext)
     }
 
     fun sendText(text: String?) {

@@ -13,6 +13,7 @@ import arrow.core.getOrElse
 import arrow.core.left
 import arrow.core.none
 import arrow.core.raise.catch
+import arrow.core.recover
 import arrow.core.right
 import inc.flide.vim8.R
 import inc.flide.vim8.datastore.model.PreferenceSerDe
@@ -52,12 +53,24 @@ interface Layout<T> {
     fun inputStream(context: Context): Either<LayoutError, InputStream>
 }
 
-fun <T> Layout<T>.safeLoadKeyboardData(context: Context): KeyboardData? {
+fun <T> Layout<T>.safeLoadKeyboardData(context: Context): KeyboardData {
     val prefs: AppPrefs by appPreferenceModel()
-    return loadKeyboardData(context).fold({
-        prefs.layout.current.reset()
-        prefs.layout.current.get().loadKeyboardData(context).getOrNull()
-    }, { it })
+    val layout = this
+    return loadKeyboardData(context)
+        .recover {
+            if (layout is CustomLayout) {
+                val uri = layout.path.toString()
+                val history: ArrayList<String> = ArrayList(prefs.layout.custom.history.get())
+                val index = history.indexOf(uri)
+                if (index > -1) {
+                    history.removeAt(index)
+                    prefs.layout.custom.history.set(LinkedHashSet(history))
+                }
+            }
+            prefs.layout.current.reset()
+            prefs.layout.current.default.loadKeyboardData(context).bind()
+        }
+        .getOrNull()!!
 }
 
 fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, KeyboardData> {
