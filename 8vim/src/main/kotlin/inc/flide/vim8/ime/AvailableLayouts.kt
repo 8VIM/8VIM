@@ -1,4 +1,4 @@
-package inc.flide.vim8.models
+package inc.flide.vim8.ime
 
 import android.content.Context
 import android.net.Uri
@@ -6,8 +6,17 @@ import arrow.core.elementAtOrNone
 import arrow.core.firstOrNone
 import arrow.core.getOrElse
 import arrow.core.getOrNone
-import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener
+import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
+import inc.flide.vim8.models.AppPrefs
+import inc.flide.vim8.models.CustomLayout
+import inc.flide.vim8.models.EmbeddedLayout
+import inc.flide.vim8.models.Layout
+import inc.flide.vim8.models.appPreferenceModel
+import inc.flide.vim8.models.embeddedLayouts
+import inc.flide.vim8.models.loadKeyboardData
+import inc.flide.vim8.models.toCustomLayout
 import inc.flide.vim8.lib.android.ext.CustomLayoutHistoryManager
+import inc.flide.vim8.models.KeyboardData
 
 class AvailableLayouts internal constructor(
     context: Context,
@@ -46,22 +55,22 @@ class AvailableLayouts internal constructor(
         }
 
         customLayoutHistoryManager.observe(object :
-                CustomLayoutHistoryManager.FileChangeObserver {
+            CustomLayoutHistoryManager.FileChangeObserver {
 
-                override fun onDelete(uri: Uri) {
+            override fun onDelete(uri: Uri) {
+                removeFromHistory(uri.toString())
+                MainKeypadActionListener.rebuildKeyboardData(currentKeyboardData)
+            }
+
+            override fun onChange(uri: Uri): Boolean {
+                if (!updateKeyboardData(prefs.layout.current.get(), context)) {
                     removeFromHistory(uri.toString())
                     MainKeypadActionListener.rebuildKeyboardData(currentKeyboardData)
+                    return true
                 }
-
-                override fun onChange(uri: Uri): Boolean {
-                    if (!updateKeyboardData(prefs.layout.current.get(), context)) {
-                        removeFromHistory(uri.toString())
-                        MainKeypadActionListener.rebuildKeyboardData(currentKeyboardData)
-                        return true
-                    }
-                    return false
-                }
-            })
+                return false
+            }
+        })
     }
 
     private fun removeFromHistory(path: String) {
@@ -119,8 +128,7 @@ class AvailableLayouts internal constructor(
             .forEach { (layout, _) -> layoutsWithKeyboardData.remove(layout) }
 
         uris.toList().flatMap { customLayoutUriString ->
-            val customLayoutUri = Uri.parse(customLayoutUriString)
-            val layout = CustomLayout(customLayoutUri)
+            val layout = customLayoutUriString.toCustomLayout()
             if (customLayouts.containsKey(layout)) {
                 emptyList()
             } else {

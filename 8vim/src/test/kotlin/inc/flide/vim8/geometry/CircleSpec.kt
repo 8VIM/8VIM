@@ -17,6 +17,16 @@ class CircleSpec : FunSpec({
         point.y = y
         return point
     }
+
+    context("is point inside circle") {
+        withData(
+            (mockPointF(1f, 1f) to true),
+            (mockPointF(20f, 20f) to false)
+        ) { (point, expected) ->
+            circle.isPointInsideCircle(point) shouldBe expected
+        }
+    }
+
     context("get sector from a point") {
         withData(
             nameFn = {

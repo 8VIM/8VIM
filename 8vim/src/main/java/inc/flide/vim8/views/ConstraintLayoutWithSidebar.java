@@ -16,7 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
-import inc.flide.vim8.keyboardactionlisteners.KeypadActionListener;
+import inc.flide.vim8.ime.actionlisteners.KeypadActionListener;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.CustomKeycode;

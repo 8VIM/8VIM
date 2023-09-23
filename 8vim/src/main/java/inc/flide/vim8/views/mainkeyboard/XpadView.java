@@ -27,7 +27,7 @@ import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
-import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
+import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.FingerPosition;
 import inc.flide.vim8.models.LayerLevel;

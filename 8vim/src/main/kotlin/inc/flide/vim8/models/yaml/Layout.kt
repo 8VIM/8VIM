@@ -2,7 +2,9 @@ package inc.flide.vim8.models.yaml
 
 import arrow.optics.optics
 import com.fasterxml.jackson.annotation.JsonProperty
+import inc.flide.vim8.lib.ExcludeFromJacocoGeneratedReport
 
+@ExcludeFromJacocoGeneratedReport
 @optics
 data class Layout(
     @JsonProperty(required = true) val layers: Layers = Layers(),
@@ -11,6 +13,7 @@ data class Layout(
     companion object
 }
 
+@ExcludeFromJacocoGeneratedReport
 @optics
 data class LayoutInfo(
     val name: String = "",
@@ -21,6 +24,7 @@ data class LayoutInfo(
     companion object
 }
 
+@ExcludeFromJacocoGeneratedReport
 @optics
 data class Contact(val name: String = "", val email: String = "") {
     companion object

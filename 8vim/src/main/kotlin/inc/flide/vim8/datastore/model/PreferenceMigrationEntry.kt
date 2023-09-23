@@ -1,5 +1,8 @@
 package inc.flide.vim8.datastore.model
 
+import inc.flide.vim8.lib.ExcludeFromJacocoGeneratedReport
+
+@ExcludeFromJacocoGeneratedReport
 class PreferenceMigrationEntry internal constructor(
     internal val action: Action,
     val key: String,

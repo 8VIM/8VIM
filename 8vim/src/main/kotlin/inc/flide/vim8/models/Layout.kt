@@ -14,10 +14,11 @@ import arrow.core.getOrElse
 import arrow.core.left
 import arrow.core.none
 import arrow.core.raise.catch
+import arrow.core.recover
 import arrow.core.right
 import inc.flide.vim8.R
 import inc.flide.vim8.datastore.model.PreferenceSerDe
-import inc.flide.vim8.ime.InputMethodServiceHelper
+import inc.flide.vim8.ime.LayoutLoader
 import inc.flide.vim8.lib.android.tryOrNull
 import inc.flide.vim8.models.error.ExceptionWrapperError
 import inc.flide.vim8.models.error.LayoutError
@@ -47,17 +48,29 @@ interface Layout<T> {
     fun inputStream(context: Context): Either<LayoutError, InputStream>
 }
 
-fun <T> Layout<T>.safeLoadKeyboardData(context: Context): KeyboardData? {
+fun <T> Layout<T>.safeLoadKeyboardData(context: Context): KeyboardData {
     val prefs: AppPrefs by appPreferenceModel()
-    return loadKeyboardData(context).fold({
-        prefs.layout.current.reset()
-        prefs.layout.current.default.loadKeyboardData(context).getOrNull()
-    }, { it })
+    val layout = this
+    return loadKeyboardData(context)
+        .recover {
+            if (layout is CustomLayout) {
+                val uri = layout.path.toString()
+                val history: ArrayList<String> = ArrayList(prefs.layout.custom.history.get())
+                val index = history.indexOf(uri)
+                if (index > -1) {
+                    history.removeAt(index)
+                    prefs.layout.custom.history.set(LinkedHashSet(history))
+                }
+            }
+            prefs.layout.current.reset()
+            prefs.layout.current.default.loadKeyboardData(context).bind()
+        }
+        .getOrNull()!!
 }
 
 fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, KeyboardData> {
     return inputStream(context)
-        .flatMap { InputMethodServiceHelper.initializeKeyboardActionMap(context.resources, it) }
+        .flatMap { LayoutLoader.loadKeyboardData(context.resources, it) }
         .map {
             KeyboardData.info.name.modify(it) { name ->
                 Log.d("FILEOBSERVER_EVENT", "Layout: $name, $path")
@@ -75,7 +88,7 @@ fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, Keyboa
 private fun EmbeddedLayout.defaultName(): String {
     val locale = Locale(path)
     return Locale.forLanguageTag(path).getDisplayName(locale)
-        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+        .replaceFirstChar { it.titlecase(locale) }
 }
 
 private fun CustomLayout.defaultName(context: Context): String {
@@ -108,6 +121,10 @@ private fun CustomLayout.defaultName(context: Context): String {
                 }
             }
     }.flatten().getOrElse { "" }
+}
+
+fun String.toCustomLayout(): CustomLayout {
+    return CustomLayout(Uri.parse(this))
 }
 
 object LayoutSerDe : PreferenceSerDe<Layout<*>> {
@@ -177,26 +194,11 @@ data class EmbeddedLayout(override val path: String) : Layout<String> {
     }
 }
 
-class CustomLayout(override val path: Uri) : Layout<Uri> {
+data class CustomLayout(override val path: Uri) : Layout<Uri> {
     @SuppressLint("Recycle")
     override fun inputStream(context: Context): Either<LayoutError, InputStream> {
         return catch({
             context.contentResolver.openInputStream(path)!!.right()
         }) { e: Throwable -> ExceptionWrapperError(e).left() }
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as CustomLayout
-
-        if (path != other.path) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return path.hashCode()
     }
 }

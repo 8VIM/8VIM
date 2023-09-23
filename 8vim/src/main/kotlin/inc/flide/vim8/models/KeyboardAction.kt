@@ -1,7 +1,9 @@
 package inc.flide.vim8.models
 
 import arrow.optics.optics
+import inc.flide.vim8.lib.ExcludeFromJacocoGeneratedReport
 
+@ExcludeFromJacocoGeneratedReport
 @optics
 data class KeyboardAction(
     val keyboardActionType: KeyboardActionType,

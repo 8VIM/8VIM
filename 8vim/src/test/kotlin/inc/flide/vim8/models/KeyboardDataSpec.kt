@@ -18,6 +18,7 @@ class KeyboardDataSpec : DescribeSpec({
                 keyboardData.actionMap shouldContainExactly keyboardActions
             }
         }
+
         it("should get characterSets") {
             checkAll(
                 Arbitraries.arbCharactersSet,

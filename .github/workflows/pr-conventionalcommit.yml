@@ -1,0 +1,17 @@
+name: Check PR conventional commit
+
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, edited, synchronize]
+jobs:
+  check-for-cc:
+    name: Conventional commit checker
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Conventional Commit Checker
+        uses: agenthunt/conventional-commit-checker-action@v2.0.0
+        with:
+          pr-body-regex: ".+"

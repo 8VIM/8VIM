@@ -9,10 +9,10 @@ import arrow.core.raise.catch
 import arrow.core.raise.either
 import inc.flide.vim8.R
 import inc.flide.vim8.ime.KeyboardDataYamlParser.readKeyboardData
-import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
 import inc.flide.vim8.models.KeyboardData
 import inc.flide.vim8.models.LayerLevel
+import inc.flide.vim8.models.MovementSequence
 import inc.flide.vim8.models.addAllToActionMap
 import inc.flide.vim8.models.error.ExceptionWrapperError
 import inc.flide.vim8.models.error.LayoutError
@@ -23,11 +23,12 @@ import inc.flide.vim8.models.setUpperCaseCharacters
 import inc.flide.vim8.models.upperCaseCharacters
 import java.io.InputStream
 
-object InputMethodServiceHelper {
-    private var layoutIndependentKeyboardData: KeyboardData? = null
+object LayoutLoader {
+    internal var layoutIndependentKeyboardData: KeyboardData? = null
+
     private fun validateNoConflictingActions(
-        mainKeyboardActionsMap: Map<List<FingerPosition>, KeyboardAction>?,
-        newKeyboardActionsMap: Map<List<FingerPosition>, KeyboardAction>
+        mainKeyboardActionsMap: Map<MovementSequence, KeyboardAction>?,
+        newKeyboardActionsMap: Map<MovementSequence, KeyboardAction>
     ): Boolean {
         return mainKeyboardActionsMap.isNullOrEmpty() || newKeyboardActionsMap.keys.firstOrNone {
             mainKeyboardActionsMap.containsKey(
@@ -37,43 +38,15 @@ object InputMethodServiceHelper {
             .isNone()
     }
 
-    @JvmStatic
-    fun initializeKeyboardActionMap(
+    fun loadKeyboardData(
         resources: Resources,
         inputStream: InputStream
     ): Either<LayoutError, KeyboardData> = either {
         val mainKeyboardData = getLayoutIndependentKeyboardData(resources)
-        addToKeyboardActionsMapUsingInputStream(mainKeyboardData, inputStream).bind()
+        loadKeyboardData(mainKeyboardData, inputStream).bind()
     }
 
-    private fun getLayoutIndependentKeyboardData(resources: Resources): KeyboardData {
-        if (layoutIndependentKeyboardData == null) {
-            layoutIndependentKeyboardData = either {
-                val sectorCircleButtonsKeyboard = addToKeyboardActionsMapUsingResourceId(
-                    KeyboardData(),
-                    resources,
-                    R.raw.sector_circle_buttons
-                ).bind()
-                val dPadActionKeyboard = addToKeyboardActionsMapUsingResourceId(
-                    sectorCircleButtonsKeyboard,
-                    resources,
-                    R.raw.d_pad_actions
-                ).bind()
-                addToKeyboardActionsMapUsingResourceId(
-                    dPadActionKeyboard,
-                    resources,
-                    R.raw.special_core_gestures
-                ).bind()
-            }.onLeft {
-                if (it is ExceptionWrapperError) {
-                    it.exception.printStackTrace()
-                }
-            }.getOrNull()
-        }
-        return layoutIndependentKeyboardData!!
-    }
-
-    private fun addToKeyboardActionsMapUsingInputStream(
+    private fun loadKeyboardData(
         keyboardData: KeyboardData,
         inputStream: InputStream
     ): Either<LayoutError, KeyboardData> {
@@ -108,17 +81,40 @@ object InputMethodServiceHelper {
         }
     }
 
-    private fun addToKeyboardActionsMapUsingResourceId(
+    private fun loadKeyboardData(
         keyboardData: KeyboardData,
         resources: Resources,
         resourceId: Int
     ): Either<LayoutError, KeyboardData> {
         catch({
             return resources.openRawResource(resourceId).use { inputStream ->
-                addToKeyboardActionsMapUsingInputStream(keyboardData, inputStream)
+                loadKeyboardData(keyboardData, inputStream)
             }
         }) { exception: Throwable ->
             return ExceptionWrapperError(exception = exception).left()
         }
+    }
+
+    private fun getLayoutIndependentKeyboardData(resources: Resources): KeyboardData {
+        if (layoutIndependentKeyboardData == null) {
+            layoutIndependentKeyboardData = either {
+                val sectorCircleButtonsKeyboard = loadKeyboardData(
+                    KeyboardData(),
+                    resources,
+                    R.raw.sector_circle_buttons
+                ).bind()
+                val dPadActionKeyboard = loadKeyboardData(
+                    sectorCircleButtonsKeyboard,
+                    resources,
+                    R.raw.d_pad_actions
+                ).bind()
+                loadKeyboardData(
+                    dPadActionKeyboard,
+                    resources,
+                    R.raw.special_core_gestures
+                ).bind()
+            }.getOrNull()
+        }
+        return layoutIndependentKeyboardData!!
     }
 }

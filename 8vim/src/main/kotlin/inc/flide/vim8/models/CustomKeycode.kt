@@ -2,7 +2,6 @@ package inc.flide.vim8.models
 
 import android.view.KeyEvent
 import inc.flide.vim8.MainInputMethodService
-import java.util.EnumSet
 
 enum class CustomKeycode(@JvmField val keyCode: Int) {
     MOVE_CURRENT_END_POINT_LEFT(-1),
@@ -24,18 +23,13 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
 
     fun handleKeyCode(mainInputMethodService: MainInputMethodService): Boolean {
         when (this) {
+            SELECTION_START,
             MOVE_CURRENT_END_POINT_LEFT,
             MOVE_CURRENT_END_POINT_RIGHT,
             MOVE_CURRENT_END_POINT_UP,
             MOVE_CURRENT_END_POINT_DOWN -> {
                 mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
                 mainInputMethodService.sendDownAndUpKeyEvent(dPadKeyCodeFromCustom, 0)
-                mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-            }
-
-            SELECTION_START -> {
-                mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-                mainInputMethodService.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, 0)
                 mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
             }
 
@@ -60,7 +54,7 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
 
     private val dPadKeyCodeFromCustom: Int
         get() = when (this) {
-            MOVE_CURRENT_END_POINT_LEFT -> KeyEvent.KEYCODE_DPAD_LEFT
+            MOVE_CURRENT_END_POINT_LEFT, SELECTION_START -> KeyEvent.KEYCODE_DPAD_LEFT
             MOVE_CURRENT_END_POINT_RIGHT -> KeyEvent.KEYCODE_DPAD_RIGHT
             MOVE_CURRENT_END_POINT_UP -> KeyEvent.KEYCODE_DPAD_UP
             MOVE_CURRENT_END_POINT_DOWN -> KeyEvent.KEYCODE_DPAD_DOWN
@@ -68,19 +62,7 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
         }
 
     companion object {
-        private val KEY_CODE_TO_STRING_CODE_MAP: MutableMap<Int, CustomKeycode> = HashMap()
-
-        init {
-            for (customKeycode in EnumSet.allOf(
-                CustomKeycode::class.java
-            )) {
-                KEY_CODE_TO_STRING_CODE_MAP[customKeycode.keyCode] = customKeycode
-            }
-        }
-
-        @JvmStatic
-        fun fromIntValue(value: Int): CustomKeycode? {
-            return KEY_CODE_TO_STRING_CODE_MAP[value]
-        }
+        val KEY_CODE_TO_STRING_CODE_MAP: Map<Int, CustomKeycode> =
+            CustomKeycode.values().associateBy({ it.keyCode }, { it })
     }
 }
