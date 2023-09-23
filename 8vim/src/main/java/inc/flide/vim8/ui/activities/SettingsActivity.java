@@ -22,6 +22,7 @@ import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
 import inc.flide.vim8.lib.android.AndroidSettings;
 import inc.flide.vim8.lib.android.SystemSettingsObserver;
+import inc.flide.vim8.lib.android.ext.CustomLayoutHistoryManager;
 import inc.flide.vim8.models.AvailableLayouts;
 import inc.flide.vim8.ui.fragments.SettingsFragment;
 import inc.flide.vim8.utils.InputMethodUtils;
@@ -40,7 +41,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AvailableLayouts.Companion.initialize(this);
+        AvailableLayouts.initialize(this, CustomLayoutHistoryManager.getInstance());
         handlerThread.start();
         backPressHandler = new Handler(handlerThread.getLooper(), null);
 

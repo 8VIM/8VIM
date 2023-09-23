@@ -2,8 +2,10 @@ package inc.flide.vim8.keyboardactionlisteners;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
+import inc.flide.vim8.models.AvailableLayouts;
 import inc.flide.vim8.models.FingerPosition;
 import inc.flide.vim8.models.KeyboardAction;
 import inc.flide.vim8.models.KeyboardActionType;
@@ -70,8 +72,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
 
     public MainKeypadActionListener(MainInputMethodService inputMethodService, View view) {
         super(inputMethodService, view);
-        keyboardData = mainInputMethodService.buildKeyboardActionMap();
-
+        keyboardData = AvailableLayouts.getInstance().getCurrentKeyboardData();
         movementSequence = new ArrayList<>();
         currentFingerPosition = FingerPosition.NO_TOUCH;
         HandlerThread longPressHandlerThread = new HandlerThread("LongPressHandlerThread");
@@ -80,6 +81,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     public static void rebuildKeyboardData(KeyboardData keyboardData) {
+        Log.d("MainKeypadActionListener", "Rebuilding KeyboardData: " + keyboardData.getInfo().getName());
         MainKeypadActionListener.keyboardData = keyboardData;
     }
 

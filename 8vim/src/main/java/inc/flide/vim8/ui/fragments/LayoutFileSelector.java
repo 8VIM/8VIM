@@ -8,8 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.PreferenceFragmentCompat;
 import arrow.core.EitherKt;
 import inc.flide.vim8.R;
-import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.models.AppPrefs;
+import inc.flide.vim8.models.AvailableLayouts;
 import inc.flide.vim8.models.CustomLayout;
 import inc.flide.vim8.models.LayoutKt;
 import inc.flide.vim8.models.error.ExceptionWrapperError;
@@ -21,9 +21,10 @@ import java.util.Set;
 import kotlin.Pair;
 
 public abstract class LayoutFileSelector extends PreferenceFragmentCompat {
-    private static final String[] LAYOUT_FILTER = { "application/octet-stream" };
+    private static final String[] LAYOUT_FILTER = {"application/octet-stream"};
 
     protected AppPrefs prefs;
+    protected AvailableLayouts availableLayouts;
 
     private final ActivityResultLauncher<String[]> openContent = registerForActivityResult(
             new ActivityResultContracts.OpenDocument(), this::callback);
@@ -41,7 +42,7 @@ public abstract class LayoutFileSelector extends PreferenceFragmentCompat {
         Set<String> currentHistory = layoutPrefs.getCustom().getHistory().get();
         boolean isInHistory = currentHistory.contains(selectedCustomLayoutFile.toString());
         if (isInHistory) {
-            updateKeyboard(layout, context);
+            availableLayouts.updateKeyboardData(layout, context);
         } else {
             Pair<Integer, String> errorToShow = EitherKt.getOrElse(
                     LayoutKt
@@ -64,16 +65,11 @@ public abstract class LayoutFileSelector extends PreferenceFragmentCompat {
                 DialogsHelper.showAlert(context, errorToShow.getFirst(), errorToShow.getSecond());
                 return;
             }
-            updateKeyboard(layout, context);
+            prefs.getLayout().getCurrent().set(layout, true);
             List<String> history = new ArrayList<>(currentHistory);
             history.add(0, selectedCustomLayoutFile.toString());
             layoutPrefs.getCustom().getHistory().set(new LinkedHashSet<>(history), true);
         }
-    }
-
-    private void updateKeyboard(CustomLayout layout, Context context) {
-        prefs.getLayout().getCurrent().set(layout, true);
-        MainKeypadActionListener.rebuildKeyboardData(LayoutKt.loadKeyboardData(layout, context).getOrNull());
     }
 
     protected void openFileSelector() {

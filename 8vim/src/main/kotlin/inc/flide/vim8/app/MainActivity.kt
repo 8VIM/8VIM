@@ -26,7 +26,6 @@ import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.lib.compose.ProvideLocalizedResources
 import inc.flide.vim8.lib.compose.SystemUiApp
 import inc.flide.vim8.models.appPreferenceModel
-import inc.flide.vim8.models.rememberEmbeddedLayouts
 import inc.flide.vim8.theme.AppTheme
 
 val LocalNavController = staticCompositionLocalOf<NavController> {
@@ -48,7 +47,6 @@ class MainActivity : ComponentActivity() {
         prefs.onReady(this) { isModelLoaded ->
             if (!isModelLoaded) return@onReady
             setContent {
-                rememberEmbeddedLayouts()
                 val prefs by appPreferenceModel()
                 val colorScheme = prefs.theme.colorScheme()
                 ProvideLocalizedResources(resourcesContext) {

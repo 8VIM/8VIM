@@ -5,9 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.provider.OpenableColumns
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
+import android.util.Log
 import arrow.core.Either
 import arrow.core.Option
 import arrow.core.flatMap
@@ -26,34 +24,22 @@ import inc.flide.vim8.models.error.LayoutError
 import inc.flide.vim8.models.yaml.name
 import java.io.InputStream
 import java.util.Locale
-import java.util.TreeMap
 
 private val isoCodes = Locale.getISOLanguages().toSet()
 
-fun embeddedLayouts(context: Context): TreeMap<String, EmbeddedLayout> {
-    return TreeMap(
-        buildMap {
-            (R.raw::class.java.fields)
-                .filter { isoCodes.contains(it.name) }
-                .map { field ->
-                    EmbeddedLayout(field.name)
-                        .let { layout ->
-                            layout
-                                .loadKeyboardData(context)
-                                .getOrNone()
-                                .filterNot { it.totalLayers == 0 }
-                                .map { it.toString() to layout }
-                        }
-                }
-                .forEach { it.onSome { (k, v) -> put(k, v) } }
-        }
-    )
-}
-
-@Composable
-fun rememberEmbeddedLayouts(): TreeMap<String, EmbeddedLayout> {
-    val context = LocalContext.current
-    return remember { embeddedLayouts(context) }
+fun embeddedLayouts(context: Context): List<Pair<EmbeddedLayout, KeyboardData>> {
+    return (R.raw::class.java.fields)
+        .filter { isoCodes.contains(it.name) }
+        .flatMap { field ->
+            EmbeddedLayout(field.name)
+                .let { layout ->
+                    layout
+                        .loadKeyboardData(context)
+                        .getOrNone()
+                        .filterNot { it.totalLayers == 0 }
+                        .map { layout to it }
+                }.toList()
+        }.sortedBy { it.second.toString() }
 }
 
 interface Layout<T> {
@@ -65,7 +51,7 @@ fun <T> Layout<T>.safeLoadKeyboardData(context: Context): KeyboardData? {
     val prefs: AppPrefs by appPreferenceModel()
     return loadKeyboardData(context).fold({
         prefs.layout.current.reset()
-        prefs.layout.current.get().loadKeyboardData(context).getOrNull()
+        prefs.layout.current.default.loadKeyboardData(context).getOrNull()
     }, { it })
 }
 
@@ -74,6 +60,7 @@ fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, Keyboa
         .flatMap { InputMethodServiceHelper.initializeKeyboardActionMap(context.resources, it) }
         .map {
             KeyboardData.info.name.modify(it) { name ->
+                Log.d("FILEOBSERVER_EVENT", "Layout: $name, $path")
                 name.ifEmpty {
                     when (this) {
                         is EmbeddedLayout -> this.defaultName()
@@ -104,18 +91,18 @@ private fun CustomLayout.defaultName(context: Context): String {
                             null,
                             null,
                             null
-                        )
-                    ).map { cursor ->
-                        var result = ""
-                        if (cursor.count != 0) {
-                            val columnIndex =
-                                cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME)
-                            cursor.moveToFirst()
-                            result = cursor.getString(columnIndex)
+                        )?.let { cursor ->
+                            var result = ""
+                            if (cursor.count != 0) {
+                                val columnIndex =
+                                    cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME)
+                                cursor.moveToFirst()
+                                result = cursor.getString(columnIndex)
+                            }
+                            cursor.close()
+                            result
                         }
-                        cursor.close()
-                        result
-                    }
+                    )
 
                     else -> none()
                 }
@@ -172,6 +159,21 @@ data class EmbeddedLayout(override val path: String) : Layout<String> {
         return catch({
             resources.openRawResource(resourceId).right()
         }) { e: Throwable -> ExceptionWrapperError(e).left() }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as EmbeddedLayout
+
+        if (path != other.path) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return path.hashCode()
     }
 }
 

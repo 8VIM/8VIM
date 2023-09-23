@@ -3,31 +3,81 @@ package inc.flide.vim8.models
 import android.content.Context
 import android.net.Uri
 import arrow.core.elementAtOrNone
+import arrow.core.firstOrNone
+import arrow.core.getOrElse
+import arrow.core.getOrNone
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener
+import inc.flide.vim8.lib.android.ext.CustomLayoutHistoryManager
 
-class AvailableLayouts internal constructor(context: Context) {
+class AvailableLayouts internal constructor(
+    context: Context,
+    customLayoutHistoryManager: CustomLayoutHistoryManager
+) {
     private val prefs: AppPrefs by appPreferenceModel()
-    private val embeddedLayoutsWithName: Map<String, EmbeddedLayout>
     private val defaultIndex: Int
-    private val embeddedLayouts: List<EmbeddedLayout>
-    private val layouts: MutableList<Layout<*>> = arrayListOf()
-    private val customLayoutsWithName: MutableMap<String, CustomLayout> = hashMapOf()
-    private val customLayouts: MutableList<CustomLayout> = arrayListOf()
-    val displayNames: MutableSet<String> = linkedSetOf()
+    private val embeddedLayoutsSize: Int
+    private val layoutsWithKeyboardData: MutableMap<Layout<*>, KeyboardData> = linkedMapOf()
+    val displayNames: ArrayList<String> = arrayListOf()
+    private val defaultKeyboard: KeyboardData
+        get() = layoutsWithKeyboardData[prefs.layout.current.default]!!
+    val currentKeyboardData: KeyboardData
+        get() = layoutsWithKeyboardData
+            .getOrNone(prefs.layout.current.get())
+            .getOrElse {
+                removeFromHistory(prefs.layout.current.get().path.toString())
+                defaultKeyboard
+            }
     var index = -1
         private set
 
     init {
-        embeddedLayoutsWithName = embeddedLayouts(context)
-        embeddedLayouts = embeddedLayoutsWithName.values.toList()
-        defaultIndex = embeddedLayouts.indexOf(prefs.layout.current.default as EmbeddedLayout)
+        val embeddedLayoutsWithName = embeddedLayouts(context)
+        embeddedLayoutsSize = embeddedLayoutsWithName.size
+        layoutsWithKeyboardData.putAll(embeddedLayoutsWithName)
+        defaultIndex =
+            layoutsWithKeyboardData.keys.indexOf(prefs.layout.current.default as EmbeddedLayout)
         reloadCustomLayouts(context)
 
         prefs.layout.custom.history.observe {
-            if (it.size > customLayouts.size) {
+            if (it.size > layoutsWithKeyboardData.size - embeddedLayoutsSize) {
                 reloadCustomLayouts(context)
+                MainKeypadActionListener.rebuildKeyboardData(currentKeyboardData)
             }
         }
+
+        customLayoutHistoryManager.observe(object :
+                CustomLayoutHistoryManager.FileChangeObserver {
+
+                override fun onDelete(uri: Uri) {
+                    removeFromHistory(uri.toString())
+                    MainKeypadActionListener.rebuildKeyboardData(currentKeyboardData)
+                }
+
+                override fun onChange(uri: Uri): Boolean {
+                    if (!updateKeyboardData(prefs.layout.current.get(), context)) {
+                        removeFromHistory(uri.toString())
+                        MainKeypadActionListener.rebuildKeyboardData(currentKeyboardData)
+                        return true
+                    }
+                    return false
+                }
+            })
+    }
+
+    private fun removeFromHistory(path: String) {
+        val historyPref = prefs.layout.custom.history
+        val history = LinkedHashSet(historyPref.get())
+        history.remove(path)
+        historyPref.set(history)
+        prefs.layout.current.reset()
+        layoutsWithKeyboardData
+            .toList()
+            .firstOrNone { (layout, _) -> layout.path.toString() == path }
+            .onSome { (layout, _) ->
+                layoutsWithKeyboardData.remove(layout)
+            }
+        updateDisplayNames()
+        findIndex()
     }
 
     private fun reloadCustomLayouts(context: Context) {
@@ -36,18 +86,20 @@ class AvailableLayouts internal constructor(context: Context) {
         findIndex()
     }
 
-    fun selectLayout(context: Context, which: Int) {
-        val embeddedLayoutSize = embeddedLayoutsWithName.size
-        val layoutOption = if (which < embeddedLayoutSize) {
-            embeddedLayouts.elementAtOrNone(which)
-        } else {
-            customLayouts.elementAtOrNone(which - embeddedLayoutSize)
-        }
-        layoutOption
-            .flatMap { layout ->
-                layout.loadKeyboardData(context).getOrNone().map { layout to it }
-                    .onNone { reloadCustomLayouts(context) }
+    fun updateKeyboardData(layout: Layout<*>, context: Context): Boolean {
+        return layoutsWithKeyboardData
+            .getOrNone(layout)
+            .flatMap { layout.loadKeyboardData(context).getOrNone() }
+            .onSome {
+                prefs.layout.current.set(layout)
+                MainKeypadActionListener.rebuildKeyboardData(it)
             }
+            .isSome()
+    }
+
+    fun selectLayout(which: Int) {
+        layoutsWithKeyboardData.keys.elementAtOrNone(which)
+            .flatMap { layout -> layoutsWithKeyboardData.getOrNone(layout).map { layout to it } }
             .onSome { (layout, keyboardData) ->
                 prefs.layout.current.set(layout)
                 MainKeypadActionListener.rebuildKeyboardData(keyboardData)
@@ -57,28 +109,35 @@ class AvailableLayouts internal constructor(context: Context) {
 
     private fun listCustomLayoutHistory(context: Context) {
         val uris = LinkedHashSet(prefs.layout.custom.history.get())
-        customLayoutsWithName.clear()
-        val newUris = linkedSetOf<String>()
-        for (customLayoutUriString in uris) {
+        val customLayouts = layoutsWithKeyboardData
+            .toList()
+            .filter { it.first is CustomLayout }
+            .toMap()
+
+        customLayouts
+            .filter { !uris.contains(it.key.toString()) }
+            .forEach { (layout, _) -> layoutsWithKeyboardData.remove(layout) }
+
+        uris.toList().flatMap { customLayoutUriString ->
             val customLayoutUri = Uri.parse(customLayoutUriString)
             val layout = CustomLayout(customLayoutUri)
-            val keyboardData = layout.loadKeyboardData(context)
-                .getOrNull()
-            if (keyboardData == null || keyboardData.totalLayers == 0) {
-                continue
+            if (customLayouts.containsKey(layout)) {
+                emptyList()
+            } else {
+                layout.loadKeyboardData(context)
+                    .getOrNone()
+                    .filterNot { it.totalLayers == 0 }
+                    .map { layout to it }
+                    .onNone { uris.remove(customLayoutUriString) }
+                    .toList()
             }
-            customLayoutsWithName[keyboardData.toString()] = layout
-            newUris.add(customLayoutUriString)
-        }
-        if (newUris.size != uris.size) {
-            prefs.layout.custom.history.set(newUris)
-        }
-        customLayouts.clear()
-        customLayouts.addAll(customLayoutsWithName.values)
+        }.let { layoutsWithKeyboardData.putAll(it) }
+
+        prefs.layout.custom.history.set(uris)
     }
 
     private fun findIndex() {
-        index = layouts.indexOf(prefs.layout.current.get())
+        index = layoutsWithKeyboardData.keys.indexOf(prefs.layout.current.get())
         if (index == -1) {
             index = defaultIndex
             prefs.layout.current.reset()
@@ -87,18 +146,16 @@ class AvailableLayouts internal constructor(context: Context) {
 
     private fun updateDisplayNames() {
         displayNames.clear()
-        displayNames.addAll(embeddedLayoutsWithName.keys)
-        displayNames.addAll(customLayoutsWithName.keys)
-        layouts.clear()
-        layouts.addAll(embeddedLayouts)
-        layouts.addAll(customLayouts)
+        displayNames.addAll(layoutsWithKeyboardData.values.map { it.toString() })
     }
 
     companion object {
         private var singleton: AvailableLayouts? = null
-        fun initialize(context: Context) {
+
+        @JvmStatic
+        fun initialize(context: Context, customLayoutHistoryManager: CustomLayoutHistoryManager) {
             if (singleton == null) {
-                singleton = AvailableLayouts(context)
+                singleton = AvailableLayouts(context, customLayoutHistoryManager)
             }
         }
 

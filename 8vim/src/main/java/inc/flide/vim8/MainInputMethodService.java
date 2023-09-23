@@ -26,6 +26,7 @@ import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.lib.android.AndroidVersion;
 import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.KeyboardData;
+import inc.flide.vim8.models.Layout;
 import inc.flide.vim8.models.LayoutKt;
 import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.views.ClipboardKeypadView;
@@ -179,7 +180,9 @@ public class MainInputMethodService extends InputMethodService
     }
 
     public KeyboardData buildKeyboardActionMap() {
-        return LayoutKt.safeLoadKeyboardData(prefs.getLayout().getCurrent().get(), getApplicationContext());
+        Layout<?> layout = prefs.getLayout().getCurrent().get();
+        KeyboardData keyboardData = LayoutKt.safeLoadKeyboardData(layout, getApplicationContext());
+        return keyboardData;
     }
 
     public void sendText(String text) {

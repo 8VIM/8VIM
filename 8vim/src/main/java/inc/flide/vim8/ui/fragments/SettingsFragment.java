@@ -18,7 +18,6 @@ import java.util.Map;
 
 public class SettingsFragment extends LayoutFileSelector {
     private Context context;
-    private AvailableLayouts availableLayouts;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -112,7 +111,7 @@ public class SettingsFragment extends LayoutFileSelector {
         DialogsHelper.createItemsChoice(context, R.string.select_preferred_keyboard_layout_dialog_title,
                 availableLayouts.getDisplayNames(),
                 availableLayouts.getIndex(),
-                which -> availableLayouts.selectLayout(context, which)).show();
+                which -> availableLayouts.selectLayout(which)).show();
     }
 
     private void askUserPreferredEmoticonKeyboard() {
