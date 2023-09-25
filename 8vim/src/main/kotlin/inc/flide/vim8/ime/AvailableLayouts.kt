@@ -1,7 +1,6 @@
 package inc.flide.vim8.ime
 
 import android.content.Context
-import android.net.Uri
 import arrow.core.elementAtOrNone
 import arrow.core.firstOrNone
 import arrow.core.getOrElse
@@ -10,17 +9,15 @@ import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
 import inc.flide.vim8.models.AppPrefs
 import inc.flide.vim8.models.CustomLayout
 import inc.flide.vim8.models.EmbeddedLayout
+import inc.flide.vim8.models.KeyboardData
 import inc.flide.vim8.models.Layout
 import inc.flide.vim8.models.appPreferenceModel
 import inc.flide.vim8.models.embeddedLayouts
 import inc.flide.vim8.models.loadKeyboardData
 import inc.flide.vim8.models.toCustomLayout
-import inc.flide.vim8.lib.android.ext.CustomLayoutHistoryManager
-import inc.flide.vim8.models.KeyboardData
 
 class AvailableLayouts internal constructor(
-    context: Context,
-    customLayoutHistoryManager: CustomLayoutHistoryManager
+    context: Context
 ) {
     private val prefs: AppPrefs by appPreferenceModel()
     private val defaultIndex: Int
@@ -53,24 +50,6 @@ class AvailableLayouts internal constructor(
                 MainKeypadActionListener.rebuildKeyboardData(currentKeyboardData)
             }
         }
-
-        customLayoutHistoryManager.observe(object :
-            CustomLayoutHistoryManager.FileChangeObserver {
-
-            override fun onDelete(uri: Uri) {
-                removeFromHistory(uri.toString())
-                MainKeypadActionListener.rebuildKeyboardData(currentKeyboardData)
-            }
-
-            override fun onChange(uri: Uri): Boolean {
-                if (!updateKeyboardData(prefs.layout.current.get(), context)) {
-                    removeFromHistory(uri.toString())
-                    MainKeypadActionListener.rebuildKeyboardData(currentKeyboardData)
-                    return true
-                }
-                return false
-            }
-        })
     }
 
     private fun removeFromHistory(path: String) {
@@ -78,7 +57,9 @@ class AvailableLayouts internal constructor(
         val history = LinkedHashSet(historyPref.get())
         history.remove(path)
         historyPref.set(history)
-        prefs.layout.current.reset()
+        if (prefs.layout.current.get().path.toString() == path) {
+            prefs.layout.current.reset()
+        }
         layoutsWithKeyboardData
             .toList()
             .firstOrNone { (layout, _) -> layout.path.toString() == path }
@@ -140,7 +121,6 @@ class AvailableLayouts internal constructor(
                     .toList()
             }
         }.let { layoutsWithKeyboardData.putAll(it) }
-
         prefs.layout.custom.history.set(uris)
     }
 
@@ -161,9 +141,9 @@ class AvailableLayouts internal constructor(
         private var singleton: AvailableLayouts? = null
 
         @JvmStatic
-        fun initialize(context: Context, customLayoutHistoryManager: CustomLayoutHistoryManager) {
+        fun initialize(context: Context) {
             if (singleton == null) {
-                singleton = AvailableLayouts(context, customLayoutHistoryManager)
+                singleton = AvailableLayouts(context)
             }
         }
 

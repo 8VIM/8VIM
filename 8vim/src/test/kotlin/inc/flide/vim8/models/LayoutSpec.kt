@@ -24,7 +24,7 @@ import io.mockk.spyk
 import java.io.InputStream
 
 class LayoutSpec : FunSpec({
-    val context = mockk<Context>()
+    val context = mockk<Context>(relaxed = true)
     val resources = mockk<Resources>()
     val contentResolver = mockk<ContentResolver>()
 

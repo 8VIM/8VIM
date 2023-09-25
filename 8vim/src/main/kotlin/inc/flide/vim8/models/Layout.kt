@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.util.Log
 import arrow.core.Either
 import arrow.core.Option
 import arrow.core.flatMap
@@ -14,7 +13,6 @@ import arrow.core.getOrElse
 import arrow.core.left
 import arrow.core.none
 import arrow.core.raise.catch
-import arrow.core.recover
 import arrow.core.right
 import inc.flide.vim8.R
 import inc.flide.vim8.datastore.model.PreferenceSerDe
@@ -48,32 +46,11 @@ interface Layout<T> {
     fun inputStream(context: Context): Either<LayoutError, InputStream>
 }
 
-fun <T> Layout<T>.safeLoadKeyboardData(context: Context): KeyboardData {
-    val prefs: AppPrefs by appPreferenceModel()
-    val layout = this
-    return loadKeyboardData(context)
-        .recover {
-            if (layout is CustomLayout) {
-                val uri = layout.path.toString()
-                val history: ArrayList<String> = ArrayList(prefs.layout.custom.history.get())
-                val index = history.indexOf(uri)
-                if (index > -1) {
-                    history.removeAt(index)
-                    prefs.layout.custom.history.set(LinkedHashSet(history))
-                }
-            }
-            prefs.layout.current.reset()
-            prefs.layout.current.default.loadKeyboardData(context).bind()
-        }
-        .getOrNull()!!
-}
-
 fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, KeyboardData> {
     return inputStream(context)
         .flatMap { LayoutLoader.loadKeyboardData(context.resources, it) }
         .map {
             KeyboardData.info.name.modify(it) { name ->
-                Log.d("FILEOBSERVER_EVENT", "Layout: $name, $path")
                 name.ifEmpty {
                     when (this) {
                         is EmbeddedLayout -> this.defaultName()
@@ -196,9 +173,7 @@ data class EmbeddedLayout(override val path: String) : Layout<String> {
 
 data class CustomLayout(override val path: Uri) : Layout<Uri> {
     @SuppressLint("Recycle")
-    override fun inputStream(context: Context): Either<LayoutError, InputStream> {
-        return catch({
-            context.contentResolver.openInputStream(path)!!.right()
-        }) { e: Throwable -> ExceptionWrapperError(e).left() }
-    }
+    override fun inputStream(context: Context): Either<LayoutError, InputStream> = catch({
+        context.contentResolver.openInputStream(path)!!.right()
+    }) { e: Throwable -> ExceptionWrapperError(e).left() }
 }

@@ -41,6 +41,7 @@ class MainActivity : ComponentActivity() {
             setKeepOnScreenCondition { !prefs.isReady() }
         }
         super.onCreate(savedInstanceState)
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         resourcesContext = createConfigurationContext(Configuration(resources.configuration))
 

@@ -8,8 +8,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.PreferenceFragmentCompat;
 import arrow.core.EitherKt;
 import inc.flide.vim8.R;
+import inc.flide.vim8.ime.AvailableLayouts;
 import inc.flide.vim8.models.AppPrefs;
-import inc.flide.vim8.models.AvailableLayouts;
 import inc.flide.vim8.models.CustomLayout;
 import inc.flide.vim8.models.LayoutKt;
 import inc.flide.vim8.models.error.ExceptionWrapperError;
@@ -35,9 +35,8 @@ public abstract class LayoutFileSelector extends PreferenceFragmentCompat {
         if (selectedCustomLayoutFile == null || context == null) {
             return;
         }
-        final int takeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
         context.getContentResolver()
-                .takePersistableUriPermission(selectedCustomLayoutFile, takeFlags);
+                .takePersistableUriPermission(selectedCustomLayoutFile, Intent.FLAG_GRANT_READ_URI_PERMISSION);
         CustomLayout layout = new CustomLayout(selectedCustomLayoutFile);
         Set<String> currentHistory = layoutPrefs.getCustom().getHistory().get();
         boolean isInHistory = currentHistory.contains(selectedCustomLayoutFile.toString());

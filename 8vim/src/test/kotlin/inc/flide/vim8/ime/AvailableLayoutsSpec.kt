@@ -8,7 +8,6 @@ import inc.flide.vim8.arbitraries.Arbitraries.arbKeyboardData
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
 import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
-import inc.flide.vim8.lib.android.ext.CustomLayoutHistoryManager
 import inc.flide.vim8.models.AppPrefs
 import inc.flide.vim8.models.CustomLayout
 import inc.flide.vim8.models.KeyboardData
@@ -47,7 +46,6 @@ class AvailableLayoutsSpec : WordSpec({
     val currentLayout = mockk<PreferenceData<Layout<*>>>(relaxed = true)
     val history = mockk<PreferenceData<Set<String>>>(relaxed = true)
     val customLayout = mockkClass(CustomLayout::class)
-    val customLayoutHistoryManager = mockk<CustomLayoutHistoryManager>(relaxed = true)
 
     val context = mockk<Context>()
 
@@ -83,10 +81,7 @@ class AvailableLayoutsSpec : WordSpec({
     beforeTest {
         mockkObject(AvailableLayouts)
         every { AvailableLayouts.instance } answers {
-            AvailableLayouts(
-                context,
-                customLayoutHistoryManager
-            )
+            AvailableLayouts(context)
         }
         every { currentLayout.default } returns embeddedLayouts.first().first
         every { currentLayout.get() } returns embeddedLayouts.first().first

@@ -31,7 +31,7 @@ import inc.flide.vim8.views.mainkeyboard.MainKeyboardView
 class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     private val prefs by appPreferenceModel()
     private var inputConnection: InputConnection? = null
-    private lateinit var clipboardKeypadView: ClipboardKeypadView
+    private var clipboardKeypadView: ClipboardKeypadView? = null
     private lateinit var editorInfo: EditorInfo
     lateinit var clipboardManagerService: ClipboardManagerService
         private set
@@ -145,7 +145,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     override fun onEvaluateFullscreenMode(): Boolean {
         val configuration = resources.configuration
         return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-                configuration.screenHeightDp < 480
+            configuration.screenHeightDp < 480
     }
 
     override fun onStartInputView(info: EditorInfo, restarting: Boolean) {
@@ -268,7 +268,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     }
 
     fun switchToClipboardKeypad() {
-        setCurrentKeypadView(clipboardKeypadView)
+        clipboardKeypadView?.let { setCurrentKeypadView(it) }
     }
 
     fun switchToSymbolsKeypad() {
@@ -367,6 +367,6 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     }
 
     override fun onClipboardHistoryChanged() {
-        clipboardKeypadView.updateClipHistory()
+        clipboardKeypadView?.updateClipHistory()
     }
 }

@@ -226,9 +226,9 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                     listOf()
                 }
                 val defaultLayerCondition = (
-                        layer === LayerLevel.FIRST &&
-                                movementSequence[0] === FingerPosition.INSIDE_CIRCLE
-                        )
+                    layer === LayerLevel.FIRST &&
+                        movementSequence[0] === FingerPosition.INSIDE_CIRCLE
+                    )
                 val extraLayerCondition =
                     layer !== LayerLevel.FIRST && movementSequence.size > layerSize
                 if (defaultLayerCondition || extraLayerCondition) {
