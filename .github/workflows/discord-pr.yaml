@@ -1,7 +1,7 @@
 name: Discord notification PR
 
 on:
-  pull_request:
+  pull_request_target:
     branches: [master]
     types: [opened, closed]
 jobs:
