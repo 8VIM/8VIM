@@ -1,16 +1,11 @@
 package inc.flide.vim8.keyboardactionlisteners;
 
-import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
-
-import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.View;
 import inc.flide.vim8.MainInputMethodService;
-import inc.flide.vim8.lib.android.AndroidVersion;
-import inc.flide.vim8.models.AppPrefs;
+import inc.flide.vim8.lib.android.HapticVibration;
+import inc.flide.vim8.lib.android.Vibration;
 import inc.flide.vim8.models.FingerPosition;
 import inc.flide.vim8.models.KeyboardAction;
 import inc.flide.vim8.models.KeyboardActionType;
@@ -59,8 +54,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
             })
             .map(Arrays::asList).collect(Collectors.toSet());
     private static KeyboardData keyboardData;
-    final Vibrator vibrator;
-    private final AppPrefs prefs;
+    final Vibration vibrator;
     private final List<FingerPosition> movementSequence;
     private final Handler longPressHandler;
     private FingerPosition currentFingerPosition;
@@ -86,8 +80,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
         HandlerThread longPressHandlerThread = new HandlerThread("LongPressHandlerThread");
         longPressHandlerThread.start();
         longPressHandler = new Handler(longPressHandlerThread.getLooper(), null);
-        vibrator = (Vibrator) inputMethodService.getSystemService(Context.VIBRATOR_SERVICE);
-        prefs = appPreferenceModel().java();
+        vibrator = HapticVibration.rotation(view.getContext());
     }
 
     public static void rebuildKeyboardData(KeyboardData keyboardData) {
@@ -214,15 +207,7 @@ public class MainKeypadActionListener extends KeypadActionListener {
                 modifiedMovementSequence.add(FingerPosition.INSIDE_CIRCLE);
                 KeyboardAction action = keyboardData.getActionMap().get(modifiedMovementSequence);
 
-                if (AndroidVersion.INSTANCE.getATLEAST_API26_O()
-                        && prefs.getInputFeedback().getHapticRotateEnabled().get()) {
-                    int duration = 50;
-                    int amplitude = 150;
-                    VibrationEffect effect = VibrationEffect.createOneShot(duration, amplitude);
-                    vibrator.vibrate(effect);
-                }
-
-                System.out.println("VIBRATE HERE!");
+                vibrator.vibrate();
 
                 if (action != null) {
                     currentLetter = areCharactersCapitalized() ? action.getCapsLockText() : action.getText();
