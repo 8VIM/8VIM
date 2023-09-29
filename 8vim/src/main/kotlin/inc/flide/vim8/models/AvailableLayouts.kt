@@ -2,6 +2,7 @@ package inc.flide.vim8.models
 
 import android.content.Context
 import android.net.Uri
+import arrow.core.elementAtOrNone
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener
 
 class AvailableLayouts internal constructor(context: Context) {
@@ -38,17 +39,20 @@ class AvailableLayouts internal constructor(context: Context) {
     fun selectLayout(context: Context, which: Int) {
         val embeddedLayoutSize = embeddedLayoutsWithName.size
         val layoutOption = if (which < embeddedLayoutSize) {
-            embeddedLayouts.getOrNull(which)
+            embeddedLayouts.elementAtOrNone(which)
         } else {
-            customLayouts.getOrNull(which - embeddedLayoutSize)
+            customLayouts.elementAtOrNone(which - embeddedLayoutSize)
         }
-        layoutOption?.let {
-            prefs.layout.current.set(it, true)
-            MainKeypadActionListener.rebuildKeyboardData(
-                it.loadKeyboardData(context).getOrNull()
-            )
-            index = which
-        }
+        layoutOption
+            .flatMap { layout ->
+                layout.loadKeyboardData(context).getOrNone().map { layout to it }
+                    .onNone { reloadCustomLayouts(context) }
+            }
+            .onSome { (layout, keyboardData) ->
+                prefs.layout.current.set(layout)
+                MainKeypadActionListener.rebuildKeyboardData(keyboardData)
+                index = which
+            }
     }
 
     private fun listCustomLayoutHistory(context: Context) {
@@ -77,6 +81,7 @@ class AvailableLayouts internal constructor(context: Context) {
         index = layouts.indexOf(prefs.layout.current.get())
         if (index == -1) {
             index = defaultIndex
+            prefs.layout.current.reset()
         }
     }
 
