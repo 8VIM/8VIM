@@ -1,0 +1,15 @@
+name: Discord notification PR
+
+on:
+  pull_request:
+    branches: [master]
+    types: [opened, closed]
+jobs:
+  notify:
+    name: Discord notification PR
+    uses: ./.github/workflows/discord-notify.yaml
+    with:
+      message: |
+        PR #${{github.event.pull_request.number}} [${{github.event.pull_request.state}}] by ${{github.event.pull_request.user.name}}
+        ${{github.event.pull_request.url}}
+    secrets: inherit
