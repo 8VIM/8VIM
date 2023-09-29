@@ -10,6 +10,6 @@ jobs:
     uses: ./.github/workflows/discord-notify.yaml
     with:
       message: |
-        PR #${{github.event.pull_request.number}} [${{github.event.pull_request.state}}] by ${{github.event.pull_request.user.name}}
+        PR #${{github.event.pull_request.number}} [${{github.event.pull_request.state}}] by ${{github.event.pull_request.user.login}}
         ${{github.event.pull_request.url}}
     secrets: inherit
