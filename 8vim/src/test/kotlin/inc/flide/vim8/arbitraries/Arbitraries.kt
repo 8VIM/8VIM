@@ -1,6 +1,5 @@
 package inc.flide.vim8.arbitraries
 
-import inc.flide.vim8.models.CHARACTER_SET_SIZE
 import inc.flide.vim8.models.CharacterSet
 import inc.flide.vim8.models.EmbeddedLayout
 import inc.flide.vim8.models.KeyboardAction
@@ -19,8 +18,8 @@ import io.kotest.property.arbitrary.map
 import io.kotest.property.arbitrary.string
 
 object Arbitraries {
-    private val arbMovementSequence: Arb<MovementSequence> = Arb.list(Arb.enum(), 1..10)
-    val arbCharactersSet = Arb.string(CHARACTER_SET_SIZE)
+    private val arbMovementSequence: Arb<MovementSequence> = Arb.list(Arb.int(-3, 4), 1..10)
+    val arbCharactersSet = Arb.string(16)
 
     private val arbKeyboardAction: Arb<KeyboardAction> = arbitrary {
         val type = Arb.enum<KeyboardActionType>().bind()

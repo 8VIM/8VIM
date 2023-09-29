@@ -1,0 +1,65 @@
+info:
+  name: English 6 sectors
+layers:
+  default:
+    sectors:
+      1:
+        parts:
+          2:
+            - lower_case: n
+            - lower_case: g
+            - lower_case: z
+          6:
+            - lower_case: l
+            - lower_case: x
+            - lower_case: "?"
+      2:
+        parts:
+          3:
+            - lower_case: i
+            - lower_case: u
+            - lower_case: y
+          1:
+            - lower_case: c
+            - lower_case: p
+            - lower_case: "*"
+      3:
+        parts:
+          4:
+            - lower_case: h
+            - lower_case: f
+            - lower_case: "@"
+          2:
+            - lower_case: r
+            - lower_case: v
+            - lower_case: b
+      4:
+        parts:
+          5:
+            - lower_case: o
+            - lower_case: j
+            - lower_case: "!"
+          3:
+            - lower_case: e
+            - lower_case: m
+            - lower_case: k
+      5:
+        parts:
+          6:
+            - lower_case: "."
+            - lower_case: "-"
+            - lower_case: "'"
+          4:
+            - lower_case: a
+            - lower_case: d
+            - lower_case: q
+      6:
+        parts:
+          1:
+            - lower_case: t
+            - lower_case: s
+            - lower_case: w
+          5:
+            - lower_case: ","
+            - lower_case: "_"
+            - lower_case: '"'

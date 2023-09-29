@@ -4,55 +4,55 @@ layers:
       movement_sequence:
         - no_touch
         - inside_circle
-        - top
+        - 3
         - no_touch
       key_code: keycode_dpad_up
     - type: input_key
       movement_sequence:
         - no_touch
         - inside_circle
-        - bottom
+        - 1
         - no_touch
       key_code: keycode_dpad_down
     - type: input_key
       movement_sequence:
         - no_touch
         - inside_circle
-        - left
+        - 2
         - no_touch
-      key_code: keycode_dpad_left
+      key_code: keycode_dpad_2
     - type: input_key
       movement_sequence:
         - no_touch
         - inside_circle
-        - right
+        - 4
         - no_touch
-      key_code: keycode_dpad_right
+      key_code: keycode_dpad_4
     - type: input_key
       movement_sequence:
         - no_touch
         - inside_circle
-        - top
+        - 3
         - long_press
       key_code: keycode_dpad_up
     - type: input_key
       movement_sequence:
         - no_touch
         - inside_circle
-        - bottom
+        - 1
         - long_press
       key_code: keycode_dpad_down
     - type: input_key
       movement_sequence:
         - no_touch
         - inside_circle
-        - left
+        - 2
         - long_press
-      key_code: keycode_dpad_left
+      key_code: keycode_dpad_2
     - type: input_key
       movement_sequence:
         - no_touch
         - inside_circle
-        - right
+        - 4
         - long_press
-      key_code: keycode_dpad_right
+      key_code: keycode_dpad_4

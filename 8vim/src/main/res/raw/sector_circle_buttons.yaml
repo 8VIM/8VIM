@@ -2,12 +2,12 @@ layers:
   hidden:
     - type: input_key
       movement_sequence:
-        - top
+        - 3
         - no_touch
       key_code: shift_toggle
     - type: input_key
       movement_sequence:
-        - left
+        - 2
         - no_touch
       key_code: switch_to_number_keypad
     - movement_sequence:
@@ -16,21 +16,31 @@ layers:
       lower_case: " "
     - type: input_key
       movement_sequence:
-        - bottom
+        - 1
         - no_touch
       key_code: keycode_enter
     - type: input_key
       movement_sequence:
-        - bottom
+        - 1
         - long_press
       key_code: keycode_enter
     - type: input_key
       movement_sequence:
-        - right
+        - 4
         - no_touch
       key_code: keycode_del
     - type: input_key
       movement_sequence:
-        - right
+        - 4
         - long_press
       key_code: keycode_del
+    - type: input_key
+      movement_sequence:
+        - 5
+        - no_touch
+      key_code: switch_to_clippad_keyboard
+    - type: input_key
+      movement_sequence:
+        - 6
+        - no_touch
+      key_code: switch_to_selection_keypad

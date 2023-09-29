@@ -9,10 +9,10 @@ import arrow.core.raise.catch
 import arrow.core.raise.either
 import inc.flide.vim8.R
 import inc.flide.vim8.ime.KeyboardDataYamlParser.readKeyboardData
-import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
 import inc.flide.vim8.models.KeyboardData
 import inc.flide.vim8.models.LayerLevel
+import inc.flide.vim8.models.MovementSequence
 import inc.flide.vim8.models.addAllToActionMap
 import inc.flide.vim8.models.error.ExceptionWrapperError
 import inc.flide.vim8.models.error.LayoutError
@@ -20,14 +20,15 @@ import inc.flide.vim8.models.info
 import inc.flide.vim8.models.lowerCaseCharacters
 import inc.flide.vim8.models.setLowerCaseCharacters
 import inc.flide.vim8.models.setUpperCaseCharacters
+import inc.flide.vim8.models.updateSectorsAndLayouts
 import inc.flide.vim8.models.upperCaseCharacters
 import java.io.InputStream
 
 object InputMethodServiceHelper {
     private var layoutIndependentKeyboardData: KeyboardData? = null
     private fun validateNoConflictingActions(
-        mainKeyboardActionsMap: Map<List<FingerPosition>, KeyboardAction>?,
-        newKeyboardActionsMap: Map<List<FingerPosition>, KeyboardAction>
+        mainKeyboardActionsMap: Map<MovementSequence, KeyboardAction>?,
+        newKeyboardActionsMap: Map<MovementSequence, KeyboardAction>
     ): Boolean {
         return mainKeyboardActionsMap.isNullOrEmpty() || newKeyboardActionsMap.keys.firstOrNone {
             mainKeyboardActionsMap.containsKey(
@@ -64,10 +65,6 @@ object InputMethodServiceHelper {
                     resources,
                     R.raw.special_core_gestures
                 ).bind()
-            }.onLeft {
-                if (it is ExceptionWrapperError) {
-                    it.exception.printStackTrace()
-                }
             }.getOrNull()
         }
         return layoutIndependentKeyboardData!!
@@ -81,6 +78,7 @@ object InputMethodServiceHelper {
             val tempKeyboardDataActionMap = tempKeyboardData.actionMap
             KeyboardData.info
                 .set(keyboardData, tempKeyboardData.info)
+                .updateSectorsAndLayouts(tempKeyboardData)
                 .addAllToActionMap(
                     if (validateNoConflictingActions(
                             keyboardData.actionMap,
@@ -92,7 +90,7 @@ object InputMethodServiceHelper {
                         emptyMap()
                     }
                 ).let {
-                    LayerLevel.VisibleLayers.fold(it) { acc, layer ->
+                    LayerLevel.visibleLayers.fold(it) { acc, layer ->
                         val lowerCase =
                             tempKeyboardData.lowerCaseCharacters(layer).map { characterSets ->
                                 acc.lowerCaseCharacters(layer).getOrElse { characterSets }

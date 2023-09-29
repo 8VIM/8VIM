@@ -20,7 +20,6 @@ import com.networknt.schema.JsonSchema
 import com.networknt.schema.JsonSchemaFactory
 import com.networknt.schema.SpecVersionDetector
 import com.networknt.schema.ValidationMessage
-import inc.flide.vim8.models.CHARACTER_SET_SIZE
 import inc.flide.vim8.models.CharacterPosition
 import inc.flide.vim8.models.FingerPosition
 import inc.flide.vim8.models.KeyboardAction
@@ -30,6 +29,8 @@ import inc.flide.vim8.models.MovementSequence
 import inc.flide.vim8.models.Quadrant
 import inc.flide.vim8.models.addAllToActionMap
 import inc.flide.vim8.models.characterIndexInString
+import inc.flide.vim8.models.characterSetSize
+import inc.flide.vim8.models.computeSectorsAndLayouts
 import inc.flide.vim8.models.error.ExceptionWrapperError
 import inc.flide.vim8.models.error.InvalidLayoutError
 import inc.flide.vim8.models.error.LayoutError
@@ -81,16 +82,14 @@ object KeyboardDataYamlParser {
         return catch({
             validateYaml(mapper.readTree(inputStream))
                 .map { layout ->
-                    val keyboardData = KeyboardData(
-                        info = layout.info,
-                        actionMap = getActionMap(layout.layers.hidden)
-                    )
-
                     val layersToAdd = layout.layers.defaultLayer
                         .map { LayerLevel.FIRST to it }
                         .toMap() + layout.layers.extraLayers
                         .mapKeys { it.key.toLayerLevel() }
-
+                    val keyboardData = KeyboardData(
+                        info = layout.info,
+                        actionMap = getActionMap(layout.layers.hidden)
+                    ).computeSectorsAndLayouts(layersToAdd.values)
                     layersToAdd
                         .fold(keyboardData) { acc, (layerId, layer) ->
                             addLayer(acc, layerId, layer)
@@ -142,7 +141,8 @@ object KeyboardDataYamlParser {
                         layer = layer,
                         quadrant = Quadrant(sector, part),
                         actions = actions,
-                        characterSets = characterSets
+                        characterSets = characterSets,
+                        keyboardData = acc1
                     )
                 )
             }
@@ -170,8 +170,10 @@ object KeyboardDataYamlParser {
         layer: LayerLevel,
         quadrant: Quadrant,
         actions: List<Action?>,
-        characterSets: Pair<StringBuilder, StringBuilder>
+        characterSets: Pair<StringBuilder, StringBuilder>,
+        keyboardData: KeyboardData
     ): Map<MovementSequence, KeyboardAction> {
+        val characterSetSize = keyboardData.characterSetSize()
         return actions
             .take(4)
             .withIndex()
@@ -183,14 +185,15 @@ object KeyboardDataYamlParser {
                     movementSequence = FingerPosition.computeMovementSequence(
                         layer,
                         quadrant,
-                        characterPosition
+                        characterPosition,
+                        keyboardData
                     )
                 }
                 val characterSetIndex: Int =
-                    quadrant.characterIndexInString(characterPosition)
+                    quadrant.characterIndexInString(characterPosition, keyboardData)
                 val updatedAction = if (action.lowerCase.isNotEmpty()) {
                     if (characterSets.first.isEmpty()) {
-                        characterSets.first.setLength(CHARACTER_SET_SIZE)
+                        characterSets.first.setLength(characterSetSize)
                     }
                     characterSets.first.setCharAt(characterSetIndex, action.lowerCase[0])
                     if (action.upperCase.isEmpty()) {
@@ -203,7 +206,7 @@ object KeyboardDataYamlParser {
                 }
                 if (updatedAction.upperCase.isNotEmpty()) {
                     if (characterSets.second.isEmpty()) {
-                        characterSets.second.setLength(CHARACTER_SET_SIZE)
+                        characterSets.second.setLength(characterSetSize)
                     }
                     characterSets.second.setCharAt(
                         characterSetIndex,
@@ -225,7 +228,8 @@ object KeyboardDataYamlParser {
                         FingerPosition.computeQuickMovementSequence(
                             layer,
                             quadrant,
-                            characterPosition
+                            characterPosition,
+                            keyboardData
                         ) to keyboardAction
                     )
 

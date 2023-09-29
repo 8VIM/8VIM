@@ -1,57 +1,57 @@
 layers:
   default:
     sectors:
-      right:
+      1:
         parts:
-          bottom:
-            - lower_case: n
-            - lower_case: m
-            - lower_case: f
-            - lower_case: "!"
-              upper_case: "!!!"
-          top:
-            - lower_case: a
-            - lower_case: r
-            - lower_case: x
-            - lower_case: "?"
-              upper_case: "*"
-      top:
-        parts:
-          right:
-            - lower_case: y
-            - lower_case: b
-            - lower_case: p
-            - lower_case: q
-          left:
-            - lower_case: s
-            - lower_case: d
-            - lower_case: g
-            - lower_case: "'"
-              upper_case: '"'
-      left:
-        parts:
-          top:
-            - lower_case: t
-            - lower_case: c
-            - lower_case: z
-            - lower_case: .
-              upper_case: "-"
-          bottom:
-            - lower_case: i
-            - lower_case: h
-            - lower_case: j
-            - lower_case: ","
-              upper_case: _
-      bottom:
-        parts:
-          left:
+          2:
             - lower_case: e
             - lower_case: l
             - lower_case: k
             - lower_case: "@"
               upper_case: "@gmail.com"
-          right:
+          4:
             - lower_case: o
             - lower_case: u
             - lower_case: v
             - lower_case: w
+      2:
+        parts:
+          3:
+            - lower_case: t
+            - lower_case: c
+            - lower_case: v
+            - lower_case: .
+              upper_case: "-"
+          1:
+            - lower_case: i
+            - lower_case: h
+            - lower_case: j
+            - lower_case: ","
+              upper_case: _
+      3:
+        parts:
+          4:
+            - lower_case: y
+            - lower_case: b
+            - lower_case: p
+            - lower_case: q
+          2:
+            - lower_case: s
+            - lower_case: d
+            - lower_case: g
+            - lower_case: "'"
+              upper_case: '"'
+      4:
+        parts:
+          1:
+            - lower_case: n
+            - lower_case: m
+            - lower_case: f
+            - lower_case: "!"
+              upper_case: "!!!"
+          3:
+            - lower_case: a
+            - lower_case: r
+            - lower_case: x
+            - lower_case: "?"
+              upper_case: "*"

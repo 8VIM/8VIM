@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -29,12 +30,11 @@ import java.util.Locale
 import java.util.TreeMap
 
 private val isoCodes = Locale.getISOLanguages().toSet()
-
 fun embeddedLayouts(context: Context): TreeMap<String, EmbeddedLayout> {
     return TreeMap(
         buildMap {
             (R.raw::class.java.fields)
-                .filter { isoCodes.contains(it.name) }
+                .filter { isoCodes.contains(it.name.split('_').first()) }
                 .map { field ->
                     EmbeddedLayout(field.name)
                         .let { layout ->
@@ -81,6 +81,11 @@ fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, Keyboa
                         else -> ""
                     }
                 }
+            }
+        }.onLeft {
+            Log.e("yaml", it.message)
+            if (it is ExceptionWrapperError) {
+                it.exception.printStackTrace()
             }
         }
 }

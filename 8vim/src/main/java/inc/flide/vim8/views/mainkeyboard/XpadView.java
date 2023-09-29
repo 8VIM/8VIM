@@ -1,7 +1,6 @@
 package inc.flide.vim8.views.mainkeyboard;
 
 import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
-import static inc.flide.vim8.models.QuadrantKt.NUMBER_OF_SECTORS;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -17,6 +16,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.Nullable;
@@ -29,8 +29,13 @@ import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.models.AppPrefs;
+import inc.flide.vim8.models.CustomKeycode;
 import inc.flide.vim8.models.FingerPosition;
+import inc.flide.vim8.models.KeyboardAction;
 import inc.flide.vim8.models.LayerLevel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class XpadView extends View {
     public static final int XPAD_ICON_ALPHA = 85;
@@ -39,8 +44,6 @@ public class XpadView extends View {
     public static final float XPAD_LETTER_HIGHLIGHT_ROUNDNESS = 25f;
     public static final float FOREGROUND_STROKE_FACTOR = 0.75f;
     public static final float LETTER_BACKGROUND_BLEND_RATIO = 0.5f;
-    public static final int DEGREE_45 = 45;
-    public static final int DEGREE_90 = 90;
     public static final int UPPER_LETTER_Y_IDX_OFFSET = 1;
     public static final int LOWER_LETTER_X_IDX_OFFSET = 2;
     public static final int LOWER_LETTER_Y_IDX_OFFSET = 3;
@@ -58,14 +61,13 @@ public class XpadView extends View {
     private final Circle circle = new Circle();
     private final Dimension keypadDimension = new Dimension();
     private final Matrix xformMatrix = new Matrix();
-    // There are 4 sectors, each has 4 letters above, and 4 below.
-    // Finally, each letter position has an x & y co-ordinate.
-    private final float[] letterPositions =
-            new float[NUMBER_OF_SECTORS * 2 * NUMBER_OF_SECTORS * 2];
     private final Path sectorLines = new Path();
     private final RectF sectorLineBounds = new RectF();
     private final float[] trialPathPos = new float[2];
     private final PathMeasure pathMeasure = new PathMeasure();
+    // There are X sectors, each has Y letters above, and Y below.
+    // Finally, each letter position has an x & y co-ordinate.
+    private float[] letterPositions;
     private MainKeypadActionListener actionListener;
     private AppPrefs prefs;
     private KeyboardTheme keyboardTheme;
@@ -109,6 +111,9 @@ public class XpadView extends View {
 
         actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
         setHapticFeedbackEnabled(true);
+
+        int size = MainKeypadActionListener.getSectors() * 2 * MainKeypadActionListener.getLayoutPositions() * 2;
+        this.letterPositions = new float[size];
     }
 
     private void onCirclePrefsChanged(int newValue) {
@@ -125,6 +130,7 @@ public class XpadView extends View {
         foregroundPaint.setColor(keyboardTheme.getForegroundColor());
         invalidate();
     }
+
 
     private void computeComponentPositions(int fullWidth, int fullHeight) {
         AppPrefs.Keyboard.Circle circlePrefs = prefs.getKeyboard().getCircle();
@@ -168,32 +174,35 @@ public class XpadView extends View {
         // Compute sector demarcation lines as if they were all going orthogonal (like a "+").
         // This is easier to compute.  Later we apply rotation to orient the lines properly (like an "x").
         sectorLines.rewind();
-        sectorLines.moveTo(circleCenter.x + radius, circleCenter.y);
-        sectorLines.rLineTo(lengthOfLineDemarcatingSectors, 0);
-        sectorLines.moveTo(circleCenter.x - radius, circleCenter.y);
-        sectorLines.rLineTo(-lengthOfLineDemarcatingSectors, 0);
-        sectorLines.moveTo(circleCenter.x, circleCenter.y + radius);
-        sectorLines.rLineTo(0, lengthOfLineDemarcatingSectors);
-        sectorLines.moveTo(circleCenter.x, circleCenter.y - radius);
-        sectorLines.rLineTo(0, -lengthOfLineDemarcatingSectors);
+        for (int i = 0; i < MainKeypadActionListener.getSectors(); i++) {
+            //double angle = -Math.PI * 2 / MainKeypadActionListener.getSectors() * i + Math.PI * 2 / MainKeypadActionListener.getSectors()/2;
+            double sectorsAngle = Math.PI * 2 / MainKeypadActionListener.getSectors();
+            double angle = -Math.PI / 2 + (sectorsAngle / 2) - sectorsAngle * i;
+            sectorLines.moveTo((float) (circleCenter.x + radius * Math.cos(angle)),
+                    (float) (circleCenter.y - radius * Math.sin(angle)));
+            sectorLines.rLineTo((float) (lengthOfLineDemarcatingSectors * Math.cos(angle)),
+                    (float) (-lengthOfLineDemarcatingSectors * Math.sin(angle)));
+        }
 
         // Compute the first set of points going straight to the "east" (aka, rightwards).
         // Then apply repeated rotation (45, then 90 x4) to get the final positions.
         computeLettersPositions(characterHeight, lengthOfLineDemarcatingSectors);
 
         xformMatrix.reset();
-        xformMatrix.postRotate(DEGREE_45, circleCenter.x, circleCenter.y);
-        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0, 8);
-        sectorLines.transform(xformMatrix);
+        xformMatrix.postRotate(getFirstSectorAngle(), circleCenter.x, circleCenter.y);
+        xformMatrix.mapPoints(letterPositions, 0, letterPositions, 0,
+                MainKeypadActionListener.getLayoutPositions() * 2);
+
 
         xformMatrix.reset();
-        xformMatrix.postRotate(DEGREE_90, circleCenter.x, circleCenter.y);
-        for (int i = 1; i < NUMBER_OF_SECTORS; i++) {
+        xformMatrix.postRotate(360f / MainKeypadActionListener.getSectors(), circleCenter.x, circleCenter.y);
+
+        for (int i = 1; i < MainKeypadActionListener.getSectors(); i++) {
             xformMatrix.mapPoints(letterPositions,
-                    NUMBER_OF_SECTORS * NUMBER_OF_SECTORS * i,
+                    MainKeypadActionListener.getLayoutPositions() * 4 * i,
                     letterPositions,
-                    NUMBER_OF_SECTORS * NUMBER_OF_SECTORS * (i - 1),
-                    8);
+                    MainKeypadActionListener.getLayoutPositions() * 4 * (i - 1),
+                    MainKeypadActionListener.getLayoutPositions() * 2);
         }
 
         // Canvas.drawPosText() draws from the bottom,
@@ -205,6 +214,10 @@ public class XpadView extends View {
         sectorLines.computeBounds(sectorLineBounds, false); // Used to position icons
     }
 
+    private float getFirstSectorAngle() {
+        return 90 - 36f / MainKeypadActionListener.getSectors() / 2;
+    }
+
     private boolean isTabletInLandscape() {
         Configuration configuration = getResources().getConfiguration();
         return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE && configuration.screenHeightDp >= 480;
@@ -213,14 +226,12 @@ public class XpadView extends View {
     private void computeLettersPositions(float characterHeight,
                                          float lengthOfLineDemarcatingSectors) {
         float eastEdge = circleCenter.x + circle.radius + characterHeight / 2;
-        for (int i = 0; i < NUMBER_OF_SECTORS; i++) {
-            float dx = i * lengthOfLineDemarcatingSectors / ((float) NUMBER_OF_SECTORS);
-            letterPositions[NUMBER_OF_SECTORS * i] = eastEdge + dx;
-            letterPositions[NUMBER_OF_SECTORS * i + UPPER_LETTER_Y_IDX_OFFSET] =
-                    circleCenter.y - characterHeight / 2; // upper letter
-            letterPositions[NUMBER_OF_SECTORS * i + LOWER_LETTER_X_IDX_OFFSET] = eastEdge + dx;
-            letterPositions[NUMBER_OF_SECTORS * i + LOWER_LETTER_Y_IDX_OFFSET] =
-                    circleCenter.y + characterHeight / 2; // lower letter
+        for (int i = 0; i < MainKeypadActionListener.getLayoutPositions(); i++) {
+            float dx = i * lengthOfLineDemarcatingSectors / ((float) MainKeypadActionListener.getLayoutPositions());
+            letterPositions[4 * i] = eastEdge + dx;
+            letterPositions[4 * i + UPPER_LETTER_Y_IDX_OFFSET] = circleCenter.y - characterHeight / 2; // upper letter
+            letterPositions[4 * i + LOWER_LETTER_X_IDX_OFFSET] = eastEdge + dx;
+            letterPositions[4 * i + LOWER_LETTER_Y_IDX_OFFSET] = circleCenter.y + characterHeight / 2; // lower letter
         }
     }
 
@@ -347,42 +358,79 @@ public class XpadView extends View {
         int iconHalfWidth = iconSize / 2;
         int iconHalfHeight = iconSize / 2;
         sectorLines.computeBounds(sectorLineBounds, false);
-        //Number pad icon (left side)
-        int iconCenterX = (int) Math.max(sectorLineBounds.left, 0);
-        int iconCenterY = centreYValue;
-        drawIconInSector(iconCenterX - iconHalfWidth,
-                iconCenterY - iconHalfHeight,
-                canvas,
-                R.drawable.numericpad_vd_vector);
 
-        //for Backspace icon (right side)
-        iconCenterX = (int) Math.min(sectorLineBounds.right, canvas.getWidth());
-        drawIconInSector(iconCenterX - iconHalfWidth,
-                iconCenterY - iconHalfHeight,
-                canvas,
-                R.drawable.ic_backspace);
 
-        //for Enter icon (bottom)
-        iconCenterX = centreXValue;
-        iconCenterY = (int) Math.min(sectorLineBounds.bottom, canvas.getHeight());
-        drawIconInSector(iconCenterX - iconHalfWidth,
-                iconCenterY - iconHalfHeight,
-                canvas,
-                R.drawable.ic_keyboard_return);
+        float[] coordinates = new float[4];
+        float radius = Math.min(
+                Math.min(sectorLineBounds.right, canvas.getWidth()) - iconHalfWidth,
+                Math.min(sectorLineBounds.bottom, canvas.getHeight()) - iconHalfHeight
+        );
+        coordinates[0] = centreXValue + radius / 2;
+        coordinates[1] = centreYValue;
+        xformMatrix.reset();
+        float sectorsAngle = 360f / MainKeypadActionListener.getSectors();
+        float angle = getFirstSectorAngle() + sectorsAngle / 2 - sectorsAngle;
+        xformMatrix.postRotate(angle, centreXValue, centreYValue);
 
-        //for caps lock and shift icon
-        iconCenterY = (int) Math.max(sectorLineBounds.top, 0);
-        int shiftIconToDisplay = R.drawable.ic_no_capslock;
-        if (actionListener.isShiftSet()) {
-            shiftIconToDisplay = R.drawable.ic_shift_engaged;
+        Map<List<Integer>, KeyboardAction> actionMap = MainKeypadActionListener.getKeyboardData().getActionMap();
+        for (int sector = 0; sector < MainKeypadActionListener.getSectors(); sector++) {
+            xformMatrix.postRotate(sectorsAngle, centreXValue, centreYValue);
+            xformMatrix.mapPoints(coordinates, 2, coordinates, 0, 1);
+
+            ArrayList<Integer> movements = new ArrayList<>();
+            movements.add(sector + 1);
+            movements.add(FingerPosition.NO_TOUCH);
+            KeyboardAction action = actionMap.get(movements);
+            if (action == null) {
+                return;
+            }
+
+            int iconToDisplay = 0;
+            if (action.getKeyEventCode() == KeyEvent.KEYCODE_ENTER) {
+                iconToDisplay = R.drawable.ic_keyboard_return;
+            } else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_NUMBER_KEYPAD.keyCode) {
+                iconToDisplay = R.drawable.numericpad_vd_vector;
+            } else if (action.getKeyEventCode() == CustomKeycode.SHIFT_TOGGLE.keyCode) {
+                iconToDisplay = R.drawable.ic_no_capslock;
+                if (actionListener.isShiftSet()) {
+                    iconToDisplay = R.drawable.ic_shift_engaged;
+                }
+                if (actionListener.isCapsLockSet()) {
+                    iconToDisplay = R.drawable.ic_capslock_engaged;
+                }
+            } else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_NUMBER_KEYPAD.keyCode) {
+                iconToDisplay = R.drawable.numericpad_vd_vector;
+            } else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.keyCode) {
+                iconToDisplay = R.drawable.ic_open_with_black;
+            } else if (action.getKeyEventCode() == KeyEvent.KEYCODE_DEL) {
+                iconToDisplay = R.drawable.ic_backspace;
+            } else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.keyCode) {
+                iconToDisplay = R.drawable.clipboard;
+            } else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_LEFT.keyCode) {
+                iconToDisplay = R.drawable.ic_keyboard_arrow_left;
+            } else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_RIGHT.keyCode) {
+                iconToDisplay = R.drawable.ic_keyboard_arrow_right;
+            } else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_UP.keyCode) {
+                iconToDisplay = R.drawable.ic_keyboard_arrow_up;
+            } else if (action.getKeyEventCode() == CustomKeycode.MOVE_CURRENT_END_POINT_DOWN.keyCode) {
+                iconToDisplay = R.drawable.ic_keyboard_arrow_down;
+            } else if (action.getKeyEventCode() == CustomKeycode.SELECT_ALL.keyCode) {
+                iconToDisplay = R.drawable.ic_select_all;
+            } else if (action.getKeyEventCode() == CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.keyCode) {
+                iconToDisplay = R.drawable.ic_emoji;
+            } else if (action.getKeyEventCode() == CustomKeycode.TOGGLE_SELECTION_ANCHOR.keyCode) {
+                iconToDisplay = R.drawable.pad_center;
+            }
+            if (iconToDisplay != 0) {
+                drawIconInSector((int) coordinates[2] - iconHalfWidth,
+                        (int) coordinates[3] - iconHalfHeight,
+                        canvas,
+                        iconToDisplay);
+            }
+            // switch_to_symbols_keypad (is a special symbol)
+            // selection_start, hide_keyboard (missing icon)
+            // switch_to_main_keypad (no reason to have it here)
         }
-        if (actionListener.isCapsLockSet()) {
-            shiftIconToDisplay = R.drawable.ic_capslock_engaged;
-        }
-        drawIconInSector(iconCenterX - iconHalfWidth,
-                iconCenterY - iconHalfHeight,
-                canvas,
-                shiftIconToDisplay);
     }
 
     private void drawIconInSector(int coordinateX, int coordinateY, Canvas canvas, int resourceId) {
@@ -428,11 +476,11 @@ public class XpadView extends View {
         return actionListener.getLowerCaseCharacters(layer);
     }
 
-    private FingerPosition getCurrentFingerPosition(PointF position) {
+    private int getCurrentFingerPosition(PointF position) {
         if (circle.isPointInsideCircle(position)) {
             return FingerPosition.INSIDE_CIRCLE;
         } else {
-            return circle.getSectorOfPoint(position);
+            return circle.getSectorOfPoint(position, MainKeypadActionListener.getKeyboardData());
         }
     }
 
@@ -440,7 +488,7 @@ public class XpadView extends View {
     @Override
     public boolean onTouchEvent(MotionEvent e) {
         PointF position = new PointF((int) e.getX(), (int) e.getY());
-        FingerPosition currentFingerPosition = getCurrentFingerPosition(position);
+        int currentFingerPosition = getCurrentFingerPosition(position);
         invalidate();
         switch (e.getActionMasked()) {
             case MotionEvent.ACTION_DOWN -> {

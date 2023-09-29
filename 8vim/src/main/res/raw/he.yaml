@@ -1,9 +1,9 @@
 layers:
   default:
     sectors:
-      right:
+      4:
         parts:
-          bottom:
+          1:
             - lower_case: ל
               upper_case: n
             - lower_case: מ
@@ -12,7 +12,7 @@ layers:
               upper_case: f
             - lower_case: "!"
               upper_case: "!!!"
-          top:
+          3:
             - lower_case: א
               upper_case: a
             - lower_case: ר
@@ -21,9 +21,9 @@ layers:
               upper_case: x
             - lower_case: "?"
               upper_case: "*"
-      top:
+      3:
         parts:
-          right:
+          4:
             - lower_case: נ
               upper_case: y
             - lower_case: ם
@@ -32,7 +32,7 @@ layers:
               upper_case: p
             - lower_case: צ
               upper_case: q
-          left:
+          2:
             - lower_case: ש
               upper_case: s
             - lower_case: ע
@@ -41,9 +41,9 @@ layers:
               upper_case: g
             - lower_case: ץ
               upper_case: "'"
-      left:
+      2:
         parts:
-          top:
+          3:
             - lower_case: ב
               upper_case: t
             - lower_case: פ
@@ -52,7 +52,7 @@ layers:
               upper_case: z
             - lower_case: .
               upper_case: "-"
-          bottom:
+          1:
             - lower_case: כ
               upper_case: i
             - lower_case: ק
@@ -61,9 +61,9 @@ layers:
               upper_case: j
             - lower_case: ","
               upper_case: _
-      bottom:
+      1:
         parts:
-          left:
+          2:
             - lower_case: י
               upper_case: e
             - lower_case: ו
@@ -72,7 +72,7 @@ layers:
               upper_case: k
             - lower_case: "@"
               upper_case: "@gmail.com"
-          right:
+          4:
             - lower_case: ה
               upper_case: o
             - lower_case: ת
@@ -84,56 +84,56 @@ layers:
   extra_layers:
     first:
       sectors:
-        right:
+        4:
           parts:
-            bottom:
+            1:
               - lower_case: n
               - lower_case: m
               - lower_case: f
               - lower_case: "!"
                 upper_case: "!!!"
-            top:
+            3:
               - lower_case: a
               - lower_case: r
               - lower_case: x
               - lower_case: "?"
                 upper_case: "*"
-        top:
+        3:
           parts:
-            right:
+            4:
               - lower_case: y
               - lower_case: b
               - lower_case: p
               - lower_case: q
-            left:
+            2:
               - lower_case: s
               - lower_case: d
               - lower_case: g
               - lower_case: "'"
                 upper_case: '"'
-        left:
+        2:
           parts:
-            top:
+            3:
               - lower_case: t
               - lower_case: c
               - lower_case: z
               - lower_case: .
                 upper_case: "-"
-            bottom:
+            1:
               - lower_case: i
               - lower_case: h
               - lower_case: j
               - lower_case: ","
                 upper_case: _
-        bottom:
+        1:
           parts:
-            left:
+            2:
               - lower_case: e
               - lower_case: l
               - lower_case: k
               - lower_case: "@"
                 upper_case: "@gmail.com"
-            right:
+            4:
               - lower_case: o
               - lower_case: u
               - lower_case: v

@@ -1,3 +1,16 @@
+[![Project Dashboard](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/flide8vim/)
+
+# TODO for multi-sector
+- Fix all tests (lot of work to do)
+- Fix emoji and other gestures for 6 side keyboard
+- Handle exceptional cases (Or cases where layers have different number of sectors)
+
+# Other ideas
+- Complete smart space, with possible option to choose the multi-char
+- Optimize keyboard via genetic programming (both 4 and 6 sides)
+- Single click enter letter
+- Single swipe enter secondary letter
+
 # 8Vim
 
 [![Project Dashboard](https://sourcespy.com/shield.svg)](https://sourcespy.com/github/flide8vim/)

@@ -2,153 +2,153 @@ layers:
   hidden:
     - type: input_key
       movement_sequence:
-        - top
+        - 3
         - inside_circle
         - no_touch
       key_code: hide_keyboard
     - type: input_key
       movement_sequence:
-        - left
+        - 2
         - inside_circle
         - no_touch
       key_code: keycode_paste
     - type: input_key
       movement_sequence:
-        - right
+        - 4
         - inside_circle
         - no_touch
       key_code: selection_start
     - type: input_key
       movement_sequence:
-        - right
+        - 4
         - inside_circle
         - long_press
       key_code: selection_start
     - type: input_key
       movement_sequence:
-        - right
+        - 4
         - inside_circle
         - long_press_end
       key_code: switch_to_selection_keypad
     - movement_sequence:
         - no_touch
-        - left
-        - bottom
-        - right
+        - 2
+        - 1
+        - 4
         - no_touch
       lower_case: 😊
       upper_case: 😁
     - movement_sequence:
         - no_touch
-        - left
-        - bottom
-        - right
-        - bottom
+        - 2
+        - 1
+        - 4
+        - 1
         - no_touch
       lower_case: 😉
       upper_case: 🤣
     - movement_sequence:
         - no_touch
-        - left
-        - top
-        - right
+        - 2
+        - 3
+        - 4
         - no_touch
       lower_case: 😢
       upper_case: 😭
     - movement_sequence:
         - no_touch
-        - bottom
-        - left
-        - top
+        - 1
+        - 2
+        - 3
         - inside_circle
-        - top
-        - right
-        - bottom
+        - 3
+        - 4
+        - 1
         - no_touch
       lower_case: ❤
       upper_case: 😍
     - movement_sequence:
         - no_touch
-        - bottom
-        - left
-        - top
+        - 1
+        - 2
+        - 3
         - inside_circle
-        - top
-        - right
-        - bottom
-        - left
-        - top
+        - 3
+        - 4
+        - 1
+        - 2
+        - 3
         - inside_circle
-        - top
-        - right
-        - bottom
+        - 3
+        - 4
+        - 1
         - no_touch
       lower_case: 😘
       upper_case: 🌹
     - movement_sequence:
         - no_touch
-        - left
+        - 2
         - inside_circle
-        - top
+        - 3
         - inside_circle
-        - right
+        - 4
         - no_touch
       lower_case: 🤔
       upper_case: 🙏
     - movement_sequence:
         - no_touch
-        - top
-        - left
-        - top
-        - right
-        - top
+        - 3
+        - 2
+        - 3
+        - 4
+        - 3
         - no_touch
       lower_case: 👏
       upper_case: 😇
     - movement_sequence:
         - no_touch
-        - left
-        - bottom
-        - right
-        - top
+        - 2
+        - 1
+        - 4
+        - 3
         - inside_circle
-        - top
+        - 3
         - no_touch
       lower_case: 👍
       upper_case: 🎉
     - movement_sequence:
         - no_touch
-        - top
-        - left
-        - bottom
+        - 3
+        - 2
+        - 1
         - no_touch
       lower_case: (
       upper_case: "["
     - movement_sequence:
         - no_touch
-        - top
-        - right
-        - bottom
+        - 3
+        - 4
+        - 1
         - no_touch
       lower_case: )
       upper_case: "]"
     - movement_sequence:
         - no_touch
-        - top
-        - left
+        - 3
+        - 2
         - inside_circle
-        - left
-        - bottom
+        - 2
+        - 1
         - no_touch
       lower_case: "{"
       upper_case: <
     - movement_sequence:
         - no_touch
-        - top
-        - right
+        - 3
+        - 4
         - inside_circle
-        - right
-        - bottom
+        - 4
+        - 1
         - no_touch
       lower_case: "}"
       upper_case: ">"

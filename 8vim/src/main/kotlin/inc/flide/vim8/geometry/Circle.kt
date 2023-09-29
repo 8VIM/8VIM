@@ -1,9 +1,7 @@
 package inc.flide.vim8.geometry
 
 import android.graphics.PointF
-import inc.flide.vim8.models.Direction.Companion.baseQuadrant
-import inc.flide.vim8.models.FingerPosition
-import inc.flide.vim8.models.toFingerPosition
+import inc.flide.vim8.models.KeyboardData
 import inc.flide.vim8.utils.GeometricUtilities
 import kotlin.math.atan2
 import kotlin.math.pow
@@ -37,13 +35,20 @@ class Circle {
     /**
      * Gets the angle of point p relative to the center
      */
-    private fun getAngleInRadiansOfPointWithRespectToCentreOfCircle(point: PointF): Double {
+    private fun getAngleInRadiansOfPointWithRespectToCentreOfCircle(
+        point: PointF,
+        keyboardData: KeyboardData
+    ): Double {
         // Get difference of coordinates
         val x = (point.x - centre.x).toDouble()
         val y = (centre.y - point.y).toDouble()
 
         // Calculate angle with special atan (calculates the correct angle in all quadrants)
         var angle = atan2(y, x)
+
+        val sectorsAngle = Math.PI * 2 / keyboardData.sectors / 2
+        val angleCenterFirstSector = -Math.PI / 2 + sectorsAngle - sectorsAngle
+        angle -= angleCenterFirstSector
         // Make all angles positive
         if (angle < 0) {
             angle += Math.PI * 2
@@ -54,10 +59,13 @@ class Circle {
     /**
      * Get the number of the sector that point p is in
      */
-    fun getSectorOfPoint(p: PointF): FingerPosition {
-        val angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p)
-        val angleToSectorValue = angleDouble / (Math.PI / 2)
-        val quadrantCyclic = angleToSectorValue.roundToInt()
-        return baseQuadrant(quadrantCyclic).toFingerPosition()
+    fun getSectorOfPoint(p: PointF, keyboardData: KeyboardData): Int {
+        val angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p, keyboardData)
+        var quadrantCyclic = (-angleDouble / (Math.PI * 2 / keyboardData.sectors)).roundToInt()
+        quadrantCyclic %= keyboardData.sectors
+        if (quadrantCyclic < 0) {
+            quadrantCyclic += keyboardData.sectors
+        }
+        return quadrantCyclic + 1
     }
 }
