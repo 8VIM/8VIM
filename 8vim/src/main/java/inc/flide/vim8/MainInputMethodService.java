@@ -4,6 +4,7 @@ import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.icu.text.BreakIterator;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -51,6 +52,7 @@ public class MainInputMethodService extends InputMethodService
     private int modifierFlags;
     private AppPrefs prefs;
     private KeyboardTheme keyboardTheme;
+    private BreakIterator breakIterator;
 
     public MainInputMethodService() {
         super();
@@ -70,6 +72,7 @@ public class MainInputMethodService extends InputMethodService
     @Override
     public void onCreate() {
         super.onCreate();
+        breakIterator = BreakIterator.getCharacterInstance();
         prefs = appPreferenceModel().java();
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         Context applicationContext = getApplicationContext();
@@ -215,10 +218,13 @@ public class MainInputMethodService extends InputMethodService
             if (AndroidVersion.INSTANCE.getATLEAST_API28_P()) {
                 switchToPreviousInputMethod();
             } else {
-                InputMethodManager inputMethodManager = (InputMethodManager) this
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                IBinder tokenIBinder = this.getWindow().getWindow().getAttributes().token;
-                inputMethodManager.switchToLastInputMethod(tokenIBinder);
+                Window window = getWindow().getWindow();
+                if (window != null) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) this
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                    IBinder tokenIBinder = window.getAttributes().token;
+                    inputMethodManager.switchToLastInputMethod(tokenIBinder);
+                }
             }
         } else {
             switchInputMethod(keyboardId);
@@ -248,11 +254,22 @@ public class MainInputMethodService extends InputMethodService
 
     public void delete() {
         CharSequence sel = inputConnection.getSelectedText(0);
+        inputConnection.beginBatchEdit();
         if (TextUtils.isEmpty(sel)) {
-            inputConnection.deleteSurroundingTextInCodePoints(1, 0);
+            int length = 1;
+            CharSequence text = inputConnection.getTextBeforeCursor(4, 0);
+            if (!TextUtils.isEmpty(text)) {
+                breakIterator.setText(text.toString());
+                int end = breakIterator.last();
+                int start = breakIterator.previous();
+                length = end - (start == BreakIterator.DONE ? 0 : start);
+            }
+            length = Math.min(length, 1);
+            inputConnection.deleteSurroundingText(length, 0);
         } else {
             inputConnection.commitText("", 0);
         }
+        inputConnection.endBatchEdit();
     }
 
     public void switchAnchor() {
@@ -317,10 +334,6 @@ public class MainInputMethodService extends InputMethodService
 
     public boolean areCharactersCapitalized() {
         return getShiftLockFlag() == KeyEvent.META_SHIFT_ON || getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
-    }
-
-    public void setModifierFlags(int newModifierFlags) {
-        this.modifierFlags = this.modifierFlags | newModifierFlags;
     }
 
     public int getShiftLockFlag() {
