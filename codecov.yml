@@ -1,4 +1,3 @@
-github_checks: false
 comment:
   layout: "diff, flags, files"
   behavior: default
@@ -7,10 +6,10 @@ coverage:
   status:
     project:
       default:
-        if_ci_failed: ignore
+        if_ci_failed: success
     patch:
       default:
-        if_ci_failed: ignore
+        if_ci_failed: success
 flags:
   unit:
     ignore:
