@@ -31,6 +31,9 @@ public class ClipboardManagerService {
         clipboardManager.addPrimaryClipChangedListener(() -> {
             ClipData primaryClip = clipboardManager.getPrimaryClip();
             if (primaryClip != null) {
+                if (!prefs.getClipboard().getEnabled().get()) {
+                    return;
+                }
                 String newClip = primaryClip.getItemAt(0).getText().toString();
                 addClipToHistory(newClip);
                 if (clipboardHistoryListener != null) {
