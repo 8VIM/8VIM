@@ -160,7 +160,6 @@ android {
 }
 tasks.withType<JacocoReport> {
     dependsOn(tasks.withType<Test>())
-    executionData.setFrom(project.fileTree(buildDir) { include("**/jacoco/*.exec") })
     reports {
         csv.required.set(false)
     }
