@@ -2,7 +2,7 @@ name: Discord notification release
 
 on:
   release:
-    types: [published]
+    types: [created]
 jobs:
   notify:
     runs-on: ubuntu-latest
