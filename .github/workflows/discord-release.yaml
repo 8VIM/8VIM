@@ -14,4 +14,4 @@ jobs:
         with:
           args: |
             New release: ${{github.event.release.name}}
-            ${{github.event.release.url}}
+            ${{github.event.release.html_url}}
