@@ -19,9 +19,21 @@ plugins {
 
 apply(plugin = "checkstyle")
 
-checkstyle {
-    toolVersion = "10.12.0"
+tasks.register<Checkstyle>("checkstyle") {
+    source = fileTree("src")
+    configFile = project.rootProject.file("config/checkstyle/checkstyle.xml")
+    includes += "**/*.java"
     isShowViolations = true
+    excludes += setOf("**/gen/**", "**/R.java")
+    classpath = files()
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+tasks.check {
+    dependsOn("checkstyle")
 }
 
 android {
@@ -100,7 +112,7 @@ android {
             applicationIdSuffix = ".debug"
 
             resValue("string", "app_name", "8Vim Debug")
-
+            enableUnitTestCoverage
             /* Activate R8 in debug mode, good to check if any new library added works
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
@@ -147,13 +159,21 @@ android {
     }
 }
 tasks.withType<JacocoReport> {
+    dependsOn(tasks.withType<Test>())
     reports {
-        csv.required.set(true)
+        csv.required.set(false)
     }
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+
+    finalizedBy(tasks.withType<JacocoReport>())
+
+    configure<JacocoTaskExtension> {
+        isIncludeNoLocationClasses = true
+        excludes = listOf("jdk.internal*")
+    }
 
     testLogging {
         events(
@@ -228,13 +248,6 @@ dependencies {
 
 configurations.testImplementation {
     exclude(module = "logback-android")
-}
-
-tasks.withType<Checkstyle>().configureEach {
-    source = fileTree("src")
-    includes += "**/*.java"
-    excludes += setOf("**/gen/**", "**/R.java")
-    classpath = files()
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {

@@ -83,6 +83,16 @@
             app:summaryOn="@string/pref_sidebar_visibility_summary_on"
             app:title="@string/pref_sidebar_visibility_title" />
 
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:widgetLayout="@layout/material_switch"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_clipboard_enabled_key"
+            app:summaryOff="@string/pref_clipboard_enabled_summary_off"
+            app:summaryOn="@string/pref_clipboard_enabled_summary_on"
+            app:title="@string/pref_clipboard_enabled_title" />
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -1,7 +1,8 @@
 @file:Suppress("DSL_SCOPE_VIOLATION")
+
 buildscript {
     dependencies {
-       classpath(libs.gradle)
+        classpath(libs.gradle)
     }
 }
 

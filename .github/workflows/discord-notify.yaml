@@ -1,0 +1,19 @@
+name: Discord notification
+
+on:
+  workflow_call:
+    inputs:
+      message:
+        required: true
+        type: string
+jobs:
+  notify:
+    name: Discord notify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Discord notify
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@0.3.2
+        with:
+          args: ${{inputs.message}}
