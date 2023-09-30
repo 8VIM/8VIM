@@ -89,7 +89,7 @@ public class SettingsFragment extends LayoutFileSelector {
     }
 
     private void setupLayoutPreferenceAction() {
-        Preference keyboardPref = findPreference(getString(R.string.pref_select_keyboard_layout_key));
+        Preference keyboardPref = findPreference(prefs.getLayout().getCurrent().getKey());
         assert keyboardPref != null;
 
         keyboardPref.setOnPreferenceClickListener(preference -> {
@@ -99,7 +99,7 @@ public class SettingsFragment extends LayoutFileSelector {
     }
 
     private void setupEmojiKeyboardPreferenceAction() {
-        Preference emojiKeyboardPref = findPreference(getString(R.string.pref_select_emoji_keyboard_key));
+        Preference emojiKeyboardPref = findPreference(prefs.getKeyboard().getEmoticonKeyboard().getKey());
         assert emojiKeyboardPref != null;
 
         emojiKeyboardPref.setOnPreferenceClickListener(preference -> {

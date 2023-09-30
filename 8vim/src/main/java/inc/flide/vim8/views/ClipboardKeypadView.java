@@ -10,7 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.ime.actionlisteners.ClipboardActionListener;
+import inc.flide.vim8.keyboardactionlisteners.ClipboardActionListener;
+import inc.flide.vim8.models.CustomKeycode;
 import java.text.MessageFormat;
 import java.util.List;
 
@@ -28,6 +29,16 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardAc
 
     public ClipboardKeypadView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void initialize(Context context) {
+        super.initialize(context);
+        prefs.getClipboard().getEnabled().observe(newValue -> {
+            if (!newValue) {
+                actionListener.handleInputKey(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.keyCode, 0);
+            }
+        });
     }
 
     @Override
