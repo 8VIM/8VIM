@@ -56,10 +56,24 @@
         android:contentDescription="@string/open_keyboard_settings_button_content_description"
         android:scaleType="centerInside"
         android:src="@drawable/key_icon_settings"
-        app:layout_constraintBottom_toTopOf="@id/switchKeypadButton"
+        app:layout_constraintBottom_toTopOf="@id/ctrlButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/switchToSelectionKeyboard"
+        app:layout_constraintVertical_weight="1" />
+
+    <ImageButton
+        android:id="@+id/ctrlButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ripple"
+        android:contentDescription="@string/ctrl_button_content_description"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_ctrl"
+        app:layout_constraintBottom_toTopOf="@id/switchKeypadButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton"
         app:layout_constraintVertical_weight="1" />
 
     <ImageButton
@@ -72,7 +86,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/goToSettingsButton"
+        app:layout_constraintTop_toBottomOf="@id/ctrlButton"
         app:layout_constraintVertical_weight="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

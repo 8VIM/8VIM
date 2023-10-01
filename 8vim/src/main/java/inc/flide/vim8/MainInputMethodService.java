@@ -49,10 +49,10 @@ public class MainInputMethodService extends InputMethodService
     private View currentKeypadView;
     private int shiftLockFlag;
     private int capsLockFlag;
-    private int modifierFlags;
     private AppPrefs prefs;
     private KeyboardTheme keyboardTheme;
     private BreakIterator breakIterator;
+    private State ctrlState = State.OFF;
 
     public MainInputMethodService() {
         super();
@@ -178,7 +178,7 @@ public class MainInputMethodService extends InputMethodService
         inputConnection = getCurrentInputConnection();
         setShiftLockFlag(0);
         setCapsLockFlag(0);
-        clearModifierFlags();
+        ctrlState = State.OFF;
     }
 
     public KeyboardData buildKeyboardActionMap() {
@@ -187,11 +187,7 @@ public class MainInputMethodService extends InputMethodService
 
     public void sendText(String text) {
         inputConnection.commitText(text, 1);
-        clearModifierFlags();
-    }
-
-    private void clearModifierFlags() {
-        modifierFlags = 0;
+        resetCtrlState();
     }
 
     public void sendDownKeyEvent(int keyEventCode, int flags) {
@@ -248,8 +244,29 @@ public class MainInputMethodService extends InputMethodService
     }
 
     public void sendKey(int keyEventCode, int flags) {
-        sendDownAndUpKeyEvent(keyEventCode, getShiftLockFlag() | getCapsLockFlag() | modifierFlags | flags);
-        clearModifierFlags();
+        sendDownAndUpKeyEvent(keyEventCode, getShiftLockFlag() | getCapsLockFlag() | getCtrlFlag() | flags);
+        resetCtrlState();
+    }
+
+    public void resetCtrlState() {
+        if (ctrlState == State.ON) {
+            ctrlState = State.OFF;
+        }
+    }
+
+    public void resetShiftState() {
+        if (getShiftstate() == State.ON) {
+            setShiftLockFlag(0);
+            setCapsLockFlag(0);
+        }
+    }
+
+    private int getCtrlFlag() {
+        if (ctrlState == State.OFF) {
+            return 0;
+        } else {
+            return KeyEvent.META_CTRL_MASK;
+        }
     }
 
     public void delete() {
@@ -332,6 +349,22 @@ public class MainInputMethodService extends InputMethodService
         }
     }
 
+    public void performCtrlToggle() {
+        switch (ctrlState) {
+            case OFF -> ctrlState = State.ON;
+            case ON -> ctrlState = State.ENGAGED;
+            default -> ctrlState = State.OFF;
+        }
+    }
+
+    public float getCtrlAlpha() {
+        float alpha = 1f;
+        if (getCtrlState() == State.OFF) {
+            alpha = 0.65f;
+        }
+        return alpha;
+    }
+
     public boolean areCharactersCapitalized() {
         return getShiftLockFlag() == KeyEvent.META_SHIFT_ON || getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
     }
@@ -405,5 +438,23 @@ public class MainInputMethodService extends InputMethodService
         if (clipboardKeypadView != null) {
             clipboardKeypadView.updateClipHistory();
         }
+    }
+
+    public State getCtrlState() {
+        return ctrlState;
+    }
+
+    public State getShiftstate() {
+        if (getShiftLockFlag() == KeyEvent.META_SHIFT_ON) {
+            return State.ON;
+        } else if (getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON) {
+            return State.ENGAGED;
+        } else {
+            return State.OFF;
+        }
+    }
+
+    public enum State {
+        OFF, ON, ENGAGED
     }
 }
