@@ -31,7 +31,7 @@
     <string name="pref_category_look_and_feel">Look &amp; Feel</string>
 
     <!--    preferences shown in gui UI-->
-    <string name="pref_select_keyboard_layout_key">select_keyboard_layout</string>
+    <string name="pref_select_keyboard_layout_key">prefs_layout_current</string>
     <string name="pref_select_keyboard_layout_title">Select language layout</string>
     <string name="pref_select_keyboard_layout_summary">Chosen language will decide which diacritics
         can be entered </string>
@@ -41,75 +41,80 @@
     <string name="pref_select_custom_keyboard_layout_summary">Layout file from the device memory
         will be loaded. Please note this is experimental and might not work.</string>
 
-    <string name="pref_select_emoji_keyboard_key">select_emoji_keyboard</string>
+    <string name="pref_select_emoji_keyboard_key">prefs_keyboard_emoticon_keyboard</string>
     <string name="pref_select_emoji_keyboard_title">Select emoji keyboard</string>
     <string name="pref_select_emoji_keyboard_summary">Chosen keyboard will be accessible through
         keyboard\'s emoji icon </string>
 
-    <string name="pref_circle_scale_factor">x_board_circle_radius_size_factor</string>
+    <string name="pref_circle_scale_factor">prefs_keyboard_sidebar_circle_radius_size_factor</string>
     <string name="pref_circle_scale_factor_title">Circle size</string>
     <string name="pref_circle_scale_factor_summary">Resize circle according to your needs</string>
 
-    <string name="pref_circle_x_offset_key">x_board_circle_centre_x_offset</string>
+    <string name="pref_circle_x_offset_key">prefs_keyboard_sidebar_circle_centre_x_offset</string>
     <string name="pref_circle_x_offset_title">Circle offset X axis</string>
 
-    <string name="pref_circle_y_offset_key">x_board_circle_centre_y_offset</string>
+    <string name="pref_circle_y_offset_key">prefs_keyboard_sidebar_circle_centre_y_offset</string>
     <string name="pref_circle_y_offset_title">Circle offset Y axis</string>
 
-    <string name="pref_keyboard_height">x_board_keyboard_height</string>
-    <string name="pref_keyboard_height_title">Keyboard size</string>
+    <string name="pref_keyboard_height">prefs_keyboard_height</string>
+    <string name="pref_keyboard_height_title">Keyboard height</string>
     <string name="pref_keyboard_height_summary">Resize keyboard to your needs</string>
 
-    <string name="pref_sidebar_left_key">user_preferred_sidebar_left</string>
+    <string name="pref_sidebar_left_key">prefs_keyboard_sidebar_is_on_left</string>
     <string name="pref_sidebar_left_title">Sidebar on the left</string>
     <string name="pref_sidebar_left_summary_on">Sidebar is currently on the left</string>
     <string name="pref_sidebar_left_summary_off">Sidebar is currently on the right</string>
 
-    <string name="pref_sidebar_visibility_key">user_preferred_sidebar_visibility</string>
+    <string name="pref_sidebar_visibility_key">prefs_keyboard_sidebar_is_visible</string>
     <string name="pref_sidebar_visibility_title">Sidebar visibility</string>
     <string name="pref_sidebar_visibility_summary_on">Sidebar is currently visible</string>
     <string name="pref_sidebar_visibility_summary_off">Sidebar is currently hidden</string>
 
-    <string name="pref_display_sector_icons_key">user_preferred_display_icons_in</string>
+    <string name="pref_clipboard_enabled_key">prefs_clipboard_enabled</string>
+    <string name="pref_clipboard_enabled_title">Enable clipboard</string>
+    <string name="pref_clipboard_enabled_summary_on">Clipboard is enabled</string>
+    <string name="pref_clipboard_enabled_summary_off">Clipboard is disabled</string>
+
+    <string name="pref_display_sector_icons_key">prefs_keyboard_display_show_sector_icons</string>
     <string name="pref_display_sector_icons_title">Display sector icons</string>
     <string name="pref_display_sector_icons_summary_on">Sector icons are enabled</string>
     <string name="pref_display_sector_icons_summary_off">Sector icons are disabled</string>
 
-    <string name="pref_display_wheel_characters_key">user_preferred_display_letters_on_wheel</string>
+    <string name="pref_display_wheel_characters_key">prefs_keyboard_display_show_letters_on_wheel</string>
     <string name="pref_display_wheel_characters_title">Display letters on X-pad</string>
     <string name="pref_display_wheel_characters_summary_on">Letters on X-pad are visible</string>
     <string name="pref_display_wheel_characters_summary_off">Letters on X-pad are not visible</string>
 
-    <string name="pref_typing_trail_visibility_key">user_preferred_typing_trail_visibility</string>
-    <string name="pref_typing_trail_visibility_title">Display touch trail</string>
-    <string name="pref_typing_trail_visibility_summary_on">Trail will be visible when typing</string>
-    <string name="pref_typing_trail_visibility_summary_off">No trail will be shown when typing</string>
-
-    <string name="pref_haptic_feedback_key">user_preferred_haptic_feedback_enabled</string>
+    <string name="pref_haptic_feedback_key">prefs_input_feedback_haptic_enabled</string>
     <string name="pref_haptic_feedback_title">Enable input haptic feedback</string>
     <string name="pref_haptic_feedback_summary_on">Haptic feedback is enabled</string>
     <string name="pref_haptic_feedback_summary_off">Haptic feedback is disabled</string>
 
-    <string name="pref_sound_feedback_key">user_preferred_sound_feedback_enabled</string>
+    <string name="pref_sound_feedback_key">prefs_input_feedback_sound_enabled</string>
     <string name="pref_sound_feedback_summary_off">Sound feedback is disabled</string>
     <string name="pref_sound_feedback_summary_on">Sound feedback is enabled</string>
     <string name="pref_sound_feedback_title">Enable keypress sounds</string>
 
-    <string name="pref_random_trail_color_key">user_preferred_random_trail_color_enabled</string>
+    <string name="pref_typing_trail_visibility_key">prefs_keyboard_trail_is_visible</string>
+    <string name="pref_typing_trail_visibility_title">Display touch trail</string>
+    <string name="pref_typing_trail_visibility_summary_on">Trail will be visible when typing</string>
+    <string name="pref_typing_trail_visibility_summary_off">No trail will be shown when typing</string>
+
+    <string name="pref_random_trail_color_key">prefs_keyboard_trail_use_random_color</string>
     <string name="pref_random_trail_color_title">Select Touch Trail color at Random</string>
     <string name="pref_random_trail_color_summary_on">Touch Trail color is random</string>
     <string name="pref_random_trail_color_summary_off">Touch Trail color is selected by user</string>
 
-    <string name="pref_board_bg_color_key">board_bg_color</string>
+    <string name="pref_board_bg_color_key">prefs_keyboard_custom_colors_background</string>
     <string name="pref_board_bg_color_title">Keyboard background color</string>
 
-    <string name="pref_board_fg_color_key">board_fg_color</string>
+    <string name="pref_board_fg_color_key">prefs_keyboard_custom_colors_foreground</string>
     <string name="pref_board_fg_color_title">Keyboard foreground color</string>
 
-    <string name="pref_trail_color_key">trail_color</string>
+    <string name="pref_trail_color_key">prefs_keyboard_trail_color</string>
     <string name="pref_trail_color_title">Touch trail color</string>
 
-    <string name="pref_color_mode_key">color_mode</string>
+    <string name="pref_color_mode_key">prefs_theme_color_mode</string>
     <string name="pref_color_mode_title">Keyboard color</string>
 
     <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>

@@ -16,32 +16,37 @@ import inc.flide.vim8.theme.darkColorPalette
 import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
-class AppPrefs : PreferenceModel(1) {
+class AppPrefs : PreferenceModel(2) {
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
+    val keyboard = Keyboard()
+    val inputFeedback = InputFeedback()
+    val internal = Internal()
 
     inner class Clipboard {
         val history = stringSet(
-            key = "clipboard_history",
+            key = "prefs_clipboard_history",
             default = HashSet()
+        )
+        val enabled = boolean(
+            key = "prefs_clipboard_enabled",
+            default = true
         )
     }
 
-    val keyboard = Keyboard()
-    val inputFeedback = InputFeedback()
-
     inner class Layout {
+        val custom = Custom()
+
         val current = custom(
-            key = "select_keyboard_layout",
+            key = "prefs_layout_current",
             default = EmbeddedLayout("en"),
             serde = LayoutSerDe
         )
-        val custom = Custom()
 
         inner class Custom {
             val history = stringSet(
-                key = "pref_custom_keyboard_layout_history",
+                key = "prefs_layout_custom_history",
                 default = emptySet()
             )
         }
@@ -49,20 +54,18 @@ class AppPrefs : PreferenceModel(1) {
 
     inner class InputFeedback {
         val soundEnabled = boolean(
-            key = "user_preferred_sound_feedback_enabled",
+            key = "prefs_input_feedback_sound_enabled",
             default = true
         )
         val hapticEnabled = boolean(
-            key = "user_preferred_haptic_feedback_enabled",
+            key = "prefs_input_feedback_haptic_enabled",
             default = true
         )
     }
 
-    val internal = Internal()
-
     inner class Theme {
         val mode = enum(
-            key = "color_mode",
+            key = "prefs_theme_color_mode",
             default = ThemeMode.SYSTEM
         )
 
@@ -83,80 +86,80 @@ class AppPrefs : PreferenceModel(1) {
 
     inner class Keyboard {
         val sidebar = SideBar()
-
-        val height = int(
-            key = "x_board_keyboard_height",
-            default = 100
-        )
-
-        inner class SideBar {
-            val isVisible = boolean(
-                key = "user_preferred_sidebar_visibility",
-                default = true
-            )
-            val isOnLeft = boolean(
-                key = "user_preferred_sidebar_left",
-                default = true
-            )
-        }
-
-        val emoticonKeyboard = string(
-            key = "selected_emoticon_keyboard",
-            default = ""
-        )
         val customColors = CustomColors()
         val trail = Trail()
         val display = Display()
         val circle = Circle()
 
+        val height = int(
+            key = "prefs_keyboard_height",
+            default = 100
+        )
+
+        val emoticonKeyboard = string(
+            key = "prefs_keyboard_emoticon_keyboard",
+            default = ""
+        )
+
+        inner class SideBar {
+            val isVisible = boolean(
+                key = "prefs_keyboard_sidebar_is_visible",
+                default = true
+            )
+            val isOnLeft = boolean(
+                key = "prefs_keyboard_sidebar_is_on_left",
+                default = true
+            )
+        }
+
         inner class Circle {
             val radiusSizeFactor = int(
-                key = "x_board_circle_radius_size_factor",
+                key = "prefs_keyboard_sidebar_circle_radius_size_factor",
                 default = 12
             )
             val xCentreOffset = int(
-                key = "x_board_circle_centre_x_offset",
+                key = "prefs_keyboard_sidebar_circle_centre_x_offset",
                 default = 0
             )
             val yCentreOffset = int(
-                key = "x_board_circle_centre_y_offset",
+                key = "prefs_keyboard_sidebar_circle_centre_y_offset",
                 default = 0
             )
         }
 
         inner class CustomColors {
             val background = int(
-                key = "board_bg_color",
+                key = "prefs_keyboard_custom_colors_background",
                 default = Color(0xFA, 0xFA, 0xFA).toArgb()
             )
             val foreground = int(
-                key = "board_fg_color",
+                key = "prefs_keyboard_custom_colors_foreground",
                 default = Color(21, 21, 21).toArgb()
             )
         }
 
         inner class Display {
             val showSectorIcons = boolean(
-                key = "user_preferred_display_icons_in",
+                key = "prefs_keyboard_display_show_sector_icons",
                 default = true
             )
             val showLettersOnWheel = boolean(
-                key = "user_preferred_display_letters_on_wheel",
+                key = "prefs_keyboard_display_show_letters_on_wheel",
                 default = true
             )
         }
 
         inner class Trail {
             val isVisible = boolean(
-                key = "user_preferred_typing_trail_visibility",
+                key = "prefs_keyboard_trail_is_visible",
                 default = true
             )
             val useRandomColor = boolean(
-                key = "user_preferred_random_trail_color_enabled",
+                key = "prefs_keyboard_trail_use_random_color",
                 default = true
             )
             val color = int(
-                "trail_color",
+                "prefs_keyboard_trail_color",
                 default = Color(0x3D, 0x5A, 0xFE).toArgb()
             )
         }
@@ -173,6 +176,59 @@ class AppPrefs : PreferenceModel(1) {
         return when (previousVersion) {
             0 -> when (entry.key) {
                 "color_mode" -> entry.transform(rawValue = entry.rawValue.toString().uppercase())
+                else -> entry.keepAsIs()
+            }
+
+            1 -> when (entry.key) {
+                "clipboard_history" -> entry.transform(key = "prefs_clipboard_history")
+                "user_preferred_clipboard_enabled" -> entry.transform(
+                    key = "prefs_clipboard_enabled"
+                )
+                "select_keyboard_layout" -> entry.transform(key = "prefs_layout_current")
+                "pref_custom_keyboard_layout_history" -> entry.transform(
+                    key = "prefs_layout_custom_history"
+                )
+                "user_preferred_sound_feedback_enabled" -> entry.transform(
+                    key = "prefs_input_feedback_sound_enabled"
+                )
+                "user_preferred_haptic_feedback_enabled" -> entry.transform(
+                    key = "prefs_input_feedback_haptic_enabled"
+                )
+                "color_mode" -> entry.transform(key = "prefs_theme_color_mode")
+                "x_board_keyboard_height" -> entry.transform(key = "prefs_keyboard_height")
+                "selected_emoticon_keyboard" -> entry.transform(
+                    key = "prefs_keyboard_emoticon_keyboard"
+                )
+                "user_preferred_sidebar_visibility" -> entry.transform(
+                    key = "prefs_keyboard_sidebar_is_visible"
+                )
+                "user_preferred_sidebar_left" -> entry.transform(
+                    key = "prefs_keyboard_sidebar_is_on_left"
+                )
+                "x_board_circle_radius_size_factor" -> entry.transform(
+                    key = "prefs_keyboard_sidebar_circle_radius_size_factor"
+                )
+                "x_board_circle_centre_x_offset" -> entry.transform(
+                    key = "prefs_keyboard_sidebar_circle_centre_x_offset"
+                )
+                "x_board_circle_centre_y_offset" -> entry.transform(
+                    key = "prefs_keyboard_sidebar_circle_centre_y_offset"
+                )
+                "board_bg_color" -> entry.transform(key = "prefs_keyboard_custom_colors_background")
+                "board_fg_color" -> entry.transform(key = "prefs_keyboard_custom_colors_foreground")
+                "user_preferred_display_icons_in" -> entry.transform(
+                    key = "prefs_keyboard_display_show_sector_icons"
+                )
+                "user_preferred_display_letters_on_wheel" -> entry.transform(
+                    key = "prefs_keyboard_display_show_letters_on_wheel"
+                )
+                "user_preferred_typing_trail_visibility" -> entry.transform(
+                    key = "prefs_keyboard_trail_is_visible"
+                )
+                "user_preferred_random_trail_color_enabled" -> entry.transform(
+                    key = "prefs_keyboard_trail_use_random_color"
+                )
+                "trail_color" -> entry.transform(key = "prefs_keyboard_trail_color")
                 else -> entry.keepAsIs()
             }
 
