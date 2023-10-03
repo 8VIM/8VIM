@@ -12,12 +12,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SelectionKeypadView extends ButtonKeypadView {
-    private static final Set<Integer> MOVE_CURRENT_END_POINTS = new HashSet<>(
-            Arrays.asList(CustomKeycode.MOVE_CURRENT_END_POINT_DOWN.keyCode,
-                    CustomKeycode.MOVE_CURRENT_END_POINT_LEFT.keyCode,
-                    CustomKeycode.MOVE_CURRENT_END_POINT_UP.keyCode,
-                    CustomKeycode.MOVE_CURRENT_END_POINT_RIGHT.keyCode));
-
     public SelectionKeypadView(Context context) {
         super(context);
         initialize(context);
@@ -40,21 +34,5 @@ public class SelectionKeypadView extends ButtonKeypadView {
             updateCtrlKey();
             updateShiftKey();
         }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent me) {
-        boolean result = super.onTouchEvent(me);
-        if (result && me.getAction() == MotionEvent.ACTION_UP) {
-            if (MOVE_CURRENT_END_POINTS.contains(lastKey)) {
-                lastKey = -1;
-                mainInputMethodService.resetCtrlState();
-                mainInputMethodService.resetShiftState();
-                updateCtrlKey();
-                updateShiftKey();
-            }
-
-        }
-        return result;
     }
 }

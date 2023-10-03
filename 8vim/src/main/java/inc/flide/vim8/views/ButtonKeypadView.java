@@ -21,10 +21,8 @@ public abstract class ButtonKeypadView extends KeyboardView {
     private final Drawable ctrlEngagedDrawable;
     private final Drawable shiftDrawable;
     private final Drawable shiftEngagedDrawable;
-    private final Drawable caplockEngagedDrawable;
     protected Keyboard keyboard;
     protected MainInputMethodService mainInputMethodService;
-    protected int lastKey = -1;
     private Typeface font;
     private KeyboardTheme keyboardTheme;
     private Keyboard.Key ctrlKey;
@@ -40,7 +38,6 @@ public abstract class ButtonKeypadView extends KeyboardView {
 
         shiftDrawable = AppCompatResources.getDrawable(getContext(), R.drawable.ic_no_capslock);
         shiftEngagedDrawable = AppCompatResources.getDrawable(getContext(), R.drawable.ic_shift_engaged);
-        caplockEngagedDrawable = AppCompatResources.getDrawable(getContext(), R.drawable.ic_capslock_engaged);
 
         initialize(context);
     }
@@ -63,7 +60,6 @@ public abstract class ButtonKeypadView extends KeyboardView {
             } else if (code == CustomKeycode.CTRL_TOGGLE.keyCode) {
                 ctrlKey = key;
             }
-            key.onPressed();
         }
         setKeyboard(keyboard);
     }
@@ -73,27 +69,25 @@ public abstract class ButtonKeypadView extends KeyboardView {
             return;
         }
 
-        int alpha = Math.round(mainInputMethodService.getCtrlAlpha() * 255);
-        if (mainInputMethodService.getCtrlState() == MainInputMethodService.State.ENGAGED) {
-            ctrlKey.icon = ctrlEngagedDrawable;
-        } else {
+        if (mainInputMethodService.getCtrlState() == MainInputMethodService.State.OFF) {
             ctrlKey.icon = ctrlDrawable;
+        } else {
+            ctrlKey.icon = ctrlEngagedDrawable;
         }
         ctrlKey.icon = ctrlKey.icon.mutate();
         ctrlKey.icon.setTint(keyboardTheme.getForegroundColor());
-        ctrlKey.icon.setAlpha(alpha);
+        ctrlKey.icon.setAlpha(255);
     }
 
     public void updateShiftKey() {
         if (shiftKey == null) {
             return;
         }
-        switch (mainInputMethodService.getShiftstate()) {
-            case OFF -> shiftKey.icon = shiftDrawable;
-            case ON -> shiftKey.icon = shiftEngagedDrawable;
-            case ENGAGED -> shiftKey.icon = caplockEngagedDrawable;
-            default -> {
-            }
+
+        if (mainInputMethodService.getShiftstate() == MainInputMethodService.State.OFF) {
+            shiftKey.icon = shiftDrawable;
+        } else {
+            shiftKey.icon = shiftEngagedDrawable;
         }
 
         shiftKey.icon = shiftKey.icon.mutate();
@@ -119,18 +113,10 @@ public abstract class ButtonKeypadView extends KeyboardView {
                 // on xpad view
                 key.icon = key.icon.mutate();
                 key.icon.setTint(keyboardTheme.getForegroundColor());
-                int alpha = 255;
-                if (key.codes != null && key.codes[0] == CustomKeycode.CTRL_TOGGLE.keyCode) {
-                    alpha = Math.round(mainInputMethodService.getCtrlAlpha() * 255);
-                }
-                key.icon.setAlpha(alpha);
+                key.icon.setAlpha(255);
             }
         }
         invalidate();
-    }
-
-    public void setLastKey(int lastKey) {
-        this.lastKey = lastKey;
     }
 
     @Override
@@ -158,13 +144,5 @@ public abstract class ButtonKeypadView extends KeyboardView {
                 key.icon.draw(canvas);
             }
         }
-    }
-
-    public Keyboard.Key getCtrlKey() {
-        return ctrlKey;
-    }
-
-    public Keyboard.Key getShiftKey() {
-        return shiftKey;
     }
 }

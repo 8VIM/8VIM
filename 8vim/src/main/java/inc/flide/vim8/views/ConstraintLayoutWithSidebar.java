@@ -148,12 +148,11 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
     private void updateCtrlButton() {
         ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
         Drawable drawable = ctrlDrawable;
-        if (actionListener.getCtrlState() == MainInputMethodService.State.ENGAGED) {
+        if (actionListener.getCtrlState() != MainInputMethodService.State.OFF) {
             drawable = ctrlEngagedDrawable;
         }
 
         ctrlKeyButton.setImageDrawable(drawable);
-        ctrlKeyButton.setAlpha(actionListener.getCtrlAlpha());
     }
 
     private void setupSwitchToSelectionKeyboardButton() {
@@ -169,13 +168,8 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
     }
 
     protected void setImageButtonTint(int tintColor, int id) {
-        setImageButtonTint(tintColor, 1f, id);
-    }
-
-    protected void setImageButtonTint(int tintColor, float alpha, int id) {
         ImageButton button = findViewById(id);
         button.setColorFilter(tintColor);
-        button.setAlpha(alpha);
     }
 
     protected void setColors() {
@@ -183,7 +177,7 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         int tintColor = keyboardTheme.getForegroundColor();
 
         this.setBackgroundColor(backgroundColor);
-        setImageButtonTint(tintColor, actionListener.getCtrlAlpha(), R.id.ctrlButton);
+        setImageButtonTint(tintColor, R.id.ctrlButton);
         setImageButtonTint(tintColor, R.id.switchKeypadButton);
         setImageButtonTint(tintColor, R.id.goToSettingsButton);
         setImageButtonTint(tintColor, R.id.tabButton);

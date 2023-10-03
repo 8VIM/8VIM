@@ -35,7 +35,12 @@ public class ButtonKeypadActionListener extends KeypadActionListener implements 
     }
 
     private void handleShiftToggle() {
-        mainInputMethodService.performShiftToggle();
+        if (mainInputMethodService.getShiftstate() == MainInputMethodService.State.OFF) {
+            mainInputMethodService.performShiftToggle();
+        } else {
+            mainInputMethodService.setShiftLockFlag(0);
+            mainInputMethodService.setCapsLockFlag(0);
+        }
         buttonKeypadView.updateShiftKey();
     }
 
@@ -62,9 +67,5 @@ public class ButtonKeypadActionListener extends KeypadActionListener implements 
 
     @Override
     public void onRelease(int primaryCode) {
-        if (primaryCode == NOT_A_KEY) {
-            return;
-        }
-        buttonKeypadView.setLastKey(primaryCode);
     }
 }

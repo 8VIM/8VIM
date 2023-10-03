@@ -261,7 +261,7 @@ public class MainInputMethodService extends InputMethodService
         }
     }
 
-    private int getCtrlFlag() {
+    public int getCtrlFlag() {
         if (ctrlState == State.OFF) {
             return 0;
         } else {
@@ -350,23 +350,15 @@ public class MainInputMethodService extends InputMethodService
     }
 
     public void performCtrlToggle() {
-        switch (ctrlState) {
-            case OFF -> ctrlState = State.ON;
-            case ON -> ctrlState = State.ENGAGED;
-            default -> ctrlState = State.OFF;
+        if (ctrlState == State.OFF) {
+            ctrlState = State.ON;
+        } else {
+            ctrlState = State.OFF;
         }
-    }
-
-    public float getCtrlAlpha() {
-        float alpha = 1f;
-        if (getCtrlState() == State.OFF) {
-            alpha = 0.65f;
-        }
-        return alpha;
     }
 
     public boolean areCharactersCapitalized() {
-        return getShiftLockFlag() == KeyEvent.META_SHIFT_ON || getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
+        return getShiftstate() != State.OFF;
     }
 
     public int getShiftLockFlag() {
@@ -375,8 +367,9 @@ public class MainInputMethodService extends InputMethodService
 
     public void setShiftLockFlag(int shiftLockFlag) {
         this.shiftLockFlag = shiftLockFlag;
-        if (getWindow().findViewById(R.id.xboardView) != null) {
-            getWindow().findViewById(R.id.xboardView).invalidate();
+        View xboardView = getWindow().findViewById(R.id.xboardView);
+        if (xboardView != null) {
+            xboardView.invalidate();
         }
     }
 

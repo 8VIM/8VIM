@@ -48,10 +48,6 @@ public abstract class KeypadActionListener {
         }
     }
 
-    public float getCtrlAlpha() {
-        return mainInputMethodService.getCtrlAlpha();
-    }
-
     public void performCtrlToggle() {
         mainInputMethodService.performCtrlToggle();
     }
