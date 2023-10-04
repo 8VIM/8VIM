@@ -52,7 +52,7 @@ public abstract class KeypadActionListener {
         mainInputMethodService.performCtrlToggle();
     }
 
-    public MainInputMethodService.State getCtrlState() {
+    public boolean getCtrlState() {
         return mainInputMethodService.getCtrlState();
     }
 
@@ -84,10 +84,7 @@ public abstract class KeypadActionListener {
                 case KeyEvent.KEYCODE_PASTE -> mainInputMethodService.paste();
                 case KeyEvent.KEYCODE_ENTER -> mainInputMethodService.commitImeOptionsBasedEnter();
                 case KeyEvent.KEYCODE_DEL -> mainInputMethodService.delete();
-                default -> {
-                    mainInputMethodService.sendKey(primaryCode, keyFlags);
-                    mainInputMethodService.resetShiftState();
-                }
+                default -> mainInputMethodService.sendKey(primaryCode, keyFlags);
             }
             return true;
         }
@@ -102,7 +99,7 @@ public abstract class KeypadActionListener {
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
-        boolean isUpperCase = mainInputMethodService.getShiftstate() != MainInputMethodService.State.OFF;
+        boolean isUpperCase = mainInputMethodService.getShiftState() != MainInputMethodService.State.OFF;
         String text = (isUpperCase && !keyboardAction.getCapsLockText().isEmpty()) ? keyboardAction.getCapsLockText() :
                 keyboardAction.getText();
         onText(text);
@@ -113,11 +110,11 @@ public abstract class KeypadActionListener {
     }
 
     public boolean isShiftSet() {
-        return mainInputMethodService.getShiftstate() == MainInputMethodService.State.ON;
+        return mainInputMethodService.getShiftState() == MainInputMethodService.State.ON;
     }
 
     public boolean isCapsLockSet() {
-        return mainInputMethodService.getShiftstate() == MainInputMethodService.State.ENGAGED;
+        return mainInputMethodService.getShiftState() == MainInputMethodService.State.ENGAGED;
     }
 
     public LayerLevel findLayer() {

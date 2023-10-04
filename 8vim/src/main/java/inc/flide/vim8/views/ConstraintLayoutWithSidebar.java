@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
@@ -24,7 +23,8 @@ import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.CustomKeycode;
 import inc.flide.vim8.ui.activities.SettingsActivity;
 
-public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener> extends ConstraintLayout {
+public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener> extends ConstraintLayout
+        implements CtrlButtonView {
     protected T actionListener;
     protected KeyboardTheme keyboardTheme;
     protected AppPrefs prefs;
@@ -102,6 +102,7 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         setupTabKey();
         setupCtrlKey();
         setupGoToSettingsButton();
+        updateCtrlButton();
     }
 
     protected void setupSwitchToMainKeyboardButton() {
@@ -139,16 +140,13 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
     }
 
     private void setupCtrlKey() {
-        findViewById(R.id.ctrlButton).setOnClickListener(view -> {
-            actionListener.performCtrlToggle();
-            updateCtrlButton();
-        });
+        findViewById(R.id.ctrlButton).setOnClickListener(view -> actionListener.performCtrlToggle());
     }
 
-    private void updateCtrlButton() {
+    public void updateCtrlButton() {
         ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
         Drawable drawable = ctrlDrawable;
-        if (actionListener.getCtrlState() != MainInputMethodService.State.OFF) {
+        if (actionListener.getCtrlState()) {
             drawable = ctrlEngagedDrawable;
         }
 
@@ -193,12 +191,5 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         super.onMeasure(MeasureSpec.makeMeasureSpec(computedDimension.width, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(computedDimension.height, MeasureSpec.EXACTLY));
 
-    }
-
-    @Override
-    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
-        if (visibility == VISIBLE) {
-            updateCtrlButton();
-        }
     }
 }

@@ -4,7 +4,6 @@ import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.icu.text.BreakIterator;
 import android.inputmethodservice.InputMethodService;
 import android.os.IBinder;
 import android.os.SystemClock;
@@ -23,21 +22,29 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.WindowInsetsControllerCompat;
 import com.google.android.material.color.DynamicColors;
+import inc.flide.vim8.datastore.model.PreferenceData;
 import inc.flide.vim8.ime.KeyboardTheme;
+import inc.flide.vim8.ime.nlp.BreakIteratorGroup;
 import inc.flide.vim8.lib.android.AndroidVersion;
 import inc.flide.vim8.models.AppPrefs;
 import inc.flide.vim8.models.KeyboardData;
 import inc.flide.vim8.models.LayoutKt;
 import inc.flide.vim8.services.ClipboardManagerService;
 import inc.flide.vim8.views.ClipboardKeypadView;
+import inc.flide.vim8.views.CtrlButtonView;
 import inc.flide.vim8.views.NumberKeypadView;
 import inc.flide.vim8.views.SelectionKeypadView;
+import inc.flide.vim8.views.ShiftButtonView;
 import inc.flide.vim8.views.SymbolKeypadView;
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainInputMethodService extends InputMethodService
         implements ClipboardManagerService.ClipboardHistoryListener {
+    private final List<CtrlButtonView> ctrlButtonViews = new ArrayList<>();
+    private final List<ShiftButtonView> shiftButtonViews = new ArrayList<>();
+    private BreakIteratorGroup breakIteratorGroup;
     private InputConnection inputConnection;
     private EditorInfo editorInfo;
     private ClipboardManagerService clipboardManagerService;
@@ -47,12 +54,10 @@ public class MainInputMethodService extends InputMethodService
     private SymbolKeypadView symbolKeypadView;
     private ClipboardKeypadView clipboardKeypadView;
     private View currentKeypadView;
-    private int shiftLockFlag;
-    private int capsLockFlag;
     private AppPrefs prefs;
     private KeyboardTheme keyboardTheme;
-    private BreakIterator breakIterator;
-    private State ctrlState = State.OFF;
+    private boolean ctrlState = false;
+    private State shiftState = State.OFF;
 
     public MainInputMethodService() {
         super();
@@ -72,13 +77,35 @@ public class MainInputMethodService extends InputMethodService
     @Override
     public void onCreate() {
         super.onCreate();
-        breakIterator = BreakIterator.getCharacterInstance();
+        breakIteratorGroup = new BreakIteratorGroup(getApplicationContext());
         prefs = appPreferenceModel().java();
+        PreferenceData<Boolean> moveByWord = prefs.getKeyboard().getBehavior().getCursor().getMoveByWord();
+        ctrlState = moveByWord.get();
+        moveByWord.observe(newValue -> {
+            if (newValue != ctrlState) {
+                ctrlState = newValue;
+                updateCtrlButton();
+            }
+        });
         DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
         Context applicationContext = getApplicationContext();
         this.clipboardManagerService = new ClipboardManagerService(applicationContext);
         this.clipboardManagerService.setClipboardHistoryListener(this);
         keyboardTheme = KeyboardTheme.getInstance();
+    }
+
+    private void updateCtrlButton() {
+        ctrlButtonViews.forEach(view -> {
+            view.updateCtrlButton();
+            ((View) view).invalidate();
+        });
+    }
+
+    private void updateShiftButton() {
+        shiftButtonViews.forEach(view -> {
+            view.updateShiftButton();
+            ((View) view).invalidate();
+        });
     }
 
     @Override
@@ -113,6 +140,12 @@ public class MainInputMethodService extends InputMethodService
         clipboardKeypadView = new ClipboardKeypadView(this);
         symbolKeypadView = new SymbolKeypadView(this);
         mainKeyboardView = new MainKeyboardView(this);
+
+        ctrlButtonViews.add(mainKeyboardView);
+        ctrlButtonViews.add(clipboardKeypadView);
+        ctrlButtonViews.add(selectionKeypadView);
+        shiftButtonViews.add(selectionKeypadView);
+
         setCurrentKeypadView(mainKeyboardView);
 
         Window window = getWindow().getWindow();
@@ -160,15 +193,10 @@ public class MainInputMethodService extends InputMethodService
         this.editorInfo = info;
         int inputType = this.editorInfo.inputType & InputType.TYPE_MASK_CLASS;
         switch (inputType) {
-            case InputType.TYPE_CLASS_NUMBER:
-            case InputType.TYPE_CLASS_PHONE:
-            case InputType.TYPE_CLASS_DATETIME:
-                switchToNumberPad();
-                break;
-            case InputType.TYPE_CLASS_TEXT:
-            default:
-                switchToMainKeypad();
-                break;
+            case InputType.TYPE_CLASS_NUMBER, InputType.TYPE_CLASS_PHONE, InputType.TYPE_CLASS_DATETIME ->
+                    switchToNumberPad();
+            case InputType.TYPE_CLASS_TEXT -> switchToMainKeypad();
+            default -> switchToMainKeypad();
         }
     }
 
@@ -176,9 +204,8 @@ public class MainInputMethodService extends InputMethodService
     public void onInitializeInterface() {
         super.onInitializeInterface();
         inputConnection = getCurrentInputConnection();
-        setShiftLockFlag(0);
-        setCapsLockFlag(0);
-        ctrlState = State.OFF;
+        shiftState = State.OFF;
+        ctrlState = prefs.getKeyboard().getBehavior().getCursor().getMoveByWord().get();
     }
 
     public KeyboardData buildKeyboardActionMap() {
@@ -187,7 +214,6 @@ public class MainInputMethodService extends InputMethodService
 
     public void sendText(String text) {
         inputConnection.commitText(text, 1);
-        resetCtrlState();
     }
 
     public void sendDownKeyEvent(int keyEventCode, int flags) {
@@ -244,25 +270,18 @@ public class MainInputMethodService extends InputMethodService
     }
 
     public void sendKey(int keyEventCode, int flags) {
-        sendDownAndUpKeyEvent(keyEventCode, getShiftLockFlag() | getCapsLockFlag() | getCtrlFlag() | flags);
-        resetCtrlState();
-    }
-
-    public void resetCtrlState() {
-        if (ctrlState == State.ON) {
-            ctrlState = State.OFF;
-        }
+        sendDownAndUpKeyEvent(keyEventCode, flags);
     }
 
     public void resetShiftState() {
-        if (getShiftstate() == State.ON) {
-            setShiftLockFlag(0);
-            setCapsLockFlag(0);
+        if (getShiftState() == State.ON) {
+            shiftState = State.OFF;
+            updateShiftButton();
         }
     }
 
     public int getCtrlFlag() {
-        if (ctrlState == State.OFF) {
+        if (!ctrlState) {
             return 0;
         } else {
             return KeyEvent.META_CTRL_MASK;
@@ -273,15 +292,13 @@ public class MainInputMethodService extends InputMethodService
         CharSequence sel = inputConnection.getSelectedText(0);
         inputConnection.beginBatchEdit();
         if (TextUtils.isEmpty(sel)) {
-            int length = 1;
-            CharSequence text = inputConnection.getTextBeforeCursor(4, 0);
-            if (!TextUtils.isEmpty(text)) {
-                breakIterator.setText(text.toString());
-                int end = breakIterator.last();
-                int start = breakIterator.previous();
-                length = end - (start == BreakIterator.DONE ? 0 : start);
+            int length;
+            ExtractedText extractedText = inputConnection.getExtractedText(new ExtractedTextRequest(), 0);
+            if (ctrlState) {
+                length = breakIteratorGroup.measureLastWords(extractedText.text.toString(), 1);
+            } else {
+                length = breakIteratorGroup.measureLastCharacters(extractedText.text.toString(), 1);
             }
-            length = Math.min(length, 1);
             inputConnection.deleteSurroundingText(length, 0);
         } else {
             inputConnection.commitText("", 0);
@@ -334,51 +351,29 @@ public class MainInputMethodService extends InputMethodService
     }
 
     public void performShiftToggle() {
-        // single press locks the shift key,
-        // double press locks the caps key
-        // a third press unlocks both.
-        if (getShiftLockFlag() == KeyEvent.META_SHIFT_ON) {
-            setShiftLockFlag(0);
-            setCapsLockFlag(KeyEvent.META_CAPS_LOCK_ON);
-        } else if (getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON) {
-            setShiftLockFlag(0);
-            setCapsLockFlag(0);
-        } else {
-            setShiftLockFlag(KeyEvent.META_SHIFT_ON);
-            setCapsLockFlag(0);
+        switch (shiftState) {
+            case OFF -> shiftState = State.ON;
+            case ON -> shiftState = State.ENGAGED;
+            default -> shiftState = State.OFF;
         }
+        updateShiftButton();
     }
 
     public void performCtrlToggle() {
-        if (ctrlState == State.OFF) {
-            ctrlState = State.ON;
-        } else {
-            ctrlState = State.OFF;
-        }
+        ctrlState = !ctrlState;
+        updateCtrlButton();
     }
 
     public boolean areCharactersCapitalized() {
-        return getShiftstate() != State.OFF;
+        return getShiftState() != State.OFF;
     }
 
     public int getShiftLockFlag() {
-        return shiftLockFlag;
-    }
-
-    public void setShiftLockFlag(int shiftLockFlag) {
-        this.shiftLockFlag = shiftLockFlag;
-        View xboardView = getWindow().findViewById(R.id.xboardView);
-        if (xboardView != null) {
-            xboardView.invalidate();
-        }
+        return shiftState == State.ON ? KeyEvent.META_SHIFT_ON : 0;
     }
 
     public int getCapsLockFlag() {
-        return capsLockFlag;
-    }
-
-    public void setCapsLockFlag(int capsLockFlag) {
-        this.capsLockFlag = capsLockFlag;
+        return shiftState == State.ENGAGED ? KeyEvent.META_CAPS_LOCK_ON : 0;
     }
 
     /*
@@ -406,23 +401,22 @@ public class MainInputMethodService extends InputMethodService
     public void commitImeOptionsBasedEnter() {
         int imeAction = this.editorInfo.imeOptions & EditorInfo.IME_MASK_ACTION;
         switch (imeAction) {
-            case EditorInfo.IME_ACTION_GO:
-            case EditorInfo.IME_ACTION_SEARCH:
-            case EditorInfo.IME_ACTION_SEND:
-            case EditorInfo.IME_ACTION_NEXT:
-            case EditorInfo.IME_ACTION_DONE:
-            case EditorInfo.IME_ACTION_PREVIOUS:
+            case EditorInfo.IME_ACTION_GO,
+                    EditorInfo.IME_ACTION_SEARCH,
+                    EditorInfo.IME_ACTION_SEND,
+                    EditorInfo.IME_ACTION_NEXT,
+                    EditorInfo.IME_ACTION_DONE,
+                    EditorInfo.IME_ACTION_PREVIOUS -> {
                 int imeNoEnterFlag = this.editorInfo.imeOptions & EditorInfo.IME_FLAG_NO_ENTER_ACTION;
                 if (imeNoEnterFlag == EditorInfo.IME_FLAG_NO_ENTER_ACTION) {
                     sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0);
                 } else {
                     inputConnection.performEditorAction(imeAction);
                 }
-                break;
-            case EditorInfo.IME_ACTION_UNSPECIFIED:
-            case EditorInfo.IME_ACTION_NONE:
-            default:
-                sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0);
+            }
+            case EditorInfo.IME_ACTION_UNSPECIFIED,
+                    EditorInfo.IME_ACTION_NONE -> sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0);
+            default -> sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0);
         }
     }
 
@@ -433,11 +427,11 @@ public class MainInputMethodService extends InputMethodService
         }
     }
 
-    public State getCtrlState() {
+    public boolean getCtrlState() {
         return ctrlState;
     }
 
-    public State getShiftstate() {
+    public State getShiftState() {
         if (getShiftLockFlag() == KeyEvent.META_SHIFT_ON) {
             return State.ON;
         } else if (getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON) {
@@ -445,6 +439,11 @@ public class MainInputMethodService extends InputMethodService
         } else {
             return State.OFF;
         }
+    }
+
+    public void setShiftState(State state) {
+        shiftState = state;
+        updateShiftButton();
     }
 
     public enum State {

@@ -1,15 +1,8 @@
 package inc.flide.vim8.views;
 
 import android.content.Context;
-import android.view.MotionEvent;
-import android.view.View;
-import androidx.annotation.NonNull;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardactionlisteners.ButtonKeypadActionListener;
-import inc.flide.vim8.models.CustomKeycode;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class SelectionKeypadView extends ButtonKeypadView {
     public SelectionKeypadView(Context context) {
@@ -26,13 +19,5 @@ public class SelectionKeypadView extends ButtonKeypadView {
     @Override
     protected int getLayoutView() {
         return R.layout.selection_keypad_view;
-    }
-
-    @Override
-    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
-        if (visibility == VISIBLE) {
-            updateCtrlKey();
-            updateShiftKey();
-        }
     }
 }

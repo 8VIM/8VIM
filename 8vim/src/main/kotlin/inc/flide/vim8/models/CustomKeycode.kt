@@ -29,14 +29,14 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
             MOVE_CURRENT_END_POINT_RIGHT,
             MOVE_CURRENT_END_POINT_UP,
             MOVE_CURRENT_END_POINT_DOWN -> {
-                if (mainInputMethodService.shiftstate != MainInputMethodService.State.OFF) {
+                if (mainInputMethodService.shiftState != MainInputMethodService.State.OFF) {
                     mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
                 }
                 mainInputMethodService.sendDownAndUpKeyEvent(
                     dPadKeyCodeFromCustom,
                     mainInputMethodService.ctrlFlag
                 )
-                if (mainInputMethodService.shiftstate != MainInputMethodService.State.OFF) {
+                if (mainInputMethodService.shiftState != MainInputMethodService.State.OFF) {
                     mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
                 }
             }

@@ -15,7 +15,7 @@ import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.models.CustomKeycode;
 
-public abstract class ButtonKeypadView extends KeyboardView {
+public abstract class ButtonKeypadView extends KeyboardView implements CtrlButtonView, ShiftButtonView {
     private final Paint foregroundPaint = new Paint();
     private final Drawable ctrlDrawable;
     private final Drawable ctrlEngagedDrawable;
@@ -64,12 +64,12 @@ public abstract class ButtonKeypadView extends KeyboardView {
         setKeyboard(keyboard);
     }
 
-    public void updateCtrlKey() {
+    public void updateCtrlButton() {
         if (ctrlKey == null) {
             return;
         }
 
-        if (mainInputMethodService.getCtrlState() == MainInputMethodService.State.OFF) {
+        if (!mainInputMethodService.getCtrlState()) {
             ctrlKey.icon = ctrlDrawable;
         } else {
             ctrlKey.icon = ctrlEngagedDrawable;
@@ -79,12 +79,12 @@ public abstract class ButtonKeypadView extends KeyboardView {
         ctrlKey.icon.setAlpha(255);
     }
 
-    public void updateShiftKey() {
+    public void updateShiftButton() {
         if (shiftKey == null) {
             return;
         }
 
-        if (mainInputMethodService.getShiftstate() == MainInputMethodService.State.OFF) {
+        if (mainInputMethodService.getShiftState() == MainInputMethodService.State.OFF) {
             shiftKey.icon = shiftDrawable;
         } else {
             shiftKey.icon = shiftEngagedDrawable;
