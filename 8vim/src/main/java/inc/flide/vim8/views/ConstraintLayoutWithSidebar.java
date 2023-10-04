@@ -61,9 +61,9 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         sidebarPrefs.isOnLeft().observe(newValue -> initializeView());
         sidebarPrefs.isVisible().observe(newValue -> initializeView());
         prefs.getClipboard().getEnabled().observe(newValue -> initializeView());
-        initializeView();
         ctrlDrawable = AppCompatResources.getDrawable(getContext(), R.drawable.ic_ctrl);
         ctrlEngagedDrawable = AppCompatResources.getDrawable(getContext(), R.drawable.ic_ctrl_engaged);
+        initializeView();
     }
 
     protected void initializeView() {

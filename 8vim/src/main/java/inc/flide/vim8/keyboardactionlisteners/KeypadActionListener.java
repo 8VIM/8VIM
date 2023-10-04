@@ -84,12 +84,31 @@ public abstract class KeypadActionListener {
                 case KeyEvent.KEYCODE_PASTE -> mainInputMethodService.paste();
                 case KeyEvent.KEYCODE_ENTER -> mainInputMethodService.commitImeOptionsBasedEnter();
                 case KeyEvent.KEYCODE_DEL -> mainInputMethodService.delete();
-                default -> mainInputMethodService.sendKey(primaryCode, keyFlags);
+                default -> {
+                    if (isDPad(primaryCode)) {
+                        keyFlags |= mainInputMethodService.getCtrlFlag();
+                    }
+                    mainInputMethodService.sendKey(primaryCode, keyFlags);
+                }
             }
             return true;
         }
 
         return false;
+    }
+
+    private boolean isDPad(int primaryCode) {
+        switch (primaryCode) {
+            case KeyEvent.KEYCODE_DPAD_UP,
+                    KeyEvent.KEYCODE_DPAD_DOWN,
+                    KeyEvent.KEYCODE_DPAD_LEFT,
+                    KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                return true;
+            }
+            default -> {
+                return false;
+            }
+        }
     }
 
     public void onText(CharSequence text) {
