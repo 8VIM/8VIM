@@ -56,6 +56,7 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         });
         sidebarPrefs.isOnLeft().observe(newValue -> initializeView());
         sidebarPrefs.isVisible().observe(newValue -> initializeView());
+        prefs.getClipboard().getEnabled().observe(newValue -> initializeView());
         initializeView();
     }
 
@@ -73,10 +74,15 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         int sidebarLayout = getSidebarLayout(isSidebarOnLeft);
         inflater.inflate(sidebarLayout, this, true);
         if (!sidebarPrefs.isVisible().get()) {
-            View sidebar = this.findViewById(R.id.sidebarButtonsLayout);
+            View sidebar = findViewById(R.id.sidebarButtonsLayout);
             LayoutParams params = (LayoutParams) sidebar.getLayoutParams();
             params.horizontalWeight = 0;
             sidebar.setLayoutParams(params);
+        }
+        ImageButton switchToClipboardButton = findViewById(R.id.switchKeypadButton);
+        if (switchToClipboardButton != null) {
+            int clipboardVisibility = prefs.getClipboard().getEnabled().get() ? VISIBLE : GONE;
+            switchToClipboardButton.setVisibility(clipboardVisibility);
         }
     }
 
@@ -96,17 +102,17 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         switchToMainKeyboardButton.setContentDescription(
                 this.getContext().getString(R.string.main_keyboard_button_content_description));
         switchToMainKeyboardButton.setImageDrawable(
-                AppCompatResources.getDrawable(this.getContext(), R.drawable.ic_viii));
+                AppCompatResources.getDrawable(getContext(), R.drawable.ic_viii));
         switchToMainKeyboardButton.setOnClickListener(
                 view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.keyCode, 0));
     }
 
     protected void setupSwitchToClipboardKeypadButton() {
         ImageButton switchToClipboardButton = findViewById(R.id.switchKeypadButton);
-        switchToClipboardButton.setContentDescription(
-                this.getContext().getString(R.string.clipboard_button_content_description));
+        Context context = getContext();
+        switchToClipboardButton.setContentDescription(context.getString(R.string.clipboard_button_content_description));
         switchToClipboardButton.setImageDrawable(
-                AppCompatResources.getDrawable(this.getContext(), R.drawable.clipboard));
+                AppCompatResources.getDrawable(context, R.drawable.clipboard));
         switchToClipboardButton.setOnClickListener(
                 view -> actionListener.handleInputKey(CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.keyCode, 0));
     }
