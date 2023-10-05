@@ -20,7 +20,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
-import inc.flide.vim8.ime.AvailableLayouts;
+import inc.flide.vim8.ime.layout.AvailableLayouts;
 import inc.flide.vim8.lib.android.AndroidSettings;
 import inc.flide.vim8.lib.android.SystemSettingsObserver;
 import inc.flide.vim8.ui.fragments.SettingsFragment;

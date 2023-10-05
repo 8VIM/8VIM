@@ -18,10 +18,12 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.google.android.material.color.DynamicColors
 import inc.flide.vim8.ime.KeyboardTheme
 import inc.flide.vim8.ime.KeyboardTheme.Companion.getInstance
+import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
+import inc.flide.vim8.ime.appPreferenceModel
+import inc.flide.vim8.ime.layout.safeLoadKeyboardData
 import inc.flide.vim8.ime.services.ClipboardManagerService
 import inc.flide.vim8.ime.services.ClipboardManagerService.ClipboardHistoryListener
 import inc.flide.vim8.lib.android.AndroidVersion.ATLEAST_API28_P
-import inc.flide.vim8.models.appPreferenceModel
 import inc.flide.vim8.views.ClipboardKeypadView
 import inc.flide.vim8.views.NumberKeypadView
 import inc.flide.vim8.views.SelectionKeypadView
@@ -95,6 +97,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
      * 13. InputMethodService stops
      */
     override fun onCreateInputView(): View {
+        MainKeypadActionListener.rebuildKeyboardData(safeLoadKeyboardData(this))
         numberKeypadView = NumberKeypadView(this)
         selectionKeypadView = SelectionKeypadView(this)
         clipboardKeypadView = ClipboardKeypadView(this)

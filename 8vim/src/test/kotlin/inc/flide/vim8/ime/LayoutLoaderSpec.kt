@@ -1,12 +1,15 @@
 package inc.flide.vim8.ime
 
 import android.content.res.Resources
+import arrow.core.None
 import arrow.core.right
 import inc.flide.vim8.arbitraries.Arbitraries
-import inc.flide.vim8.models.CharacterSet
-import inc.flide.vim8.models.FingerPosition
-import inc.flide.vim8.models.KeyboardData
-import inc.flide.vim8.models.yaml.LayoutInfo
+import inc.flide.vim8.ime.layout.Cache
+import inc.flide.vim8.ime.layout.models.CharacterSet
+import inc.flide.vim8.ime.layout.models.FingerPosition
+import inc.flide.vim8.ime.layout.models.KeyboardData
+import inc.flide.vim8.ime.layout.models.yaml.LayoutInfo
+import inc.flide.vim8.ime.parsers.Yaml
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.property.arbitrary.next
@@ -14,6 +17,7 @@ import io.mockk.clearMocks
 import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import java.io.InputStream
 
@@ -22,7 +26,11 @@ class LayoutLoaderSpec : FunSpec({
     val inputStream = mockk<InputStream>(relaxed = true)
 
     beforeSpec {
-        mockkStatic(KeyboardDataYamlParser::class)
+        mockkStatic(Yaml::class)
+        mockkObject(Cache)
+        val cache = mockk<Cache>(relaxed = true)
+        every { Cache.instance } returns cache
+        every { cache.load(any()) } returns None
     }
 
     beforeTest {
@@ -31,7 +39,7 @@ class LayoutLoaderSpec : FunSpec({
 
     afterTest {
         clearMocks(resources)
-        clearStaticMockk(KeyboardDataYamlParser::class)
+        clearStaticMockk(Yaml::class, Cache::class)
         LayoutLoader.layoutIndependentKeyboardData = null
     }
 
@@ -40,7 +48,7 @@ class LayoutLoaderSpec : FunSpec({
             val action = Arbitraries.arbKeyboardAction.next()
             val first = listOf(FingerPosition.INSIDE_CIRCLE) to action
             val second = listOf(FingerPosition.TOP) to action
-            every { KeyboardDataYamlParser.readKeyboardData(any()) } returnsMany listOf(
+            every { Yaml.readKeyboardData(any()) } returnsMany listOf(
                 KeyboardData(
                     actionMap = mapOf(first),
                     characterSets = listOf(CharacterSet("t"))

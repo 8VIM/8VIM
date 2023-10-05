@@ -2,7 +2,7 @@ package inc.flide.vim8.ime.services
 
 import android.content.ClipboardManager
 import android.content.Context
-import inc.flide.vim8.models.appPreferenceModel
+import inc.flide.vim8.ime.appPreferenceModel
 
 class ClipboardManagerService(context: Context) {
     private val clipboardManager: ClipboardManager
@@ -13,9 +13,11 @@ class ClipboardManagerService(context: Context) {
         clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         clipboardManager.addPrimaryClipChangedListener {
             clipboardManager.primaryClip?.let {
-                val newClip = it.getItemAt(0).text.toString()
-                addClipToHistory(newClip)
-                clipboardHistoryListener?.onClipboardHistoryChanged()
+                if (prefs.clipboard.enabled.get()) {
+                    val newClip = it.getItemAt(0).text.toString()
+                    addClipToHistory(newClip)
+                    clipboardHistoryListener?.onClipboardHistoryChanged()
+                }
             }
         }
     }

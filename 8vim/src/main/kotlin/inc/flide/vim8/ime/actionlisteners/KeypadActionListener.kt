@@ -6,11 +6,11 @@ import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.View
 import inc.flide.vim8.MainInputMethodService
+import inc.flide.vim8.ime.appPreferenceModel
+import inc.flide.vim8.ime.layout.models.CustomKeycode.Companion.KEY_CODE_TO_STRING_CODE_MAP
+import inc.flide.vim8.ime.layout.models.KeyboardAction
+import inc.flide.vim8.ime.layout.models.LayerLevel
 import inc.flide.vim8.lib.android.AndroidVersion.ATLEAST_API29_Q
-import inc.flide.vim8.models.CustomKeycode.Companion.KEY_CODE_TO_STRING_CODE_MAP
-import inc.flide.vim8.models.KeyboardAction
-import inc.flide.vim8.models.LayerLevel
-import inc.flide.vim8.models.appPreferenceModel
 
 @Suppress("DEPRECATION")
 abstract class KeypadActionListener(

@@ -210,6 +210,8 @@ dependencies {
     implementation(libs.arrow.core)
     implementation(libs.arrow.optics)
     implementation(libs.colorpreference)
+    implementation(libs.commons.codec)
+    implementation(libs.jackson.dataformat.cbor)
     implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jackson.module.arrow.kotlin)
     implementation(libs.jackson.module.kotlin)

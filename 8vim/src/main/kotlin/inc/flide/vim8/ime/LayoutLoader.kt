@@ -8,19 +8,20 @@ import arrow.core.left
 import arrow.core.raise.catch
 import arrow.core.raise.either
 import inc.flide.vim8.R
-import inc.flide.vim8.ime.KeyboardDataYamlParser.readKeyboardData
-import inc.flide.vim8.models.KeyboardAction
-import inc.flide.vim8.models.KeyboardData
-import inc.flide.vim8.models.LayerLevel
-import inc.flide.vim8.models.MovementSequence
-import inc.flide.vim8.models.addAllToActionMap
-import inc.flide.vim8.models.error.ExceptionWrapperError
-import inc.flide.vim8.models.error.LayoutError
-import inc.flide.vim8.models.info
-import inc.flide.vim8.models.lowerCaseCharacters
-import inc.flide.vim8.models.setLowerCaseCharacters
-import inc.flide.vim8.models.setUpperCaseCharacters
-import inc.flide.vim8.models.upperCaseCharacters
+import inc.flide.vim8.ime.layout.Cache
+import inc.flide.vim8.ime.layout.models.KeyboardAction
+import inc.flide.vim8.ime.layout.models.KeyboardData
+import inc.flide.vim8.ime.layout.models.LayerLevel
+import inc.flide.vim8.ime.layout.models.MovementSequence
+import inc.flide.vim8.ime.layout.models.addAllToActionMap
+import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
+import inc.flide.vim8.ime.layout.models.error.LayoutError
+import inc.flide.vim8.ime.layout.models.info
+import inc.flide.vim8.ime.layout.models.lowerCaseCharacters
+import inc.flide.vim8.ime.layout.models.setLowerCaseCharacters
+import inc.flide.vim8.ime.layout.models.setUpperCaseCharacters
+import inc.flide.vim8.ime.layout.models.upperCaseCharacters
+import inc.flide.vim8.ime.parsers.Yaml.readKeyboardData
 import java.io.InputStream
 
 object LayoutLoader {
@@ -97,23 +98,26 @@ object LayoutLoader {
 
     private fun getLayoutIndependentKeyboardData(resources: Resources): KeyboardData {
         if (layoutIndependentKeyboardData == null) {
-            layoutIndependentKeyboardData = either {
-                val sectorCircleButtonsKeyboard = loadKeyboardData(
-                    KeyboardData(),
-                    resources,
-                    R.raw.sector_circle_buttons
-                ).bind()
-                val dPadActionKeyboard = loadKeyboardData(
-                    sectorCircleButtonsKeyboard,
-                    resources,
-                    R.raw.d_pad_actions
-                ).bind()
-                loadKeyboardData(
-                    dPadActionKeyboard,
-                    resources,
-                    R.raw.special_core_gestures
-                ).bind()
-            }.getOrNull()
+            val cache = Cache.instance
+            layoutIndependentKeyboardData = cache.load("common").getOrElse {
+                either {
+                    val sectorCircleButtonsKeyboard = loadKeyboardData(
+                        KeyboardData(),
+                        resources,
+                        R.raw.sector_circle_buttons
+                    ).bind()
+                    val dPadActionKeyboard = loadKeyboardData(
+                        sectorCircleButtonsKeyboard,
+                        resources,
+                        R.raw.d_pad_actions
+                    ).bind()
+                    loadKeyboardData(
+                        dPadActionKeyboard,
+                        resources,
+                        R.raw.special_core_gestures
+                    ).bind()
+                }.getOrNull()?.also { cache.add("common", it) }
+            }
         }
         return layoutIndependentKeyboardData!!
     }

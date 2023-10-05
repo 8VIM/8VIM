@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.ime.actionlisteners.ClipboardActionListener;
-import inc.flide.vim8.models.CustomKeycode;
+import inc.flide.vim8.ime.layout.models.CustomKeycode;
 import java.text.MessageFormat;
 import java.util.List;
 

@@ -3,23 +3,24 @@ package inc.flide.vim8.ime.actionlisteners
 import android.os.Handler
 import android.os.HandlerThread
 import android.view.View
+import arrow.core.None
+import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.getOrNone
 import arrow.core.recover
 import inc.flide.vim8.MainInputMethodService
-import inc.flide.vim8.ime.AvailableLayouts
-import inc.flide.vim8.models.FingerPosition
-import inc.flide.vim8.models.KeyboardActionType
-import inc.flide.vim8.models.KeyboardData
-import inc.flide.vim8.models.LayerLevel
-import inc.flide.vim8.models.LayerLevel.Companion.MovementSequences
-import inc.flide.vim8.models.LayerLevel.Companion.VisibleLayers
-import inc.flide.vim8.models.MovementSequence
-import inc.flide.vim8.models.MovementSequenceType
-import inc.flide.vim8.models.findLayer
-import inc.flide.vim8.models.lowerCaseCharacters
-import inc.flide.vim8.models.upperCaseCharacters
-import inc.flide.vim8.models.yaml.ExtraLayer
+import inc.flide.vim8.ime.layout.models.FingerPosition
+import inc.flide.vim8.ime.layout.models.KeyboardActionType
+import inc.flide.vim8.ime.layout.models.KeyboardData
+import inc.flide.vim8.ime.layout.models.LayerLevel
+import inc.flide.vim8.ime.layout.models.LayerLevel.Companion.MovementSequences
+import inc.flide.vim8.ime.layout.models.LayerLevel.Companion.VisibleLayers
+import inc.flide.vim8.ime.layout.models.MovementSequence
+import inc.flide.vim8.ime.layout.models.MovementSequenceType
+import inc.flide.vim8.ime.layout.models.findLayer
+import inc.flide.vim8.ime.layout.models.lowerCaseCharacters
+import inc.flide.vim8.ime.layout.models.upperCaseCharacters
+import inc.flide.vim8.ime.layout.models.yaml.ExtraLayer
 
 class MainKeypadActionListener(inputMethodService: MainInputMethodService, view: View) :
     KeypadActionListener(inputMethodService, view) {
@@ -94,11 +95,11 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                 FingerPosition.BOTTOM
             )
         )
-        private lateinit var keyboardData: KeyboardData
+        private var keyboardData: Option<KeyboardData> = None
 
         @JvmStatic
         fun rebuildKeyboardData(keyboardDataOption: KeyboardData?) {
-            keyboardDataOption?.let { keyboardData = it }
+            keyboardData = Option.fromNullable(keyboardDataOption)
         }
     }
 
@@ -119,7 +120,6 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
     }
 
     init {
-        keyboardData = AvailableLayouts.instance.currentKeyboardData
         currentFingerPosition = FingerPosition.NO_TOUCH
         val longPressHandlerThread = HandlerThread("LongPressHandlerThread")
         longPressHandlerThread.start()
@@ -127,11 +127,11 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
     }
 
     fun getLowerCaseCharacters(layer: LayerLevel): String {
-        return keyboardData.lowerCaseCharacters(layer).getOrElse { "" }
+        return keyboardData.flatMap { it.lowerCaseCharacters(layer) }.getOrElse { "" }
     }
 
     fun getUpperCaseCharacters(layer: LayerLevel): String {
-        return keyboardData.upperCaseCharacters(layer).getOrElse { "" }
+        return keyboardData.flatMap { it.upperCaseCharacters(layer) }.getOrElse { "" }
     }
 
     override fun findLayer(): LayerLevel {
@@ -144,13 +144,17 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
             }
             val startWith: MovementSequence =
                 movementSequence.subList(0, extraLayerMovementSequence.size)
-            if (extraLayerMovementSequences.contains(startWith) &&
-                layerLevel.ordinal <= keyboardData.totalLayers
+            if (keyboardData.isSome {
+                extraLayerMovementSequences.contains(startWith) &&
+                    layerLevel.ordinal <= it.totalLayers
+            }
             ) {
                 return layerLevel
             }
         }
-        return keyboardData.findLayer(movementSequence.toList() + FingerPosition.INSIDE_CIRCLE)
+        return keyboardData
+            .map { it.findLayer(movementSequence.toList() + FingerPosition.INSIDE_CIRCLE) }
+            .getOrElse { LayerLevel.FIRST }
     }
 
     private val isFullRotation: Boolean
@@ -207,7 +211,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                 mainInputMethodService.performShiftToggle()
             }
             if (currentFingerPosition === FingerPosition.INSIDE_CIRCLE &&
-                keyboardData.actionMap.containsKey(movementSequence)
+                keyboardData.isSome { it.actionMap.containsKey(movementSequence) }
             ) {
                 processMovementSequence(movementSequence)
                 movementSequence.clear()
@@ -241,10 +245,11 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
             } else {
                 val modifiedMovementSequence =
                     movementSequence.toList() + FingerPosition.INSIDE_CIRCLE
-                keyboardData.actionMap[modifiedMovementSequence]?.let {
-                    currentLetter =
-                        if (areCharactersCapitalized()) it.capsLockText else it.text
-                }
+                keyboardData
+                    .flatMap { it.actionMap.getOrNone(modifiedMovementSequence) }
+                    .onSome {
+                        currentLetter = if (areCharactersCapitalized()) it.capsLockText else it.text
+                    }
             }
         } else if (!isLongPressCallbackSet) {
             initiateLongPressDetection()
@@ -281,12 +286,12 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
     }
 
     private fun processMovementSequence(movementSequence: MovementSequence) {
-        keyboardData.actionMap
-            .getOrNone(movementSequence)
+        keyboardData
+            .flatMap { it.actionMap.getOrNone(movementSequence) }
             .recover {
                 val modifiedMovementSequence =
                     listOf(FingerPosition.NO_TOUCH) + movementSequence.toList()
-                keyboardData.actionMap.getOrNone(modifiedMovementSequence).bind()
+                keyboardData.flatMap { it.actionMap.getOrNone(modifiedMovementSequence) }.bind()
             }
             .onSome {
                 if (it.keyboardActionType === KeyboardActionType.INPUT_TEXT) {

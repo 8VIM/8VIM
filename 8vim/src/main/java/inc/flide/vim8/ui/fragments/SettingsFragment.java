@@ -1,6 +1,6 @@
 package inc.flide.vim8.ui.fragments;
 
-import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
+import static inc.flide.vim8.ime.AppPrefsKt.appPreferenceModel;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import inc.flide.vim8.R;
 import inc.flide.vim8.datastore.model.PreferenceData;
-import inc.flide.vim8.ime.AvailableLayouts;
-import inc.flide.vim8.models.AppPrefs;
+import inc.flide.vim8.ime.AppPrefs;
+import inc.flide.vim8.ime.layout.AvailableLayouts;
 import inc.flide.vim8.theme.ThemeMode;
 import inc.flide.vim8.utils.DialogsHelper;
 import inc.flide.vim8.utils.InputMethodUtils;
@@ -111,7 +111,7 @@ public class SettingsFragment extends LayoutFileSelector {
         DialogsHelper.createItemsChoice(context, R.string.select_preferred_keyboard_layout_dialog_title,
                 availableLayouts.getDisplayNames(),
                 availableLayouts.getIndex(),
-                which -> availableLayouts.selectLayout(which)).show();
+                which -> availableLayouts.selectLayout(which, context)).show();
     }
 
     private void askUserPreferredEmoticonKeyboard() {

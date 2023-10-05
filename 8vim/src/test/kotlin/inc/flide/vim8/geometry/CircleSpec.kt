@@ -1,7 +1,7 @@
 package inc.flide.vim8.geometry
 
 import android.graphics.PointF
-import inc.flide.vim8.models.FingerPosition
+import inc.flide.vim8.ime.layout.models.FingerPosition
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe

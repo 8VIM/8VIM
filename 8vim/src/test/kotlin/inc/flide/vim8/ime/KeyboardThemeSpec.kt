@@ -8,8 +8,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
-import inc.flide.vim8.models.AppPrefs
-import inc.flide.vim8.models.appPreferenceModel
 import inc.flide.vim8.theme.ThemeMode
 import inc.flide.vim8.theme.darkColorPalette
 import inc.flide.vim8.theme.lightColorPalette

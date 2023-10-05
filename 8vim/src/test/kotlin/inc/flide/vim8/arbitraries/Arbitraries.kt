@@ -1,13 +1,13 @@
 package inc.flide.vim8.arbitraries
 
-import inc.flide.vim8.models.CHARACTER_SET_SIZE
-import inc.flide.vim8.models.CharacterSet
-import inc.flide.vim8.models.EmbeddedLayout
-import inc.flide.vim8.models.KeyboardAction
-import inc.flide.vim8.models.KeyboardActionType
-import inc.flide.vim8.models.KeyboardData
-import inc.flide.vim8.models.LayerLevel
-import inc.flide.vim8.models.MovementSequence
+import inc.flide.vim8.ime.layout.EmbeddedLayout
+import inc.flide.vim8.ime.layout.models.CHARACTER_SET_SIZE
+import inc.flide.vim8.ime.layout.models.CharacterSet
+import inc.flide.vim8.ime.layout.models.KeyboardAction
+import inc.flide.vim8.ime.layout.models.KeyboardActionType
+import inc.flide.vim8.ime.layout.models.KeyboardData
+import inc.flide.vim8.ime.layout.models.LayerLevel
+import inc.flide.vim8.ime.layout.models.MovementSequence
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.arbitrary
 import io.kotest.property.arbitrary.choice
