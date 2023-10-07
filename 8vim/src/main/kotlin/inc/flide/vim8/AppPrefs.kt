@@ -19,7 +19,7 @@ import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
 
-class AppPrefs : PreferenceModel(4) {
+class AppPrefs : PreferenceModel(3) {
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
