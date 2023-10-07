@@ -2,7 +2,7 @@ package inc.flide.vim8.ime.services
 
 import android.content.ClipboardManager
 import android.content.Context
-import inc.flide.vim8.ime.appPreferenceModel
+import inc.flide.vim8.appPreferenceModel
 
 class ClipboardManagerService(context: Context) {
     private val clipboardManager: ClipboardManager

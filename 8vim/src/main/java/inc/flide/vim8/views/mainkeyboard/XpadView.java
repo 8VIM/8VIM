@@ -1,6 +1,6 @@
 package inc.flide.vim8.views.mainkeyboard;
 
-import static inc.flide.vim8.ime.AppPrefsKt.appPreferenceModel;
+import static inc.flide.vim8.AppPrefsKt.appPreferenceModel;
 import static inc.flide.vim8.ime.layout.models.QuadrantKt.NUMBER_OF_SECTORS;
 
 import android.annotation.SuppressLint;
@@ -26,7 +26,7 @@ import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
-import inc.flide.vim8.ime.AppPrefs;
+import inc.flide.vim8.AppPrefs;
 import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.ime.layout.models.FingerPosition;

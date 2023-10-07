@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime
+package inc.flide.vim8
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import inc.flide.vim8.BuildConfig
 import inc.flide.vim8.datastore.Datastore
 import inc.flide.vim8.datastore.model.PreferenceMigrationEntry
 import inc.flide.vim8.datastore.model.PreferenceModel
@@ -20,7 +19,7 @@ import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
 
-class AppPrefs : PreferenceModel(3) {
+class AppPrefs : PreferenceModel(4) {
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
@@ -99,6 +98,7 @@ class AppPrefs : PreferenceModel(3) {
         val trail = Trail()
         val display = Display()
         val circle = Circle()
+        val behavior = Behavior()
 
         val height = int(
             key = "prefs_keyboard_height",
@@ -171,6 +171,15 @@ class AppPrefs : PreferenceModel(3) {
                 "prefs_keyboard_trail_color",
                 default = Color(0x3D, 0x5A, 0xFE).toArgb()
             )
+        }
+
+        inner class Behavior {
+            val cursor = Cursor()
+
+            inner class Cursor {
+                val moveByWord =
+                    boolean(key = "prefs_keyboard_behavior_cursor_move_by_word", default = false)
+            }
         }
     }
 

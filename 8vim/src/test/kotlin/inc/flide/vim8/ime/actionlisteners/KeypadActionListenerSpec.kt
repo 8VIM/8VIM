@@ -7,8 +7,8 @@ import android.view.View
 import inc.flide.vim8.MainInputMethodService
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
-import inc.flide.vim8.ime.AppPrefs
-import inc.flide.vim8.ime.appPreferenceModel
+import inc.flide.vim8.AppPrefs
+import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.lib.android.AndroidVersion
 import io.kotest.core.spec.style.FunSpec
 import io.mockk.clearMocks

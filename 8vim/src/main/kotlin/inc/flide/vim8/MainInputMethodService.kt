@@ -19,19 +19,23 @@ import com.google.android.material.color.DynamicColors
 import inc.flide.vim8.ime.KeyboardTheme
 import inc.flide.vim8.ime.KeyboardTheme.Companion.getInstance
 import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
-import inc.flide.vim8.ime.appPreferenceModel
 import inc.flide.vim8.ime.layout.safeLoadKeyboardData
+import inc.flide.vim8.ime.nlp.BreakIteratorGroup
 import inc.flide.vim8.ime.services.ClipboardManagerService
 import inc.flide.vim8.ime.services.ClipboardManagerService.ClipboardHistoryListener
 import inc.flide.vim8.lib.android.AndroidVersion.ATLEAST_API28_P
 import inc.flide.vim8.views.ClipboardKeypadView
+import inc.flide.vim8.views.CtrlButtonView
 import inc.flide.vim8.views.NumberKeypadView
 import inc.flide.vim8.views.SelectionKeypadView
+import inc.flide.vim8.views.ShiftButtonView
 import inc.flide.vim8.views.SymbolKeypadView
 import inc.flide.vim8.views.mainkeyboard.MainKeyboardView
 
 class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     private val prefs by appPreferenceModel()
+    private val ctrlButtonViews = mutableListOf<CtrlButtonView>()
+    private val shiftButtonViews = mutableListOf<ShiftButtonView>()
     private var inputConnection: InputConnection? = null
     private var clipboardKeypadView: ClipboardKeypadView? = null
     private lateinit var editorInfo: EditorInfo
@@ -42,15 +46,24 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     private lateinit var numberKeypadView: NumberKeypadView
     private lateinit var selectionKeypadView: SelectionKeypadView
     private lateinit var symbolKeypadView: SymbolKeypadView
-    var shiftLockFlag = 0
-        set(shiftLockFlag) {
-            field = shiftLockFlag
-            if (window.findViewById<View?>(R.id.xboardView) != null) {
-                window.findViewById<View>(R.id.xboardView).invalidate()
-            }
+    private lateinit var breakIteratorGroup: BreakIteratorGroup
+    var ctrlState = false
+        private set
+    val ctrlFlag: Int
+        get() = if (!ctrlState) {
+            0
+        } else {
+            KeyEvent.META_CTRL_MASK
         }
-    var capsLockFlag = 0
-    private var modifierFlags = 0
+    var shiftState = State.OFF
+        set(value) {
+            field = value
+            updateShiftButton()
+        }
+    val shiftLockFlag: Int
+        get() = if (shiftState == State.ON) KeyEvent.META_SHIFT_ON else 0
+    val capsLockFlag: Int
+        get() = if (shiftState == State.ENGAGED) KeyEvent.META_CAPS_LOCK_ON else 0
     private lateinit var keyboardTheme: KeyboardTheme
 
     init {
@@ -65,11 +78,33 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
 
     override fun onCreate() {
         super.onCreate()
+        breakIteratorGroup = BreakIteratorGroup(applicationContext)
         DynamicColors.applyToActivitiesIfAvailable(this.application)
-        val applicationContext = applicationContext
         clipboardManagerService = ClipboardManagerService(applicationContext)
         clipboardManagerService.setClipboardHistoryListener(this)
         keyboardTheme = getInstance()
+        val moveByWord = prefs.keyboard.behavior.cursor.moveByWord
+        ctrlState = moveByWord.get()
+        moveByWord.observe {
+            if (it != ctrlState) {
+                ctrlState = it
+                updateCtrlButton()
+            }
+        }
+    }
+
+    private fun updateCtrlButton() {
+        ctrlButtonViews.forEach {
+            it.updateCtrlButton();
+            (it as View).invalidate();
+        }
+    }
+
+    private fun updateShiftButton() {
+        shiftButtonViews.forEach {
+            it.updateShiftButton();
+            (it as View).invalidate();
+        };
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -103,6 +138,8 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
         clipboardKeypadView = ClipboardKeypadView(this)
         symbolKeypadView = SymbolKeypadView(this)
         mainKeyboardView = MainKeyboardView(this)
+        ctrlButtonViews + listOf(mainKeyboardView, clipboardKeypadView, selectionKeypadView)
+        shiftButtonViews + selectionKeypadView
         setCurrentKeypadView(mainKeyboardView)
 
         if (ATLEAST_API28_P) {
@@ -148,7 +185,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     override fun onEvaluateFullscreenMode(): Boolean {
         val configuration = resources.configuration
         return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-            configuration.screenHeightDp < 480
+                configuration.screenHeightDp < 480
     }
 
     override fun onStartInputView(info: EditorInfo, restarting: Boolean) {
@@ -167,18 +204,12 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     override fun onInitializeInterface() {
         super.onInitializeInterface()
         inputConnection = currentInputConnection
-        shiftLockFlag = 0
-        capsLockFlag = 0
-        clearModifierFlags()
+        shiftState = State.OFF
+        ctrlState = prefs.keyboard.behavior.cursor.moveByWord.get()
     }
 
     fun sendText(text: String?) {
         inputConnection?.commitText(text, 1)
-        clearModifierFlags()
-    }
-
-    private fun clearModifierFlags() {
-        modifierFlags = 0
     }
 
     fun sendDownKeyEvent(keyEventCode: Int, flags: Int) {
@@ -241,16 +272,30 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
         }
 
     fun sendKey(keyEventCode: Int, flags: Int) {
-        sendDownAndUpKeyEvent(keyEventCode, shiftLockFlag or capsLockFlag or modifierFlags or flags)
-        clearModifierFlags()
+        sendDownAndUpKeyEvent(keyEventCode, flags)
+    }
+
+    fun resetShiftState() {
+        if (shiftState == State.ON) {
+            shiftState = State.OFF
+            updateShiftButton()
+        }
     }
 
     fun delete() {
-        inputConnection?.getSelectedText(0)?.let {
-            if (TextUtils.isEmpty(it)) {
-                inputConnection?.deleteSurroundingTextInCodePoints(1, 0)
-            } else {
-                inputConnection?.commitText("", 0)
+        inputConnection?.let {
+            it.getSelectedText(0)?.let { sel ->
+                if (TextUtils.isEmpty(sel)) {
+                    val extractedText = it.getExtractedText(ExtractedTextRequest(), 0)
+                    val length = if (ctrlState) {
+                        breakIteratorGroup.measureLastWords(extractedText.text.toString(), 1)
+                    } else {
+                        breakIteratorGroup.measureLastCharacters(extractedText.text.toString(), 1)
+                    }.coerceAtLeast(1)
+                    it.deleteSurroundingTextInCodePoints(length, 0)
+                } else {
+                    it.commitText("", 0)
+                }
             }
         }
     }
@@ -303,23 +348,21 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     }
 
     fun performShiftToggle() {
-        // single press locks the shift key,
-        // double press locks the caps key
-        // a third press unlocks both.
-        if (shiftLockFlag == KeyEvent.META_SHIFT_ON) {
-            shiftLockFlag = 0
-            capsLockFlag = KeyEvent.META_CAPS_LOCK_ON
-        } else if (capsLockFlag == KeyEvent.META_CAPS_LOCK_ON) {
-            shiftLockFlag = 0
-            capsLockFlag = 0
-        } else {
-            shiftLockFlag = KeyEvent.META_SHIFT_ON
-            capsLockFlag = 0
+        shiftState = when (shiftState) {
+            State.OFF -> State.ON
+            State.ON -> State.ENGAGED
+            else -> State.OFF
         }
+        updateShiftButton()
+    }
+
+    fun performCtrlToggle() {
+        ctrlState = !ctrlState
+        updateCtrlButton()
     }
 
     fun areCharactersCapitalized(): Boolean {
-        return shiftLockFlag == KeyEvent.META_SHIFT_ON || capsLockFlag == KeyEvent.META_CAPS_LOCK_ON
+        return shiftState != State.OFF
     }
 
     /*
@@ -371,5 +414,9 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
 
     override fun onClipboardHistoryChanged() {
         clipboardKeypadView?.updateClipHistory()
+    }
+
+    enum class State {
+        OFF, ON, ENGAGED
     }
 }

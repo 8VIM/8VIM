@@ -5,8 +5,8 @@ import android.content.res.Resources
 import android.util.DisplayMetrics
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
-import inc.flide.vim8.ime.AppPrefs
-import inc.flide.vim8.ime.appPreferenceModel
+import inc.flide.vim8.AppPrefs
+import inc.flide.vim8.appPreferenceModel
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every

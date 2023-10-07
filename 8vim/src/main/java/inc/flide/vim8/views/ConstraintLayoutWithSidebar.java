@@ -1,9 +1,10 @@
 package inc.flide.vim8.views;
 
-import static inc.flide.vim8.ime.AppPrefsKt.appPreferenceModel;
+import static inc.flide.vim8.AppPrefsKt.appPreferenceModel;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -15,18 +16,21 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
-import inc.flide.vim8.ime.AppPrefs;
+import inc.flide.vim8.AppPrefs;
 import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.ime.actionlisteners.KeypadActionListener;
 import inc.flide.vim8.ime.layout.models.CustomKeycode;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
 import inc.flide.vim8.ui.activities.SettingsActivity;
 
-public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener> extends ConstraintLayout {
+public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener> extends ConstraintLayout
+        implements CtrlButtonView {
     protected T actionListener;
     protected KeyboardTheme keyboardTheme;
     protected AppPrefs prefs;
     protected LayoutInflater inflater;
+    private Drawable ctrlDrawable;
+    private Drawable ctrlEngagedDrawable;
 
     public ConstraintLayoutWithSidebar(@NonNull Context context) {
         super(context);
@@ -57,6 +61,8 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         sidebarPrefs.isOnLeft().observe(newValue -> initializeView());
         sidebarPrefs.isVisible().observe(newValue -> initializeView());
         prefs.getClipboard().getEnabled().observe(newValue -> initializeView());
+        ctrlDrawable = AppCompatResources.getDrawable(getContext(), R.drawable.ic_ctrl);
+        ctrlEngagedDrawable = AppCompatResources.getDrawable(getContext(), R.drawable.ic_ctrl_engaged);
         initializeView();
     }
 
@@ -94,7 +100,9 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         setupSwitchToEmojiKeyboardButton();
         setupSwitchToSelectionKeyboardButton();
         setupTabKey();
+        setupCtrlKey();
         setupGoToSettingsButton();
+        updateCtrlButton();
     }
 
     protected void setupSwitchToMainKeyboardButton() {
@@ -131,6 +139,20 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         tabKeyButton.setOnClickListener(view -> actionListener.handleInputKey(KeyEvent.KEYCODE_TAB, 0));
     }
 
+    private void setupCtrlKey() {
+        findViewById(R.id.ctrlButton).setOnClickListener(view -> actionListener.performCtrlToggle());
+    }
+
+    public void updateCtrlButton() {
+        ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
+        Drawable drawable = ctrlDrawable;
+        if (actionListener.getCtrlState()) {
+            drawable = ctrlEngagedDrawable;
+        }
+
+        ctrlKeyButton.setImageDrawable(drawable);
+    }
+
     private void setupSwitchToSelectionKeyboardButton() {
         ImageButton switchToSelectionKeyboardButton = findViewById(R.id.switchToSelectionKeyboard);
         switchToSelectionKeyboardButton.setOnClickListener(
@@ -153,12 +175,14 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
         int tintColor = keyboardTheme.getForegroundColor();
 
         this.setBackgroundColor(backgroundColor);
+        setImageButtonTint(tintColor, R.id.ctrlButton);
         setImageButtonTint(tintColor, R.id.switchKeypadButton);
         setImageButtonTint(tintColor, R.id.goToSettingsButton);
         setImageButtonTint(tintColor, R.id.tabButton);
         setImageButtonTint(tintColor, R.id.switchToSelectionKeyboard);
         setImageButtonTint(tintColor, R.id.switchToEmojiKeyboard);
     }
+
 
     @Override
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -168,5 +192,4 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
                 MeasureSpec.makeMeasureSpec(computedDimension.height, MeasureSpec.EXACTLY));
 
     }
-
 }

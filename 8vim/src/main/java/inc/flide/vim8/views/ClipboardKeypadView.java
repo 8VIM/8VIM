@@ -74,10 +74,8 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardAc
             int children = clipboardItemsList.getChildCount();
             for (int i = 0; i < children; i++) {
                 View child = clipboardItemsList.getChildAt(i);
-
                 TextView textView = child.findViewById(android.R.id.text1);
                 textView.setTextColor(keyboardTheme.getForegroundColor());
-
             }
         });
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, (clipHistory)) {
@@ -117,5 +115,4 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardAc
             clipboardItemsList.smoothScrollToPosition(0);
         }
     }
-
 }

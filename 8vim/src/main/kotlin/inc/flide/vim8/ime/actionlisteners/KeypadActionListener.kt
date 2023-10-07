@@ -6,7 +6,7 @@ import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.View
 import inc.flide.vim8.MainInputMethodService
-import inc.flide.vim8.ime.appPreferenceModel
+import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.layout.models.CustomKeycode.Companion.KEY_CODE_TO_STRING_CODE_MAP
 import inc.flide.vim8.ime.layout.models.KeyboardAction
 import inc.flide.vim8.ime.layout.models.LayerLevel
@@ -72,7 +72,7 @@ abstract class KeypadActionListener(
                 KeyEvent.KEYCODE_DEL -> mainInputMethodService.delete()
                 else -> {
                     mainInputMethodService.sendKey(primaryCode, keyFlags)
-                    mainInputMethodService.shiftLockFlag = 0
+                    mainInputMethodService.resetShiftState()
                 }
             }
             return true
@@ -82,7 +82,7 @@ abstract class KeypadActionListener(
 
     fun onText(text: CharSequence) {
         mainInputMethodService.sendText(text.toString())
-        mainInputMethodService.shiftLockFlag = 0
+        mainInputMethodService.resetShiftState()
         performInputAcceptedFeedback(AudioManager.FX_KEYPRESS_STANDARD)
     }
 

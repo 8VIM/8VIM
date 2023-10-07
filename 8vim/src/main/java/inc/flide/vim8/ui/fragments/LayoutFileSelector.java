@@ -8,7 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.PreferenceFragmentCompat;
 import arrow.core.EitherKt;
 import inc.flide.vim8.R;
-import inc.flide.vim8.ime.AppPrefs;
+import inc.flide.vim8.AppPrefs;
 import inc.flide.vim8.ime.layout.AvailableLayouts;
 import inc.flide.vim8.ime.layout.CustomLayout;
 import inc.flide.vim8.ime.layout.LayoutKt;

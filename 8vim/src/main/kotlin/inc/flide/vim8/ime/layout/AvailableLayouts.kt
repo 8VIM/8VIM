@@ -5,9 +5,9 @@ import arrow.core.elementAtOrNone
 import arrow.core.firstOrNone
 import arrow.core.getOrNone
 import arrow.core.recover
-import inc.flide.vim8.ime.AppPrefs
+import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
-import inc.flide.vim8.ime.appPreferenceModel
+import inc.flide.vim8.appPreferenceModel
 
 class AvailableLayouts internal constructor(
     context: Context

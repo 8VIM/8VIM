@@ -15,8 +15,8 @@ import inc.flide.vim8.R
 import inc.flide.vim8.app.LocalNavController
 import inc.flide.vim8.datastore.ui.PreferenceLayout
 import inc.flide.vim8.datastore.ui.PreferenceUiContent
-import inc.flide.vim8.ime.AppPrefs
-import inc.flide.vim8.ime.appPreferenceModel
+import inc.flide.vim8.AppPrefs
+import inc.flide.vim8.appPreferenceModel
 
 @Composable
 fun Screen(builder: @Composable ScreenScope.() -> Unit) {

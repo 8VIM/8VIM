@@ -3,7 +3,7 @@ package inc.flide.vim8.ime.layout
 import android.content.Context
 import arrow.core.None
 import arrow.core.Option
-import inc.flide.vim8.ime.appPreferenceModel
+import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.parsers.Cbor
 import java.io.File

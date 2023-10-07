@@ -1,6 +1,6 @@
 package inc.flide.vim8.ui.fragments;
 
-import static inc.flide.vim8.ime.AppPrefsKt.appPreferenceModel;
+import static inc.flide.vim8.AppPrefsKt.appPreferenceModel;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import inc.flide.vim8.R;
 import inc.flide.vim8.datastore.model.PreferenceData;
-import inc.flide.vim8.ime.AppPrefs;
+import inc.flide.vim8.AppPrefs;
 import inc.flide.vim8.ime.layout.AvailableLayouts;
 import inc.flide.vim8.theme.ThemeMode;
 import inc.flide.vim8.utils.DialogsHelper;
