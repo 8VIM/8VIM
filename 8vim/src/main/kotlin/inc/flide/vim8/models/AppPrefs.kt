@@ -16,7 +16,7 @@ import inc.flide.vim8.theme.darkColorPalette
 import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
-class AppPrefs : PreferenceModel(2) {
+class AppPrefs : PreferenceModel(3) {
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
@@ -90,6 +90,7 @@ class AppPrefs : PreferenceModel(2) {
         val trail = Trail()
         val display = Display()
         val circle = Circle()
+        val behavior = Behavior()
 
         val height = int(
             key = "prefs_keyboard_height",
@@ -163,6 +164,15 @@ class AppPrefs : PreferenceModel(2) {
                 default = Color(0x3D, 0x5A, 0xFE).toArgb()
             )
         }
+
+        inner class Behavior {
+            val cursor = Cursor()
+
+            inner class Cursor {
+                val moveByWord =
+                    boolean(key = "prefs_keyboard_behavior_cursor_move_by_word", default = false)
+            }
+        }
     }
 
     inner class Internal {
@@ -184,50 +194,64 @@ class AppPrefs : PreferenceModel(2) {
                 "user_preferred_clipboard_enabled" -> entry.transform(
                     key = "prefs_clipboard_enabled"
                 )
+
                 "select_keyboard_layout" -> entry.transform(key = "prefs_layout_current")
                 "pref_custom_keyboard_layout_history" -> entry.transform(
                     key = "prefs_layout_custom_history"
                 )
+
                 "user_preferred_sound_feedback_enabled" -> entry.transform(
                     key = "prefs_input_feedback_sound_enabled"
                 )
+
                 "user_preferred_haptic_feedback_enabled" -> entry.transform(
                     key = "prefs_input_feedback_haptic_enabled"
                 )
+
                 "color_mode" -> entry.transform(key = "prefs_theme_color_mode")
                 "x_board_keyboard_height" -> entry.transform(key = "prefs_keyboard_height")
                 "selected_emoticon_keyboard" -> entry.transform(
                     key = "prefs_keyboard_emoticon_keyboard"
                 )
+
                 "user_preferred_sidebar_visibility" -> entry.transform(
                     key = "prefs_keyboard_sidebar_is_visible"
                 )
+
                 "user_preferred_sidebar_left" -> entry.transform(
                     key = "prefs_keyboard_sidebar_is_on_left"
                 )
+
                 "x_board_circle_radius_size_factor" -> entry.transform(
                     key = "prefs_keyboard_sidebar_circle_radius_size_factor"
                 )
+
                 "x_board_circle_centre_x_offset" -> entry.transform(
                     key = "prefs_keyboard_sidebar_circle_centre_x_offset"
                 )
+
                 "x_board_circle_centre_y_offset" -> entry.transform(
                     key = "prefs_keyboard_sidebar_circle_centre_y_offset"
                 )
+
                 "board_bg_color" -> entry.transform(key = "prefs_keyboard_custom_colors_background")
                 "board_fg_color" -> entry.transform(key = "prefs_keyboard_custom_colors_foreground")
                 "user_preferred_display_icons_in" -> entry.transform(
                     key = "prefs_keyboard_display_show_sector_icons"
                 )
+
                 "user_preferred_display_letters_on_wheel" -> entry.transform(
                     key = "prefs_keyboard_display_show_letters_on_wheel"
                 )
+
                 "user_preferred_typing_trail_visibility" -> entry.transform(
                     key = "prefs_keyboard_trail_is_visible"
                 )
+
                 "user_preferred_random_trail_color_enabled" -> entry.transform(
                     key = "prefs_keyboard_trail_use_random_color"
                 )
+
                 "trail_color" -> entry.transform(key = "prefs_keyboard_trail_color")
                 else -> entry.keepAsIs()
             }

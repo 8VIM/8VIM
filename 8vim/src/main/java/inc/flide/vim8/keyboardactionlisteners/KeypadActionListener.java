@@ -48,6 +48,14 @@ public abstract class KeypadActionListener {
         }
     }
 
+    public void performCtrlToggle() {
+        mainInputMethodService.performCtrlToggle();
+    }
+
+    public boolean getCtrlState() {
+        return mainInputMethodService.getCtrlState();
+    }
+
     private int keySound(int keyCode) {
         return switch (keyCode) {
             case KeyEvent.KEYCODE_ENTER -> AudioManager.FX_KEYPRESS_RETURN;
@@ -77,8 +85,10 @@ public abstract class KeypadActionListener {
                 case KeyEvent.KEYCODE_ENTER -> mainInputMethodService.commitImeOptionsBasedEnter();
                 case KeyEvent.KEYCODE_DEL -> mainInputMethodService.delete();
                 default -> {
+                    if (isDPad(primaryCode)) {
+                        keyFlags |= mainInputMethodService.getCtrlFlag();
+                    }
                     mainInputMethodService.sendKey(primaryCode, keyFlags);
-                    mainInputMethodService.setShiftLockFlag(0);
                 }
             }
             return true;
@@ -87,14 +97,28 @@ public abstract class KeypadActionListener {
         return false;
     }
 
+    private boolean isDPad(int primaryCode) {
+        switch (primaryCode) {
+            case KeyEvent.KEYCODE_DPAD_UP,
+                    KeyEvent.KEYCODE_DPAD_DOWN,
+                    KeyEvent.KEYCODE_DPAD_LEFT,
+                    KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                return true;
+            }
+            default -> {
+                return false;
+            }
+        }
+    }
+
     public void onText(CharSequence text) {
         mainInputMethodService.sendText(text.toString());
-        mainInputMethodService.setShiftLockFlag(0);
+        mainInputMethodService.resetShiftState();
         performInputAcceptedFeedback(AudioManager.FX_KEYPRESS_STANDARD);
     }
 
     public void handleInputText(KeyboardAction keyboardAction) {
-        boolean isUpperCase = isShiftSet() || isCapsLockSet();
+        boolean isUpperCase = mainInputMethodService.getShiftState() != MainInputMethodService.State.OFF;
         String text = (isUpperCase && !keyboardAction.getCapsLockText().isEmpty()) ? keyboardAction.getCapsLockText() :
                 keyboardAction.getText();
         onText(text);
@@ -105,11 +129,11 @@ public abstract class KeypadActionListener {
     }
 
     public boolean isShiftSet() {
-        return mainInputMethodService.getShiftLockFlag() == KeyEvent.META_SHIFT_ON;
+        return mainInputMethodService.getShiftState() == MainInputMethodService.State.ON;
     }
 
     public boolean isCapsLockSet() {
-        return mainInputMethodService.getCapsLockFlag() == KeyEvent.META_CAPS_LOCK_ON;
+        return mainInputMethodService.getShiftState() == MainInputMethodService.State.ENGAGED;
     }
 
     public LayerLevel findLayer() {

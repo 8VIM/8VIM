@@ -5,7 +5,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.mockk.clearMocks
 import io.mockk.mockk
 
-class InputMethodServiceHelperTest : DescribeSpec({
+class InputMethodServiceHelperSpec : DescribeSpec({
     val resources = mockk<Resources>()
 
     afterTest {

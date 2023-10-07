@@ -244,7 +244,6 @@ public class MainKeypadActionListener extends KeypadActionListener {
     }
 
     private void processMovementSequence(List<FingerPosition> movementSequence) {
-
         KeyboardAction keyboardAction = keyboardData.getActionMap().get(movementSequence);
         if (keyboardAction == null && currentMovementSequenceType == MovementSequenceType.NEW_MOVEMENT) {
             List<FingerPosition> modifiedMovementSequence = new ArrayList<>(movementSequence);

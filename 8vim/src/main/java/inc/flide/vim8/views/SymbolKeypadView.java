@@ -1,8 +1,10 @@
 package inc.flide.vim8.views;
 
 import android.content.Context;
+import com.hijamoya.keyboardview.Keyboard;
 import inc.flide.vim8.R;
 import inc.flide.vim8.keyboardactionlisteners.ButtonKeypadActionListener;
+import inc.flide.vim8.models.CustomKeycode;
 
 public class SymbolKeypadView extends ButtonKeypadView {
 
