@@ -1,5 +1,6 @@
 package inc.flide.vim8.ime
 
+import android.content.Context
 import android.content.res.Resources
 import arrow.core.None
 import arrow.core.right
@@ -9,28 +10,25 @@ import inc.flide.vim8.ime.layout.models.CharacterSet
 import inc.flide.vim8.ime.layout.models.FingerPosition
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.yaml.LayoutInfo
-import inc.flide.vim8.ime.parsers.Yaml
+import inc.flide.vim8.ime.layout.parsers.LayoutParser
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.property.arbitrary.next
 import io.mockk.clearMocks
-import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkObject
-import io.mockk.mockkStatic
 import java.io.InputStream
 
 class LayoutLoaderSpec : FunSpec({
+    val context = mockk<Context>()
     val resources = mockk<Resources>()
     val inputStream = mockk<InputStream>(relaxed = true)
+    val cache = mockk<Cache>(relaxed = true)
+    val layoutParser = mockk<LayoutParser>(relaxed = true)
 
     beforeSpec {
-        mockkStatic(Yaml::class)
-        mockkObject(Cache)
-        val cache = mockk<Cache>(relaxed = true)
-        every { Cache.instance } returns cache
         every { cache.load(any()) } returns None
+        every { context.resources } returns resources
     }
 
     beforeTest {
@@ -38,9 +36,7 @@ class LayoutLoaderSpec : FunSpec({
     }
 
     afterTest {
-        clearMocks(resources)
-        clearStaticMockk(Yaml::class, Cache::class)
-        LayoutLoader.layoutIndependentKeyboardData = null
+        clearMocks(resources, layoutParser)
     }
 
     context("Loading keyboardData") {
@@ -48,7 +44,7 @@ class LayoutLoaderSpec : FunSpec({
             val action = Arbitraries.arbKeyboardAction.next()
             val first = listOf(FingerPosition.INSIDE_CIRCLE) to action
             val second = listOf(FingerPosition.TOP) to action
-            every { Yaml.readKeyboardData(any()) } returnsMany listOf(
+            every { layoutParser.readKeyboardData(any()) } returnsMany listOf(
                 KeyboardData(
                     actionMap = mapOf(first),
                     characterSets = listOf(CharacterSet("t"))
@@ -60,10 +56,8 @@ class LayoutLoaderSpec : FunSpec({
                 KeyboardData(actionMap = mapOf(second)).right(),
                 KeyboardData(info = LayoutInfo(name = "test")).right()
             )
-            LayoutLoader.loadKeyboardData(
-                resources,
-                mockk()
-            ) shouldBeRight KeyboardData(
+            YamlLayoutLoader(layoutParser, cache, context)
+                .loadKeyboardData(mockk()) shouldBeRight KeyboardData(
                 actionMap = mapOf(first, second),
                 info = LayoutInfo(name = "test")
             )

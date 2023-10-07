@@ -1,6 +1,6 @@
 package inc.flide.vim8.ime
 
-import android.content.res.Resources
+import android.content.Context
 import arrow.core.Either
 import arrow.core.firstOrNone
 import arrow.core.getOrElse
@@ -21,11 +21,20 @@ import inc.flide.vim8.ime.layout.models.lowerCaseCharacters
 import inc.flide.vim8.ime.layout.models.setLowerCaseCharacters
 import inc.flide.vim8.ime.layout.models.setUpperCaseCharacters
 import inc.flide.vim8.ime.layout.models.upperCaseCharacters
-import inc.flide.vim8.ime.parsers.Yaml.readKeyboardData
+import inc.flide.vim8.ime.layout.parsers.LayoutParser
 import java.io.InputStream
 
-object LayoutLoader {
-    internal var layoutIndependentKeyboardData: KeyboardData? = null
+interface LayoutLoader {
+    fun loadKeyboardData(inputStream: InputStream): Either<LayoutError, KeyboardData>
+}
+
+class YamlLayoutLoader(
+    private val layoutParser: LayoutParser,
+    private val cache: Cache,
+    private val context: Context
+) :
+    LayoutLoader {
+    private var layoutIndependentKeyboardData: KeyboardData? = null
 
     private fun validateNoConflictingActions(
         mainKeyboardActionsMap: Map<MovementSequence, KeyboardAction>?,
@@ -39,19 +48,17 @@ object LayoutLoader {
             .isNone()
     }
 
-    fun loadKeyboardData(
-        resources: Resources,
-        inputStream: InputStream
-    ): Either<LayoutError, KeyboardData> = either {
-        val mainKeyboardData = getLayoutIndependentKeyboardData(resources)
-        loadKeyboardData(mainKeyboardData, inputStream).bind()
-    }
+    override fun loadKeyboardData(inputStream: InputStream): Either<LayoutError, KeyboardData> =
+        either {
+            val mainKeyboardData = getLayoutIndependentKeyboardData()
+            loadKeyboardData(mainKeyboardData, inputStream).bind()
+        }
 
     private fun loadKeyboardData(
         keyboardData: KeyboardData,
         inputStream: InputStream
-    ): Either<LayoutError, KeyboardData> {
-        return readKeyboardData(inputStream).map { tempKeyboardData ->
+    ): Either<LayoutError, KeyboardData> =
+        layoutParser.readKeyboardData(inputStream).map { tempKeyboardData ->
             val tempKeyboardDataActionMap = tempKeyboardData.actionMap
             KeyboardData.info
                 .set(keyboardData, tempKeyboardData.info)
@@ -80,15 +87,13 @@ object LayoutLoader {
                     }
                 }
         }
-    }
 
     private fun loadKeyboardData(
         keyboardData: KeyboardData,
-        resources: Resources,
         resourceId: Int
     ): Either<LayoutError, KeyboardData> {
         catch({
-            return resources.openRawResource(resourceId).use { inputStream ->
+            return context.resources.openRawResource(resourceId).use { inputStream ->
                 loadKeyboardData(keyboardData, inputStream)
             }
         }) { exception: Throwable ->
@@ -96,24 +101,20 @@ object LayoutLoader {
         }
     }
 
-    private fun getLayoutIndependentKeyboardData(resources: Resources): KeyboardData {
+    private fun getLayoutIndependentKeyboardData(): KeyboardData {
         if (layoutIndependentKeyboardData == null) {
-            val cache = Cache.instance
             layoutIndependentKeyboardData = cache.load("common").getOrElse {
                 either {
                     val sectorCircleButtonsKeyboard = loadKeyboardData(
                         KeyboardData(),
-                        resources,
                         R.raw.sector_circle_buttons
                     ).bind()
                     val dPadActionKeyboard = loadKeyboardData(
                         sectorCircleButtonsKeyboard,
-                        resources,
                         R.raw.d_pad_actions
                     ).bind()
                     loadKeyboardData(
                         dPadActionKeyboard,
-                        resources,
                         R.raw.special_core_gestures
                     ).bind()
                 }.getOrNull()?.also { cache.add("common", it) }

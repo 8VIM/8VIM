@@ -25,20 +25,24 @@ import inc.flide.vim8.ime.layout.models.error.LayoutError
 import inc.flide.vim8.ime.layout.models.info
 import inc.flide.vim8.ime.layout.models.yaml.name
 import inc.flide.vim8.lib.android.tryOrNull
+import inc.flide.vim8.vim8Application
 import java.io.InputStream
 import java.util.Locale
 import org.apache.commons.codec.digest.DigestUtils
 
 private val isoCodes = Locale.getISOLanguages().toSet()
 
-fun embeddedLayouts(context: Context): List<Pair<EmbeddedLayout, String>> =
+fun embeddedLayouts(
+    layoutLoader: LayoutLoader,
+    context: Context
+): List<Pair<EmbeddedLayout, String>> =
     (R.raw::class.java.fields)
         .filter { isoCodes.contains(it.name) }
         .flatMap { field ->
             EmbeddedLayout(field.name)
                 .let { layout ->
                     layout
-                        .loadKeyboardData(context)
+                        .loadKeyboardData(layoutLoader, context)
                         .getOrNone()
                         .filterNot { it.totalLayers == 0 }
                         .map { layout to it.toString() }
@@ -49,12 +53,13 @@ interface Layout<T> {
     val path: T
     fun inputStream(context: Context): Either<LayoutError, InputStream>
     fun md5(context: Context): Option<String>
+    fun defaultName(context: Context): String
 }
 
-fun safeLoadKeyboardData(context: Context): KeyboardData? {
+fun safeLoadKeyboardData(layoutLoader: LayoutLoader, context: Context): KeyboardData? {
     val prefs by appPreferenceModel()
     val current = prefs.layout.current.get()
-    return current.loadKeyboardData(context)
+    return current.loadKeyboardData(layoutLoader, context)
         .onLeft {
             if (current is CustomLayout) {
                 val historyPref = prefs.layout.custom.history
@@ -64,72 +69,33 @@ fun safeLoadKeyboardData(context: Context): KeyboardData? {
             }
             prefs.layout.current.reset()
         }
-        .fold({ prefs.layout.current.default.loadKeyboardData(context) }, { Either.Right(it) })
+        .fold(
+            { prefs.layout.current.default.loadKeyboardData(layoutLoader, context) },
+            { Either.Right(it) }
+        )
         .getOrNull()
 }
 
-fun <T> Layout<T>.loadKeyboardData(context: Context): Either<LayoutError, KeyboardData> =
+fun <T> Layout<T>.loadKeyboardData(
+    layoutLoader: LayoutLoader,
+    context: Context
+): Either<LayoutError, KeyboardData> =
     md5(context)
         .toEither { ExceptionWrapperError(Exception("MD5")) }
         .flatMap { md5 ->
-            val cache = Cache.instance
+            val cache = vim8Application()?.cache!!
             cache.load(md5).fold({
                 inputStream(context)
-                    .flatMap { stream ->
-                        LayoutLoader.loadKeyboardData(context.resources, stream)
-                            .also { stream.close() }
+                    .flatMap {
+                        layoutLoader.loadKeyboardData(it)
                     }
                     .map {
                         KeyboardData.info.name.modify(it) { name ->
-                            name.ifEmpty {
-                                when (this) {
-                                    is EmbeddedLayout -> this.defaultName()
-                                    is CustomLayout -> this.defaultName(context)
-                                    else -> ""
-                                }
-                            }
+                            name.ifEmpty { defaultName(context) }
                         }
                     }.onRight { cache.add(md5, it) }
             }, { it.right() })
         }
-
-private fun EmbeddedLayout.defaultName(): String {
-    val locale = Locale(path)
-    return Locale.forLanguageTag(path).getDisplayName(locale)
-        .replaceFirstChar { it.titlecase(locale) }
-}
-
-private fun CustomLayout.defaultName(context: Context): String {
-    return Option.catch {
-        Option.fromNullable(path.scheme)
-            .flatMap {
-                when (it) {
-                    "file" -> Option.fromNullable(path.lastPathSegment)
-                    "content" -> Option.fromNullable(
-                        context.contentResolver.query(
-                            path,
-                            null,
-                            null,
-                            null,
-                            null
-                        )?.let { cursor ->
-                            var result = ""
-                            if (cursor.count != 0) {
-                                val columnIndex =
-                                    cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME)
-                                cursor.moveToFirst()
-                                result = cursor.getString(columnIndex)
-                            }
-                            cursor.close()
-                            result
-                        }
-                    )
-
-                    else -> none()
-                }
-            }
-    }.flatten().getOrElse { "" }
-}
 
 fun String.toCustomLayout(): CustomLayout {
     return CustomLayout(Uri.parse(this))
@@ -187,6 +153,11 @@ data class EmbeddedLayout(override val path: String) : Layout<String> {
     }
 
     override fun md5(context: Context): Option<String> = path.some()
+    override fun defaultName(context: Context): String {
+        val locale = Locale(path)
+        return Locale.forLanguageTag(path).getDisplayName(locale)
+            .replaceFirstChar { it.titlecase(locale) }
+    }
 }
 
 data class CustomLayout(override val path: Uri) : Layout<Uri> {
@@ -198,4 +169,34 @@ data class CustomLayout(override val path: Uri) : Layout<Uri> {
     override fun md5(context: Context): Option<String> = inputStream(context)
         .getOrNone()
         .map { DigestUtils.md5Hex(it) }
+
+    override fun defaultName(context: Context): String = Option.catch {
+        Option.fromNullable(path.scheme)
+            .flatMap {
+                when (it) {
+                    "file" -> Option.fromNullable(path.lastPathSegment)
+                    "content" -> Option.fromNullable(
+                        context.contentResolver.query(
+                            path,
+                            null,
+                            null,
+                            null,
+                            null
+                        )?.let { cursor ->
+                            var result = ""
+                            if (cursor.count != 0) {
+                                val columnIndex =
+                                    cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME)
+                                cursor.moveToFirst()
+                                result = cursor.getString(columnIndex)
+                            }
+                            cursor.close()
+                            result
+                        }
+                    )
+
+                    else -> none()
+                }
+            }
+    }.flatten().getOrElse { "" }
 }

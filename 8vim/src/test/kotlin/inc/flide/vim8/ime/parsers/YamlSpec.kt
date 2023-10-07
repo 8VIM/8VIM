@@ -9,7 +9,7 @@ import inc.flide.vim8.ime.layout.models.KeyboardActionType
 import inc.flide.vim8.ime.layout.models.LayerLevel
 import inc.flide.vim8.ime.layout.models.lowerCaseCharacters
 import inc.flide.vim8.ime.layout.models.upperCaseCharacters
-import inc.flide.vim8.ime.parsers.Yaml.readKeyboardData
+import inc.flide.vim8.ime.layout.parsers.YamlParser
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome
@@ -135,7 +135,8 @@ class YamlSpec : DescribeSpec({
             stringBuilder.setLength(CHARACTER_SET_SIZE)
             stringBuilder.setCharAt(0, 'n')
             val inputStream = javaClass.getResourceAsStream("/valid_file.yaml")
-            val keyboardData = readKeyboardData(inputStream).shouldBeRight()
+            val layoutParser = YamlParser()
+            val keyboardData = layoutParser.readKeyboardData(inputStream).shouldBeRight()
             keyboardData.totalLayers shouldBe 2
             val lowerCaseCharacters = keyboardData.lowerCaseCharacters(LayerLevel.FIRST)
             lowerCaseCharacters shouldBeSome stringBuilder.toString()
@@ -149,12 +150,14 @@ class YamlSpec : DescribeSpec({
 
         it("there is only an hidden layer") {
             val inputStream = javaClass.getResourceAsStream("/hidden_layer.yaml")
-            readKeyboardData(inputStream).shouldBeRight().totalLayers shouldBe 0
+            val layoutParser = YamlParser()
+            layoutParser.readKeyboardData(inputStream).shouldBeRight().totalLayers shouldBe 0
         }
 
         it("there is only a default layer") {
             val inputStream = javaClass.getResourceAsStream("/one_layer.yaml")
-            readKeyboardData(inputStream).shouldBeRight().totalLayers shouldBe 1
+            val layoutParser = YamlParser()
+            layoutParser.readKeyboardData(inputStream).shouldBeRight().totalLayers shouldBe 1
         }
     }
 
@@ -162,22 +165,26 @@ class YamlSpec : DescribeSpec({
 
         it("not a valid layout") {
             val inputStream = javaClass.getResourceAsStream("/invalid_file.yaml")
-            readKeyboardData(inputStream).shouldBeLeft()
+            val layoutParser = YamlParser()
+            layoutParser.readKeyboardData(inputStream).shouldBeLeft()
         }
 
         it("there is only an extra layer") {
             val inputStream = javaClass.getResourceAsStream("/extra_layers.yaml")
-            readKeyboardData(inputStream).shouldBeLeft()
+            val layoutParser = YamlParser()
+            layoutParser.readKeyboardData(inputStream).shouldBeLeft()
         }
 
         it("there is no layers") {
             val inputStream = javaClass.getResourceAsStream("/no_layers.yaml")
-            readKeyboardData(inputStream).shouldBeLeft()
+            val layoutParser = YamlParser()
+            layoutParser.readKeyboardData(inputStream).shouldBeLeft()
         }
 
         it("it's not a YAML file") {
             val inputStream = javaClass.getResourceAsStream("/invalid_file.xml")
-            readKeyboardData(inputStream).shouldBeLeft()
+            val layoutParser = YamlParser()
+            layoutParser.readKeyboardData(inputStream).shouldBeLeft()
         }
     }
 })

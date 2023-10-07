@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.parsers
+package inc.flide.vim8.ime.layout.parsers
 
 import arrow.core.Either
 import arrow.core.fold
@@ -48,7 +48,11 @@ import java.io.IOException
 import java.io.InputStream
 import java.text.MessageFormat
 
-object Yaml {
+interface LayoutParser {
+    fun readKeyboardData(inputStream: InputStream?): Either<LayoutError, KeyboardData>
+}
+
+class YamlParser : LayoutParser {
     private val module = SimpleModule(FlagsDeserializer::class.qualifiedName)
         .addDeserializer(
             Flags::class,
@@ -64,7 +68,7 @@ object Yaml {
     private var schema: JsonSchema
 
     init {
-        Yaml::class.java.getResourceAsStream("/schema.json")
+        LayoutParser::class.java.getResourceAsStream("/schema.json")
             .use { schemaInputStream ->
                 val schemaJson = mapper.readTree(schemaInputStream)
                 val factory = JsonSchemaFactory.builder(
@@ -76,8 +80,7 @@ object Yaml {
             }
     }
 
-    @JvmStatic
-    fun readKeyboardData(inputStream: InputStream?): Either<LayoutError, KeyboardData> {
+    override fun readKeyboardData(inputStream: InputStream?): Either<LayoutError, KeyboardData> {
         return catch({
             validateYaml(mapper.readTree(inputStream))
                 .map { layout ->

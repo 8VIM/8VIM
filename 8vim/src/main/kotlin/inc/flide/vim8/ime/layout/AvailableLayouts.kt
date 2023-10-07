@@ -7,11 +7,10 @@ import arrow.core.getOrNone
 import arrow.core.recover
 import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.appPreferenceModel
+import inc.flide.vim8.ime.LayoutLoader
 import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
 
-class AvailableLayouts internal constructor(
-    context: Context
-) {
+class AvailableLayouts(private val layoutLoader: LayoutLoader, private val context: Context) {
     private val prefs: AppPrefs by appPreferenceModel()
     private val defaultIndex: Int
     private val embeddedLayoutsSize: Int
@@ -22,18 +21,18 @@ class AvailableLayouts internal constructor(
         private set
 
     init {
-        val embeddedLayoutsWithName = embeddedLayouts(context)
+        val embeddedLayoutsWithName = embeddedLayouts(layoutLoader, context)
         embeddedLayoutsSize = embeddedLayoutsWithName.size
         layoutsWithKeyboardData.putAll(embeddedLayoutsWithName)
         defaultIndex =
             layoutsWithKeyboardData.keys.indexOf(prefs.layout.current.default as EmbeddedLayout)
-        reloadCustomLayouts(context)
+        reloadCustomLayouts()
 
         prefs.layout.custom.history.observe {
             if (it.size > layoutsWithKeyboardData.size - embeddedLayoutsSize) {
-                reloadCustomLayouts(context)
+                reloadCustomLayouts()
                 MainKeypadActionListener.rebuildKeyboardData(
-                    prefs.layout.current.get().loadKeyboardData(context).getOrNull()
+                    prefs.layout.current.get().loadKeyboardData(layoutLoader, context).getOrNull()
                 )
             }
         }
@@ -54,15 +53,15 @@ class AvailableLayouts internal constructor(
         findIndex()
     }
 
-    private fun reloadCustomLayouts(context: Context) {
-        listCustomLayoutHistory(context)
+    private fun reloadCustomLayouts() {
+        listCustomLayoutHistory()
         findIndex()
     }
 
-    fun updateKeyboardData(layout: Layout<*>, context: Context): Boolean {
+    fun updateKeyboardData(layout: Layout<*>): Boolean {
         return layoutsWithKeyboardData
             .getOrNone(layout)
-            .flatMap { layout.loadKeyboardData(context).getOrNone() }
+            .flatMap { layout.loadKeyboardData(layoutLoader, context).getOrNone() }
             .onSome {
                 prefs.layout.current.set(layout)
                 MainKeypadActionListener.rebuildKeyboardData(it)
@@ -70,11 +69,11 @@ class AvailableLayouts internal constructor(
             .isSome()
     }
 
-    fun selectLayout(which: Int, context: Context) {
+    fun selectLayout(which: Int) {
         layoutsWithKeyboardData.keys.elementAtOrNone(which)
             .onSome { layout ->
                 layout
-                    .loadKeyboardData(context)
+                    .loadKeyboardData(layoutLoader, context)
                     .getOrNone()
                     .onNone { removeFromHistory(layout.path.toString()) }
                     .onSome {
@@ -82,14 +81,15 @@ class AvailableLayouts internal constructor(
                         index = which
                     }
                     .recover {
-                        prefs.layout.current.default.loadKeyboardData(context).getOrNone().bind()
+                        prefs.layout.current.default.loadKeyboardData(layoutLoader, context)
+                            .getOrNone().bind()
                     }
                     .getOrNull()
                     .let { MainKeypadActionListener.rebuildKeyboardData(it) }
             }
     }
 
-    private fun listCustomLayoutHistory(context: Context) {
+    private fun listCustomLayoutHistory() {
         val uris = LinkedHashSet(prefs.layout.custom.history.get())
         val customLayouts = layoutsWithKeyboardData
             .toList()
@@ -105,7 +105,7 @@ class AvailableLayouts internal constructor(
             if (customLayouts.containsKey(layout)) {
                 emptyList()
             } else {
-                layout.loadKeyboardData(context)
+                layout.loadKeyboardData(layoutLoader, context)
                     .getOrNone()
                     .filterNot { it.totalLayers == 0 }
                     .map { layout to it.toString() }
@@ -122,20 +122,5 @@ class AvailableLayouts internal constructor(
             index = defaultIndex
             prefs.layout.current.reset()
         }
-    }
-
-    companion object {
-        private var singleton: AvailableLayouts? = null
-
-        @JvmStatic
-        fun initialize(context: Context) {
-            if (singleton == null) {
-                singleton = AvailableLayouts(context)
-            }
-        }
-
-        @JvmStatic
-        val instance: AvailableLayouts
-            get() = singleton!!
     }
 }

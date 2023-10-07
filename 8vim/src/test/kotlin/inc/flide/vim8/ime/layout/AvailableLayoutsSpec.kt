@@ -9,6 +9,7 @@ import inc.flide.vim8.arbitraries.Arbitraries.arbEmbeddedLayout
 import inc.flide.vim8.arbitraries.Arbitraries.arbKeyboardData
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
+import inc.flide.vim8.ime.LayoutLoader
 import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
@@ -39,7 +40,7 @@ class AvailableLayoutsSpec : WordSpec({
     val currentLayout = mockk<PreferenceData<Layout<*>>>(relaxed = true)
     val history = mockk<PreferenceData<Set<String>>>(relaxed = true)
     val customLayout = mockkClass(CustomLayout::class)
-
+    val layoutLoader = mockk<LayoutLoader>(relaxed = true)
     val context = mockk<Context>()
 
     val embeddedLayouts = Arb.list(
@@ -55,7 +56,7 @@ class AvailableLayoutsSpec : WordSpec({
         justRun { MainKeypadActionListener.rebuildKeyboardData(any()) }
 
         embeddedLayouts.forEach { (layout, name) ->
-            every { layout.loadKeyboardData(any()) } answers {
+            every { layout.loadKeyboardData(any(), any()) } answers {
                 KeyboardData.info.name.set(
                     arbKeyboardData.next(),
                     name
@@ -68,14 +69,10 @@ class AvailableLayoutsSpec : WordSpec({
         every { layoutPref.custom } returns customPref
         every { customPref.history } returns history
         every { appPreferenceModel() } returns CachedPreferenceModel(prefs)
-        every { embeddedLayouts(any()) } returns embeddedLayouts
+        every { embeddedLayouts(any(), any()) } returns embeddedLayouts
     }
 
     beforeTest {
-        mockkObject(AvailableLayouts)
-        every { AvailableLayouts.instance } answers {
-            AvailableLayouts(context)
-        }
         every { currentLayout.default } returns embeddedLayouts.first().first
         every { currentLayout.get() } returns embeddedLayouts.first().first
         every { history.get() } returns emptySet()
@@ -85,14 +82,14 @@ class AvailableLayoutsSpec : WordSpec({
         "find the index of a previous config" should {
             "get the right index" {
                 every { currentLayout.get() } returns embeddedLayouts[1].first
-                val availableLayouts = AvailableLayouts.instance
+                val availableLayouts = AvailableLayouts(layoutLoader, context)
                 availableLayouts.index shouldBe 1
             }
         }
 
         "custom layout history" should {
             "get only embedded layouts if the history is empty" {
-                val availableLayouts = AvailableLayouts.instance
+                val availableLayouts = AvailableLayouts(layoutLoader, context)
                 val expected = embeddedLayouts.map { it.second }
                 availableLayouts.displayNames shouldContainExactly expected
             }
@@ -102,9 +99,9 @@ class AvailableLayoutsSpec : WordSpec({
                 val keyboardData = arbKeyboardData.next()
                 every { uri.toCustomLayout() } returns customLayout
                 every { currentLayout.get() } returns customLayout
-                every { customLayout.loadKeyboardData(any()) } returns keyboardData.right()
+                every { customLayout.loadKeyboardData(any(), any()) } returns keyboardData.right()
                 every { history.get() } returns setOf(uri)
-                val availableLayouts = AvailableLayouts.instance
+                val availableLayouts = AvailableLayouts(layoutLoader, context)
                 val strings = embeddedLayouts.map { it.second } + keyboardData.toString()
                 availableLayouts.displayNames shouldContainExactly strings
                 availableLayouts.index shouldBe embeddedLayouts.size
@@ -114,12 +111,12 @@ class AvailableLayoutsSpec : WordSpec({
                 val uri = "uri"
                 every { uri.toCustomLayout() } returns customLayout
                 every { currentLayout.get() } returns customLayout
-                every { customLayout.loadKeyboardData(any()) } returns ExceptionWrapperError(
+                every { customLayout.loadKeyboardData(any(), any()) } returns ExceptionWrapperError(
                     Exception()
                 ).left()
                 every { history.get() } returns setOf(uri)
                 justRun { history.set(any()) }
-                val availableLayouts = AvailableLayouts.instance
+                val availableLayouts = AvailableLayouts(layoutLoader, context)
                 val expected = embeddedLayouts.map { it.second }
                 availableLayouts.displayNames shouldContainExactly expected
                 availableLayouts.index shouldBe 0
@@ -131,8 +128,8 @@ class AvailableLayoutsSpec : WordSpec({
         "which is an embedded layout" {
             val layouts = embeddedLayouts.map { it.first }
             val index = Random.nextInt(1, layouts.size)
-            val availableLayouts = AvailableLayouts.instance
-            availableLayouts.selectLayout(index, context)
+            val availableLayouts = AvailableLayouts(layoutLoader, context)
+            availableLayouts.selectLayout(index)
             verify { MainKeypadActionListener.rebuildKeyboardData(any()) }
             verify { currentLayout.set(layouts[index]) }
             availableLayouts.index shouldBe index
@@ -141,11 +138,12 @@ class AvailableLayoutsSpec : WordSpec({
         "which is a custom layout" {
             val uri = "uri"
             every { uri.toCustomLayout() } returns customLayout
-            every { customLayout.loadKeyboardData(any()) } returns arbKeyboardData.next().right()
+            every { customLayout.loadKeyboardData(any(), any()) } returns arbKeyboardData.next()
+                .right()
             every { history.get() } returns setOf(uri)
             val index = embeddedLayouts.size
-            val availableLayouts = AvailableLayouts.instance
-            availableLayouts.selectLayout(index, context)
+            val availableLayouts = AvailableLayouts(layoutLoader, context)
+            availableLayouts.selectLayout(index)
             verify { MainKeypadActionListener.rebuildKeyboardData(any()) }
             verify { currentLayout.set(customLayout) }
             availableLayouts.index shouldBe index
@@ -153,8 +151,8 @@ class AvailableLayoutsSpec : WordSpec({
 
         "which is not a valid index" {
             val index = embeddedLayouts.size
-            val availableLayouts = AvailableLayouts.instance
-            availableLayouts.selectLayout(index, context)
+            val availableLayouts = AvailableLayouts(layoutLoader, context)
+            availableLayouts.selectLayout(index)
             availableLayouts.index shouldBe 0
         }
     }

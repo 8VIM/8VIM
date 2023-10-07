@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.google.android.material.color.DynamicColors
 import inc.flide.vim8.ime.KeyboardTheme
 import inc.flide.vim8.ime.KeyboardTheme.Companion.getInstance
+import inc.flide.vim8.ime.LayoutLoader
 import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
 import inc.flide.vim8.ime.layout.safeLoadKeyboardData
 import inc.flide.vim8.ime.nlp.BreakIteratorGroup
@@ -47,6 +48,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     private lateinit var selectionKeypadView: SelectionKeypadView
     private lateinit var symbolKeypadView: SymbolKeypadView
     private lateinit var breakIteratorGroup: BreakIteratorGroup
+    private lateinit var layoutLoader: LayoutLoader
     var ctrlState = false
         private set
     val ctrlFlag: Int
@@ -78,6 +80,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
 
     override fun onCreate() {
         super.onCreate()
+        layoutLoader = vim8Application()?.layoutLoader!!
         breakIteratorGroup = BreakIteratorGroup(applicationContext)
         DynamicColors.applyToActivitiesIfAvailable(this.application)
         clipboardManagerService = ClipboardManagerService(applicationContext)
@@ -132,7 +135,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
      * 13. InputMethodService stops
      */
     override fun onCreateInputView(): View {
-        MainKeypadActionListener.rebuildKeyboardData(safeLoadKeyboardData(this))
+        MainKeypadActionListener.rebuildKeyboardData(safeLoadKeyboardData(layoutLoader, this))
         numberKeypadView = NumberKeypadView(this)
         selectionKeypadView = SelectionKeypadView(this)
         clipboardKeypadView = ClipboardKeypadView(this)
