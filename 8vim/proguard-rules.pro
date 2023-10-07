@@ -10,8 +10,7 @@
 -keep,allowobfuscation,allowshrinking class arrow.core.Either
 -keep,allowobfuscation,allowshrinking class arrow.core.Option
 
--keep class inc.flide.vim8.models.** { *; }
--keep class inc.flide.vim8.ime.KeyboardDataYamlParser* { *; }
+-keep class inc.flide.vim8.ime.layout.** { *; }
 
 -keep class ch.qos.logback.** { *; }
 -keepclassmembers class ch.qos.logback.classic.pattern.* { <init>(); }
