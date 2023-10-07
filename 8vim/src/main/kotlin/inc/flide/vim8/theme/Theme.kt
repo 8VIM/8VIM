@@ -2,13 +2,11 @@ package inc.flide.vim8.theme
 
 import android.content.Context
 import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.luminance
 import inc.flide.vim8.lib.android.AndroidVersion
 
@@ -26,19 +24,8 @@ fun lightColorPalette(context: Context) =
         lightColorScheme()
     }
 
-@Composable
-fun AppTheme(
-    colorScheme: ColorScheme,
-    content: @Composable () -> Unit
-) {
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = colorScheme.typography(),
-        content = content
-    )
-}
-
 fun ColorScheme.isLightTheme() = this.background.luminance() >= 0.5f
+
 fun ColorScheme.typography(): Typography {
     val current = Typography()
     return current.copy(

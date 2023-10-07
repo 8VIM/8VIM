@@ -13,7 +13,6 @@ interface PreferenceData<V : Any> {
     fun getOrNull(): V?
     fun set(value: V, sync: Boolean = true)
     fun reset()
-    fun hasObservers(): Boolean
     fun dispatch()
     fun observe(owner: LifecycleOwner, observer: PreferenceObserver<V>)
     fun observe(observer: PreferenceObserver<V>)
@@ -35,16 +34,15 @@ internal abstract class SharedPreferencePreferenceData<V : Any>(
         if (cachedValue.get() != value) {
             cachedValue.set(value)
             if (sync) {
-                val editor = model.sharedPreferences.get()!!.edit()
+                val editor = model.sharedPreferences.edit()
                 serde.serialize(editor, key, value)
                 editor.apply()
             }
         }
     }
 
-    final override fun hasObservers(): Boolean = observers.isNotEmpty()
     final override fun reset() {
-        model.sharedPreferences.get()?.edit()?.remove(key)?.apply()
+        model.sharedPreferences.edit()?.remove(key)?.apply()
         cachedValue.set(null)
     }
 
@@ -79,7 +77,7 @@ internal abstract class SharedPreferencePreferenceData<V : Any>(
     }
 
     override fun dispatch() {
-        val newValue = serde.deserialize(model.sharedPreferences.get()!!, key, default)
+        val newValue = serde.deserialize(model.sharedPreferences, key, default)
         cachedValue.set(newValue)
         observers.forEach { it.onChanged(newValue) }
     }
@@ -125,7 +123,7 @@ internal class StringSetSharedPreferencePreferenceData(
     override val serde: PreferenceSerDe<Set<String>> = StringSetPreferenceSerde
 }
 
-internal class CustomSharedPreferencePreferenceData<V : Any>(
+internal open class CustomSharedPreferencePreferenceData<V : Any>(
     model: PreferenceModel,
     override val key: String,
     override val default: V,

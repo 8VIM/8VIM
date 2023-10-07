@@ -1,10 +1,12 @@
 package inc.flide.vim8.datastore
 
 import inc.flide.vim8.datastore.model.PreferenceModel
+import inc.flide.vim8.lib.ExcludeFromJacocoGeneratedReport
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
+@ExcludeFromJacocoGeneratedReport
 object Datastore {
     private val preferenceModelCache: HashMap<KClass<*>, CachedPreferenceModel<*>> = hashMapOf()
 

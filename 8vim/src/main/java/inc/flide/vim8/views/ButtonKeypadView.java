@@ -12,8 +12,8 @@ import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
+import inc.flide.vim8.ime.layout.models.CustomKeycode;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
-import inc.flide.vim8.models.CustomKeycode;
 
 public abstract class ButtonKeypadView extends KeyboardView implements CtrlButtonView, ShiftButtonView {
     private final Paint foregroundPaint = new Paint();
@@ -61,6 +61,7 @@ public abstract class ButtonKeypadView extends KeyboardView implements CtrlButto
                 ctrlKey = key;
             }
         }
+        updateCtrlButton();
         setKeyboard(keyboard);
     }
 

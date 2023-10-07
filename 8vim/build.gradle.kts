@@ -113,6 +113,8 @@ android {
 
             resValue("string", "app_name", "8Vim Debug")
             enableUnitTestCoverage
+            isMinifyEnabled = true
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             /* Activate R8 in debug mode, good to check if any new library added works
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
@@ -158,6 +160,7 @@ android {
         findByName("test")?.java?.srcDirs(project.file("src/test/kotlin"))
     }
 }
+
 tasks.withType<JacocoReport> {
     dependsOn(tasks.withType<Test>())
     reports {
@@ -209,6 +212,8 @@ dependencies {
     implementation(libs.arrow.core)
     implementation(libs.arrow.optics)
     implementation(libs.colorpreference)
+    implementation(libs.commons.codec)
+    implementation(libs.jackson.dataformat.cbor)
     implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jackson.module.arrow.kotlin)
     implementation(libs.jackson.module.kotlin)
@@ -239,8 +244,6 @@ dependencies {
     testImplementation(libs.kotest.property)
     testImplementation(libs.kotest.property.arrow)
     testImplementation(libs.kotest.property.arrow.optics)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.junit5)
     testImplementation(libs.mockk.core)
     testImplementation(libs.mockk.android)
     testImplementation(libs.mockk.agent)

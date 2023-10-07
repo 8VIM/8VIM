@@ -7,7 +7,6 @@ import inc.flide.vim8.R
 import java.util.function.IntConsumer
 
 object DialogsHelper {
-    @JvmStatic
     fun createItemsChoice(
         context: Context,
         titleRes: Int,
@@ -30,7 +29,6 @@ object DialogsHelper {
             .show()
     }
 
-    @JvmStatic
     fun showAlert(context: Context, titleRes: Int, message: String) {
         MaterialAlertDialogBuilder(context)
             .setTitle(titleRes)

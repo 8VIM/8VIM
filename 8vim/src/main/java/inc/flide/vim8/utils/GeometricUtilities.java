@@ -1,9 +1,9 @@
 package inc.flide.vim8.utils;
 
-import static inc.flide.vim8.models.QuadrantKt.NUMBER_OF_SECTORS;
+import static inc.flide.vim8.ime.layout.models.QuadrantKt.NUMBER_OF_SECTORS;
 
 import android.graphics.PointF;
-import inc.flide.vim8.models.Direction;
+import inc.flide.vim8.ime.layout.models.Direction;
 
 public final class GeometricUtilities {
     private GeometricUtilities() {
