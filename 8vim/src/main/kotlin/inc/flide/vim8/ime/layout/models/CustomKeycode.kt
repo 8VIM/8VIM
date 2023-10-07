@@ -24,7 +24,6 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
 
     fun handleKeyCode(mainInputMethodService: MainInputMethodService): Boolean {
         when (this) {
-            SELECTION_START,
             MOVE_CURRENT_END_POINT_LEFT,
             MOVE_CURRENT_END_POINT_RIGHT,
             MOVE_CURRENT_END_POINT_UP,
@@ -39,6 +38,15 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
                 if (mainInputMethodService.shiftState != MainInputMethodService.State.OFF) {
                     mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
                 }
+            }
+
+            SELECTION_START -> {
+                mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+                mainInputMethodService.sendDownAndUpKeyEvent(
+                    KeyEvent.KEYCODE_DPAD_LEFT,
+                    mainInputMethodService.ctrlFlag
+                )
+                mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
             }
 
             SELECT_ALL -> mainInputMethodService.sendDownAndUpKeyEvent(
