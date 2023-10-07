@@ -55,6 +55,7 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
             SWITCH_TO_EMOTICON_KEYBOARD -> mainInputMethodService.switchToExternalEmoticonKeyboard()
             HIDE_KEYBOARD -> mainInputMethodService.hideKeyboard()
             SWITCH_TO_CLIPPAD_KEYBOARD -> mainInputMethodService.switchToClipboardKeypad()
+            CTRL_TOGGLE -> mainInputMethodService.performCtrlToggle()
             else -> {}
         }
         return true

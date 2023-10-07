@@ -34,7 +34,7 @@ import inc.flide.vim8.views.mainkeyboard.MainKeyboardView
 
 class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     private val prefs by appPreferenceModel()
-    private val ctrlButtonViews = mutableListOf<CtrlButtonView>()
+    private var ctrlButtonViews = mutableListOf<CtrlButtonView>()
     private val shiftButtonViews = mutableListOf<ShiftButtonView>()
     private var inputConnection: InputConnection? = null
     private var clipboardKeypadView: ClipboardKeypadView? = null
@@ -95,16 +95,16 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
 
     private fun updateCtrlButton() {
         ctrlButtonViews.forEach {
-            it.updateCtrlButton();
-            (it as View).invalidate();
+            it.updateCtrlButton()
+            (it as View).invalidate()
         }
     }
 
     private fun updateShiftButton() {
         shiftButtonViews.forEach {
-            it.updateShiftButton();
-            (it as View).invalidate();
-        };
+            it.updateShiftButton()
+            (it as View).invalidate()
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -138,8 +138,8 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
         clipboardKeypadView = ClipboardKeypadView(this)
         symbolKeypadView = SymbolKeypadView(this)
         mainKeyboardView = MainKeyboardView(this)
-        ctrlButtonViews + listOf(mainKeyboardView, clipboardKeypadView, selectionKeypadView)
-        shiftButtonViews + selectionKeypadView
+        ctrlButtonViews.addAll(listOf(mainKeyboardView, clipboardKeypadView!!, selectionKeypadView))
+        shiftButtonViews.add(selectionKeypadView)
         setCurrentKeypadView(mainKeyboardView)
 
         if (ATLEAST_API28_P) {
@@ -185,7 +185,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     override fun onEvaluateFullscreenMode(): Boolean {
         val configuration = resources.configuration
         return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-                configuration.screenHeightDp < 480
+            configuration.screenHeightDp < 480
     }
 
     override fun onStartInputView(info: EditorInfo, restarting: Boolean) {
@@ -284,19 +284,19 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
 
     fun delete() {
         inputConnection?.let {
-            it.getSelectedText(0)?.let { sel ->
-                if (TextUtils.isEmpty(sel)) {
-                    val extractedText = it.getExtractedText(ExtractedTextRequest(), 0)
-                    val length = if (ctrlState) {
-                        breakIteratorGroup.measureLastWords(extractedText.text.toString(), 1)
-                    } else {
-                        breakIteratorGroup.measureLastCharacters(extractedText.text.toString(), 1)
-                    }.coerceAtLeast(1)
-                    it.deleteSurroundingTextInCodePoints(length, 0)
+            it.beginBatchEdit()
+            if (TextUtils.isEmpty(it.getSelectedText(0))) {
+                val extractedText = it.getExtractedText(ExtractedTextRequest(), 0)
+                val length = if (ctrlState) {
+                    breakIteratorGroup.measureLastWords(extractedText.text.toString(), 1)
                 } else {
-                    it.commitText("", 0)
-                }
+                    breakIteratorGroup.measureLastCharacters(extractedText.text.toString(), 1)
+                }.coerceAtLeast(1)
+                it.deleteSurroundingTextInCodePoints(length, 0)
+            } else {
+                it.commitText("", 0)
             }
+            it.endBatchEdit()
         }
     }
 

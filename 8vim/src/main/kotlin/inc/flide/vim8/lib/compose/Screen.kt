@@ -11,12 +11,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.R
 import inc.flide.vim8.app.LocalNavController
+import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.ui.PreferenceLayout
 import inc.flide.vim8.datastore.ui.PreferenceUiContent
-import inc.flide.vim8.AppPrefs
-import inc.flide.vim8.appPreferenceModel
 
 @Composable
 fun Screen(builder: @Composable ScreenScope.() -> Unit) {

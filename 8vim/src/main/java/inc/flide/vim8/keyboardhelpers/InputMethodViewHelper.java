@@ -5,9 +5,9 @@ import static inc.flide.vim8.AppPrefsKt.appPreferenceModel;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import inc.flide.vim8.AppPrefs;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
-import inc.flide.vim8.AppPrefs;
 
 public final class InputMethodViewHelper {
     private InputMethodViewHelper() {

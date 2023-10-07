@@ -3,10 +3,10 @@ package inc.flide.vim8.keyboardhelpers
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.util.DisplayMetrics
-import inc.flide.vim8.datastore.CachedPreferenceModel
-import inc.flide.vim8.datastore.model.PreferenceData
 import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.appPreferenceModel
+import inc.flide.vim8.datastore.CachedPreferenceModel
+import inc.flide.vim8.datastore.model.PreferenceData
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every

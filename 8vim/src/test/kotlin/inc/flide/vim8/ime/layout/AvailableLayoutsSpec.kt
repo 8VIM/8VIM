@@ -3,13 +3,13 @@ package inc.flide.vim8.ime.layout
 import android.content.Context
 import arrow.core.left
 import arrow.core.right
+import inc.flide.vim8.AppPrefs
+import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.arbitraries.Arbitraries.arbEmbeddedLayout
 import inc.flide.vim8.arbitraries.Arbitraries.arbKeyboardData
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
-import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
-import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.info

@@ -22,8 +22,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.appPreferenceModel
+import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.lib.compose.AppTheme
 import inc.flide.vim8.lib.compose.ProvideLocalizedResources
 import inc.flide.vim8.lib.compose.SystemUiApp

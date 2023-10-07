@@ -1,7 +1,6 @@
 package inc.flide.vim8.views;
 
 import android.content.Context;
-import com.hijamoya.keyboardview.Keyboard;
 import inc.flide.vim8.R;
 import inc.flide.vim8.ime.actionlisteners.ButtonKeypadActionListener;
 

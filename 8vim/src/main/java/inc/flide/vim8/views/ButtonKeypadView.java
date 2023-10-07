@@ -61,6 +61,7 @@ public abstract class ButtonKeypadView extends KeyboardView implements CtrlButto
                 ctrlKey = key;
             }
         }
+        updateCtrlButton();
         setKeyboard(keyboard);
     }
 
