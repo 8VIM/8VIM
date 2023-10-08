@@ -18,25 +18,22 @@
 
         <Key
             app:codes="@integer/KEYCODE_FORWARD_DEL"
-            app:isRepeatable="true"
             app:keyIcon="@drawable/ic_delete" />
 
         <Key
             app:codes="@integer/MOVE_CURRENT_END_POINT_UP"
-            app:isRepeatable="true"
             app:keyIcon="@drawable/ic_keyboard_arrow_up" />
 
         <Key
             app:codes="@integer/KEYCODE_DEL"
-            app:isRepeatable="true"
             app:keyIcon="@drawable/ic_backspace" />
     </Row>
 
     <Row>
 
         <Key
-            app:keyLabel=" "
-            app:keyOutputText="" />
+            app:codes="@integer/SHIFT_TOGGLE"
+            app:keyIcon="@drawable/ic_no_capslock" />
 
         <Key
             app:codes="@integer/SWITCH_TO_MAIN_KEYPAD"
@@ -69,8 +66,8 @@
             app:keyIcon="@drawable/ic_content_paste" />
 
         <Key
-            app:keyLabel=" "
-            app:keyOutputText="" />
+            app:codes="@integer/CTRL_TOGGLE"
+            app:keyIcon="@drawable/ic_ctrl" />
 
         <Key
             app:codes="@integer/MOVE_CURRENT_END_POINT_DOWN"

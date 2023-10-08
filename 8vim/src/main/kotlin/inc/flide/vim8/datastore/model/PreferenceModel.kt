@@ -35,7 +35,18 @@ abstract class PreferenceModel(val version: Int) :
 
     private val registry: MutableMap<String, PreferenceData<*>> = mutableMapOf()
     private var onReadyObserver: PreferenceObserver<Boolean>? = null
+
     fun isReady(): Boolean = isReady.get()
+
+    fun onReady(observer: PreferenceObserver<Boolean>) {
+        if (onReadyObserver == null) {
+            onReadyObserver = observer
+        }
+        if (isReady()) {
+            onReadyObserver?.onChanged(true)
+        }
+    }
+
     fun onReady(owner: LifecycleOwner, observer: PreferenceObserver<Boolean>) {
         if (owner.lifecycle.currentState == Lifecycle.State.DESTROYED) {
             return
@@ -78,6 +89,9 @@ abstract class PreferenceModel(val version: Int) :
         entry: PreferenceMigrationEntry
     ): PreferenceMigrationEntry {
         return entry.keepAsIs()
+    }
+
+    protected open fun postInitialize() {
     }
 
     private fun <V : Any> PreferenceData<V>.deserialize(rawValue: Any?) {
@@ -209,6 +223,7 @@ abstract class PreferenceModel(val version: Int) :
         editor
             .putInt(DATASTORE_VERSION, version)
             .apply()
+        postInitialize()
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         isReady.set(true)
         onReadyObserver?.onChanged(true)

@@ -6,11 +6,11 @@ import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.View
 import inc.flide.vim8.MainInputMethodService
+import inc.flide.vim8.appPreferenceModel
+import inc.flide.vim8.ime.layout.models.CustomKeycode.Companion.KEY_CODE_TO_STRING_CODE_MAP
+import inc.flide.vim8.ime.layout.models.KeyboardAction
+import inc.flide.vim8.ime.layout.models.LayerLevel
 import inc.flide.vim8.lib.android.AndroidVersion.ATLEAST_API29_Q
-import inc.flide.vim8.models.CustomKeycode.Companion.KEY_CODE_TO_STRING_CODE_MAP
-import inc.flide.vim8.models.KeyboardAction
-import inc.flide.vim8.models.LayerLevel
-import inc.flide.vim8.models.appPreferenceModel
 
 @Suppress("DEPRECATION")
 abstract class KeypadActionListener(
@@ -18,6 +18,8 @@ abstract class KeypadActionListener(
     protected val view: View
 ) {
     private val prefs by appPreferenceModel()
+    val ctrlState: Boolean
+        get() = mainInputMethodService.ctrlState
     private val audioManager: AudioManager =
         view.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -25,6 +27,10 @@ abstract class KeypadActionListener(
         val keycodeProfileSwitch =
             if (ATLEAST_API29_Q) KeyEvent.KEYCODE_PROFILE_SWITCH else KEYCODE_PROFILE_SWITCH
         return keyCode >= KeyEvent.KEYCODE_UNKNOWN && keyCode <= keycodeProfileSwitch
+    }
+
+    fun performCtrlToggle() {
+        mainInputMethodService.performCtrlToggle()
     }
 
     fun handleInputKey(keyCode: Int, keyFlags: Int) {
@@ -71,8 +77,13 @@ abstract class KeypadActionListener(
                 KeyEvent.KEYCODE_ENTER -> mainInputMethodService.commitImeOptionsBasedEnter()
                 KeyEvent.KEYCODE_DEL -> mainInputMethodService.delete()
                 else -> {
-                    mainInputMethodService.sendKey(primaryCode, keyFlags)
-                    mainInputMethodService.shiftLockFlag = 0
+                    val flags = if (isDPad(primaryCode)) {
+                        keyFlags or mainInputMethodService.ctrlFlag
+                    } else {
+                        keyFlags
+                    }
+                    mainInputMethodService.sendKey(primaryCode, flags)
+                    mainInputMethodService.resetShiftState()
                 }
             }
             return true
@@ -80,14 +91,27 @@ abstract class KeypadActionListener(
         return false
     }
 
+    private fun isDPad(primaryCode: Int): Boolean {
+        return when (primaryCode) {
+            KeyEvent.KEYCODE_DPAD_UP,
+            KeyEvent.KEYCODE_DPAD_DOWN,
+            KeyEvent.KEYCODE_DPAD_LEFT,
+            KeyEvent.KEYCODE_DPAD_RIGHT -> {
+                true
+            }
+
+            else -> false
+        }
+    }
+
     fun onText(text: CharSequence) {
         mainInputMethodService.sendText(text.toString())
-        mainInputMethodService.shiftLockFlag = 0
+        mainInputMethodService.resetShiftState()
         performInputAcceptedFeedback(AudioManager.FX_KEYPRESS_STANDARD)
     }
 
     fun handleInputText(keyboardAction: KeyboardAction) {
-        val isUpperCase = isShiftSet || isCapsLockSet
+        val isUpperCase = mainInputMethodService.shiftState != MainInputMethodService.State.OFF
         val text =
             if (isUpperCase && keyboardAction.capsLockText.isNotEmpty()) {
                 keyboardAction.capsLockText
