@@ -5,16 +5,15 @@ import android.content.res.Configuration
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import inc.flide.vim8.models.AppPrefs
-import inc.flide.vim8.models.appPreferenceModel
+import inc.flide.vim8.AppPrefs
+import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.theme.ThemeMode
 import inc.flide.vim8.theme.darkColorPalette
 import inc.flide.vim8.theme.lightColorPalette
 import kotlin.properties.Delegates
 import kotlin.random.Random
-import kotlin.random.nextInt
 
-class KeyboardTheme private constructor(context: Context) {
+class KeyboardTheme internal constructor(context: Context) {
     private val prefs: AppPrefs by appPreferenceModel()
     private val darkColorScheme: ColorScheme
     private val lightColorScheme: ColorScheme
@@ -28,9 +27,9 @@ class KeyboardTheme private constructor(context: Context) {
             prefs.keyboard.trail.color.get()
         } else {
             Color(
-                Random.nextInt(0..255),
-                Random.nextInt(0..255),
-                Random.nextInt(0..255),
+                Random.nextInt(256),
+                Random.nextInt(256),
+                Random.nextInt(256),
                 255
             ).toArgb()
         }
@@ -56,6 +55,13 @@ class KeyboardTheme private constructor(context: Context) {
         onChangeCallbacks.add(onChangeCallback)
     }
 
+    fun onChange(onChangeCallback: () -> Unit) {
+        onChange(object : OnChangeCallback {
+            override fun invoke() {
+                onChangeCallback()
+            }
+        })
+    }
     private fun onPrefChanged() {
         updateColors()
         onChangeCallbacks.forEach { it.invoke() }
@@ -91,7 +97,6 @@ class KeyboardTheme private constructor(context: Context) {
     companion object {
         private var singleton: KeyboardTheme? = null
 
-        @JvmStatic
         fun initialize(context: Context) {
             if (singleton == null) {
                 singleton = KeyboardTheme(context)

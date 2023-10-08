@@ -1,14 +1,13 @@
 package inc.flide.vim8.keyboardhelpers;
 
-import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
+import static inc.flide.vim8.AppPrefsKt.appPreferenceModel;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import inc.flide.vim8.AppPrefs;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
-import inc.flide.vim8.models.AppPrefs;
 
 public final class InputMethodViewHelper {
     private InputMethodViewHelper() {

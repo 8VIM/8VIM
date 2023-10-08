@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
+import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.views.ConstraintLayoutWithSidebar;
 
 public class MainKeyboardView extends ConstraintLayoutWithSidebar<MainKeypadActionListener> {

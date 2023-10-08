@@ -1,7 +1,7 @@
 package inc.flide.vim8.geometry
 
 import android.graphics.PointF
-import inc.flide.vim8.models.FingerPosition
+import inc.flide.vim8.ime.layout.models.FingerPosition
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
@@ -17,6 +17,16 @@ class CircleSpec : FunSpec({
         point.y = y
         return point
     }
+
+    context("is point inside circle") {
+        withData(
+            (mockPointF(1f, 1f) to true),
+            (mockPointF(20f, 20f) to false)
+        ) { (point, expected) ->
+            circle.isPointInsideCircle(point) shouldBe expected
+        }
+    }
+
     context("get sector from a point") {
         withData(
             nameFn = {

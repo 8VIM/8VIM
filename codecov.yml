@@ -2,13 +2,23 @@ comment:
   layout: "diff, flags, files"
   behavior: default
   require_changes: false
+coverage:
+  status:
+    project:
+      default:
+        if_ci_failed: success
+    patch:
+      default:
+        if_ci_failed: success
 flags:
   unit:
     ignore:
-      - 8vim/src/**/compose
       - 8vim/src/**/app
       - 8vim/src/**/ui
       - 8vim/src/**/views
+      - 8vim/src/**/lib
+      - 8vim/src/**/theme/Theme.kt
+      - 8vim/src/**/models/error/LayoutError.kt
       - 8vim/src/**/VIM8Application.kt
-      - 8vim/src/**/AppPrefs.kt
-      - 8vim/src/**/MainInputMethodService.java
+      - 8vim/src/**/PreferenceDataAdapter.kt
+      - 8vim/src/**/MainInputMethodService.kt

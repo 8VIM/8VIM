@@ -1,7 +1,7 @@
 package inc.flide.vim8.views.mainkeyboard;
 
-import static inc.flide.vim8.models.AppPrefsKt.appPreferenceModel;
-import static inc.flide.vim8.models.QuadrantKt.NUMBER_OF_SECTORS;
+import static inc.flide.vim8.AppPrefsKt.appPreferenceModel;
+import static inc.flide.vim8.ime.layout.models.QuadrantKt.NUMBER_OF_SECTORS;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,15 +22,15 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
+import inc.flide.vim8.AppPrefs;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
-import inc.flide.vim8.keyboardactionlisteners.MainKeypadActionListener;
-import inc.flide.vim8.models.AppPrefs;
-import inc.flide.vim8.models.FingerPosition;
-import inc.flide.vim8.models.LayerLevel;
+import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener;
+import inc.flide.vim8.ime.layout.models.FingerPosition;
+import inc.flide.vim8.ime.layout.models.LayerLevel;
 
 public class XpadView extends View {
     public static final int XPAD_ICON_ALPHA = 85;
@@ -90,6 +90,7 @@ public class XpadView extends View {
         keyboardTheme = KeyboardTheme.getInstance();
         keyboardTheme.onChange(this::updateColors);
 
+        prefs.getLayout().getCurrent().observe(newValue -> invalidate());
         AppPrefs.Keyboard.Circle circlePrefs = prefs.getKeyboard().getCircle();
         circlePrefs.getRadiusSizeFactor().observe(this::onCirclePrefsChanged);
         circlePrefs.getXCentreOffset().observe(this::onCirclePrefsChanged);

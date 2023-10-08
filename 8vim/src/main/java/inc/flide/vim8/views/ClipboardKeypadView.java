@@ -10,12 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import inc.flide.vim8.MainInputMethodService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.keyboardactionlisteners.ClipboardActionListener;
+import inc.flide.vim8.ime.actionlisteners.ClipboardActionListener;
+import inc.flide.vim8.ime.layout.models.CustomKeycode;
 import java.text.MessageFormat;
 import java.util.List;
 
 public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardActionListener> {
     private ArrayAdapter<String> adapter;
+    private ListView clipboardItemsList;
 
     public ClipboardKeypadView(Context context) {
         super(context);
@@ -27,6 +29,16 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardAc
 
     public ClipboardKeypadView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void initialize(Context context) {
+        super.initialize(context);
+        prefs.getClipboard().getEnabled().observe(newValue -> {
+            if (!newValue) {
+                actionListener.handleInputKey(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.keyCode, 0);
+            }
+        });
     }
 
     @Override
@@ -56,17 +68,14 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardAc
     }
 
     public void setupClipboardListView() {
-
         List<String> clipHistory = actionListener.getClipHistory();
-        ListView clipboardItemsList = this.findViewById(R.id.clipboardItemsList);
+        clipboardItemsList = this.findViewById(R.id.clipboardItemsList);
         keyboardTheme.onChange(() -> {
             int children = clipboardItemsList.getChildCount();
             for (int i = 0; i < children; i++) {
                 View child = clipboardItemsList.getChildAt(i);
-
                 TextView textView = child.findViewById(android.R.id.text1);
                 textView.setTextColor(keyboardTheme.getForegroundColor());
-
             }
         });
         adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, (clipHistory)) {
@@ -86,19 +95,24 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardAc
                 return view;
             }
         };
+
         clipboardItemsList.setAdapter(adapter);
 
         clipboardItemsList.setOnItemClickListener((parent, itemView, position, id) -> {
             String selectedClip = adapter.getItem(position);
+            assert selectedClip != null;
             actionListener.onClipSelected(selectedClip);
         });
     }
 
     public void updateClipHistory() {
         List<String> clipHistory = actionListener.getClipHistory();
+        adapter.setNotifyOnChange(false);
         adapter.clear();
         adapter.addAll(clipHistory);
         adapter.notifyDataSetChanged();
+        if (clipboardItemsList != null) {
+            clipboardItemsList.smoothScrollToPosition(0);
+        }
     }
-
 }
