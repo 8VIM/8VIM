@@ -91,7 +91,7 @@ abstract class PreferenceModel(val version: Int) :
         return entry.keepAsIs()
     }
 
-    protected open fun postInitialize() {
+    protected open fun postInitialize(context: Context) {
     }
 
     private fun <V : Any> PreferenceData<V>.deserialize(rawValue: Any?) {
@@ -223,7 +223,7 @@ abstract class PreferenceModel(val version: Int) :
         editor
             .putInt(DATASTORE_VERSION, version)
             .apply()
-        postInitialize()
+        postInitialize(context)
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         isReady.set(true)
         onReadyObserver?.onChanged(true)
