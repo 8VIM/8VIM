@@ -1,9 +1,9 @@
 package inc.flide.vim8.geometry
 
 import android.graphics.PointF
-import inc.flide.vim8.models.Direction.Companion.baseQuadrant
-import inc.flide.vim8.models.FingerPosition
-import inc.flide.vim8.models.toFingerPosition
+import inc.flide.vim8.ime.layout.models.Direction.Companion.baseQuadrant
+import inc.flide.vim8.ime.layout.models.FingerPosition
+import inc.flide.vim8.ime.layout.models.toFingerPosition
 import inc.flide.vim8.utils.GeometricUtilities
 import kotlin.math.atan2
 import kotlin.math.pow

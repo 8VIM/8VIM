@@ -206,4 +206,18 @@
             app:title="@string/pref_trail_color_title"
             app:viewSize="large" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/pref_category_behavior">
+
+        <SwitchPreferenceCompat
+            android:widgetLayout="@layout/material_switch"
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/pref_behavior_cursor_move_by_word_key"
+            app:summaryOff="@string/pref_behavior_cursor_move_by_word_summary_off"
+            app:summaryOn="@string/pref_behavior_cursor_move_by_word_summary_on"
+            app:title="@string/pref_behavior_cursor_move_by_word_title" />
+    </PreferenceCategory>
 </PreferenceScreen>

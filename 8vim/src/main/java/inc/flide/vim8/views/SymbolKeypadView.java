@@ -2,7 +2,7 @@ package inc.flide.vim8.views;
 
 import android.content.Context;
 import inc.flide.vim8.R;
-import inc.flide.vim8.keyboardactionlisteners.ButtonKeypadActionListener;
+import inc.flide.vim8.ime.actionlisteners.ButtonKeypadActionListener;
 
 public class SymbolKeypadView extends ButtonKeypadView {
 

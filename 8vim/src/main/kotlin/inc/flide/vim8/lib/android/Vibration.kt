@@ -5,8 +5,8 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.annotation.RequiresApi
+import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
-import inc.flide.vim8.models.appPreferenceModel
 
 interface Vibration {
     fun vibrate()
@@ -16,7 +16,6 @@ object HapticVibration {
     private val prefs by appPreferenceModel()
     private val singletons = mutableMapOf<String, Vibration>()
 
-    @JvmStatic
     fun rotation(context: Context): Vibration {
         if (singletons[prefs.inputFeedback.hapticRotateEnabled.key] == null) {
             singletons[prefs.inputFeedback.hapticRotateEnabled.key] =

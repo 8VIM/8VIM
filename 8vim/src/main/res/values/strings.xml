@@ -29,6 +29,7 @@
     <string name="pref_category_general">General</string>
     <string name="pref_category_ergonomics">Ergonomics</string>
     <string name="pref_category_look_and_feel">Look &amp; Feel</string>
+    <string name="pref_category_behavior">Behavior</string>
 
     <!--    preferences shown in gui UI-->
     <string name="pref_select_keyboard_layout_key">prefs_layout_current</string>
@@ -122,10 +123,16 @@
     <string name="pref_color_mode_key">prefs_theme_color_mode</string>
     <string name="pref_color_mode_title">Keyboard color</string>
 
+    <string name="pref_behavior_cursor_move_by_word_key">prefs_keyboard_behavior_cursor_move_by_word</string>
+    <string name="pref_behavior_cursor_move_by_word_title">Cursor movement behavior</string>
+    <string name="pref_behavior_cursor_move_by_word_summary_on">Move the cursor word by word</string>
+    <string name="pref_behavior_cursor_move_by_word_summary_off">Move the cursor character by character</string>
+
     <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
     <string name="about_us_label">About Us</string>
     <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>
     <string name="tab_button_content_description">Tab</string>
+    <string name="ctrl_button_content_description">Ctrl button</string>
     <string name="open_selection_keypad_button_content_description">Open Selection Keypad</string>
     <string name="open_keyboard_settings_button_content_description">Open Keyboard Settings</string>
     <string name="clipboard_button_content_description">Open Clipboard keypad</string>
