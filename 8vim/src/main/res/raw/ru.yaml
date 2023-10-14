@@ -49,4 +49,36 @@ layers:
             - lower_case: у
             - lower_case: ж
             - lower_case: ","
-              upper_case: "."
+  extra_layers:
+    first:
+      sectors:
+        right:
+          parts:
+            bottom:
+              - lower_case: "!"
+            top:
+              - lower_case: "."
+              - lower_case: ё
+        top:
+          parts:
+            right:
+              - lower_case: "…"
+              - lower_case: '"'
+            left:
+              - lower_case: ":"
+              - lower_case: "/"
+        left:
+          parts:
+            bottom:
+              - lower_case: "—"
+              - lower_case: "*"
+            top:
+              - lower_case: ";" 
+              - lower_case: ъ
+        bottom:
+          parts:
+            left:
+              - lower_case: "-"
+              - lower_case: "@"
+            right:
+              - lower_case: "?"
