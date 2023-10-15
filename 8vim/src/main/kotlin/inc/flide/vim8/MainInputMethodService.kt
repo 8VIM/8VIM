@@ -287,19 +287,19 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
 
     fun delete() {
         inputConnection?.let {
-            it.beginBatchEdit()
             if (TextUtils.isEmpty(it.getSelectedText(0))) {
-                val extractedText = it.getExtractedText(ExtractedTextRequest(), 0)
-                val length = if (ctrlState) {
-                    breakIteratorGroup.measureLastWords(extractedText.text.toString(), 1)
-                } else {
-                    breakIteratorGroup.measureLastCharacters(extractedText.text.toString(), 1)
-                }.coerceAtLeast(1)
+                val length =
+                    it.getExtractedText(ExtractedTextRequest(), 0)?.text?.toString()?.let { text ->
+                        if (ctrlState) {
+                            breakIteratorGroup.measureLastWords(text, 1)
+                        } else {
+                            breakIteratorGroup.measureLastCharacters(text, 1)
+                        }.coerceAtLeast(1)
+                    } ?: 1
                 it.deleteSurroundingTextInCodePoints(length, 0)
             } else {
                 it.commitText("", 0)
             }
-            it.endBatchEdit()
         }
     }
 
