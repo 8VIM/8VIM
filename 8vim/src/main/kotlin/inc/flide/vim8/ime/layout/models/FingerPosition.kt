@@ -96,8 +96,7 @@ enum class FingerPosition {
                     val maxMovements = position.ordinal + 1
                     val movementSequence =
                         LayerLevel.MovementSequences[layer].orEmpty() + INSIDE_CIRCLE
-
-                    return (0..maxMovements).fold(movementSequence) { acc, _ ->
+                    (0..maxMovements).fold(movementSequence) { acc, _ ->
                         val lastPosition = acc.last()
                         val nextPosition = getNextPosition(quadrant, lastPosition)
                         acc + nextPosition
