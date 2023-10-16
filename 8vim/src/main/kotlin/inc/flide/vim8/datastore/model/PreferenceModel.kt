@@ -91,7 +91,7 @@ abstract class PreferenceModel(val version: Int) :
         return entry.keepAsIs()
     }
 
-    protected open fun postInitialize() {
+    protected open fun postInitialize(context: Context) {
     }
 
     private fun <V : Any> PreferenceData<V>.deserialize(rawValue: Any?) {
@@ -188,7 +188,7 @@ abstract class PreferenceModel(val version: Int) :
             var prefKey = entry.key
             var rawValue = entry.value
             var updateValue = false
-            (oldVersion..version).forEach { fromVersion ->
+            (oldVersion until version).forEach { fromVersion ->
                 val migrationResult = migrate(
                     fromVersion,
                     PreferenceMigrationEntry(
@@ -223,7 +223,7 @@ abstract class PreferenceModel(val version: Int) :
         editor
             .putInt(DATASTORE_VERSION, version)
             .apply()
-        postInitialize()
+        postInitialize(context)
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         isReady.set(true)
         onReadyObserver?.onChanged(true)

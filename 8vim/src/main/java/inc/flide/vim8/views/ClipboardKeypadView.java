@@ -67,7 +67,7 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardAc
         setupSwitchToMainKeyboardButton();
     }
 
-    public void setupClipboardListView() {
+    private void setupClipboardListView() {
         List<String> clipHistory = actionListener.getClipHistory();
         clipboardItemsList = this.findViewById(R.id.clipboardItemsList);
         keyboardTheme.onChange(() -> {

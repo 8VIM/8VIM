@@ -1,5 +1,6 @@
 package inc.flide.vim8
 
+import android.content.Context
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
@@ -269,9 +270,10 @@ class AppPrefs : PreferenceModel(3) {
         }
     }
 
-    override fun postInitialize() {
+    override fun postInitialize(context: Context) {
         if (internal.versionCode.get() != BuildConfig.VERSION_CODE) {
             layout.cache.reset()
+            context.cacheDir.deleteRecursively()
         }
         internal.versionCode.set(BuildConfig.VERSION_CODE)
     }

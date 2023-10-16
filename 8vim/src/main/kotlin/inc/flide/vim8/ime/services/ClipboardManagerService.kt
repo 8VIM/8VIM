@@ -3,20 +3,21 @@ package inc.flide.vim8.ime.services
 import android.content.ClipboardManager
 import android.content.Context
 import inc.flide.vim8.appPreferenceModel
+import inc.flide.vim8.lib.android.systemServiceOrNull
 
 class ClipboardManagerService(context: Context) {
-    private val clipboardManager: ClipboardManager
     private val prefs by appPreferenceModel()
     private var clipboardHistoryListener: ClipboardHistoryListener? = null
 
     init {
-        clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        clipboardManager.addPrimaryClipChangedListener {
-            clipboardManager.primaryClip?.let {
-                if (prefs.clipboard.enabled.get()) {
-                    val newClip = it.getItemAt(0).text.toString()
-                    addClipToHistory(newClip)
-                    clipboardHistoryListener?.onClipboardHistoryChanged()
+        context.systemServiceOrNull(ClipboardManager::class)?.let { clipboardManager ->
+            clipboardManager.addPrimaryClipChangedListener {
+                clipboardManager.primaryClip?.let {
+                    if (prefs.clipboard.enabled.get()) {
+                        val newClip = it.getItemAt(0).text.toString()
+                        addClipToHistory(newClip)
+                        clipboardHistoryListener?.onClipboardHistoryChanged()
+                    }
                 }
             }
         }
@@ -34,7 +35,7 @@ class ClipboardManagerService(context: Context) {
     private fun addClipToHistory(newClip: String) {
         if (newClip.isNotEmpty()) {
             val timestampedClip = "[${System.currentTimeMillis()}] $newClip"
-            (prefs.clipboard.history.get() + timestampedClip)
+            (prefs.clipboard.history.get().asSequence() + timestampedClip)
                 .fold(mapOf<String, Long>()) { acc, clip ->
                     val cleanedClip = getClipFromTimestampedClip(clip)
                     val timestamp = getTimestampFromTimestampedClip(clip)
