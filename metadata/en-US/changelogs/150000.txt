@@ -1,0 +1,10 @@
+feat: setup process by @MaethorNaur
+feat: improve keyboard launching by @MaethorNaur
+fix: display/crash if the layer to render is from hidden by @MaethorNaur
+fix: reading wrong haptic/sound preferences by @MaethorNaur
+feat: add estonian layout by @Kiisu-Master
+feat: add arabic layout by @Oderjunkie
+feat: update Ukrainian layout by @binraptor
+feat: add option to disable clipboard by @MaethorNaur
+feat: more option for cursor by @MaethorNaur
+feat: add russian layout by @nmukhachev
