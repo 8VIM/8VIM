@@ -49,6 +49,9 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     private lateinit var symbolKeypadView: SymbolKeypadView
     private lateinit var breakIteratorGroup: BreakIteratorGroup
     private lateinit var layoutLoader: LayoutLoader
+
+    var isPassword = false
+        private set
     var ctrlState = false
         private set
     val ctrlFlag: Int
@@ -194,6 +197,13 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
     override fun onStartInputView(info: EditorInfo, restarting: Boolean) {
         super.onStartInputView(info, restarting)
         editorInfo = info
+        isPassword = when (editorInfo.inputType and InputType.TYPE_MASK_VARIATION) {
+            InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD,
+            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD,
+            InputType.TYPE_TEXT_VARIATION_PASSWORD -> true
+
+            else -> false
+        }
         when (editorInfo.inputType and InputType.TYPE_MASK_CLASS) {
             InputType.TYPE_CLASS_NUMBER,
             InputType.TYPE_CLASS_PHONE,
@@ -328,6 +338,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
 
     fun switchToMainKeypad() {
         setCurrentKeypadView(mainKeyboardView)
+        mainKeyboardView.setupClipboardButton()
     }
 
     fun switchToNumberPad() {

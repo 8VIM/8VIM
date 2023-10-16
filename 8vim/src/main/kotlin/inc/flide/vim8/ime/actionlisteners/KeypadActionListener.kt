@@ -20,6 +20,8 @@ abstract class KeypadActionListener(
     private val prefs by appPreferenceModel()
     val ctrlState: Boolean
         get() = mainInputMethodService.ctrlState
+    val isPassword: Boolean
+        get() = mainInputMethodService.isPassword
     private val audioManager: AudioManager =
         view.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -32,7 +34,6 @@ abstract class KeypadActionListener(
     fun performCtrlToggle() {
         mainInputMethodService.performCtrlToggle()
     }
-
     fun handleInputKey(keyCode: Int, keyFlags: Int) {
         val actionHandled =
             handleKeyEventKeyCodes(keyCode, keyFlags) || (

@@ -14,7 +14,8 @@ class ClipboardManagerService(context: Context) {
             clipboardManager.addPrimaryClipChangedListener {
                 clipboardManager.primaryClip?.let {
                     if (prefs.clipboard.enabled.get()) {
-                        val newClip = it.getItemAt(0).text.toString()
+                        val clip = it.getItemAt(0)
+                        val newClip = clip.text.toString()
                         addClipToHistory(newClip)
                         clipboardHistoryListener?.onClipboardHistoryChanged()
                     }

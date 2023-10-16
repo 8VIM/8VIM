@@ -85,9 +85,14 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
             params.horizontalWeight = 0;
             sidebar.setLayoutParams(params);
         }
+        setupClipboardButton();
+    }
+
+    public void setupClipboardButton() {
         ImageButton switchToClipboardButton = findViewById(R.id.switchKeypadButton);
         if (switchToClipboardButton != null) {
-            int clipboardVisibility = prefs.getClipboard().getEnabled().get() ? VISIBLE : GONE;
+            boolean isVisible = !actionListener.isPassword() && prefs.getClipboard().getEnabled().get();
+            int clipboardVisibility = isVisible ? VISIBLE : GONE;
             switchToClipboardButton.setVisibility(clipboardVisibility);
         }
     }
