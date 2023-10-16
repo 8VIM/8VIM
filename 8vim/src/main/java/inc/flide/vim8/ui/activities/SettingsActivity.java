@@ -2,7 +2,6 @@ package inc.flide.vim8.ui.activities;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static inc.flide.vim8.VIM8ApplicationKt.vim8Application;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +21,6 @@ import com.google.android.material.navigation.NavigationView;
 import inc.flide.vim8.BuildConfig;
 import inc.flide.vim8.R;
 import inc.flide.vim8.app.settings.SettingsFragment;
-import inc.flide.vim8.ime.LayoutLoader;
-import inc.flide.vim8.ime.layout.AvailableLayouts;
 import inc.flide.vim8.lib.android.AndroidSettings;
 import inc.flide.vim8.lib.android.SystemSettingsObserver;
 import inc.flide.vim8.utils.InputMethodUtils;
@@ -42,8 +39,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LayoutLoader layoutLoader = vim8Application().getLayoutLoader();
-        AvailableLayouts availableLayouts = new AvailableLayouts(layoutLoader, this);
         handlerThread.start();
         backPressHandler = new Handler(handlerThread.getLooper(), null);
 
@@ -62,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         navigationView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.settings_fragment, new SettingsFragment(availableLayouts, layoutLoader)).commit();
+                .replace(R.id.settings_fragment, new SettingsFragment()).commit();
         setupCards();
     }
 

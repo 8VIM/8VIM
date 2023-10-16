@@ -17,6 +17,7 @@ import arrow.core.right
 import arrow.core.some
 import inc.flide.vim8.R
 import inc.flide.vim8.appPreferenceModel
+import inc.flide.vim8.cache
 import inc.flide.vim8.datastore.model.PreferenceSerDe
 import inc.flide.vim8.ime.LayoutLoader
 import inc.flide.vim8.ime.layout.models.KeyboardData
@@ -25,7 +26,6 @@ import inc.flide.vim8.ime.layout.models.error.LayoutError
 import inc.flide.vim8.ime.layout.models.info
 import inc.flide.vim8.ime.layout.models.yaml.name
 import inc.flide.vim8.lib.android.tryOrNull
-import inc.flide.vim8.vim8Application
 import java.io.InputStream
 import java.util.Locale
 import org.apache.commons.codec.digest.DigestUtils
@@ -83,7 +83,7 @@ fun <T> Layout<T>.loadKeyboardData(
     md5(context)
         .toEither { ExceptionWrapperError(Exception("MD5")) }
         .flatMap { md5 ->
-            val cache = vim8Application()?.cache!!
+            val cache by context.cache()
             cache.load(md5).fold({
                 inputStream(context)
                     .flatMap {

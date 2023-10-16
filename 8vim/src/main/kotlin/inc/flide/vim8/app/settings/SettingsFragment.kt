@@ -4,21 +4,20 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.Preference
 import inc.flide.vim8.R
-import inc.flide.vim8.ime.LayoutLoader
 import inc.flide.vim8.ime.layout.AvailableLayouts
+import inc.flide.vim8.layoutLoader
 import inc.flide.vim8.theme.ThemeMode
 import inc.flide.vim8.utils.DialogsHelper.createItemsChoice
 import inc.flide.vim8.utils.InputMethodUtils.listOtherKeyboard
 
-class SettingsFragment(availableLayouts: AvailableLayouts, layoutLoader: LayoutLoader) :
-    LayoutFileSelector() {
-
-    init {
-        this.availableLayouts = availableLayouts
-        this.layoutLoader = layoutLoader
-    }
-
+class SettingsFragment : LayoutFileSelector() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        context?.let { context ->
+            if (availableLayouts == null) {
+                layoutLoader = context.layoutLoader().value
+                availableLayouts = AvailableLayouts(layoutLoader!!, context)
+            }
+        }
         setPreferencesFromResource(R.xml.preferences, rootKey)
         setupPreferenceButtonActions()
         setupPreferenceCallbacks()
