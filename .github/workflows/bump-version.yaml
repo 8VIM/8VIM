@@ -46,19 +46,22 @@ jobs:
             RC_CODE=$((100-$RC))
           else
             RC=0
-            if [ $VERSION = "patch" ]
+            if [ $VERSION != "next" ]
             then
-              PATCH=$(($PATCH+1))
-            else
-              PATCH=0
-              if [ $VERSION = "minor" ]
+              if [ $VERSION = "patch" ]
               then
-                MINOR=$(($MINOR+1))
+                PATCH=$(($PATCH+1))
               else
-                if [ $VERSION = "major" ]
+                PATCH=0
+                if [ $VERSION = "minor" ]
                 then
-                  MINOR=0
-                  MAJOR=$(($MAJOR+1))
+                  MINOR=$(($MINOR+1))
+                else
+                  if [ $VERSION = "major" ]
+                  then
+                    MINOR=0
+                    MAJOR=$(($MAJOR+1))
+                  fi
                 fi
               fi
             fi
