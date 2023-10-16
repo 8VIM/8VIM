@@ -8,14 +8,13 @@ import android.net.Uri
 import android.provider.OpenableColumns
 import arrow.core.None
 import arrow.core.right
-import inc.flide.vim8.VIM8Application
 import inc.flide.vim8.arbitraries.Arbitraries
+import inc.flide.vim8.cache
 import inc.flide.vim8.ime.LayoutLoader
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.info
 import inc.flide.vim8.ime.layout.models.yaml.name
-import inc.flide.vim8.vim8Application
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
@@ -36,13 +35,11 @@ class LayoutSpec : FunSpec({
     val cache = mockk<Cache>(relaxed = true)
     val inputStream = mockk<InputStream>(relaxed = true)
     val layoutLoader = mockk<LayoutLoader>()
-    val application = mockk<VIM8Application>()
 
     beforeSpec {
         mockkStatic(DigestUtils::class)
-        mockkStatic(::vim8Application)
-        every { vim8Application() } returns application
-        every { application.cache } returns cache
+        mockkStatic(Context::cache)
+        every { context.cache() } returns lazy { cache }
         every { DigestUtils.md5Hex(any<InputStream>()) } returns ""
         every { context.resources } returns resources
         every { context.contentResolver } returns contentResolver
@@ -148,6 +145,6 @@ class LayoutSpec : FunSpec({
     }
 
     afterSpec {
-        clearStaticMockk(DigestUtils::class)
+        clearStaticMockk(DigestUtils::class, Context::class)
     }
 })

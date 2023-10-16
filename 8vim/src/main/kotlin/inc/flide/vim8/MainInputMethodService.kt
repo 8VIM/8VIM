@@ -83,9 +83,9 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
 
     override fun onCreate() {
         super.onCreate()
-        layoutLoader = vim8Application()?.layoutLoader!!
+        layoutLoader = applicationContext.layoutLoader().value
         breakIteratorGroup = BreakIteratorGroup(applicationContext)
-        DynamicColors.applyToActivitiesIfAvailable(this.application)
+        DynamicColors.applyToActivitiesIfAvailable(application)
         clipboardManagerService = ClipboardManagerService(applicationContext)
         clipboardManagerService.setClipboardHistoryListener(this)
         keyboardTheme = getInstance()
