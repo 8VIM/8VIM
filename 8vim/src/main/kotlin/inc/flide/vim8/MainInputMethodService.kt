@@ -296,7 +296,7 @@ class MainInputMethodService : InputMethodService(), ClipboardHistoryListener {
                             breakIteratorGroup.measureLastCharacters(text, 1)
                         }.coerceAtLeast(1)
                     } ?: 1
-                it.deleteSurroundingTextInCodePoints(length, 0)
+                it.deleteSurroundingText(length, 0)
             } else {
                 it.commitText("", 0)
             }
