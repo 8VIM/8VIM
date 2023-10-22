@@ -162,7 +162,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
             val layer = findLayer()
             var size = FULL_ROTATION_STEPS
             var start = 1
-            var layerCondition = movementSequence[0] === FingerPosition.INSIDE_CIRCLE
+            var layerCondition = movementSequence[0] == FingerPosition.INSIDE_CIRCLE
             if (layer !== LayerLevel.FIRST) {
                 MovementSequences.getOrNone(layer).onSome {
                     size += it.size
@@ -210,7 +210,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                 movementSequence.subList(start, size).clear()
                 mainInputMethodService.performShiftToggle()
             }
-            if (currentFingerPosition === FingerPosition.INSIDE_CIRCLE &&
+            if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE &&
                 keyboardData.isSome { it.actionMap.containsKey(movementSequence) }
             ) {
                 processMovementSequence(movementSequence)
@@ -218,7 +218,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                 currentLetter = null
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT
                 movementSequence.add(currentFingerPosition)
-            } else if (currentFingerPosition === FingerPosition.INSIDE_CIRCLE) {
+            } else if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
                 val layer = findLayer()
                 var layerSize = 0
                 val extraLayerMovementSequences = if (layer !== LayerLevel.FIRST) {
@@ -230,8 +230,8 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                     listOf()
                 }
                 val defaultLayerCondition = (
-                    layer === LayerLevel.FIRST &&
-                        movementSequence[0] === FingerPosition.INSIDE_CIRCLE
+                    layer == LayerLevel.FIRST &&
+                        movementSequence[0] == FingerPosition.INSIDE_CIRCLE
                     )
                 val extraLayerCondition =
                     layer !== LayerLevel.FIRST && movementSequence.size > layerSize
@@ -286,8 +286,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
     }
 
     private fun processMovementSequence(movementSequence: MovementSequence) {
-        val keyboardData = keyboardData.getOrNull() ?: return
-        val actionMap = keyboardData.actionMap
+        val actionMap = keyboardData.getOrNull()?.actionMap ?: return
         actionMap
             .getOrNone(movementSequence)
             .recover {
@@ -299,7 +298,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                     .bind()
             }
             .onSome {
-                if (it.keyboardActionType === KeyboardActionType.INPUT_TEXT) {
+                if (it.keyboardActionType == KeyboardActionType.INPUT_TEXT) {
                     handleInputText(it)
                 } else {
                     handleInputKey(it.keyEventCode, it.keyFlags)
