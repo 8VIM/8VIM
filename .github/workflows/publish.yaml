@@ -38,7 +38,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: artifact
-          path: artifact/ 
+          path: artifact/
       - name: Setup env
         run: |
           mkdir -p distribution/whatsnew
@@ -100,7 +100,7 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v4
         with:
           configuration: changelog-configuration.json
-          ignorePreReleases: "${{!contains(inputs.version_name, 'rc')}}"
+          ignorePreReleases: "${{!contains(inputs.version_name, 'rc') && 'true' || 'false'}}"
           toTag: v${{inputs.version_name}}
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
