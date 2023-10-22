@@ -153,7 +153,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
             }
         }
         return keyboardData
-            .map { it.findLayer(movementSequence.toList() + FingerPosition.INSIDE_CIRCLE) }
+            .map { it.findLayer(movementSequence + FingerPosition.INSIDE_CIRCLE) }
             .getOrElse { LayerLevel.FIRST }
     }
 
@@ -162,7 +162,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
             val layer = findLayer()
             var size = FULL_ROTATION_STEPS
             var start = 1
-            var layerCondition = movementSequence[0] === FingerPosition.INSIDE_CIRCLE
+            var layerCondition = movementSequence[0] == FingerPosition.INSIDE_CIRCLE
             if (layer !== LayerLevel.FIRST) {
                 MovementSequences.getOrNone(layer).onSome {
                     size += it.size
@@ -210,7 +210,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                 movementSequence.subList(start, size).clear()
                 mainInputMethodService.performShiftToggle()
             }
-            if (currentFingerPosition === FingerPosition.INSIDE_CIRCLE &&
+            if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE &&
                 keyboardData.isSome { it.actionMap.containsKey(movementSequence) }
             ) {
                 processMovementSequence(movementSequence)
@@ -218,7 +218,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                 currentLetter = null
                 currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT
                 movementSequence.add(currentFingerPosition)
-            } else if (currentFingerPosition === FingerPosition.INSIDE_CIRCLE) {
+            } else if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
                 val layer = findLayer()
                 var layerSize = 0
                 val extraLayerMovementSequences = if (layer !== LayerLevel.FIRST) {
@@ -230,8 +230,8 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                     listOf()
                 }
                 val defaultLayerCondition = (
-                    layer === LayerLevel.FIRST &&
-                        movementSequence[0] === FingerPosition.INSIDE_CIRCLE
+                    layer == LayerLevel.FIRST &&
+                        movementSequence[0] == FingerPosition.INSIDE_CIRCLE
                     )
                 val extraLayerCondition =
                     layer !== LayerLevel.FIRST && movementSequence.size > layerSize
@@ -244,7 +244,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                 }
             } else {
                 val modifiedMovementSequence =
-                    movementSequence.toList() + FingerPosition.INSIDE_CIRCLE
+                    movementSequence + FingerPosition.INSIDE_CIRCLE
                 keyboardData
                     .flatMap { it.actionMap.getOrNone(modifiedMovementSequence) }
                     .onSome {
@@ -281,20 +281,24 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
 
     private fun interruptLongPress() {
         longPressHandler.removeCallbacks(longPressRunnable)
-        processMovementSequence(movementSequence.toList() + FingerPosition.LONG_PRESS_END)
+        processMovementSequence(movementSequence + FingerPosition.LONG_PRESS_END)
         isLongPressCallbackSet = false
     }
 
     private fun processMovementSequence(movementSequence: MovementSequence) {
-        keyboardData
-            .flatMap { it.actionMap.getOrNone(movementSequence) }
+        val actionMap = keyboardData.getOrNull()?.actionMap ?: return
+        actionMap
+            .getOrNone(movementSequence)
             .recover {
-                val modifiedMovementSequence =
-                    listOf(FingerPosition.NO_TOUCH) + movementSequence.toList()
-                keyboardData.flatMap { it.actionMap.getOrNone(modifiedMovementSequence) }.bind()
+                actionMap
+                    .getOrNone(
+                        listOf(FingerPosition.NO_TOUCH) + movementSequence
+                    )
+                    .filter { currentMovementSequenceType == MovementSequenceType.NEW_MOVEMENT }
+                    .bind()
             }
             .onSome {
-                if (it.keyboardActionType === KeyboardActionType.INPUT_TEXT) {
+                if (it.keyboardActionType == KeyboardActionType.INPUT_TEXT) {
                     handleInputText(it)
                 } else {
                     handleInputKey(it.keyEventCode, it.keyFlags)
