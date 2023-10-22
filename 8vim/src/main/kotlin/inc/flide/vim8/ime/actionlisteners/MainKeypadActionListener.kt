@@ -286,16 +286,16 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
     }
 
     private fun processMovementSequence(movementSequence: MovementSequence) {
-        keyboardData
-            .flatMap { it.actionMap.getOrNone(movementSequence) }
+        val keyboardData = keyboardData.getOrNull() ?: return
+        val actionMap = keyboardData.actionMap
+        actionMap
+            .getOrNone(movementSequence)
             .recover {
-                keyboardData
+                actionMap
+                    .getOrNone(
+                        listOf(FingerPosition.NO_TOUCH) + movementSequence
+                    )
                     .filter { currentMovementSequenceType == MovementSequenceType.NEW_MOVEMENT }
-                    .flatMap {
-                        it.actionMap.getOrNone(
-                            listOf(FingerPosition.NO_TOUCH) + movementSequence
-                        )
-                    }
                     .bind()
             }
             .onSome {
