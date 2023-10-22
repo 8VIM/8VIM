@@ -153,7 +153,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
             }
         }
         return keyboardData
-            .map { it.findLayer(movementSequence.toList() + FingerPosition.INSIDE_CIRCLE) }
+            .map { it.findLayer(movementSequence + FingerPosition.INSIDE_CIRCLE) }
             .getOrElse { LayerLevel.FIRST }
     }
 
@@ -244,7 +244,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                 }
             } else {
                 val modifiedMovementSequence =
-                    movementSequence.toList() + FingerPosition.INSIDE_CIRCLE
+                    movementSequence + FingerPosition.INSIDE_CIRCLE
                 keyboardData
                     .flatMap { it.actionMap.getOrNone(modifiedMovementSequence) }
                     .onSome {
@@ -281,7 +281,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
 
     private fun interruptLongPress() {
         longPressHandler.removeCallbacks(longPressRunnable)
-        processMovementSequence(movementSequence.toList() + FingerPosition.LONG_PRESS_END)
+        processMovementSequence(movementSequence + FingerPosition.LONG_PRESS_END)
         isLongPressCallbackSet = false
     }
 
@@ -289,9 +289,14 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
         keyboardData
             .flatMap { it.actionMap.getOrNone(movementSequence) }
             .recover {
-                val modifiedMovementSequence =
-                    listOf(FingerPosition.NO_TOUCH) + movementSequence.toList()
-                keyboardData.flatMap { it.actionMap.getOrNone(modifiedMovementSequence) }.bind()
+                keyboardData
+                    .filter { currentMovementSequenceType == MovementSequenceType.NEW_MOVEMENT }
+                    .flatMap {
+                        it.actionMap.getOrNone(
+                            listOf(FingerPosition.NO_TOUCH) + movementSequence
+                        )
+                    }
+                    .bind()
             }
             .onSome {
                 if (it.keyboardActionType === KeyboardActionType.INPUT_TEXT) {
