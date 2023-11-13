@@ -43,7 +43,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -109,17 +109,17 @@ class StepLayoutScope(
 
 class StepState private constructor(
     private val currentAuto: MutableState<Int>,
-    private val currentManual: MutableState<Int> = mutableStateOf(-1)
+    private val currentManual: MutableState<Int> = mutableIntStateOf(-1)
 ) {
     companion object {
-        fun new(init: Int) = StepState(mutableStateOf(init))
+        fun new(init: Int) = StepState(mutableIntStateOf(init))
 
         val Saver = Saver<StepState, ArrayList<Int>>(
             save = {
                 arrayListOf(it.currentAuto.value, it.currentManual.value)
             },
             restore = {
-                StepState(mutableStateOf(it[0]), mutableStateOf(it[1]))
+                StepState(mutableIntStateOf(it[0]), mutableIntStateOf(it[1]))
             }
         )
     }
@@ -154,7 +154,6 @@ fun StepLayout(
     stepState: StepState,
     steps: List<Step>,
     modifier: Modifier = Modifier,
-    primaryColor: Color = MaterialTheme.colorScheme.primary,
     header: @Composable StepLayoutScope.() -> Unit = { },
     footer: @Composable StepLayoutScope.() -> Unit = { }
 ) {
@@ -170,7 +169,6 @@ fun StepLayout(
                     totalSteps = steps.size,
                     stepState = stepState,
                     title = step.title,
-                    primaryColor = primaryColor
                 ) {
                     step.content(StepLayoutScope(this))
                 }
@@ -186,13 +184,12 @@ private fun ColumnScope.Step(
     totalSteps: Int,
     stepState: StepState,
     title: String,
-    primaryColor: Color,
     content: @Composable ColumnScope.() -> Unit
 ) {
     val currentStepId by stepState.getCurrent()
     val autoStepId by stepState.getCurrentAuto()
     val backgroundColor = when (ownStepId) {
-        currentStepId -> primaryColor
+        currentStepId -> MaterialTheme.colorScheme.primary
         else -> MaterialTheme.colorScheme.outline
     }
     val contentVisible = ownStepId == currentStepId
@@ -223,29 +220,26 @@ private fun ColumnScope.Step(
         exit = fadeOut(animationSpec = animSpec)
     ) {
         val onBackground = MaterialTheme.colorScheme.onSurface
-        val modifier = Modifier
+        Box(modifier = Modifier
             .padding(start = 56.dp)
-        Box(
-            modifier = if (currentStepId < totalSteps) {
-                modifier.drawBehind {
-                    drawLine(
-                        color = onBackground,
-                        start = Offset(stepStrokeX.toPx(), 0f),
-                        end = Offset(stepStrokeX.toPx(), size.height),
-                        strokeWidth = stepStrokeWidth.toPx(),
-                        pathEffect = PathEffect.dashPathEffect(
-                            floatArrayOf(
-                                2.dp.toPx(),
-                                10.dp.toPx()
-                            )
-                        ),
-                        alpha = 0.38f
-                    )
+            .let {
+                if (currentStepId < totalSteps) {
+                    it.drawBehind {
+                        drawLine(
+                            color = onBackground,
+                            start = Offset(stepStrokeX.toPx(), 0f),
+                            end = Offset(stepStrokeX.toPx(), size.height),
+                            strokeWidth = stepStrokeWidth.toPx(),
+                            pathEffect = PathEffect.dashPathEffect(
+                                floatArrayOf(2.dp.toPx(), 10.dp.toPx())
+                            ),
+                            alpha = 0.38f
+                        )
+                    }
+                } else {
+                    it
                 }
-            } else {
-                modifier
-            }
-        ) {
+            }) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()

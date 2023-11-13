@@ -4,25 +4,57 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import arrow.core.Option
+import arrow.core.firstOrNone
 import inc.flide.vim8.lib.android.AndroidSettings
 import inc.flide.vim8.lib.android.systemServiceOrNull
 
-private const val DELIMITER = ':'
 private const val IME_SERVICE_CLASS_NAME = "inc.flide.vim8.MainInputMethodService"
 
 object InputMethodUtils {
     @Composable
+    private fun rememberLifecycleEvent(lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current): Lifecycle.Event {
+        var state by remember { mutableStateOf(Lifecycle.Event.ON_ANY) }
+        DisposableEffect(lifecycleOwner) {
+            val observer = LifecycleEventObserver { _, event ->
+                state = event
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        }
+        return state
+    }
+
+    @Composable
     fun observeIs8VimEnabled(
-        context: Context = LocalContext.current.applicationContext,
-        foregroundOnly: Boolean = false
-    ) = AndroidSettings.Secure.observeAsState(
-        key = Settings.Secure.ENABLED_INPUT_METHODS,
-        foregroundOnly = foregroundOnly,
-        transform = { parseIs8VimEnabled(context, it.toString()) }
-    )
+        context: Context = LocalContext.current.applicationContext
+    ): State<Boolean> {
+        val state = remember { mutableStateOf(parseIs8VimEnabled(context)) }
+        val lifecycleEvent = rememberLifecycleEvent()
+        LaunchedEffect(lifecycleEvent) {
+            if (lifecycleEvent == Lifecycle.Event.ON_RESUME) {
+                state.value = parseIs8VimEnabled(context)
+            }
+        }
+        return state
+    }
 
     @Composable
     fun observeIs8VimSelected(
@@ -34,18 +66,26 @@ object InputMethodUtils {
         transform = { parseIs8VimSelected(context, it.toString()) }
     )
 
-    fun parseIs8VimEnabled(context: Context, activeImeIds: String): Boolean {
-        return activeImeIds.split(DELIMITER).map { componentStr ->
-            ComponentName.unflattenFromString(componentStr)
-        }.any { it?.packageName == context.packageName && it?.className == IME_SERVICE_CLASS_NAME }
+    @JvmStatic
+    fun parseIs8VimEnabled(context: Context): Boolean {
+        return Option
+            .fromNullable(context.systemServiceOrNull(InputMethodManager::class))
+            .isSome {
+                it.enabledInputMethodList.firstOrNone { inputMethodInfo ->
+                    inputMethodInfo.component.packageName == context.packageName &&
+                            inputMethodInfo.component.className == IME_SERVICE_CLASS_NAME
+                }.isSome()
+            }
     }
 
+    @JvmStatic
     fun parseIs8VimSelected(context: Context, selectedImeId: String): Boolean {
         val component = ComponentName.unflattenFromString(selectedImeId)
         return component?.packageName == context.packageName &&
-            component?.className == IME_SERVICE_CLASS_NAME
+                component?.className == IME_SERVICE_CLASS_NAME
     }
 
+    @JvmStatic
     fun showImeEnablerActivity(context: Context) {
         val intent = Intent()
         intent.action = Settings.ACTION_INPUT_METHOD_SETTINGS
@@ -53,6 +93,7 @@ object InputMethodUtils {
         context.startActivity(intent)
     }
 
+    @JvmStatic
     fun showImePicker(context: Context): Boolean {
         val imm = context.systemServiceOrNull(InputMethodManager::class)
         return if (imm != null) {
