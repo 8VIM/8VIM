@@ -1,7 +1,6 @@
 package inc.flide.vim8.app.setup
 
 import android.content.Intent
-import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,7 +22,6 @@ import inc.flide.vim8.R
 import inc.flide.vim8.app.LocalNavController
 import inc.flide.vim8.app.MainActivity
 import inc.flide.vim8.app.Routes
-import inc.flide.vim8.lib.android.AndroidSettings
 import inc.flide.vim8.lib.android.launchActivity
 import inc.flide.vim8.lib.android.launchUrl
 import inc.flide.vim8.lib.compose.Screen
@@ -49,7 +47,7 @@ fun SetupScreen() = Screen {
     val navController = LocalNavController.current
     val context = LocalContext.current
 
-    val is8VimEnabled by InputMethodUtils.observeIs8VimEnabled(foregroundOnly = true)
+    val is8VimEnabled by InputMethodUtils.observeIs8VimEnabled()
     val is8VimSelected by InputMethodUtils.observeIs8VimSelected(foregroundOnly = true)
 
     val stepState = rememberSaveable(saver = StepState.Saver) {
@@ -77,11 +75,7 @@ fun SetupScreen() = Screen {
         LaunchedEffect(Unit) {
             while (isActive) {
                 delay(200)
-                val imeIds = AndroidSettings.Secure.getString(
-                    context,
-                    Settings.Secure.ENABLED_INPUT_METHODS
-                ) ?: "(null)"
-                val isEnabled = InputMethodUtils.parseIs8VimEnabled(context, imeIds)
+                val isEnabled = InputMethodUtils.parseIs8VimEnabled(context)
                 if (stepState.getCurrentAuto().value == SetupStep.EnableIme &&
                     stepState.getCurrentManual().value == -1 &&
                     !is8VimEnabled &&

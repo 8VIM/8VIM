@@ -113,10 +113,9 @@ android {
 
             resValue("string", "app_name", "8Vim Debug")
             enableUnitTestCoverage
-            /* Activate R8 in debug mode, good to check if any new library added works
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
-            */
+//            Activate R8 in debug mode, good to check if any new library added works
+//            isMinifyEnabled = true
+//            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
 
         named("release") {

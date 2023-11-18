@@ -31,7 +31,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     private Handler backPressHandler;
     private boolean pressBackTwice;
     private final Runnable runnable = () -> pressBackTwice = false;
-    private SystemSettingsObserver keyboardEnabledObserver;
     private SystemSettingsObserver keyboardSelectedObserver;
     private MaterialCard keyboardNotEnabledCard;
     private MaterialCard keyboardNotSelectedCard;
@@ -65,13 +64,11 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         keyboardNotEnabledCard = findViewById(R.id.error_card);
         keyboardNotSelectedCard = findViewById(R.id.warning_card);
         keyboardNotEnabledCard.setOnClickListener(
-                (v) -> InputMethodUtils.INSTANCE.showImeEnablerActivity(getApplicationContext()));
+                (v) -> InputMethodUtils.showImeEnablerActivity(getApplicationContext()));
         keyboardNotSelectedCard.setOnClickListener(
-                (v) -> InputMethodUtils.INSTANCE.showImePicker(getApplicationContext()));
-        keyboardEnabledObserver =
-                new SystemSettingsObserver(getApplicationContext(), this::updateCards);
+                (v) -> InputMethodUtils.showImePicker(getApplicationContext()));
         keyboardSelectedObserver =
-                new SystemSettingsObserver(getApplicationContext(), this::updateCards);
+                new SystemSettingsObserver(getApplicationContext(), this::updateKeyboardNotSelectedCard);
         updateCards();
     }
 
@@ -85,6 +82,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     @Override
     protected void onResume() {
         super.onResume();
+        updateKeyboardNotEnabledCard();
         observe();
     }
 
@@ -103,12 +101,11 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void observe() {
-        observe(Settings.Secure.ENABLED_INPUT_METHODS, keyboardEnabledObserver);
         observe(Settings.Secure.DEFAULT_INPUT_METHOD, keyboardSelectedObserver);
     }
 
     private void observe(String key, SystemSettingsObserver observer) {
-        Uri uri = AndroidSettings.INSTANCE.getSecure().getUriFor(key);
+        Uri uri = AndroidSettings.getSecure().getUriFor(key);
         if (uri != null) {
             getApplicationContext().getContentResolver().registerContentObserver(uri, false, observer);
             observer.dispatchChange(false, uri);
@@ -116,7 +113,6 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void removeObservers() {
-        removeObserver(keyboardEnabledObserver);
         removeObserver(keyboardSelectedObserver);
     }
 
@@ -170,18 +166,16 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
 
     private void updateKeyboardNotEnabledCard() {
         Context context = getApplicationContext();
-        String imeIds = AndroidSettings.INSTANCE.getSecure().getString(context, Settings.Secure.ENABLED_INPUT_METHODS);
-        int visibility =
-                imeIds != null && InputMethodUtils.INSTANCE.parseIs8VimEnabled(context, imeIds) ? GONE : VISIBLE;
+        int visibility = InputMethodUtils.parseIs8VimEnabled(context) ? GONE : VISIBLE;
         keyboardNotEnabledCard.setVisibility(visibility);
     }
 
     private void updateKeyboardNotSelectedCard() {
         Context context = getApplicationContext();
         String selectedImeId =
-                AndroidSettings.INSTANCE.getSecure().getString(context, Settings.Secure.DEFAULT_INPUT_METHOD);
+                AndroidSettings.getSecure().getString(context, Settings.Secure.DEFAULT_INPUT_METHOD);
         boolean isSelected =
-                selectedImeId != null && InputMethodUtils.INSTANCE.parseIs8VimSelected(context, selectedImeId);
+                selectedImeId != null && InputMethodUtils.parseIs8VimSelected(context, selectedImeId);
         int visibility =
                 keyboardNotEnabledCard.getVisibility() == VISIBLE || isSelected ? GONE : VISIBLE;
         keyboardNotSelectedCard.setVisibility(visibility);

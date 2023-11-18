@@ -2,7 +2,7 @@
 # Main
 accompanist = "0.30.1"
 androidx-activity = "1.7.2"
-android-gradle-plugin = "8.1.2"
+android-gradle-plugin = "8.1.4"
 android-appcompat = "1.6.1"
 android-material = "1.9.0"
 androidx-compose = "1.5.2"

@@ -88,6 +88,7 @@ abstract class AndroidSettingsHelper {
 }
 
 object AndroidSettings {
+    @JvmStatic
     val Secure = object : AndroidSettingsHelper() {
         override fun getString(context: Context, key: String): String? {
             return tryOrNull { Settings.Secure.getString(context.contentResolver, key) }
