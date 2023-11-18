@@ -4,7 +4,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
-import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -28,7 +27,9 @@ private const val IME_SERVICE_CLASS_NAME = "inc.flide.vim8.MainInputMethodServic
 
 object InputMethodUtils {
     @Composable
-    private fun rememberLifecycleEvent(lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current): Lifecycle.Event {
+    private fun rememberLifecycleEvent(
+        lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    ): Lifecycle.Event {
         var state by remember { mutableStateOf(Lifecycle.Event.ON_ANY) }
         DisposableEffect(lifecycleOwner) {
             val observer = LifecycleEventObserver { _, event ->
@@ -73,7 +74,7 @@ object InputMethodUtils {
             .isSome {
                 it.enabledInputMethodList.firstOrNone { inputMethodInfo ->
                     inputMethodInfo.component.packageName == context.packageName &&
-                            inputMethodInfo.component.className == IME_SERVICE_CLASS_NAME
+                        inputMethodInfo.component.className == IME_SERVICE_CLASS_NAME
                 }.isSome()
             }
     }
@@ -82,7 +83,7 @@ object InputMethodUtils {
     fun parseIs8VimSelected(context: Context, selectedImeId: String): Boolean {
         val component = ComponentName.unflattenFromString(selectedImeId)
         return component?.packageName == context.packageName &&
-                component?.className == IME_SERVICE_CLASS_NAME
+            component?.className == IME_SERVICE_CLASS_NAME
     }
 
     @JvmStatic

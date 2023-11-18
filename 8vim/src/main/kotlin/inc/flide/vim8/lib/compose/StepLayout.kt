@@ -168,7 +168,7 @@ fun StepLayout(
                     ownStepId = step.id,
                     totalSteps = steps.size,
                     stepState = stepState,
-                    title = step.title,
+                    title = step.title
                 ) {
                     step.content(StepLayoutScope(this))
                 }
@@ -220,26 +220,28 @@ private fun ColumnScope.Step(
         exit = fadeOut(animationSpec = animSpec)
     ) {
         val onBackground = MaterialTheme.colorScheme.onSurface
-        Box(modifier = Modifier
-            .padding(start = 56.dp)
-            .let {
-                if (currentStepId < totalSteps) {
-                    it.drawBehind {
-                        drawLine(
-                            color = onBackground,
-                            start = Offset(stepStrokeX.toPx(), 0f),
-                            end = Offset(stepStrokeX.toPx(), size.height),
-                            strokeWidth = stepStrokeWidth.toPx(),
-                            pathEffect = PathEffect.dashPathEffect(
-                                floatArrayOf(2.dp.toPx(), 10.dp.toPx())
-                            ),
-                            alpha = 0.38f
-                        )
+        Box(
+            modifier = Modifier
+                .padding(start = 56.dp)
+                .let {
+                    if (currentStepId < totalSteps) {
+                        it.drawBehind {
+                            drawLine(
+                                color = onBackground,
+                                start = Offset(stepStrokeX.toPx(), 0f),
+                                end = Offset(stepStrokeX.toPx(), size.height),
+                                strokeWidth = stepStrokeWidth.toPx(),
+                                pathEffect = PathEffect.dashPathEffect(
+                                    floatArrayOf(2.dp.toPx(), 10.dp.toPx())
+                                ),
+                                alpha = 0.38f
+                            )
+                        }
+                    } else {
+                        it
                     }
-                } else {
-                    it
                 }
-            }) {
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
