@@ -136,7 +136,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
 
     override fun findLayer(): LayerLevel {
         for (i in VisibleLayers.size - 1 downTo LayerLevel.SECOND.ordinal) {
-            val layerLevel = LayerLevel.values()[i + 1]
+            val layerLevel = LayerLevel.values()[i]
             val extraLayerMovementSequence = MovementSequences[layerLevel]
                 ?: return LayerLevel.FIRST
             if (movementSequence.size < extraLayerMovementSequence.size) {
