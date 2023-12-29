@@ -1,0 +1,14 @@
+name: Matrix notification discussion
+
+on:
+  discussion:
+    types: [created, answered]
+jobs:
+  notify:
+    name: Matrix notify
+    uses: ./.github/workflows/matrix-notify.yaml
+    with:
+      message: |
+        ${{github.event.action == 'created' && 'New discussion' || 'Answer in'}} #${{github.event.discussion.number}}
+        ${{github.event.discussion.html_url}}
+    secrets: inherit
