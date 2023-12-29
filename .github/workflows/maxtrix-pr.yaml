@@ -7,7 +7,7 @@ on:
 jobs:
   notify:
     name: Discord notification PR
-    uses: ./.github/workflows/discord-notify.yaml
+    uses: ./.github/workflows/matrix-notify.yaml
     with:
       message: |
         PR #${{github.event.pull_request.number}} [${{github.event.pull_request.state}}] by ${{github.event.pull_request.user.login}}
