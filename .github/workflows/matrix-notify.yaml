@@ -1,0 +1,20 @@
+name: Matrix notification
+
+on:
+  workflow_call:
+    inputs:
+      message:
+        required: true
+        type: string
+jobs:
+  notify:
+    name: Matrix notify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Matrix notify
+        uses: fadenb/matrix-chat-message@v0.0.6
+        with:
+          homeserver: matrix.org
+          token: ${{ secrets.MATRIX_TOKEN }}
+          channel: "!moWaJbLuMpOPkpYeeF:matrix.org"
+          message: ${{inputs.message}}
