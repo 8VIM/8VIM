@@ -11,6 +11,6 @@ jobs:
     uses: ./.github/workflows/matrix-notify.yaml
     with:
       message: |
-        ${{(gitgub.event_name == 'discussion' && github.event.action == 'created') && 'New discussion' || 'Answer in'}} #${{github.event.discussion.number}}
+        ${{(github.event_name == 'discussion' && github.event.action == 'created') && 'New discussion' || 'Answer in'}} #${{github.event.discussion.number}}
         ${{github.event.discussion.html_url}}
     secrets: inherit
