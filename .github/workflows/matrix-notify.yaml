@@ -14,6 +14,7 @@ jobs:
       - name: Matrix notify
         uses: fadenb/matrix-chat-message@v0.0.6
         with:
+          homeserver: matrix.org
           token: ${{ secrets.MATRIX_TOKEN }}
           channel: "!moWaJbLuMpOPkpYeeF:matrix.org"
           message: ${{inputs.message}}
