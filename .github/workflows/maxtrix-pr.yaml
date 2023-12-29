@@ -1,4 +1,4 @@
-name: Discord notification PR
+name: Matrix notification PR
 
 on:
   pull_request_target:
@@ -6,7 +6,7 @@ on:
     types: [opened, closed]
 jobs:
   notify:
-    name: Discord notification PR
+    name: Matrix notification PR
     uses: ./.github/workflows/matrix-notify.yaml
     with:
       message: |
