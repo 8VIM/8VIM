@@ -11,28 +11,24 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
         <item name="android:statusBarColor">?colorPrimary</item>
-        <item name="toolbarStyle">@style/MaterialToolbar</item>
-        <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
     </style>
 
     <style name="AppThemeLight.NoActionBar" parent="AppThemeLightBase.NoActionBar" />
 
+    <style name="AppTheme.Keyboard" parent="android:Theme.Material.InputMethod">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
+    </style>
     <style name="AppTheme.NoActionBar" parent="AppThemeLight.NoActionBar" />
 
     <style name="AppTheme.Splash" parent="Theme.SplashScreen.IconBackground">
         <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
-        <item name="windowSplashScreenBackground">@color/white</item>
-        <item name="windowSplashScreenIconBackgroundColor">@color/white</item>
+        <item name="windowSplashScreenBackground">@android:color/white</item>
+        <item name="windowSplashScreenIconBackgroundColor">@android:color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/app_icon</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-    </style>
-
-    <style name="MaterialToolbar" parent="Widget.Material3.Toolbar">
-        <item name="titleTextColor">?colorOnPrimary</item>
-    </style>
-
-    <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="color">?colorOnPrimary</item>
     </style>
 
     <style name="KeyboardView" parent="android:Widget">

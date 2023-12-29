@@ -2,13 +2,13 @@ package inc.flide.vim8.ime.actionlisteners
 
 import android.view.View
 import com.hijamoya.keyboardview.KeyboardView
-import inc.flide.vim8.MainInputMethodService
+import inc.flide.vim8.Vim8ImeService
 import inc.flide.vim8.ime.layout.models.CustomKeycode
 
 private const val NOT_A_KEY = -1
 
-class ButtonKeypadActionListener(mainInputMethodService: MainInputMethodService, view: View) :
-    KeypadActionListener(mainInputMethodService, view), KeyboardView.OnKeyboardActionListener {
+class ButtonKeypadActionListener(vim8ImeService: Vim8ImeService, view: View) :
+    KeypadActionListener(vim8ImeService, view), KeyboardView.OnKeyboardActionListener {
     override fun onKey(primaryCode: Int, keyCodes: IntArray) {
         when (primaryCode) {
             CustomKeycode.SHIFT_TOGGLE.keyCode -> handleShiftToggle()
@@ -18,17 +18,17 @@ class ButtonKeypadActionListener(mainInputMethodService: MainInputMethodService,
     }
 
     private fun handleShiftToggle() {
-        if (mainInputMethodService.shiftState == MainInputMethodService.State.OFF) {
-            mainInputMethodService.performShiftToggle()
+        if (vim8ImeService.shiftState == Vim8ImeService.State.OFF) {
+            vim8ImeService.performShiftToggle()
         } else {
-            mainInputMethodService.shiftState = MainInputMethodService.State.OFF
+            vim8ImeService.shiftState = Vim8ImeService.State.OFF
         }
     }
 
     override fun swipeLeft() {}
     override fun swipeRight() {}
     override fun swipeDown() {
-        mainInputMethodService.hideKeyboard()
+        vim8ImeService.hideKeyboard()
     }
 
     override fun swipeUp() {}

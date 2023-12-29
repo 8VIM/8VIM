@@ -89,6 +89,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
@@ -208,7 +209,6 @@ dependencies {
     implementation(libs.apache.commons.text)
     implementation(libs.arrow.core)
     implementation(libs.arrow.optics)
-    implementation(libs.colorpreference)
     implementation(libs.commons.codec)
     implementation(libs.jackson.dataformat.cbor)
     implementation(libs.jackson.dataformat.yaml)

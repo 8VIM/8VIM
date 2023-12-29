@@ -8,7 +8,7 @@ import arrow.core.Option
 import arrow.core.getOrElse
 import arrow.core.getOrNone
 import arrow.core.recover
-import inc.flide.vim8.MainInputMethodService
+import inc.flide.vim8.Vim8ImeService
 import inc.flide.vim8.ime.layout.models.FingerPosition
 import inc.flide.vim8.ime.layout.models.KeyboardActionType
 import inc.flide.vim8.ime.layout.models.KeyboardData
@@ -22,7 +22,7 @@ import inc.flide.vim8.ime.layout.models.lowerCaseCharacters
 import inc.flide.vim8.ime.layout.models.upperCaseCharacters
 import inc.flide.vim8.ime.layout.models.yaml.ExtraLayer
 
-class MainKeypadActionListener(inputMethodService: MainInputMethodService, view: View) :
+class MainKeypadActionListener(inputMethodService: Vim8ImeService, view: View) :
     KeypadActionListener(inputMethodService, view) {
     companion object {
         private const val DELAY_MILLIS_LONG_PRESS_CONTINUATION = 50
@@ -208,7 +208,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                     }
                 }
                 movementSequence.subList(start, size).clear()
-                mainInputMethodService.performShiftToggle()
+                vim8ImeService.performShiftToggle()
             }
             if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE &&
                 keyboardData.isSome { it.actionMap.containsKey(movementSequence) }

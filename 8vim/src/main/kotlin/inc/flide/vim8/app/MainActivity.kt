@@ -18,20 +18,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
+import inc.flide.vim8.ime.layout.AvailableLayouts
+import inc.flide.vim8.layoutLoader
 import inc.flide.vim8.lib.compose.AppTheme
+import inc.flide.vim8.lib.compose.LocalPreviewFieldController
+import inc.flide.vim8.lib.compose.PreviewKeyboardField
 import inc.flide.vim8.lib.compose.ProvideLocalizedResources
 import inc.flide.vim8.lib.compose.SystemUiApp
+import inc.flide.vim8.lib.compose.rememberPreviewFieldController
+import java.lang.ref.WeakReference
 
 val LocalNavController = staticCompositionLocalOf<NavController> {
     error("LocalNavController not initialized")
 }
 
+var availableLayouts: WeakReference<AvailableLayouts?> = WeakReference(null)
 class MainActivity : ComponentActivity() {
     private val prefs by appPreferenceModel()
     private var resourcesContext by mutableStateOf(this as Context)
@@ -65,9 +73,17 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun AppContent() {
         val navController = rememberNavController()
+        val previewFieldController = rememberPreviewFieldController()
         val isImeSetUp by prefs.internal.isImeSetup.observeAsState()
+        val context = LocalContext.current
+        val layoutLoader by context.layoutLoader()
+
+        if (availableLayouts.get() == null) {
+            availableLayouts = WeakReference(AvailableLayouts(layoutLoader, context))
+        }
         CompositionLocalProvider(
-            LocalNavController provides navController
+            LocalNavController provides navController,
+            LocalPreviewFieldController provides previewFieldController
         ) {
             Column(
                 modifier = Modifier
@@ -80,6 +96,7 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = if (isImeSetUp) Routes.Settings.Home else Routes.Setup.Screen
                 )
+                PreviewKeyboardField(previewFieldController)
             }
         }
         SideEffect {

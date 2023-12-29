@@ -12,7 +12,7 @@ public class SelectionKeypadView extends ButtonKeypadView {
 
     public void initialize(Context context) {
         super.initialize(context);
-        ButtonKeypadActionListener actionListener = new ButtonKeypadActionListener(mainInputMethodService, this);
+        ButtonKeypadActionListener actionListener = new ButtonKeypadActionListener(vim8ImeService, this);
         setOnKeyboardActionListener(actionListener);
     }
 

@@ -16,12 +16,12 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import inc.flide.vim8.AppPrefs;
 import inc.flide.vim8.R;
+import inc.flide.vim8.app.MainActivity;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.ime.actionlisteners.KeypadActionListener;
 import inc.flide.vim8.ime.layout.models.CustomKeycode;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
-import inc.flide.vim8.ui.activities.SettingsActivity;
 
 public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener> extends ConstraintLayout
         implements CtrlButtonView {
@@ -133,7 +133,7 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
     private void setupGoToSettingsButton() {
         ImageButton goToSettingsButton = findViewById(R.id.goToSettingsButton);
         goToSettingsButton.setOnClickListener(view -> {
-            Intent vim8SettingsIntent = new Intent(getContext(), SettingsActivity.class);
+            Intent vim8SettingsIntent = new Intent(getContext(), MainActivity.class);
             vim8SettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getContext().startActivity(vim8SettingsIntent);
         });

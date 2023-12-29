@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:targetApi="s">
         <service
-            android:name=".MainInputMethodService"
+            android:name=".Vim8ImeService"
             android:exported="true"
             android:permission="android.permission.BIND_INPUT_METHOD"
             android:theme="@style/AppTheme.NoActionBar">
@@ -40,6 +40,17 @@
                     android:host="app-ui"
                     android:scheme="vim8" />
             </intent-filter>
+            <intent-filter>
+                <category android:name="android.intent.category.OPENABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="*"
+                    android:mimeType="application/octet-stream"
+                    android:scheme="file" />
+                <data android:pathPattern=".*\\.yaml" />
+                <data android:pathPattern=".*\\.yml" />
+            </intent-filter>
         </activity>
 
         <activity-alias
@@ -55,24 +66,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity-alias>
-
-        <activity
-            android:name=".ui.activities.SettingsActivity"
-            android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <category android:name="android.intent.category.OPENABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data
-                    android:host="*"
-                    android:mimeType="application/octet-stream"
-                    android:scheme="file" />
-                <data android:pathPattern=".*\\.yaml" />
-                <data android:pathPattern=".*\\.yml" />
-            </intent-filter>
-        </activity>
 
         <activity
             android:name=".ui.activities.AboutUsActivity"

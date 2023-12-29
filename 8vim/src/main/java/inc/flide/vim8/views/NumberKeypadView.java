@@ -18,7 +18,7 @@ public class NumberKeypadView extends ButtonKeypadView {
         super.initialize(context);
         setCurrencySymbolBasedOnLocale();
         ButtonKeypadActionListener actionListener =
-                new ButtonKeypadActionListener(mainInputMethodService, this);
+                new ButtonKeypadActionListener(vim8ImeService, this);
         setOnKeyboardActionListener(actionListener);
     }
 

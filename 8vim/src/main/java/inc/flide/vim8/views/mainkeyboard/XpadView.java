@@ -23,7 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import inc.flide.vim8.AppPrefs;
-import inc.flide.vim8.MainInputMethodService;
+import inc.flide.vim8.Vim8ImeService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Circle;
 import inc.flide.vim8.geometry.Dimension;
@@ -107,7 +107,7 @@ public class XpadView extends View {
         setForegroundPaint(foregroundPaint, font);
         setForegroundPaint(foregroundHighlightPaint, fontBold);
 
-        actionListener = new MainKeypadActionListener((MainInputMethodService) context, this);
+        actionListener = new MainKeypadActionListener((Vim8ImeService) context, this);
         setHapticFeedbackEnabled(true);
     }
 

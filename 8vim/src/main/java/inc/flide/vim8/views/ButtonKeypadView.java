@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable;
 import androidx.appcompat.content.res.AppCompatResources;
 import com.hijamoya.keyboardview.Keyboard;
 import com.hijamoya.keyboardview.KeyboardView;
-import inc.flide.vim8.MainInputMethodService;
+import inc.flide.vim8.Vim8ImeService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
@@ -22,7 +22,7 @@ public abstract class ButtonKeypadView extends KeyboardView implements CtrlButto
     private final Drawable shiftDrawable;
     private final Drawable shiftEngagedDrawable;
     protected Keyboard keyboard;
-    protected MainInputMethodService mainInputMethodService;
+    protected Vim8ImeService vim8ImeService;
     private Typeface font;
     private KeyboardTheme keyboardTheme;
     private Keyboard.Key ctrlKey;
@@ -31,7 +31,7 @@ public abstract class ButtonKeypadView extends KeyboardView implements CtrlButto
 
     public ButtonKeypadView(Context context) {
         super(context, null, R.attr.keyboardViewStyle, R.style.KeyboardView);
-        mainInputMethodService = (MainInputMethodService) context;
+        vim8ImeService = (Vim8ImeService) context;
 
         ctrlDrawable = AppCompatResources.getDrawable(getContext(), R.drawable.ic_ctrl);
         ctrlEngagedDrawable = AppCompatResources.getDrawable(getContext(), R.drawable.ic_ctrl_engaged);
@@ -70,7 +70,7 @@ public abstract class ButtonKeypadView extends KeyboardView implements CtrlButto
             return;
         }
 
-        if (!mainInputMethodService.getCtrlState()) {
+        if (!vim8ImeService.getCtrlState()) {
             ctrlKey.icon = ctrlDrawable;
         } else {
             ctrlKey.icon = ctrlEngagedDrawable;
@@ -85,7 +85,7 @@ public abstract class ButtonKeypadView extends KeyboardView implements CtrlButto
             return;
         }
 
-        if (mainInputMethodService.getShiftState() == MainInputMethodService.State.OFF) {
+        if (vim8ImeService.getShiftState() == Vim8ImeService.State.OFF) {
             shiftKey.icon = shiftDrawable;
         } else {
             shiftKey.icon = shiftEngagedDrawable;

@@ -15,7 +15,7 @@ public class SymbolKeypadView extends ButtonKeypadView {
         super.initialize(context);
 
         ButtonKeypadActionListener actionListener =
-                new ButtonKeypadActionListener(mainInputMethodService, this);
+                new ButtonKeypadActionListener(vim8ImeService, this);
         this.setOnKeyboardActionListener(actionListener);
     }
 

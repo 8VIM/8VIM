@@ -5,7 +5,7 @@ import android.media.AudioManager
 import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.View
-import inc.flide.vim8.MainInputMethodService
+import inc.flide.vim8.Vim8ImeService
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.layout.models.CustomKeycode.Companion.KEY_CODE_TO_STRING_CODE_MAP
 import inc.flide.vim8.ime.layout.models.KeyboardAction
@@ -14,14 +14,14 @@ import inc.flide.vim8.lib.android.AndroidVersion.ATLEAST_API29_Q
 
 @Suppress("DEPRECATION")
 abstract class KeypadActionListener(
-    protected val mainInputMethodService: MainInputMethodService,
+    protected val vim8ImeService: Vim8ImeService,
     protected val view: View
 ) {
     private val prefs by appPreferenceModel()
     val ctrlState: Boolean
-        get() = mainInputMethodService.ctrlState
+        get() = vim8ImeService.ctrlState
     val isPassword: Boolean
-        get() = mainInputMethodService.isPassword
+        get() = vim8ImeService.isPassword
     private val audioManager: AudioManager =
         view.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -32,13 +32,13 @@ abstract class KeypadActionListener(
     }
 
     fun performCtrlToggle() {
-        mainInputMethodService.performCtrlToggle()
+        vim8ImeService.performCtrlToggle()
     }
     fun handleInputKey(keyCode: Int, keyFlags: Int) {
         val actionHandled =
             handleKeyEventKeyCodes(keyCode, keyFlags) || (
                 KEY_CODE_TO_STRING_CODE_MAP[keyCode]?.handleKeyCode(
-                    mainInputMethodService
+                    vim8ImeService
                 ) ?: true
                 )
         if (!actionHandled) {
@@ -72,19 +72,19 @@ abstract class KeypadActionListener(
     private fun handleKeyEventKeyCodes(primaryCode: Int, keyFlags: Int): Boolean {
         if (keyCodeIsValid(primaryCode)) {
             when (primaryCode) {
-                KeyEvent.KEYCODE_CUT -> mainInputMethodService.cut()
-                KeyEvent.KEYCODE_COPY -> mainInputMethodService.copy()
-                KeyEvent.KEYCODE_PASTE -> mainInputMethodService.paste()
-                KeyEvent.KEYCODE_ENTER -> mainInputMethodService.commitImeOptionsBasedEnter()
-                KeyEvent.KEYCODE_DEL -> mainInputMethodService.delete()
+                KeyEvent.KEYCODE_CUT -> vim8ImeService.cut()
+                KeyEvent.KEYCODE_COPY -> vim8ImeService.copy()
+                KeyEvent.KEYCODE_PASTE -> vim8ImeService.paste()
+                KeyEvent.KEYCODE_ENTER -> vim8ImeService.commitImeOptionsBasedEnter()
+//                KeyEvent.KEYCODE_DEL -> vim8ImeService.delete()
                 else -> {
                     val flags = if (isDPad(primaryCode)) {
-                        keyFlags or mainInputMethodService.ctrlFlag
+                        keyFlags or vim8ImeService.ctrlFlag
                     } else {
                         keyFlags
                     }
-                    mainInputMethodService.sendKey(primaryCode, flags)
-                    mainInputMethodService.resetShiftState()
+                    vim8ImeService.sendKey(primaryCode, flags)
+                    vim8ImeService.resetShiftState()
                 }
             }
             return true
@@ -106,13 +106,13 @@ abstract class KeypadActionListener(
     }
 
     fun onText(text: CharSequence) {
-        mainInputMethodService.sendText(text.toString())
-        mainInputMethodService.resetShiftState()
+        vim8ImeService.sendText(text.toString())
+        vim8ImeService.resetShiftState()
         performInputAcceptedFeedback(AudioManager.FX_KEYPRESS_STANDARD)
     }
 
     fun handleInputText(keyboardAction: KeyboardAction) {
-        val isUpperCase = mainInputMethodService.shiftState != MainInputMethodService.State.OFF
+        val isUpperCase = vim8ImeService.shiftState != Vim8ImeService.State.OFF
         val text =
             if (isUpperCase && keyboardAction.capsLockText.isNotEmpty()) {
                 keyboardAction.capsLockText
@@ -123,13 +123,13 @@ abstract class KeypadActionListener(
     }
 
     fun areCharactersCapitalized(): Boolean {
-        return mainInputMethodService.areCharactersCapitalized()
+        return vim8ImeService.areCharactersCapitalized()
     }
 
     val isShiftSet: Boolean
-        get() = mainInputMethodService.shiftLockFlag == KeyEvent.META_SHIFT_ON
+        get() = vim8ImeService.shiftLockFlag == KeyEvent.META_SHIFT_ON
     val isCapsLockSet: Boolean
-        get() = mainInputMethodService.capsLockFlag == KeyEvent.META_CAPS_LOCK_ON
+        get() = vim8ImeService.capsLockFlag == KeyEvent.META_CAPS_LOCK_ON
 
     open fun findLayer(): LayerLevel {
         return LayerLevel.FIRST

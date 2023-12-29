@@ -29,7 +29,7 @@ import inc.flide.vim8.lib.compose.Step
 import inc.flide.vim8.lib.compose.StepLayout
 import inc.flide.vim8.lib.compose.StepState
 import inc.flide.vim8.lib.compose.stringRes
-import inc.flide.vim8.utils.InputMethodUtils
+import inc.flide.vim8.lib.util.InputMethodUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
@@ -42,6 +42,7 @@ private object SetupStep {
 @Composable
 fun SetupScreen() = Screen {
     title = stringRes(R.string.setup__title)
+    imeAlerts = false
     navigationIconVisible = false
     scrollable = false
     val navController = LocalNavController.current

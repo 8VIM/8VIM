@@ -1,4 +1,4 @@
-package inc.flide.vim8.utils
+package inc.flide.vim8.lib.util
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog

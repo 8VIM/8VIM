@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import inc.flide.vim8.MainInputMethodService;
+import inc.flide.vim8.Vim8ImeService;
 import inc.flide.vim8.R;
 import inc.flide.vim8.ime.actionlisteners.ClipboardActionListener;
 import inc.flide.vim8.ime.layout.models.CustomKeycode;
@@ -43,7 +43,7 @@ public class ClipboardKeypadView extends ConstraintLayoutWithSidebar<ClipboardAc
 
     @Override
     protected void initializeActionListener(Context context) {
-        actionListener = new ClipboardActionListener((MainInputMethodService) context, this);
+        actionListener = new ClipboardActionListener((Vim8ImeService) context, this);
     }
 
     @Override

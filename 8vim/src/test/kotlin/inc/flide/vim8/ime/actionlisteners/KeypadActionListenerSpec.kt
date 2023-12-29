@@ -5,7 +5,7 @@ import android.media.AudioManager
 import android.view.KeyEvent
 import android.view.View
 import inc.flide.vim8.AppPrefs
-import inc.flide.vim8.MainInputMethodService
+import inc.flide.vim8.Vim8ImeService
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
@@ -27,7 +27,7 @@ class KeypadActionListenerSpec : FunSpec({
     val context = mockk<Context>()
     val view = mockk<View>()
     val audioManager = mockk<AudioManager>(relaxed = true)
-    val mainInputMethodService = mockk<MainInputMethodService>(relaxed = true)
+    val vim8ImeService = mockk<Vim8ImeService>(relaxed = true)
 
     beforeSpec {
         mockkStatic(::appPreferenceModel)
@@ -46,7 +46,7 @@ class KeypadActionListenerSpec : FunSpec({
         every { AndroidVersion.ATLEAST_API29_Q } returns true
         every { hapticEnabled.get() } returns false
         every { soundEnabled.get() } returns false
-        val listener = spyk(object : KeypadActionListener(mainInputMethodService, view) {})
+        val listener = spyk(object : KeypadActionListener(vim8ImeService, view) {})
         listener.handleInputKey(KeyEvent.KEYCODE_0, 0)
     }
 

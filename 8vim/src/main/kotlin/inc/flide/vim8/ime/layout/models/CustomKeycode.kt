@@ -1,7 +1,7 @@
 package inc.flide.vim8.ime.layout.models
 
 import android.view.KeyEvent
-import inc.flide.vim8.MainInputMethodService
+import inc.flide.vim8.Vim8ImeService
 
 enum class CustomKeycode(@JvmField val keyCode: Int) {
     MOVE_CURRENT_END_POINT_LEFT(-2),
@@ -22,48 +22,48 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
     SWITCH_TO_CLIPPAD_KEYBOARD(-17),
     CTRL_TOGGLE(-18);
 
-    fun handleKeyCode(mainInputMethodService: MainInputMethodService): Boolean {
+    fun handleKeyCode(vim8ImeService: Vim8ImeService): Boolean {
         when (this) {
             MOVE_CURRENT_END_POINT_LEFT,
             MOVE_CURRENT_END_POINT_RIGHT,
             MOVE_CURRENT_END_POINT_UP,
             MOVE_CURRENT_END_POINT_DOWN -> {
-                if (mainInputMethodService.shiftState != MainInputMethodService.State.OFF) {
-                    mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+                if (vim8ImeService.shiftState != Vim8ImeService.State.OFF) {
+                    vim8ImeService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
                 }
-                mainInputMethodService.sendDownAndUpKeyEvent(
+                vim8ImeService.sendDownAndUpKeyEvent(
                     dPadKeyCodeFromCustom,
-                    mainInputMethodService.ctrlFlag
+                    vim8ImeService.ctrlFlag
                 )
-                if (mainInputMethodService.shiftState != MainInputMethodService.State.OFF) {
-                    mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+                if (vim8ImeService.shiftState != Vim8ImeService.State.OFF) {
+                    vim8ImeService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
                 }
             }
 
             SELECTION_START -> {
-                mainInputMethodService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-                mainInputMethodService.sendDownAndUpKeyEvent(
+                vim8ImeService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+                vim8ImeService.sendDownAndUpKeyEvent(
                     KeyEvent.KEYCODE_DPAD_LEFT,
-                    mainInputMethodService.ctrlFlag
+                    vim8ImeService.ctrlFlag
                 )
-                mainInputMethodService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+                vim8ImeService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
             }
 
-            SELECT_ALL -> mainInputMethodService.sendDownAndUpKeyEvent(
+            SELECT_ALL -> vim8ImeService.sendDownAndUpKeyEvent(
                 KeyEvent.KEYCODE_A,
                 KeyEvent.META_CTRL_ON
             )
 
-            TOGGLE_SELECTION_ANCHOR -> mainInputMethodService.switchAnchor()
-            SHIFT_TOGGLE -> mainInputMethodService.performShiftToggle()
-            SWITCH_TO_MAIN_KEYPAD -> mainInputMethodService.switchToMainKeypad()
-            SWITCH_TO_NUMBER_KEYPAD -> mainInputMethodService.switchToNumberPad()
-            SWITCH_TO_SYMBOLS_KEYPAD -> mainInputMethodService.switchToSymbolsKeypad()
-            SWITCH_TO_SELECTION_KEYPAD -> mainInputMethodService.switchToSelectionKeypad()
-            SWITCH_TO_EMOTICON_KEYBOARD -> mainInputMethodService.switchToExternalEmoticonKeyboard()
-            HIDE_KEYBOARD -> mainInputMethodService.hideKeyboard()
-            SWITCH_TO_CLIPPAD_KEYBOARD -> mainInputMethodService.switchToClipboardKeypad()
-            CTRL_TOGGLE -> mainInputMethodService.performCtrlToggle()
+            TOGGLE_SELECTION_ANCHOR -> vim8ImeService.switchAnchor()
+            SHIFT_TOGGLE -> vim8ImeService.performShiftToggle()
+            SWITCH_TO_MAIN_KEYPAD -> vim8ImeService.switchToMainKeypad()
+            SWITCH_TO_NUMBER_KEYPAD -> vim8ImeService.switchToNumberPad()
+            SWITCH_TO_SYMBOLS_KEYPAD -> vim8ImeService.switchToSymbolsKeypad()
+            SWITCH_TO_SELECTION_KEYPAD -> vim8ImeService.switchToSelectionKeypad()
+            SWITCH_TO_EMOTICON_KEYBOARD -> vim8ImeService.switchToExternalEmoticonKeyboard()
+            HIDE_KEYBOARD -> vim8ImeService.hideKeyboard()
+            SWITCH_TO_CLIPPAD_KEYBOARD -> vim8ImeService.switchToClipboardKeypad()
+            CTRL_TOGGLE -> vim8ImeService.performCtrlToggle()
             else -> {}
         }
         return true

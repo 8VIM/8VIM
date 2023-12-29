@@ -5,18 +5,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.R
 import inc.flide.vim8.app.LocalNavController
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.ui.PreferenceLayout
 import inc.flide.vim8.datastore.ui.PreferenceUiContent
+import inc.flide.vim8.lib.util.InputMethodUtils
 
 @Composable
 fun Screen(builder: @Composable ScreenScope.() -> Unit) {
@@ -42,6 +46,8 @@ interface ScreenScope {
 
     var iconSpaceReserved: Boolean
 
+    var imeAlerts: Boolean
+
     fun actions(actions: ScreenActions)
 
     fun bottomBar(bottomBar: ScreenBottomBar)
@@ -59,6 +65,7 @@ private class ScreenScopeImpl : ScreenScope {
     override var previewFieldVisible: Boolean by mutableStateOf(false)
     override var scrollable: Boolean by mutableStateOf(true)
     override var iconSpaceReserved: Boolean by mutableStateOf(true)
+    override var imeAlerts: Boolean by mutableStateOf(true)
 
     private var actions: ScreenActions = @Composable { }
     private var bottomBar: ScreenBottomBar = @Composable { }
@@ -95,6 +102,11 @@ private class ScreenScopeImpl : ScreenScope {
 
     @Composable
     fun Render() {
+        val previewFieldController = LocalPreviewFieldController.current
+
+        SideEffect {
+            previewFieldController?.isVisible = previewFieldVisible
+        }
         Scaffold(
             topBar = { AppBar(title, navigationIcon.takeIf { navigationIconVisible }, actions) },
             bottomBar = bottomBar,
@@ -110,8 +122,33 @@ private class ScreenScopeImpl : ScreenScope {
                 modifier = modifier
                     .padding(innerPadding)
                     .fillMaxWidth(),
-                content = content
-            )
+            ) {
+                if (imeAlerts) ImeAlertCards()
+                content()
+            }
         }
+    }
+}
+
+@Composable
+fun ImeAlertCards() {
+    val context = LocalContext.current
+    val is8VimBoardEnabled by InputMethodUtils.observeIs8VimEnabled()
+    val is8VimBoardSelected by InputMethodUtils.observeIs8VimSelected(foregroundOnly = true)
+
+    if (!is8VimBoardEnabled) {
+        ErrorCard(
+            modifier = Modifier.padding(8.dp),
+            text = stringRes(R.string.settings__home__ime_not_enabled),
+            onClick = {
+                InputMethodUtils.showImeEnablerActivity(context)
+            }
+        )
+    } else if (!is8VimBoardSelected) {
+        WarningCard(
+            modifier = Modifier.padding(8.dp),
+            text = stringRes(R.string.settings__home__ime_not_selected),
+            onClick = { InputMethodUtils.showImePicker(context) }
+        )
     }
 }

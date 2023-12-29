@@ -1,8 +1,9 @@
-package inc.flide.vim8.utils
+package inc.flide.vim8.lib.util
 
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.inputmethodservice.InputMethodService
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import androidx.compose.runtime.Composable
@@ -20,10 +21,12 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import arrow.core.Option
 import arrow.core.firstOrNone
+import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.lib.android.AndroidSettings
+import inc.flide.vim8.lib.android.AndroidVersion.ATLEAST_API28_P
 import inc.flide.vim8.lib.android.systemServiceOrNull
 
-private const val IME_SERVICE_CLASS_NAME = "inc.flide.vim8.MainInputMethodService"
+private const val IME_SERVICE_CLASS_NAME = "inc.flide.vim8.Vim8ImeService"
 
 object InputMethodUtils {
     @Composable
@@ -67,26 +70,48 @@ object InputMethodUtils {
         transform = { parseIs8VimSelected(context, it.toString()) }
     )
 
-    @JvmStatic
+    @Suppress("DEPRECATION")
+    fun switchToEmoticonKeyboard(ime: InputMethodService) {
+        selectedEmoticonKeyboard(ime.applicationContext)
+            .onSome { ime.switchInputMethod(it) }
+            .onNone {
+                if (ATLEAST_API28_P) {
+                    ime.switchToPreviousInputMethod()
+                } else {
+                    ime.applicationContext.systemServiceOrNull(InputMethodManager::class)?.let {
+                        val tokenIBinder = ime.window.window!!.attributes.token
+                        it.switchToLastInputMethod(tokenIBinder)
+                    }
+                }
+            }
+    }
+
+    private fun selectedEmoticonKeyboard(context: Context): Option<String> {
+        val prefs by appPreferenceModel()
+        val emoticonKeyboardId = prefs.keyboard.emoticonKeyboard.get()
+        return Option.fromNullable(context.systemServiceOrNull(InputMethodManager::class))
+            .flatMap { imm ->
+                imm.enabledInputMethodList.firstOrNone { it.id == emoticonKeyboardId }.map { it.id }
+            }
+    }
+
     fun parseIs8VimEnabled(context: Context): Boolean {
         return Option
             .fromNullable(context.systemServiceOrNull(InputMethodManager::class))
             .isSome {
                 it.enabledInputMethodList.firstOrNone { inputMethodInfo ->
                     inputMethodInfo.component.packageName == context.packageName &&
-                        inputMethodInfo.component.className == IME_SERVICE_CLASS_NAME
+                            inputMethodInfo.component.className == IME_SERVICE_CLASS_NAME
                 }.isSome()
             }
     }
 
-    @JvmStatic
-    fun parseIs8VimSelected(context: Context, selectedImeId: String): Boolean {
+    private fun parseIs8VimSelected(context: Context, selectedImeId: String): Boolean {
         val component = ComponentName.unflattenFromString(selectedImeId)
         return component?.packageName == context.packageName &&
-            component?.className == IME_SERVICE_CLASS_NAME
+                component?.className == IME_SERVICE_CLASS_NAME
     }
 
-    @JvmStatic
     fun showImeEnablerActivity(context: Context) {
         val intent = Intent()
         intent.action = Settings.ACTION_INPUT_METHOD_SETTINGS
@@ -94,7 +119,6 @@ object InputMethodUtils {
         context.startActivity(intent)
     }
 
-    @JvmStatic
     fun showImePicker(context: Context): Boolean {
         val imm = context.systemServiceOrNull(InputMethodManager::class)
         return if (imm != null) {
