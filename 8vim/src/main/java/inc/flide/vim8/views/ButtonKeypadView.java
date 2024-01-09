@@ -8,9 +8,9 @@ import android.graphics.drawable.Drawable;
 import androidx.appcompat.content.res.AppCompatResources;
 import com.hijamoya.keyboardview.Keyboard;
 import com.hijamoya.keyboardview.KeyboardView;
-import inc.flide.vim8.Vim8ImeService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.geometry.Dimension;
+import inc.flide.vim8.Vim8ImeService;
+import inc.flide.vim8.lib.util.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.ime.layout.models.CustomKeycode;
 import inc.flide.vim8.keyboardhelpers.InputMethodViewHelper;
@@ -70,11 +70,6 @@ public abstract class ButtonKeypadView extends KeyboardView implements CtrlButto
             return;
         }
 
-        if (!vim8ImeService.getCtrlState()) {
-            ctrlKey.icon = ctrlDrawable;
-        } else {
-            ctrlKey.icon = ctrlEngagedDrawable;
-        }
         ctrlKey.icon = ctrlKey.icon.mutate();
         ctrlKey.icon.setTint(keyboardTheme.getForegroundColor());
         ctrlKey.icon.setAlpha(255);
@@ -84,13 +79,6 @@ public abstract class ButtonKeypadView extends KeyboardView implements CtrlButto
         if (shiftKey == null) {
             return;
         }
-
-        if (vim8ImeService.getShiftState() == Vim8ImeService.State.OFF) {
-            shiftKey.icon = shiftDrawable;
-        } else {
-            shiftKey.icon = shiftEngagedDrawable;
-        }
-
         shiftKey.icon = shiftKey.icon.mutate();
         shiftKey.icon.setTint(keyboardTheme.getForegroundColor());
         shiftKey.icon.setAlpha(255);

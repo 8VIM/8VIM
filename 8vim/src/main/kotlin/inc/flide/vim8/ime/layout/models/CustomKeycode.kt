@@ -22,31 +22,39 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
     SWITCH_TO_CLIPPAD_KEYBOARD(-17),
     CTRL_TOGGLE(-18);
 
+    fun toKeyEvent(): Int = when (this) {
+        MOVE_CURRENT_END_POINT_LEFT, SELECTION_START -> KeyEvent.KEYCODE_DPAD_LEFT
+        MOVE_CURRENT_END_POINT_RIGHT -> KeyEvent.KEYCODE_DPAD_RIGHT
+        MOVE_CURRENT_END_POINT_UP -> KeyEvent.KEYCODE_DPAD_UP
+        MOVE_CURRENT_END_POINT_DOWN -> KeyEvent.KEYCODE_DPAD_DOWN
+        else -> 0
+    }
+
     fun handleKeyCode(vim8ImeService: Vim8ImeService): Boolean {
         when (this) {
             MOVE_CURRENT_END_POINT_LEFT,
             MOVE_CURRENT_END_POINT_RIGHT,
             MOVE_CURRENT_END_POINT_UP,
             MOVE_CURRENT_END_POINT_DOWN -> {
-                if (vim8ImeService.shiftState != Vim8ImeService.State.OFF) {
-                    vim8ImeService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-                }
-                vim8ImeService.sendDownAndUpKeyEvent(
-                    dPadKeyCodeFromCustom,
-                    vim8ImeService.ctrlFlag
-                )
-                if (vim8ImeService.shiftState != Vim8ImeService.State.OFF) {
-                    vim8ImeService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-                }
+//                if (vim8ImeService.shiftState != Vim8ImeService.State.OFF) {
+//                    vim8ImeService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+//                }
+//                vim8ImeService.sendDownAndUpKeyEvent(
+//                    dPadKeyCodeFromCustom,
+//                    vim8ImeService.ctrlFlag
+//                )
+//                if (vim8ImeService.shiftState != Vim8ImeService.State.OFF) {
+//                    vim8ImeService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+//                }
             }
 
             SELECTION_START -> {
-                vim8ImeService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-                vim8ImeService.sendDownAndUpKeyEvent(
-                    KeyEvent.KEYCODE_DPAD_LEFT,
-                    vim8ImeService.ctrlFlag
-                )
-                vim8ImeService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+                /*      vim8ImeService.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+                      vim8ImeService.sendDownAndUpKeyEvent(
+                          KeyEvent.KEYCODE_DPAD_LEFT,
+                          vim8ImeService.ctrlFlag
+                      )
+                      vim8ImeService.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)*/
             }
 
             SELECT_ALL -> vim8ImeService.sendDownAndUpKeyEvent(
@@ -68,15 +76,6 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
         }
         return true
     }
-
-    private val dPadKeyCodeFromCustom: Int
-        get() = when (this) {
-            MOVE_CURRENT_END_POINT_LEFT, SELECTION_START -> KeyEvent.KEYCODE_DPAD_LEFT
-            MOVE_CURRENT_END_POINT_RIGHT -> KeyEvent.KEYCODE_DPAD_RIGHT
-            MOVE_CURRENT_END_POINT_UP -> KeyEvent.KEYCODE_DPAD_UP
-            MOVE_CURRENT_END_POINT_DOWN -> KeyEvent.KEYCODE_DPAD_DOWN
-            else -> 0
-        }
 
     companion object {
         val KEY_CODE_TO_STRING_CODE_MAP: Map<Int, CustomKeycode> =

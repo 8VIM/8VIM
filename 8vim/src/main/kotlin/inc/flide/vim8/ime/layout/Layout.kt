@@ -26,9 +26,9 @@ import inc.flide.vim8.ime.layout.models.error.LayoutError
 import inc.flide.vim8.ime.layout.models.info
 import inc.flide.vim8.ime.layout.models.yaml.name
 import inc.flide.vim8.lib.android.tryOrNull
+import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream
 import java.util.Locale
-import org.apache.commons.codec.digest.DigestUtils
 
 private val isoCodes = Locale.getISOLanguages().toSet()
 
@@ -44,7 +44,9 @@ fun embeddedLayouts(
                     layout
                         .loadKeyboardData(layoutLoader, context)
                         .getOrNone()
-                        .filterNot { it.totalLayers == 0 }
+                        .filterNot {
+                            it.totalLayers == 0
+                        }
                         .map { layout to it.toString() }
                 }.toList()
         }.sortedBy { it.second }
@@ -73,6 +75,7 @@ fun safeLoadKeyboardData(layoutLoader: LayoutLoader, context: Context): Keyboard
             { prefs.layout.current.default.loadKeyboardData(layoutLoader, context) },
             { Either.Right(it) }
         )
+
         .getOrNull()
 }
 

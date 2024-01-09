@@ -15,13 +15,11 @@ import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.LayerLevel
 import inc.flide.vim8.ime.layout.models.MovementSequence
 import inc.flide.vim8.ime.layout.models.addAllToActionMap
+import inc.flide.vim8.ime.layout.models.characterSets
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.error.LayoutError
 import inc.flide.vim8.ime.layout.models.info
-import inc.flide.vim8.ime.layout.models.lowerCaseCharacters
-import inc.flide.vim8.ime.layout.models.setLowerCaseCharacters
-import inc.flide.vim8.ime.layout.models.setUpperCaseCharacters
-import inc.flide.vim8.ime.layout.models.upperCaseCharacters
+import inc.flide.vim8.ime.layout.models.setCharacterSets
 import inc.flide.vim8.ime.layout.parsers.LayoutParser
 import java.io.InputStream
 
@@ -75,16 +73,11 @@ class YamlLayoutLoader(
                     }
                 ).let {
                     LayerLevel.VisibleLayers.fold(it) { acc, layer ->
-                        val lowerCase =
-                            tempKeyboardData.lowerCaseCharacters(layer).map { characterSets ->
-                                acc.lowerCaseCharacters(layer).getOrElse { characterSets }
-                            }.getOrNull().orEmpty()
-                        val upperCase =
-                            tempKeyboardData.upperCaseCharacters(layer).map { characterSets ->
-                                acc.upperCaseCharacters(layer).getOrElse { characterSets }
-                            }.getOrNull().orEmpty()
-                        acc.setLowerCaseCharacters(lowerCase, layer)
-                            .setUpperCaseCharacters(upperCase, layer)
+                        val characterSets =
+                            tempKeyboardData.characterSets(layer).map { characterSets ->
+                                acc.characterSets(layer).getOrElse { characterSets }
+                            }.getOrElse { emptyList() }
+                        acc.setCharacterSets(characterSets, layer)
                     }
                 }
         }

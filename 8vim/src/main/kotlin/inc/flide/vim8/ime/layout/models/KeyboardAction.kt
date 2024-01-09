@@ -13,5 +13,13 @@ data class KeyboardAction(
     val keyFlags: Int,
     val layer: LayerLevel
 ) {
-    companion object
+    companion object {
+        val UNSPECIFIED = KeyboardAction(
+            keyboardActionType = KeyboardActionType.INPUT_KEY,
+            text = "",
+            keyEventCode = 0,
+            keyFlags = 0,
+            layer = LayerLevel.FIRST
+        )
+    }
 }

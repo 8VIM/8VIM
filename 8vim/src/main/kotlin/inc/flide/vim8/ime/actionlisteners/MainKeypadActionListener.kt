@@ -127,11 +127,13 @@ class MainKeypadActionListener(inputMethodService: Vim8ImeService, view: View) :
     }
 
     fun getLowerCaseCharacters(layer: LayerLevel): String {
-        return keyboardData.flatMap { it.lowerCaseCharacters(layer) }.getOrElse { "" }
+        return ""
+//        return keyboardData.flatMap { it.lowerCaseCharacters(layer) }.getOrElse { "" }
     }
 
     fun getUpperCaseCharacters(layer: LayerLevel): String {
-        return keyboardData.flatMap { it.upperCaseCharacters(layer) }.getOrElse { "" }
+        return ""
+//        return keyboardData.flatMap { it.upperCaseCharacters(layer) }.getOrElse { "" }
     }
 
     override fun findLayer(): LayerLevel {

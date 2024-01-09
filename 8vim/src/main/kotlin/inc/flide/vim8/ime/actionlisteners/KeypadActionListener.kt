@@ -18,10 +18,6 @@ abstract class KeypadActionListener(
     protected val view: View
 ) {
     private val prefs by appPreferenceModel()
-    val ctrlState: Boolean
-        get() = vim8ImeService.ctrlState
-    val isPassword: Boolean
-        get() = vim8ImeService.isPassword
     private val audioManager: AudioManager =
         view.context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -35,7 +31,7 @@ abstract class KeypadActionListener(
         vim8ImeService.performCtrlToggle()
     }
     fun handleInputKey(keyCode: Int, keyFlags: Int) {
-        val actionHandled =
+      /*  val actionHandled =
             handleKeyEventKeyCodes(keyCode, keyFlags) || (
                 KEY_CODE_TO_STRING_CODE_MAP[keyCode]?.handleKeyCode(
                     vim8ImeService
@@ -45,7 +41,7 @@ abstract class KeypadActionListener(
             onText(keyCode.toChar().toString())
         } else {
             performInputAcceptedFeedback(keySound(keyCode))
-        }
+        }*/
     }
 
     private fun keySound(keyCode: Int): Int {
@@ -78,13 +74,13 @@ abstract class KeypadActionListener(
                 KeyEvent.KEYCODE_ENTER -> vim8ImeService.commitImeOptionsBasedEnter()
 //                KeyEvent.KEYCODE_DEL -> vim8ImeService.delete()
                 else -> {
-                    val flags = if (isDPad(primaryCode)) {
-                        keyFlags or vim8ImeService.ctrlFlag
-                    } else {
+//                    val flags = if (isDPad(primaryCode)) {
+//                        keyFlags or vim8ImeService.ctrlFlag
+                 /*   } else {
                         keyFlags
                     }
                     vim8ImeService.sendKey(primaryCode, flags)
-                    vim8ImeService.resetShiftState()
+                    vim8ImeService.resetShiftState()*/
                 }
             }
             return true
@@ -112,7 +108,8 @@ abstract class KeypadActionListener(
     }
 
     fun handleInputText(keyboardAction: KeyboardAction) {
-        val isUpperCase = vim8ImeService.shiftState != Vim8ImeService.State.OFF
+        val isUpperCase = true
+//        vim8ImeService.shiftState != Vim8ImeService.State.OFF
         val text =
             if (isUpperCase && keyboardAction.capsLockText.isNotEmpty()) {
                 keyboardAction.capsLockText
@@ -125,11 +122,6 @@ abstract class KeypadActionListener(
     fun areCharactersCapitalized(): Boolean {
         return vim8ImeService.areCharactersCapitalized()
     }
-
-    val isShiftSet: Boolean
-        get() = vim8ImeService.shiftLockFlag == KeyEvent.META_SHIFT_ON
-    val isCapsLockSet: Boolean
-        get() = vim8ImeService.capsLockFlag == KeyEvent.META_CAPS_LOCK_ON
 
     open fun findLayer(): LayerLevel {
         return LayerLevel.FIRST

@@ -25,8 +25,8 @@ import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 import inc.flide.vim8.AppPrefs;
 import inc.flide.vim8.Vim8ImeService;
 import inc.flide.vim8.R;
-import inc.flide.vim8.geometry.Circle;
-import inc.flide.vim8.geometry.Dimension;
+import inc.flide.vim8.lib.util.geometry.Circle;
+import inc.flide.vim8.lib.util.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener;
 import inc.flide.vim8.ime.layout.models.FingerPosition;
@@ -373,12 +373,12 @@ public class XpadView extends View {
         //for caps lock and shift icon
         iconCenterY = (int) Math.max(sectorLineBounds.top, 0);
         int shiftIconToDisplay = R.drawable.ic_no_capslock;
-        if (actionListener.isShiftSet()) {
-            shiftIconToDisplay = R.drawable.ic_shift_engaged;
-        }
-        if (actionListener.isCapsLockSet()) {
-            shiftIconToDisplay = R.drawable.ic_capslock_engaged;
-        }
+//        if (actionListener.isShiftSet()) {
+//            shiftIconToDisplay = R.drawable.ic_shift_engaged;
+//        }
+//        if (actionListener.isCapsLockSet()) {
+//            shiftIconToDisplay = R.drawable.ic_capslock_engaged;
+//        }
         drawIconInSector(iconCenterX - iconHalfWidth,
                 iconCenterY - iconHalfHeight,
                 canvas,

@@ -1,5 +1,6 @@
-package inc.flide.vim8.ime.keyboard
+package inc.flide.vim8.ime.keyboard.text
 
+import android.view.KeyEvent
 import inc.flide.vim8.ime.input.ImeUiMode
 import inc.flide.vim8.ime.input.InputShiftState
 import inc.flide.vim8.ime.input.KeyVariation
@@ -77,6 +78,8 @@ open class KeyboardState protected constructor(open var rawValue: ULong) {
         set(v) {
             setFlag(F_IS_CTRL_ON, v)
         }
+    val ctrlFlag: Int
+        get() = if (isCtrlOn) KeyEvent.META_CTRL_MASK else 0
 }
 
 class ObservableKeyboardState private constructor(

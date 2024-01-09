@@ -2,8 +2,6 @@ package inc.flide.vim8.ime.layout.models
 
 import arrow.core.Option
 import arrow.core.elementAtOrNone
-import arrow.core.none
-import arrow.core.some
 import arrow.optics.dsl.index
 import arrow.optics.optics
 import arrow.optics.typeclasses.Index
@@ -18,7 +16,7 @@ data class KeyboardData(
     @JsonSerialize(keyUsing = MovementSequenceSerializer::class)
     @JsonDeserialize(keyUsing = MovementSequenceDeserializer::class)
     val actionMap: Map<MovementSequence, KeyboardAction> = HashMap(),
-    val characterSets: List<CharacterSet> = List(LayerLevel.VisibleLayers.size) { CharacterSet() },
+    val characterSets: List<List<KeyboardAction?>> = List(LayerLevel.VisibleLayers.size) { emptyList() },
     val info: LayoutInfo = LayoutInfo()
 ) {
     companion object
@@ -46,51 +44,18 @@ fun KeyboardData.addAllToActionMap(
     }
 }
 
-fun KeyboardData.lowerCaseCharacters(layer: LayerLevel): Option<String> {
-    return characterSets.elementAtOrNone(layer.ordinal - 1).flatMap {
-        if (it.lowerCaseCharacters.isEmpty()) {
-            none()
-        } else {
-            it.lowerCaseCharacters.some()
-        }
-    }
-}
+fun KeyboardData.characterSets(layer: LayerLevel): Option<List<KeyboardAction?>> =
+    characterSets.elementAtOrNone(layer.ordinal - 1)
+        .filter { it.isNotEmpty() && it.any { action -> action != null } }
 
-fun KeyboardData.upperCaseCharacters(layer: LayerLevel): Option<String> {
-    return characterSets.elementAtOrNone(layer.ordinal - 1).flatMap {
-        if (it.upperCaseCharacters.isEmpty()) {
-            none()
-        } else {
-            it.upperCaseCharacters.some()
-        }
-    }
-}
-
-fun KeyboardData.setLowerCaseCharacters(
-    lowerCaseCharacters: String,
+fun KeyboardData.setCharacterSets(
+    characterSets: List<KeyboardAction?>,
     layer: LayerLevel
-): KeyboardData {
-    return KeyboardData.characterSets.index(
+): KeyboardData =
+    KeyboardData.characterSets.index(
         Index.list(),
         layer.ordinal - 1
-    ).lowerCaseCharacters.set(
-        this,
-        lowerCaseCharacters
-    )
-}
-
-fun KeyboardData.setUpperCaseCharacters(
-    upperCaseCharacters: String,
-    layer: LayerLevel
-): KeyboardData {
-    return KeyboardData.characterSets.index(
-        Index.list(),
-        layer.ordinal - 1
-    ).upperCaseCharacters.set(
-        this,
-        upperCaseCharacters
-    )
-}
+    ).set(this, characterSets)
 
 fun KeyboardData.findLayer(movementSequence: MovementSequence): LayerLevel {
     return actionMap[movementSequence]?.layer.let {

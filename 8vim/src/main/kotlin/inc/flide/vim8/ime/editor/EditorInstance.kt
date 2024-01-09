@@ -64,6 +64,21 @@ class EditorInstance(context: Context) {
 
     fun performEnter(): Boolean = sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0)
 
+    fun performCut(): Boolean {
+        val ic = currentInputConnection() ?: return false
+        return ic.performContextMenuAction(android.R.id.cut)
+    }
+
+    fun performCopy(): Boolean {
+        val ic = currentInputConnection() ?: return false
+        return ic.performContextMenuAction(android.R.id.copy)
+    }
+
+    fun performPaste(): Boolean {
+        val ic = currentInputConnection() ?: return false
+        return ic.performContextMenuAction(android.R.id.paste)
+    }
+
     fun performDelete(): Boolean {
         val ctrlState = true
         val ic = currentInputConnection() ?: return false
@@ -80,6 +95,34 @@ class EditorInstance(context: Context) {
         } else {
             ic.commitText("", 0)
         }
+    }
+
+    fun performSwitchAnchor(): Boolean {
+        val ic = currentInputConnection() ?: return false
+        val extractedText =
+            ic.getExtractedText(ExtractedTextRequest(), InputConnection.GET_EXTRACTED_TEXT_MONITOR)
+        val start = extractedText.selectionStart
+        val end = extractedText.selectionEnd
+        return ic.setSelection(end, start)
+    }
+
+    fun sendDownAndUpKeyEvent(keyEventCode: Int, flags: Int): Boolean {
+        val ic = currentInputConnection() ?: return false
+        ic.sendDownKeyEvent(keyEventCode, flags)
+        ic.sendUpKeyEvent(keyEventCode, flags)
+        return true
+    }
+
+    fun sendDownKeyEvent(keyEventCode: Int, flags: Int): Boolean {
+        val ic = currentInputConnection() ?: return false
+        ic.sendDownKeyEvent(keyEventCode, flags)
+        return true
+    }
+
+    fun sendUpKeyEvent(keyEventCode: Int, flags: Int): Boolean {
+        val ic = currentInputConnection() ?: return false
+        ic.sendUpKeyEvent(keyEventCode, flags)
+        return true
     }
 
     private fun InputConnection.sendDownKeyEvent(keyEventCode: Int, flags: Int): Boolean =
@@ -106,14 +149,4 @@ class EditorInstance(context: Context) {
             )
         )
 
-    fun sendDownAndUpKeyEvent(keyEventCode: Int, flags: Int): Boolean {
-        val ic = currentInputConnection() ?: return false
-        ic.sendDownKeyEvent(keyEventCode, flags)
-        ic.sendUpKeyEvent(keyEventCode, flags)
-        return true
-    }
-
-    private class Wrapper(editorInfo: EditorInfo) {
-        val imeOptions = ImeOptions.wrap(editorInfo.imeOptions)
-    }
 }

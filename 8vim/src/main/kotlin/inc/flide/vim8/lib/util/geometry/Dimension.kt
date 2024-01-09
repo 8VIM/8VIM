@@ -1,4 +1,4 @@
-package inc.flide.vim8.geometry
+package inc.flide.vim8.lib.util.geometry
 
 import inc.flide.vim8.lib.ExcludeFromJacocoGeneratedReport
 

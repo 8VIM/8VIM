@@ -8,13 +8,13 @@ import arrow.core.recover
 import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.LayoutLoader
-import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
 
 class AvailableLayouts(private val layoutLoader: LayoutLoader, private val context: Context) {
     private val prefs: AppPrefs by appPreferenceModel()
     private val defaultIndex: Int
     private val embeddedLayoutsSize: Int
     private val layoutsWithKeyboardData: MutableMap<Layout<*>, String> = linkedMapOf()
+
     val displayNames: List<String>
         get() = layoutsWithKeyboardData.values.toList()
     var index = -1
@@ -31,9 +31,6 @@ class AvailableLayouts(private val layoutLoader: LayoutLoader, private val conte
         prefs.layout.custom.history.observe {
             if (it.size > layoutsWithKeyboardData.size - embeddedLayoutsSize) {
                 reloadCustomLayouts()
-                MainKeypadActionListener.rebuildKeyboardData(
-                    prefs.layout.current.get().loadKeyboardData(layoutLoader, context).getOrNull()
-                )
             }
         }
     }
@@ -64,7 +61,6 @@ class AvailableLayouts(private val layoutLoader: LayoutLoader, private val conte
             .flatMap { layout.loadKeyboardData(layoutLoader, context).getOrNone() }
             .onSome {
                 prefs.layout.current.set(layout)
-                MainKeypadActionListener.rebuildKeyboardData(it)
             }
             .isSome()
     }
@@ -84,8 +80,6 @@ class AvailableLayouts(private val layoutLoader: LayoutLoader, private val conte
                         prefs.layout.current.default.loadKeyboardData(layoutLoader, context)
                             .getOrNone().bind()
                     }
-                    .getOrNull()
-                    .let { MainKeypadActionListener.rebuildKeyboardData(it) }
             }
     }
 

@@ -53,15 +53,17 @@ class ThemeManager(context: Context) {
         return when {
             mode == ThemeMode.CUSTOM -> {
                 val customColorsPrefs = prefs.keyboard.customColors
-                val backgroundColor = customColorsPrefs.background.get()
-                val foregroundColor = customColorsPrefs.foreground.get()
+                val backgroundColor = Color(customColorsPrefs.background.get())
+                val foregroundColor = Color(customColorsPrefs.foreground.get())
                 lightColorScheme.copy(
-                    background = Color(backgroundColor),
-                    onBackground = Color(foregroundColor)
+                    background = backgroundColor,
+                    surface = backgroundColor,
+                    onBackground = foregroundColor,
+                    onSurface = foregroundColor
                 )
             }
 
-            mode == ThemeMode.DARK || configuration.isDarkTheme() -> darkColorScheme
+            mode == ThemeMode.DARK || (mode == ThemeMode.SYSTEM && configuration.isDarkTheme()) -> darkColorScheme
             else -> lightColorScheme
         }
     }

@@ -18,11 +18,7 @@ class ButtonKeypadActionListener(vim8ImeService: Vim8ImeService, view: View) :
     }
 
     private fun handleShiftToggle() {
-        if (vim8ImeService.shiftState == Vim8ImeService.State.OFF) {
-            vim8ImeService.performShiftToggle()
-        } else {
-            vim8ImeService.shiftState = Vim8ImeService.State.OFF
-        }
+
     }
 
     override fun swipeLeft() {}

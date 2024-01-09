@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import inc.flide.vim8.AppPrefs;
 import inc.flide.vim8.R;
 import inc.flide.vim8.app.MainActivity;
-import inc.flide.vim8.geometry.Dimension;
+import inc.flide.vim8.lib.util.geometry.Dimension;
 import inc.flide.vim8.ime.KeyboardTheme;
 import inc.flide.vim8.ime.actionlisteners.KeypadActionListener;
 import inc.flide.vim8.ime.layout.models.CustomKeycode;
@@ -89,12 +89,12 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
     }
 
     public void setupClipboardButton() {
-        ImageButton switchToClipboardButton = findViewById(R.id.switchKeypadButton);
-        if (switchToClipboardButton != null) {
-            boolean isVisible = !actionListener.isPassword() && prefs.getClipboard().getEnabled().get();
-            int clipboardVisibility = isVisible ? VISIBLE : GONE;
-            switchToClipboardButton.setVisibility(clipboardVisibility);
-        }
+//        ImageButton switchToClipboardButton = findViewById(R.id.switchKeypadButton);
+//        if (switchToClipboardButton != null) {
+//            boolean isVisible = !actionListener.isPassword() && prefs.getClipboard().getEnabled().get();
+//            int clipboardVisibility = isVisible ? VISIBLE : GONE;
+//            switchToClipboardButton.setVisibility(clipboardVisibility);
+//        }
     }
 
     protected abstract void initializeActionListener(Context context);
@@ -151,10 +151,10 @@ public abstract class ConstraintLayoutWithSidebar<T extends KeypadActionListener
     public void updateCtrlButton() {
         ImageButton ctrlKeyButton = findViewById(R.id.ctrlButton);
         Drawable drawable = ctrlDrawable;
-        if (actionListener.getCtrlState()) {
-            drawable = ctrlEngagedDrawable;
-        }
-
+//        if (actionListener.getCtrlState()) {
+//            drawable = ctrlEngagedDrawable;
+//        }
+//
         ctrlKeyButton.setImageDrawable(drawable);
     }
 
