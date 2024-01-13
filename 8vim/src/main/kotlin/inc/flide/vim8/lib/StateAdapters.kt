@@ -14,13 +14,13 @@ import androidx.lifecycle.Observer
 
 @Composable
 fun <V> LiveData<V>.observeAsNonNullState(
-    policy: SnapshotMutationPolicy<V> = structuralEqualityPolicy(),
+    policy: SnapshotMutationPolicy<V> = structuralEqualityPolicy()
 ): State<V> = observeAsTransformingState(policy) { it!! }
 
 @Composable
 inline fun <V, R> LiveData<V>.observeAsTransformingState(
     policy: SnapshotMutationPolicy<R> = structuralEqualityPolicy(),
-    crossinline transform: @DisallowComposableCalls (V?) -> R,
+    crossinline transform: @DisallowComposableCalls (V?) -> R
 ): State<R> {
     val lifecycleOwner = LocalLifecycleOwner.current
     val state = remember { mutableStateOf(transform(value), policy) }

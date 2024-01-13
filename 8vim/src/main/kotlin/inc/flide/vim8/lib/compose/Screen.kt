@@ -121,7 +121,7 @@ private class ScreenScopeImpl : ScreenScope {
                 appPreferenceModel(),
                 modifier = modifier
                     .padding(innerPadding)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             ) {
                 if (imeAlerts) ImeAlertCards()
                 content()

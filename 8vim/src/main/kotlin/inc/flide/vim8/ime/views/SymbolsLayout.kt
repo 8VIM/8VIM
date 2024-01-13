@@ -28,7 +28,7 @@ fun SymbolsLayout() {
                 Key("©".toKeyboardAction()),
                 Key("®".toKeyboardAction()),
                 Key("™".toKeyboardAction()),
-                Key("¿".toKeyboardAction()),
+                Key("¿".toKeyboardAction())
             ),
             arrayOf(
                 Key("[".toKeyboardAction()),
@@ -42,7 +42,7 @@ fun SymbolsLayout() {
                 Key("<".toKeyboardAction()),
                 Key(">".toKeyboardAction()),
                 Key("^".toKeyboardAction()),
-                Key("¡".toKeyboardAction()),
+                Key("¡".toKeyboardAction())
             ),
             arrayOf(
                 Key("§".toKeyboardAction()),
@@ -56,7 +56,7 @@ fun SymbolsLayout() {
                 Key("\\".toKeyboardAction()),
                 Key("|".toKeyboardAction()),
                 Key("¦".toKeyboardAction()),
-                Key(KeyEvent.KEYCODE_DEL.toKeyboardAction(), drawableId = R.drawable.ic_backspace),
+                Key(KeyEvent.KEYCODE_DEL.toKeyboardAction(), drawableId = R.drawable.ic_backspace)
             ),
             arrayOf(
                 Key("~".toKeyboardAction()),
@@ -69,8 +69,8 @@ fun SymbolsLayout() {
                 Key(
                     KeyEvent.KEYCODE_ENTER.toKeyboardAction(),
                     drawableId = R.drawable.ic_keyboard_return
-                ),
-            ),
+                )
+            )
         )
     )
     Column(modifier = Modifier.fillMaxWidth()) {

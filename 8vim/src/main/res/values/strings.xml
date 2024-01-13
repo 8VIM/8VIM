@@ -142,6 +142,9 @@
     <string name="settings__theme__custom__background__color__title">Keyboard background color</string>
     <string name="settings__theme__custom__foreground__color__title">Keyboard foreground color</string>
 
+    <string name="settings__theme__trail__is__visible__title">Display touch trail</string>
+    <string name="settings__theme__trail__is__visible__summary__on">Trail will be visible when typing</string>
+    <string name="settings__theme__trail__is__visible__summary__off">No trail will be shown when typing</string>
     <string name="settings__theme__trail__use__random__color__title">Select Touch Trail color at Random</string>
     <string name="settings__theme__trail__use__random__color__summary__on">Touch Trail color is random</string>
     <string name="settings__theme__trail__use__random__color__summary__off">Touch Trail color is selected by user</string>

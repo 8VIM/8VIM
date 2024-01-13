@@ -15,7 +15,7 @@ import inc.flide.vim8.lib.compose.Screen
 import inc.flide.vim8.lib.compose.stringRes
 import inc.flide.vim8.theme.ThemeMode
 
-private val modes = ThemeMode.values().map { it.toString().lowercase().capitalize(Locale.current) }
+private val modes = ThemeMode.entries.map { it.toString().lowercase().capitalize(Locale.current) }
 
 @Composable
 fun ThemeScreen() = Screen {
@@ -24,6 +24,7 @@ fun ThemeScreen() = Screen {
 
     content {
         val colorMode by prefs.theme.mode.observeAsState()
+        val trailIsVisible by prefs.keyboard.trail.isVisible.observeAsState()
         val trailUseRandomColor by prefs.keyboard.trail.useRandomColor.observeAsState()
 
         PreferenceGroup {
@@ -31,7 +32,7 @@ fun ThemeScreen() = Screen {
                 title = stringRes(R.string.settings__theme__color__mode__title)
                 index = { colorMode.ordinal }
                 items = { modes }
-                onConfirm { prefs.theme.mode.set(ThemeMode.values()[it]) }
+                onConfirm { prefs.theme.mode.set(ThemeMode.entries[it]) }
                 Preference(
                     title = stringRes(R.string.settings__theme__color__mode__title),
                     summary = colorMode.toString().lowercase().capitalize(Locale.current),
@@ -42,16 +43,27 @@ fun ThemeScreen() = Screen {
                 prefs.keyboard.customColors.background,
                 title = stringRes(R.string.settings__theme__custom__background__color__title),
                 colorChoices = R.array.color_palette,
-                enabledIf = { colorMode == ThemeMode.CUSTOM }
+                visibleIf = { colorMode == ThemeMode.CUSTOM }
             )
             ColorPreference(
                 prefs.keyboard.customColors.foreground,
                 title = stringRes(R.string.settings__theme__custom__foreground__color__title),
                 colorChoices = R.array.color_palette,
-                enabledIf = { colorMode == ThemeMode.CUSTOM }
+                visibleIf = { colorMode == ThemeMode.CUSTOM }
             )
         }
+
         PreferenceGroup {
+            SwitchPreference(
+                prefs.keyboard.trail.isVisible,
+                title = stringRes(R.string.settings__theme__trail__is__visible__title),
+                summaryOff = stringRes(
+                    R.string.settings__theme__trail__is__visible__summary__on
+                ),
+                summaryOn = stringRes(
+                    R.string.settings__theme__trail__is__visible__summary__off
+                )
+            )
             SwitchPreference(
                 prefs.keyboard.trail.useRandomColor,
                 title = stringRes(R.string.settings__theme__trail__use__random__color__title),
@@ -60,13 +72,14 @@ fun ThemeScreen() = Screen {
                 ),
                 summaryOn = stringRes(
                     R.string.settings__theme__trail__use__random__color__summary__on
-                )
+                ),
+                visibleIf = { trailIsVisible }
             )
             ColorPreference(
                 prefs.keyboard.trail.color,
                 title = stringRes(R.string.settings__theme__trail__color__title),
                 colorChoices = R.array.color_palette,
-                enabledIf = { trailUseRandomColor }
+                visibleIf = { trailIsVisible && !trailUseRandomColor }
             )
         }
     }

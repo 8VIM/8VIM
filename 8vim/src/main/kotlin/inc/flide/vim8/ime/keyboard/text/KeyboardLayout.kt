@@ -1,11 +1,13 @@
 package inc.flide.vim8.ime.keyboard.text
 
 import android.content.Context
+import android.util.Log
 import android.view.MotionEvent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.absoluteOffset
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,6 +30,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import inc.flide.vim8.ime.input.InputEventDispatcher
 import inc.flide.vim8.ime.keyboard.LocalKeyboardHeight
@@ -42,8 +46,6 @@ import inc.flide.vim8.lib.toIntOffset
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.onFailure
 import kotlinx.coroutines.isActive
-
-private val hideKeyboardAction = CustomKeycode.HIDE_KEYBOARD.toKeyboardAction()
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -68,7 +70,7 @@ fun KeyboardLayout(keyboard: Keyboard): Unit = with(LocalDensity.current) {
     }
 
     DisposableLifecycleEffect(
-        onPause = { resetAllKeys() },
+        onPause = { resetAllKeys() }
     )
 
     BoxWithConstraints(
@@ -129,26 +131,35 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
     Box(
         modifier = Modifier
             .requiredSize(size)
-            .absoluteOffset { key.visibleBounds.topLeft.toIntOffset() },
+            .absoluteOffset { key.visibleBounds.topLeft.toIntOffset() }
     ) {
-        val modifier = Modifier
-            .wrapContentSize()
-            .padding(horizontal = (key.visibleBounds.width / 12f).toDp())
-            .align(Alignment.Center)
-        if (key.drawableId != null) {
-            Image(
-                painter = painterResource(key.drawableId),
-                contentDescription = null,
-                modifier = modifier,
-                contentScale = ContentScale.Fit,
-                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
-            )
-        } else {
-            Text(
-                modifier = modifier,
-                text = key.action.text,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = size.height * 0.15f)
+                .fillMaxHeight()
+        ) {
+            if (key.drawableId != null) {
+                Image(
+                    painter = painterResource(key.drawableId),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .requiredSize(20.sp.toDp())
+                        .align(Alignment.Center),
+                    contentScale = ContentScale.Fit,
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                )
+            } else {
+                Text(
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .align(Alignment.Center),
+                    text = key.action.text,
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
@@ -248,7 +259,8 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
                         pointer.index = pointerIndex
                         if (swipeGestureDetector.onTouchUp(
                                 event,
-                                pointer, size
+                                pointer,
+                                size
                             ) || pointer.hasTriggeredGestureMove
                         ) {
                             onTouchCancelInternal(pointer)
@@ -277,10 +289,16 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
         val initialKey = pointer.initialKey
         val activeKey = pointer.activeKey
         if (initialKey != null && activeKey != null) {
-            if ((event.getX(pointer.index) < activeKey.visibleBounds.left - 0.1f * activeKey.visibleBounds.width)
-                || (event.getX(pointer.index) > activeKey.visibleBounds.right + 0.1f * activeKey.visibleBounds.width)
-                || (event.getY(pointer.index) < activeKey.visibleBounds.top - 0.35f * activeKey.visibleBounds.height)
-                || (event.getY(pointer.index) > activeKey.visibleBounds.bottom + 0.35f * activeKey.visibleBounds.height)
+            val eventX = event.getX(pointer.index)
+            val eventY = event.getY(pointer.index)
+            val left = activeKey.visibleBounds.left - 0.1f * activeKey.visibleBounds.width
+            val right = activeKey.visibleBounds.right + 0.1f * activeKey.visibleBounds.width
+            val top = activeKey.visibleBounds.top - 0.35f * activeKey.visibleBounds.height
+            val bottom = activeKey.visibleBounds.bottom - 0.35f * activeKey.visibleBounds.height
+            if (eventX < left ||
+                eventX > right ||
+                eventY < top ||
+                eventY > bottom
             ) {
                 onTouchCancelInternal(pointer)
                 onTouchDownInternal(event, pointer)
@@ -343,8 +361,9 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
     }
 
     override fun onSwipe(direction: SwipeGesture.Direction): Boolean {
+        Log.d("kb swipe", direction.toString())
         if (direction == SwipeGesture.Direction.DOWN) {
-            inputEventDispatcher.sendDownUp(hideKeyboardAction)
+            inputEventDispatcher.sendDownUp(CustomKeycode.HIDE_KEYBOARD.toKeyboardAction())
         }
         return true
     }

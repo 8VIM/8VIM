@@ -23,7 +23,7 @@ fun ProvideKeyboardHeight(content: @Composable () -> Unit) {
     }
 
     CompositionLocalProvider(
-        LocalKeyboardHeight provides keyboardHeight,
+        LocalKeyboardHeight provides keyboardHeight
     ) {
         content()
     }
@@ -34,15 +34,21 @@ private fun calcInputViewHeight(resources: Resources): Dp {
     val dm = resources.displayMetrics
     val minBaseSize = when {
         resources.configuration.isOrientationPortrait() -> resources.getFraction(
-            R.fraction.inputView_minHeightFraction, dm.widthPixels, dm.widthPixels
+            R.fraction.inputView_minHeightFraction,
+            dm.widthPixels,
+            dm.widthPixels
         )
 
         else -> resources.getFraction(
-            R.fraction.inputView_minHeightFraction, dm.heightPixels, dm.heightPixels
+            R.fraction.inputView_minHeightFraction,
+            dm.heightPixels,
+            dm.heightPixels
         )
     }
     val maxBaseSize = resources.getFraction(
-        R.fraction.inputView_maxHeightFraction, dm.heightPixels, dm.heightPixels
+        R.fraction.inputView_maxHeightFraction,
+        dm.heightPixels,
+        dm.heightPixels
     )
     val scale = prefs.keyboard.height.get() / 100f
     val height = ((minBaseSize + maxBaseSize) / 2.0f).coerceAtLeast(

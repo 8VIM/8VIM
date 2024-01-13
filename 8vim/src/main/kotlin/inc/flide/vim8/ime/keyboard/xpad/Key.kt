@@ -4,13 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import arrow.core.elementAtOrNone
 import arrow.core.raise.nullable
 import inc.flide.vim8.ime.layout.models.characterSets
+import inc.flide.vim8.ime.theme.blendARGB
 
 class Key(val index: Int, private val keyboard: Keyboard) {
     var position: Offset by mutableStateOf(Offset.Zero)
-    var characterHeightWidth: Float by mutableStateOf(0f)
     var isSelected: Boolean by mutableStateOf(false)
 
     fun text(isCapitalize: Boolean): String = nullable {
@@ -21,4 +22,6 @@ class Key(val index: Int, private val keyboard: Keyboard) {
         if (isCapitalize) keyboardAction.capsLockText else keyboardAction.text
     }.orEmpty()
 
+    val backgroundColor: Color
+        get() = keyboard.trailColor.blendARGB(Color.White, 0.5f)
 }

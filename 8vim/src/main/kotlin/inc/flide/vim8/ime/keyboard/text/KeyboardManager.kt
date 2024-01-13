@@ -20,15 +20,19 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     val activeState = ObservableKeyboardState.new()
 
     private val repeatableKeyCodes = intArrayOf(
+        KeyEvent.KEYCODE_DEL,
+        KeyEvent.KEYCODE_DPAD_LEFT,
+        KeyEvent.KEYCODE_DPAD_RIGHT,
+        KeyEvent.KEYCODE_DPAD_UP,
+        KeyEvent.KEYCODE_DPAD_DOWN,
         CustomKeycode.MOVE_CURRENT_END_POINT_LEFT.keyCode,
         CustomKeycode.MOVE_CURRENT_END_POINT_RIGHT.keyCode,
         CustomKeycode.MOVE_CURRENT_END_POINT_UP.keyCode,
-        CustomKeycode.MOVE_CURRENT_END_POINT_DOWN.keyCode,
+        CustomKeycode.MOVE_CURRENT_END_POINT_DOWN.keyCode
     )
     private val repeatableKeyCodesSet = repeatableKeyCodes.toSet()
 
-    val inputEventDispatcher = InputEventDispatcher
-        .new(repeatableKeyCodes = repeatableKeyCodes)
+    val inputEventDispatcher = InputEventDispatcher()
         .also { it.keyEventReceiver = this }
 
     init {
@@ -46,7 +50,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         KeyEvent.KEYCODE_DPAD_UP,
         KeyEvent.KEYCODE_DPAD_DOWN,
         KeyEvent.KEYCODE_DPAD_LEFT,
-        KeyEvent.KEYCODE_DPAD_RIGHT -> keyFlags or activeState.ctrlFlag
+        KeyEvent.KEYCODE_DPAD_RIGHT -> keyFlags or activeState.shiftFlag or activeState.ctrlFlag
 
         else -> keyFlags
     }
@@ -69,7 +73,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                 }
             }
         }
-        Vim8ImeService.inputFeebackController()?.keyPress(keyCode)
+        Vim8ImeService.inputFeedbackController()?.keyPress(keyCode)
     }
 
     private fun handleKeyCode(keycode: CustomKeycode) {
@@ -83,8 +87,16 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                 it.imeUiMode = ImeUiMode.CLIPBOARD
             }
 
+            CustomKeycode.SWITCH_TO_SYMBOLS_KEYPAD -> activeState.batchEdit {
+                it.imeUiMode = ImeUiMode.SYMBOLS
+            }
+
             CustomKeycode.SWITCH_TO_SELECTION_KEYPAD -> activeState.batchEdit {
                 it.imeUiMode = ImeUiMode.SELECTION
+            }
+
+            CustomKeycode.SWITCH_TO_NUMBER_KEYPAD -> activeState.batchEdit {
+                it.imeUiMode = ImeUiMode.NUMERIC
             }
 
             CustomKeycode.TOGGLE_SELECTION_ANCHOR -> editorInstance.performSwitchAnchor()
@@ -104,12 +116,16 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
 
     private fun handleText(keyboardAction: KeyboardAction) {
         val text =
-            if (activeState.isUppercase && keyboardAction.capsLockText.isNotEmpty())
+            if (activeState.isUppercase && keyboardAction.capsLockText.isNotEmpty()) {
                 keyboardAction.capsLockText
-            else keyboardAction.text
+            } else {
+                keyboardAction.text
+            }
         editorInstance.commitText(text)
-        activeState.inputShiftState = InputShiftState.UNSHIFTED
-        Vim8ImeService.inputFeebackController()?.keyPress()
+        if (activeState.inputShiftState == InputShiftState.SHIFTED) {
+            activeState.inputShiftState = InputShiftState.UNSHIFTED
+        }
+        Vim8ImeService.inputFeedbackController()?.keyPress()
     }
 
     private fun handleShift() {
@@ -121,21 +137,17 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     }
 
     private fun handleMove(keycode: CustomKeycode) {
-        if (activeState.inputShiftState != InputShiftState.UNSHIFTED) {
-            editorInstance.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-        }
-
-        editorInstance.sendDownAndUpKeyEvent(keycode.toKeyEvent(), activeState.ctrlFlag)
-
-        if (activeState.inputShiftState != InputShiftState.UNSHIFTED) {
-            editorInstance.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-        }
+        editorInstance.sendDownAndUpKeyEvent(
+            keycode.toKeyEvent(),
+            activeState.shiftFlag or activeState.ctrlFlag
+        )
     }
 
     private fun handleSelectionStart() {
-        editorInstance.sendDownKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
-        editorInstance.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, activeState.ctrlFlag)
-        editorInstance.sendUpKeyEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+        editorInstance.sendDownAndUpKeyEvent(
+            KeyEvent.KEYCODE_DPAD_LEFT,
+            KeyEvent.META_SHIFT_MASK or activeState.ctrlFlag
+        )
     }
 
     private fun handleSelectAll() {
@@ -147,45 +159,43 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     }
 
     private fun handleEnter() {
-        if (editorInstance.imeOptions.flagNoEnterAction) {
-            editorInstance.performEnter()
-        } else {
-            when (val action = editorInstance.imeOptions.action) {
-                ImeOptions.Action.DONE,
-                ImeOptions.Action.GO,
-                ImeOptions.Action.NEXT,
-                ImeOptions.Action.PREVIOUS,
-                ImeOptions.Action.SEARCH,
-                ImeOptions.Action.SEND -> {
+        when (val action = editorInstance.imeOptions.action) {
+            ImeOptions.Action.DONE,
+            ImeOptions.Action.GO,
+            ImeOptions.Action.NEXT,
+            ImeOptions.Action.PREVIOUS,
+            ImeOptions.Action.SEARCH,
+            ImeOptions.Action.SEND -> {
+                if (editorInstance.imeOptions.flagNoEnterAction) {
+                    editorInstance.performEnter()
+                } else {
                     editorInstance.performEnterAction(action)
                 }
-
-                else -> editorInstance.performEnter()
             }
+
+            else -> editorInstance.performEnter()
+        }
+    }
+
+    fun resetShift() {
+        if (activeState.inputShiftState == InputShiftState.SHIFTED) {
+            activeState.inputShiftState = InputShiftState.UNSHIFTED
         }
     }
 
     override fun onInputKeyDown(keyboardAction: KeyboardAction) {
-        if (keyboardAction.keyboardActionType == KeyboardActionType.INPUT_KEY &&
-            repeatableKeyCodesSet.contains(keyboardAction.keyEventCode)
-        ) {
-            handleKeyCode(keyboardAction.keyEventCode, keyboardAction.keyFlags)
-        }
-    }
-
-    override fun onInputKeyUp(keyboardAction: KeyboardAction) {
         when (keyboardAction.keyboardActionType) {
             KeyboardActionType.INPUT_TEXT -> handleText(keyboardAction)
             KeyboardActionType.INPUT_KEY ->
-                if (!repeatableKeyCodesSet.contains(keyboardAction.keyEventCode)) {
+                if (repeatableKeyCodesSet.contains(keyboardAction.keyEventCode)) {
                     handleKeyCode(keyboardAction.keyEventCode, keyboardAction.keyFlags)
                 }
         }
     }
 
-    override fun onInputKeyRepeat(keyboardAction: KeyboardAction) {
+    override fun onInputKeyUp(keyboardAction: KeyboardAction) {
         if (keyboardAction.keyboardActionType == KeyboardActionType.INPUT_KEY &&
-            repeatableKeyCodesSet.contains(keyboardAction.keyEventCode)
+            !repeatableKeyCodesSet.contains(keyboardAction.keyEventCode)
         ) {
             handleKeyCode(keyboardAction.keyEventCode, keyboardAction.keyFlags)
         }

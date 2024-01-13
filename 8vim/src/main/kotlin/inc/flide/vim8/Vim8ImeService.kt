@@ -24,12 +24,12 @@ import inc.flide.vim8.ime.input.InputFeedbackController
 import inc.flide.vim8.ime.input.LocalInputFeedbackController
 import inc.flide.vim8.ime.keyboard.LocalKeyboardHeight
 import inc.flide.vim8.ime.keyboard.ProvideKeyboardHeight
+import inc.flide.vim8.ime.lifecycle.LifecycleInputMethodService
+import inc.flide.vim8.ime.theme.ImeTheme
 import inc.flide.vim8.ime.views.KeyboardLayout
 import inc.flide.vim8.ime.views.NumberLayout
 import inc.flide.vim8.ime.views.SelectionLayout
 import inc.flide.vim8.ime.views.SymbolsLayout
-import inc.flide.vim8.ime.lifecycle.LifecycleInputMethodService
-import inc.flide.vim8.ime.theme.ImeTheme
 import inc.flide.vim8.lib.android.AndroidVersion.ATLEAST_API28_P
 import inc.flide.vim8.lib.compose.ProvideLocalizedResources
 import inc.flide.vim8.lib.compose.SystemUiIme
@@ -43,7 +43,7 @@ class Vim8ImeService : LifecycleInputMethodService() {
         fun currentInputConnection(): InputConnection? =
             Vim8ImeServiceReference.get()?.currentInputConnection
 
-        fun inputFeebackController(): InputFeedbackController? =
+        fun inputFeedbackController(): InputFeedbackController? =
             Vim8ImeServiceReference.get()?.inputFeedbackController
 
         fun switchToEmoticonKeyboard() {
@@ -91,7 +91,7 @@ class Vim8ImeService : LifecycleInputMethodService() {
     override fun onEvaluateFullscreenMode(): Boolean {
         val configuration = resources.configuration
         return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-                configuration.screenHeightDp < 480
+            configuration.screenHeightDp < 480
     }
 
     override fun onStartInputView(info: EditorInfo, restarting: Boolean) {
@@ -99,42 +99,6 @@ class Vim8ImeService : LifecycleInputMethodService() {
         activeState.batchEdit {
             editorInstance.handleStartInputView(info)
         }
-
-    }
-
-    fun sendText(text: String?) {
-//        inputConnection?.commitText(text, 1)
-    }
-
-    fun sendDownKeyEvent(keyEventCode: Int, flags: Int) {
-//        inputConnection?.sendKeyEvent(
-//            KeyEvent(
-//                SystemClock.uptimeMillis(),
-//                SystemClock.uptimeMillis(),
-//                KeyEvent.ACTION_DOWN,
-//                keyEventCode,
-//                0,
-//                flags
-//            )
-//        )
-    }
-
-    fun sendUpKeyEvent(keyEventCode: Int, flags: Int) {
-//        inputConnection?.sendKeyEvent(
-//            KeyEvent(
-//                SystemClock.uptimeMillis(),
-//                SystemClock.uptimeMillis(),
-//                KeyEvent.ACTION_UP,
-//                keyEventCode,
-//                0,
-//                flags
-//            )
-//        )
-    }
-
-    fun sendDownAndUpKeyEvent(keyEventCode: Int, flags: Int) {
-        sendDownKeyEvent(keyEventCode, flags)
-        sendUpKeyEvent(keyEventCode, flags)
     }
 
     @Suppress("DEPRECATION")
@@ -163,69 +127,6 @@ class Vim8ImeService : LifecycleInputMethodService() {
                 .find { it.id == emoticonKeyboardId }?.let { emoticonKeyboardId }.orEmpty()
         }
 
-
-    fun resetShiftState() {
-    }
-
-
-    fun switchAnchor() {
-        /*    inputConnection?.getExtractedText(
-                ExtractedTextRequest(),
-                InputConnection.GET_EXTRACTED_TEXT_MONITOR
-            )?.let {
-                val start = it.selectionStart
-                val end = it.selectionEnd
-                inputConnection?.setSelection(end, start)
-            }*/
-    }
-
-    fun switchToSelectionKeypad() {
-//        setCurrentKeypadView(selectionKeypadView)
-    }
-
-    fun switchToClipboardKeypad() {
-//        clipboardKeypadView?.let { setCurrentKeypadView(it) }
-    }
-
-    fun switchToSymbolsKeypad() {
-//        setCurrentKeypadView(symbolKeypadView)
-    }
-
-    fun switchToMainKeypad() {
-//        setCurrentKeypadView(mainKeyboardView)
-//        mainKeyboardView.setupClipboardButton()
-    }
-
-    fun switchToNumberPad() {
-//        setCurrentKeypadView(numberKeypadView)
-    }
-
-    fun cut() {
-//        inputConnection?.performContextMenuAction(android.R.id.cut)
-    }
-
-    fun copy() {
-//        inputConnection?.performContextMenuAction(android.R.id.copy)
-    }
-
-    fun paste() {
-//        inputConnection?.performContextMenuAction(android.R.id.paste)
-    }
-
-    fun hideKeyboard() {
-        requestHideSelf(InputMethodManager.HIDE_NOT_ALWAYS)
-    }
-
-    fun performShiftToggle() {
-    }
-
-    fun performCtrlToggle() {
-    }
-
-    fun areCharactersCapitalized(): Boolean {
-        return true
-    }
-
     override fun onCreateCandidatesView(): View? {
         return null
     }
@@ -236,37 +137,14 @@ class Vim8ImeService : LifecycleInputMethodService() {
         inputWindowView = null
     }
 
-    fun commitImeOptionsBasedEnter() {
-//        when (val imeAction = editorInfo.imeOptions and EditorInfo.IME_MASK_ACTION) {
-//            EditorInfo.IME_ACTION_GO,
-//            EditorInfo.IME_ACTION_SEARCH,
-//            EditorInfo.IME_ACTION_SEND,
-//            EditorInfo.IME_ACTION_NEXT,
-//            EditorInfo.IME_ACTION_DONE,
-//            EditorInfo.IME_ACTION_PREVIOUS -> {
-//                val imeNoEnterFlag = editorInfo.imeOptions and EditorInfo.IME_FLAG_NO_ENTER_ACTION
-//                if (imeNoEnterFlag == EditorInfo.IME_FLAG_NO_ENTER_ACTION) {
-//                    sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0)
-//                } else {
-//                    inputConnection?.performEditorAction(imeAction)
-//                }
-//            }
-//
-//            EditorInfo.IME_ACTION_UNSPECIFIED, EditorInfo.IME_ACTION_NONE -> sendDownAndUpKeyEvent(
-//                KeyEvent.KEYCODE_ENTER,
-//                0
-//            )
-//
-//            else -> sendDownAndUpKeyEvent(KeyEvent.KEYCODE_ENTER, 0)
-//        }
-    }
-
     @Composable
     private fun ImeUiWrapper() {
         ProvideLocalizedResources(resourcesContext) {
             ProvideKeyboardHeight {
                 val keyboardHeight = LocalKeyboardHeight.current
-                CompositionLocalProvider(LocalInputFeedbackController provides inputFeedbackController) {
+                CompositionLocalProvider(
+                    LocalInputFeedbackController provides inputFeedbackController
+                ) {
                     ImeTheme {
                         Surface(
                             modifier = Modifier.height(keyboardHeight),

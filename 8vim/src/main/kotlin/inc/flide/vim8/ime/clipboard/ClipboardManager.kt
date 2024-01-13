@@ -46,14 +46,14 @@ class ClipboardManager(context: Context) : OnPrimaryClipChangedListener {
                     val timestamp = getTimestampFromTimestampedClip(clip)
                     val toAdd = mapOf(cleanedClip to timestamp)
                     acc + (
-                            acc[cleanedClip]?.let {
-                                if (timestamp > it) {
-                                    toAdd
-                                } else {
-                                    emptyMap()
-                                }
-                            } ?: toAdd
-                            )
+                        acc[cleanedClip]?.let {
+                            if (timestamp > it) {
+                                toAdd
+                            } else {
+                                emptyMap()
+                            }
+                        } ?: toAdd
+                        )
                 }
                 .toList()
                 .sortedByDescending { it.second }
@@ -71,7 +71,6 @@ class ClipboardManager(context: Context) : OnPrimaryClipChangedListener {
         .toList()
         .sortedByDescending { getTimestampFromTimestampedClip(it) }
         .map { getClipFromTimestampedClip(it) }
-
 
     companion object {
         private const val MAX_HISTORY_SIZE = 10 // This could be made user-configurable

@@ -4,10 +4,10 @@ enum class LayerLevel {
     HIDDEN, FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH;
 
     companion object {
-        val VisibleLayers = listOf(*values()).drop(1)
+        val VisibleLayers = entries.drop(1)
 
         val MovementSequences: Map<LayerLevel, MovementSequence> =
-            values().fold(mapOf()) { acc, layer ->
+            entries.fold(mapOf()) { acc, layer ->
                 val movementSequence = when (layer) {
                     SECOND -> listOf(
                         FingerPosition.BOTTOM,

@@ -16,7 +16,7 @@ import java.util.Locale
 
 @Composable
 fun NumberLayout() {
-    val currency = Currency.getInstance(Locale.getDefault());
+    val currency = Currency.getInstance(Locale.getDefault())
     val keyboard = Keyboard(
         arrayOf(
             arrayOf(
@@ -28,7 +28,7 @@ fun NumberLayout() {
                 Key("1".toKeyboardAction()),
                 Key("2".toKeyboardAction()),
                 Key("3".toKeyboardAction()),
-                Key("?".toKeyboardAction()),
+                Key("?".toKeyboardAction())
             ),
             arrayOf(
                 Key("@".toKeyboardAction()),
@@ -36,12 +36,12 @@ fun NumberLayout() {
                 Key("_".toKeyboardAction()),
                 Key("/".toKeyboardAction()),
                 Key(
-                    CustomKeycode.SWITCH_TO_SYMBOLS_KEYPAD.toKeyboardAction().copy(text = "|{^$|"),
+                    CustomKeycode.SWITCH_TO_SYMBOLS_KEYPAD.toKeyboardAction().copy(text = "|{^$|")
                 ),
                 Key("4".toKeyboardAction()),
                 Key("5".toKeyboardAction()),
                 Key("6".toKeyboardAction()),
-                Key("!".toKeyboardAction()),
+                Key("!".toKeyboardAction())
             ),
             arrayOf(
                 Key("%".toKeyboardAction()),
@@ -55,7 +55,7 @@ fun NumberLayout() {
                 Key("7".toKeyboardAction()),
                 Key("8".toKeyboardAction()),
                 Key("9".toKeyboardAction()),
-                Key(KeyEvent.KEYCODE_DEL.toKeyboardAction(), drawableId = R.drawable.ic_backspace),
+                Key(KeyEvent.KEYCODE_DEL.toKeyboardAction(), drawableId = R.drawable.ic_backspace)
             ),
             arrayOf(
                 Key(":".toKeyboardAction()),
@@ -68,8 +68,8 @@ fun NumberLayout() {
                 Key(
                     KeyEvent.KEYCODE_ENTER.toKeyboardAction(),
                     drawableId = R.drawable.ic_keyboard_return
-                ),
-            ),
+                )
+            )
         )
     )
     Column(modifier = Modifier.fillMaxWidth()) {

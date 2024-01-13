@@ -101,7 +101,7 @@ object InputMethodUtils {
             .isSome {
                 it.enabledInputMethodList.firstOrNone { inputMethodInfo ->
                     inputMethodInfo.component.packageName == context.packageName &&
-                            inputMethodInfo.component.className == IME_SERVICE_CLASS_NAME
+                        inputMethodInfo.component.className == IME_SERVICE_CLASS_NAME
                 }.isSome()
             }
     }
@@ -109,7 +109,7 @@ object InputMethodUtils {
     private fun parseIs8VimSelected(context: Context, selectedImeId: String): Boolean {
         val component = ComponentName.unflattenFromString(selectedImeId)
         return component?.packageName == context.packageName &&
-                component?.className == IME_SERVICE_CLASS_NAME
+            component?.className == IME_SERVICE_CLASS_NAME
     }
 
     fun showImeEnablerActivity(context: Context) {

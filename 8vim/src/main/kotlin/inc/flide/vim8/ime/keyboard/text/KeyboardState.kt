@@ -4,12 +4,12 @@ import android.view.KeyEvent
 import inc.flide.vim8.ime.input.ImeUiMode
 import inc.flide.vim8.ime.input.InputShiftState
 import inc.flide.vim8.ime.input.KeyVariation
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.properties.Delegates
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 open class KeyboardState protected constructor(open var rawValue: ULong) {
     companion object {
@@ -19,7 +19,6 @@ open class KeyboardState protected constructor(open var rawValue: ULong) {
         const val O_KEY_VARIATION: Int = 4
         const val M_INPUT_SHIFT_STATE: ULong = 0x03u
         const val O_INPUT_SHIFT_STATE: Int = 8
-
 
         const val F_IS_CTRL_ON: ULong = 0x00000400u
 
@@ -78,8 +77,12 @@ open class KeyboardState protected constructor(open var rawValue: ULong) {
         set(v) {
             setFlag(F_IS_CTRL_ON, v)
         }
+
     val ctrlFlag: Int
         get() = if (isCtrlOn) KeyEvent.META_CTRL_MASK else 0
+
+    val shiftFlag: Int
+        get() = if (isUppercase) KeyEvent.META_SHIFT_MASK else 0
 }
 
 class ObservableKeyboardState private constructor(
@@ -88,7 +91,7 @@ class ObservableKeyboardState private constructor(
         KeyboardState.new(
             initValue
         )
-    ),
+    )
 ) : KeyboardState(initValue), StateFlow<KeyboardState> by dispatchFlow {
     companion object {
         const val BATCH_ZERO: Int = 0
@@ -96,7 +99,10 @@ class ObservableKeyboardState private constructor(
         fun new(value: ULong = STATE_ALL_ZERO) = ObservableKeyboardState(value)
     }
 
-    override var rawValue by Delegates.observable(initValue) { _, old, new -> if (old != new) dispatchState() }
+    override var rawValue by Delegates
+        .observable(initValue) { _, old, new ->
+            if (old != new) dispatchState()
+        }
     private val batchEditCount = AtomicInteger(BATCH_ZERO)
 
     init {

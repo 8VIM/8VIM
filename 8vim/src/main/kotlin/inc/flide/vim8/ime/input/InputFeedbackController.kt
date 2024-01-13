@@ -23,7 +23,6 @@ class InputFeedbackController private constructor(private val ims: InputMethodSe
     fun keyPress(keySound: Int = 0) {
         if (prefs.inputFeedback.hapticEnabled.get()) performHapticFeedback()
         if (prefs.inputFeedback.soundEnabled.get()) performAudioFeedback(keySound(keySound))
-
     }
 
     private fun keySound(keyCode: Int): Int {

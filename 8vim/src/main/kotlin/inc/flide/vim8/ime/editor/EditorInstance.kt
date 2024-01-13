@@ -47,7 +47,6 @@ class EditorInstance(context: Context) {
             else -> {
                 activeState.keyVariation = KeyVariation.NORMAL
                 ImeUiMode.TEXT
-
             }
         }
     }
@@ -80,12 +79,11 @@ class EditorInstance(context: Context) {
     }
 
     fun performDelete(): Boolean {
-        val ctrlState = true
         val ic = currentInputConnection() ?: return false
         return if (TextUtils.isEmpty(ic.getSelectedText(0))) {
             val length =
                 ic.getExtractedText(ExtractedTextRequest(), 0)?.text?.toString()?.let { text ->
-                    if (ctrlState) {
+                    if (activeState.isCtrlOn) {
                         breakIteratorGroup.measureLastWords(text, 1)
                     } else {
                         breakIteratorGroup.measureLastCharacters(text, 1)
@@ -113,18 +111,6 @@ class EditorInstance(context: Context) {
         return true
     }
 
-    fun sendDownKeyEvent(keyEventCode: Int, flags: Int): Boolean {
-        val ic = currentInputConnection() ?: return false
-        ic.sendDownKeyEvent(keyEventCode, flags)
-        return true
-    }
-
-    fun sendUpKeyEvent(keyEventCode: Int, flags: Int): Boolean {
-        val ic = currentInputConnection() ?: return false
-        ic.sendUpKeyEvent(keyEventCode, flags)
-        return true
-    }
-
     private fun InputConnection.sendDownKeyEvent(keyEventCode: Int, flags: Int): Boolean =
         this.sendKeyEvent(
             KeyEvent(
@@ -148,5 +134,4 @@ class EditorInstance(context: Context) {
                 flags
             )
         )
-
 }

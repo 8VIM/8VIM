@@ -42,7 +42,7 @@ fun SelectionLayout() {
                     CustomKeycode.MOVE_CURRENT_END_POINT_UP.toKeyboardAction(),
                     drawableId = R.drawable.ic_keyboard_arrow_up
                 ),
-                Key(KeyEvent.KEYCODE_DEL.toKeyboardAction(), drawableId = R.drawable.ic_backspace),
+                Key(KeyEvent.KEYCODE_DEL.toKeyboardAction(), drawableId = R.drawable.ic_backspace)
             ),
             arrayOf(
                 Key(
@@ -68,7 +68,7 @@ fun SelectionLayout() {
                 Key(
                     CustomKeycode.MOVE_CURRENT_END_POINT_RIGHT.toKeyboardAction(),
                     drawableId = R.drawable.ic_keyboard_arrow_right
-                ),
+                )
             ),
             arrayOf(
                 Key(
@@ -81,7 +81,11 @@ fun SelectionLayout() {
                 ),
                 Key(
                     CustomKeycode.CTRL_TOGGLE.toKeyboardAction(),
-                    drawableId = if (state.isCtrlOn) R.drawable.ic_ctrl_engaged else R.drawable.ic_ctrl
+                    drawableId = if (state.isCtrlOn) {
+                        R.drawable.ic_ctrl_engaged
+                    } else {
+                        R.drawable.ic_ctrl
+                    }
                 ),
                 Key(
                     CustomKeycode.MOVE_CURRENT_END_POINT_DOWN.toKeyboardAction(),
@@ -90,8 +94,8 @@ fun SelectionLayout() {
                 Key(
                     KeyEvent.KEYCODE_ENTER.toKeyboardAction(),
                     drawableId = R.drawable.ic_keyboard_return
-                ),
-            ),
+                )
+            )
         )
     )
     Column(modifier = Modifier.fillMaxWidth()) {

@@ -10,7 +10,6 @@ value class ImeOptions private constructor(val raw: Int) {
     val flagNoEnterAction: Boolean
         get() = raw and EditorInfo.IME_FLAG_NO_ENTER_ACTION != 0
 
-
     companion object {
         fun wrap(imeOptions: Int) = ImeOptions(imeOptions)
     }

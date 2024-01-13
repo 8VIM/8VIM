@@ -4,7 +4,6 @@ import android.content.Context
 import arrow.core.elementAtOrNone
 import arrow.core.firstOrNone
 import arrow.core.getOrNone
-import arrow.core.recover
 import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.LayoutLoader
@@ -76,9 +75,8 @@ class AvailableLayouts(private val layoutLoader: LayoutLoader, private val conte
                         prefs.layout.current.set(layout)
                         index = which
                     }
-                    .recover {
-                        prefs.layout.current.default.loadKeyboardData(layoutLoader, context)
-                            .getOrNone().bind()
+                    .onNone {
+                        prefs.layout.current.reset()
                     }
             }
     }

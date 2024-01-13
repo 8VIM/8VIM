@@ -14,7 +14,10 @@ import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 
-open class LifecycleInputMethodService : InputMethodService(), LifecycleOwner, ViewModelStoreOwner,
+open class LifecycleInputMethodService :
+    InputMethodService(),
+    LifecycleOwner,
+    ViewModelStoreOwner,
     SavedStateRegistryOwner {
     private val lifecycleRegistry by lazy { LifecycleRegistry(this) }
     private val store by lazy { ViewModelStore() }

@@ -11,7 +11,7 @@ import androidx.lifecycle.LifecycleEventObserver
 @NonRestartableComposable
 fun DisposableLifecycleEffect(
     lifecycle: Lifecycle = LocalLifecycleOwner.current.lifecycle,
-    onPause: () -> Unit,
+    onPause: () -> Unit
 ) {
     DisposableEffect(lifecycle) {
         val observer = LifecycleEventObserver { _, event ->

@@ -1,8 +1,8 @@
 package inc.flide.vim8.lib.kotlin
 
-import kotlinx.coroutines.sync.Mutex
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlinx.coroutines.sync.Mutex
 
 class GuardedByLock<out T : Any>(@PublishedApi internal val wrapped: T) {
     @PublishedApi

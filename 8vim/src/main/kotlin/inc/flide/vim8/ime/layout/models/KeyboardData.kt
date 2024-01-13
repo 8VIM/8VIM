@@ -16,7 +16,8 @@ data class KeyboardData(
     @JsonSerialize(keyUsing = MovementSequenceSerializer::class)
     @JsonDeserialize(keyUsing = MovementSequenceDeserializer::class)
     val actionMap: Map<MovementSequence, KeyboardAction> = HashMap(),
-    val characterSets: List<List<KeyboardAction?>> = List(LayerLevel.VisibleLayers.size) { emptyList() },
+    val characterSets: List<List<KeyboardAction?>> =
+        List(LayerLevel.VisibleLayers.size) { emptyList() },
     val info: LayoutInfo = LayoutInfo()
 ) {
     companion object
@@ -57,12 +58,11 @@ fun KeyboardData.setCharacterSets(
         layer.ordinal - 1
     ).set(this, characterSets)
 
-fun KeyboardData.findLayer(movementSequence: MovementSequence): LayerLevel {
-    return actionMap[movementSequence]?.layer.let {
+fun KeyboardData.findLayer(movementSequence: MovementSequence): LayerLevel =
+    actionMap[movementSequence]?.layer.let {
         if (it == LayerLevel.HIDDEN) {
             LayerLevel.FIRST
         } else {
             it
         }
     } ?: LayerLevel.FIRST
-}

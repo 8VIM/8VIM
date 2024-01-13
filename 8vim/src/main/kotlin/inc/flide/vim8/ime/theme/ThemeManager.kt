@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.graphics.ColorUtils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import inc.flide.vim8.AppPrefs
@@ -39,7 +40,6 @@ class ThemeManager(context: Context) {
         customColors.foreground.observe { updateCurrentTheme() }
         trailColor.useRandomColor.observe { updateCurrentTheme() }
         trailColor.color.observe { updateCurrentTheme() }
-
     }
 
     fun updateCurrentTheme() {
@@ -63,31 +63,39 @@ class ThemeManager(context: Context) {
                 )
             }
 
-            mode == ThemeMode.DARK || (mode == ThemeMode.SYSTEM && configuration.isDarkTheme()) -> darkColorScheme
+            mode == ThemeMode.DARK ||
+                (mode == ThemeMode.SYSTEM && configuration.isDarkTheme()) -> darkColorScheme
+
             else -> lightColorScheme
         }
     }
 
     private fun trailColor(): TrailColor =
-        if (prefs.keyboard.trail.useRandomColor.get()) randomTrailColor
-        else FixedTrailColor(prefs.keyboard.trail.color.get())
+        if (prefs.keyboard.trail.useRandomColor.get()) {
+            randomTrailColor
+        } else {
+            FixedTrailColor(Color(prefs.keyboard.trail.color.get()))
+        }
 
     data class ThemeInfo(val scheme: ColorScheme, val trailColor: TrailColor)
 
     interface TrailColor {
-        fun color(): Int
+        fun color(): Color
     }
 
-    class FixedTrailColor(private val color: Int) : TrailColor {
-        override fun color(): Int = color
+    class FixedTrailColor(private val color: Color) : TrailColor {
+        override fun color(): Color = color
     }
 
     class RandomTrailColor : TrailColor {
-        override fun color(): Int = Color(
+        override fun color(): Color = Color(
             Random.nextInt(256),
             Random.nextInt(256),
             Random.nextInt(256),
             255
-        ).toArgb()
+        )
     }
 }
+
+fun Color.blendARGB(other: Color, ratio: Float): Color =
+    Color(ColorUtils.blendARGB(this.toArgb(), other.toArgb(), ratio))

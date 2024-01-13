@@ -27,8 +27,10 @@ fun ClipboardLayout() {
             ListItem(
                 modifier = Modifier.clickable(
                     role = Role.Button,
-                    onClick = { editorInstance.commitText(item) }),
-                headlineContent = { Text("${idx + 1}. $item") })
+                    onClick = { editorInstance.commitText(item) }
+                ),
+                headlineContent = { Text("${idx + 1}. $item") }
+            )
         }
     }
 }

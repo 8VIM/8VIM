@@ -37,12 +37,12 @@ fun KeyboardLayout() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
+            .wrapContentHeight()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .wrapContentHeight(),
+                .wrapContentHeight()
         ) {
             Row {
                 if (isOnLeft) Sidebar()
@@ -79,7 +79,11 @@ fun RowScope.Sidebar() {
         ImageButton(
             resourceId = R.drawable.ic_emoji,
             description = stringRes(R.string.open_emoticon_keyboard_button_content_description),
-            onClick = { inputEventDispatcher.sendDownUp(CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.toKeyboardAction()) }
+            onClick = {
+                inputEventDispatcher.sendDownUp(
+                    CustomKeycode.SWITCH_TO_EMOTICON_KEYBOARD.toKeyboardAction()
+                )
+            }
         )
 
         ImageButton(
@@ -91,7 +95,11 @@ fun RowScope.Sidebar() {
         ImageButton(
             resourceId = R.drawable.ic_open_with_black,
             description = stringRes(R.string.open_emoticon_keyboard_button_content_description),
-            onClick = { inputEventDispatcher.sendDownUp(CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.toKeyboardAction()) }
+            onClick = {
+                inputEventDispatcher.sendDownUp(
+                    CustomKeycode.SWITCH_TO_SELECTION_KEYPAD.toKeyboardAction()
+                )
+            }
         )
 
         ImageButton(
@@ -107,19 +115,31 @@ fun RowScope.Sidebar() {
         ImageButton(
             resourceId = if (state.isCtrlOn) R.drawable.ic_ctrl_engaged else R.drawable.ic_ctrl,
             description = stringRes(R.string.open_emoticon_keyboard_button_content_description),
-            onClick = { inputEventDispatcher.sendDownUp(CustomKeycode.CTRL_TOGGLE.toKeyboardAction()) }
+            onClick = {
+                inputEventDispatcher.sendDownUp(
+                    CustomKeycode.CTRL_TOGGLE.toKeyboardAction()
+                )
+            }
         )
         if (state.imeUiMode == ImeUiMode.TEXT) {
             ImageButton(
                 resourceId = R.drawable.ic_content_paste,
                 description = stringRes(R.string.open_emoticon_keyboard_button_content_description),
-                onClick = { inputEventDispatcher.sendDownUp(CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.toKeyboardAction()) }
+                onClick = {
+                    inputEventDispatcher.sendDownUp(
+                        CustomKeycode.SWITCH_TO_CLIPPAD_KEYBOARD.toKeyboardAction()
+                    )
+                }
             )
         } else {
             ImageButton(
                 resourceId = R.drawable.ic_viii,
                 description = stringRes(R.string.main_keyboard_button_content_description),
-                onClick = { inputEventDispatcher.sendDownUp(CustomKeycode.SWITCH_TO_MAIN_KEYPAD.toKeyboardAction()) }
+                onClick = {
+                    inputEventDispatcher.sendDownUp(
+                        CustomKeycode.SWITCH_TO_MAIN_KEYPAD.toKeyboardAction()
+                    )
+                }
             )
         }
     }
