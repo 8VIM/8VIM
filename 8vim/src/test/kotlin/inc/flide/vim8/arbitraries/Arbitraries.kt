@@ -17,7 +17,7 @@ import io.kotest.property.arbitrary.orNull
 import io.kotest.property.arbitrary.string
 
 object Arbitraries {
-    private val arbMovementSequence: Arb<MovementSequence> = Arb.list(Arb.enum(), 1..10)
+    val arbMovementSequence: Arb<MovementSequence> = Arb.list(Arb.enum(), 1..10)
 
     val arbKeyboardAction: Arb<KeyboardAction> = arbitrary {
         val type = Arb.enum<KeyboardActionType>().bind()

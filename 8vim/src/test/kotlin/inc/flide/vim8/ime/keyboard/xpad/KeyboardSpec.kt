@@ -1,35 +1,192 @@
 package inc.flide.vim8.ime.keyboard.xpad
 
+import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Resources
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.IntSize
+import arrow.core.None
+import arrow.core.some
+import inc.flide.vim8.Vim8ImeService
+import inc.flide.vim8.arbitraries.Arbitraries
 import inc.flide.vim8.ime.layout.models.FingerPosition
+import inc.flide.vim8.ime.layout.models.KeyboardData
+import inc.flide.vim8.ime.layout.models.LayerLevel
+import inc.flide.vim8.ime.layout.models.MovementSequenceType
+import inc.flide.vim8.ime.layout.models.characterSets
+import inc.flide.vim8.ime.layout.models.findLayer
+import inc.flide.vim8.ime.layout.models.yaml.ExtraLayer
+import inc.flide.vim8.ime.layout.models.yaml.toLayerLevel
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
+import io.kotest.matchers.floats.plusOrMinus
 import io.kotest.matchers.shouldBe
+import io.kotest.property.arbitrary.next
+import io.mockk.clearMocks
+import io.mockk.clearStaticMockk
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkObject
+import io.mockk.mockkStatic
 
 class KeyboardSpec : FunSpec({
-    val circle = Keyboard.Circle(radius = 10f)
+    val context = mockk<Context>(relaxed = true)
+    val resources = mockk<Resources>(relaxed = true)
+    val keyboardData = mockk<KeyboardData>(relaxed = true)
+    val textMeasurer = mockk<TextMeasurer>()
+    val textStyle = mockk<TextStyle>()
+    val textLayoutResult = mockk<TextLayoutResult>()
+    val configuration = Configuration()
+    val action = Arbitraries.arbKeyboardAction.next()
 
-    context("is point inside circle") {
+    beforeSpec {
+        mockkObject(Vim8ImeService.Companion)
+        mockkStatic("inc.flide.vim8.ime.layout.models.KeyboardDataKt")
+        every { context.resources } returns resources
+        every { resources.configuration } returns configuration
+        every { Vim8ImeService.keyboardData() } returns keyboardData
+        every {
+            textMeasurer.measure(
+                any(),
+                any(),
+                overflow = any(),
+                softWrap = any(),
+                maxLines = any(),
+                constraints = any(),
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } returns textLayoutResult
+        every { textLayoutResult.size } returns IntSize(1, 1)
+        configuration.screenHeightDp = 480
+    }
+
+    context("find layer") {
+        every { keyboardData.findLayer(any()) } returns LayerLevel.HIDDEN
+        val movementSequences =
+            (
+                ExtraLayer.MOVEMENT_SEQUENCES
+                    .map { (layer, sequence) -> sequence to layer.toLayerLevel() } + (
+                    emptyList<FingerPosition>() to LayerLevel.HIDDEN
+                    )
+                )
+                .map { (sequence, layer) -> (sequence + FingerPosition.NO_TOUCH) to layer }
         withData(
-            (Offset(1f, 1f) to true),
-            (Offset(20f, 20f) to false)
-        ) { (point, expected) ->
-            circle.isPointInsideCircle(point) shouldBe expected
+            nameFn = { "${it.first} -> ${it.second}" },
+            movementSequences
+        ) { (sequence, layer) ->
+            every { keyboardData.totalLayers } returns 6
+            val keyboard = Keyboard(context)
+            keyboard.findLayer(sequence)
+            keyboard.layerLevel shouldBe layer
         }
     }
 
-    context("get sector from a point") {
-        withData(
-            nameFn = {
-                "Finger at (${it.second.x}, ${it.second.y})" +
-                    "should be the ${it.first} sector"
-            },
-            (FingerPosition.TOP to Offset(0f, -10f)),
-            (FingerPosition.LEFT to Offset(-10f, 0f)),
-            (FingerPosition.BOTTOM to Offset(0f, 10f)),
-            (FingerPosition.RIGHT to Offset(10f, 0f))
-        ) { (position, point) ->
-            circle.getSectorOfPoint(point) shouldBe position
+    context("key") {
+        test("No matching movement") {
+            val keyboard = Keyboard(context)
+            every { keyboardData.actionMap } returns emptyMap()
+            keyboard.key(emptyList()) shouldBe null
         }
+
+        test("No matching layer") {
+            every { keyboardData.characterSets(any()) } returns None
+            every { keyboardData.actionMap } returns mapOf(emptyList<FingerPosition>() to action)
+            val keyboard = Keyboard(context)
+            keyboard.key(emptyList()) shouldBe null
+        }
+        test("finding the key") {
+            every { keyboardData.characterSets(any()) } returns listOf(action).some()
+            every { keyboardData.actionMap } returns mapOf(emptyList<FingerPosition>() to action)
+            val keyboard = Keyboard(context)
+            val key = keyboard.key(emptyList())
+            key?.index shouldBe 0
+        }
+    }
+
+    context("action") {
+        withData(
+            nameFn = { "${it.first}" },
+            ((emptyList<FingerPosition>() to MovementSequenceType.NO_MOVEMENT) to None),
+            (
+                (listOf(FingerPosition.INSIDE_CIRCLE) to MovementSequenceType.NO_MOVEMENT)
+                    to None
+                ),
+            (
+                (listOf(FingerPosition.INSIDE_CIRCLE) to MovementSequenceType.NEW_MOVEMENT)
+                    to action.some()
+                ),
+            (
+                (listOf(FingerPosition.LONG_PRESS) to MovementSequenceType.NO_MOVEMENT)
+                    to action.some()
+                )
+        ) { (params, result) ->
+            every { keyboardData.actionMap } returns mapOf(
+                listOf(
+                    FingerPosition.NO_TOUCH,
+                    FingerPosition.INSIDE_CIRCLE
+                ) to action,
+                listOf(FingerPosition.LONG_PRESS) to action
+            )
+            val (movementSequence, currentMovementSequenceType) = params
+            val keyboard = Keyboard(context)
+            keyboard.action(movementSequence, currentMovementSequenceType) shouldBe result
+        }
+    }
+
+    context("layout") {
+        withData(
+            nameFn = { "${it.first} ${it.second}" },
+            LayoutParam(isTabletLandscape = false, isSidebarOnLeft = false)
+                to Offset(5f, 10f),
+            LayoutParam(
+                isTabletLandscape = true,
+                isSidebarOnLeft = false
+            ) to Offset(6.4f, 10f),
+            LayoutParam(isTabletLandscape = true, isSidebarOnLeft = true)
+                to Offset(3.6f, 10f)
+        ) { (params, result) ->
+            val keyboard = Keyboard(context)
+            configuration.orientation =
+                if (params.isTabletLandscape) {
+                    Configuration.ORIENTATION_LANDSCAPE
+                } else {
+                    Configuration.ORIENTATION_PORTRAIT
+                }
+
+            keyboard.layout(
+                Size(10f, 20f),
+                params.isSidebarOnLeft,
+                10,
+                0,
+                0,
+                textMeasurer,
+                textStyle
+            )
+            keyboard.circle.centre.x shouldBe result.x.plusOrMinus(0.1f)
+            keyboard.circle.centre.y shouldBe result.y.plusOrMinus(0.1f)
+        }
+    }
+
+    test("hasAction") {
+        every { keyboardData.actionMap } returns mapOf(emptyList<FingerPosition>() to action)
+        val keyboard = Keyboard(context)
+        keyboard.hasAction(emptyList()) shouldBe true
+    }
+
+    afterTest {
+        clearMocks(keyboardData)
+    }
+
+    afterSpec {
+        clearStaticMockk(Vim8ImeService::class)
     }
 })
+
+private data class LayoutParam(val isTabletLandscape: Boolean, val isSidebarOnLeft: Boolean)

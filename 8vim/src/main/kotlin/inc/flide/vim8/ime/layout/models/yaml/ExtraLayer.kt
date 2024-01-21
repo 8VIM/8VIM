@@ -7,8 +7,7 @@ enum class ExtraLayer {
     FIRST, SECOND, THIRD, FOURTH, FIFTH;
 
     companion object {
-        @JvmField
-        val MOVEMENT_SEQUENCES: Map<ExtraLayer, List<FingerPosition>> = values().fold(
+        val MOVEMENT_SEQUENCES: Map<ExtraLayer, List<FingerPosition>> = entries.fold(
             listOf(
                 FingerPosition.BOTTOM,
                 FingerPosition.INSIDE_CIRCLE

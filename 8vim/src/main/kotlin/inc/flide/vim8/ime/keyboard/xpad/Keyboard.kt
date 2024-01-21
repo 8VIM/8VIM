@@ -60,38 +60,38 @@ class Keyboard(private val context: Context) {
     private val isTabletLandscape: Boolean
         get() =
             context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-                context.resources.configuration.screenHeightDp >= 480
+                    context.resources.configuration.screenHeightDp >= 480
 
     fun reset() {
         layerLevel = LayerLevel.FIRST
     }
 
-    fun findLayer(movementSequence: MutableList<FingerPosition>) {
-        keyboardData?.let {
-            for (i in VisibleLayers.size - 1 downTo LayerLevel.SECOND.ordinal) {
-                val layerLevel = LayerLevel.entries[i]
-                val extraLayerMovementSequence = MovementSequences[layerLevel]
-                if (extraLayerMovementSequence == null) {
-                    this.layerLevel = LayerLevel.FIRST
-                    return
-                }
-                if (movementSequence.size < extraLayerMovementSequence.size) {
-                    continue
-                }
-                val startWith: MovementSequence =
-                    movementSequence.subList(0, extraLayerMovementSequence.size)
+    fun findLayer(movementSequence: List<FingerPosition>) {
+        if (keyboardData == null) return
 
-                if (extraLayerMovementSequences.contains(startWith) &&
-                    layerLevel.ordinal <= it.totalLayers
-                ) {
-                    this.layerLevel = layerLevel
-                    return
-                }
+        for (i in VisibleLayers.size downTo LayerLevel.SECOND.ordinal) {
+            val layerLevel = LayerLevel.entries[i]
+            val extraLayerMovementSequence = MovementSequences[layerLevel]
+            if (extraLayerMovementSequence == null) {
+                this.layerLevel = LayerLevel.FIRST
+                return
             }
+            if (movementSequence.size < extraLayerMovementSequence.size) {
+                continue
+            }
+            val startWith: MovementSequence =
+                movementSequence.subList(0, extraLayerMovementSequence.size)
 
-            this.layerLevel = it
-                .findLayer(movementSequence + FingerPosition.INSIDE_CIRCLE)
+            if (extraLayerMovementSequences.contains(startWith) &&
+                layerLevel.ordinal <= keyboardData!!.totalLayers
+            ) {
+                this.layerLevel = layerLevel
+                return
+            }
         }
+
+        this.layerLevel = keyboardData!!
+            .findLayer(movementSequence + FingerPosition.INSIDE_CIRCLE)
     }
 
     fun key(movementSequence: MovementSequence): Key? = nullable {
@@ -138,7 +138,7 @@ class Keyboard(private val context: Context) {
         val offsetY = yCentreOffset * XPAD_CIRCLE_OFFSET_FACTOR
 
         val smallDim = min(
-            if (offsetX > 0) size.width / 2 - offsetX else size.width / 2 + offsetX,
+            size.width / 2 - offsetX,
             size.height / 2 - abs(offsetY)
         )
         lengthOfLineDemarcatingSectors = hypot(smallDim, smallDim) - radius - characterHeight
