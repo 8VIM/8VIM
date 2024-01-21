@@ -312,6 +312,7 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
 
         val initialKey = pointer.initialKey
         val activeKey = pointer.activeKey
+        Log.d("key text up", "${activeKey?.action}")
         if (initialKey != null && activeKey != null) {
             if (!pointer.hasTriggeredGestureMove) {
                 inputEventDispatcher.sendUp(activeKey.action)
@@ -323,6 +324,7 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
 
     private fun onTouchDownInternal(event: MotionEvent, pointer: TouchPointer) {
         val key = keyboard.getKeyForPos(event.getX(pointer.index), event.getY(pointer.index))
+        Log.d("key text down", "${key?.action}")
         if (key != null) {
             pointer.pressedKeyInfo = inputEventDispatcher.sendDown(key.action)
             if (pointer.initialKey == null) {
@@ -339,6 +341,7 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
         pointer.pressedKeyInfo = null
 
         val activeKey = pointer.activeKey
+        Log.d("key text cancel", "${activeKey?.action}")
         if (activeKey != null) {
             pointer.activeKey = null
         }

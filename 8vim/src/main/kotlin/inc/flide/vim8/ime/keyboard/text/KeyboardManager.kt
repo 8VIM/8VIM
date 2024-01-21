@@ -58,7 +58,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     private fun handleKeyCode(keyCode: Int, keyFlags: Int = 0) {
         val customKeycode = CustomKeycode.KEY_CODE_TO_STRING_CODE_MAP[keyCode]
         if (customKeycode != null) {
-            handleKeyCode(customKeycode)
+            handleKeyCode(customKeycode, keyFlags)
         } else {
             when (keyCode) {
                 KeyEvent.KEYCODE_CUT -> editorInstance.performCut()
@@ -76,7 +76,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         Vim8ImeService.inputFeedbackController()?.keyPress(keyCode)
     }
 
-    private fun handleKeyCode(keycode: CustomKeycode) {
+    private fun handleKeyCode(keycode: CustomKeycode, keyFlags: Int) {
         when (keycode) {
             CustomKeycode.SWITCH_TO_MAIN_KEYPAD -> activeState.batchEdit {
                 it.imeUiMode = ImeUiMode.TEXT
@@ -101,7 +101,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
 
             CustomKeycode.TOGGLE_SELECTION_ANCHOR -> editorInstance.performSwitchAnchor()
             CustomKeycode.CTRL_TOGGLE -> handleCtrl()
-            CustomKeycode.SHIFT_TOGGLE -> handleShift()
+            CustomKeycode.SHIFT_TOGGLE -> if (keyFlags == -1) toggleShift() else handleShift()
             CustomKeycode.MOVE_CURRENT_END_POINT_LEFT,
             CustomKeycode.MOVE_CURRENT_END_POINT_RIGHT,
             CustomKeycode.MOVE_CURRENT_END_POINT_UP,
@@ -133,6 +133,13 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
             InputShiftState.UNSHIFTED -> InputShiftState.SHIFTED
             InputShiftState.SHIFTED -> InputShiftState.CAPS_LOCK
             InputShiftState.CAPS_LOCK -> InputShiftState.UNSHIFTED
+        }
+    }
+
+    private fun toggleShift() {
+        activeState.inputShiftState = when (activeState.inputShiftState) {
+            InputShiftState.UNSHIFTED -> InputShiftState.SHIFTED
+            else -> InputShiftState.UNSHIFTED
         }
     }
 

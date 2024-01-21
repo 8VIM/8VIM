@@ -17,9 +17,7 @@ import arrow.core.getOrNone
 import arrow.core.raise.nullable
 import arrow.core.raise.option
 import arrow.core.recover
-import inc.flide.vim8.AppPrefs
-import inc.flide.vim8.appPreferenceModel
-import inc.flide.vim8.ime.layout.loadKeyboardData
+import inc.flide.vim8.Vim8ImeService
 import inc.flide.vim8.ime.layout.models.CHARACTER_SET_SIZE
 import inc.flide.vim8.ime.layout.models.Direction.Companion.baseQuadrant
 import inc.flide.vim8.ime.layout.models.FingerPosition
@@ -34,8 +32,6 @@ import inc.flide.vim8.ime.layout.models.characterSets
 import inc.flide.vim8.ime.layout.models.findLayer
 import inc.flide.vim8.ime.layout.models.toFingerPosition
 import inc.flide.vim8.ime.layout.models.yaml.ExtraLayer
-import inc.flide.vim8.ime.layout.safeLoadKeyboardData
-import inc.flide.vim8.layoutLoader
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.hypot
@@ -50,30 +46,17 @@ class Keyboard(private val context: Context) {
         val extraLayerMovementSequences = ExtraLayer.MOVEMENT_SEQUENCES.values.toSet()
     }
 
-    private val prefs: AppPrefs by appPreferenceModel()
-    private val layoutLoader by context.layoutLoader()
-    var keyboardData: KeyboardData? by mutableStateOf(null)
-
     val keys = List(CHARACTER_SET_SIZE) { Key(it, this) }
     var trailColor: Color = Color.Unspecified
     var layerLevel: LayerLevel by mutableStateOf(LayerLevel.FIRST)
     var lengthOfLineDemarcatingSectors = 0f
         private set
+    val keyboardData: KeyboardData? get() = Vim8ImeService.keyboardData()
     val circle = Circle()
     private val isTabletLandscape: Boolean
         get() =
             context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 context.resources.configuration.screenHeightDp >= 480
-
-    init {
-        keyboardData = safeLoadKeyboardData(layoutLoader, context)!!
-        prefs.layout.current.observe {
-            it.loadKeyboardData(layoutLoader, context)
-                .onRight { keyboardData ->
-                    this.keyboardData = keyboardData
-                }
-        }
-    }
 
     fun reset() {
         layerLevel = LayerLevel.FIRST

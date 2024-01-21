@@ -276,11 +276,11 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             }
 
             MotionEvent.ACTION_CANCEL -> {
+                Log.d("key action cancel", movementSequence.toString())
                 job?.cancel()
                 job = null
                 resetKey()
                 currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT
-                keyboardManager.resetShift()
                 keyboard.reset()
             }
         }

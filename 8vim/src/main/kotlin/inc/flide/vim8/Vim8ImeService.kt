@@ -24,6 +24,9 @@ import inc.flide.vim8.ime.input.InputFeedbackController
 import inc.flide.vim8.ime.input.LocalInputFeedbackController
 import inc.flide.vim8.ime.keyboard.LocalKeyboardHeight
 import inc.flide.vim8.ime.keyboard.ProvideKeyboardHeight
+import inc.flide.vim8.ime.layout.loadKeyboardData
+import inc.flide.vim8.ime.layout.models.KeyboardData
+import inc.flide.vim8.ime.layout.safeLoadKeyboardData
 import inc.flide.vim8.ime.lifecycle.LifecycleInputMethodService
 import inc.flide.vim8.ime.theme.ImeTheme
 import inc.flide.vim8.ime.views.KeyboardLayout
@@ -53,17 +56,21 @@ class Vim8ImeService : LifecycleInputMethodService() {
         fun hideKeyboard() {
             Vim8ImeServiceReference.get()?.requestHideSelf(InputMethodManager.HIDE_NOT_ALWAYS)
         }
+
+        fun keyboardData() = Vim8ImeServiceReference.get()?.keyboardData
     }
 
     private val prefs by appPreferenceModel()
     private val themeManager by themeManager()
     private val keyboardManager by keyboardManager()
     private val editorInstance by editorInstance()
+    private val layoutLoader by layoutLoader()
 
     private var resourcesContext by mutableStateOf(this as Context)
     private var inputWindowView by mutableStateOf<View?>(null)
     private val activeState get() = keyboardManager.activeState
     private val inputFeedbackController by lazy { InputFeedbackController.new(this) }
+    var keyboardData: KeyboardData? by mutableStateOf(null)
 
     init {
         setTheme(R.style.AppTheme_Keyboard)
@@ -73,6 +80,13 @@ class Vim8ImeService : LifecycleInputMethodService() {
         super.onCreate()
         Vim8ImeServiceReference = WeakReference(this)
         resourcesContext = createConfigurationContext(Configuration(resources.configuration))
+        keyboardData = safeLoadKeyboardData(layoutLoader, this)!!
+        prefs.layout.current.observe {
+            it.loadKeyboardData(layoutLoader, this)
+                .onRight { keyboardData ->
+                    this.keyboardData = keyboardData
+                }
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

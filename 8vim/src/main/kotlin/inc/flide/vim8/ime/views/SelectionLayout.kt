@@ -46,7 +46,7 @@ fun SelectionLayout() {
             ),
             arrayOf(
                 Key(
-                    CustomKeycode.SHIFT_TOGGLE.toKeyboardAction(),
+                    CustomKeycode.SHIFT_TOGGLE.toKeyboardAction().copy(keyFlags = -1),
                     drawableId = when (state.inputShiftState) {
                         InputShiftState.UNSHIFTED -> R.drawable.ic_no_capslock
                         InputShiftState.SHIFTED -> R.drawable.ic_shift_engaged
