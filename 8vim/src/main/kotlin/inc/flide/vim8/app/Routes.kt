@@ -11,6 +11,7 @@ import inc.flide.vim8.app.settings.KeyboardScreen
 import inc.flide.vim8.app.settings.LayoutScreen
 import inc.flide.vim8.app.settings.ThemeScreen
 import inc.flide.vim8.app.settings.about.AboutScreen
+import inc.flide.vim8.app.settings.about.ThirdPartyLicencesScreen
 import inc.flide.vim8.app.setup.SetupScreen
 
 object Routes {
@@ -25,6 +26,7 @@ object Routes {
         const val Theme = "settings/theme"
         const val Gesture = "settings/gesture"
         const val About = "settings/about"
+        const val ThirdPartyLicenses = "settings/about/third-party-licenses"
     }
 
     @Composable
@@ -46,6 +48,7 @@ object Routes {
             composable(Settings.Theme) { ThemeScreen() }
             composable(Settings.Gesture) { GestureScreen() }
             composable(Settings.About) { AboutScreen() }
+            composable(Settings.ThirdPartyLicenses) { ThirdPartyLicencesScreen() }
         }
     }
 }

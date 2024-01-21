@@ -1,7 +1,6 @@
 package inc.flide.vim8.ime.keyboard.text
 
 import android.content.Context
-import android.util.Log
 import android.view.MotionEvent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -77,9 +76,7 @@ fun KeyboardLayout(keyboard: Keyboard): Unit = with(LocalDensity.current) {
         modifier = Modifier
             .fillMaxWidth()
             .height(keyboardUiHeight)
-            .onGloballyPositioned { coords ->
-                controller.size = coords.size.toSize()
-            }
+            .onGloballyPositioned { controller.size = it.size.toSize() }
             .pointerInteropFilter { event ->
                 when (event.actionMasked) {
                     MotionEvent.ACTION_DOWN,
@@ -312,7 +309,6 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
 
         val initialKey = pointer.initialKey
         val activeKey = pointer.activeKey
-        Log.d("key text up", "${activeKey?.action}")
         if (initialKey != null && activeKey != null) {
             if (!pointer.hasTriggeredGestureMove) {
                 inputEventDispatcher.sendUp(activeKey.action)
@@ -324,7 +320,6 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
 
     private fun onTouchDownInternal(event: MotionEvent, pointer: TouchPointer) {
         val key = keyboard.getKeyForPos(event.getX(pointer.index), event.getY(pointer.index))
-        Log.d("key text down", "${key?.action}")
         if (key != null) {
             pointer.pressedKeyInfo = inputEventDispatcher.sendDown(key.action)
             if (pointer.initialKey == null) {
@@ -341,7 +336,6 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
         pointer.pressedKeyInfo = null
 
         val activeKey = pointer.activeKey
-        Log.d("key text cancel", "${activeKey?.action}")
         if (activeKey != null) {
             pointer.activeKey = null
         }
@@ -364,7 +358,6 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
     }
 
     override fun onSwipe(direction: SwipeGesture.Direction): Boolean {
-        Log.d("kb swipe", direction.toString())
         if (direction == SwipeGesture.Direction.DOWN) {
             inputEventDispatcher.sendDownUp(CustomKeycode.HIDE_KEYBOARD.toKeyboardAction())
         }

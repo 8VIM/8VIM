@@ -1,7 +1,6 @@
 package inc.flide.vim8.ime.keyboard.text.gestures
 
 import android.content.res.Resources
-import android.util.Log
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import androidx.compose.ui.geometry.Size
@@ -57,7 +56,6 @@ abstract class SwipeGesture {
                 velocityTracker.computeCurrentVelocity(1000)
                 val velocityX = ViewUtils.px2dp(velocityTracker.getXVelocity(pointer.id))
                 val velocityY = ViewUtils.px2dp(velocityTracker.getYVelocity(pointer.id))
-                Log.d("swipe up", "$velocityX $velocityY")
                 pointerMap.removeById(pointer.id)
                 return if ((
                     abs(absDiffX) > (ViewUtils.px2dp(size.width) / 2.0) || abs(absDiffY) > (

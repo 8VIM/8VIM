@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.AbstractComposeView
 import inc.flide.vim8.ime.input.ImeUiMode
 import inc.flide.vim8.ime.input.InputFeedbackController
 import inc.flide.vim8.ime.input.LocalInputFeedbackController
+import inc.flide.vim8.ime.keyboard.KeyboardLayout
 import inc.flide.vim8.ime.keyboard.LocalKeyboardHeight
 import inc.flide.vim8.ime.keyboard.ProvideKeyboardHeight
 import inc.flide.vim8.ime.layout.loadKeyboardData
@@ -29,7 +30,6 @@ import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.safeLoadKeyboardData
 import inc.flide.vim8.ime.lifecycle.LifecycleInputMethodService
 import inc.flide.vim8.ime.theme.ImeTheme
-import inc.flide.vim8.ime.views.KeyboardLayout
 import inc.flide.vim8.ime.views.NumberLayout
 import inc.flide.vim8.ime.views.SelectionLayout
 import inc.flide.vim8.ime.views.SymbolsLayout

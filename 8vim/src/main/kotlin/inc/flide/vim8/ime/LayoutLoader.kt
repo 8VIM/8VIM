@@ -1,7 +1,6 @@
 package inc.flide.vim8.ime
 
 import android.content.Context
-import android.util.Log
 import arrow.core.Either
 import arrow.core.firstOrNone
 import arrow.core.getOrElse
@@ -116,7 +115,6 @@ class YamlLayoutLoader(
                         if (it is ExceptionWrapperError) {
                             it.exception.printStackTrace()
                         }
-                        Log.d("err", it.message)
                     }
                     .getOrNull()?.also { cache.add("common", it) }
             }

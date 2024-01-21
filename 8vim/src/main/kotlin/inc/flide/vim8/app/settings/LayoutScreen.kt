@@ -26,6 +26,9 @@ import inc.flide.vim8.lib.compose.Screen
 import inc.flide.vim8.lib.compose.stringRes
 import inc.flide.vim8.lib.util.DialogsHelper.showAlert
 
+private val emptyLayoutError =
+    R.string.dialog__yaml__error__title to "The layout requires at least one layer"
+
 @Composable
 fun LayoutScreen() = Screen {
     title = stringRes(R.string.settings__layouts__title)
@@ -86,8 +89,7 @@ private fun fileSelector(): () -> Unit {
                     (title to error.message).some()
                 }, { keyboardData: KeyboardData ->
                     if (keyboardData.totalLayers == 0) {
-                        (R.string.dialog__yaml__error__title to "The layout requires at least one layer")
-                            .some()
+                        emptyLayoutError.some()
                     } else {
                         None
                     }

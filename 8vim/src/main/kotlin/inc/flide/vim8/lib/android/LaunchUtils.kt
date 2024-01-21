@@ -42,7 +42,7 @@ inline fun <T : Any> Context.launchActivity(
     }
 }
 
-inline fun Context.shareApp(text: String) {
+fun Context.shareApp(text: String) {
     try {
         val intent = Intent(Intent.ACTION_SEND).also {
             it.type = "text/plain"

@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.views
+package inc.flide.vim8.ime.keyboard
 
 import android.content.Intent
 import android.view.KeyEvent
@@ -19,6 +19,7 @@ import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.ime.clipboard.ClipboardLayout
 import inc.flide.vim8.ime.input.ImeUiMode
 import inc.flide.vim8.ime.keyboard.text.toKeyboardAction
+import inc.flide.vim8.ime.keyboard.xpad.XpadLayout
 import inc.flide.vim8.ime.layout.models.CustomKeycode
 import inc.flide.vim8.keyboardManager
 import inc.flide.vim8.lib.android.launchActivity

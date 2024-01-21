@@ -14,6 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import inc.flide.vim8.R
+import inc.flide.vim8.app.LocalNavController
+import inc.flide.vim8.app.Routes
 import inc.flide.vim8.app.Urls
 import inc.flide.vim8.datastore.ui.Preference
 import inc.flide.vim8.lib.android.launchUrl
@@ -23,9 +25,11 @@ import inc.flide.vim8.lib.compose.stringRes
 
 @Composable
 fun AboutScreen() = Screen {
-    title = stringRes(R.string.settings__about__title)
+    title = stringRes(R.string.about__title)
 
     val context = LocalContext.current
+    val navController = LocalNavController.current
+
     content {
         Column(
             verticalArrangement = Arrangement.Top,
@@ -49,7 +53,7 @@ fun AboutScreen() = Screen {
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Text(
-                text = stringRes(R.string.settings__about__description),
+                text = stringRes(R.string.about__description),
                 fontSize = 15.sp
             )
             Text(
@@ -88,6 +92,12 @@ fun AboutScreen() = Screen {
             title = stringRes(R.string.settings__about__play_store__label),
             onClick = { context.launchUrl(Urls.PLAY_STORE) }
         )
-
+        Divider()
+        Preference(
+            iconId = R.drawable.ic_description,
+            title = stringRes(R.string.about__third_party_licenses__title),
+            summary = stringRes(R.string.about__third_party_licenses__summary),
+            onClick = { navController.navigate(Routes.Settings.ThirdPartyLicenses) }
+        )
     }
 }

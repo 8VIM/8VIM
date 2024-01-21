@@ -1,20 +1,15 @@
 package inc.flide.vim8.ime.keyboard.xpad
 
 import android.content.Context
-import android.util.Log
 import android.view.MotionEvent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Matrix
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.rotate
 import arrow.core.getOrElse
 import arrow.core.getOrNone
 import inc.flide.vim8.appPreferenceModel
@@ -131,21 +126,8 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
 
     var hasTrail by mutableStateOf(false)
     val trailPoints = mutableStateListOf<GlideGesture.Point>()
-    var bounds: Rect by mutableStateOf(Rect.Zero)
 
     fun drawSectors(drawScope: DrawScope, color: Color) {
-        val path = Path()
-        path.moveTo(keyboard.circle.centre.x + keyboard.circle.radius, keyboard.circle.centre.y)
-        path.relativeLineTo(keyboard.lengthOfLineDemarcatingSectors, 0f)
-        path.moveTo(keyboard.circle.centre.x - keyboard.circle.radius, keyboard.circle.centre.y)
-        path.relativeLineTo(-keyboard.lengthOfLineDemarcatingSectors, 0f)
-        path.moveTo(keyboard.circle.centre.x, keyboard.circle.centre.y + keyboard.circle.radius)
-        path.relativeLineTo(0f, keyboard.lengthOfLineDemarcatingSectors)
-        path.moveTo(keyboard.circle.centre.x, keyboard.circle.centre.y - keyboard.circle.radius)
-        path.relativeLineTo(0f, -keyboard.lengthOfLineDemarcatingSectors)
-        val matrix = Matrix()
-        matrix.rotateY(45f)
-        bounds = matrix.map(path.getBounds())
         drawScope.drawCircle(
             color,
             keyboard.circle.radius,
@@ -153,9 +135,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             style = drawStyle
         )
 
-        drawScope.rotate(45f) {
-            drawPath(path, color, style = drawStyle)
-        }
+        drawScope.drawPath(keyboard.path, color, style = drawStyle)
     }
 
     fun drawTrail(drawScope: DrawScope, trailPoints: MutableList<GlideGesture.Point>) {
@@ -267,7 +247,6 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 resetKey()
                 currentFingerPosition = FingerPosition.NO_TOUCH
                 movementSequence.add(currentFingerPosition)
-                Log.d("key action up", movementSequence.toString())
                 processMovementSequence(movementSequence)
 
                 movementSequence.clear()
@@ -276,7 +255,6 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             }
 
             MotionEvent.ACTION_CANCEL -> {
-                Log.d("key action cancel", movementSequence.toString())
                 job?.cancel()
                 job = null
                 resetKey()
@@ -289,7 +267,6 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
     private fun initiateLongPressDetection() {
         if (job != null) return
 
-        Log.d("key long start", movementSequence.toString())
         job = scope.launch {
             delay(500L)
             while (isActive) {
@@ -311,7 +288,6 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         if (job == null) return@runBlocking
         job?.cancel()
         job = null
-        Log.d("key interrupt", movementSequence.toString())
         processMovementSequence(movementSequence + FingerPosition.LONG_PRESS_END)
     }
 

@@ -70,7 +70,7 @@ fun HomeScreen() = Screen {
         )
         Preference(
             iconId = R.drawable.ic_error_outline,
-            title = stringRes(R.string.settings__about__title),
+            title = stringRes(R.string.about__title),
             onClick = { navController.navigate(Routes.Settings.About) },
             trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
         )
@@ -84,7 +84,15 @@ fun HomeScreen() = Screen {
         Preference(
             iconId = R.drawable.ic_share,
             title = stringRes(R.string.share_app),
-            onClick = { context.shareApp("\nCheck out this awesome keyboard application\n\nhttps://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}\n") },
+            onClick = {
+                context.shareApp(
+                    """
+Check out this awesome keyboard application
+
+https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
+"""
+                )
+            },
             trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
         )
     }

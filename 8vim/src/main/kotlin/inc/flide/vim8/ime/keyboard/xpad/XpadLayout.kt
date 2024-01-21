@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.views
+package inc.flide.vim8.ime.keyboard.xpad
 
 import android.view.MotionEvent
 import androidx.annotation.DrawableRes
@@ -47,9 +47,6 @@ import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.ime.input.InputShiftState
 import inc.flide.vim8.ime.keyboard.LocalKeyboardHeight
-import inc.flide.vim8.ime.keyboard.xpad.Key
-import inc.flide.vim8.ime.keyboard.xpad.Keyboard
-import inc.flide.vim8.ime.keyboard.xpad.KeyboardController
 import inc.flide.vim8.keyboardManager
 import inc.flide.vim8.lib.compose.DisposableLifecycleEffect
 import kotlin.math.max
@@ -145,20 +142,20 @@ fun XpadLayout() = with(LocalDensity.current) {
                 }
             }
     ) {
+        keyboard.layout(
+            size,
+            isSidebarOnLeft,
+            radiusSizeFactor,
+            xCentreOffset,
+            yCentreOffset,
+            textMeasurer,
+            textStyle
+        )
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(keyboardUiHeight)
         ) {
-            keyboard.layout(
-                size,
-                isSidebarOnLeft,
-                radiusSizeFactor,
-                xCentreOffset,
-                yCentreOffset,
-                textMeasurer,
-                textStyle
-            )
             controller.drawSectors(this, fg)
         }
 
@@ -168,7 +165,7 @@ fun XpadLayout() = with(LocalDensity.current) {
             }
         }
 
-        if (showIcons && !controller.bounds.isEmpty) {
+        if (showIcons) {
             SectorImage(
                 when (activeState.inputShiftState) {
                     InputShiftState.UNSHIFTED -> R.drawable.ic_no_capslock
@@ -176,12 +173,13 @@ fun XpadLayout() = with(LocalDensity.current) {
                     InputShiftState.CAPS_LOCK -> R.drawable.ic_capslock_engaged
                 },
                 x = keyboard.circle.centre.x.toDp() - iconHalf,
-                y = max(controller.bounds.top, 0f).toDp() + iconHalf,
+                y = max(keyboard.bounds.top, 0f).toDp() - iconHalf,
                 iconSize
             )
+
             SectorImage(
                 R.drawable.numericpad_vd_vector,
-                x = max(controller.bounds.left, 0f).toDp() + iconSize,
+                x = max(keyboard.bounds.left, 0f).toDp() - iconHalf,
                 y = keyboard.circle.centre.y.toDp() - iconHalf,
                 iconSize
             )
@@ -189,13 +187,13 @@ fun XpadLayout() = with(LocalDensity.current) {
             SectorImage(
                 R.drawable.ic_keyboard_return,
                 x = keyboard.circle.centre.x.toDp() - iconHalf,
-                y = min(controller.bounds.bottom, size.height).toDp() - iconSize,
+                y = min(keyboard.bounds.bottom, size.height).toDp() - iconHalf,
                 iconSize
             )
 
             SectorImage(
                 R.drawable.ic_backspace,
-                x = min(controller.bounds.right, size.width).toDp() + iconSize,
+                x = min(keyboard.bounds.right, size.width).toDp() - iconHalf,
                 y = keyboard.circle.centre.y.toDp() - iconHalf,
                 iconSize
             )

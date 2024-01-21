@@ -23,8 +23,10 @@
     <string name="dialog__confirm__label">OK</string>
     <string name="dialog__dismiss__label">Cancel</string>
 
-    <string name="settings__about__title">About Us</string>
-    <string name="settings__about__description">More than just a clone for now defunct 8Pen Application.</string>
+    <string name="about__title">About Us</string>
+    <string name="about__description">More than just a clone for now defunct 8Pen Application.</string>
+    <string name="about__third_party_licenses__title">Third-party licenses</string>
+    <string name="about__third_party_licenses__summary">Licenses of the third-party libraries included in this app</string>
     <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>
     <string name="tab_button_content_description">Tab</string>
     <string name="ctrl_button_content_description">Ctrl button</string>

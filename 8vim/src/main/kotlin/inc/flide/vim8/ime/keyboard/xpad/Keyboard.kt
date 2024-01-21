@@ -7,8 +7,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import arrow.core.Option
@@ -49,10 +52,11 @@ class Keyboard(private val context: Context) {
     val keys = List(CHARACTER_SET_SIZE) { Key(it, this) }
     var trailColor: Color = Color.Unspecified
     var layerLevel: LayerLevel by mutableStateOf(LayerLevel.FIRST)
-    var lengthOfLineDemarcatingSectors = 0f
-        private set
+    private var lengthOfLineDemarcatingSectors = 0f
     val keyboardData: KeyboardData? get() = Vim8ImeService.keyboardData()
     val circle = Circle()
+    val path = Path()
+    var bounds: Rect = Rect.Zero
     private val isTabletLandscape: Boolean
         get() =
             context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
@@ -164,9 +168,21 @@ class Keyboard(private val context: Context) {
             letterPositions[4 * i + 2] = eastEdge + dx
             letterPositions[4 * i + 3] = circleCenter.y + characterHeight / 2f
         }
+        path.rewind()
 
+        path.moveTo(circle.centre.x + circle.radius, circle.centre.y)
+        path.relativeLineTo(lengthOfLineDemarcatingSectors, 0f)
+        path.moveTo(circle.centre.x - circle.radius, circle.centre.y)
+        path.relativeLineTo(-lengthOfLineDemarcatingSectors, 0f)
+        path.moveTo(circle.centre.x, circle.centre.y + circle.radius)
+        path.relativeLineTo(0f, lengthOfLineDemarcatingSectors)
+        path.moveTo(circle.centre.x, circle.centre.y - circle.radius)
+        path.relativeLineTo(0f, -lengthOfLineDemarcatingSectors)
         matrix.reset()
+
         matrix.postRotate(45f, circleCenter.x, circleCenter.y)
+        path.asAndroidPath().transform(matrix)
+        bounds = path.getBounds()
         matrix.mapPoints(letterPositions, 0, letterPositions, 0, 8)
         matrix.reset()
         matrix.postRotate(90f, circleCenter.x, circleCenter.y)
