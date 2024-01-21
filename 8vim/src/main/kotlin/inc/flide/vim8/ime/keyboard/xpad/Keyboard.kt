@@ -60,7 +60,7 @@ class Keyboard(private val context: Context) {
     private val isTabletLandscape: Boolean
         get() =
             context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-                    context.resources.configuration.screenHeightDp >= 480
+                context.resources.configuration.screenHeightDp >= 480
 
     fun reset() {
         layerLevel = LayerLevel.FIRST
