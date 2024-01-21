@@ -63,47 +63,44 @@ private fun fileSelector(): () -> Unit {
     val prefs by appPreferenceModel()
     val layoutLoader by context.layoutLoader()
     val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.OpenDocument(),
-        onResult = {
-            val layoutPrefs = prefs.layout
-
-            if (it == null) {
-                return@rememberLauncherForActivityResult
-            }
-            context.contentResolver
-                .takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            val layout = CustomLayout(it)
-            val currentHistory = layoutPrefs.custom.history.get()
-            val isInHistory = currentHistory.contains(it.toString())
-            if (isInHistory) {
-                availableLayouts.get()!!.updateKeyboardData(layout)
-            } else {
-                layout.loadKeyboardData(layoutLoader, context)
-                    .fold({ error: LayoutError ->
-                        val title = if (error is ExceptionWrapperError) {
-                            R.string.generic_error_text
-                        } else {
-                            R.string.yaml_error_title
-                        }
-                        (title to error.message).some()
-                    }, { keyboardData: KeyboardData ->
-                        if (keyboardData.totalLayers == 0) {
-                            (R.string.yaml_error_title to "The layout requires at least one layer")
-                                .some()
-                        } else {
-                            None
-                        }
-                    })
-                    .onSome { (titleId, message) -> showAlert(context, titleId, message) }
-                    .onNone {
-                        prefs.layout.current.set(layout)
-                        val history =
-                            listOf(it.toString()) + currentHistory.toList()
-
-                        layoutPrefs.custom.history.set(LinkedHashSet(history))
-                    }
-            }
+        contract = ActivityResultContracts.OpenDocument()
+    ) {
+        if (it == null) {
+            return@rememberLauncherForActivityResult
         }
-    )
+        context.contentResolver
+            .takePersistableUriPermission(it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        val layout = CustomLayout(it)
+        val currentHistory = prefs.layout.custom.history.get()
+        val isInHistory = currentHistory.contains(it.toString())
+        if (isInHistory) {
+            availableLayouts.get()!!.updateKeyboardData(layout)
+        } else {
+            layout.loadKeyboardData(layoutLoader, context)
+                .fold({ error: LayoutError ->
+                    val title = if (error is ExceptionWrapperError) {
+                        R.string.dialog__error__title
+                    } else {
+                        R.string.dialog__yaml__error__title
+                    }
+                    (title to error.message).some()
+                }, { keyboardData: KeyboardData ->
+                    if (keyboardData.totalLayers == 0) {
+                        (R.string.dialog__yaml__error__title to "The layout requires at least one layer")
+                            .some()
+                    } else {
+                        None
+                    }
+                })
+                .onSome { (titleId, message) -> showAlert(context, titleId, message) }
+                .onNone {
+                    prefs.layout.current.set(layout)
+                    val history =
+                        listOf(it.toString()) + currentHistory.toList()
+
+                    prefs.layout.custom.history.set(LinkedHashSet(history))
+                }
+        }
+    }
     return { launcher.launch(arrayOf("application/octet-stream")) }
 }

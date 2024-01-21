@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import inc.flide.vim8.R
+import inc.flide.vim8.app.Urls
 import inc.flide.vim8.datastore.ui.Preference
 import inc.flide.vim8.lib.android.launchUrl
 import inc.flide.vim8.lib.compose.AppIcon
@@ -22,10 +23,9 @@ import inc.flide.vim8.lib.compose.stringRes
 
 @Composable
 fun AboutScreen() = Screen {
-    title = stringRes(R.string.about_us_label)
+    title = stringRes(R.string.settings__about__title)
 
     val context = LocalContext.current
-
     content {
         Column(
             verticalArrangement = Arrangement.Top,
@@ -49,11 +49,11 @@ fun AboutScreen() = Screen {
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Text(
-                text = stringRes(R.string.about_8vim_text),
+                text = stringRes(R.string.settings__about__description),
                 fontSize = 15.sp
             )
             Text(
-                text = stringRes(R.string.owner_text),
+                text = stringRes(R.string.settings__about__owner__label),
                 fontSize = 15.sp,
                 modifier = Modifier.padding(top = 10.dp)
             )
@@ -61,37 +61,33 @@ fun AboutScreen() = Screen {
 
         Preference(
             iconId = R.drawable.ic_error_outline,
-            title = stringRes(R.string.version_name_label),
+            title = stringRes(R.string.app__version__label),
             summary = stringRes(R.string.version_name)
         )
         Divider()
         Preference(
             iconId = R.drawable.github_vd_vector,
-            title = stringRes(R.string.connect_using_github_label),
-            onClick = { context.launchUrl("https://github.com/8VIM/8VIM") }
+            title = stringRes(R.string.settings__about__github__label),
+            onClick = { context.launchUrl(Urls.GITHUB) }
         )
         Divider()
         Preference(
             iconId = R.drawable.matrix_vd_vector,
-            title = stringRes(R.string.join_us_on_matrix_label),
-            onClick = { context.launchUrl("https://app.element.io/#/room/#8vim/lobby:matrix.org") }
+            title = stringRes(R.string.settings__about__matrix__label),
+            onClick = { context.launchUrl(Urls.MATRIX) }
         )
         Divider()
         Preference(
             iconId = R.drawable.twitter_vd_vector,
-            title = stringRes(R.string.connect_using_twitter_label),
-            onClick = { context.launchUrl("https://twitter.com/8vim_?s=09") }
+            title = stringRes(R.string.settings__about__twitter__label),
+            onClick = { context.launchUrl(Urls.TWITTER) }
         )
         Divider()
         Preference(
             iconId = R.drawable.playstore_vd_vector,
-            title = stringRes(R.string.connect_using_google_play_store_label),
-            onClick = {
-                context.launchUrl(
-                    "https://play.google.com/store/apps/details?id=inc.flide.vi8"
-                )
-            }
+            title = stringRes(R.string.settings__about__play_store__label),
+            onClick = { context.launchUrl(Urls.PLAY_STORE) }
         )
-        Divider()
+
     }
 }

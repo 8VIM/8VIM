@@ -30,8 +30,4 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/app_icon</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
-
-    <style name="KeyboardView" parent="android:Widget">
-        <item name="keyBackground">@drawable/key_bg</item>
-    </style>
 </resources>

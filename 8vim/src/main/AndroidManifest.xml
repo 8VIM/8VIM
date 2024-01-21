@@ -4,6 +4,11 @@
 
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <queries>
+        <intent>
+            <action android:name="android.view.InputMethod" />
+        </intent>
+    </queries>
     <application
         android:name=".VIM8Application"
         android:allowBackup="true"

@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY appname "8Vim">]>
 <resources>
-    <string name="version_name_label">Version</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="app__version__label">Version</string>
     <string name="enable_ime_dialog_title">Please Enable IME</string>
     <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable
         the keyboard first. Once you click on the enable button, you will be taken to the input
-        method settings screen. Please enable the "&appname; Keyboard" there.</string>
+        method settings screen. Please enable the "{app_name} Keyboard" there.</string>
     <string name="enable_ime_dialog_neutral_button_text">Enable</string>
     <string name="activate_ime_dialog_title">Please Activate IME</string>
     <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting
-        and verify them, if "&appname; Keyboard" is active. Would you like to switch to &appname;
+        and verify them, if "{app_name} Keyboard" is active. Would you like to switch to {app_name}
         keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
 
     <string name="keyboard_test_edit_text_hint">Test your keyboard here</string>
-    <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
-    <string name="share_app">Share &appname;</string>
+    <string name="settings__help__feedback"><![CDATA[Help & Feedback]]></string>
+    <string name="share_app">Share {app_name}</string>
     <string name="select_preferred_emoticon_keyboard_dialog_title">Choose the input method</string>
     <string name="select_preferred_keyboard_layout_dialog_title">Choose the language</string>
-    <string name="yaml_error_title">Couldn\'t load layout file</string>
-    <string name="generic_error_text">Error</string>
-    <string name="generic_okay_text">OK</string>
-    <string name="generic_cancel_text">Cancel</string>
+    <string name="dialog__yaml__error__title">Couldn\'t load layout file</string>
+    <string name="dialog__error__title">Error</string>
+    <string name="dialog__confirm__label">OK</string>
+    <string name="dialog__dismiss__label">Cancel</string>
 
-    <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
-    <string name="about_us_label">About Us</string>
+    <string name="settings__about__title">About Us</string>
+    <string name="settings__about__description">More than just a clone for now defunct 8Pen Application.</string>
     <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>
     <string name="tab_button_content_description">Tab</string>
     <string name="ctrl_button_content_description">Ctrl button</string>
@@ -35,25 +33,16 @@
     <string name="clipboard_button_content_description">Open Clipboard keypad</string>
     <string name="main_keyboard_button_content_description">Open Main keypad</string>
     <string name="generic_back_button_content_description">Go Back</string>
-    <string name="owner_text">Designed and Developed by flide</string>
+    <string name="settings__about__owner__label">Designed and Developed by flide</string>
     <string name="connect_with_us_label">Connect with us</string>
-
-    <!--    github-->
     <string name="github_icon_content_description">Github Icon</string>
-    <string name="connect_using_github_label">Fork us on GitHub</string>
-
-    <!--    matrix-->
+    <string name="settings__about__github__label">Fork us on GitHub</string>
     <string name="matrix_icon_content_description">Matrix Icon</string>
-    <string name="join_us_on_matrix_label">Join us on Matrix</string>
-
-    <!--    play store-->
+    <string name="settings__about__matrix__label">Join us on Matrix</string>
     <string name="play_store_icon_content_description">Google Play store icon</string>
-    <string name="connect_using_google_play_store_label">Rate us on the Play Store</string>
-
-    <!--    twitter-->
+    <string name="settings__about__play_store__label">Rate us on the Play Store</string>
     <string name="twitter_icon_content_description">"Twitter icon"</string>
-    <string name="connect_using_twitter_label">Follow us on Twitter</string>
-
+    <string name="settings__about__twitter__label">Follow us on Twitter</string>
     <string name="choose_the_8vim">Choose 8Vim above.We will NEVER collect any personal data.</string>
 
     <string name="vim8__repository_url" translatable="false">https://github.com/8VIM/8VIM</string>
@@ -78,9 +67,9 @@
 
     <string name="settings__title" comment="Title of Settings">Settings</string>
 
-    <string name="settings__home__title" comment="Title of the Home screen">Welcome to &appname;</string>
-    <string name="settings__home__ime_not_enabled">&appname; is not enabled in the system and thus won\'t be available as an input method in the input picker.\nClick here to resolve this issue.</string>
-    <string name="settings__home__ime_not_selected">&appname; is not selected as the default input method.\nClick here to resolve this issue.</string>
+    <string name="settings__home__title" comment="Title of the Home screen">Welcome to {app_name}</string>
+    <string name="settings__home__ime_not_enabled">{app_name} is not enabled in the system and thus won\'t be available as an input method in the input picker.\nClick here to resolve this issue.</string>
+    <string name="settings__home__ime_not_selected">{app_name} is not selected as the default input method.\nClick here to resolve this issue.</string>
 
     <string name="settings__layouts__title" comment="Title of Layout screen">Layouts</string>
     <string name="settings__layouts__select__title">Select language layout</string>

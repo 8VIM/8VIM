@@ -33,7 +33,6 @@ import inc.flide.vim8.ime.views.KeyboardLayout
 import inc.flide.vim8.ime.views.NumberLayout
 import inc.flide.vim8.ime.views.SelectionLayout
 import inc.flide.vim8.ime.views.SymbolsLayout
-import inc.flide.vim8.lib.android.AndroidVersion.ATLEAST_API28_P
 import inc.flide.vim8.lib.compose.ProvideLocalizedResources
 import inc.flide.vim8.lib.compose.SystemUiIme
 import inc.flide.vim8.lib.util.InputMethodUtils
@@ -114,32 +113,6 @@ class Vim8ImeService : LifecycleInputMethodService() {
             editorInstance.handleStartInputView(info)
         }
     }
-
-    @Suppress("DEPRECATION")
-    fun switchToExternalEmoticonKeyboard() {
-        val keyboardId = selectedEmoticonKeyboardId
-        if (keyboardId.isEmpty()) {
-            if (ATLEAST_API28_P) {
-                switchToPreviousInputMethod()
-            } else {
-                val inputMethodManager = this
-                    .getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                val tokenIBinder = window.window!!.attributes.token
-                inputMethodManager.switchToLastInputMethod(tokenIBinder)
-            }
-        } else {
-            switchInputMethod(keyboardId)
-        }
-    }
-
-    private val selectedEmoticonKeyboardId: String
-        get() {
-            val emoticonKeyboardId = prefs.keyboard.emoticonKeyboard.get()
-
-            val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            return inputMethodManager.enabledInputMethodList
-                .find { it.id == emoticonKeyboardId }?.let { emoticonKeyboardId }.orEmpty()
-        }
 
     override fun onCreateCandidatesView(): View? {
         return null

@@ -14,6 +14,8 @@ import inc.flide.vim8.lib.android.isOrientationPortrait
 import inc.flide.vim8.lib.util.ViewUtils
 
 val LocalKeyboardHeight = staticCompositionLocalOf { 65.dp }
+private const val MIN_HEIGHT_FRACTION = 38.2 / 100f
+private const val MAX_HEIGHT_FRACTION = 46f / 100f
 
 @Composable
 fun ProvideKeyboardHeight(content: @Composable () -> Unit) {

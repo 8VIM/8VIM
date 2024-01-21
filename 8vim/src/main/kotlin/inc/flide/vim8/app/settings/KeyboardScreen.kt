@@ -26,12 +26,17 @@ fun KeyboardScreen() = Screen {
         PreferenceGroup {
             Dialog {
                 title = stringRes(R.string.select_preferred_emoticon_keyboard_dialog_title)
-                index = { selectedKeyboard(prefs.keyboard.emoticonKeyboard, context) }
-                items = { listOtherKeyboard(context).keys }
+                index = {
+                    selectedKeyboard(
+                        prefs.keyboard.emoticonKeyboard,
+                        context.applicationContext
+                    )
+                }
+                items = { listOtherKeyboard(context.applicationContext).keys }
                 onConfirm {
                     if (it == -1) return@onConfirm
                     prefs.keyboard.emoticonKeyboard.set(
-                        listOtherKeyboard(context).values.toList()[it]
+                        listOtherKeyboard(context.applicationContext).values.toList()[it]
                     )
                 }
                 Preference(

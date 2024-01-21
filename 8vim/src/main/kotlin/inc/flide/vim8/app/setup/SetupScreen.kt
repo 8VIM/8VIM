@@ -22,6 +22,7 @@ import inc.flide.vim8.R
 import inc.flide.vim8.app.LocalNavController
 import inc.flide.vim8.app.MainActivity
 import inc.flide.vim8.app.Routes
+import inc.flide.vim8.app.Urls
 import inc.flide.vim8.lib.android.launchActivity
 import inc.flide.vim8.lib.android.launchUrl
 import inc.flide.vim8.lib.compose.Screen
@@ -85,10 +86,10 @@ fun SetupScreen() = Screen {
                 ) {
                     context.launchActivity(MainActivity::class) {
                         it.flags = (
-                            Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-                                or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                                or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                            )
+                                Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
+                                        or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                        or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                )
                     }
                 }
             }
@@ -146,8 +147,7 @@ fun SetupScreen() = Screen {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    val repositoryUrl = stringRes(R.string.vim8__repository_url)
-                    TextButton(onClick = { context.launchUrl(repositoryUrl) }) {
+                    TextButton(onClick = { context.launchUrl(Urls.GITHUB) }) {
                         Text(text = stringRes(R.string.setup__footer__repository))
                     }
                 }

@@ -129,8 +129,8 @@ object InputMethodUtils {
         }
     }
 
-    fun listOtherKeyboard(context: Context): Map<String, String> {
-        return context.systemServiceOrNull(InputMethodManager::class)?.let {
+    fun listOtherKeyboard(context: Context): Map<String, String> =
+        context.systemServiceOrNull(InputMethodManager::class)?.let {
             it.enabledInputMethodList
                 .fold(emptyMap()) { acc, inputMethodInfo ->
                     if (inputMethodInfo.component.packageName == context.packageName &&
@@ -144,5 +144,4 @@ object InputMethodUtils {
                     }
                 }
         } ?: emptyMap()
-    }
 }

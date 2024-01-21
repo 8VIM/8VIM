@@ -120,7 +120,7 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
                 onDismissRequest = { openAlertDialog = false },
                 confirmButton = {
                     TextButton(onClick = { openAlertDialog = false }) {
-                        Text(stringRes(R.string.generic_cancel_text))
+                        Text(stringRes(R.string.dialog__dismiss__label))
                     }
                 },
                 text = {

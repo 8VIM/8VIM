@@ -70,12 +70,12 @@ private class DialogScopeImpl : DialogScope {
                             openAlertDialog = false
                         }
                     ) {
-                        Text(stringRes(R.string.generic_okay_text))
+                        Text(stringRes(R.string.dialog__confirm__label))
                     }
                 },
                 dismissButton = {
                     TextButton(onClick = { openAlertDialog = false }) {
-                        Text(stringRes(R.string.generic_cancel_text))
+                        Text(stringRes(R.string.dialog__dismiss__label))
                     }
                 },
                 text = {

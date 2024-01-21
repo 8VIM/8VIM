@@ -10,11 +10,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import inc.flide.vim8.BuildConfig
 import inc.flide.vim8.R
 import inc.flide.vim8.app.LocalNavController
 import inc.flide.vim8.app.Routes
+import inc.flide.vim8.app.Urls
 import inc.flide.vim8.datastore.ui.Preference
+import inc.flide.vim8.lib.android.launchUrl
+import inc.flide.vim8.lib.android.shareApp
 import inc.flide.vim8.lib.compose.AppIcon
 import inc.flide.vim8.lib.compose.Screen
 import inc.flide.vim8.lib.compose.stringRes
@@ -26,6 +31,7 @@ fun HomeScreen() = Screen {
     previewFieldVisible = true
 
     val navController = LocalNavController.current
+    val context = LocalContext.current
 
     content {
         Column(
@@ -64,8 +70,21 @@ fun HomeScreen() = Screen {
         )
         Preference(
             iconId = R.drawable.ic_error_outline,
-            title = stringRes(R.string.about_us_label),
+            title = stringRes(R.string.settings__about__title),
             onClick = { navController.navigate(Routes.Settings.About) },
+            trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+        )
+        Preference(
+            iconId = R.drawable.ic_help,
+            title = stringRes(R.string.settings__help__feedback),
+            onClick = { context.launchUrl(Urls.MAIL_TO) },
+            trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+        )
+
+        Preference(
+            iconId = R.drawable.ic_share,
+            title = stringRes(R.string.share_app),
+            onClick = { context.shareApp("\nCheck out this awesome keyboard application\n\nhttps://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}\n") },
             trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
         )
     }
