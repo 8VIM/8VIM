@@ -101,14 +101,6 @@ fun KeyboardScreen() = Screen {
                     R.string.settings__keyboard__display__show__letters__on__wheel__summary__on
                 )
             )
-            SwitchPreference(
-                pref = prefs.keyboard.trail.isVisible,
-                title = stringRes(R.string.settings__keyboard__trail__is__visible__title),
-                summaryOff = stringRes(
-                    R.string.settings__keyboard__trail__is__visible__summary__off
-                ),
-                summaryOn = stringRes(R.string.settings__keyboard__trail__is__visible__summary__on)
-            )
         }
 
         PreferenceGroup {

@@ -3,6 +3,7 @@ package inc.flide.vim8.ime.keyboard
 import android.content.res.Resources
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
@@ -10,18 +11,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import inc.flide.vim8.R
 import inc.flide.vim8.appPreferenceModel
+import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.lib.android.isOrientationPortrait
 import inc.flide.vim8.lib.util.ViewUtils
 
 val LocalKeyboardHeight = staticCompositionLocalOf { 65.dp }
-private const val MIN_HEIGHT_FRACTION = 38.2 / 100f
-private const val MAX_HEIGHT_FRACTION = 46f / 100f
 
 @Composable
 fun ProvideKeyboardHeight(content: @Composable () -> Unit) {
     val resources = LocalContext.current.resources
-    val keyboardHeight = remember(resources) {
-        calcInputViewHeight(resources)
+    val prefs by appPreferenceModel()
+    val height by prefs.keyboard.height.observeAsState()
+    val keyboardHeight = remember(resources, height) {
+        calcInputViewHeight(resources, height)
     }
 
     CompositionLocalProvider(
@@ -31,8 +33,7 @@ fun ProvideKeyboardHeight(content: @Composable () -> Unit) {
     }
 }
 
-private fun calcInputViewHeight(resources: Resources): Dp {
-    val prefs by appPreferenceModel()
+private fun calcInputViewHeight(resources: Resources, keyboardHeight: Int): Dp {
     val dm = resources.displayMetrics
     val minBaseSize = when {
         resources.configuration.isOrientationPortrait() -> resources.getFraction(
@@ -52,7 +53,7 @@ private fun calcInputViewHeight(resources: Resources): Dp {
         dm.heightPixels,
         dm.heightPixels
     )
-    val scale = prefs.keyboard.height.get() / 100f
+    val scale = keyboardHeight / 100f
     val height = ((minBaseSize + maxBaseSize) / 2.0f).coerceAtLeast(
         resources.getDimension(R.dimen.inputView_baseHeight)
     ) * scale
