@@ -79,7 +79,6 @@ class Vim8ImeService : LifecycleInputMethodService() {
         super.onCreate()
         Vim8ImeServiceReference = WeakReference(this)
         resourcesContext = createConfigurationContext(Configuration(resources.configuration))
-        keyboardData = safeLoadKeyboardData(layoutLoader, this)!!
         prefs.layout.current.observe {
             it.loadKeyboardData(layoutLoader, this)
                 .onRight { keyboardData ->
@@ -96,6 +95,7 @@ class Vim8ImeService : LifecycleInputMethodService() {
 
     override fun onCreateInputView(): View {
         super.installViewTreeOwners()
+        keyboardData = safeLoadKeyboardData(layoutLoader, this)
         val composeView = ComposeInputView()
         inputWindowView = composeView
         return composeView

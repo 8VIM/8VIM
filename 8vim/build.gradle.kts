@@ -150,10 +150,8 @@ android {
 
     testOptions {
         unitTests.isReturnDefaultValues = true
-        unitTests.all {
-            it.useJUnitPlatform()
-        }
     }
+
     sourceSets {
         findByName("main")?.java?.srcDirs(project.file("src/main/kotlin"))
         findByName("test")?.java?.srcDirs(project.file("src/test/kotlin"))
@@ -205,7 +203,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.preference)
-    implementation(libs.androidx.recyclerview)
     implementation(libs.apache.commons.text)
     implementation(libs.arrow.core)
     implementation(libs.arrow.optics)
@@ -230,9 +227,6 @@ dependencies {
     androidTestImplementation(libs.junit4)
 
     testImplementation(libs.logback.classic)
-    testImplementation(libs.junit5.api)
-    testRuntimeOnly(libs.junit5.jupiter.engine)
-    testRuntimeOnly(libs.junit5.vintage.engine)
     testImplementation(libs.kotest.assertions)
     testImplementation(libs.kotest.extensions.arrow)
     testImplementation(libs.kotest.framework.datatest)
@@ -250,8 +244,6 @@ configurations.testImplementation {
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-    debug.set(true)
-    verbose.set(true)
     android.set(true)
     outputToConsole.set(true)
     outputColorName.set("RED")
