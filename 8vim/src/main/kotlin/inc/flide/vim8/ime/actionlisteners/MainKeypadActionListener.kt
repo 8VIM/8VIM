@@ -21,6 +21,8 @@ import inc.flide.vim8.ime.layout.models.findLayer
 import inc.flide.vim8.ime.layout.models.lowerCaseCharacters
 import inc.flide.vim8.ime.layout.models.upperCaseCharacters
 import inc.flide.vim8.ime.layout.models.yaml.ExtraLayer
+import inc.flide.vim8.lib.android.HapticVibration
+import inc.flide.vim8.lib.android.Vibration
 
 class MainKeypadActionListener(inputMethodService: MainInputMethodService, view: View) :
     KeypadActionListener(inputMethodService, view) {
@@ -105,6 +107,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
 
     private val movementSequence: MutableList<FingerPosition> = arrayListOf()
     private lateinit var longPressHandler: Handler
+    private var vibration: Vibration
     private var currentFingerPosition: FingerPosition
     var currentLetter: String? = null
         private set
@@ -124,6 +127,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
         val longPressHandlerThread = HandlerThread("LongPressHandlerThread")
         longPressHandlerThread.start()
         longPressHandler = Handler(longPressHandlerThread.looper, null)
+        vibration = HapticVibration.rotation(view.context)
     }
 
     fun getLowerCaseCharacters(layer: LayerLevel): String {
@@ -250,6 +254,7 @@ class MainKeypadActionListener(inputMethodService: MainInputMethodService, view:
                     .onSome {
                         currentLetter = if (areCharactersCapitalized()) it.capsLockText else it.text
                     }
+                vibration.vibrate()
             }
         } else if (!isLongPressCallbackSet) {
             initiateLongPressDetection()

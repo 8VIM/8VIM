@@ -70,6 +70,11 @@ class AppPrefs : PreferenceModel(3) {
             key = "prefs_input_feedback_haptic_enabled",
             default = true
         )
+
+        val hapticRotateEnabled = boolean(
+            key = "prefs_input_feedback_haptic_rotate_enabled",
+            default = true
+        )
     }
 
     inner class Theme {
