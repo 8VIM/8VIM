@@ -11,7 +11,6 @@ import kotlin.math.abs
 import kotlin.math.atan2
 
 abstract class SwipeGesture {
-
     class Detector(private val listener: Listener) {
         private var pointerMap: PointerMap<GesturePointer> = PointerMap { GesturePointer() }
         private val velocityTracker: VelocityTracker = VelocityTracker.obtain()
