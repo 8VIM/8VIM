@@ -191,7 +191,6 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.android.material)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
