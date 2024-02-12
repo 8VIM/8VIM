@@ -4,11 +4,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.IntSize
 import arrow.core.None
 import arrow.core.some
 import inc.flide.vim8.Vim8ImeService
@@ -37,9 +32,6 @@ class KeyboardSpec : FunSpec({
     val context = mockk<Context>(relaxed = true)
     val resources = mockk<Resources>(relaxed = true)
     val keyboardData = mockk<KeyboardData>(relaxed = true)
-    val textMeasurer = mockk<TextMeasurer>()
-    val textStyle = mockk<TextStyle>()
-    val textLayoutResult = mockk<TextLayoutResult>()
     val configuration = Configuration()
     val action = Arbitraries.arbKeyboardAction.next()
 
@@ -49,21 +41,6 @@ class KeyboardSpec : FunSpec({
         every { context.resources } returns resources
         every { resources.configuration } returns configuration
         every { Vim8ImeService.keyboardData() } returns keyboardData
-        every {
-            textMeasurer.measure(
-                any(),
-                any(),
-                overflow = any(),
-                softWrap = any(),
-                maxLines = any(),
-                constraints = any(),
-                any(),
-                any(),
-                any(),
-                any()
-            )
-        } returns textLayoutResult
-        every { textLayoutResult.size } returns IntSize(1, 1)
         configuration.screenHeightDp = 480
     }
 
@@ -161,13 +138,13 @@ class KeyboardSpec : FunSpec({
                 }
 
             keyboard.layout(
-                Size(10f, 20f),
+                10f,
+                20f,
                 params.isSidebarOnLeft,
                 10,
                 0,
                 0,
-                textMeasurer,
-                textStyle
+                1f
             )
             keyboard.circle.centre.x shouldBe result.x.plusOrMinus(0.1f)
             keyboard.circle.centre.y shouldBe result.y.plusOrMinus(0.1f)

@@ -8,12 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asAndroidPath
-import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.TextStyle
 import arrow.core.Option
 import arrow.core.firstOrNone
 import arrow.core.getOrNone
@@ -122,39 +119,37 @@ class Keyboard(private val context: Context) {
         keyboardData?.actionMap?.containsKey(movementSequence) ?: false
 
     fun layout(
-        size: Size,
+        keyboardWidth: Float,
+        keyboardHeight: Float,
         isSidebarOnLeft: Boolean,
         radiusSizeFactor: Int,
         xCentreOffset: Int,
         yCentreOffset: Int,
-        textMeasurer: TextMeasurer,
-        textStyle: TextStyle
+        characterHeight: Float
     ) {
-        val keyboardHeight = size.height
-        val characterHeight = textMeasurer.measure("A", textStyle).size.height.toFloat()
         val spRadiusValue = radiusSizeFactor.toFloat()
         val radius = (spRadiusValue / XPAD_CIRCLE_RADIUS_FACTOR * keyboardHeight) / 2f
         val offsetX = xCentreOffset * XPAD_CIRCLE_OFFSET_FACTOR
         val offsetY = yCentreOffset * XPAD_CIRCLE_OFFSET_FACTOR
 
         val smallDim = min(
-            size.width / 2 - offsetX,
-            size.height / 2 - abs(offsetY)
+            keyboardWidth / 2 - offsetX,
+            keyboardHeight / 2 - abs(offsetY)
         )
         lengthOfLineDemarcatingSectors = hypot(smallDim, smallDim) - radius - characterHeight
 
         val x = if (isTabletLandscape) {
             val base = lengthOfLineDemarcatingSectors + offsetX
             if (!isSidebarOnLeft) {
-                size.width - base
+                keyboardWidth - base
             } else {
                 base
             }
         } else {
-            size.width / 2f + offsetX
+            keyboardWidth / 2f + offsetX
         }
 
-        val circleCenter = Offset(x, y = size.height / 2f + offsetY)
+        val circleCenter = Offset(x, y = keyboardHeight / 2f + offsetY)
         circle.centre = circleCenter
         circle.radius = radius
 

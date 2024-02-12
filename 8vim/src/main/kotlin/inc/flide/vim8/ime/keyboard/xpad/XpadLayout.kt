@@ -2,7 +2,6 @@ package inc.flide.vim8.ime.keyboard.xpad
 
 import android.view.MotionEvent
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.absoluteOffset
@@ -16,20 +15,16 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -41,7 +36,6 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
 import inc.flide.vim8.R
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
@@ -67,6 +61,10 @@ private val textStyleBold = TextStyle(
     textAlign = TextAlign.Center
 )
 
+private const val FONT_SIZE = 16f
+private val cornerRadius = CornerRadius(25f)
+private val letterSelectedStroke = Stroke(3f)
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun XpadLayout() = with(LocalDensity.current) {
@@ -76,15 +74,10 @@ fun XpadLayout() = with(LocalDensity.current) {
     val keyboardUiHeight = LocalKeyboardHeight.current
     val textMeasurer = rememberTextMeasurer()
     val activeState by keyboardManager.activeState.collectAsState()
-    val showIcons by prefs.keyboard.display.showSectorIcons.observeAsState()
-    val showLetters by prefs.keyboard.display.showLettersOnWheel.observeAsState()
-    val isSidebarOnLeft by prefs.keyboard.sidebar.isOnLeft.observeAsState()
-    val radiusSizeFactor by prefs.keyboard.circle.radiusSizeFactor.observeAsState()
-    val xCentreOffset by prefs.keyboard.circle.xCentreOffset.observeAsState()
-    val yCentreOffset by prefs.keyboard.circle.yCentreOffset.observeAsState()
+
+    val characterHeight = textMeasurer.measure("A", textStyle).size.height.toFloat()
 
     val keyboard = remember { Keyboard(context) }
-    var size by remember { mutableStateOf(Size.Zero) }
     val touchEventChannel = remember { Channel<MotionEvent>(64) }
 
     val controller = remember { KeyboardController(context) }.also { it.keyboard = keyboard }
@@ -114,9 +107,6 @@ fun XpadLayout() = with(LocalDensity.current) {
         modifier = Modifier
             .fillMaxWidth()
             .height(keyboardUiHeight)
-            .onGloballyPositioned { coords ->
-                size = coords.size.toSize()
-            }
             .pointerInteropFilter { event ->
                 when (event.actionMasked) {
                     MotionEvent.ACTION_DOWN,
@@ -140,24 +130,27 @@ fun XpadLayout() = with(LocalDensity.current) {
                 if (controller.hasTrail && controller.trailPoints.isNotEmpty()) {
                     controller.drawTrail(this, controller.trailPoints)
                 }
+                controller.drawSectors(this, fg)
             }
     ) {
+        val showIcons by prefs.keyboard.display.showSectorIcons.observeAsState()
+        val showLetters by prefs.keyboard.display.showLettersOnWheel.observeAsState()
+        val isSidebarOnLeft by prefs.keyboard.sidebar.isOnLeft.observeAsState()
+        val radiusSizeFactor by prefs.keyboard.circle.radiusSizeFactor.observeAsState()
+        val xCentreOffset by prefs.keyboard.circle.xCentreOffset.observeAsState()
+        val yCentreOffset by prefs.keyboard.circle.yCentreOffset.observeAsState()
+        val keyboardWidth = constraints.maxWidth.toFloat()
+        val keyboardHeight = constraints.maxHeight.toFloat()
+
         keyboard.layout(
-            size,
+            keyboardWidth,
+            keyboardHeight,
             isSidebarOnLeft,
             radiusSizeFactor,
             xCentreOffset,
             yCentreOffset,
-            textMeasurer,
-            textStyle
+            characterHeight
         )
-        Canvas(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(keyboardUiHeight)
-        ) {
-            controller.drawSectors(this, fg)
-        }
 
         if (showLetters) {
             for (key in keyboard.keys) {
@@ -187,13 +180,13 @@ fun XpadLayout() = with(LocalDensity.current) {
             SectorImage(
                 R.drawable.ic_keyboard_return,
                 x = keyboard.circle.centre.x.toDp() - iconHalf,
-                y = min(keyboard.bounds.bottom, size.height).toDp() - iconHalf,
+                y = min(keyboard.bounds.bottom, keyboardHeight).toDp() - iconHalf,
                 iconSize
             )
 
             SectorImage(
                 R.drawable.ic_backspace,
-                x = min(keyboard.bounds.right, size.width).toDp() - iconHalf,
+                x = min(keyboard.bounds.right, keyboardWidth).toDp() - iconHalf,
                 y = keyboard.circle.centre.y.toDp() - iconHalf,
                 iconSize
             )
@@ -230,7 +223,6 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
     val activeState by keyboardManager.activeState.collectAsState()
     val text = key.text(activeState.isUppercase)
     val style = if (key.isSelected) textStyleBold else textStyle
-    val fontSize = 16f
 
     Text(
         modifier = Modifier
@@ -239,30 +231,30 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
                 key.position.y.toDp()
             )
             .drawWithContent {
+                drawContent()
                 if (key.isSelected) {
                     val topLeft = key.position.copy(
-                        x = -fontSize,
-                        y = -fontSize
+                        x = -FONT_SIZE,
+                        y = -FONT_SIZE
                     )
                     val size = this.size.copy(
-                        this.size.width + fontSize * 2f,
-                        this.size.height + fontSize * 2f
+                        this.size.width + FONT_SIZE * 2f,
+                        this.size.height + FONT_SIZE * 2f
                     )
                     drawRoundRect(
                         color = key.backgroundColor,
                         topLeft = topLeft,
                         size = size,
-                        cornerRadius = CornerRadius(25f)
+                        cornerRadius = cornerRadius
                     )
                     drawRoundRect(
                         color = Color.Black,
                         topLeft = topLeft,
                         size = size,
-                        cornerRadius = CornerRadius(25f),
-                        style = Stroke(3f)
+                        cornerRadius = cornerRadius,
+                        style = letterSelectedStroke
                     )
                 }
-                drawContent()
             },
         text = text,
         color = if (key.isSelected) Color.Black else MaterialTheme.colorScheme.onBackground,
