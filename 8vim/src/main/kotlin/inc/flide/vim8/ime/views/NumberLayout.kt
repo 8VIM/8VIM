@@ -61,7 +61,7 @@ fun NumberLayout() {
                 Key(":".toKeyboardAction()),
                 Key("\"".toKeyboardAction()),
                 Key("'".toKeyboardAction()),
-                Key(" ".toKeyboardAction()),
+                Key(" ".toKeyboardAction(), alternateText = "┗━┛"),
                 Key(",".toKeyboardAction()),
                 Key("0".toKeyboardAction()),
                 Key(".".toKeyboardAction()),
