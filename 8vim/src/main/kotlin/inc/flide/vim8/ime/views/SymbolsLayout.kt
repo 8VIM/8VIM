@@ -62,7 +62,7 @@ fun SymbolsLayout() {
                 Key("~".toKeyboardAction()),
                 Key("⨯".toKeyboardAction()),
                 Key("÷".toKeyboardAction()),
-                Key("┗━┛".toKeyboardAction()),
+                Key(" ".toKeyboardAction(), alternateText = "┗━┛"),
                 Key("`".toKeyboardAction()),
                 Key(";".toKeyboardAction()),
                 Key(":".toKeyboardAction()),
