@@ -1,0 +1,33 @@
+name: Promote track Playstore
+
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: From track
+        required: true
+        type: choice
+        default: internal
+        options:
+          - internal
+          - alpha
+          - beta
+      to:
+        description: To track
+        required: true
+        type: choice
+        default: alpha
+        options:
+          - alpha
+          - beta
+
+jobs:
+  promote:
+   runs-on: ubuntu-latest
+   steps:
+     - uses: kevin-david/promote-play-release@v1
+       with:
+         from-track: ${{inputs.from}}
+         to-track: ${{inputs.to}}
+         service-account-json-raw: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+         package-name: inc.flide.vi8
