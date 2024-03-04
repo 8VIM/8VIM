@@ -62,8 +62,8 @@ internal fun <T : PreferenceModel, V> PreferenceUiScope<T>.RangeSliderPreference
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             value = sliderRange,
-            onValueChange = { sliderRange = it },
-            onValueChangeFinished = {
+            onValueChange = {
+                sliderRange = it
                 minPref.set(convertToV(sliderRange.start))
                 maxPref.set(convertToV(sliderRange.endInclusive))
             },
@@ -150,8 +150,10 @@ internal fun <T : PreferenceModel, V> PreferenceUiScope<T>.SliderPreference(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             value = sliderValue,
-            onValueChange = { sliderValue = it },
-            onValueChangeFinished = { pref.set(convertToV(sliderValue)) },
+            onValueChange = {
+                sliderValue = it
+                pref.set(convertToV(sliderValue))
+            },
             valueRange = min.toFloat()..max.toFloat(),
             steps = ((max.toFloat() - min.toFloat()) / stepIncrement.toFloat()).toInt() - 1,
             enabled = isEnabled
