@@ -20,7 +20,7 @@ import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
 
-class AppPrefs : PreferenceModel(4) {
+class AppPrefs : PreferenceModel(5) {
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
@@ -123,6 +123,14 @@ class AppPrefs : PreferenceModel(4) {
         }
 
         inner class Circle {
+            val autoResize = boolean(
+                key = "prefs_keyboard_circle_auto_resize",
+                default = false
+            )
+            val radiusMinSizeFactor = int(
+                key = "prefs_keyboard_circle_radius_min_size_factor",
+                default = 8
+            )
             val radiusSizeFactor = int(
                 key = "prefs_keyboard_circle_radius_size_factor",
                 default = 12
@@ -270,12 +278,15 @@ class AppPrefs : PreferenceModel(4) {
                 "prefs_keyboard_sidebar_circle_radius_size_factor" -> entry.transform(
                     key = "prefs_keyboard_circle_radius_size_factor"
                 )
+
                 "prefs_keyboard_sidebar_circle_centre_x_offset" -> entry.transform(
                     key = "prefs_keyboard_circle_centre_x_offset"
                 )
+
                 "prefs_keyboard_sidebar_circle_centre_y_offset" -> entry.transform(
                     key = "prefs_keyboard_circle_centre_y_offset"
                 )
+
                 else -> entry.keepAsIs()
             }
 
@@ -287,6 +298,10 @@ class AppPrefs : PreferenceModel(4) {
         if (internal.versionCode.get() != BuildConfig.VERSION_CODE) {
             layout.cache.reset()
             context.cacheDir.deleteRecursively()
+        }
+        val maxCircleSize = keyboard.circle.radiusSizeFactor.get()
+        if (keyboard.circle.radiusMinSizeFactor.get() >= maxCircleSize) {
+            keyboard.circle.radiusMinSizeFactor.set((maxCircleSize - 4).coerceAtLeast(1))
         }
         internal.versionCode.set(BuildConfig.VERSION_CODE)
     }

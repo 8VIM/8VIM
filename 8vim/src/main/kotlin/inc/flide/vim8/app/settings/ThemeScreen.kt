@@ -58,10 +58,10 @@ fun ThemeScreen() = Screen {
                 prefs.keyboard.trail.isVisible,
                 title = stringRes(R.string.settings__theme__trail__is__visible__title),
                 summaryOff = stringRes(
-                    R.string.settings__theme__trail__is__visible__summary__on
+                    R.string.settings__theme__trail__is__visible__summary__off
                 ),
                 summaryOn = stringRes(
-                    R.string.settings__theme__trail__is__visible__summary__off
+                    R.string.settings__theme__trail__is__visible__summary__on
                 )
             )
             SwitchPreference(
