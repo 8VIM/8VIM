@@ -20,7 +20,7 @@ import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
 
-class AppPrefs : PreferenceModel(3) {
+class AppPrefs : PreferenceModel(4) {
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
@@ -124,15 +124,15 @@ class AppPrefs : PreferenceModel(3) {
 
         inner class Circle {
             val radiusSizeFactor = int(
-                key = "prefs_keyboard_sidebar_circle_radius_size_factor",
+                key = "prefs_keyboard_circle_radius_size_factor",
                 default = 12
             )
             val xCentreOffset = int(
-                key = "prefs_keyboard_sidebar_circle_centre_x_offset",
+                key = "prefs_keyboard_circle_centre_x_offset",
                 default = 0
             )
             val yCentreOffset = int(
-                key = "prefs_keyboard_sidebar_circle_centre_y_offset",
+                key = "prefs_keyboard_circle_centre_y_offset",
                 default = 0
             )
         }
@@ -263,6 +263,19 @@ class AppPrefs : PreferenceModel(3) {
                 )
 
                 "trail_color" -> entry.transform(key = "prefs_keyboard_trail_color")
+                else -> entry.keepAsIs()
+            }
+
+            3 -> when (entry.key) {
+                "prefs_keyboard_sidebar_circle_radius_size_factor" -> entry.transform(
+                    key = "prefs_keyboard_circle_radius_size_factor"
+                )
+                "prefs_keyboard_sidebar_circle_centre_x_offset" -> entry.transform(
+                    key = "prefs_keyboard_circle_centre_x_offset"
+                )
+                "prefs_keyboard_sidebar_circle_centre_y_offset" -> entry.transform(
+                    key = "prefs_keyboard_circle_centre_y_offset"
+                )
                 else -> entry.keepAsIs()
             }
 

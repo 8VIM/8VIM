@@ -6,50 +6,45 @@ enum class Direction {
     RIGHT, TOP, LEFT, BOTTOM;
 
     companion object {
-        @JvmStatic
         fun baseQuadrant(continuousQuadrantValue: Int): Direction {
             val result = abs(continuousQuadrantValue % NUMBER_OF_SECTORS)
-            return values()[result]
+            return entries[result]
         }
     }
 }
 
-fun Direction.toFingerPosition(): FingerPosition {
-    return when (this) {
-        Direction.RIGHT -> {
-            FingerPosition.RIGHT
-        }
+fun Direction.toFingerPosition(): FingerPosition = when (this) {
+    Direction.RIGHT -> {
+        FingerPosition.RIGHT
+    }
 
-        Direction.TOP -> {
-            FingerPosition.TOP
-        }
+    Direction.TOP -> {
+        FingerPosition.TOP
+    }
 
-        Direction.LEFT -> {
-            FingerPosition.LEFT
-        }
+    Direction.LEFT -> {
+        FingerPosition.LEFT
+    }
 
-        else -> {
-            FingerPosition.BOTTOM
-        }
+    else -> {
+        FingerPosition.BOTTOM
     }
 }
 
-fun Direction.opposite(): Direction {
-    return when (this) {
-        Direction.RIGHT -> {
-            Direction.LEFT
-        }
+fun Direction.opposite(): Direction = when (this) {
+    Direction.RIGHT -> {
+        Direction.LEFT
+    }
 
-        Direction.TOP -> {
-            Direction.BOTTOM
-        }
+    Direction.TOP -> {
+        Direction.BOTTOM
+    }
 
-        Direction.LEFT -> {
-            Direction.RIGHT
-        }
+    Direction.LEFT -> {
+        Direction.RIGHT
+    }
 
-        else -> {
-            Direction.TOP
-        }
+    else -> {
+        Direction.TOP
     }
 }

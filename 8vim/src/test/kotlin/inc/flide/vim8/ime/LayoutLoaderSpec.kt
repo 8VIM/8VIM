@@ -6,7 +6,6 @@ import arrow.core.None
 import arrow.core.right
 import inc.flide.vim8.arbitraries.Arbitraries
 import inc.flide.vim8.ime.layout.Cache
-import inc.flide.vim8.ime.layout.models.CharacterSet
 import inc.flide.vim8.ime.layout.models.FingerPosition
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.yaml.LayoutInfo
@@ -47,11 +46,11 @@ class LayoutLoaderSpec : FunSpec({
             every { layoutParser.readKeyboardData(any()) } returnsMany listOf(
                 KeyboardData(
                     actionMap = mapOf(first),
-                    characterSets = listOf(CharacterSet("t"))
+                    characterSets = emptyList()
                 ).right(),
                 KeyboardData(
                     actionMap = mapOf(first),
-                    characterSets = listOf(CharacterSet(), CharacterSet("u", "T"))
+                    characterSets = emptyList()
                 ).right(),
                 KeyboardData(actionMap = mapOf(second)).right(),
                 KeyboardData(info = LayoutInfo(name = "test")).right()

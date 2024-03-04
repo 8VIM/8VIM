@@ -34,8 +34,7 @@ import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.error.InvalidLayoutError
 import inc.flide.vim8.ime.layout.models.error.LayoutError
 import inc.flide.vim8.ime.layout.models.error.validationMessages
-import inc.flide.vim8.ime.layout.models.setLowerCaseCharacters
-import inc.flide.vim8.ime.layout.models.setUpperCaseCharacters
+import inc.flide.vim8.ime.layout.models.setCharacterSets
 import inc.flide.vim8.ime.layout.models.yaml.Action
 import inc.flide.vim8.ime.layout.models.yaml.Flags
 import inc.flide.vim8.ime.layout.models.yaml.Flags.FlagsDeserializer
@@ -135,9 +134,7 @@ class YamlParser : LayoutParser {
         layer: LayerLevel,
         layerData: Layer
     ): KeyboardData {
-        val lowerCaseCharacters = StringBuilder()
-        val upperCaseCharacters = StringBuilder()
-        val characterSets = (lowerCaseCharacters to upperCaseCharacters)
+        val characterSets = arrayOfNulls<KeyboardAction?>(CHARACTER_SET_SIZE)
         return layerData.sectors.fold(keyboardData) { acc, (sector, value) ->
             value.parts.fold(acc) { acc1, (part, actions) ->
                 acc1.addAllToActionMap(
@@ -150,8 +147,7 @@ class YamlParser : LayoutParser {
                 )
             }
         }
-            .setLowerCaseCharacters(lowerCaseCharacters.toString(), layer)
-            .setUpperCaseCharacters(upperCaseCharacters.toString(), layer)
+            .setCharacterSets(characterSets.toList(), layer)
     }
 
     private fun getActionMap(actions: List<Action>): Map<MovementSequence, KeyboardAction> {
@@ -173,14 +169,14 @@ class YamlParser : LayoutParser {
         layer: LayerLevel,
         quadrant: Quadrant,
         actions: List<Action?>,
-        characterSets: Pair<StringBuilder, StringBuilder>
+        characterSets: Array<KeyboardAction?>
     ): Map<MovementSequence, KeyboardAction> {
         return actions
             .take(4)
             .withIndex()
             .filterNot { it.value.isEmpty() }
             .fold(emptyMap()) { acc, (i, action) ->
-                val characterPosition = CharacterPosition.values()[i]
+                val characterPosition = CharacterPosition.entries[i]
                 var movementSequence: MovementSequence = action!!.movementSequence
                 if (movementSequence.isEmpty()) {
                     movementSequence = FingerPosition.computeMovementSequence(
@@ -192,10 +188,6 @@ class YamlParser : LayoutParser {
                 val characterSetIndex: Int =
                     quadrant.characterIndexInString(characterPosition)
                 val updatedAction = if (action.lowerCase.isNotEmpty()) {
-                    if (characterSets.first.isEmpty()) {
-                        characterSets.first.setLength(CHARACTER_SET_SIZE)
-                    }
-                    characterSets.first.setCharAt(characterSetIndex, action.lowerCase[0])
                     if (action.upperCase.isEmpty()) {
                         action.copy(upperCase = action.lowerCase.uppercase())
                     } else {
@@ -204,15 +196,7 @@ class YamlParser : LayoutParser {
                 } else {
                     action
                 }
-                if (updatedAction.upperCase.isNotEmpty()) {
-                    if (characterSets.second.isEmpty()) {
-                        characterSets.second.setLength(CHARACTER_SET_SIZE)
-                    }
-                    characterSets.second.setCharAt(
-                        characterSetIndex,
-                        updatedAction.upperCase[0]
-                    )
-                }
+
                 val keyboardAction = KeyboardAction(
                     updatedAction.actionType,
                     updatedAction.lowerCase,
@@ -221,6 +205,7 @@ class YamlParser : LayoutParser {
                     updatedAction.flags.value,
                     layer
                 )
+                characterSets[characterSetIndex] = keyboardAction
                 val baseActionMap = movementSequence to keyboardAction
                 val actionMap = when {
                     layer != LayerLevel.FIRST && action.movementSequence.isEmpty() -> mapOf(

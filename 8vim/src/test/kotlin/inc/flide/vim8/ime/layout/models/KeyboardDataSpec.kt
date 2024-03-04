@@ -9,6 +9,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.property.Exhaustive
 import io.kotest.property.checkAll
 import io.kotest.property.exhaustive.enum
+import io.kotest.property.withAssumptions
 
 class KeyboardDataSpec : DescribeSpec({
     describe("KeyboardData") {
@@ -24,18 +25,17 @@ class KeyboardDataSpec : DescribeSpec({
                 Arbitraries.arbCharactersSet,
                 Exhaustive.enum<LayerLevel>()
             ) { characterSet, layer ->
-                val keyboardData = KeyboardData()
-                    .setLowerCaseCharacters(characterSet, layer)
-                    .setUpperCaseCharacters(characterSet, layer)
-                when (layer) {
-                    LayerLevel.HIDDEN -> {
-                        keyboardData.lowerCaseCharacters(layer).shouldBeNone()
-                        keyboardData.upperCaseCharacters(layer).shouldBeNone()
-                    }
+                withAssumptions(characterSet.any { it != null }) {
+                    val keyboardData = KeyboardData()
+                        .setCharacterSets(characterSet, layer)
+                    when (layer) {
+                        LayerLevel.HIDDEN -> {
+                            keyboardData.characterSets(layer).shouldBeNone()
+                        }
 
-                    else -> {
-                        keyboardData.lowerCaseCharacters(layer) shouldBeSome characterSet
-                        keyboardData.upperCaseCharacters(layer) shouldBeSome characterSet
+                        else -> {
+                            keyboardData.characterSets(layer) shouldBeSome characterSet
+                        }
                     }
                 }
             }
@@ -46,10 +46,12 @@ class KeyboardDataSpec : DescribeSpec({
                 Arbitraries.arbCharactersSet,
                 Exhaustive.enum<LayerLevel>()
             ) { characterSet, layer ->
-                val keyboardData = KeyboardData().setLowerCaseCharacters(characterSet, layer)
-                when (layer) {
-                    LayerLevel.HIDDEN -> keyboardData.totalLayers shouldBe 0
-                    else -> keyboardData.totalLayers shouldBe layer.ordinal
+                withAssumptions(characterSet.any { it != null }) {
+                    val keyboardData = KeyboardData().setCharacterSets(characterSet, layer)
+                    when (layer) {
+                        LayerLevel.HIDDEN -> keyboardData.totalLayers shouldBe 0
+                        else -> keyboardData.totalLayers shouldBe layer.ordinal
+                    }
                 }
             }
         }
