@@ -1,4 +1,3 @@
-github_checks: false
 comment:
   layout: "diff, flags, files"
   behavior: default
@@ -15,11 +14,12 @@ flags:
   unit:
     ignore:
       - 8vim/src/**/app
-      - 8vim/src/**/ui
-      - 8vim/src/**/views
       - 8vim/src/**/lib
       - 8vim/src/**/theme/Theme.kt
       - 8vim/src/**/models/error/LayoutError.kt
       - 8vim/src/**/VIM8Application.kt
       - 8vim/src/**/PreferenceDataAdapter.kt
-      - 8vim/src/**/MainInputMethodService.kt
+      - 8vim/src/**/Vim8ImeService.kt
+      - 8vim/src/**/clipboard
+      - 8vim/src/**/keyboard/**/*Layout.kt
+      - 8vim/src/**/AppPrefs.kt

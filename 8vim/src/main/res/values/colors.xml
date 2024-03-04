@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="white">#FAFAFA</color>
     <color name="ripple_color">#40444444</color>
-    <color name="black">#212121</color>
-
-    <color name="defaultBoardBg">#FAFAFA</color>
-    <color name="defaultBoardFg">#212121</color>
-    <color name="defaultTrail">#3D5AFE</color>
 
     <string-array name="color_palette">
         <item>#FFFFFF</item>

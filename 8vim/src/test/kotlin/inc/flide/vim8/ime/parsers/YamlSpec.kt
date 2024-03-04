@@ -1,14 +1,14 @@
 package inc.flide.vim8.ime.parsers
 
 import android.view.KeyEvent
-import inc.flide.vim8.ime.layout.models.CHARACTER_SET_SIZE
+import arrow.core.Option
+import arrow.core.elementAtOrNone
 import inc.flide.vim8.ime.layout.models.CustomKeycode
 import inc.flide.vim8.ime.layout.models.FingerPosition
 import inc.flide.vim8.ime.layout.models.KeyboardAction
 import inc.flide.vim8.ime.layout.models.KeyboardActionType
 import inc.flide.vim8.ime.layout.models.LayerLevel
-import inc.flide.vim8.ime.layout.models.lowerCaseCharacters
-import inc.flide.vim8.ime.layout.models.upperCaseCharacters
+import inc.flide.vim8.ime.layout.models.characterSets
 import inc.flide.vim8.ime.layout.parsers.YamlParser
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
@@ -131,20 +131,19 @@ class YamlSpec : DescribeSpec({
                     LayerLevel.FIRST
                 )
             )
-            val stringBuilder = StringBuilder()
-            stringBuilder.setLength(CHARACTER_SET_SIZE)
-            stringBuilder.setCharAt(0, 'n')
             val inputStream = javaClass.getResourceAsStream("/valid_file.yaml")
             val layoutParser = YamlParser()
             val keyboardData = layoutParser.readKeyboardData(inputStream).shouldBeRight()
             keyboardData.totalLayers shouldBe 2
-            val lowerCaseCharacters = keyboardData.lowerCaseCharacters(LayerLevel.FIRST)
-            lowerCaseCharacters shouldBeSome stringBuilder.toString()
+            keyboardData.characterSets(LayerLevel.FIRST).flatMap { it.elementAtOrNone(0) }
+                .flatMap { Option.fromNullable(it) }
+                .shouldBeSome().text shouldBe "n"
 
-            stringBuilder.setCharAt(0, 'C')
-            stringBuilder.setCharAt(2, 'a')
-            val upperCaseCharacters = keyboardData.upperCaseCharacters(LayerLevel.SECOND)
-            upperCaseCharacters shouldBeSome stringBuilder.toString()
+            val action = keyboardData.characterSets(LayerLevel.SECOND).shouldBeSome()
+            action.elementAtOrNone(0).flatMap { Option.fromNullable(it) }
+                .shouldBeSome().capsLockText shouldBe "C"
+            action.elementAtOrNone(2).flatMap { Option.fromNullable(it) }
+                .shouldBeSome().capsLockText shouldBe "a"
             keyboardData.actionMap shouldContainExactly movementSequences
         }
 

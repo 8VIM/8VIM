@@ -22,6 +22,7 @@ import inc.flide.vim8.R
 import inc.flide.vim8.app.LocalNavController
 import inc.flide.vim8.app.MainActivity
 import inc.flide.vim8.app.Routes
+import inc.flide.vim8.app.Urls
 import inc.flide.vim8.lib.android.launchActivity
 import inc.flide.vim8.lib.android.launchUrl
 import inc.flide.vim8.lib.compose.Screen
@@ -29,7 +30,7 @@ import inc.flide.vim8.lib.compose.Step
 import inc.flide.vim8.lib.compose.StepLayout
 import inc.flide.vim8.lib.compose.StepState
 import inc.flide.vim8.lib.compose.stringRes
-import inc.flide.vim8.utils.InputMethodUtils
+import inc.flide.vim8.lib.util.InputMethodUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
@@ -42,6 +43,7 @@ private object SetupStep {
 @Composable
 fun SetupScreen() = Screen {
     title = stringRes(R.string.setup__title)
+    imeAlerts = false
     navigationIconVisible = false
     scrollable = false
     val navController = LocalNavController.current
@@ -145,8 +147,7 @@ fun SetupScreen() = Screen {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    val repositoryUrl = stringRes(R.string.vim8__repository_url)
-                    TextButton(onClick = { context.launchUrl(repositoryUrl) }) {
+                    TextButton(onClick = { context.launchUrl(Urls.GITHUB) }) {
                         Text(text = stringRes(R.string.setup__footer__repository))
                     }
                 }

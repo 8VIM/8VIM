@@ -10,7 +10,6 @@ import inc.flide.vim8.arbitraries.Arbitraries.arbKeyboardData
 import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
 import inc.flide.vim8.ime.LayoutLoader
-import inc.flide.vim8.ime.actionlisteners.MainKeypadActionListener
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.info
@@ -28,7 +27,6 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkClass
-import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import io.mockk.verify
 import kotlin.random.Random
@@ -52,8 +50,6 @@ class AvailableLayoutsSpec : WordSpec({
         mockkStatic(::appPreferenceModel)
         mockkStatic(::embeddedLayouts)
         mockkStatic(String::toCustomLayout)
-        mockkObject(MainKeypadActionListener)
-        justRun { MainKeypadActionListener.rebuildKeyboardData(any()) }
 
         embeddedLayouts.forEach { (layout, name) ->
             every { layout.loadKeyboardData(any(), any()) } answers {
@@ -130,7 +126,6 @@ class AvailableLayoutsSpec : WordSpec({
             val index = Random.nextInt(1, layouts.size)
             val availableLayouts = AvailableLayouts(layoutLoader, context)
             availableLayouts.selectLayout(index)
-            verify { MainKeypadActionListener.rebuildKeyboardData(any()) }
             verify { currentLayout.set(layouts[index]) }
             availableLayouts.index shouldBe index
         }
@@ -144,7 +139,6 @@ class AvailableLayoutsSpec : WordSpec({
             val index = embeddedLayouts.size
             val availableLayouts = AvailableLayouts(layoutLoader, context)
             availableLayouts.selectLayout(index)
-            verify { MainKeypadActionListener.rebuildKeyboardData(any()) }
             verify { currentLayout.set(customLayout) }
             availableLayouts.index shouldBe index
         }

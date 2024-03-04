@@ -89,6 +89,7 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
@@ -148,10 +149,9 @@ android {
     }
 
     testOptions {
-        unitTests.all {
-            it.useJUnitPlatform()
-        }
+        unitTests.isReturnDefaultValues = true
     }
+
     sourceSets {
         findByName("main")?.java?.srcDirs(project.file("src/main/kotlin"))
         findByName("test")?.java?.srcDirs(project.file("src/test/kotlin"))
@@ -191,7 +191,6 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.android.material)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
@@ -200,22 +199,18 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.preference)
-    implementation(libs.androidx.recyclerview)
     implementation(libs.apache.commons.text)
     implementation(libs.arrow.core)
     implementation(libs.arrow.optics)
-    implementation(libs.colorpreference)
     implementation(libs.commons.codec)
     implementation(libs.jackson.dataformat.cbor)
     implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jackson.module.arrow.kotlin)
     implementation(libs.jackson.module.kotlin)
     implementation(libs.json.schema.validator)
-    implementation(libs.keyboardview)
     implementation(libs.kotlin.reflect)
     implementation(libs.logback.android)
     implementation(libs.mikepenz.aboutlibraries.core)
@@ -231,9 +226,6 @@ dependencies {
     androidTestImplementation(libs.junit4)
 
     testImplementation(libs.logback.classic)
-    testImplementation(libs.junit5.api)
-    testRuntimeOnly(libs.junit5.jupiter.engine)
-    testRuntimeOnly(libs.junit5.vintage.engine)
     testImplementation(libs.kotest.assertions)
     testImplementation(libs.kotest.extensions.arrow)
     testImplementation(libs.kotest.framework.datatest)
@@ -251,8 +243,6 @@ configurations.testImplementation {
 }
 
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-    debug.set(true)
-    verbose.set(true)
     android.set(true)
     outputToConsole.set(true)
     outputColorName.set("RED")

@@ -44,7 +44,9 @@ fun embeddedLayouts(
                     layout
                         .loadKeyboardData(layoutLoader, context)
                         .getOrNone()
-                        .filterNot { it.totalLayers == 0 }
+                        .filterNot {
+                            it.totalLayers == 0
+                        }
                         .map { layout to it.toString() }
                 }.toList()
         }.sortedBy { it.second }

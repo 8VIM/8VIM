@@ -1,130 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE resources [<!ENTITY appname "8Vim">]>
 <resources>
-    <string name="version_name_label">Version : </string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="app__version__label">Version</string>
     <string name="enable_ime_dialog_title">Please Enable IME</string>
     <string name="enable_ime_dialog_content">In order to utilize the keyboard, you need to enable
         the keyboard first. Once you click on the enable button, you will be taken to the input
-        method settings screen. Please enable the "&appname; Keyboard" there.</string>
+        method settings screen. Please enable the "{app_name} Keyboard" there.</string>
     <string name="enable_ime_dialog_neutral_button_text">Enable</string>
     <string name="activate_ime_dialog_title">Please Activate IME</string>
     <string name="activate_ime_dialog_content">It will be easier for you to fiddle with the setting
-        and verify them, if "&appname; Keyboard" is active. Would you like to switch to &appname;
+        and verify them, if "{app_name} Keyboard" is active. Would you like to switch to {app_name}
         keyboard now? </string>
     <string name="activate_ime_dialog_positive_button_text">Switch</string>
     <string name="activate_ime_dialog_negative_button_text">Dismiss</string>
 
     <string name="keyboard_test_edit_text_hint">Test your keyboard here</string>
-    <string name="help_feedback"><![CDATA[Help & Feedback]]></string>
-    <string name="share_app">Share &appname;</string>
+    <string name="settings__help__feedback"><![CDATA[Help & Feedback]]></string>
+    <string name="share_app">Share {app_name}</string>
     <string name="select_preferred_emoticon_keyboard_dialog_title">Choose the input method</string>
     <string name="select_preferred_keyboard_layout_dialog_title">Choose the language</string>
-    <string name="yaml_error_title">Couldn\'t load layout file</string>
-    <string name="generic_error_text">Error</string>
-    <string name="generic_okay_text">OK</string>
-    <string name="generic_cancel_text">Cancel</string>
+    <string name="dialog__yaml__error__title">Couldn\'t load layout file</string>
+    <string name="dialog__error__title">Error</string>
+    <string name="dialog__confirm__label">OK</string>
+    <string name="dialog__dismiss__label">Cancel</string>
 
-    <!--   preferences categories -->
-    <string name="pref_category_general">General</string>
-    <string name="pref_category_ergonomics">Ergonomics</string>
-    <string name="pref_category_look_and_feel">Look &amp; Feel</string>
-    <string name="pref_category_behavior">Behavior</string>
-
-    <!--    preferences shown in gui UI-->
-    <string name="pref_select_keyboard_layout_key">prefs_layout_current</string>
-    <string name="pref_select_keyboard_layout_title">Select language layout</string>
-    <string name="pref_select_keyboard_layout_summary">Chosen language will decide which diacritics
-        can be entered </string>
-
-    <string name="pref_select_custom_keyboard_layout_key">select_custom_keyboard_layout</string>
-    <string name="pref_select_custom_keyboard_layout_title">Select layout file from device</string>
-    <string name="pref_select_custom_keyboard_layout_summary">Layout file from the device memory
-        will be loaded. Please note this is experimental and might not work.</string>
-
-    <string name="pref_select_emoji_keyboard_key">prefs_keyboard_emoticon_keyboard</string>
-    <string name="pref_select_emoji_keyboard_title">Select emoji keyboard</string>
-    <string name="pref_select_emoji_keyboard_summary">Chosen keyboard will be accessible through
-        keyboard\'s emoji icon </string>
-
-    <string name="pref_circle_scale_factor">prefs_keyboard_sidebar_circle_radius_size_factor</string>
-    <string name="pref_circle_scale_factor_title">Circle size</string>
-    <string name="pref_circle_scale_factor_summary">Resize circle according to your needs</string>
-
-    <string name="pref_circle_x_offset_key">prefs_keyboard_sidebar_circle_centre_x_offset</string>
-    <string name="pref_circle_x_offset_title">Circle offset X axis</string>
-
-    <string name="pref_circle_y_offset_key">prefs_keyboard_sidebar_circle_centre_y_offset</string>
-    <string name="pref_circle_y_offset_title">Circle offset Y axis</string>
-
-    <string name="pref_keyboard_height">prefs_keyboard_height</string>
-    <string name="pref_keyboard_height_title">Keyboard height</string>
-    <string name="pref_keyboard_height_summary">Resize keyboard to your needs</string>
-
-    <string name="pref_sidebar_left_key">prefs_keyboard_sidebar_is_on_left</string>
-    <string name="pref_sidebar_left_title">Sidebar on the left</string>
-    <string name="pref_sidebar_left_summary_on">Sidebar is currently on the left</string>
-    <string name="pref_sidebar_left_summary_off">Sidebar is currently on the right</string>
-
-    <string name="pref_sidebar_visibility_key">prefs_keyboard_sidebar_is_visible</string>
-    <string name="pref_sidebar_visibility_title">Sidebar visibility</string>
-    <string name="pref_sidebar_visibility_summary_on">Sidebar is currently visible</string>
-    <string name="pref_sidebar_visibility_summary_off">Sidebar is currently hidden</string>
-
-    <string name="pref_clipboard_enabled_key">prefs_clipboard_enabled</string>
-    <string name="pref_clipboard_enabled_title">Enable clipboard</string>
-    <string name="pref_clipboard_enabled_summary_on">Clipboard is enabled</string>
-    <string name="pref_clipboard_enabled_summary_off">Clipboard is disabled</string>
-
-    <string name="pref_display_sector_icons_key">prefs_keyboard_display_show_sector_icons</string>
-    <string name="pref_display_sector_icons_title">Display sector icons</string>
-    <string name="pref_display_sector_icons_summary_on">Sector icons are enabled</string>
-    <string name="pref_display_sector_icons_summary_off">Sector icons are disabled</string>
-
-    <string name="pref_display_wheel_characters_key">prefs_keyboard_display_show_letters_on_wheel</string>
-    <string name="pref_display_wheel_characters_title">Display letters on X-pad</string>
-    <string name="pref_display_wheel_characters_summary_on">Letters on X-pad are visible</string>
-    <string name="pref_display_wheel_characters_summary_off">Letters on X-pad are not visible</string>
-
-    <string name="pref_haptic_feedback_key">prefs_input_feedback_haptic_enabled</string>
-    <string name="pref_haptic_feedback_title">Enable input haptic feedback</string>
-    <string name="pref_haptic_feedback_summary_on">Haptic feedback is enabled</string>
-    <string name="pref_haptic_feedback_summary_off">Haptic feedback is disabled</string>
-
-    <string name="pref_sound_feedback_key">prefs_input_feedback_sound_enabled</string>
-    <string name="pref_sound_feedback_summary_off">Sound feedback is disabled</string>
-    <string name="pref_sound_feedback_summary_on">Sound feedback is enabled</string>
-    <string name="pref_sound_feedback_title">Enable keypress sounds</string>
-
-    <string name="pref_typing_trail_visibility_key">prefs_keyboard_trail_is_visible</string>
-    <string name="pref_typing_trail_visibility_title">Display touch trail</string>
-    <string name="pref_typing_trail_visibility_summary_on">Trail will be visible when typing</string>
-    <string name="pref_typing_trail_visibility_summary_off">No trail will be shown when typing</string>
-
-    <string name="pref_random_trail_color_key">prefs_keyboard_trail_use_random_color</string>
-    <string name="pref_random_trail_color_title">Select Touch Trail color at Random</string>
-    <string name="pref_random_trail_color_summary_on">Touch Trail color is random</string>
-    <string name="pref_random_trail_color_summary_off">Touch Trail color is selected by user</string>
-
-    <string name="pref_board_bg_color_key">prefs_keyboard_custom_colors_background</string>
-    <string name="pref_board_bg_color_title">Keyboard background color</string>
-
-    <string name="pref_board_fg_color_key">prefs_keyboard_custom_colors_foreground</string>
-    <string name="pref_board_fg_color_title">Keyboard foreground color</string>
-
-    <string name="pref_trail_color_key">prefs_keyboard_trail_color</string>
-    <string name="pref_trail_color_title">Touch trail color</string>
-
-    <string name="pref_color_mode_key">prefs_theme_color_mode</string>
-    <string name="pref_color_mode_title">Keyboard color</string>
-
-    <string name="pref_behavior_cursor_move_by_word_key">prefs_keyboard_behavior_cursor_move_by_word</string>
-    <string name="pref_behavior_cursor_move_by_word_title">Cursor movement behavior</string>
-    <string name="pref_behavior_cursor_move_by_word_summary_on">Move the cursor word by word</string>
-    <string name="pref_behavior_cursor_move_by_word_summary_off">Move the cursor character by character</string>
-
-    <string name="about_8vim_text">More than just a clone for now defunct 8Pen Application.</string>
-    <string name="about_us_label">About Us</string>
+    <string name="about__title">About Us</string>
+    <string name="about__description">More than just a clone for now defunct 8Pen Application.</string>
+    <string name="about__third_party_licenses__title">Third-party licenses</string>
+    <string name="about__third_party_licenses__summary">Licenses of the third-party libraries included in this app</string>
     <string name="open_emoticon_keyboard_button_content_description">Open Emoticon Keyboard</string>
     <string name="tab_button_content_description">Tab</string>
     <string name="ctrl_button_content_description">Ctrl button</string>
@@ -133,25 +35,16 @@
     <string name="clipboard_button_content_description">Open Clipboard keypad</string>
     <string name="main_keyboard_button_content_description">Open Main keypad</string>
     <string name="generic_back_button_content_description">Go Back</string>
-    <string name="owner_text">Designed and Developed by flide</string>
+    <string name="settings__about__owner__label">Designed and Developed by flide</string>
     <string name="connect_with_us_label">Connect with us</string>
-
-    <!--    github-->
     <string name="github_icon_content_description">Github Icon</string>
-    <string name="connect_using_github_label">Fork us on GitHub</string>
-
-    <!--    matrix-->
+    <string name="settings__about__github__label">Fork us on GitHub</string>
     <string name="matrix_icon_content_description">Matrix Icon</string>
-    <string name="join_us_on_matrix_label">Join us on Matrix</string>
-
-    <!--    play store-->
+    <string name="settings__about__matrix__label">Join us on Matrix</string>
     <string name="play_store_icon_content_description">Google Play store icon</string>
-    <string name="connect_using_google_play_store_label">Rate us on the Play Store</string>
-
-    <!--    twitter-->
+    <string name="settings__about__play_store__label">Rate us on the Play Store</string>
     <string name="twitter_icon_content_description">"Twitter icon"</string>
-    <string name="connect_using_twitter_label">Follow us on Twitter</string>
-
+    <string name="settings__about__twitter__label">Follow us on Twitter</string>
     <string name="choose_the_8vim">Choose 8Vim above.We will NEVER collect any personal data.</string>
 
     <string name="vim8__repository_url" translatable="false">https://github.com/8VIM/8VIM</string>
@@ -169,11 +62,87 @@
     <string name="setup__select_ime__description">{app_name} is now enabled in your system. To actively use it, switch to {app_name} by selecting it in the input selector dialog!</string>
     <string name="setup__select_ime__switch_keyboard_btn">Switch Keyboard</string>
 
-    <string name="settings__title" comment="Title of Settings">Settings</string>
     <string name="setup__finish_up__title">Finish Up</string>
     <string name="setup__finish_up__description_p1">{app_name} is now enabled in the system and ready to be customized by you.</string>
     <string name="setup__finish_up__description_p2">If you encounter any issues, bugs, crashes or just want to make a suggestion, check out the project repository from the about screen!</string>
     <string name="setup__finish_up__finish_btn">Start Customizing</string>
-    <string name="ime_not_enabled">&appname; is not enabled in the system and thus won\'t be available as an input method in the input picker.\nClick here to resolve this issue.</string>
-    <string name="ime_not_selected">&appname; is not selected as the default input method.\nClick here to resolve this issue.</string>
+
+    <string name="settings__title" comment="Title of Settings">Settings</string>
+
+    <string name="settings__home__title" comment="Title of the Home screen">Welcome to {app_name}</string>
+    <string name="settings__home__ime_not_enabled">{app_name} is not enabled in the system and thus won\'t be available as an input method in the input picker.\nClick here to resolve this issue.</string>
+    <string name="settings__home__ime_not_selected">{app_name} is not selected as the default input method.\nClick here to resolve this issue.</string>
+
+    <string name="settings__layouts__title" comment="Title of Layout screen">Layouts</string>
+    <string name="settings__layouts__select__title">Select language layout</string>
+    <string name="settings__layouts__select__summary">Chosen language will decide which diacritics
+        can be entered </string>
+    <string name="settings__layouts__load_custom__title">Select layout file from device</string>
+    <string name="settings__layouts__load_custom__summary">Layout file from the device memory
+        will be loaded. Please note this is experimental and might not work.</string>
+
+    <string name="settings__keyboard__title" comment="Title of Keyboard screen">Keyboard</string>
+
+    <string name="settings__keyboard__select__emoji__keyboard__title">Select emoji keyboard</string>
+    <string name="settings__keyboard__select__emoji__keyboard__summary">Chosen keyboard will be accessible through
+        keyboard\'s emoji icon </string>
+    <string name="settings__keyboard__circle__size__title">Circle size</string>
+    <string name="settings__keyboard__circle__size__summary">Resize circle according to your needs</string>
+
+    <string name="settings__keyboard__circle__x__centre__offset__title">Circle offset X axis</string>
+    <string name="settings__keyboard__circle__y__centre__offset__key">prefs_keyboard_circle_centre_y_offset</string>
+    <string name="settings__keyboard__circle__y__centre__offset__title">Circle offset Y axis</string>
+
+    <string name="settings__keyboard__height__title">Keyboard height</string>
+    <string name="settings__keyboard__height__summary">Resize keyboard to your needs</string>
+
+    <string name="settings__keyboard__sidebar__is__visible__title">Sidebar visibility</string>
+    <string name="settings__keyboard__sidebar__is__visible__summary__on">Sidebar is currently visible</string>
+    <string name="settings__keyboard__sidebar__is__visible__summary__off">Sidebar is currently hidden</string>
+
+    <string name="settings__keyboard__sidebar__is__on__left__title">Sidebar on the left</string>
+    <string name="settings__keyboard__sidebar__is__on__left__summary__on">Sidebar is currently on the left</string>
+    <string name="settings__keyboard__sidebar__is__on__left__summary__off">Sidebar is currently on the right</string>
+
+    <string name="settings__keyboard__clipboard__enabled__title">Enable clipboard</string>
+    <string name="settings__keyboard__clipboard__enabled__summary__on">Clipboard is enabled</string>
+    <string name="settings__keyboard__clipboard__enabled__summary__off">Clipboard is disabled</string>
+
+    <string name="settings__keyboard__display__show__sector__icons__title">Display sector icons</string>
+    <string name="settings__keyboard__display__show__sector__icons__summary__on">Sector icons are enabled</string>
+    <string name="settings__keyboard__display__show__sector__icons__summary__off">Sector icons are disabled</string>
+
+    <string name="settings__keyboard__display__show__letters__on__wheel__title">Display letters on X-pad</string>
+    <string name="settings__keyboard__display__show__letters__on__wheel__summary__on">Letters on X-pad are visible</string>
+    <string name="settings__keyboard__display__show__letters__on__wheel__summary__off">Letters on X-pad are not visible</string>
+
+    <string name="settings__keyboard__trail__is__visible__title">Display touch trail</string>
+    <string name="settings__keyboard__trail__is__visible__summary__on">Trail will be visible when typing</string>
+    <string name="settings__keyboard__trail__is__visible__summary__off">No trail will be shown when typing</string>
+
+    <string name="settings__keyboard__haptic__feedback__enabled__title">Enable input haptic feedback</string>
+    <string name="settings__keyboard__haptic__feedback__enabled__summary__on">Haptic feedback is enabled</string>
+    <string name="settings__keyboard__haptic__feedback__enabled__summary__off">Haptic feedback is disabled</string>
+
+    <string name="settings__keyboard__sound__feedback__enabled__title">Enable keypress sounds</string>
+    <string name="settings__keyboard__sound__feedback__enabled__summary__off">Sound feedback is disabled</string>
+    <string name="settings__keyboard__sound__feedback__enabled__summary__on">Sound feedback is enabled</string>
+
+    <string name="settings__theme__title" comment="Title of Theme screen">Theme</string>
+    <string name="settings__theme__color__mode__title">Keyboard color</string>
+    <string name="settings__theme__custom__background__color__title">Keyboard background color</string>
+    <string name="settings__theme__custom__foreground__color__title">Keyboard foreground color</string>
+
+    <string name="settings__theme__trail__is__visible__title">Display touch trail</string>
+    <string name="settings__theme__trail__is__visible__summary__on">Trail will be visible when typing</string>
+    <string name="settings__theme__trail__is__visible__summary__off">No trail will be shown when typing</string>
+    <string name="settings__theme__trail__use__random__color__title">Select Touch Trail color at Random</string>
+    <string name="settings__theme__trail__use__random__color__summary__on">Touch Trail color is random</string>
+    <string name="settings__theme__trail__use__random__color__summary__off">Touch Trail color is selected by user</string>
+    <string name="settings__theme__trail__color__title">Touch trail color</string>
+
+    <string name="settings__gesture__title" comment="Title of Gesture screen">Gesture</string>
+    <string name="settings__gesture__cursor__move__by__word__title">Cursor movement behavior</string>
+    <string name="settings__gesture__cursor__move__by__word__summary__on">Move the cursor word by word</string>
+    <string name="settings__gesture__cursor__move__by__word__summary__off">Move the cursor character by character</string>
 </resources>
