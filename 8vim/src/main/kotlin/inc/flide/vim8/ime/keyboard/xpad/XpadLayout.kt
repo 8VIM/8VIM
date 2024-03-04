@@ -136,6 +136,7 @@ fun XpadLayout() = with(LocalDensity.current) {
         val showIcons by prefs.keyboard.display.showSectorIcons.observeAsState()
         val showLetters by prefs.keyboard.display.showLettersOnWheel.observeAsState()
         val isSidebarOnLeft by prefs.keyboard.sidebar.isOnLeft.observeAsState()
+        val radiusMinSizeFactor by prefs.keyboard.circle.radiusMinSizeFactor.observeAsState()
         val radiusSizeFactor by prefs.keyboard.circle.radiusSizeFactor.observeAsState()
         val xCentreOffset by prefs.keyboard.circle.xCentreOffset.observeAsState()
         val yCentreOffset by prefs.keyboard.circle.yCentreOffset.observeAsState()
@@ -146,7 +147,7 @@ fun XpadLayout() = with(LocalDensity.current) {
             keyboardWidth,
             keyboardHeight,
             isSidebarOnLeft,
-            radiusSizeFactor,
+            if (controller.isReducesCircleSize) radiusMinSizeFactor else radiusSizeFactor,
             xCentreOffset,
             yCentreOffset,
             characterHeight

@@ -10,6 +10,7 @@ import inc.flide.vim8.R
 import inc.flide.vim8.datastore.model.PreferenceData
 import inc.flide.vim8.datastore.ui.Preference
 import inc.flide.vim8.datastore.ui.PreferenceGroup
+import inc.flide.vim8.datastore.ui.RangeSliderPreference
 import inc.flide.vim8.datastore.ui.SliderPreference
 import inc.flide.vim8.datastore.ui.SwitchPreference
 import inc.flide.vim8.lib.compose.Dialog
@@ -50,8 +51,9 @@ fun KeyboardScreen() = Screen {
             }
         }
         PreferenceGroup {
-            SliderPreference(
-                pref = prefs.keyboard.circle.radiusSizeFactor,
+            RangeSliderPreference(
+                minPref = prefs.keyboard.circle.radiusMinSizeFactor,
+                maxPref = prefs.keyboard.circle.radiusSizeFactor,
                 title = stringRes(R.string.settings__keyboard__circle__size__title),
                 summary = stringRes(R.string.settings__keyboard__circle__size__summary),
                 min = 1,
