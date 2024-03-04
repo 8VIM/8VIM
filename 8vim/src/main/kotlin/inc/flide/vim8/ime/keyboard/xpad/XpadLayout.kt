@@ -126,11 +126,11 @@ fun XpadLayout() = with(LocalDensity.current) {
                 return@pointerInteropFilter true
             }
             .drawWithContent {
-                drawContent()
                 if (controller.hasTrail && controller.trailPoints.isNotEmpty()) {
                     controller.drawTrail(this, controller.trailPoints)
                 }
                 controller.drawSectors(this, fg)
+                drawContent()
             }
     ) {
         val showIcons by prefs.keyboard.display.showSectorIcons.observeAsState()
@@ -237,7 +237,6 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
                 key.position.y.toDp()
             )
             .drawWithContent {
-                drawContent()
                 if (key.isSelected) {
                     val topLeft = key.position.copy(
                         x = -FONT_SIZE,
@@ -261,6 +260,7 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
                         style = letterSelectedStroke
                     )
                 }
+                drawContent()
             },
         text = text,
         color = if (key.isSelected) Color.Black else MaterialTheme.colorScheme.onBackground,
