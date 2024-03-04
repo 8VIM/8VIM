@@ -123,6 +123,10 @@ class AppPrefs : PreferenceModel(5) {
         }
 
         inner class Circle {
+            val autoResize = boolean(
+                key = "prefs_keyboard_circle_auto_resize",
+                default = false
+            )
             val radiusMinSizeFactor = int(
                 key = "prefs_keyboard_circle_radius_min_size_factor",
                 default = 8
