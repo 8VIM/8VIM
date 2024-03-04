@@ -25,7 +25,7 @@ jobs:
   promote:
    runs-on: ubuntu-latest
    steps:
-     - uses: kevin-david/promote-play-release@v1
+     - uses: kevin-david/promote-play-release@v1.1.0
        with:
          from-track: ${{inputs.from}}
          to-track: ${{inputs.to}}
