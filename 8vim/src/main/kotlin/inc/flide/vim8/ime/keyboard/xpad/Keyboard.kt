@@ -34,9 +34,12 @@ import inc.flide.vim8.ime.layout.models.toFingerPosition
 import inc.flide.vim8.ime.layout.models.yaml.ExtraLayer
 import kotlin.math.abs
 import kotlin.math.atan2
+import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 private const val XPAD_CIRCLE_RADIUS_FACTOR = 40f
 private const val XPAD_CIRCLE_OFFSET_FACTOR = 26
@@ -201,7 +204,7 @@ class Keyboard(private val context: Context) {
 
     data class Circle(var centre: Offset = Offset.Zero, var radius: Float = 0f) {
 
-        private fun getPowerOfPoint(point: Offset, correctionOffset: Float): Float {
+        private fun getPowerOfPoint(point: Offset): Float {
             /*
             If O is the centre of circle
             Consider startingPoint point P not necessarily on the circumference of the circle.
@@ -210,15 +213,25 @@ class Keyboard(private val context: Context) {
             p=d^2-r^2.
             */
             val squaredDistanceBetweenPoints = distanceFromCentre(point)
-            val radiusSquare = radius * radius - correctionOffset
+            val radiusSquare = radius * radius
             return squaredDistanceBetweenPoints - radiusSquare
         }
 
-        fun isPointInsideCircle(point: Offset, correctionOffset: Float = 0f): Boolean {
-            return getPowerOfPoint(point, correctionOffset) < 0
+        fun virtual(point: Offset, distanceFactor: Float): Circle {
+            val radius = this.radius * distanceFactor
+            val x = (point.x - centre.x).toDouble()
+            val y = (point.y - centre.y).toDouble()
+            val angle = (atan2(y, x)).toFloat()
+            val offset = Offset(x = -radius * cos(angle), y = -radius * sin(angle))
+            return copy(centre = centre + offset)
         }
 
-        fun distanceFromCentre(point: Offset): Float = (point - centre).getDistanceSquared()
+        fun distanceFactor(point: Offset): Float = sqrt(distanceFromCentre(point)) / radius
+        fun isPointInsideCircle(point: Offset): Boolean {
+            return getPowerOfPoint(point) < 0
+        }
+
+        private fun distanceFromCentre(point: Offset): Float = (point - centre).getDistanceSquared()
 
         private fun getAngleInRadiansOfPointWithRespectToCentreOfCircle(point: Offset): Float {
             // Get difference of coordinates
