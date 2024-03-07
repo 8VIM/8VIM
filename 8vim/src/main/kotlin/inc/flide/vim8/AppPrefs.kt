@@ -135,6 +135,10 @@ class AppPrefs : PreferenceModel(6) {
         }
 
         inner class Circle {
+            val dynamicCentre = boolean(
+                key = "prefs_keyboard_circle_dynamic_centre",
+                default = false
+            )
             val autoResize = boolean(
                 key = "prefs_keyboard_circle_auto_resize",
                 default = false

@@ -92,6 +92,16 @@ fun KeyboardScreen() = Screen {
                 )
             }
 
+            SwitchPreference(
+                prefs.keyboard.circle.dynamicCentre,
+                title = stringRes(R.string.settings__keyboard__circle__dynamic_centre__title),
+                summaryOff = stringRes(
+                    R.string.settings__keyboard__circle__dynamic_centre__summary__off
+                ),
+                summaryOn = stringRes(
+                    R.string.settings__keyboard__circle__dynamic_centre__summary__on
+                )
+            )
             SliderPreference(
                 pref = prefs.keyboard.circle.xCentreOffset,
                 title = stringRes(R.string.settings__keyboard__circle__x__centre__offset__title),

@@ -90,6 +90,10 @@
     <string name="settings__keyboard__circle__auto_resize__summary__on">Reduce the circle size when a movement starting from it</string>
     <string name="settings__keyboard__circle__auto_resize__summary__off">Keep the circle size all time</string>
 
+    <string name="settings__keyboard__circle__dynamic_centre__title">Dynamically move the circle to reduce crossing</string>
+    <string name="settings__keyboard__circle__dynamic_centre__summary__on">Enabled</string>
+    <string name="settings__keyboard__circle__dynamic_centre__summary__off">Disabled</string>
+
     <string name="settings__keyboard__circle__size__title">Circle size</string>
     <string name="settings__keyboard__circle__size__summary">Resize circle according to your needs</string>
 

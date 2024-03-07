@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import arrow.core.firstOrNone
 import arrow.core.getOrElse
@@ -25,6 +26,7 @@ import inc.flide.vim8.ime.layout.models.LayerLevel.Companion.MovementSequences
 import inc.flide.vim8.ime.layout.models.MovementSequence
 import inc.flide.vim8.ime.layout.models.MovementSequenceType
 import inc.flide.vim8.ime.theme.ThemeManager
+import inc.flide.vim8.ime.theme.blendARGB
 import inc.flide.vim8.keyboardManager
 import inc.flide.vim8.themeManager
 import kotlinx.coroutines.CoroutineScope
@@ -141,6 +143,14 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         )
 
         drawScope.drawPath(keyboard.path, color, style = drawStyle)
+        if (prefs.keyboard.circle.dynamicCentre.get() && keyboard.circle.centre != circle.centre) {
+            drawScope.drawCircle(
+                color.blendARGB(Color.White, 0.5f).copy(alpha = 0.5f),
+                circle.radius,
+                circle.centre,
+                style = Fill
+            )
+        }
     }
 
     fun drawTrail(drawScope: DrawScope, trailPoints: MutableList<GlideGesture.Point>) {
@@ -176,7 +186,9 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 keyboard.reset()
                 movementSequence.add(currentPosition)
                 currentFingerPosition = currentPosition
-                if (currentPosition == FingerPosition.INSIDE_CIRCLE) {
+                if (prefs.keyboard.circle.dynamicCentre.get() &&
+                    currentPosition == FingerPosition.INSIDE_CIRCLE
+                ) {
                     distanceFactor = keyboard.circle.distanceFactor(position)
                     circle = keyboard.circle.virtual(position, distanceFactor)
                 }
@@ -184,7 +196,9 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             }
 
             MotionEvent.ACTION_MOVE -> {
-                if (currentPosition != FingerPosition.INSIDE_CIRCLE) {
+                if (prefs.keyboard.circle.dynamicCentre.get() &&
+                    currentPosition != FingerPosition.INSIDE_CIRCLE
+                ) {
                     circle = keyboard.circle.virtual(position, distanceFactor)
                 }
                 val lastKnownFingerPosition = currentFingerPosition
@@ -213,16 +227,17 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                         )
                     }
 
-                    if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE && keyboard.hasAction(
-                            movementSequence
-                        )
+                    if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE &&
+                        keyboard.hasAction(movementSequence)
                     ) {
                         processKeyPress(movementSequence)
                         resetKey()
                         movementSequence.clear()
                         currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT
                         movementSequence.add(currentFingerPosition)
-                        circle = keyboard.circle.virtual(position, distanceFactor)
+                        if (prefs.keyboard.circle.dynamicCentre.get()) {
+                            circle = keyboard.circle.virtual(position, distanceFactor)
+                        }
                     } else {
                         Vim8ImeService.inputFeedbackController()?.sectorCross()
                         if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
@@ -240,7 +255,11 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 interruptLongPress()
                 resetKey()
                 isReducesCircleSize = false
-                circle = keyboard.circle.copy()
+
+                if (prefs.keyboard.circle.dynamicCentre.get()) {
+                    circle = keyboard.circle.copy()
+                }
+
                 currentFingerPosition = FingerPosition.NO_TOUCH
                 movementSequence.add(currentFingerPosition)
                 processKeyPress(movementSequence)
@@ -258,6 +277,9 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 circle = keyboard.circle.copy()
                 currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT
                 keyboard.reset()
+                if (prefs.keyboard.circle.dynamicCentre.get()) {
+                    circle = keyboard.circle.copy()
+                }
             }
         }
     }
@@ -296,8 +318,10 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT
             movementSequence.addAll(extraLayerMovementSequences)
             movementSequence.add(currentFingerPosition)
-            distanceFactor = keyboard.circle.distanceFactor(position)
-            circle = keyboard.circle.virtual(position, distanceFactor)
+            if (prefs.keyboard.circle.dynamicCentre.get()) {
+                distanceFactor = keyboard.circle.distanceFactor(position)
+                circle = keyboard.circle.virtual(position, distanceFactor)
+            }
         }
     }
 
