@@ -1,6 +1,7 @@
 package inc.flide.vim8.ime.keyboard.xpad
 
 import android.content.Context
+import android.util.Log
 import android.view.MotionEvent
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -13,6 +14,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import arrow.core.firstOrNone
 import arrow.core.getOrElse
 import arrow.core.getOrNone
+import inc.flide.vim8.Vim8ImeService
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.keyboard.text.toKeyboardAction
 import inc.flide.vim8.ime.keyboard.xpad.Keyboard.Companion.extraLayerMovementSequences
@@ -115,6 +117,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
     private var currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT
     private var currentFingerPosition: FingerPosition = FingerPosition.NO_TOUCH
     private var currentKey: Key? = null
+    private var offsetCorrection = 0f
     private val movementSequence: MutableList<FingerPosition> = arrayListOf()
     private val trailColor: Color
         get() = (
@@ -148,8 +151,9 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
 
     fun onTouchEventInternal(event: MotionEvent) {
         val position = Offset(event.x, event.y)
+
         val currentPosition =
-            if (keyboard.circle.isPointInsideCircle(position)) {
+            if (keyboard.circle.isPointInsideCircle(position, offsetCorrection)) {
                 FingerPosition.INSIDE_CIRCLE
             } else {
                 keyboard.circle.getSectorOfPoint(position)
@@ -170,6 +174,9 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 keyboard.reset()
                 movementSequence.add(currentPosition)
                 currentFingerPosition = currentPosition
+                if (currentPosition == FingerPosition.INSIDE_CIRCLE) {
+                    offsetCorrection = keyboard.circle.distanceFromCentre(position)
+                }
                 initiateLongPressDetection()
             }
 
@@ -178,11 +185,10 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 currentFingerPosition = currentPosition
                 val isFingerPositionChanged = lastKnownFingerPosition !== currentFingerPosition
                 if (isFingerPositionChanged) {
-                    if (!isReducesCircleSize && movementSequence.firstOrNone()
-                        .isSome { it == FingerPosition.INSIDE_CIRCLE }
-                    ) {
-                        isReducesCircleSize = true
-                    }
+                    movementSequence.firstOrNone()
+                        .filter { it == FingerPosition.INSIDE_CIRCLE && !isReducesCircleSize }
+                        .onSome { isReducesCircleSize = true }
+
                     interruptLongPress()
                     movementSequence.add(currentFingerPosition)
                     keyboard.findLayer(movementSequence)
@@ -205,43 +211,17 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                             movementSequence
                         )
                     ) {
-                        processMovementSequence(movementSequence)
+                        processKeyPress(movementSequence)
                         resetKey()
                         movementSequence.clear()
                         currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT
                         movementSequence.add(currentFingerPosition)
-                    } else if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
-                        var layerSize = 0
-                        val extraLayerMovementSequences =
-                            if (keyboard.layerLevel !== LayerLevel.FIRST) {
-                                MovementSequences.getOrNone(keyboard.layerLevel)
-                                    .onSome {
-                                        layerSize = it.size + 1
-                                    }.getOrElse { listOf() }
-                            } else {
-                                listOf()
-                            }
-                        val defaultLayerCondition = (
-                            keyboard.layerLevel == LayerLevel.FIRST &&
-                                movementSequence[0] == FingerPosition.INSIDE_CIRCLE
-                            )
-                        val extraLayerCondition =
-                            keyboard.layerLevel !== LayerLevel.FIRST &&
-                                movementSequence.size > layerSize
-                        if (defaultLayerCondition || extraLayerCondition) {
-                            movementSequence.clear()
-                            resetKey()
-                            currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT
-                            movementSequence.addAll(extraLayerMovementSequences)
-                            movementSequence.add(currentFingerPosition)
-                        }
                     } else {
-                        resetKey()
-                        val modifiedMovementSequence =
-                            movementSequence + FingerPosition.INSIDE_CIRCLE
-                        keyboard.key(modifiedMovementSequence)?.let {
-                            it.isSelected = true
-                            currentKey = it
+                        Vim8ImeService.inputFeedbackController()?.sectorCross()
+                        if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
+                            processLayerMovements()
+                        } else {
+                            detectKeySelection()
                         }
                     }
                 } else {
@@ -255,8 +235,9 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 isReducesCircleSize = false
                 currentFingerPosition = FingerPosition.NO_TOUCH
                 movementSequence.add(currentFingerPosition)
-                processMovementSequence(movementSequence)
+                processKeyPress(movementSequence)
 
+                offsetCorrection = 0f
                 movementSequence.clear()
                 currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT
                 keyboard.reset()
@@ -267,9 +248,47 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 job = null
                 resetKey()
                 isReducesCircleSize = false
+                offsetCorrection = 0f
                 currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT
                 keyboard.reset()
             }
+        }
+    }
+
+    private fun detectKeySelection() {
+        resetKey()
+        val modifiedMovementSequence =
+            movementSequence + FingerPosition.INSIDE_CIRCLE
+        keyboard.key(modifiedMovementSequence)?.let {
+            it.isSelected = true
+            currentKey = it
+        }
+    }
+
+    private fun processLayerMovements() {
+        var layerSize = 0
+        val extraLayerMovementSequences =
+            if (keyboard.layerLevel !== LayerLevel.FIRST) {
+                MovementSequences.getOrNone(keyboard.layerLevel)
+                    .onSome {
+                        layerSize = it.size + 1
+                    }.getOrElse { listOf() }
+            } else {
+                listOf()
+            }
+        val defaultLayerCondition = (
+            keyboard.layerLevel == LayerLevel.FIRST &&
+                movementSequence[0] == FingerPosition.INSIDE_CIRCLE
+            )
+        val extraLayerCondition =
+            keyboard.layerLevel !== LayerLevel.FIRST &&
+                movementSequence.size > layerSize
+        if (defaultLayerCondition || extraLayerCondition) {
+            movementSequence.clear()
+            resetKey()
+            currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT
+            movementSequence.addAll(extraLayerMovementSequences)
+            movementSequence.add(currentFingerPosition)
         }
     }
 
@@ -279,25 +298,42 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         job = scope.launch {
             delay(500L)
             while (isActive) {
-                processMovementSequence(movementSequence + FingerPosition.LONG_PRESS)
+                processLongPressStart(movementSequence + FingerPosition.LONG_PRESS)
                 delay(50L)
             }
         }
     }
 
-    private fun processMovementSequence(movementSequence: MovementSequence) {
-        keyboard
-            .action(movementSequence, currentMovementSequenceType)
+    private fun processKeyPress(movementSequence: MovementSequence) {
+        processMovementSequence(movementSequence)
+            .onSome {
+                inputEventDispatcher.sendDownUp(it)
+            }
+    }
+    private fun processLongPressStart(movementSequence: MovementSequence) {
+        processMovementSequence(movementSequence)
+            .onSome {
+                inputEventDispatcher.sendDownUp(it, true)
+            }
+    }
+
+    private fun processLongPressEnd(movementSequence: MovementSequence) {
+        processMovementSequence(movementSequence)
             .onSome {
                 inputEventDispatcher.sendDownUp(it)
             }
     }
 
+    private fun processMovementSequence(movementSequence: MovementSequence) =
+        keyboard
+            .action(movementSequence, currentMovementSequenceType)
+
     private fun interruptLongPress() = runBlocking {
         if (job == null) return@runBlocking
         job?.cancel()
         job = null
-        processMovementSequence(movementSequence + FingerPosition.LONG_PRESS_END)
+        Log.d("x", "le $movementSequence")
+        processLongPressEnd(movementSequence + FingerPosition.LONG_PRESS_END)
     }
 
     private fun resetKey() {

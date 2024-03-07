@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -68,31 +68,31 @@ fun AboutScreen() = Screen {
             title = stringRes(R.string.app__version__label),
             summary = stringRes(R.string.version_name)
         )
-        Divider()
+        HorizontalDivider()
         Preference(
             iconId = R.drawable.github_vd_vector,
             title = stringRes(R.string.settings__about__github__label),
             onClick = { context.launchUrl(Urls.GITHUB) }
         )
-        Divider()
+        HorizontalDivider()
         Preference(
             iconId = R.drawable.matrix_vd_vector,
             title = stringRes(R.string.settings__about__matrix__label),
             onClick = { context.launchUrl(Urls.MATRIX) }
         )
-        Divider()
+        HorizontalDivider()
         Preference(
             iconId = R.drawable.twitter_vd_vector,
             title = stringRes(R.string.settings__about__twitter__label),
             onClick = { context.launchUrl(Urls.TWITTER) }
         )
-        Divider()
+        HorizontalDivider()
         Preference(
             iconId = R.drawable.playstore_vd_vector,
             title = stringRes(R.string.settings__about__play_store__label),
             onClick = { context.launchUrl(Urls.PLAY_STORE) }
         )
-        Divider()
+        HorizontalDivider()
         Preference(
             iconId = R.drawable.ic_description,
             title = stringRes(R.string.about__third_party_licenses__title),

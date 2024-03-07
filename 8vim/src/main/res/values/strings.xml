@@ -128,9 +128,13 @@
     <string name="settings__keyboard__haptic__feedback__enabled__summary__on">Haptic feedback is enabled</string>
     <string name="settings__keyboard__haptic__feedback__enabled__summary__off">Haptic feedback is disabled</string>
 
+    <string name="settings__keyboard__haptic__feedback__haptic_sector_cross_enabled__title">Enable input haptic feedback when crossing sectors</string>
+    <string name="settings__keyboard__haptic__feedback__sound_sector_cross_enabled__title">Enable sounds feedback when crossing sectors</string>
+
     <string name="settings__keyboard__sound__feedback__enabled__title">Enable keypress sounds</string>
     <string name="settings__keyboard__sound__feedback__enabled__summary__off">Sound feedback is disabled</string>
     <string name="settings__keyboard__sound__feedback__enabled__summary__on">Sound feedback is enabled</string>
+    <string name="settings__keyboard__sound__feedback__volume__title">Sound volume</string>
 
     <string name="settings__theme__title" comment="Title of Theme screen">Theme</string>
     <string name="settings__theme__color__mode__title">Keyboard color</string>

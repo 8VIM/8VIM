@@ -20,7 +20,7 @@ import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
 
-class AppPrefs : PreferenceModel(5) {
+class AppPrefs : PreferenceModel(6) {
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
@@ -66,9 +66,21 @@ class AppPrefs : PreferenceModel(5) {
             key = "prefs_input_feedback_sound_enabled",
             default = true
         )
+        val soundVolume = int(
+            key = "prefs_input_feedback_sound_volume",
+            default = 0
+        )
         val hapticEnabled = boolean(
             key = "prefs_input_feedback_haptic_enabled",
             default = true
+        )
+        val hapticSectorCrossEnabled = boolean(
+            key = "prefs_input_feedback_haptic_sector_cross_enabled",
+            default = false
+        )
+        val soundSectorCrossEnabled = boolean(
+            key = "prefs_input_feedback_sound_sector_cross_enabled",
+            default = false
         )
     }
 

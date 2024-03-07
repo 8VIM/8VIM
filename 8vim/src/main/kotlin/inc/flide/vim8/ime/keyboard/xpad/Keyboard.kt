@@ -201,7 +201,7 @@ class Keyboard(private val context: Context) {
 
     data class Circle(var centre: Offset = Offset.Zero, var radius: Float = 0f) {
 
-        private fun getPowerOfPoint(point: Offset): Float {
+        private fun getPowerOfPoint(point: Offset, correctionOffset: Float): Float {
             /*
             If O is the centre of circle
             Consider startingPoint point P not necessarily on the circumference of the circle.
@@ -209,14 +209,16 @@ class Keyboard(private val context: Context) {
             then the power of the point P relative to the circle is
             p=d^2-r^2.
             */
-            val squaredDistanceBetweenPoints = (point - centre).getDistanceSquared()
-            val radiusSquare = radius * radius
+            val squaredDistanceBetweenPoints = distanceFromCentre(point)
+            val radiusSquare = radius * radius - correctionOffset
             return squaredDistanceBetweenPoints - radiusSquare
         }
 
-        fun isPointInsideCircle(point: Offset): Boolean {
-            return getPowerOfPoint(point) < 0
+        fun isPointInsideCircle(point: Offset, correctionOffset: Float = 0f): Boolean {
+            return getPowerOfPoint(point, correctionOffset) < 0
         }
+
+        fun distanceFromCentre(point: Offset): Float = (point - centre).getDistanceSquared()
 
         private fun getAngleInRadiansOfPointWithRespectToCentreOfCircle(point: Offset): Float {
             // Get difference of coordinates
