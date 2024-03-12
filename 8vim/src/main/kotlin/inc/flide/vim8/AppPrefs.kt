@@ -33,6 +33,10 @@ class AppPrefs : PreferenceModel(6) {
             key = "prefs_clipboard_history",
             default = HashSet()
         )
+        val maxHistory = int(
+            key = "prefs_clipboard_max_history",
+            default = 10
+        )
         val enabled = boolean(
             key = "prefs_clipboard_enabled",
             default = true

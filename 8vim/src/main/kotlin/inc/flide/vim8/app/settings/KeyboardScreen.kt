@@ -62,7 +62,9 @@ fun KeyboardScreen() = Screen {
                 )
             }
         }
-        PreferenceGroup {
+        PreferenceGroup(
+            title = stringRes(R.string.settings__keyboard__circle__auto_resize_group__title)
+        ) {
             SwitchPreference(
                 prefs.keyboard.circle.autoResize,
                 title = stringRes(R.string.settings__keyboard__circle__auto_resize__title),
@@ -118,7 +120,9 @@ fun KeyboardScreen() = Screen {
             )
         }
 
-        PreferenceGroup {
+        PreferenceGroup(
+            title = stringRes(R.string.settings__keyboard__circle__offset_and_height_group__title)
+        ) {
             SliderPreference(
                 pref = prefs.keyboard.circle.xCentreOffset,
                 title = stringRes(R.string.settings__keyboard__circle__x__centre__offset__title),
@@ -140,7 +144,9 @@ fun KeyboardScreen() = Screen {
             )
         }
 
-        PreferenceGroup {
+        PreferenceGroup(
+            title = stringRes(R.string.settings__keyboard__display__group__title)
+        ) {
             SwitchPreference(
                 pref = prefs.keyboard.display.showSectorIcons,
                 title = stringRes(R.string.settings__keyboard__display__show__sector__icons__title),
@@ -165,7 +171,9 @@ fun KeyboardScreen() = Screen {
             )
         }
 
-        PreferenceGroup {
+        PreferenceGroup(
+            title = stringRes(R.string.settings__keyboard__sidebar__group__title)
+        ) {
             SwitchPreference(
                 pref = prefs.keyboard.sidebar.isVisible,
                 title = stringRes(R.string.settings__keyboard__sidebar__is__visible__title),
@@ -188,17 +196,11 @@ fun KeyboardScreen() = Screen {
                     R.string.settings__keyboard__sidebar__is__on__left__summary__on
                 )
             )
-
-            SwitchPreference(
-                pref = prefs.clipboard.enabled,
-                title = stringRes(R.string.settings__keyboard__clipboard__enabled__title),
-                summaryOff = stringRes(
-                    R.string.settings__keyboard__clipboard__enabled__summary__off
-                ),
-                summaryOn = stringRes(R.string.settings__keyboard__clipboard__enabled__summary__on)
-            )
         }
-        PreferenceGroup {
+
+        PreferenceGroup(
+            title = stringRes(R.string.settings__keyboard__haptic__sound__group__title)
+        ) {
             SwitchPreference(
                 pref = prefs.inputFeedback.hapticEnabled,
                 title = stringRes(R.string.settings__keyboard__haptic__feedback__enabled__title),

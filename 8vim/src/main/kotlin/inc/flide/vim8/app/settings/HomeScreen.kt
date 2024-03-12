@@ -66,6 +66,19 @@ fun HomeScreen() = Screen {
                 )
             }
         )
+
+        Preference(
+            iconId = R.drawable.ic_content_paste,
+            title = stringRes(R.string.settings__clipboard__title),
+            onClick = { navController.navigate(Routes.Settings.Clipboard) },
+            trailing = {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
+        )
+
         Preference(
             iconId = R.drawable.ic_outline_palette,
             title = stringRes(R.string.settings__theme__title),

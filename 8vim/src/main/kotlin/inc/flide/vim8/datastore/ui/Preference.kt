@@ -2,7 +2,6 @@ package inc.flide.vim8.datastore.ui
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -54,14 +53,20 @@ internal fun maybeIcon(
 
 @Composable
 fun <T : PreferenceModel> PreferenceUiScope<T>.PreferenceGroup(
+    title: String? = null,
     content: PreferenceUiContent<T>
 ) {
     Card(modifier = Modifier.padding(8.dp)) {
-        Column(modifier = Modifier.padding(vertical = 16.dp)) {
-            content(
-                this@PreferenceGroup.copy(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        if (title != null) {
+            Text(
+                modifier = Modifier.padding(16.dp),
+                text = title,
+                style = MaterialTheme.typography.headlineSmall
             )
         }
+        content(
+            this@PreferenceGroup.copy(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+        )
     }
 }
 
