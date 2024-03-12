@@ -94,6 +94,9 @@
     <string name="settings__keyboard__circle__dynamic_centre__summary__on">Enabled</string>
     <string name="settings__keyboard__circle__dynamic_centre__summary__off">Disabled</string>
 
+    <string name="settings__keyboard__circle__dynamic_centre_max_offset_ratio__title">Dynamic centre maximum offset ratio</string>
+    <string name="settings__keyboard__circle__dynamic_centre_max_offset_ratio__summary">Maximum offset ratio from the current circle size</string>
+
     <string name="settings__keyboard__circle__size__title">Circle size</string>
     <string name="settings__keyboard__circle__size__summary">Resize circle according to your needs</string>
 

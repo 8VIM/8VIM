@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
+import arrow.core.elementAtOrNone
 import arrow.core.firstOrNone
 import arrow.core.getOrElse
 import arrow.core.getOrNone
@@ -118,14 +119,15 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
     private var currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT
     private var currentFingerPosition: FingerPosition = FingerPosition.NO_TOUCH
     private var currentKey: Key? = null
-    private var circle = Keyboard.Circle()
-    private var distanceFactor = 1f
     private val movementSequence: MutableList<FingerPosition> = arrayListOf()
     private val trailColor: Color
         get() = (
             themeManager.currentTheme.value?.trailColor
                 ?: ThemeManager.RandomTrailColor()
             ).color()
+    private val backgroundColor: Color
+        get() = themeManager.currentTheme.value?.scheme?.background ?: Color.White
+
     private val inputEventDispatcher get() = keyboardManager.inputEventDispatcher
     private val glideGesture = GlideGesture.Detector(this)
     private val showTrail: Boolean get() = prefs.keyboard.trail.isVisible.get()
@@ -143,11 +145,11 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         )
 
         drawScope.drawPath(keyboard.path, color, style = drawStyle)
-        if (prefs.keyboard.circle.dynamicCentre.get() && keyboard.circle.centre != circle.centre) {
+        if (keyboard.circle.hasVirtualCentre) {
             drawScope.drawCircle(
-                color.blendARGB(Color.White, 0.5f).copy(alpha = 0.5f),
-                circle.radius,
-                circle.centre,
+                color.blendARGB(backgroundColor, 0.65f).copy(alpha = 0.75f),
+                keyboard.circle.radius,
+                keyboard.circle.virtualCentre,
                 style = Fill
             )
         }
@@ -161,14 +163,11 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
 
     fun onTouchEventInternal(event: MotionEvent) {
         val position = Offset(event.x, event.y)
-        if (circle.centre == Offset.Zero) {
-            circle = keyboard.circle.copy()
-        }
         val currentPosition =
-            if (circle.isPointInsideCircle(position)) {
+            if (keyboard.circle.isPointInsideCircle(position)) {
                 FingerPosition.INSIDE_CIRCLE
             } else {
-                circle.getSectorOfPoint(position)
+                keyboard.circle.getSectorOfPoint(position)
             }
 
         hasTrail = if (showTrail) {
@@ -186,24 +185,17 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 keyboard.reset()
                 movementSequence.add(currentPosition)
                 currentFingerPosition = currentPosition
-                if (prefs.keyboard.circle.dynamicCentre.get() &&
-                    currentPosition == FingerPosition.INSIDE_CIRCLE
-                ) {
-                    distanceFactor = keyboard.circle.distanceFactor(position)
-                    circle = keyboard.circle.virtual(position, distanceFactor)
+                if (currentPosition == FingerPosition.INSIDE_CIRCLE) {
+                    keyboard.circle.initVirtual(position)
                 }
                 initiateLongPressDetection()
             }
 
             MotionEvent.ACTION_MOVE -> {
-                if (prefs.keyboard.circle.dynamicCentre.get() &&
-                    currentPosition != FingerPosition.INSIDE_CIRCLE
-                ) {
-                    circle = keyboard.circle.virtual(position, distanceFactor)
-                }
                 val lastKnownFingerPosition = currentFingerPosition
                 currentFingerPosition = currentPosition
                 val isFingerPositionChanged = lastKnownFingerPosition !== currentFingerPosition
+                computeVirtualCentre(position, currentPosition)
                 if (isFingerPositionChanged) {
                     movementSequence.firstOrNone()
                         .filter { it == FingerPosition.INSIDE_CIRCLE && !isReducesCircleSize }
@@ -235,9 +227,6 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                         movementSequence.clear()
                         currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT
                         movementSequence.add(currentFingerPosition)
-                        if (prefs.keyboard.circle.dynamicCentre.get()) {
-                            circle = keyboard.circle.virtual(position, distanceFactor)
-                        }
                     } else {
                         Vim8ImeService.inputFeedbackController()?.sectorCross()
                         if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
@@ -255,11 +244,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 interruptLongPress()
                 resetKey()
                 isReducesCircleSize = false
-
-                if (prefs.keyboard.circle.dynamicCentre.get()) {
-                    circle = keyboard.circle.copy()
-                }
-
+                keyboard.circle.reset()
                 currentFingerPosition = FingerPosition.NO_TOUCH
                 movementSequence.add(currentFingerPosition)
                 processKeyPress(movementSequence)
@@ -274,13 +259,27 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 job = null
                 resetKey()
                 isReducesCircleSize = false
-                circle = keyboard.circle.copy()
+                keyboard.circle.reset()
                 currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT
                 keyboard.reset()
-                if (prefs.keyboard.circle.dynamicCentre.get()) {
-                    circle = keyboard.circle.copy()
-                }
             }
+        }
+    }
+
+    private fun computeVirtualCentre(position: Offset, currentPosition: FingerPosition) {
+        val index = MovementSequences
+            .getOrNone(keyboard.layerLevel)
+            .map { it.size }
+            .getOrElse { 0 }
+        val isInsideCircle = movementSequence
+            .elementAtOrNone(index)
+            .isSome {
+                it == FingerPosition.INSIDE_CIRCLE &&
+                    currentPosition != FingerPosition.INSIDE_CIRCLE
+            }
+
+        if (isInsideCircle) {
+            keyboard.circle.computeVirtualCentre(position)
         }
     }
 
@@ -311,17 +310,15 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             )
         val extraLayerCondition =
             keyboard.layerLevel !== LayerLevel.FIRST &&
-                movementSequence.size > layerSize
+                movementSequence.size >= layerSize
         if (defaultLayerCondition || extraLayerCondition) {
             movementSequence.clear()
             resetKey()
+            keyboard.circle.initVirtual(position)
             currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT
             movementSequence.addAll(extraLayerMovementSequences)
             movementSequence.add(currentFingerPosition)
-            if (prefs.keyboard.circle.dynamicCentre.get()) {
-                distanceFactor = keyboard.circle.distanceFactor(position)
-                circle = keyboard.circle.virtual(position, distanceFactor)
-            }
+            if (!isReducesCircleSize) isReducesCircleSize = true
         }
     }
 

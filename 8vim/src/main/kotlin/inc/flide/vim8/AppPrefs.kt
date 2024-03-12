@@ -139,6 +139,13 @@ class AppPrefs : PreferenceModel(6) {
                 key = "prefs_keyboard_circle_dynamic_centre",
                 default = false
             )
+            val dynamicCentreMaxOffsetRatio = int(
+                key = "prefs_keyboard_circle_dynamic_centre_max_offset_ratio",
+                default = 25
+            )
+            val dynamicCentreOffsetRatio: Float
+                get() = dynamicCentreMaxOffsetRatio.get().coerceIn(25..50) / 100f
+
             val autoResize = boolean(
                 key = "prefs_keyboard_circle_auto_resize",
                 default = false

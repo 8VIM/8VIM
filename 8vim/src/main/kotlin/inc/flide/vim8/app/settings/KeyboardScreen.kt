@@ -27,6 +27,7 @@ fun KeyboardScreen() = Screen {
     val context = LocalContext.current
     content {
         val circleAutoResize by prefs.keyboard.circle.autoResize.observeAsState()
+        val dynamicCentre by prefs.keyboard.circle.dynamicCentre.observeAsState()
         val hapticEnabled by prefs.inputFeedback.hapticEnabled.observeAsState()
         val soundEnabled by prefs.inputFeedback.soundEnabled.observeAsState()
 
@@ -102,6 +103,22 @@ fun KeyboardScreen() = Screen {
                     R.string.settings__keyboard__circle__dynamic_centre__summary__on
                 )
             )
+            SliderPreference(
+                pref = prefs.keyboard.circle.dynamicCentreMaxOffsetRatio,
+                title = stringRes(
+                    R.string.settings__keyboard__circle__dynamic_centre_max_offset_ratio__title
+                ),
+                summary = stringRes(
+                    R.string.settings__keyboard__circle__dynamic_centre_max_offset_ratio__summary
+                ),
+                min = 25,
+                max = 50,
+                visibleIf = { dynamicCentre },
+                toText = { "$it%" }
+            )
+        }
+
+        PreferenceGroup {
             SliderPreference(
                 pref = prefs.keyboard.circle.xCentreOffset,
                 title = stringRes(R.string.settings__keyboard__circle__x__centre__offset__title),

@@ -26,7 +26,7 @@ class EditorInstance(context: Context) {
     fun handleStartInputView(editorInfo: EditorInfo) {
         imeOptions = ImeOptions.wrap(editorInfo.imeOptions)
 
-        when (editorInfo.inputType and InputType.TYPE_MASK_CLASS) {
+        activeState.imeUiMode = when (editorInfo.inputType and InputType.TYPE_MASK_CLASS) {
             InputType.TYPE_CLASS_NUMBER,
             InputType.TYPE_CLASS_PHONE,
             InputType.TYPE_CLASS_DATETIME -> {
@@ -34,7 +34,7 @@ class EditorInstance(context: Context) {
                 ImeUiMode.NUMERIC
             }
 
-            InputType.TYPE_CLASS_TEXT ->
+            InputType.TYPE_CLASS_TEXT -> {
                 activeState.keyVariation =
                     when (editorInfo.inputType and InputType.TYPE_MASK_VARIATION) {
                         InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD,
@@ -43,6 +43,8 @@ class EditorInstance(context: Context) {
 
                         else -> KeyVariation.NORMAL
                     }
+                ImeUiMode.TEXT
+            }
 
             else -> {
                 activeState.keyVariation = KeyVariation.NORMAL

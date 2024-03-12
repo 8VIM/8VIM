@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import arrow.core.Option
 import arrow.core.getOrElse
@@ -90,8 +89,6 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.Preference(
             headlineContent = {
                 Text(
                     text = title,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyLarge
                 )
             },
