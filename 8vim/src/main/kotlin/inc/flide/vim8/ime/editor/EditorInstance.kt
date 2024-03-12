@@ -3,7 +3,6 @@ package inc.flide.vim8.ime.editor
 import android.content.Context
 import android.os.SystemClock
 import android.text.InputType
-import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
@@ -82,7 +81,7 @@ class EditorInstance(context: Context) {
 
     fun performDelete(): Boolean {
         val ic = currentInputConnection() ?: return false
-        return if (TextUtils.isEmpty(ic.getSelectedText(0))) {
+        return if ((ic.getSelectedText(0)?.length ?: 0) == 0) {
             val length =
                 ic.getExtractedText(ExtractedTextRequest(), 0)?.text?.toString()?.let { text ->
                     if (activeState.isCtrlOn) {

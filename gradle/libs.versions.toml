@@ -32,7 +32,7 @@ androidx-test-ext = "1.1.5"
 androidx-test-runner = "1.5.2"
 androidx-test-espresso = "3.5.1"
 junit4 = "4.13.2"
-kotest = "5.8.0"
+kotest = "5.8.1"
 kotest-arrow = "1.4.0"
 logback-classic = "1.3.0"
 mockk = "1.13.5"
@@ -89,7 +89,7 @@ mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
 [plugins]
 # Main
 agp-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint"}
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

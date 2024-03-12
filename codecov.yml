@@ -14,6 +14,8 @@ flags:
   unit:
     ignore:
       - 8vim/src/**/app
+      - 8vim/src/**/datastore/ui
+      - 8vim/src/**/datastore/Datastore.kt
       - 8vim/src/**/lib
       - 8vim/src/**/theme/Theme.kt
       - 8vim/src/**/models/error/LayoutError.kt
