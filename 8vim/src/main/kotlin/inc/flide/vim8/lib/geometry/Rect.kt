@@ -1,4 +1,4 @@
-package inc.flide.vim8.lib
+package inc.flide.vim8.lib.geometry
 
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.geometry.Offset

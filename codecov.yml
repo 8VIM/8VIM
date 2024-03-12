@@ -22,6 +22,6 @@ flags:
       - 8vim/src/**/VIM8Application.kt
       - 8vim/src/**/PreferenceDataAdapter.kt
       - 8vim/src/**/Vim8ImeService.kt
-      - 8vim/src/**/clipboard
+      - 8vim/src/**/clipboard/*Layout.kt
       - 8vim/src/**/keyboard/**/*Layout.kt
       - 8vim/src/**/AppPrefs.kt

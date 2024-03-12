@@ -10,7 +10,6 @@ import arrow.core.None
 import arrow.core.right
 import inc.flide.vim8.arbitraries.Arbitraries
 import inc.flide.vim8.cache
-import inc.flide.vim8.ime.LayoutLoader
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.info

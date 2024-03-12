@@ -1,4 +1,4 @@
-package inc.flide.vim8.lib
+package inc.flide.vim8.lib.compose
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisallowComposableCalls

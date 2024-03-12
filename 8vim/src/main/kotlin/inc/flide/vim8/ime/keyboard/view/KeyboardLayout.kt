@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.keyboard
+package inc.flide.vim8.ime.keyboard.view
 
 import android.content.Intent
 import android.view.KeyEvent

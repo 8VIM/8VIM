@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.keyboard
+package inc.flide.vim8.ime.keyboard.compose
 
 import android.content.res.Resources
 import androidx.compose.runtime.Composable
@@ -13,7 +13,7 @@ import inc.flide.vim8.R
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.lib.android.isOrientationPortrait
-import inc.flide.vim8.lib.util.ViewUtils
+import inc.flide.vim8.lib.geometry.px2dp
 
 val LocalKeyboardHeight = staticCompositionLocalOf { 65.dp }
 
@@ -57,5 +57,5 @@ private fun calcInputViewHeight(resources: Resources, keyboardHeight: Int): Dp {
     val height = ((minBaseSize + maxBaseSize) / 2.0f).coerceAtLeast(
         resources.getDimension(R.dimen.inputView_baseHeight)
     ) * scale
-    return ViewUtils.px2dp(height).dp
+    return height.px2dp().dp
 }
