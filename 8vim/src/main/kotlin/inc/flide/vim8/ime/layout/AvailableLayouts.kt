@@ -49,7 +49,7 @@ class AvailableLayouts(private val layoutLoader: LayoutLoader, private val conte
         findIndex()
     }
 
-    private fun reloadCustomLayouts() {
+    fun reloadCustomLayouts() {
         listCustomLayoutHistory()
         findIndex()
     }

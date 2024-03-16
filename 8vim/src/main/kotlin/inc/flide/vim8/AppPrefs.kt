@@ -31,7 +31,8 @@ class AppPrefs : PreferenceModel(4) {
     inner class Clipboard {
         val history = stringSet(
             key = "prefs_clipboard_history",
-            default = HashSet()
+            default = HashSet(),
+            exported = false
         )
         val enabled = boolean(
             key = "prefs_clipboard_enabled",
@@ -44,7 +45,8 @@ class AppPrefs : PreferenceModel(4) {
 
         val cache = stringSet(
             key = "prefs_layout_cache",
-            default = emptySet()
+            default = emptySet(),
+            exported = false
         )
 
         val current = custom(
@@ -186,7 +188,8 @@ class AppPrefs : PreferenceModel(4) {
 
     inner class Internal {
         val isImeSetup = boolean(key = "internal__is_ime_set_up", default = false)
-        val versionCode = int(key = "internal__versionCode", default = BuildConfig.VERSION_CODE)
+        val versionCode =
+            int(key = "internal__versionCode", default = BuildConfig.VERSION_CODE, exported = false)
     }
 
     override fun migrate(
@@ -270,12 +273,15 @@ class AppPrefs : PreferenceModel(4) {
                 "prefs_keyboard_sidebar_circle_radius_size_factor" -> entry.transform(
                     key = "prefs_keyboard_circle_radius_size_factor"
                 )
+
                 "prefs_keyboard_sidebar_circle_centre_x_offset" -> entry.transform(
                     key = "prefs_keyboard_circle_centre_x_offset"
                 )
+
                 "prefs_keyboard_sidebar_circle_centre_y_offset" -> entry.transform(
                     key = "prefs_keyboard_circle_centre_y_offset"
                 )
+
                 else -> entry.keepAsIs()
             }
 
