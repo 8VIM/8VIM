@@ -23,6 +23,10 @@ private val keyboardActionCache: Map<Int, KeyboardAction> =
 
 class Key(
     val action: KeyboardAction,
+<<<<<<< HEAD
+=======
+    val alternateText: String? = null,
+>>>>>>> master
     val drawableId: Int? = null
 ) {
     val touchBounds: Rect = Rect.empty()

@@ -2,6 +2,7 @@ package inc.flide.vim8.app.settings
 
 import android.content.Context
 import androidx.compose.material.icons.Icons
+<<<<<<< HEAD
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -10,6 +11,19 @@ import inc.flide.vim8.R
 import inc.flide.vim8.datastore.model.PreferenceData
 import inc.flide.vim8.datastore.ui.Preference
 import inc.flide.vim8.datastore.ui.PreferenceGroup
+=======
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
+import inc.flide.vim8.R
+import inc.flide.vim8.datastore.model.PreferenceData
+import inc.flide.vim8.datastore.model.observeAsState
+import inc.flide.vim8.datastore.ui.Preference
+import inc.flide.vim8.datastore.ui.PreferenceGroup
+import inc.flide.vim8.datastore.ui.RangeSliderPreference
+>>>>>>> master
 import inc.flide.vim8.datastore.ui.SliderPreference
 import inc.flide.vim8.datastore.ui.SwitchPreference
 import inc.flide.vim8.lib.compose.Dialog
@@ -23,6 +37,11 @@ fun KeyboardScreen() = Screen {
     previewFieldVisible = true
     val context = LocalContext.current
     content {
+<<<<<<< HEAD
+=======
+        val circleAutoResize by prefs.keyboard.circle.autoResize.observeAsState()
+
+>>>>>>> master
         PreferenceGroup {
             Dialog {
                 title = stringRes(R.string.select_preferred_emoticon_keyboard_dialog_title)
@@ -45,11 +64,21 @@ fun KeyboardScreen() = Screen {
                         R.string.settings__keyboard__select__emoji__keyboard__summary
                     ),
                     onClick = { show() },
+<<<<<<< HEAD
                     trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+=======
+                    trailing = {
+                        Icon(
+                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = null
+                        )
+                    }
+>>>>>>> master
                 )
             }
         }
         PreferenceGroup {
+<<<<<<< HEAD
             SliderPreference(
                 pref = prefs.keyboard.circle.radiusSizeFactor,
                 title = stringRes(R.string.settings__keyboard__circle__size__title),
@@ -57,6 +86,36 @@ fun KeyboardScreen() = Screen {
                 min = 1,
                 max = 40
             )
+=======
+            SwitchPreference(
+                prefs.keyboard.circle.autoResize,
+                title = stringRes(R.string.settings__keyboard__circle__auto_resize__title),
+                summaryOff = stringRes(
+                    R.string.settings__keyboard__circle__auto_resize__summary__off
+                ),
+                summaryOn = stringRes(
+                    R.string.settings__keyboard__circle__auto_resize__summary__on
+                )
+            )
+            if (circleAutoResize) {
+                RangeSliderPreference(
+                    minPref = prefs.keyboard.circle.radiusMinSizeFactor,
+                    maxPref = prefs.keyboard.circle.radiusSizeFactor,
+                    title = stringRes(R.string.settings__keyboard__circle__size__title),
+                    summary = stringRes(R.string.settings__keyboard__circle__size__summary),
+                    min = 1,
+                    max = 40
+                )
+            } else {
+                SliderPreference(
+                    pref = prefs.keyboard.circle.radiusSizeFactor,
+                    title = stringRes(R.string.settings__keyboard__circle__size__title),
+                    summary = stringRes(R.string.settings__keyboard__circle__size__summary),
+                    min = 1,
+                    max = 40
+                )
+            }
+>>>>>>> master
             SliderPreference(
                 pref = prefs.keyboard.circle.xCentreOffset,
                 title = stringRes(R.string.settings__keyboard__circle__x__centre__offset__title),

@@ -45,3 +45,22 @@ jobs:
       issues: read
       pull-requests: read
       contents: write
+  close_milestone:
+    needs: [release, update_version]
+    runs-on: ubuntu-latest
+    name: Close milestone v${{needs.update_version.outputs.version_name}}
+    steps:
+      - uses: lee-dohm/close-matching-issues@v2
+        with:
+          query: repo:${{ github.repository }} milestone:v${{needs.update_version.outputs.version_name}}
+          token: ${{ secrets.PAT }}
+      - uses: Beakyn/gha-close-milestone@v1.1.1
+        with:
+          milestone-title: v${{needs.update_version.outputs.version_name}}
+          repository: ${{ github.repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+    permissions:
+      issues: write
+      pull-requests: write
+      repository-projects: write

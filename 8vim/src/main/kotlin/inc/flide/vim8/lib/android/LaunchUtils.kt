@@ -49,3 +49,16 @@ fun Context.shareApp(text: String) {
         showToast(e.localizedMessage ?: "")
     }
 }
+
+fun Context.shareApp(text: String) {
+    try {
+        val intent = Intent(Intent.ACTION_SEND).also {
+            it.type = "text/plain"
+            it.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name)
+            it.putExtra(Intent.EXTRA_TEXT, text)
+        }
+        this.startActivity(Intent.createChooser(intent, "Share ${R.string.app_name}"))
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(this, e.localizedMessage, Toast.LENGTH_LONG).show()
+    }
+}

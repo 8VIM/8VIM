@@ -1,6 +1,7 @@
 [versions]
 # Main
 androidx-activity = "1.8.2"
+<<<<<<< HEAD
 android-gradle-plugin = "8.2.2"
 android-appcompat = "1.6.1"
 android-material = "1.11.0"
@@ -11,6 +12,18 @@ androidx-core = "1.12.0"
 androidx-core-splashscreen = "1.0.1"
 androidx-lifecycle = "2.7.0"
 androidx-navigation = "2.7.6"
+=======
+android-gradle-plugin = "8.3.0"
+android-appcompat = "1.6.1"
+android-material = "1.11.0"
+androidx-compose = "1.6.2"
+androidx-compose-compiler = "1.5.10"
+androidx-compose-material3 = "1.2.0"
+androidx-core = "1.12.0"
+androidx-core-splashscreen = "1.0.1"
+androidx-lifecycle = "2.7.0"
+androidx-navigation = "2.7.7"
+>>>>>>> master
 androidx-preference = "1.2.1"
 apache-commons = "1.10.0"
 commons-codec = "1.16.0"

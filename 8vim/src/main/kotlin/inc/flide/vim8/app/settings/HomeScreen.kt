@@ -69,12 +69,15 @@ fun HomeScreen() = Screen {
             trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
         )
         Preference(
+<<<<<<< HEAD
             iconId = R.drawable.ic_settings_backup_restore,
             title = stringRes(R.string.settings__backup_and_restore__title),
             onClick = { navController.navigate(Routes.Settings.BackupAndRestore) },
             trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
         )
         Preference(
+=======
+>>>>>>> master
             iconId = R.drawable.ic_error_outline,
             title = stringRes(R.string.about__title),
             onClick = { navController.navigate(Routes.Settings.About) },
