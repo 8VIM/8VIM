@@ -228,7 +228,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                     } else {
                         Vim8ImeService.inputFeedbackController()?.sectorCross()
                         if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
-                            processLayerMovements(position)
+                            processLayerMovements()
                         } else {
                             detectKeySelection()
                         }
@@ -274,7 +274,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         }
     }
 
-    private fun processLayerMovements(position: Offset) {
+    private fun processLayerMovements() {
         var layerSize = 0
         val extraLayerMovementSequences =
             if (keyboard.layerLevel !== LayerLevel.FIRST) {
