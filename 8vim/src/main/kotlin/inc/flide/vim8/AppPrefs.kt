@@ -31,7 +31,8 @@ class AppPrefs : PreferenceModel(5) {
     inner class Clipboard {
         val history = stringSet(
             key = "prefs_clipboard_history",
-            default = HashSet()
+            default = HashSet(),
+            canBeExported = false
         )
         val enabled = boolean(
             key = "prefs_clipboard_enabled",
@@ -44,7 +45,8 @@ class AppPrefs : PreferenceModel(5) {
 
         val cache = stringSet(
             key = "prefs_layout_cache",
-            default = emptySet()
+            default = emptySet(),
+            canBeExported = false
         )
 
         val current = custom(
@@ -193,8 +195,15 @@ class AppPrefs : PreferenceModel(5) {
     }
 
     inner class Internal {
-        val isImeSetup = boolean(key = "internal__is_ime_set_up", default = false)
-        val versionCode = int(key = "internal__versionCode", default = BuildConfig.VERSION_CODE)
+        val isImeSetup =
+            boolean(key = "internal__is_ime_set_up", default = false, canBeReset = false)
+        val versionCode =
+            int(
+                key = "internal__versionCode",
+                default = BuildConfig.VERSION_CODE,
+                canBeExported = false,
+                canBeReset = false
+            )
     }
 
     override fun migrate(
