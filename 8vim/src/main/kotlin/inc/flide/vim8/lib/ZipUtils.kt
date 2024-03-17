@@ -43,7 +43,7 @@ object ZipUtils {
             val flexEntries = flexFile.entries()
             while (flexEntries.hasMoreElements()) {
                 val flexEntry = flexEntries.nextElement()
-                val flexEntryFile = File(dstDir, flexEntry.name).normalize()
+                val flexEntryFile = File(dstDir, flexEntry.name)
                 if (flexEntry.isDirectory) {
                     flexEntryFile.mkdir()
                 } else {
