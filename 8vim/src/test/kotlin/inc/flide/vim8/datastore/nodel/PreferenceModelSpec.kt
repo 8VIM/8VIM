@@ -126,14 +126,14 @@ class PreferenceModelSpec : WordSpec({
 
             "migrate data" {
                 sharedData["to_remove"] = 1
-                sharedData["boolean"] = 1
+                sharedData[pref.booleanPref.key] = 1
                 sharedData["to_rename"] = "value"
                 sharedData[pref.intPref.key] = 1
                 pref.initialize(context)
                 pref.isReady().shouldBeTrue()
                 sharedData shouldBe mapOf(
                     pref.stringPref.key to "value",
-                    pref.stringPref.key to true,
+                    pref.booleanPref.key to true,
                     pref.intPref.key to 2,
                     PreferenceModel.DATASTORE_VERSION to 1
                 )
@@ -143,7 +143,7 @@ class PreferenceModelSpec : WordSpec({
 
     "Reset all" should {
         "Reset all data expect boolean" {
-            sharedData["boolean"] = true
+            sharedData[pref.booleanPref.key] = true
             sharedData[pref.intPref.key] = 1
             sharedData[PreferenceModel.DATASTORE_VERSION] = 1
             pref.initialize(context)
