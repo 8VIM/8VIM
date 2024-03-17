@@ -10,7 +10,9 @@ import inc.flide.vim8.datastore.model.PreferenceMigrationEntry
 import inc.flide.vim8.datastore.model.PreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceObserver
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
+import io.kotest.matchers.maps.shouldContainAll
 import io.kotest.matchers.shouldBe
 import io.mockk.Call
 import io.mockk.Runs
@@ -27,7 +29,7 @@ enum class Enum {
 }
 
 class TestModel : PreferenceModel(1) {
-    val booleanPref = boolean(key = "boolean", default = false)
+    val booleanPref = boolean(key = "boolean", default = false, canBeReset = false)
     val stringPref = string(key = "string", default = "")
     val intPref = int(key = "int", default = 0)
     val floatPref = float(key = "float", default = 0f)
@@ -117,7 +119,7 @@ class PreferenceModelSpec : WordSpec({
                 pref.initialize(context)
                 pref.isReady().shouldBeTrue()
                 sharedData shouldBe mapOf(
-                    "float" to 1f,
+                    pref.floatPref.key to 1f,
                     PreferenceModel.DATASTORE_VERSION to 1
                 )
             }
@@ -130,26 +132,70 @@ class PreferenceModelSpec : WordSpec({
                 pref.initialize(context)
                 pref.isReady().shouldBeTrue()
                 sharedData shouldBe mapOf(
-                    "string" to "value",
-                    "boolean" to true,
-                    "int" to 2,
+                    pref.stringPref.key to "value",
+                    pref.stringPref.key to true,
+                    pref.intPref.key to 2,
                     PreferenceModel.DATASTORE_VERSION to 1
                 )
             }
         }
     }
 
-    "loading previous preferences" should {
-        "get the correct  value" {
+    "Reset all" should {
+        "Reset all data expect boolean" {
+            sharedData["boolean"] = true
+            sharedData[pref.intPref.key] = 1
             sharedData[PreferenceModel.DATASTORE_VERSION] = 1
-            sharedData["int"] = 1
+            pref.initialize(context)
+            pref.isReady().shouldBeTrue()
+            pref.booleanPref.get().shouldBeTrue()
+            pref.intPref.get() shouldBe 1
+            pref.reset()
+            pref.booleanPref.get().shouldBeTrue()
+            pref.intPref.get() shouldBe 0
+        }
+    }
+
+    "Exported keys" should {
+        "get" {
+            sharedData[PreferenceModel.DATASTORE_VERSION] = 1
+            sharedData[pref.intPref.key] = 1
+            pref.initialize(context)
+            pref.isReady().shouldBeTrue()
+            pref.exportedKeys shouldContainAll mapOf<String, Any?>(
+                PreferenceModel.DATASTORE_VERSION to 1,
+                pref.intPref.key to 1
+            )
+        }
+        "set" {
+            sharedData[PreferenceModel.DATASTORE_VERSION] = 0
+            pref.initialize(context)
+            pref.isReady().shouldBeTrue()
+            pref.intPref.get() shouldBe 0
+            pref.booleanPref.get().shouldBeFalse()
+            pref.exportedKeys = mapOf<String, Any?>(
+                pref.intPref.key to 1,
+                pref.booleanPref.key to 1
+            )
+            sharedData shouldBe mapOf(
+                pref.intPref.key to 1,
+                PreferenceModel.DATASTORE_VERSION to 1
+            )
+        }
+    }
+
+    "loading previous preferences" should {
+        "get the correct value" {
+            sharedData[PreferenceModel.DATASTORE_VERSION] = 1
+            sharedData[pref.intPref.key] = 1
             pref.initialize(context)
             pref.isReady().shouldBeTrue()
             pref.intPref.get() shouldBe 1
         }
+
         "fallback to default value for incorrect data" {
             sharedData[PreferenceModel.DATASTORE_VERSION] = 1
-            sharedData["int"] = "string"
+            sharedData[pref.intPref.key] = "string"
             pref.initialize(context)
             pref.isReady().shouldBeTrue()
             pref.intPref.get() shouldBe pref.intPref.default
@@ -164,7 +210,7 @@ class PreferenceModelSpec : WordSpec({
             pref.intPref.get() shouldBe pref.intPref.default
             pref.intPref.set(1)
             sharedData shouldBe mapOf(
-                "int" to 1,
+                pref.intPref.key to 1,
                 PreferenceModel.DATASTORE_VERSION to 1
             )
         }
@@ -174,7 +220,7 @@ class PreferenceModelSpec : WordSpec({
         "loading data" should {
             "get the correct value" {
                 sharedData[PreferenceModel.DATASTORE_VERSION] = 1
-                sharedData["enum"] = Enum.B.toString()
+                sharedData[pref.enumPref.key] = Enum.B.toString()
                 pref.initialize(context)
                 pref.isReady().shouldBeTrue()
                 pref.enumPref.get() shouldBe Enum.B
@@ -182,7 +228,7 @@ class PreferenceModelSpec : WordSpec({
 
             "fallback to default if it's not valid" {
                 sharedData[PreferenceModel.DATASTORE_VERSION] = 1
-                sharedData["enum"] = "string"
+                sharedData[pref.enumPref.key] = "string"
                 pref.initialize(context)
                 pref.isReady().shouldBeTrue()
                 pref.enumPref.get() shouldBe pref.enumPref.default

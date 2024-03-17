@@ -18,7 +18,7 @@ object ZipUtils {
         }
     }
 
-    internal fun zip(srcDir: File, zipOut: ZipOutputStream, base: String) {
+    private fun zip(srcDir: File, zipOut: ZipOutputStream, base: String) {
         val dir = File(srcDir, base)
         for (file in dir.listFiles() ?: arrayOf()) {
             val path = if (base.isBlank()) file.name else "$base/${file.name}"

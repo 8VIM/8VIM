@@ -9,7 +9,8 @@ interface PreferenceData<V : Any> {
     val serde: PreferenceSerDe<V>
     val key: String
     val default: V
-    val exported: Boolean
+    val canBeExported: Boolean
+    val canBeReset: Boolean
     fun get(): V
     fun getOrNull(): V?
     fun set(value: V, sync: Boolean = true)
@@ -88,7 +89,8 @@ internal class BooleanSharedPreferencePreferenceData(
     model: PreferenceModel,
     override val key: String,
     override val default: Boolean,
-    override val exported: Boolean = true
+    override val canBeExported: Boolean = true,
+    override val canBeReset: Boolean = true
 ) : SharedPreferencePreferenceData<Boolean>(model) {
     override val serde: PreferenceSerDe<Boolean> = BooleanPreferenceSerde
 }
@@ -97,7 +99,8 @@ internal class FloatSharedPreferencePreferenceData(
     model: PreferenceModel,
     override val key: String,
     override val default: Float,
-    override val exported: Boolean = true
+    override val canBeExported: Boolean = true,
+    override val canBeReset: Boolean = true
 ) : SharedPreferencePreferenceData<Float>(model) {
     override val serde: PreferenceSerDe<Float> = FloatPreferenceSerde
 }
@@ -106,7 +109,8 @@ internal class IntSharedPreferencePreferenceData(
     model: PreferenceModel,
     override val key: String,
     override val default: Int,
-    override val exported: Boolean = true
+    override val canBeExported: Boolean = true,
+    override val canBeReset: Boolean = true
 ) : SharedPreferencePreferenceData<Int>(model) {
     override val serde: PreferenceSerDe<Int> = IntPreferenceSerde
 }
@@ -115,7 +119,8 @@ internal class StringSharedPreferencePreferenceData(
     model: PreferenceModel,
     override val key: String,
     override val default: String,
-    override val exported: Boolean = true
+    override val canBeExported: Boolean = true,
+    override val canBeReset: Boolean = true
 ) : SharedPreferencePreferenceData<String>(model) {
     override val serde: PreferenceSerDe<String> = StringPreferenceSerde
 }
@@ -124,7 +129,8 @@ internal class StringSetSharedPreferencePreferenceData(
     model: PreferenceModel,
     override val key: String,
     override val default: Set<String>,
-    override val exported: Boolean = true
+    override val canBeExported: Boolean = true,
+    override val canBeReset: Boolean = true
 ) : SharedPreferencePreferenceData<Set<String>>(model) {
     override val serde: PreferenceSerDe<Set<String>> = StringSetPreferenceSerde
 }
@@ -134,5 +140,6 @@ internal open class CustomSharedPreferencePreferenceData<V : Any>(
     override val key: String,
     override val default: V,
     override val serde: PreferenceSerDe<V>,
-    override val exported: Boolean = true
+    override val canBeExported: Boolean = true,
+    override val canBeReset: Boolean = true
 ) : SharedPreferencePreferenceData<V>(model)

@@ -126,28 +126,18 @@ fun XpadLayout() = with(LocalDensity.current) {
                 return@pointerInteropFilter true
             }
             .drawWithContent {
-<<<<<<< HEAD
-                drawContent()
-=======
->>>>>>> master
                 if (controller.hasTrail && controller.trailPoints.isNotEmpty()) {
                     controller.drawTrail(this, controller.trailPoints)
                 }
                 controller.drawSectors(this, fg)
-<<<<<<< HEAD
-=======
                 drawContent()
->>>>>>> master
             }
     ) {
         val showIcons by prefs.keyboard.display.showSectorIcons.observeAsState()
         val showLetters by prefs.keyboard.display.showLettersOnWheel.observeAsState()
         val isSidebarOnLeft by prefs.keyboard.sidebar.isOnLeft.observeAsState()
-<<<<<<< HEAD
-=======
         val circleAutoResize by prefs.keyboard.circle.autoResize.observeAsState()
         val radiusMinSizeFactor by prefs.keyboard.circle.radiusMinSizeFactor.observeAsState()
->>>>>>> master
         val radiusSizeFactor by prefs.keyboard.circle.radiusSizeFactor.observeAsState()
         val xCentreOffset by prefs.keyboard.circle.xCentreOffset.observeAsState()
         val yCentreOffset by prefs.keyboard.circle.yCentreOffset.observeAsState()
@@ -158,15 +148,11 @@ fun XpadLayout() = with(LocalDensity.current) {
             keyboardWidth,
             keyboardHeight,
             isSidebarOnLeft,
-<<<<<<< HEAD
-            radiusSizeFactor,
-=======
             if (circleAutoResize && controller.isReducesCircleSize) {
                 radiusMinSizeFactor
             } else {
                 radiusSizeFactor
             },
->>>>>>> master
             xCentreOffset,
             yCentreOffset,
             characterHeight
@@ -251,10 +237,6 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
                 key.position.y.toDp()
             )
             .drawWithContent {
-<<<<<<< HEAD
-                drawContent()
-=======
->>>>>>> master
                 if (key.isSelected) {
                     val topLeft = key.position.copy(
                         x = -FONT_SIZE,
@@ -278,10 +260,7 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
                         style = letterSelectedStroke
                     )
                 }
-<<<<<<< HEAD
-=======
                 drawContent()
->>>>>>> master
             },
         text = text,
         color = if (key.isSelected) Color.Black else MaterialTheme.colorScheme.onBackground,

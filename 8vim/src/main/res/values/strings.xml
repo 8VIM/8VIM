@@ -86,13 +86,10 @@
     <string name="settings__keyboard__select__emoji__keyboard__title">Select emoji keyboard</string>
     <string name="settings__keyboard__select__emoji__keyboard__summary">Chosen keyboard will be accessible through
         keyboard\'s emoji icon </string>
-<<<<<<< HEAD
-=======
     <string name="settings__keyboard__circle__auto_resize__title">Auto resize circle</string>
     <string name="settings__keyboard__circle__auto_resize__summary__on">Reduce the circle size when a movement starting from it</string>
     <string name="settings__keyboard__circle__auto_resize__summary__off">Keep the circle size all time</string>
 
->>>>>>> master
     <string name="settings__keyboard__circle__size__title">Circle size</string>
     <string name="settings__keyboard__circle__size__summary">Resize circle according to your needs</string>
 
@@ -152,7 +149,6 @@
     <string name="settings__gesture__cursor__move__by__word__title">Cursor movement behavior</string>
     <string name="settings__gesture__cursor__move__by__word__summary__on">Move the cursor word by word</string>
     <string name="settings__gesture__cursor__move__by__word__summary__off">Move the cursor character by character</string>
-<<<<<<< HEAD
 
     <string name="settings__backup_and_restore__title" comment="Title of Advanced screen">Back up &amp; Restore</string>
     <string name="settings__backup_and_restore__back_up__title" comment="Title of Back up screen">Back up data</string>
@@ -163,6 +159,9 @@
     <string name="settings__backup_and_restore__restore__summary">Restore preferences and customizations from a backup archive</string>
     <string name="settings__backup_and_restore__restore__failure">Failed to restore data: {error_message}</string>
     <string name="settings__backup_and_restore__restore__different_version">This backup archive was generated with a more recent version of 8VIM</string>
-=======
->>>>>>> master
+    <string name="settings__backup_and_restore__reset__title">Reset settings to default</string>
+    <string name="settings__backup_and_restore_restore__success">Successfully restored backup!</string>
+    <string name="dialog__confirm__title">Confirm</string>
+    <string name="resetting_settings__description">The settings will be reset to their default value. All custom layouts and clipboard history  will be lost.</string>
+    <string name="settings__backup_and_restore__reset">Settings have been reset</string>
 </resources>

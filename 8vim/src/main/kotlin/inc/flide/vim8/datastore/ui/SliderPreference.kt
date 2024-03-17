@@ -3,19 +3,13 @@ package inc.flide.vim8.datastore.ui
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-<<<<<<< HEAD
-=======
 import androidx.compose.material3.RangeSlider
->>>>>>> master
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-<<<<<<< HEAD
-=======
 import androidx.compose.runtime.mutableStateOf
->>>>>>> master
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -26,8 +20,6 @@ import inc.flide.vim8.datastore.model.observeAsState
 import kotlin.math.roundToInt
 
 @Composable
-<<<<<<< HEAD
-=======
 internal fun <T : PreferenceModel, V> PreferenceUiScope<T>.RangeSliderPreference(
     minPref: PreferenceData<V>,
     maxPref: PreferenceData<V>,
@@ -120,7 +112,6 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.RangeSliderPreference(
 }
 
 @Composable
->>>>>>> master
 internal fun <T : PreferenceModel, V> PreferenceUiScope<T>.SliderPreference(
     pref: PreferenceData<V>,
     modifier: Modifier,
@@ -159,15 +150,10 @@ internal fun <T : PreferenceModel, V> PreferenceUiScope<T>.SliderPreference(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             value = sliderValue,
-<<<<<<< HEAD
-            onValueChange = { sliderValue = it },
-            onValueChangeFinished = { pref.set(convertToV(sliderValue)) },
-=======
             onValueChange = {
                 sliderValue = it
                 pref.set(convertToV(sliderValue))
             },
->>>>>>> master
             valueRange = min.toFloat()..max.toFloat(),
             steps = ((max.toFloat() - min.toFloat()) / stepIncrement.toFloat()).toInt() - 1,
             enabled = isEnabled

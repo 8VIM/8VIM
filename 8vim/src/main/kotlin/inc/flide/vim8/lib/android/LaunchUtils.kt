@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import inc.flide.vim8.R
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -17,7 +18,11 @@ fun Context.launchUrl(url: String) {
     try {
         this.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
-        showToast(R.string.general__no_browser_app_found_for_url, "url" to url)
+        Toast.makeText(
+            this,
+            this.stringRes(R.string.general__no_browser_app_found_for_url, "url" to url),
+            Toast.LENGTH_LONG
+        ).show()
     }
 }
 
@@ -33,20 +38,7 @@ inline fun <T : Any> Context.launchActivity(
         intentModifier(intent)
         this.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
-        showToast(e.localizedMessage ?: "")
-    }
-}
-
-fun Context.shareApp(text: String) {
-    try {
-        val intent = Intent(Intent.ACTION_SEND).also {
-            it.type = "text/plain"
-            it.putExtra(Intent.EXTRA_SUBJECT, R.string.app_name)
-            it.putExtra(Intent.EXTRA_TEXT, text)
-        }
-        this.startActivity(Intent.createChooser(intent, "Share ${R.string.app_name}"))
-    } catch (e: ActivityNotFoundException) {
-        showToast(e.localizedMessage ?: "")
+        Toast.makeText(this, e.localizedMessage, Toast.LENGTH_LONG).show()
     }
 }
 

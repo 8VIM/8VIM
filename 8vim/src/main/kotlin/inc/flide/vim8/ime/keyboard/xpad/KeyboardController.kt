@@ -10,10 +10,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-<<<<<<< HEAD
-=======
 import arrow.core.firstOrNone
->>>>>>> master
 import arrow.core.getOrElse
 import arrow.core.getOrNone
 import inc.flide.vim8.appPreferenceModel
@@ -107,12 +104,8 @@ private val ROTATION_MOVEMENT_SEQUENCES = setOf(
 )
 
 class KeyboardController(context: Context) : GlideGesture.Listener {
-<<<<<<< HEAD
-    val prefs by appPreferenceModel()
-=======
     var isReducesCircleSize by mutableStateOf(false)
     private val prefs by appPreferenceModel()
->>>>>>> master
     private val keyboardManager by context.keyboardManager()
     private val themeManager by context.themeManager()
 
@@ -185,14 +178,11 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 currentFingerPosition = currentPosition
                 val isFingerPositionChanged = lastKnownFingerPosition !== currentFingerPosition
                 if (isFingerPositionChanged) {
-<<<<<<< HEAD
-=======
                     if (!isReducesCircleSize && movementSequence.firstOrNone()
                         .isSome { it == FingerPosition.INSIDE_CIRCLE }
                     ) {
                         isReducesCircleSize = true
                     }
->>>>>>> master
                     interruptLongPress()
                     movementSequence.add(currentFingerPosition)
                     keyboard.findLayer(movementSequence)
@@ -262,10 +252,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             MotionEvent.ACTION_UP -> {
                 interruptLongPress()
                 resetKey()
-<<<<<<< HEAD
-=======
                 isReducesCircleSize = false
->>>>>>> master
                 currentFingerPosition = FingerPosition.NO_TOUCH
                 movementSequence.add(currentFingerPosition)
                 processMovementSequence(movementSequence)
@@ -279,10 +266,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 job?.cancel()
                 job = null
                 resetKey()
-<<<<<<< HEAD
-=======
                 isReducesCircleSize = false
->>>>>>> master
                 currentMovementSequenceType = MovementSequenceType.NO_MOVEMENT
                 keyboard.reset()
             }

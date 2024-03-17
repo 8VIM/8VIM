@@ -151,11 +151,7 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
                     modifier = Modifier
                         .wrapContentSize()
                         .align(Alignment.Center),
-<<<<<<< HEAD
-                    text = key.action.text,
-=======
                     text = key.alternateText ?: key.action.text,
->>>>>>> master
                     fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center

@@ -14,6 +14,7 @@ import inc.flide.vim8.ime.layout.parsers.CborParser
 import inc.flide.vim8.ime.layout.parsers.YamlParser
 import inc.flide.vim8.ime.theme.ThemeManager
 import inc.flide.vim8.lib.android.tryOrNull
+import inc.flide.vim8.lib.backup.BackupManager
 import inc.flide.vim8.theme.ThemeMode
 import java.lang.ref.WeakReference
 
@@ -26,6 +27,7 @@ class VIM8Application : Application() {
     val cache = lazy { Cache(CborParser(), this) }
     val layoutLoader = lazy { YamlLayoutLoader(layoutParser, cache.value, this) }
     val clipboardManager = lazy { ClipboardManager(this) }
+    val backupManager = lazy { BackupManager(this) }
     val themeManager = lazy { ThemeManager(this) }
     val keyboardManager = lazy { KeyboardManager(this) }
     val editorInstance = lazy { EditorInstance(this) }
@@ -70,4 +72,5 @@ fun Context.layoutLoader() = this.vim8Application().layoutLoader
 fun Context.themeManager() = this.vim8Application().themeManager
 fun Context.keyboardManager() = this.vim8Application().keyboardManager
 fun Context.clipboardManager() = this.vim8Application().clipboardManager
+fun Context.backupManager() = this.vim8Application().backupManager
 fun Context.editorInstance() = this.vim8Application().editorInstance

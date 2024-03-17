@@ -61,7 +61,7 @@ abstract class PreferenceModel(val version: Int) :
 
     var exportedKeys: Map<String, Any?>
         get() = sharedPreferences.all.entries
-            .filter { (key, _) -> registry[key]?.exported ?: false }
+            .filter { (key, _) -> registry[key]?.canBeExported ?: false }
             .associateBy({ it.key }, { it.value }) + (DATASTORE_VERSION to version)
         set(value) {
             val editor = sharedPreferences.edit()
@@ -71,7 +71,6 @@ abstract class PreferenceModel(val version: Int) :
                 }
             }
             (value[DATASTORE_VERSION] as Int?)?.let { editor.putInt(DATASTORE_VERSION, it).apply() }
-            migrate()
         }
 
     private fun registryAdd(prefData: PreferenceData<*>) {
@@ -103,9 +102,11 @@ abstract class PreferenceModel(val version: Int) :
     protected fun boolean(
         key: String,
         default: Boolean,
-        exported: Boolean = true
+        canBeExported: Boolean = true,
+        canBeReset: Boolean = true
     ): PreferenceData<Boolean> {
-        val prefData = BooleanSharedPreferencePreferenceData(this, key, default, exported)
+        val prefData =
+            BooleanSharedPreferencePreferenceData(this, key, default, canBeExported, canBeReset)
         registryAdd(prefData)
         return prefData
     }
@@ -113,9 +114,16 @@ abstract class PreferenceModel(val version: Int) :
     protected fun float(
         key: String,
         default: Float,
-        exported: Boolean = true
+        canBeExported: Boolean = true,
+        canBeReset: Boolean = true
     ): PreferenceData<Float> {
-        val prefData = FloatSharedPreferencePreferenceData(this, key, default, exported)
+        val prefData = FloatSharedPreferencePreferenceData(
+            this,
+            key,
+            default,
+            canBeExported,
+            canBeReset
+        )
         registryAdd(prefData)
         return prefData
     }
@@ -123,9 +131,16 @@ abstract class PreferenceModel(val version: Int) :
     protected fun int(
         key: String,
         default: Int,
-        exported: Boolean = true
+        canBeExported: Boolean = true,
+        canBeReset: Boolean = true
     ): PreferenceData<Int> {
-        val prefData = IntSharedPreferencePreferenceData(this, key, default, exported)
+        val prefData = IntSharedPreferencePreferenceData(
+            this,
+            key,
+            default,
+            canBeExported,
+            canBeReset
+        )
         registryAdd(prefData)
         return prefData
     }
@@ -133,9 +148,11 @@ abstract class PreferenceModel(val version: Int) :
     protected fun string(
         key: String,
         default: String,
-        exported: Boolean = true
+        canBeExported: Boolean = true,
+        canBeReset: Boolean = true
     ): PreferenceData<String> {
-        val prefData = StringSharedPreferencePreferenceData(this, key, default, exported)
+        val prefData =
+            StringSharedPreferencePreferenceData(this, key, default, canBeExported, canBeReset)
         registryAdd(prefData)
         return prefData
     }
@@ -143,9 +160,11 @@ abstract class PreferenceModel(val version: Int) :
     protected fun stringSet(
         key: String,
         default: Set<String>,
-        exported: Boolean = true
+        canBeExported: Boolean = true,
+        canBeReset: Boolean = true
     ): PreferenceData<Set<String>> {
-        val prefData = StringSetSharedPreferencePreferenceData(this, key, default, exported)
+        val prefData =
+            StringSetSharedPreferencePreferenceData(this, key, default, canBeExported, canBeReset)
         registryAdd(prefData)
         return prefData
     }
@@ -153,7 +172,8 @@ abstract class PreferenceModel(val version: Int) :
     protected inline fun <reified V : Enum<V>> enum(
         key: String,
         default: V,
-        exported: Boolean = true
+        canBeExported: Boolean = true,
+        canBeReset: Boolean = true
     ): PreferenceData<V> {
         val serde = object : PreferenceSerDe<V> {
             override fun serialize(editor: Editor, key: String, value: V) {
@@ -174,18 +194,31 @@ abstract class PreferenceModel(val version: Int) :
                 return tryOrNull { enumValueOf<V>(value.toString()) }
             }
         }
-        return custom(key, default, serde, exported)
+        return custom(key, default, serde, canBeExported, canBeReset)
     }
 
     protected fun <V : Any> custom(
         key: String,
         default: V,
         serde: PreferenceSerDe<V>,
-        exported: Boolean = true
+        canBeExported: Boolean = true,
+        canBeReset: Boolean = true
     ): PreferenceData<V> {
-        val prefData = CustomSharedPreferencePreferenceData(this, key, default, serde, exported)
+        val prefData =
+            CustomSharedPreferencePreferenceData(
+                this,
+                key,
+                default,
+                serde,
+                canBeExported,
+                canBeReset
+            )
         registryAdd(prefData)
         return prefData
+    }
+
+    fun reset() {
+        registry.forEach { (_, pref) -> if (pref.canBeReset) pref.reset() }
     }
 
     fun initialize(context: Context) {

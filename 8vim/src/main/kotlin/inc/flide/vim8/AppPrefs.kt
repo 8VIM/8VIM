@@ -20,11 +20,7 @@ import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
 
-<<<<<<< HEAD
-class AppPrefs : PreferenceModel(4) {
-=======
 class AppPrefs : PreferenceModel(5) {
->>>>>>> master
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
@@ -36,7 +32,7 @@ class AppPrefs : PreferenceModel(5) {
         val history = stringSet(
             key = "prefs_clipboard_history",
             default = HashSet(),
-            exported = false
+            canBeExported = false
         )
         val enabled = boolean(
             key = "prefs_clipboard_enabled",
@@ -50,7 +46,7 @@ class AppPrefs : PreferenceModel(5) {
         val cache = stringSet(
             key = "prefs_layout_cache",
             default = emptySet(),
-            exported = false
+            canBeExported = false
         )
 
         val current = custom(
@@ -199,9 +195,15 @@ class AppPrefs : PreferenceModel(5) {
     }
 
     inner class Internal {
-        val isImeSetup = boolean(key = "internal__is_ime_set_up", default = false)
+        val isImeSetup =
+            boolean(key = "internal__is_ime_set_up", default = false, canBeReset = false)
         val versionCode =
-            int(key = "internal__versionCode", default = BuildConfig.VERSION_CODE, exported = false)
+            int(
+                key = "internal__versionCode",
+                default = BuildConfig.VERSION_CODE,
+                canBeExported = false,
+                canBeReset = false
+            )
     }
 
     override fun migrate(
