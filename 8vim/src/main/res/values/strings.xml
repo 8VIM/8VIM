@@ -88,17 +88,15 @@
     <string name="settings__keyboard__select__emoji__keyboard__summary">Chosen keyboard will be accessible through
         keyboard\'s emoji icon </string>
 
-    <string name="settings__keyboard__circle__auto_resize_group__title">Circle auto resizing and dynamic centre</string>
+    <string name="settings__keyboard__circle__auto_resize_group__title">Circle auto resizing and dynamic circle</string>
     <string name="settings__keyboard__circle__auto_resize__title">Auto resize circle</string>
     <string name="settings__keyboard__circle__auto_resize__summary__on">Reduce the circle size when a movement starting from it</string>
     <string name="settings__keyboard__circle__auto_resize__summary__off">Keep the circle size all time</string>
 
-    <string name="settings__keyboard__circle__dynamic_centre__title">Dynamically move the circle to reduce crossing</string>
-    <string name="settings__keyboard__circle__dynamic_centre__summary__on">Enabled</string>
-    <string name="settings__keyboard__circle__dynamic_centre__summary__off">Disabled</string>
+    <string name="settings__keyboard__circle__dynamic_centre__title">Dynamically move the circle</string>
+    <string name="settings__keyboard__circle__dynamic_centre__summary">Move the circle to where it has been first pressed</string>
 
-    <string name="settings__keyboard__circle__dynamic_centre_max_offset_ratio__title">Dynamic centre maximum offset ratio</string>
-    <string name="settings__keyboard__circle__dynamic_centre_max_offset_ratio__summary">Maximum offset ratio from the current circle size</string>
+    <string name="settings__keyboard__circle__dynamic_centre_overlay_enabled__title">Show an overlay of the dynamic circle</string>
 
     <string name="settings__keyboard__circle__size__title">Circle size</string>
     <string name="settings__keyboard__circle__size__summary">Resize circle according to your needs</string>

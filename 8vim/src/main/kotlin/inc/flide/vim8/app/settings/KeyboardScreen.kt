@@ -27,7 +27,7 @@ fun KeyboardScreen() = Screen {
     val context = LocalContext.current
     content {
         val circleAutoResize by prefs.keyboard.circle.autoResize.observeAsState()
-        val dynamicCentre by prefs.keyboard.circle.dynamicCentre.observeAsState()
+        val isDynamicCircleEnabled by prefs.keyboard.circle.dynamic.isEnabled.observeAsState()
         val hapticEnabled by prefs.inputFeedback.hapticEnabled.observeAsState()
         val soundEnabled by prefs.inputFeedback.soundEnabled.observeAsState()
 
@@ -96,27 +96,17 @@ fun KeyboardScreen() = Screen {
             }
 
             SwitchPreference(
-                prefs.keyboard.circle.dynamicCentre,
+                prefs.keyboard.circle.dynamic.isEnabled,
                 title = stringRes(R.string.settings__keyboard__circle__dynamic_centre__title),
-                summaryOff = stringRes(
-                    R.string.settings__keyboard__circle__dynamic_centre__summary__off
-                ),
-                summaryOn = stringRes(
-                    R.string.settings__keyboard__circle__dynamic_centre__summary__on
-                )
+                summary = stringRes(R.string.settings__keyboard__circle__dynamic_centre__summary)
             )
-            SliderPreference(
-                pref = prefs.keyboard.circle.dynamicCentreMaxOffsetRatio,
+
+            SwitchPreference(
+                prefs.keyboard.circle.dynamic.isOverlayEnabled,
                 title = stringRes(
-                    R.string.settings__keyboard__circle__dynamic_centre_max_offset_ratio__title
+                    R.string.settings__keyboard__circle__dynamic_centre_overlay_enabled__title
                 ),
-                summary = stringRes(
-                    R.string.settings__keyboard__circle__dynamic_centre_max_offset_ratio__summary
-                ),
-                min = 0,
-                max = 100,
-                visibleIf = { dynamicCentre },
-                toText = { "$it%" }
+                visibleIf = { isDynamicCircleEnabled }
             )
         }
 

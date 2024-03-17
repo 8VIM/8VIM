@@ -130,6 +130,8 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
     private val inputEventDispatcher get() = keyboardManager.inputEventDispatcher
     private val glideGesture = GlideGesture.Detector(this)
     private val showTrail: Boolean get() = prefs.keyboard.trail.isVisible.get()
+    private val dynamicCentreOverlayEnabled: Boolean
+        get() = prefs.keyboard.circle.dynamic.isOverlayEnabled.get()
     lateinit var keyboard: Keyboard
 
     var hasTrail by mutableStateOf(false)
@@ -144,7 +146,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         )
 
         drawScope.drawPath(keyboard.path, color, style = drawStyle)
-        if (keyboard.circle.hasVirtualCentre) {
+        if (keyboard.circle.hasVirtualCentre && dynamicCentreOverlayEnabled) {
             drawScope.drawCircle(
                 color.blendARGB(backgroundColor, 0.65f).copy(alpha = 0.75f),
                 keyboard.circle.radius,

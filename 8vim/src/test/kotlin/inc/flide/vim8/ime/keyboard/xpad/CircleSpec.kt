@@ -15,7 +15,7 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 
 class CircleSpec : FunSpec({
-    val dynamicCentre = mockk<PreferenceData<Boolean>>(relaxed = true)
+    val isDynamicCircleEnabled = mockk<PreferenceData<Boolean>>(relaxed = true)
     val circle = Keyboard.Circle(radius = 10f)
 
     beforeSpec {
@@ -23,16 +23,17 @@ class CircleSpec : FunSpec({
         val prefs = mockk<AppPrefs>()
         val keyboardPref = mockk<AppPrefs.Keyboard>(relaxed = true)
         val circlePref = mockk<AppPrefs.Keyboard.Circle>(relaxed = true)
+        val dynamicPref = mockk<AppPrefs.Keyboard.Circle.Dynamic>(relaxed = true)
 
         every { prefs.keyboard } returns keyboardPref
         every { keyboardPref.circle } returns circlePref
-        every { circlePref.dynamicCentre } returns dynamicCentre
-        every { circlePref.dynamicCentreOffsetRatio } returns 0.25f
+        every { circlePref.dynamic } returns dynamicPref
+        every { dynamicPref.isEnabled } returns isDynamicCircleEnabled
         every { appPreferenceModel() } returns CachedPreferenceModel(prefs)
     }
 
     beforeTest {
-        clearMocks(dynamicCentre)
+        clearMocks(isDynamicCircleEnabled)
     }
 
     context("is point inside circle") {
@@ -72,23 +73,13 @@ class CircleSpec : FunSpec({
                 expected = Offset.Zero
             ),
             VirtualCentreTestParam(
-                shouldInit = false,
-                isDynamic = false,
-                point = Offset.Zero,
-                expected = Offset.Zero
-            ),
-            VirtualCentreTestParam(
                 point = Offset(2f, 0f),
-                expected = Offset(-1.0f, 0f)
+                expected = Offset(1.0f, 0f)
             )
-        ) { (shouldInit, isDynamic, point, expected) ->
+        ) { (isDynamic, point, expected) ->
             val circleWithCentre = Keyboard.Circle(centre, 10f)
-            every { dynamicCentre.get() } returns isDynamic
-            if (shouldInit) {
-                circleWithCentre.initVirtual(point)
-            } else {
-                circleWithCentre.computeVirtualCentre(point)
-            }
+            every { isDynamicCircleEnabled.get() } returns isDynamic
+            circleWithCentre.initVirtual(point)
             val expectedCentre = centre + expected
             val expectedHasCentre = expected != Offset.Zero
             circleWithCentre.hasVirtualCentre shouldBe expectedHasCentre
@@ -98,7 +89,6 @@ class CircleSpec : FunSpec({
 })
 
 private data class VirtualCentreTestParam(
-    val shouldInit: Boolean = true,
     val isDynamic: Boolean = true,
     val point: Offset,
     val expected: Offset

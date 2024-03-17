@@ -206,33 +206,23 @@ class Keyboard(private val context: Context) {
     data class Circle(var centre: Offset = Offset.Zero, var radius: Float = 0f) {
         private val prefs by appPreferenceModel()
         private var offset: Offset = Offset.Zero
-        private var distanceFactor: Float = 0.25f
         val virtualCentre: Offset
             get() = centre + offset
         val hasVirtualCentre: Boolean
-            get() = prefs.keyboard.circle.dynamicCentre.get() && offset != Offset.Zero
+            get() = prefs.keyboard.circle.dynamic.isEnabled.get() && offset != Offset.Zero
 
         fun initVirtual(point: Offset) {
-            if (!prefs.keyboard.circle.dynamicCentre.get()) return
-            distanceFactor =
-                (sqrt((point - centre).getDistanceSquared()) / radius).coerceAtMost(
-                    prefs.keyboard.circle.dynamicCentreOffsetRatio
-                )
-            computeVirtualCentre(point)
-        }
-
-        fun reset() {
-            distanceFactor = 0.25f
-            offset = Offset.Zero
-        }
-
-        fun computeVirtualCentre(point: Offset) {
-            if (!prefs.keyboard.circle.dynamicCentre.get()) return
+            if (!prefs.keyboard.circle.dynamic.isEnabled.get()) return
+            val distanceFactor = (sqrt((point - centre).getDistanceSquared()) / radius)
             val radius = this.radius * distanceFactor
             val x = (point.x - centre.x).toDouble()
             val y = (point.y - centre.y).toDouble()
             val angle = (atan2(y, x)).toFloat()
             offset = Offset(x = radius * cos(angle), y = radius * sin(angle))
+        }
+
+        fun reset() {
+            offset = Offset.Zero
         }
 
         fun isPointInsideCircle(point: Offset): Boolean {

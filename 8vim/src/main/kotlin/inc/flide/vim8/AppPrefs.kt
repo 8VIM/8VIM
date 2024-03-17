@@ -139,16 +139,7 @@ class AppPrefs : PreferenceModel(6) {
         }
 
         inner class Circle {
-            val dynamicCentre = boolean(
-                key = "prefs_keyboard_circle_dynamic_centre",
-                default = false
-            )
-            val dynamicCentreMaxOffsetRatio = int(
-                key = "prefs_keyboard_circle_dynamic_centre_max_offset_ratio",
-                default = 100
-            )
-            val dynamicCentreOffsetRatio: Float
-                get() = dynamicCentreMaxOffsetRatio.get().coerceIn(0..100) / 100f
+            val dynamic = Dynamic()
 
             val autoResize = boolean(
                 key = "prefs_keyboard_circle_auto_resize",
@@ -170,6 +161,16 @@ class AppPrefs : PreferenceModel(6) {
                 key = "prefs_keyboard_circle_centre_y_offset",
                 default = 0
             )
+            inner class Dynamic {
+                val isEnabled = boolean(
+                    key = "prefs_keyboard_circle_dynamic_is_enabled",
+                    default = false
+                )
+                val isOverlayEnabled = boolean(
+                    key = "prefs_keyboard_circle_dynamic_overlay_enabled",
+                    default = true
+                )
+            }
         }
 
         inner class CustomColors {
