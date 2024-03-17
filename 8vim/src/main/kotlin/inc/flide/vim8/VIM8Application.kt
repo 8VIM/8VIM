@@ -4,12 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.content.ContextWrapper
 import androidx.appcompat.app.AppCompatDelegate
-import inc.flide.vim8.ime.KeyboardTheme
-import inc.flide.vim8.ime.YamlLayoutLoader
 import inc.flide.vim8.ime.clipboard.ClipboardManager
 import inc.flide.vim8.ime.editor.EditorInstance
 import inc.flide.vim8.ime.keyboard.text.KeyboardManager
 import inc.flide.vim8.ime.layout.Cache
+import inc.flide.vim8.ime.layout.YamlLayoutLoader
 import inc.flide.vim8.ime.layout.parsers.CborParser
 import inc.flide.vim8.ime.layout.parsers.YamlParser
 import inc.flide.vim8.ime.theme.ThemeManager
@@ -34,7 +33,6 @@ class VIM8Application : Application() {
         super.onCreate()
         vim8ApplicationReference = WeakReference(this)
         prefs.initialize(this)
-        KeyboardTheme.initialize(this)
 
         when (prefs.theme.mode.get()) {
             ThemeMode.DARK -> AppCompatDelegate.setDefaultNightMode(

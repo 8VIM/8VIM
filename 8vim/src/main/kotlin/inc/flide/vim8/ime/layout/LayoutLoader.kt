@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime
+package inc.flide.vim8.ime.layout
 
 import android.content.Context
 import arrow.core.Either
@@ -8,7 +8,6 @@ import arrow.core.left
 import arrow.core.raise.catch
 import arrow.core.raise.either
 import inc.flide.vim8.R
-import inc.flide.vim8.ime.layout.Cache
 import inc.flide.vim8.ime.layout.models.KeyboardAction
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.LayerLevel

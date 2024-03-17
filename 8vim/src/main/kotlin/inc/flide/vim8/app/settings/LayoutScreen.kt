@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -47,14 +47,24 @@ fun LayoutScreen() = Screen {
                     title = stringRes(R.string.settings__layouts__select__title),
                     summary = stringRes(R.string.settings__layouts__select__summary),
                     onClick = { show() },
-                    trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+                    trailing = {
+                        Icon(
+                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = null
+                        )
+                    }
                 )
             }
             Preference(
                 title = stringRes(R.string.settings__layouts__load_custom__title),
                 summary = stringRes(R.string.settings__layouts__load_custom__summary),
                 onClick = { fileSelector() },
-                trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+                trailing = {
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null
+                    )
+                }
             )
         }
     }

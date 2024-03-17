@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.views
+package inc.flide.vim8.ime.keyboard.view
 
 import android.view.KeyEvent
 import androidx.compose.foundation.layout.Column

@@ -1,24 +1,21 @@
 package inc.flide.vim8.ime.input
 
 import android.os.SystemClock
-import android.view.ViewConfiguration
 import inc.flide.vim8.ime.layout.models.KeyboardAction
 import inc.flide.vim8.lib.kotlin.guardedByLock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 class InputEventDispatcher {
     companion object {
-        private val KeyRepeatTimeout = ViewConfiguration.getKeyRepeatTimeout().toLong()
-        private val KeyRepeatDelay = ViewConfiguration.getKeyRepeatDelay().toLong()
+        val KeyRepeatTimeout = 400L
+        val KeyRepeatDelay = 50L
     }
 
     private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
@@ -29,8 +26,7 @@ class InputEventDispatcher {
     var keyEventReceiver: InputKeyEventReceiver? = null
 
     fun sendDown(
-        keyboardAction: KeyboardAction,
-        onRepeat: () -> Boolean = { true }
+        keyboardAction: KeyboardAction
     ) = runBlocking {
         val eventTime = SystemClock.uptimeMillis()
         val result = pressedKeys.withLock { pressedKeys ->
@@ -39,11 +35,8 @@ class InputEventDispatcher {
                 pressedKeyInfo.job = scope.launch {
                     delay(KeyRepeatTimeout)
                     while (isActive) {
-                        val onRepeatResult = withContext(Dispatchers.Main) { onRepeat() }
-                        if (onRepeatResult) {
-                            keyEventReceiver?.onInputKeyDown(keyboardAction)
-                            pressedKeyInfo.blockUp = true
-                        }
+                        keyEventReceiver?.onInputKeyDown(keyboardAction, true)
+                        pressedKeyInfo.blockUp = true
                         delay(KeyRepeatDelay)
                     }
                 }
@@ -52,7 +45,7 @@ class InputEventDispatcher {
             return@withLock pressedKeyInfo
         }
         if (result != null) {
-            keyEventReceiver?.onInputKeyDown(keyboardAction)
+            keyEventReceiver?.onInputKeyDown(keyboardAction, false)
             lastKeyEventDown = EventData(eventTime, keyboardAction)
         }
         result
@@ -67,25 +60,20 @@ class InputEventDispatcher {
             return@withLock false
         }
         if (result) {
-            keyEventReceiver?.onInputKeyUp(keyboardAction)
+            keyEventReceiver?.onInputKeyUp(keyboardAction, false)
             lastKeyEventUp = EventData(SystemClock.uptimeMillis(), keyboardAction)
         }
     }
 
-    fun sendDownUp(keyboardAction: KeyboardAction) = runBlocking {
+    fun sendDownUp(keyboardAction: KeyboardAction, repeat: Boolean = false) = runBlocking {
         pressedKeys.withLock { pressedKeys ->
             pressedKeys.remove(keyboardAction)?.also { it.cancelJobs() }
         }
         val eventData = EventData(SystemClock.uptimeMillis(), keyboardAction)
-        keyEventReceiver?.onInputKeyDown(keyboardAction)
+        keyEventReceiver?.onInputKeyDown(keyboardAction, repeat)
         lastKeyEventDown = eventData
-        keyEventReceiver?.onInputKeyUp(keyboardAction)
+        keyEventReceiver?.onInputKeyUp(keyboardAction, repeat)
         lastKeyEventUp = eventData
-    }
-
-    fun close() {
-        keyEventReceiver = null
-        scope.cancel()
     }
 
     data class PressedKeyInfo(
@@ -105,6 +93,6 @@ class InputEventDispatcher {
 }
 
 interface InputKeyEventReceiver {
-    fun onInputKeyDown(keyboardAction: KeyboardAction)
-    fun onInputKeyUp(keyboardAction: KeyboardAction)
+    fun onInputKeyDown(keyboardAction: KeyboardAction, repeat: Boolean)
+    fun onInputKeyUp(keyboardAction: KeyboardAction, repeat: Boolean)
 }

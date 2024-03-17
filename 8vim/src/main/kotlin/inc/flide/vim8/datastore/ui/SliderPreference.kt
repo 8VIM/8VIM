@@ -124,6 +124,7 @@ internal fun <T : PreferenceModel, V> PreferenceUiScope<T>.SliderPreference(
     min: V,
     max: V,
     stepIncrement: V,
+    toText: (V) -> String,
     convertToV: (Float) -> V
 ) where V : Number, V : Comparable<V> {
     val prefValue by pref.observeAsState()
@@ -140,7 +141,7 @@ internal fun <T : PreferenceModel, V> PreferenceUiScope<T>.SliderPreference(
             enabledIf = enabledIf,
             trailing = {
                 Text(
-                    text = convertToV(sliderValue).toString()
+                    text = toText(convertToV(sliderValue))
                 )
             }
         )
@@ -173,7 +174,8 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.SliderPreference(
     visibleIf: PreferenceDataEvaluator = { true },
     min: Int,
     max: Int,
-    stepIncrement: Int = 1
+    stepIncrement: Int = 1,
+    toText: (Int) -> String = { it.toString() }
 ) {
     SliderPreference(
         pref = pref,
@@ -186,7 +188,8 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.SliderPreference(
         visibleIf = visibleIf,
         min = min,
         max = max,
-        stepIncrement = stepIncrement
+        stepIncrement = stepIncrement,
+        toText = toText
     ) {
         try {
             it.roundToInt()

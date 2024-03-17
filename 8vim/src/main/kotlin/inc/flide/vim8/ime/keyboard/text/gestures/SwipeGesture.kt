@@ -4,9 +4,9 @@ import android.content.res.Resources
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import androidx.compose.ui.geometry.Size
-import inc.flide.vim8.lib.Pointer
-import inc.flide.vim8.lib.PointerMap
-import inc.flide.vim8.lib.util.ViewUtils
+import inc.flide.vim8.lib.geometry.Pointer
+import inc.flide.vim8.lib.geometry.PointerMap
+import inc.flide.vim8.lib.geometry.px2dp
 import kotlin.math.abs
 import kotlin.math.atan2
 
@@ -15,7 +15,7 @@ abstract class SwipeGesture {
         private var pointerMap: PointerMap<GesturePointer> = PointerMap { GesturePointer() }
         private val velocityTracker: VelocityTracker = VelocityTracker.obtain()
         private val thresholdSpeed =
-            ViewUtils.px2dp(Resources.getSystem().displayMetrics.density * 500)
+            (Resources.getSystem().displayMetrics.density * 500).px2dp()
 
         fun onTouchEvent(event: MotionEvent) {
             if (event.actionMasked == MotionEvent.ACTION_DOWN) {
@@ -26,8 +26,8 @@ abstract class SwipeGesture {
 
         fun onTouchDown(event: MotionEvent, pointer: Pointer) {
             pointerMap.add(pointer.id, pointer.index)?.let { gesturePointer ->
-                gesturePointer.firstX = ViewUtils.px2dp(event.getX(pointer.index))
-                gesturePointer.firstY = ViewUtils.px2dp(event.getY(pointer.index))
+                gesturePointer.firstX = (event.getX(pointer.index).px2dp())
+                gesturePointer.firstY = (event.getY(pointer.index).px2dp())
                 gesturePointer.lastX = gesturePointer.firstX
                 gesturePointer.lastY = gesturePointer.firstY
             }
@@ -36,8 +36,8 @@ abstract class SwipeGesture {
         fun onTouchMove(event: MotionEvent, pointer: Pointer): Boolean {
             pointerMap.findById(pointer.id)?.let { gesturePointer ->
                 gesturePointer.index = pointer.index
-                val currentX = ViewUtils.px2dp(event.getX(pointer.index))
-                val currentY = ViewUtils.px2dp(event.getY(pointer.index))
+                val currentX = event.getX(pointer.index).px2dp()
+                val currentY = event.getY(pointer.index).px2dp()
                 gesturePointer.lastX = currentX
                 gesturePointer.lastY = currentY
 
@@ -48,24 +48,22 @@ abstract class SwipeGesture {
 
         fun onTouchUp(event: MotionEvent, pointer: Pointer, size: Size): Boolean {
             pointerMap.findById(pointer.id)?.let { gesturePointer ->
-                val currentX = ViewUtils.px2dp(event.getX(pointer.index))
-                val currentY = ViewUtils.px2dp(event.getY(pointer.index))
+                val currentX = event.getX(pointer.index).px2dp()
+                val currentY = event.getY(pointer.index).px2dp()
                 val absDiffX = currentX - gesturePointer.firstX
                 val absDiffY = currentY - gesturePointer.firstY
                 velocityTracker.computeCurrentVelocity(1000)
-                val velocityX = ViewUtils.px2dp(velocityTracker.getXVelocity(pointer.id))
-                val velocityY = ViewUtils.px2dp(velocityTracker.getYVelocity(pointer.id))
+                val velocityX = velocityTracker.getXVelocity(pointer.id).px2dp()
+                val velocityY = velocityTracker.getYVelocity(pointer.id).px2dp()
                 pointerMap.removeById(pointer.id)
-                return if ((
-                    abs(absDiffX) > (ViewUtils.px2dp(size.width) / 2.0) || abs(absDiffY) > (
-                        ViewUtils.px2dp(
-                                size.height
-                            ) / 2.0
-                        )
-                    ) && (
+                return if (
+                    (
+                        abs(absDiffX) > (size.width.px2dp() / 2.0) ||
+                            abs(absDiffY) > (size.height.px2dp() / 2.0)
+                        ) && (
                         abs(
-                                velocityX
-                            ) > thresholdSpeed || abs(velocityY) > thresholdSpeed
+                            velocityX
+                        ) > thresholdSpeed || abs(velocityY) > thresholdSpeed
                         )
                 ) {
                     val direction = detectDirection(absDiffX.toDouble(), absDiffY.toDouble())

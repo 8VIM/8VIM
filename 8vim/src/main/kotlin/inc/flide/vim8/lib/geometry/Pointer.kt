@@ -1,4 +1,4 @@
-package inc.flide.vim8.lib
+package inc.flide.vim8.lib.geometry
 
 import androidx.annotation.RestrictTo
 

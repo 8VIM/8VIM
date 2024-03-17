@@ -1,11 +1,10 @@
-package inc.flide.vim8.ime
+package inc.flide.vim8.ime.layout
 
 import android.content.Context
 import android.content.res.Resources
 import arrow.core.None
 import arrow.core.right
 import inc.flide.vim8.arbitraries.Arbitraries
-import inc.flide.vim8.ime.layout.Cache
 import inc.flide.vim8.ime.layout.models.FingerPosition
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.yaml.LayoutInfo

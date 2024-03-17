@@ -73,7 +73,6 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
                 }
             }
         }
-        Vim8ImeService.inputFeedbackController()?.keyPress(keyCode)
     }
 
     private fun handleKeyCode(keycode: CustomKeycode, keyFlags: Int) {
@@ -125,7 +124,6 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         if (activeState.inputShiftState == InputShiftState.SHIFTED) {
             activeState.inputShiftState = InputShiftState.UNSHIFTED
         }
-        Vim8ImeService.inputFeedbackController()?.keyPress()
     }
 
     private fun handleShift() {
@@ -184,15 +182,21 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         }
     }
 
-    fun resetShift() {
-        if (activeState.inputShiftState == InputShiftState.SHIFTED) {
-            activeState.inputShiftState = InputShiftState.UNSHIFTED
+    override fun onInputKeyDown(keyboardAction: KeyboardAction, repeat: Boolean) {
+        if (keyboardAction.keyboardActionType == KeyboardActionType.INPUT_TEXT ||
+            (
+                keyboardAction.keyboardActionType == KeyboardActionType.INPUT_KEY &&
+                    repeatableKeyCodesSet.contains(keyboardAction.keyEventCode)
+                )
+        ) {
+            Vim8ImeService.inputFeedbackController()?.keyPress(keyboardAction.keyEventCode, repeat)
         }
-    }
 
-    override fun onInputKeyDown(keyboardAction: KeyboardAction) {
         when (keyboardAction.keyboardActionType) {
-            KeyboardActionType.INPUT_TEXT -> handleText(keyboardAction)
+            KeyboardActionType.INPUT_TEXT -> {
+                handleText(keyboardAction)
+            }
+
             KeyboardActionType.INPUT_KEY ->
                 if (repeatableKeyCodesSet.contains(keyboardAction.keyEventCode)) {
                     handleKeyCode(keyboardAction.keyEventCode, keyboardAction.keyFlags)
@@ -200,10 +204,11 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         }
     }
 
-    override fun onInputKeyUp(keyboardAction: KeyboardAction) {
+    override fun onInputKeyUp(keyboardAction: KeyboardAction, repeat: Boolean) {
         if (keyboardAction.keyboardActionType == KeyboardActionType.INPUT_KEY &&
             !repeatableKeyCodesSet.contains(keyboardAction.keyEventCode)
         ) {
+            Vim8ImeService.inputFeedbackController()?.keyPress(keyboardAction.keyEventCode, repeat)
             handleKeyCode(keyboardAction.keyEventCode, keyboardAction.keyFlags)
         }
     }

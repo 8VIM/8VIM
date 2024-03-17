@@ -19,7 +19,6 @@ import inc.flide.vim8.R
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.cache
 import inc.flide.vim8.datastore.model.PreferenceSerDe
-import inc.flide.vim8.ime.LayoutLoader
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.error.LayoutError

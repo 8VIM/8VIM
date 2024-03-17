@@ -3,7 +3,6 @@ package inc.flide.vim8.ime.editor
 import android.content.Context
 import android.os.SystemClock
 import android.text.InputType
-import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.ExtractedTextRequest
@@ -26,7 +25,7 @@ class EditorInstance(context: Context) {
     fun handleStartInputView(editorInfo: EditorInfo) {
         imeOptions = ImeOptions.wrap(editorInfo.imeOptions)
 
-        when (editorInfo.inputType and InputType.TYPE_MASK_CLASS) {
+        activeState.imeUiMode = when (editorInfo.inputType and InputType.TYPE_MASK_CLASS) {
             InputType.TYPE_CLASS_NUMBER,
             InputType.TYPE_CLASS_PHONE,
             InputType.TYPE_CLASS_DATETIME -> {
@@ -34,7 +33,7 @@ class EditorInstance(context: Context) {
                 ImeUiMode.NUMERIC
             }
 
-            InputType.TYPE_CLASS_TEXT ->
+            InputType.TYPE_CLASS_TEXT -> {
                 activeState.keyVariation =
                     when (editorInfo.inputType and InputType.TYPE_MASK_VARIATION) {
                         InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD,
@@ -43,6 +42,8 @@ class EditorInstance(context: Context) {
 
                         else -> KeyVariation.NORMAL
                     }
+                ImeUiMode.TEXT
+            }
 
             else -> {
                 activeState.keyVariation = KeyVariation.NORMAL
@@ -80,7 +81,7 @@ class EditorInstance(context: Context) {
 
     fun performDelete(): Boolean {
         val ic = currentInputConnection() ?: return false
-        return if (TextUtils.isEmpty(ic.getSelectedText(0))) {
+        return if ((ic.getSelectedText(0)?.length ?: 0) == 0) {
             val length =
                 ic.getExtractedText(ExtractedTextRequest(), 0)?.text?.toString()?.let { text ->
                     if (activeState.isCtrlOn) {

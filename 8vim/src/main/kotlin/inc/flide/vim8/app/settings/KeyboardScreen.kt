@@ -27,6 +27,9 @@ fun KeyboardScreen() = Screen {
     val context = LocalContext.current
     content {
         val circleAutoResize by prefs.keyboard.circle.autoResize.observeAsState()
+        val isDynamicCircleEnabled by prefs.keyboard.circle.dynamic.isEnabled.observeAsState()
+        val hapticEnabled by prefs.inputFeedback.hapticEnabled.observeAsState()
+        val soundEnabled by prefs.inputFeedback.soundEnabled.observeAsState()
 
         PreferenceGroup {
             Dialog {
@@ -59,7 +62,9 @@ fun KeyboardScreen() = Screen {
                 )
             }
         }
-        PreferenceGroup {
+        PreferenceGroup(
+            title = stringRes(R.string.settings__keyboard__circle__auto_resize_group__title)
+        ) {
             SwitchPreference(
                 prefs.keyboard.circle.autoResize,
                 title = stringRes(R.string.settings__keyboard__circle__auto_resize__title),
@@ -70,6 +75,7 @@ fun KeyboardScreen() = Screen {
                     R.string.settings__keyboard__circle__auto_resize__summary__on
                 )
             )
+
             if (circleAutoResize) {
                 RangeSliderPreference(
                     minPref = prefs.keyboard.circle.radiusMinSizeFactor,
@@ -88,6 +94,25 @@ fun KeyboardScreen() = Screen {
                     max = 40
                 )
             }
+
+            SwitchPreference(
+                prefs.keyboard.circle.dynamic.isEnabled,
+                title = stringRes(R.string.settings__keyboard__circle__dynamic_centre__title),
+                summary = stringRes(R.string.settings__keyboard__circle__dynamic_centre__summary)
+            )
+
+            SwitchPreference(
+                prefs.keyboard.circle.dynamic.isOverlayEnabled,
+                title = stringRes(
+                    R.string.settings__keyboard__circle__dynamic_centre_overlay_enabled__title
+                ),
+                visibleIf = { isDynamicCircleEnabled }
+            )
+        }
+
+        PreferenceGroup(
+            title = stringRes(R.string.settings__keyboard__circle__offset_and_height_group__title)
+        ) {
             SliderPreference(
                 pref = prefs.keyboard.circle.xCentreOffset,
                 title = stringRes(R.string.settings__keyboard__circle__x__centre__offset__title),
@@ -109,7 +134,9 @@ fun KeyboardScreen() = Screen {
             )
         }
 
-        PreferenceGroup {
+        PreferenceGroup(
+            title = stringRes(R.string.settings__keyboard__display__group__title)
+        ) {
             SwitchPreference(
                 pref = prefs.keyboard.display.showSectorIcons,
                 title = stringRes(R.string.settings__keyboard__display__show__sector__icons__title),
@@ -134,7 +161,9 @@ fun KeyboardScreen() = Screen {
             )
         }
 
-        PreferenceGroup {
+        PreferenceGroup(
+            title = stringRes(R.string.settings__keyboard__sidebar__group__title)
+        ) {
             SwitchPreference(
                 pref = prefs.keyboard.sidebar.isVisible,
                 title = stringRes(R.string.settings__keyboard__sidebar__is__visible__title),
@@ -157,17 +186,11 @@ fun KeyboardScreen() = Screen {
                     R.string.settings__keyboard__sidebar__is__on__left__summary__on
                 )
             )
-
-            SwitchPreference(
-                pref = prefs.clipboard.enabled,
-                title = stringRes(R.string.settings__keyboard__clipboard__enabled__title),
-                summaryOff = stringRes(
-                    R.string.settings__keyboard__clipboard__enabled__summary__off
-                ),
-                summaryOn = stringRes(R.string.settings__keyboard__clipboard__enabled__summary__on)
-            )
         }
-        PreferenceGroup {
+
+        PreferenceGroup(
+            title = stringRes(R.string.settings__keyboard__haptic__sound__group__title)
+        ) {
             SwitchPreference(
                 pref = prefs.inputFeedback.hapticEnabled,
                 title = stringRes(R.string.settings__keyboard__haptic__feedback__enabled__title),
@@ -179,6 +202,19 @@ fun KeyboardScreen() = Screen {
                 )
             )
             SwitchPreference(
+                pref = prefs.inputFeedback.hapticSectorCrossEnabled,
+                title = stringRes(
+                    R.string.settings__keyboard__haptic__feedback__haptic_sector_cross_enabled__title// ktlint-disable
+                ),
+                summaryOff = stringRes(
+                    R.string.settings__keyboard__haptic__feedback__enabled__summary__off
+                ),
+                summaryOn = stringRes(
+                    R.string.settings__keyboard__haptic__feedback__enabled__summary__on
+                ),
+                visibleIf = { hapticEnabled }
+            )
+            SwitchPreference(
                 pref = prefs.inputFeedback.soundEnabled,
                 title = stringRes(R.string.settings__keyboard__sound__feedback__enabled__title),
                 summaryOff = stringRes(
@@ -187,6 +223,33 @@ fun KeyboardScreen() = Screen {
                 summaryOn = stringRes(
                     R.string.settings__keyboard__sound__feedback__enabled__summary__on
                 )
+            )
+            SliderPreference(
+                pref = prefs.inputFeedback.soundVolume,
+                title = stringRes(R.string.settings__keyboard__sound__feedback__volume__title),
+                min = 0,
+                max = 100,
+                visibleIf = { soundEnabled },
+                toText = {
+                    if (it == 0) {
+                        "System default"
+                    } else {
+                        "$it%"
+                    }
+                }
+            )
+            SwitchPreference(
+                pref = prefs.inputFeedback.soundSectorCrossEnabled,
+                title = stringRes(
+                    R.string.settings__keyboard__haptic__feedback__sound_sector_cross_enabled__title
+                ),
+                summaryOff = stringRes(
+                    R.string.settings__keyboard__sound__feedback__enabled__summary__off
+                ),
+                summaryOn = stringRes(
+                    R.string.settings__keyboard__sound__feedback__enabled__summary__on
+                ),
+                visibleIf = { soundEnabled }
             )
         }
     }

@@ -11,8 +11,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import inc.flide.vim8.clipboardManager
 import inc.flide.vim8.editorInstance
+import inc.flide.vim8.lib.compose.observeAsNonNullState
 import inc.flide.vim8.lib.compose.verticalScroll
-import inc.flide.vim8.lib.observeAsNonNullState
 
 @Composable
 fun ClipboardLayout() {

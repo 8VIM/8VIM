@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.parsers
+package inc.flide.vim8.ime.layout.parsers
 
 import android.view.KeyEvent
 import arrow.core.Option
@@ -9,7 +9,6 @@ import inc.flide.vim8.ime.layout.models.KeyboardAction
 import inc.flide.vim8.ime.layout.models.KeyboardActionType
 import inc.flide.vim8.ime.layout.models.LayerLevel
 import inc.flide.vim8.ime.layout.models.characterSets
-import inc.flide.vim8.ime.layout.parsers.YamlParser
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome

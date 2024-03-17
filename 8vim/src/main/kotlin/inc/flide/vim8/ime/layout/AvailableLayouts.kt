@@ -6,7 +6,6 @@ import arrow.core.firstOrNone
 import arrow.core.getOrNone
 import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.appPreferenceModel
-import inc.flide.vim8.ime.LayoutLoader
 
 class AvailableLayouts(private val layoutLoader: LayoutLoader, private val context: Context) {
     private val prefs: AppPrefs by appPreferenceModel()
