@@ -232,7 +232,7 @@ class Keyboard(private val context: Context) {
             val x = (point.x - centre.x).toDouble()
             val y = (point.y - centre.y).toDouble()
             val angle = (atan2(y, x)).toFloat()
-            offset = Offset(x = -radius * cos(angle), y = -radius * sin(angle))
+            offset = Offset(x = radius * cos(angle), y = radius * sin(angle))
         }
 
         fun isPointInsideCircle(point: Offset): Boolean {

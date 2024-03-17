@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
-import arrow.core.elementAtOrNone
 import arrow.core.firstOrNone
 import arrow.core.getOrElse
 import arrow.core.getOrNone
@@ -195,7 +194,6 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 val lastKnownFingerPosition = currentFingerPosition
                 currentFingerPosition = currentPosition
                 val isFingerPositionChanged = lastKnownFingerPosition !== currentFingerPosition
-                computeVirtualCentre(position, currentPosition)
                 if (isFingerPositionChanged) {
                     movementSequence.firstOrNone()
                         .filter { it == FingerPosition.INSIDE_CIRCLE && !isReducesCircleSize }
@@ -266,23 +264,6 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         }
     }
 
-    private fun computeVirtualCentre(position: Offset, currentPosition: FingerPosition) {
-        val index = MovementSequences
-            .getOrNone(keyboard.layerLevel)
-            .map { it.size }
-            .getOrElse { 0 }
-        val isInsideCircle = movementSequence
-            .elementAtOrNone(index)
-            .isSome {
-                it == FingerPosition.INSIDE_CIRCLE &&
-                    currentPosition != FingerPosition.INSIDE_CIRCLE
-            }
-
-        if (isInsideCircle) {
-            keyboard.circle.computeVirtualCentre(position)
-        }
-    }
-
     private fun detectKeySelection() {
         resetKey()
         val modifiedMovementSequence =
@@ -314,7 +295,6 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         if (defaultLayerCondition || extraLayerCondition) {
             movementSequence.clear()
             resetKey()
-            keyboard.circle.initVirtual(position)
             currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT
             movementSequence.addAll(extraLayerMovementSequences)
             movementSequence.add(currentFingerPosition)

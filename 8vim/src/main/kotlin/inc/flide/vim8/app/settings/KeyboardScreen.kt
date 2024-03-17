@@ -113,8 +113,8 @@ fun KeyboardScreen() = Screen {
                 summary = stringRes(
                     R.string.settings__keyboard__circle__dynamic_centre_max_offset_ratio__summary
                 ),
-                min = 25,
-                max = 50,
+                min = 0,
+                max = 100,
                 visibleIf = { dynamicCentre },
                 toText = { "$it%" }
             )
