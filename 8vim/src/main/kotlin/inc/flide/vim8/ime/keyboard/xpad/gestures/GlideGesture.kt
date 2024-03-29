@@ -5,9 +5,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathMeasure
 
-private const val TRAIL_STEPS = 150
-private const val TRAIL_STEP_DISTANCE = 5
-private const val TRAIL_MAX_RADIUS = 14
+internal const val TRAIL_STEPS = 150
+internal const val TRAIL_STEP_DISTANCE = 5
+internal const val TRAIL_MAX_RADIUS = 14
 
 class GlideGesture {
     class Detector(private val listener: Listener) {

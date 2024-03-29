@@ -1,7 +1,6 @@
 package inc.flide.vim8.ime.layout
 
 import android.content.Context
-import android.content.res.Resources
 import arrow.core.None
 import arrow.core.right
 import inc.flide.vim8.arbitraries.Arbitraries
@@ -12,29 +11,28 @@ import inc.flide.vim8.ime.layout.parsers.LayoutParser
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.property.arbitrary.next
-import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import java.io.InputStream
 
 class LayoutLoaderSpec : FunSpec({
-    val context = mockk<Context>()
-    val resources = mockk<Resources>()
-    val inputStream = mockk<InputStream>(relaxed = true)
-    val cache = mockk<Cache>(relaxed = true)
-    val layoutParser = mockk<LayoutParser>(relaxed = true)
+    lateinit var context: Context
+    lateinit var cache: Cache
+    lateinit var layoutParser: LayoutParser
 
     beforeSpec {
-        every { cache.load(any()) } returns None
-        every { context.resources } returns resources
+        context = mockk {
+            every { resources } returns mockk {
+                every { openRawResource(any()) } returns mockk<InputStream>(relaxed = true)
+            }
+        }
+        cache = mockk(relaxed = true) {
+            every { load(any()) } returns None
+        }
     }
 
     beforeTest {
-        every { resources.openRawResource(any()) } returns inputStream
-    }
-
-    afterTest {
-        clearMocks(resources, layoutParser)
+        layoutParser = mockk<LayoutParser>(relaxed = true)
     }
 
     context("Loading keyboardData") {

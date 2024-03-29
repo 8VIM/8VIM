@@ -1,10 +1,7 @@
 package inc.flide.vim8.ime.nlp
 
 import android.content.Context
-import android.content.res.Configuration
-import android.content.res.Resources
 import android.icu.text.BreakIterator
-import android.os.LocaleList
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
@@ -16,20 +13,27 @@ import io.mockk.mockkStatic
 import java.util.Locale
 
 class BreakIteratorGroupSpec : FunSpec({
-    val context = mockk<Context>(relaxed = true)
-    val resources = mockk<Resources>(relaxed = true)
-    val configuration = mockk<Configuration>()
-    val localeList = mockk<LocaleList>()
+    lateinit var context: Context
     val breakIterator = mockk<BreakIterator>(relaxed = true)
 
     beforeSpec {
-        every { context.resources } returns resources
-        every { resources.configuration } returns configuration
-        every { configuration.locales } returns localeList
-        every { localeList.get(0) } returns Locale.US
         mockkStatic(BreakIterator::class)
-        every { BreakIterator.getWordInstance(Locale.US) } returns breakIterator
-        every { BreakIterator.getCharacterInstance(Locale.US) } returns breakIterator
+
+        context = mockk {
+            every { resources } returns mockk {
+                every { configuration } returns mockk {
+                    every { locales } returns mockk {
+                        every { get(0) } returns Locale.ROOT
+                    }
+                }
+            }
+        }
+        every { BreakIterator.getWordInstance(Locale.ROOT) } returns breakIterator
+        every { BreakIterator.getCharacterInstance(Locale.ROOT) } returns breakIterator
+    }
+
+    beforeTest {
+        clearMocks(breakIterator)
     }
 
     context("Measure last words length") {
@@ -81,7 +85,7 @@ class BreakIteratorGroupSpec : FunSpec({
             text.substring(text.length - length) shouldBe characters
         }
     }
-    afterTest { clearMocks(breakIterator) }
+
     afterSpec {
         clearStaticMockk(BreakIterator::class)
     }

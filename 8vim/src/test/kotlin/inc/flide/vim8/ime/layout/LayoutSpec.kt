@@ -28,42 +28,49 @@ import java.io.InputStream
 import org.apache.commons.codec.digest.DigestUtils
 
 class LayoutSpec : FunSpec({
-    val context = mockk<Context>(relaxed = true)
-    val resources = mockk<Resources>()
-    val contentResolver = mockk<ContentResolver>()
-    val cache = mockk<Cache>(relaxed = true)
-    val inputStream = mockk<InputStream>(relaxed = true)
+    lateinit var context: Context
+    lateinit var androidResources: Resources
+    lateinit var androidContentResolver: ContentResolver
+    lateinit var cache: Cache
+    lateinit var inputStream: InputStream
     val layoutLoader = mockk<LayoutLoader>()
 
     beforeSpec {
         mockkStatic(DigestUtils::class)
         mockkStatic(Context::cache)
-        every { context.cache() } returns lazy { cache }
+        context = mockk(relaxed = true) {
+            every { cache() } answers { lazy { cache } }
+            every { resources } answers { androidResources }
+            every { contentResolver } answers { androidContentResolver }
+            every { packageName } returns ""
+        }
         every { DigestUtils.md5Hex(any<InputStream>()) } returns ""
-        every { context.resources } returns resources
-        every { context.contentResolver } returns contentResolver
-        every { context.packageName } returns ""
     }
 
     beforeTest {
-        every { cache.load(any()) } returns None
+        androidResources = mockk()
+        androidContentResolver = mockk()
+        cache = mockk(relaxed = true) {
+            every { load(any()) } returns None
+        }
+        inputStream = mockk(relaxed = true)
     }
 
     context("Embedded layout") {
 
         beforeTest {
-            every { resources.getIdentifier(any(), any(), any()) } returns 0
+            every { androidResources.getIdentifier(any(), any(), any()) } returns 0
         }
 
         context("loading InputStream") {
             test("the resource is found") {
-                every { resources.openRawResource(any()) } returns inputStream
+                every { androidResources.openRawResource(any()) } returns inputStream
                 EmbeddedLayout("test").inputStream(context) shouldBeRight inputStream
             }
 
             test("the resource is not found") {
                 val exception = Exception("resource not found")
-                every { resources.openRawResource(any()) } throws exception
+                every { androidResources.openRawResource(any()) } throws exception
                 EmbeddedLayout("test").inputStream(context) shouldBeLeft ExceptionWrapperError(
                     exception
                 )
@@ -89,13 +96,13 @@ class LayoutSpec : FunSpec({
         afterTest { clearMocks(uri) }
         context("loading InputStream") {
             test("the resource is found") {
-                every { contentResolver.openInputStream(any()) } returns inputStream
+                every { androidContentResolver.openInputStream(any()) } returns inputStream
                 CustomLayout(uri).inputStream(context) shouldBeRight inputStream
             }
 
             test("the resource is not found") {
                 val exception = Exception("resource not found")
-                every { contentResolver.openInputStream(any()) } throws exception
+                every { androidContentResolver.openInputStream(any()) } throws exception
                 CustomLayout(uri).inputStream(context) shouldBeLeft ExceptionWrapperError(
                     exception
                 )
@@ -123,7 +130,15 @@ class LayoutSpec : FunSpec({
             test("scheme is a content") {
                 every { uri.scheme } returns "content"
                 val cursor = mockk<Cursor>(relaxed = true)
-                every { contentResolver.query(any(), any(), any(), any(), any()) } returns cursor
+                every {
+                    androidContentResolver.query(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                    )
+                } returns cursor
                 every { cursor.count } returns 1
                 every { cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME) } returns 0
                 every { cursor.getString(any()) } returns "content.yaml"
@@ -137,10 +152,6 @@ class LayoutSpec : FunSpec({
                 )
             }
         }
-    }
-
-    afterTest {
-        clearMocks(resources, contentResolver, cache, layoutLoader)
     }
 
     afterSpec {

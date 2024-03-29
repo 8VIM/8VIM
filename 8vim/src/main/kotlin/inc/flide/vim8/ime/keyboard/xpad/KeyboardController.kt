@@ -107,7 +107,6 @@ private val ROTATION_MOVEMENT_SEQUENCES = setOf(
 )
 
 class KeyboardController(context: Context) : GlideGesture.Listener {
-    var isReducesCircleSize by mutableStateOf(false)
     private val prefs by appPreferenceModel()
     private val keyboardManager by context.keyboardManager()
     private val themeManager by context.themeManager()
@@ -125,15 +124,18 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 ?: ThemeManager.RandomTrailColor()
             ).color()
     private val backgroundColor: Color
-        get() = themeManager.currentTheme.value?.scheme?.background ?: Color.White
+        get() = themeManager
+            .currentTheme
+            .value?.scheme?.background ?: Color.White
 
     private val inputEventDispatcher get() = keyboardManager.inputEventDispatcher
     private val glideGesture = GlideGesture.Detector(this)
     private val showTrail: Boolean get() = prefs.keyboard.trail.isVisible.get()
-    private val dynamicCentreOverlayEnabled: Boolean
+    private val isDynamicCircleOverlayEnabled: Boolean
         get() = prefs.keyboard.circle.dynamic.isOverlayEnabled.get()
     lateinit var keyboard: Keyboard
 
+    var isReducesCircleSize by mutableStateOf(false)
     var hasTrail by mutableStateOf(false)
     val trailPoints = mutableStateListOf<GlideGesture.Point>()
 
@@ -146,7 +148,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         )
 
         drawScope.drawPath(keyboard.path, color, style = drawStyle)
-        if (keyboard.circle.hasVirtualCentre && dynamicCentreOverlayEnabled) {
+        if (keyboard.circle.hasVirtualCentre && isDynamicCircleOverlayEnabled) {
             drawScope.drawCircle(
                 color.blendARGB(backgroundColor, 0.65f).copy(alpha = 0.75f),
                 keyboard.circle.radius,
@@ -156,9 +158,9 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         }
     }
 
-    fun drawTrail(drawScope: DrawScope, trailPoints: MutableList<GlideGesture.Point>) {
+    fun drawTrail(drawScope: DrawScope, trailPoints: List<GlideGesture.Point>) {
         for (point in trailPoints) {
-            drawScope.drawCircle(keyboard.trailColor, point.radius, point.center)
+            drawScope.drawCircle(keyboard.trailColor!!, point.radius, point.center)
         }
     }
 

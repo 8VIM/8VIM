@@ -14,7 +14,6 @@ import inc.flide.vim8.lib.android.systemVibratorOrNull
 import inc.flide.vim8.lib.android.vibrate
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
-import io.mockk.clearMocks
 import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.mockk
@@ -47,41 +46,45 @@ class InputFeedbackControllerSpec : FunSpec({
     )
 
     val ims = mockk<InputMethodService>(relaxed = true)
-    val audioManager = mockk<AudioManager>(relaxed = true)
-    val vibrator = mockk<Vibrator>(relaxed = true)
-    val hapticEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
-    val hapticSectorCrossPref = mockk<PreferenceData<Boolean>>(relaxed = true)
-    val soundEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
-    val soundSectorCrossEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
+    lateinit var audioManager: AudioManager
+    lateinit var vibrator: Vibrator
+    lateinit var hapticEnabledPref: PreferenceData<Boolean>
+    lateinit var hapticSectorCrossPref: PreferenceData<Boolean>
+    lateinit var soundEnabledPref: PreferenceData<Boolean>
+    lateinit var soundSectorCrossEnabledPref: PreferenceData<Boolean>
 
     beforeSpec {
         mockkStatic(Context::class)
         mockkStatic(Context::systemVibratorOrNull)
         mockkStatic(::appPreferenceModel)
-        val prefs = mockk<AppPrefs>()
-        val inputFeedbackPref = mockk<AppPrefs.InputFeedback>()
-        val soundVolume = mockk<PreferenceData<Int>>()
-        every { ims.systemVibratorOrNull() } returns vibrator
-        every { ims.systemServiceOrNull(AudioManager::class) } returns audioManager
-        every { prefs.inputFeedback } returns inputFeedbackPref
-        every { inputFeedbackPref.hapticEnabled } returns hapticEnabledPref
-        every { inputFeedbackPref.hapticSectorCrossEnabled } returns hapticSectorCrossPref
-        every { inputFeedbackPref.soundEnabled } returns soundEnabledPref
-        every { inputFeedbackPref.soundSectorCrossEnabled } returns soundSectorCrossEnabledPref
-        every { inputFeedbackPref.soundVolume } returns soundVolume
-        every { soundVolume.get() } returns 100
-        every { appPreferenceModel() } returns CachedPreferenceModel(prefs)
+
+        every { ims.systemVibratorOrNull() } answers { vibrator }
+        every { ims.systemServiceOrNull(AudioManager::class) } answers {
+            audioManager
+        }
+
+        every { appPreferenceModel() } returns CachedPreferenceModel(
+            mockk<AppPrefs> {
+                every { inputFeedback } returns mockk {
+                    every { hapticEnabled } answers { hapticEnabledPref }
+                    every { hapticSectorCrossEnabled } answers { hapticSectorCrossPref }
+                    every { soundEnabled } answers { soundEnabledPref }
+                    every { soundSectorCrossEnabled } answers { soundSectorCrossEnabledPref }
+                    every { soundVolume } returns mockk {
+                        every { get() } returns 100
+                    }
+                }
+            }
+        )
     }
 
     beforeTest {
-        clearMocks(
-            hapticEnabledPref,
-            hapticSectorCrossPref,
-            soundEnabledPref,
-            soundSectorCrossEnabledPref,
-            vibrator,
-            audioManager
-        )
+        hapticEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
+        hapticSectorCrossPref = mockk<PreferenceData<Boolean>>(relaxed = true)
+        soundEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
+        soundSectorCrossEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
+        audioManager = mockk<AudioManager>(relaxed = true)
+        vibrator = mockk<Vibrator>(relaxed = true)
     }
 
     context("keyPress") {

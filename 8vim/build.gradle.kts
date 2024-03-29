@@ -54,6 +54,18 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/licenses/*",
+                "META-INF/AL2.0",
+                "META-INF/LGPL*",
+                "win32-x86-64/*",
+                "win32-x86/*"
+            )
+        }
+    }
+
     kotlinOptions {
         jvmTarget = "17"
         freeCompilerArgs = listOf(
@@ -220,10 +232,14 @@ dependencies {
     ksp(libs.arrow.ksp)
 
     androidTestImplementation(libs.androidx.test.core)
-    androidTestImplementation(libs.androidx.test.ext)
+    androidTestImplementation(libs.androidx.test.core.ktx)
+    androidTestImplementation(libs.androidx.test.rules)
     androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.kotest.assertions)
+    androidTestImplementation(libs.kotest.runner.android)
     androidTestImplementation(libs.androidx.test.runner)
-    androidTestImplementation(libs.junit4)
+    androidTestImplementation(libs.kotest.assertions.android)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
     testImplementation(libs.logback.classic)
     testImplementation(libs.kotest.assertions)

@@ -11,10 +11,11 @@ class ClipboardManager(context: Context) : OnPrimaryClipChangedListener {
     private val prefs by appPreferenceModel()
     private val systemClipboardManager =
         context.systemService(android.content.ClipboardManager::class)
-    private val _history = MutableLiveData(clipHistoryFromHistory())
+    private val _history = MutableLiveData<List<String>>()
     val history: LiveData<List<String>> get() = _history
 
     init {
+        _history.value = clipHistoryFromHistory()
         systemClipboardManager.addPrimaryClipChangedListener(this)
         prefs.clipboard.maxHistory.observe {
             updateHistory(

@@ -1,9 +1,6 @@
 package inc.flide.vim8.ime.editor
 
 import android.content.Context
-import android.content.res.Configuration
-import android.content.res.Resources
-import android.os.LocaleList
 import android.text.InputType
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
@@ -12,7 +9,6 @@ import android.view.inputmethod.InputConnection
 import inc.flide.vim8.Vim8ImeService
 import inc.flide.vim8.ime.input.ImeUiMode
 import inc.flide.vim8.ime.input.KeyVariation
-import inc.flide.vim8.ime.keyboard.text.KeyboardManager
 import inc.flide.vim8.ime.keyboard.text.ObservableKeyboardState
 import inc.flide.vim8.ime.nlp.BreakIteratorGroup
 import inc.flide.vim8.keyboardManager
@@ -24,7 +20,6 @@ import io.kotest.property.arbitrary.string
 import io.kotest.property.checkAll
 import io.mockk.OfTypeMatcher
 import io.mockk.clearConstructorMockk
-import io.mockk.clearMocks
 import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.mockk
@@ -35,27 +30,32 @@ import io.mockk.verify
 import java.util.Locale
 
 class EditorInstanceSpec : FunSpec({
-    val context = mockk<Context>()
-    val inputConnection = mockk<InputConnection>(relaxed = true)
-    val keyboardState = mockk<ObservableKeyboardState>(relaxed = true)
+    lateinit var context: Context
+    lateinit var inputConnection: InputConnection
+    lateinit var keyboardState: ObservableKeyboardState
 
     beforeSpec {
-        val keyboardManager = mockk<KeyboardManager>(relaxed = true)
-        val resources = mockk<Resources>()
-        val locales = mockk<LocaleList>()
-        val configuration = mockk<Configuration>()
-
         mockkStatic(Context::keyboardManager)
         mockkObject(Vim8ImeService)
         mockkConstructor(BreakIteratorGroup::class)
 
-        every { resources.configuration } returns configuration
-        every { configuration.locales } returns locales
-        every { locales[any()] } returns Locale.ROOT
-        every { context.resources } returns resources
-        every { keyboardManager.activeState } returns keyboardState
-        every { context.keyboardManager() } returns lazy { keyboardManager }
-        every { Vim8ImeService.currentInputConnection() } returns inputConnection
+        context = mockk {
+            every { resources } returns mockk {
+                every { configuration } returns mockk {
+                    every { locales } returns mockk {
+                        every { get(any<Int>()) } returns Locale.ROOT
+                    }
+                }
+            }
+            every { keyboardManager() } returns lazy {
+                mockk(relaxed = true) {
+                    every { activeState } answers { keyboardState }
+                }
+            }
+        }
+
+        every { Vim8ImeService.currentInputConnection() } answers { inputConnection }
+
         every {
             constructedWith<BreakIteratorGroup>(OfTypeMatcher<Context>(Context::class))
                 .measureLastWords(any(), any())
@@ -67,7 +67,8 @@ class EditorInstanceSpec : FunSpec({
     }
 
     beforeTest {
-        clearMocks(inputConnection, keyboardState)
+        inputConnection = mockk<InputConnection>(relaxed = true)
+        keyboardState = mockk<ObservableKeyboardState>(relaxed = true)
     }
 
     context("handleStartInputView") {

@@ -51,7 +51,7 @@ class Keyboard(private val context: Context) {
     }
 
     val keys = List(CHARACTER_SET_SIZE) { Key(it, this) }
-    var trailColor: Color = Color.Unspecified
+    var trailColor: Color? = null
     var layerLevel: LayerLevel by mutableStateOf(LayerLevel.FIRST)
     private var lengthOfLineDemarcatingSectors = 0f
     val keyboardData: KeyboardData? get() = Vim8ImeService.keyboardData()
@@ -231,8 +231,8 @@ class Keyboard(private val context: Context) {
             return (squaredDistanceBetweenPoints - radiusSquare) < 0
         }
 
-        fun getSectorOfPoint(p: Offset): FingerPosition {
-            val angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p)
+        fun getSectorOfPoint(point: Offset): FingerPosition {
+            val angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(point)
             val angleToSectorValue = angleDouble / (Math.PI / 2)
             val quadrantCyclic = angleToSectorValue.roundToInt()
             return baseQuadrant(quadrantCyclic).toFingerPosition()

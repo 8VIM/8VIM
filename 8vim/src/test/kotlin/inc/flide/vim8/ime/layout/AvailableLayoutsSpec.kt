@@ -3,7 +3,6 @@ package inc.flide.vim8.ime.layout
 import android.content.Context
 import arrow.core.left
 import arrow.core.right
-import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.arbitraries.Arbitraries.arbEmbeddedLayout
 import inc.flide.vim8.arbitraries.Arbitraries.arbKeyboardData
@@ -21,7 +20,6 @@ import io.kotest.property.arbitrary.list
 import io.kotest.property.arbitrary.next
 import io.kotest.property.arbitrary.pair
 import io.kotest.property.arbitrary.string
-import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -31,12 +29,10 @@ import io.mockk.verify
 import kotlin.random.Random
 
 class AvailableLayoutsSpec : WordSpec({
-    val prefs = mockk<AppPrefs>()
-    val layoutPref = mockk<AppPrefs.Layout>(relaxed = true)
-    val customPref = mockk<AppPrefs.Layout.Custom>(relaxed = true)
-    val currentLayout = mockk<PreferenceData<Layout<*>>>(relaxed = true)
-    val history = mockk<PreferenceData<Set<String>>>(relaxed = true)
-    val customLayout = mockkClass(CustomLayout::class)
+    lateinit var currentLayout: PreferenceData<Layout<*>>
+    lateinit var historyData: PreferenceData<Set<String>>
+    lateinit var customLayout: CustomLayout
+
     val layoutLoader = mockk<LayoutLoader>(relaxed = true)
     val context = mockk<Context>()
 
@@ -59,18 +55,28 @@ class AvailableLayoutsSpec : WordSpec({
             }
         }
 
-        every { prefs.layout } returns layoutPref
-        every { layoutPref.current } returns currentLayout
-        every { layoutPref.custom } returns customPref
-        every { customPref.history } returns history
-        every { appPreferenceModel() } returns CachedPreferenceModel(prefs)
+        every { appPreferenceModel() } returns CachedPreferenceModel(
+            mockk {
+                every { layout } returns mockk {
+                    every { current } answers { currentLayout }
+                    every { custom } returns mockk {
+                        every { history } answers { historyData }
+                    }
+                }
+            }
+        )
         every { embeddedLayouts(any(), any()) } returns embeddedLayouts
     }
 
     beforeTest {
-        every { currentLayout.default } returns embeddedLayouts.first().first
-        every { currentLayout.get() } returns embeddedLayouts.first().first
-        every { history.get() } returns emptySet()
+        customLayout = mockkClass(CustomLayout::class)
+        currentLayout = mockk(relaxed = true) {
+            every { default } returns embeddedLayouts.first().first
+            every { get() } returns embeddedLayouts.first().first
+        }
+        historyData = mockk(relaxed = true) {
+            every { get() } returns emptySet()
+        }
     }
 
     "Loading layouts" When {
@@ -95,7 +101,7 @@ class AvailableLayoutsSpec : WordSpec({
                 every { uri.toCustomLayout() } returns customLayout
                 every { currentLayout.get() } returns customLayout
                 every { customLayout.loadKeyboardData(any(), any()) } returns keyboardData.right()
-                every { history.get() } returns setOf(uri)
+                every { historyData.get() } returns setOf(uri)
                 val availableLayouts = AvailableLayouts(layoutLoader, context)
                 val strings = embeddedLayouts.map { it.second } + keyboardData.toString()
                 availableLayouts.displayNames shouldContainExactly strings
@@ -109,8 +115,8 @@ class AvailableLayoutsSpec : WordSpec({
                 every { customLayout.loadKeyboardData(any(), any()) } returns ExceptionWrapperError(
                     Exception()
                 ).left()
-                every { history.get() } returns setOf(uri)
-                justRun { history.set(any()) }
+                every { historyData.get() } returns setOf(uri)
+                justRun { historyData.set(any()) }
                 val availableLayouts = AvailableLayouts(layoutLoader, context)
                 val expected = embeddedLayouts.map { it.second }
                 availableLayouts.displayNames shouldContainExactly expected
@@ -134,7 +140,7 @@ class AvailableLayoutsSpec : WordSpec({
             every { uri.toCustomLayout() } returns customLayout
             every { customLayout.loadKeyboardData(any(), any()) } returns arbKeyboardData.next()
                 .right()
-            every { history.get() } returns setOf(uri)
+            every { historyData.get() } returns setOf(uri)
             val index = embeddedLayouts.size
             val availableLayouts = AvailableLayouts(layoutLoader, context)
             availableLayouts.selectLayout(index)
@@ -148,9 +154,5 @@ class AvailableLayoutsSpec : WordSpec({
             availableLayouts.selectLayout(index)
             availableLayouts.index shouldBe 0
         }
-    }
-
-    afterTest {
-        clearMocks(currentLayout, history, currentLayout)
     }
 })

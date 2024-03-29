@@ -4,16 +4,16 @@ import inc.flide.vim8.arbitraries.Arbitraries
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.property.arbitrary.next
-import io.mockk.clearMocks
 import io.mockk.mockk
 import io.mockk.verifyOrder
 import kotlinx.coroutines.delay
 
 class InputEventDispatcherSpec : FunSpec({
-    val receiver = mockk<InputKeyEventReceiver>(relaxed = true)
+    lateinit var receiver: InputKeyEventReceiver
     val action = Arbitraries.arbKeyboardAction.next()
+
     beforeTest {
-        clearMocks(receiver)
+        receiver = mockk<InputKeyEventReceiver>(relaxed = true)
     }
 
     context("sendDown and sendUp") {
