@@ -240,8 +240,8 @@ class Keyboard(private val context: Context) {
 
         private fun getAngleInRadiansOfPointWithRespectToCentreOfCircle(point: Offset): Float {
             // Get difference of coordinates
-            val x = (point.x - centre.x).toDouble()
-            val y = (centre.y - point.y).toDouble()
+            val x = (point.x - virtualCentre.x).toDouble()
+            val y = (virtualCentre.y - point.y).toDouble()
 
             return atan2(y, x)
                 .let { if (it < 0) it + Math.PI * 2 else it }
