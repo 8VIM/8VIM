@@ -9,7 +9,6 @@ import arrow.core.some
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import inc.flide.vim8.AppPrefs
 import inc.flide.vim8.app.availableLayouts
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.CachedPreferenceModel
@@ -34,14 +33,12 @@ import io.kotest.matchers.maps.shouldContainAll
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
-import io.mockk.clearMocks
 import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
-import io.mockk.slot
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStream
@@ -51,14 +48,15 @@ import java.nio.file.Files
 import java.util.UUID
 
 class BackupManagerSpec : FunSpec({
-    val context = mockk<Context>()
-    val prefs = mockk<AppPrefs>(relaxed = true)
-    val layoutPrefs = mockk<AppPrefs.Layout>()
-    val customLayout = mockk<CustomLayout>(relaxed = true)
+    lateinit var context: Context
+    lateinit var customLayout: CustomLayout
+    lateinit var prefExportedKeys: Map<String, Any?>
+    var currentVersion = 0
     var tmpCacheDir: File? = null
     var tmpFilesDir: File? = null
     val uuid = UUID(0, 0)
     val objectMapper = JsonMapper.builder().build().registerKotlinModule()
+
     fun contentStream(): InputStream =
         ByteArrayInputStream("content".toByteArray(Charset.defaultCharset()))
 
@@ -72,46 +70,61 @@ class BackupManagerSpec : FunSpec({
         mockkStatic(::availableLayouts)
 
         every { UUID.randomUUID() } returns uuid
-
-        val history = mockk<PreferenceData<Set<String>>>(relaxed = true)
-        val customPrefs = mockk<AppPrefs.Layout.Custom>()
-        val current = mockk<PreferenceData<Layout<*>>>(relaxed = true)
-        val defaultLayout = mockk<EmbeddedLayout>()
-        val contentResolver = mockk<ContentResolver>(relaxed = true)
         val uri = mockk<Uri>()
-
-        every { layoutPrefs.current } returns current
-        every { layoutPrefs.custom } returns customPrefs
-        every { appPreferenceModel() } returns CachedPreferenceModel(prefs)
-        every { customPrefs.history } returns history
-        every { context.cacheDir } answers { tmpCacheDir }
-        every { context.filesDir } answers { tmpFilesDir }
-        every { context.contentResolver } returns contentResolver
-        every { contentResolver.readToFile(any(), any()) } just Runs
-        every { history.get() } returns setOf("custom")
-        every { history.key } returns "prefs_layout_custom_history"
-        every { current.key } returns "prefs_layout_current"
-        every { current.default } returns defaultLayout
-        every { defaultLayout.path } returns "en"
-        every { "custom".toCustomLayout() } returns customLayout
-        every { ZipUtils.zip(any(), any()) } just Runs
-        every { ZipUtils.unzip(any(), any()) } just Runs
-        every { availableLayouts } returns WeakReference(mockk<AvailableLayouts>(relaxed = true))
-        every { context.fileUri(any()) } returns uri
         every { uri.toString() } answers {
             File(
                 File(tmpFilesDir, uuid.toString()),
                 "custom"
             ).absolutePath
         }
+        context = mockk {
+            every { cacheDir } answers { tmpCacheDir }
+            every { filesDir } answers { tmpFilesDir }
+            every { contentResolver } returns mockk {
+                every { readToFile(any(), any()) } just Runs
+            }
+            every { fileUri(any()) } returns uri
+        }
+
+        every { appPreferenceModel() } returns CachedPreferenceModel(
+            mockk {
+                every { version } answers { currentVersion }
+                every { exportedKeys } answers { prefExportedKeys }
+                every { exportedKeys = any() } propertyType Map::class answers {
+                    @Suppress("unchecked_cast")
+                    prefExportedKeys = value as Map<String, Any?>
+                }
+                every { layout } returns mockk {
+                    every { current } returns mockk<PreferenceData<Layout<*>>>(relaxed = true) {
+                        every { key } returns "prefs_layout_current"
+                        every { default } returns mockk<EmbeddedLayout> {
+                            every { path } returns "en"
+                        }
+                    }
+                    every { custom } returns mockk {
+                        every { history } returns mockk(relaxed = true) {
+                            every { get() } returns setOf("custom")
+                            every { key } returns "prefs_layout_custom_history"
+                        }
+                    }
+                }
+            }
+        )
+        every { "custom".toCustomLayout() } answers { customLayout }
+        every { ZipUtils.zip(any(), any()) } just Runs
+        every { ZipUtils.unzip(any(), any()) } just Runs
+        every { availableLayouts } returns WeakReference(mockk<AvailableLayouts>(relaxed = true))
     }
 
     beforeTest {
+        customLayout = mockk(relaxed = true) {
+            every { defaultName(any()) } returns "test"
+            every { md5(any()) } returns "uuid".some()
+        }
         tmpCacheDir = Files.createTempDirectory("8vim_cache").toFile()
         tmpFilesDir = Files.createTempDirectory("8vim_files").toFile()
-        every { prefs.layout } returns layoutPrefs
-        every { customLayout.defaultName(any()) } returns "test"
-        every { customLayout.md5(any()) } returns "uuid".some()
+        currentVersion = 0
+        prefExportedKeys = emptyMap()
     }
 
     context("Export") {
@@ -121,7 +134,7 @@ class BackupManagerSpec : FunSpec({
                 contentStream(),
                 null
             ) { content ->
-                every { prefs.exportedKeys } returns mapOf(
+                prefExportedKeys = mapOf(
                     "prefs_layout_custom_history" to setOf("custom"),
                     "prefs_layout_current" to "${layout.first()}$layout"
                 )
@@ -166,18 +179,13 @@ class BackupManagerSpec : FunSpec({
     }
 
     context("Import") {
-
         withData(nameFn = { "App version $it" }, 0, 1, 2) { appVersion ->
             withData(nameFn = { "Backup version $it" }, 0, 1) { backupVersion ->
                 withData(nameFn = { "Current Layout $it" }, "custom", "en") { layout ->
                     val dstDir = File(tmpFilesDir, uuid.toString())
                     val custom = File(dstDir, "custom").absolutePath
                     dstDir.mkdirs()
-                    val keys = slot<Map<String, Any?>>()
-                    every { prefs.version } returns appVersion
-                    every {
-                        prefs.exportedKeys = capture(keys)
-                    } propertyType Map::class answers { value }
+                    currentVersion = appVersion
                     val data = mapOf<String, Any?>(
                         PreferenceModel.DATASTORE_VERSION to backupVersion,
                         "prefs_layout_current" to "${layout.first()}$layout",
@@ -195,7 +203,7 @@ class BackupManagerSpec : FunSpec({
                         } else {
                             "een"
                         }
-                        keys.captured shouldContainAll mapOf(
+                        prefExportedKeys shouldContainAll mapOf(
                             PreferenceModel.DATASTORE_VERSION to backupVersion,
                             "prefs_layout_current" to current,
                             "prefs_layout_custom_history" to setOf(custom)
@@ -209,7 +217,6 @@ class BackupManagerSpec : FunSpec({
     afterTest {
         tmpCacheDir?.deleteRecursively()
         tmpFilesDir?.deleteRecursively()
-        clearMocks(customLayout, prefs)
     }
 
     afterSpec {

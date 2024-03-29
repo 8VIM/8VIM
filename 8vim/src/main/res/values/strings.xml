@@ -81,18 +81,27 @@
     <string name="settings__layouts__load_custom__summary">Layout file from the device memory
         will be loaded. Please note this is experimental and might not work.</string>
 
+    <string name="settings__clipboard__title" comment="Title of Clipboard screen">Clipboard</string>
     <string name="settings__keyboard__title" comment="Title of Keyboard screen">Keyboard</string>
 
     <string name="settings__keyboard__select__emoji__keyboard__title">Select emoji keyboard</string>
     <string name="settings__keyboard__select__emoji__keyboard__summary">Chosen keyboard will be accessible through
         keyboard\'s emoji icon </string>
+
+    <string name="settings__keyboard__circle__auto_resize_group__title">Circle auto resizing and dynamic circle</string>
     <string name="settings__keyboard__circle__auto_resize__title">Auto resize circle</string>
     <string name="settings__keyboard__circle__auto_resize__summary__on">Reduce the circle size when a movement starting from it</string>
     <string name="settings__keyboard__circle__auto_resize__summary__off">Keep the circle size all time</string>
 
+    <string name="settings__keyboard__circle__dynamic_centre__title">Dynamically move the circle</string>
+    <string name="settings__keyboard__circle__dynamic_centre__summary">Move the circle to where it has been first pressed</string>
+
+    <string name="settings__keyboard__circle__dynamic_centre_overlay_enabled__title">Show an overlay of the dynamic circle</string>
+
     <string name="settings__keyboard__circle__size__title">Circle size</string>
     <string name="settings__keyboard__circle__size__summary">Resize circle according to your needs</string>
 
+    <string name="settings__keyboard__circle__offset_and_height_group__title">Circle offsets and keyboard height</string>
     <string name="settings__keyboard__circle__x__centre__offset__title">Circle offset X axis</string>
     <string name="settings__keyboard__circle__y__centre__offset__key">prefs_keyboard_circle_centre_y_offset</string>
     <string name="settings__keyboard__circle__y__centre__offset__title">Circle offset Y axis</string>
@@ -100,6 +109,7 @@
     <string name="settings__keyboard__height__title">Keyboard height</string>
     <string name="settings__keyboard__height__summary">Resize keyboard to your needs</string>
 
+    <string name="settings__keyboard__sidebar__group__title">Sidebar</string>
     <string name="settings__keyboard__sidebar__is__visible__title">Sidebar visibility</string>
     <string name="settings__keyboard__sidebar__is__visible__summary__on">Sidebar is currently visible</string>
     <string name="settings__keyboard__sidebar__is__visible__summary__off">Sidebar is currently hidden</string>
@@ -111,7 +121,9 @@
     <string name="settings__keyboard__clipboard__enabled__title">Enable clipboard</string>
     <string name="settings__keyboard__clipboard__enabled__summary__on">Clipboard is enabled</string>
     <string name="settings__keyboard__clipboard__enabled__summary__off">Clipboard is disabled</string>
+    <string name="settings__keyboard__clipboard__max_history__title">Max history</string>
 
+    <string name="settings__keyboard__display__group__title">Keyboard display</string>
     <string name="settings__keyboard__display__show__sector__icons__title">Display sector icons</string>
     <string name="settings__keyboard__display__show__sector__icons__summary__on">Sector icons are enabled</string>
     <string name="settings__keyboard__display__show__sector__icons__summary__off">Sector icons are disabled</string>
@@ -124,13 +136,18 @@
     <string name="settings__keyboard__trail__is__visible__summary__on">Trail will be visible when typing</string>
     <string name="settings__keyboard__trail__is__visible__summary__off">No trail will be shown when typing</string>
 
+    <string name="settings__keyboard__haptic__sound__group__title">Haptic and sound</string>
     <string name="settings__keyboard__haptic__feedback__enabled__title">Enable input haptic feedback</string>
     <string name="settings__keyboard__haptic__feedback__enabled__summary__on">Haptic feedback is enabled</string>
     <string name="settings__keyboard__haptic__feedback__enabled__summary__off">Haptic feedback is disabled</string>
 
+    <string name="settings__keyboard__haptic__feedback__haptic_sector_cross_enabled__title">Enable input haptic feedback when crossing sectors</string>
+    <string name="settings__keyboard__haptic__feedback__sound_sector_cross_enabled__title">Enable sounds feedback when crossing sectors</string>
+
     <string name="settings__keyboard__sound__feedback__enabled__title">Enable keypress sounds</string>
     <string name="settings__keyboard__sound__feedback__enabled__summary__off">Sound feedback is disabled</string>
     <string name="settings__keyboard__sound__feedback__enabled__summary__on">Sound feedback is enabled</string>
+    <string name="settings__keyboard__sound__feedback__volume__title">Sound volume</string>
 
     <string name="settings__theme__title" comment="Title of Theme screen">Theme</string>
     <string name="settings__theme__color__mode__title">Keyboard color</string>

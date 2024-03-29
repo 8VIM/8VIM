@@ -23,5 +23,5 @@ class Key(val index: Int, private val keyboard: Keyboard) {
     }.orEmpty()
 
     val backgroundColor: Color
-        get() = keyboard.trailColor.blendARGB(Color.White, 0.5f)
+        get() = keyboard.trailColor!!.blendARGB(Color.White, 0.5f)
 }

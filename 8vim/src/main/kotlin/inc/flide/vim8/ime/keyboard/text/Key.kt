@@ -5,8 +5,8 @@ import inc.flide.vim8.ime.layout.models.CustomKeycode
 import inc.flide.vim8.ime.layout.models.KeyboardAction
 import inc.flide.vim8.ime.layout.models.KeyboardActionType
 import inc.flide.vim8.ime.layout.models.LayerLevel
-import inc.flide.vim8.lib.Rect
 import inc.flide.vim8.lib.android.AndroidVersion.ATLEAST_API29_Q
+import inc.flide.vim8.lib.geometry.Rect
 
 private val minCode = CustomKeycode.entries.minBy { it.keyCode }.keyCode
 private val maxCode = if (ATLEAST_API29_Q) KeyEvent.KEYCODE_PROFILE_SWITCH else 288

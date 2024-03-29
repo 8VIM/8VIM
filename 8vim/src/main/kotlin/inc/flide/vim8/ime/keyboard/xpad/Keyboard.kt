@@ -18,6 +18,7 @@ import arrow.core.raise.nullable
 import arrow.core.raise.option
 import arrow.core.recover
 import inc.flide.vim8.Vim8ImeService
+import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.layout.models.CHARACTER_SET_SIZE
 import inc.flide.vim8.ime.layout.models.Direction.Companion.baseQuadrant
 import inc.flide.vim8.ime.layout.models.FingerPosition
@@ -34,9 +35,12 @@ import inc.flide.vim8.ime.layout.models.toFingerPosition
 import inc.flide.vim8.ime.layout.models.yaml.ExtraLayer
 import kotlin.math.abs
 import kotlin.math.atan2
+import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 private const val XPAD_CIRCLE_RADIUS_FACTOR = 40f
 private const val XPAD_CIRCLE_OFFSET_FACTOR = 26
@@ -47,7 +51,7 @@ class Keyboard(private val context: Context) {
     }
 
     val keys = List(CHARACTER_SET_SIZE) { Key(it, this) }
-    var trailColor: Color = Color.Unspecified
+    var trailColor: Color? = null
     var layerLevel: LayerLevel by mutableStateOf(LayerLevel.FIRST)
     private var lengthOfLineDemarcatingSectors = 0f
     val keyboardData: KeyboardData? get() = Vim8ImeService.keyboardData()
@@ -200,46 +204,48 @@ class Keyboard(private val context: Context) {
     }
 
     data class Circle(var centre: Offset = Offset.Zero, var radius: Float = 0f) {
+        private val prefs by appPreferenceModel()
+        private var offset: Offset = Offset.Zero
+        val virtualCentre: Offset
+            get() = centre + offset
+        val hasVirtualCentre: Boolean
+            get() = prefs.keyboard.circle.dynamic.isEnabled.get() && offset != Offset.Zero
 
-        private fun getPowerOfPoint(point: Offset): Float {
-            /*
-            If O is the centre of circle
-            Consider startingPoint point P not necessarily on the circumference of the circle.
-            If d = OP is the distance between P and the circle's center O,
-            then the power of the point P relative to the circle is
-            p=d^2-r^2.
-            */
-            val squaredDistanceBetweenPoints = (point - centre).getDistanceSquared()
-            val radiusSquare = radius * radius
-            return squaredDistanceBetweenPoints - radiusSquare
+        fun initVirtual(point: Offset) {
+            if (!prefs.keyboard.circle.dynamic.isEnabled.get()) return
+            val distanceFactor = (sqrt((point - centre).getDistanceSquared()) / radius)
+            val radius = this.radius * distanceFactor
+            val x = (point.x - centre.x).toDouble()
+            val y = (point.y - centre.y).toDouble()
+            val angle = (atan2(y, x)).toFloat()
+            offset = Offset(x = radius * cos(angle), y = radius * sin(angle))
+        }
+
+        fun reset() {
+            offset = Offset.Zero
         }
 
         fun isPointInsideCircle(point: Offset): Boolean {
-            return getPowerOfPoint(point) < 0
+            val squaredDistanceBetweenPoints = (point - virtualCentre).getDistanceSquared()
+            val radiusSquare = radius * radius
+            return (squaredDistanceBetweenPoints - radiusSquare) < 0
+        }
+
+        fun getSectorOfPoint(point: Offset): FingerPosition {
+            val angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(point)
+            val angleToSectorValue = angleDouble / (Math.PI / 2)
+            val quadrantCyclic = angleToSectorValue.roundToInt()
+            return baseQuadrant(quadrantCyclic).toFingerPosition()
         }
 
         private fun getAngleInRadiansOfPointWithRespectToCentreOfCircle(point: Offset): Float {
             // Get difference of coordinates
-            val x = (point.x - centre.x).toDouble()
-            val y = (centre.y - point.y).toDouble()
+            val x = (point.x - virtualCentre.x).toDouble()
+            val y = (virtualCentre.y - point.y).toDouble()
 
-            // Calculate angle with special atan (calculates the correct angle in all quadrants)
-            var angle = atan2(y, x)
-            // Make all angles positive
-            if (angle < 0) {
-                angle += Math.PI * 2
-            }
-            return angle.toFloat()
-        }
-
-        /**
-         * Get the number of the sector that point p is in
-         */
-        fun getSectorOfPoint(p: Offset): FingerPosition {
-            val angleDouble = getAngleInRadiansOfPointWithRespectToCentreOfCircle(p)
-            val angleToSectorValue = angleDouble / (Math.PI / 2)
-            val quadrantCyclic = angleToSectorValue.roundToInt()
-            return baseQuadrant(quadrantCyclic).toFingerPosition()
+            return atan2(y, x)
+                .let { if (it < 0) it + Math.PI * 2 else it }
+                .toFloat()
         }
     }
 }

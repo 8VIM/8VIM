@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import inc.flide.vim8.app.settings.BackupRestoreScreen
+import inc.flide.vim8.app.settings.ClipboardScreen
 import inc.flide.vim8.app.settings.GestureScreen
 import inc.flide.vim8.app.settings.HomeScreen
 import inc.flide.vim8.app.settings.KeyboardScreen
@@ -24,6 +25,7 @@ object Routes {
         const val Home = "settings"
         const val Layouts = "settings/layouts"
         const val Keyboard = "settings/keyboard"
+        const val Clipboard = "settings/clipboard"
         const val Theme = "settings/theme"
         const val Gesture = "settings/gesture"
         const val BackupAndRestore = "settings/backup-and-restore"
@@ -47,6 +49,7 @@ object Routes {
             composable(Settings.Home) { HomeScreen() }
             composable(Settings.Layouts) { LayoutScreen() }
             composable(Settings.Keyboard) { KeyboardScreen() }
+            composable(Settings.Clipboard) { ClipboardScreen() }
             composable(Settings.Theme) { ThemeScreen() }
             composable(Settings.Gesture) { GestureScreen() }
             composable(Settings.BackupAndRestore) { BackupRestoreScreen() }
