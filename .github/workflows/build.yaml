@@ -30,16 +30,16 @@ jobs:
               exit 1
               ;;
           esac
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{inputs.ref}}
           fetch-depth: 0
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           java-version: "17"
           distribution: temurin
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
       - name: Get keystore
         if: ${{inputs.target!='debug'}}
         run: |
@@ -53,7 +53,7 @@ jobs:
           VIM8_BUILD_KEY_PASSWORD: ${{ secrets.VIM8_BUILD_KEY_PASSWORD }}
         run: ./gradlew ${{steps.gradle.outputs.cmd}}
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: artifact
           if-no-files-found: ignore

@@ -30,12 +30,12 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: v${{inputs.version_name}}
       - name: Download artifact
         id: artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: artifact
           path: artifact/
@@ -57,7 +57,7 @@ jobs:
     if: ${{!contains(inputs.version_name, 'rc')}}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: ${{secrets.PAT}}
           repository: 8VIM/8VIM.github.io
@@ -88,10 +88,10 @@ jobs:
       target: ${{contains(inputs.version_name, 'rc') && 'rc' || 'release'}}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download artifact
         id: artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: artifact
           path: artifact/
@@ -105,7 +105,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
       - name: Create release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           body: ${{steps.github_release.outputs.changelog}}
           files: ${{ steps.artifact.outputs.download-path }}/apk/${{env.target}}/8vim-${{env.target}}.apk

@@ -51,7 +51,7 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: 8VIM/json-yaml-validate@main
         with:
           json_schema: ./8vim/src/main/resources/schema.json
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo ${{ github.event.number }} > ./pr_number
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: artifact
           path: pr_number
