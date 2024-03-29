@@ -27,10 +27,11 @@ class ThemeManager(context: Context) {
             field = value
             updateCurrentTheme()
         }
-    private val _currentTheme = MutableLiveData(themeInfo())
+    private val _currentTheme = MutableLiveData<ThemeInfo>()
     val currentTheme: LiveData<ThemeInfo> get() = _currentTheme
 
     init {
+        _currentTheme.value = themeInfo()
         val customColors = prefs.keyboard.customColors
         val trailColor = prefs.keyboard.trail
         prefs.theme.mode.observe {
