@@ -2,8 +2,7 @@ package inc.flide.vim8.ime.editor
 
 import android.view.inputmethod.EditorInfo
 
-@JvmInline
-value class ImeOptions private constructor(val raw: Int) {
+class ImeOptions private constructor(val raw: Int) {
     val action: Action
         get() = Action.fromInt(raw and EditorInfo.IME_MASK_ACTION)
 
@@ -25,7 +24,7 @@ value class ImeOptions private constructor(val raw: Int) {
         SEND(EditorInfo.IME_ACTION_SEND);
 
         companion object {
-            fun fromInt(int: Int) = values().firstOrNull { it.value == int } ?: NONE
+            fun fromInt(int: Int) = entries.firstOrNull { it.value == int } ?: NONE
         }
 
         fun toInt() = value

@@ -58,6 +58,7 @@ class ClipboardManagerSpec : FunSpec({
         every {
             anyConstructed<MutableLiveData<List<String>>>().value = any()
         } propertyType List::class answers {
+            @Suppress("Unchecked_cast")
             dataHistory = value as List<String>
         }
 
@@ -130,8 +131,8 @@ class ClipboardManagerSpec : FunSpec({
                 )
                 .map { it.toSet() }
             val manager = ClipboardManager(context)
-            for (history in window) {
-                val expected = if (!isEnabled) emptyList() else history
+            for (data in window) {
+                val expected = if (!isEnabled) emptyList() else data
                 manager.onPrimaryClipChanged()
                 manager.history.value shouldContainExactlyInAnyOrder expected
             }

@@ -15,9 +15,10 @@ import inc.flide.vim8.keyboardManager
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.property.Arb
-import io.kotest.property.arbitrary.enum
+import io.kotest.property.Exhaustive
 import io.kotest.property.arbitrary.string
 import io.kotest.property.checkAll
+import io.kotest.property.exhaustive.enum
 import io.mockk.OfTypeMatcher
 import io.mockk.clearConstructorMockk
 import io.mockk.clearStaticMockk
@@ -26,6 +27,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 import io.mockk.verify
 import java.util.Locale
 
@@ -120,7 +122,7 @@ class EditorInstanceSpec : FunSpec({
     }
 
     test("performEnterAction") {
-        checkAll(Arb.enum<ImeOptions.Action>()) { action ->
+        checkAll(Exhaustive.enum<ImeOptions.Action>()) { action ->
             every { inputConnection.performEditorAction(any()) } returns true
             val editorInstance = EditorInstance(context)
             editorInstance.performEnterAction(action)
@@ -222,5 +224,6 @@ class EditorInstanceSpec : FunSpec({
     afterSpec {
         clearStaticMockk(Context::class)
         clearConstructorMockk(BreakIteratorGroup::class)
+        unmockkObject(Vim8ImeService)
     }
 })

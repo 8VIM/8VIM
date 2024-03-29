@@ -21,11 +21,11 @@ import io.kotest.matchers.floats.plusOrMinus
 import io.kotest.matchers.shouldBe
 import io.kotest.property.arbitrary.next
 import io.mockk.clearMocks
-import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkObject
 
 class KeyboardSpec : FunSpec() {
     init {
@@ -36,7 +36,7 @@ class KeyboardSpec : FunSpec() {
         config.screenHeightDp = 480
 
         beforeSpec {
-            mockkObject(Vim8ImeService.Companion)
+            mockkObject(Vim8ImeService)
             mockkStatic("inc.flide.vim8.ime.layout.models.KeyboardDataKt")
 
             context = mockk(relaxed = true) {
@@ -173,7 +173,7 @@ class KeyboardSpec : FunSpec() {
         }
 
         afterSpec {
-            clearStaticMockk(Vim8ImeService::class)
+            unmockkObject(Vim8ImeService)
         }
     }
 

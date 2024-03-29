@@ -215,10 +215,8 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
                     val pointer = pointerMap.findById(pointerId)
                     if (pointer != null) {
                         pointer.index = pointerIndex
-                        if (swipeGestureDetector.onTouchMove(
-                                event,
-                                pointer
-                            ) || pointer.hasTriggeredGestureMove
+                        if (swipeGestureDetector.onTouchMove(pointer) ||
+                            pointer.hasTriggeredGestureMove
                         ) {
                             pointer.hasTriggeredGestureMove = true
                         } else {
