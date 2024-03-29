@@ -6,6 +6,8 @@ import android.view.MotionEvent
 import android.view.VelocityTracker
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import arrow.core.none
+import arrow.core.some
 import inc.flide.vim8.ime.keyboard.text.gestures.SwipeGesture.Detector.GesturePointer
 import inc.flide.vim8.ime.keyboard.text.gestures.SwipeGesture.Direction
 import inc.flide.vim8.lib.geometry.Pointer
@@ -30,6 +32,7 @@ class SwipeGestureSpec : FunSpec({
     lateinit var event: MotionEvent
     lateinit var velocityTracker: VelocityTracker
     val pointer = GesturePointer()
+    val pointerOptions = listOf(pointer.some(), none())
 
     beforeSpec {
         mockkStatic(VelocityTracker::obtain)
@@ -79,7 +82,7 @@ class SwipeGestureSpec : FunSpec({
     }
 
     context("onTouchDown") {
-        withData(listOf(pointer, null)) {
+        withData(pointerOptions) {
             every {
                 anyConstructed<PointerMap<GesturePointer>>().add(any(), any())
             } returns it
@@ -87,7 +90,7 @@ class SwipeGestureSpec : FunSpec({
             val detector = SwipeGesture.Detector(listener)
             detector.onTouchDown(event, pointer)
 
-            if (it != null) {
+            it.onSome {
                 pointer.firstX shouldBe 1f
                 pointer.firstY shouldBe 1f
             }
@@ -95,7 +98,7 @@ class SwipeGestureSpec : FunSpec({
     }
 
     context("onTouchMove") {
-        withData(listOf(pointer, null)) {
+        withData(pointerOptions) {
             every {
                 anyConstructed<PointerMap<GesturePointer>>().findById(any())
             } returns it
@@ -103,9 +106,9 @@ class SwipeGestureSpec : FunSpec({
             val detector = SwipeGesture.Detector(listener)
             detector.onTouchMove(
                 mockk<Pointer>(relaxed = true) { every { index } returns 1 }
-            ) shouldBe (it != null)
+            ) shouldBe it.isSome()
 
-            if (it != null) {
+            it.onSome {
                 pointer.index shouldBe 1
             }
         }
@@ -121,7 +124,7 @@ class SwipeGestureSpec : FunSpec({
             velocityValues.map { y -> Offset(x, y) }
         }
 
-        withData(listOf(pointer, null)) {
+        withData(pointerOptions) {
             withData(
                 nameFn = { "Size: ${it.width}, ${it.height}" },
                 sizes
@@ -147,7 +150,7 @@ class SwipeGestureSpec : FunSpec({
                             Direction.DOWN -> 0f to 1f
                             Direction.LEFT -> -1f to 0f
                         }
-                        val matchTrigger = it != null &&
+                        val matchTrigger = it.isSome() &&
                             ((abs(x) > (size.width / 2f)) || (abs(y) > (size.height / 2f))) &&
                             (velocity.x == 1000f || velocity.y == 1000f)
 

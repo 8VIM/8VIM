@@ -1,22 +1,21 @@
 package inc.flide.vim8.lib.geometry
 
 import androidx.annotation.RestrictTo
+import arrow.core.Option
+import arrow.core.elementAtOrNone
+import arrow.core.firstOrNone
 
 class PointerMap<P : Pointer>(val capacity: Int = 4, init: (Int) -> P) : Iterable<P> {
     private val pointers: List<P> = List(capacity.coerceAtLeast(1)) { i ->
         init(i).also { pointer -> pointer.reset() }
     }
 
-    fun add(id: Int, index: Int): P? {
-        for (pointer in pointers) {
-            if (pointer.isNotUsed) {
-                pointer.id = id
-                pointer.index = index
-                return pointer
-            }
+    fun add(id: Int, index: Int): Option<P> = pointers
+        .firstOrNone { it.isNotUsed }
+        .onSome {
+            it.id = id
+            it.index = index
         }
-        return null
-    }
 
     fun clear() {
         for (pointer in pointers) {
@@ -31,14 +30,7 @@ class PointerMap<P : Pointer>(val capacity: Int = 4, init: (Int) -> P) : Iterabl
      *
      * @return The pointer with given [id] or null.
      */
-    fun findById(id: Int): P? {
-        for (pointer in pointers) {
-            if (pointer.id == id) {
-                return pointer
-            }
-        }
-        return null
-    }
+    fun findById(id: Int): Option<P> = pointers.firstOrNone { it.id == id }
 
     /**
      * Gets a pointer from the internal array based on the internal array index. This method
@@ -49,13 +41,9 @@ class PointerMap<P : Pointer>(val capacity: Int = 4, init: (Int) -> P) : Iterabl
      * @return The pointer for given index or null, excluding unused pointers.
      */
     @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP_PREFIX)
-    fun get(index: Int): P? {
-        val pointer = pointers.getOrNull(index)
-        if (pointer != null && pointer.isUsed) {
-            return pointer
-        }
-        return null
-    }
+    fun get(index: Int): Option<P> = pointers
+        .elementAtOrNone(index)
+        .filter { it.isUsed }
 
     override fun iterator(): Iterator<P> {
         return PointerIterator(this)
@@ -68,15 +56,9 @@ class PointerMap<P : Pointer>(val capacity: Int = 4, init: (Int) -> P) : Iterabl
      *
      * @return True if a pointer was removed, false otherwise.
      */
-    fun removeById(id: Int): Boolean {
-        for (pointer in pointers) {
-            if (pointer.id == id) {
-                pointer.reset()
-                return true
-            }
-        }
-        return false
-    }
+    fun removeById(id: Int): Boolean = pointers.firstOrNone { it.id == id }
+        .onSome { it.reset() }
+        .isSome()
 
     /**
      * Returns the size of this map (only counting active pointers). This value is anywhere
@@ -91,7 +73,7 @@ class PointerIterator<P : Pointer>(private val pointerMap: PointerMap<P>) : Iter
 
     override fun hasNext(): Boolean {
         do {
-            if (pointerMap.get(index) != null) {
+            if (pointerMap.get(index).isSome()) {
                 return true
             }
         } while (++index < pointerMap.capacity)
@@ -99,7 +81,7 @@ class PointerIterator<P : Pointer>(private val pointerMap: PointerMap<P>) : Iter
     }
 
     override fun next(): P {
-        return pointerMap.get(index++)!!
+        return pointerMap.get(index++).getOrNull()!!
     }
 }
 

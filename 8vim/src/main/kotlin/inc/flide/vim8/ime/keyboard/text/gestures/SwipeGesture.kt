@@ -25,14 +25,14 @@ abstract class SwipeGesture {
         }
 
         fun onTouchDown(event: MotionEvent, pointer: Pointer) {
-            pointerMap.add(pointer.id, pointer.index)?.let { gesturePointer ->
+            pointerMap.add(pointer.id, pointer.index).onSome { gesturePointer ->
                 gesturePointer.firstX = event.getX(pointer.index).px2dp()
                 gesturePointer.firstY = event.getY(pointer.index).px2dp()
             }
         }
 
         fun onTouchMove(pointer: Pointer): Boolean {
-            pointerMap.findById(pointer.id)?.let { gesturePointer ->
+            pointerMap.findById(pointer.id).onSome { gesturePointer ->
                 gesturePointer.index = pointer.index
                 return true
             }
@@ -40,7 +40,7 @@ abstract class SwipeGesture {
         }
 
         fun onTouchUp(event: MotionEvent, pointer: Pointer, size: Size): Boolean {
-            pointerMap.findById(pointer.id)?.let { gesturePointer ->
+            return pointerMap.findById(pointer.id).filter { gesturePointer ->
                 val currentX = event.getX(pointer.index).px2dp()
                 val currentY = event.getY(pointer.index).px2dp()
                 val absDiffX = currentX - gesturePointer.firstX
@@ -49,7 +49,7 @@ abstract class SwipeGesture {
                 val velocityX = velocityTracker.getXVelocity(pointer.id).px2dp()
                 val velocityY = velocityTracker.getYVelocity(pointer.id).px2dp()
                 pointerMap.removeById(pointer.id)
-                return if (
+                if (
                     (
                         abs(absDiffX) > (size.width.px2dp() / 2.0) ||
                             abs(absDiffY) > (size.height.px2dp() / 2.0)
@@ -63,8 +63,7 @@ abstract class SwipeGesture {
                 } else {
                     false
                 }
-            }
-            return false
+            }.isSome()
         }
 
         fun onTouchCancel(pointer: Pointer) {

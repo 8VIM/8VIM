@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 private const val FULL_ROTATION_STEPS = 7
-private val ROTATION_MOVEMENT_SEQUENCES = setOf(
+internal val ROTATION_MOVEMENT_SEQUENCES = setOf(
     listOf(
         FingerPosition.BOTTOM,
         FingerPosition.LEFT,

@@ -172,7 +172,7 @@ class ThemeManagerSpec : FunSpec({
     }
 
     test("Observe change") {
-        val manager = ThemeManager(context)
+        ThemeManager(context)
         backgroundObserver.onChanged(1)
         foregroundObserver.onChanged(1)
         trailColorObserver.onChanged(1)

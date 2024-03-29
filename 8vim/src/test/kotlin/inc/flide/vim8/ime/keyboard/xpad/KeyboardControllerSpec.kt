@@ -21,8 +21,14 @@ import inc.flide.vim8.datastore.CachedPreferenceModel
 import inc.flide.vim8.datastore.model.PreferenceData
 import inc.flide.vim8.ime.input.InputEventDispatcher
 import inc.flide.vim8.ime.input.InputFeedbackController
+import inc.flide.vim8.ime.keyboard.text.toKeyboardAction
 import inc.flide.vim8.ime.keyboard.xpad.gestures.GlideGesture
+import inc.flide.vim8.ime.layout.models.CustomKeycode
 import inc.flide.vim8.ime.layout.models.FingerPosition
+import inc.flide.vim8.ime.layout.models.KeyboardAction
+import inc.flide.vim8.ime.layout.models.LayerLevel
+import inc.flide.vim8.ime.layout.models.LayerLevel.Companion.MovementSequences
+import inc.flide.vim8.ime.layout.models.LayerLevel.Companion.VisibleLayers
 import inc.flide.vim8.ime.theme.ThemeManager
 import inc.flide.vim8.ime.theme.blendARGB
 import inc.flide.vim8.keyboardManager
@@ -41,8 +47,10 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.verify
 import io.mockk.verifyOrder
 import io.mockk.verifySequence
+import kotlinx.coroutines.delay
 
 class KeyboardControllerSpec : FunSpec({
     lateinit var context: Context
@@ -108,13 +116,31 @@ class KeyboardControllerSpec : FunSpec({
             every { x } returns 0f
             every { y } returns 0f
         }
+
         xpadKeyboard = mockk(relaxed = true) {
             every { circle } answers { keyboardCircle }
             every { trailColor } returns Color.Black
+            every { hasAction(any()) } returns false
+            every { action(any(), any()) } returns None
+            every { key(any()) } returns null
         }
+
         isDynamicCircleOverlayEnabled = mockk<PreferenceData<Boolean>>()
-        showTrail = mockk<PreferenceData<Boolean>>()
-        keyboardCircle = mockk<Keyboard.Circle>(relaxed = true)
+
+        showTrail = mockk<PreferenceData<Boolean>> {
+            every { get() } returns false
+        }
+
+        keyboardCircle = mockk<Keyboard.Circle>(relaxed = true) {
+            every { isPointInsideCircle(any()) } answers {
+                unpackFloat2(firstArg<Long>()).toInt() == FingerPosition.INSIDE_CIRCLE.ordinal
+            }
+
+            every { getSectorOfPoint(any()) } answers {
+                FingerPosition.entries[unpackFloat2(firstArg<Long>()).toInt()]
+            }
+        }
+
         eventDispatcher = mockk<InputEventDispatcher>(relaxed = true)
     }
 
@@ -185,7 +211,6 @@ class KeyboardControllerSpec : FunSpec({
 
     context("onTouchEventInternal") {
         test("keyPress") {
-            every { showTrail.get() } returns false
             val movements = listOf(
                 listOf(
                     FingerPosition.INSIDE_CIRCLE,
@@ -201,23 +226,17 @@ class KeyboardControllerSpec : FunSpec({
                     FingerPosition.INSIDE_CIRCLE
                 ) to arbKeyboardAction.next()
             )
-            every { xpadKeyboard.hasAction(any()) } returns false
-            every { xpadKeyboard.action(any(), any()) } returns None
+
+            val key = mockk<Key>(relaxed = true)
+
             for ((movement, action) in movements) {
                 every { xpadKeyboard.hasAction(movement) } returns true
                 every { xpadKeyboard.action(movement, any()) } returns action.some()
+                every { xpadKeyboard.key(movement) } returns key
             }
 
             every { event.actionMasked } answers { MotionEvent.ACTION_DOWN } andThenAnswer {
                 MotionEvent.ACTION_MOVE
-            }
-
-            every { keyboardCircle.isPointInsideCircle(any()) } answers {
-                unpackFloat2(firstArg<Long>()).toInt() == FingerPosition.INSIDE_CIRCLE.ordinal
-            }
-
-            every { keyboardCircle.getSectorOfPoint(any()) } answers {
-                FingerPosition.entries[unpackFloat2(firstArg<Long>()).toInt()]
             }
 
             val sequence = movements
@@ -245,7 +264,119 @@ class KeyboardControllerSpec : FunSpec({
 
             verifyOrder {
                 for ((_, action) in movements) {
+                    key setProperty "isSelected" value true
                     eventDispatcher.sendDownUp(action, false)
+                }
+            }
+        }
+
+        test("long press") {
+            val movements = listOf(
+                listOf(
+                    FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.LONG_PRESS
+                ) to arbKeyboardAction.next(),
+                listOf(
+                    FingerPosition.INSIDE_CIRCLE,
+                    FingerPosition.LONG_PRESS_END
+                ) to arbKeyboardAction.next()
+            )
+
+            for ((movement, action) in movements) {
+                every { xpadKeyboard.action(movement, any()) } returns action.some()
+            }
+
+            every { event.actionMasked } answers { MotionEvent.ACTION_DOWN } andThenAnswer {
+                MotionEvent.ACTION_MOVE
+            }
+
+            val sequence = listOf(FingerPosition.INSIDE_CIRCLE, FingerPosition.BOTTOM)
+
+            every { event.y } returnsMany sequence.map { it.ordinal.toFloat() }
+
+            val controller = KeyboardController(context).also { it.keyboard = xpadKeyboard }
+
+            controller.onTouchEventInternal(event)
+            delay(500)
+            controller.onTouchEventInternal(event)
+
+            verifyOrder {
+                for ((m, action) in movements) {
+                    eventDispatcher
+                        .sendDownUp(action, m.last() == FingerPosition.LONG_PRESS)
+                }
+            }
+        }
+
+        test("key up") {
+            val action = mockk<KeyboardAction>(relaxed = true)
+            every {
+                xpadKeyboard.action(
+                    listOf(
+                        FingerPosition.INSIDE_CIRCLE,
+                        FingerPosition.NO_TOUCH
+                    ),
+                    any()
+                )
+            } returns action.some()
+            every { event.actionMasked } answers { MotionEvent.ACTION_UP }
+
+            every { event.y } returns FingerPosition.INSIDE_CIRCLE.ordinal.toFloat()
+
+            val controller = KeyboardController(context).also { it.keyboard = xpadKeyboard }
+
+            controller.onTouchEventInternal(event)
+            eventDispatcher.sendDownUp(action, false)
+        }
+
+        test("key cancel") {
+            every { event.actionMasked } answers { MotionEvent.ACTION_CANCEL }
+
+            every { event.y } returns FingerPosition.INSIDE_CIRCLE.ordinal.toFloat()
+
+            val controller = KeyboardController(context).also { it.keyboard = xpadKeyboard }
+
+            controller.onTouchEventInternal(event)
+            verify { xpadKeyboard.reset() }
+        }
+    }
+
+    context("onTouchEventInternal full rotation") {
+        withData(nameFn = { "Layer: $it" }, VisibleLayers) { layer ->
+            withData(
+                nameFn = { "Sequence :$it" },
+                ROTATION_MOVEMENT_SEQUENCES
+            ) { rotationSequence ->
+                val layerMovement =
+                    MovementSequences.getOrDefault(layer, emptyList())
+
+                val layerLevels = listOf(
+                    LayerLevel.FIRST,
+                    LayerLevel.FIRST,
+                    LayerLevel.FIRST,
+                    LayerLevel.FIRST
+                ) + layerMovement.indices
+                    .drop(1)
+                    .map { if (it == layerMovement.size - 1) layer else LayerLevel.FIRST }
+
+                every { xpadKeyboard.layerLevel } returnsMany layerLevels
+
+                every { event.actionMasked } answers { MotionEvent.ACTION_DOWN } andThenAnswer {
+                    MotionEvent.ACTION_MOVE
+                }
+
+                val sequence =
+                    layerMovement + listOf(FingerPosition.INSIDE_CIRCLE) + rotationSequence
+
+                every { event.y } returnsMany sequence.map {
+                    it.ordinal.toFloat()
+                }
+
+                val controller = KeyboardController(context).also { it.keyboard = xpadKeyboard }
+
+                sequence.forEach { _ -> controller.onTouchEventInternal(event) }
+                verify {
+                    eventDispatcher.sendDownUp(CustomKeycode.SHIFT_TOGGLE.toKeyboardAction())
                 }
             }
         }
