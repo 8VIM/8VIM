@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
+    if: github.actor != 'dependabot[bot]'
     outputs:
       src: ${{ steps.changes.outputs.src }}
       yaml: ${{ steps.changes.outputs.yaml }}
@@ -58,7 +59,7 @@ jobs:
   test_run:
     name: 8VIM tests
     needs: changes
-    if: ${{ needs.changes.outputs.src == 'true' }}
+    if: ${{ github.actor == 'dependabot[bot]' || needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
     secrets: inherit
   test_check:
@@ -69,7 +70,7 @@ jobs:
     steps:
       - run: exit ${{ needs.test_run.result == 'success' && '0' || '1' }}
   build:
-    if: ${{ !cancelled() && (needs.test_check.result == 'success' || needs.validate_layouts.result == 'success') }}
+    if: ${{ github.actor != 'dependabot[bot]' && !cancelled() && (needs.test_check.result == 'success' || needs.validate_layouts.result == 'success') }}
     needs: [validate_layouts, test_check]
     uses: ./.github/workflows/build.yaml
     with:
