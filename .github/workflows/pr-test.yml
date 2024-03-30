@@ -91,3 +91,4 @@ jobs:
           message: |
             Artifact [8vim-debug](${{needs.build.outputs.artifact-url}}) available until: ${{needs.build.outputs.expires-at}}
           comment_tag: artifact
+          GITHUB_TOKEN: ${{ secrets.PAT }}
