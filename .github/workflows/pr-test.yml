@@ -2,9 +2,6 @@ name: PR test
 
 concurrency: pr-${{github.event.number}}
 
-permissions:
-  pull-requests: write
-
 on:
   pull_request:
     branches: [master]
@@ -82,11 +79,7 @@ jobs:
   update_pr_comment:
     if: ${{ !cancelled() && needs.build.result == 'success' }}
     needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Update comment
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            Artifact [8vim-debug](${{needs.build.outputs.artifact-url}}) available until: ${{needs.build.outputs.expires-at}}
-          comment_tag: artifact
+    uses: ./.github/workflows/pr-artifact-comment.yaml
+    with:
+      url: ${{needs.build.outputs.artifact-url}}
+      expires_at: ${{needs.build.outputs.expires-at}}

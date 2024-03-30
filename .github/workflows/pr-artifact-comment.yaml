@@ -1,0 +1,24 @@
+name: Update PR comment
+
+on:
+  workflow_call:
+    inputs:
+      url:
+        required: true
+        type: string
+      expires_at:
+        required: true
+        type: string
+jobs:
+  update_pr_comment:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Update comment
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Artifact [8vim-debug](${{inputs.url}}) available until: ${{inputs.expires_at}}
+          comment_tag: artifact
+          pr_number: needs.build.outputs.expires-at
