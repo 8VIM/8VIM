@@ -76,10 +76,3 @@ jobs:
       ref: ${{github.ref}}
       target: debug
     secrets: inherit
-  update_pr_comment:
-    if: ${{ !cancelled() && needs.build.result == 'success' }}
-    needs: [build]
-    uses: ./.github/workflows/pr-artifact-comment.yaml
-    with:
-      url: ${{needs.build.outputs.artifact-url}}
-      expires_at: ${{needs.build.outputs.expires-at}}
