@@ -65,13 +65,14 @@ jobs:
     secrets: inherit
   test_check:
     name: Github action test check workaround
+    if: ${{always()}}
     needs: test_run
     runs-on: ubuntu-latest
     steps:
-      - run: echo OK
+      - run: exit ${{ needs.test_run.result == 'success' && '0' || '1' }}
   build:
-    if: ${{ !cancelled() && (needs.test_check.result != 'failure' && needs.validate_layouts.result != 'failure') }}
-    needs: [validate_layouts, test_check, test_run]
+    if: ${{ !cancelled() && (needs.test_check.result == 'success' || needs.validate_layouts.result == 'success') }}
+    needs: [validate_layouts, test_check]
     uses: ./.github/workflows/build.yaml
     with:
       ref: ${{github.ref}}
