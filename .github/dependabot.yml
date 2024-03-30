@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: /gradle
+    schedule:
+      interval: weekly
+      timezone: Etc/UTC
+    labels: [ignore]
+    commit-message:
+      include: scope
+      prefix: chore
