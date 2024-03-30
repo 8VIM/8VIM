@@ -71,7 +71,7 @@ jobs:
       - run: echo OK
   build:
     if: ${{ !cancelled() && (needs.test_check.result != 'failure' && needs.validate_layouts.result != 'failure') }}
-    needs: [validate_layouts, test_check]
+    needs: [validate_layouts, test_check, test_run]
     uses: ./.github/workflows/build.yaml
     with:
       ref: ${{github.ref}}
