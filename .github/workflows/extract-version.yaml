@@ -26,7 +26,7 @@ jobs:
       version_code: ${{steps.vars.outputs.version_code}}
       version_name: ${{steps.vars.outputs.version_name}}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Get version
         id: vars
         run: |

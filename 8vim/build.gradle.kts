@@ -161,6 +161,22 @@ android {
     }
 
     testOptions {
+        unitTests.all {
+            it.useJUnit()
+            it.testLogging {
+                events(
+                    TestLogEvent.FAILED,
+                    TestLogEvent.PASSED,
+                    TestLogEvent.STANDARD_ERROR,
+                    TestLogEvent.SKIPPED
+                )
+
+                exceptionFormat = TestExceptionFormat.FULL
+                showExceptions = true
+                showCauses = true
+                showStackTraces = true
+            }
+        }
         unitTests.isReturnDefaultValues = true
     }
 
@@ -178,27 +194,12 @@ tasks.withType<JacocoReport> {
 }
 
 tasks.withType<Test> {
-    useJUnitPlatform()
-
+    enabled = name == "testDebugUnitTest"
     finalizedBy(tasks.withType<JacocoReport>())
 
     configure<JacocoTaskExtension> {
         isIncludeNoLocationClasses = true
         excludes = listOf("jdk.internal*")
-    }
-
-    testLogging {
-        events(
-            TestLogEvent.FAILED,
-            TestLogEvent.PASSED,
-            TestLogEvent.STANDARD_ERROR,
-            TestLogEvent.SKIPPED
-        )
-
-        exceptionFormat = TestExceptionFormat.FULL
-        showExceptions = true
-        showCauses = true
-        showStackTraces = true
     }
 }
 

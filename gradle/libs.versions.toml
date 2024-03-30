@@ -90,9 +90,6 @@ mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
 kotest-runner-android = { module = "br.com.colman:kotest-runner-android", version.ref = "kotest-runner-android" }
 kotest-assertions-android = { module = "br.com.colman:kotest-assertions-android", version.ref = "kotest-assertions-android" }
 
-# Debug
-androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidx-compose" }
-
 [plugins]
 # Main
 agp-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

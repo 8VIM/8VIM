@@ -11,7 +11,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
-import arrow.core.firstOrNone
 import arrow.core.getOrElse
 import arrow.core.getOrNone
 import inc.flide.vim8.Vim8ImeService
@@ -39,7 +38,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 private const val FULL_ROTATION_STEPS = 7
-private val ROTATION_MOVEMENT_SEQUENCES = setOf(
+internal val ROTATION_MOVEMENT_SEQUENCES = setOf(
     listOf(
         FingerPosition.BOTTOM,
         FingerPosition.LEFT,
@@ -192,6 +191,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                     keyboard.circle.initVirtual(position)
                 }
                 initiateLongPressDetection()
+                isReducesCircleSize = true
             }
 
             MotionEvent.ACTION_MOVE -> {
@@ -199,10 +199,6 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 currentFingerPosition = currentPosition
                 val isFingerPositionChanged = lastKnownFingerPosition !== currentFingerPosition
                 if (isFingerPositionChanged) {
-                    movementSequence.firstOrNone()
-                        .filter { it == FingerPosition.INSIDE_CIRCLE && !isReducesCircleSize }
-                        .onSome { isReducesCircleSize = true }
-
                     interruptLongPress()
                     movementSequence.add(currentFingerPosition)
                     keyboard.findLayer(movementSequence)
