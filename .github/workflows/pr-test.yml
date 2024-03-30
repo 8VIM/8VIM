@@ -90,4 +90,3 @@ jobs:
           message: |
             Artifact [8vim-debug](${{needs.build.outputs.artifact-url}}) available until: ${{needs.build.outputs.expires-at}}
           comment_tag: artifact
-          pr_number: ${{github.event.number}}
