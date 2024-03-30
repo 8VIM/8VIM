@@ -21,4 +21,4 @@ jobs:
           message: |
             Artifact [8vim-debug](${{inputs.url}}) available until: ${{inputs.expires_at}}
           comment_tag: artifact
-          pr_number: needs.build.outputs.expires-at
+          pr_number: ${{ github.event.number }}
