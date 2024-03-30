@@ -2,6 +2,9 @@ name: PR test
 
 concurrency: pr-${{github.event.number}}
 
+permissions:
+  pull-requests: write
+
 on:
   pull_request:
     branches: [master]
@@ -48,8 +51,6 @@ jobs:
     if: ${{ needs.changes.outputs.yaml == 'true' }}
     name: Validate language layouts
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: 8VIM/json-yaml-validate@main
@@ -82,8 +83,6 @@ jobs:
     if: ${{ !cancelled() && needs.build.result == 'success' }}
     needs: [build]
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     steps:
       - name: Update comment
         uses: thollander/actions-comment-pull-request@v2
@@ -91,4 +90,3 @@ jobs:
           message: |
             Artifact [8vim-debug](${{needs.build.outputs.artifact-url}}) available until: ${{needs.build.outputs.expires-at}}
           comment_tag: artifact
-          GITHUB_TOKEN: ${{ secrets.PAT }}
