@@ -54,7 +54,7 @@ jobs:
       - uses: 8VIM/json-yaml-validate@use-multiple-schemas
         with:
           schema_dir: ./8vim/src/main/resources/schemas
-          schema_name: https://8vim.github.io/schemas/schema
+          schema_name: schema.json
           yaml_as_json: "true"
           base_dir: ./8vim/src/main/res/raw
   test_run:
