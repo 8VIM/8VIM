@@ -4,6 +4,7 @@
   "type": "object",
   "properties": {
     "version": {
+      "$anchor": "version",
       "type": "string",
       "enum": [
         "2"

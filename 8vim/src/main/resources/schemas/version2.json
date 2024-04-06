@@ -159,6 +159,7 @@
   },
   "type": "object",
   "properties": {
+    "version": {"$ref":"/schemas/schema#version"},
     "info": {
       "type": "object",
       "properties": {
