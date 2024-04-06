@@ -135,10 +135,22 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
     lateinit var keyboard: Keyboard
 
     var isReducesCircleSize by mutableStateOf(false)
+        private set
     var hasTrail by mutableStateOf(false)
+    var hasVirtualCentre by mutableStateOf(false)
+        private set
     val trailPoints = mutableStateListOf<GlideGesture.Point>()
 
-    fun drawSectors(drawScope: DrawScope, color: Color) {
+    init {
+        prefs.keyboard.circle.dynamic.isEnabled.observe { _ ->
+            hasVirtualCentre = keyboard.circle.hasVirtualCentre && isDynamicCircleOverlayEnabled
+        }
+        prefs.keyboard.circle.dynamic.isOverlayEnabled.observe { _ ->
+            hasVirtualCentre = keyboard.circle.hasVirtualCentre && isDynamicCircleOverlayEnabled
+        }
+    }
+
+    fun drawSectors(drawScope: DrawScope, hasVirtualCentre: Boolean, color: Color) {
         drawScope.drawCircle(
             color,
             keyboard.circle.radius,
@@ -147,7 +159,8 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         )
 
         drawScope.drawPath(keyboard.path, color, style = drawStyle)
-        if (keyboard.circle.hasVirtualCentre && isDynamicCircleOverlayEnabled) {
+
+        if (hasVirtualCentre) {
             drawScope.drawCircle(
                 color.blendARGB(backgroundColor, 0.65f).copy(alpha = 0.75f),
                 keyboard.circle.radius,
@@ -262,6 +275,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                 keyboard.reset()
             }
         }
+        hasVirtualCentre = keyboard.circle.hasVirtualCentre && isDynamicCircleOverlayEnabled
     }
 
     private fun detectKeySelection() {

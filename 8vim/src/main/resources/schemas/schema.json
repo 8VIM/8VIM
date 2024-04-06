@@ -1,0 +1,37 @@
+{
+  "$id": "https://8vim.github.io/schemas/schema",
+  "$schema": "https://json-schema.org/draft/2019-09/schema#",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "enum": [
+        "2"
+      ]
+    }
+  },
+  "if": {
+    "anyOf": [
+      {
+        "properties": {
+          "version": {
+            "const": "2"
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      {
+        "not": {
+          "required": [
+            "version"
+          ]
+        }
+      }
+    ]
+  },
+  "then": {
+    "$ref": "/schemas/version2"
+  }
+}

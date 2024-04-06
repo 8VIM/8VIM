@@ -126,7 +126,7 @@ fun XpadLayout() = with(LocalDensity.current) {
                 return@pointerInteropFilter true
             }
             .drawWithContent {
-                controller.drawSectors(this, fg)
+                controller.drawSectors(this, controller.hasVirtualCentre, fg)
                 if (controller.hasTrail && controller.trailPoints.isNotEmpty()) {
                     controller.drawTrail(this, controller.trailPoints)
                 }
