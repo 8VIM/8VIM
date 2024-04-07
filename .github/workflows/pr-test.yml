@@ -88,4 +88,4 @@ jobs:
     needs: [validate_layouts, test_run]
     runs-on: ubuntu-latest
     steps:
-      - run: exit ${{ ((needs.validate_layouts.result == 'skipped' && needs.test_run.result == 'skipped') || (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success')) && '0' || '1' }}
+      - run: exit ${{ ((needs.validate_layouts.result == 'skipped' && needs.test_run.result == 'skipped') || (needs.test_run.result != 'failure' && needs.validate_layouts.result != 'failure')) && '0' || '1' }}
