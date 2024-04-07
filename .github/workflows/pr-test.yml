@@ -17,7 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
-    if: github.actor != 'dependabot[bot]'
     outputs:
       src: ${{ steps.changes.outputs.src }}
       yaml: ${{ steps.changes.outputs.yaml }}
