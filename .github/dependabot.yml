@@ -3,9 +3,10 @@ updates:
   - package-ecosystem: gradle
     directory: /
     schedule:
-      interval: daily
+      interval: weekly
       timezone: Etc/UTC
-      time: "14:20"
+      time: "00:00"
+      day: sunday
     labels: [ignore]
     commit-message:
       include: scope
