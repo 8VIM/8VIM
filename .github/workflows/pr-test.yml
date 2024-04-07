@@ -73,17 +73,6 @@ jobs:
       ref: ${{github.ref}}
       target: debug
     secrets: inherit
-  upload_artifact:
-    if: ${{ !cancelled() && needs.build.result == 'success' }}
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo ${{ github.event.number }} > ./pr_number
-      - uses: actions/upload-artifact@v3
-        with:
-          name: artifact
-          path: pr_number
-          retention-days: 7
   test_check:
     name: Github action test check workaround
     if: ${{always()}}
