@@ -1,7 +1,7 @@
 {
   "$id": "https://8vim.github.io/schemas/version2.json",
   "$schema": "https://json-schema.org/draft/2019-09/schema#",
-  "definitions": {
+  "$defs": {
     "action": {
       "type": [
         "object",
@@ -105,7 +105,7 @@
                   "type": "object",
                   "patternProperties": {
                     "^(?i)(top|bottom)$": {
-                      "$ref": "#/definitions/actionList"
+                      "$ref": "#/$defs/actionList"
                     }
                   },
                   "additionalProperties": false,
@@ -126,7 +126,7 @@
                   "type": "object",
                   "patternProperties": {
                     "^(?i)(left|right)$": {
-                      "$ref": "#/definitions/actionList"
+                      "$ref": "#/$defs/actionList"
                     }
                   },
                   "additionalProperties": false,
@@ -149,7 +149,7 @@
     "actionList": {
       "type": "array",
       "items": {
-        "$ref": "#/definitions/action"
+        "$ref": "#/$defs/action"
       },
       "maxItems": 4,
       "message": {
@@ -193,13 +193,13 @@
       "type": "object",
       "properties": {
         "default": {
-          "$ref": "#/definitions/sectors"
+          "$ref": "#/$defs/sectors"
         },
         "extra_layers": {
           "type": "object",
           "patternProperties": {
             "^(?i)(first|second|third|fourth|fifth)$": {
-              "$ref": "#/definitions/sectors"
+              "$ref": "#/$defs/sectors"
             }
           },
           "additionalProperties": false,
@@ -210,7 +210,7 @@
         "hidden": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/action"
+            "$ref": "#/$defs/action"
           }
         }
       },
