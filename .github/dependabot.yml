@@ -1,13 +1,14 @@
 version: 2
 updates:
   - package-ecosystem: gradle
-    directory: /gradle
+    directory: /
     schedule:
       interval: weekly
       timezone: Etc/UTC
-      time: 00:00
+      time: "00:00"
       day: sunday
     labels: [ignore]
     commit-message:
       include: scope
       prefix: chore
+    open-pull-requests-limit: 10
