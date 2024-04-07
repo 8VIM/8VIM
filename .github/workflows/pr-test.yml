@@ -12,12 +12,6 @@ on:
       - "**.gradle.kts"
       - "8vim/**"
 jobs:
-  debug_actor:
-    runs-on: ubuntu-latest
-    steps:
-      # - run: echo "startsWith(github.head_ref, 'releases/')"
-      - run: echo "${{github.head_ref}}"
-
   changes:
     name: Detect changed files
     runs-on: ubuntu-latest
@@ -70,7 +64,7 @@ jobs:
     uses: ./.github/workflows/codecheck.yaml
     secrets: inherit
   build:
-    if: ${{ github.triggering_actor != 'dependabot[bot]' && !cancelled() && (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success') }}
+    if: ${{ !startsWith(github.head_ref, 'dependabot/') && !cancelled() && (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success') }}
     needs: [validate_layouts, test_run]
     uses: ./.github/workflows/build.yaml
     with:
