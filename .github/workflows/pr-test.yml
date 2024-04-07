@@ -15,7 +15,8 @@ jobs:
   debug_actor:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "${{ github.actor }} -- ${{ github.triggering_actor }}"
+      # - run: echo "startsWith(github.head_ref, 'releases/')"
+      - run: echo "${{github.head_ref}}"
 
   changes:
     name: Detect changed files
