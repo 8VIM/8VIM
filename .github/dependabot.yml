@@ -11,3 +11,4 @@ updates:
     commit-message:
       include: scope
       prefix: chore
+    open-pull-requests-limit: 10
