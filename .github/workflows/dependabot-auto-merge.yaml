@@ -1,9 +1,7 @@
 name: Dependabot auto-merge
-
-on: pull_request
-# on:
-#   pull_request:
-#     types: [opened]
+on:
+  pull_request:
+    types: [opened]
 
 permissions:
   contents: write
@@ -20,9 +18,7 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Enable auto-merge for Dependabot PRs
-        run: |
-          echo "${{steps.metadata.outputs.dependency-names}}"
-          gh pr merge --auto --merge "$PR_URL"
+        run: gh pr merge --auto --merge "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
