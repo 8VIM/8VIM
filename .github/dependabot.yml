@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: daily
       timezone: Etc/UTC
-      time: 14:15
+      time: "14:20"
     labels: [ignore]
     commit-message:
       include: scope
