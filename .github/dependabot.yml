@@ -8,6 +8,12 @@ updates:
       time: "00:00"
       day: sunday
     labels: [ignore]
+    groups:
+      kotlin:
+        applies-to: version-updates
+        patterns:
+          - "org.jetbrains.kotlin*"
+          - "com.google.devtools.ksp*"
     commit-message:
       include: scope
       prefix: chore
