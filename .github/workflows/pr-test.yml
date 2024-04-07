@@ -62,6 +62,8 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
+    with:
+      skip-codecov: ${{ startsWith(github.head_ref, 'dependabot/') }}
     secrets: inherit
   build:
     if: ${{ !startsWith(github.head_ref, 'dependabot/') && !cancelled() && (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success') }}
