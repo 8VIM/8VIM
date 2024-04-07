@@ -1,5 +1,5 @@
 {
-  "$id": "https://8vim.github.io/schemas/version2",
+  "$id": "https://8vim.github.io/schemas/version2.json",
   "$schema": "https://json-schema.org/draft/2019-09/schema#",
   "definitions": {
     "action": {
@@ -159,7 +159,7 @@
   },
   "type": "object",
   "properties": {
-    "version": {"$ref":"/schemas/schema#version"},
+    "version": {"$ref":"/schemas/schema.json#version"},
     "info": {
       "type": "object",
       "properties": {
