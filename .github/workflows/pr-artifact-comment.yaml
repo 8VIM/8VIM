@@ -4,14 +4,14 @@ on:
   workflow_run:
     workflows: [PR test]
     types: [completed]
-
+    branches-ignore: ["dependabot/**"]
 jobs:
   update_pr_comment:
     permissions:
       actions: read
       pull-requests: write
     runs-on: ubuntu-latest
-    if: ${{ github.triggering_actor != 'dependabot[bot]' && github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Get artifact link
         id: artifact
@@ -38,6 +38,7 @@ jobs:
           echo "url=https://github.com/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts/$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
           echo "expires=$(jq -j '.expires_at' artifact.json)" >> $GITHUB_OUTPUT
       - name: Update comment
+        if: ${{steps.artifact.outputs.expires != 'null' }}
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |

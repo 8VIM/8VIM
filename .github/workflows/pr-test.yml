@@ -62,9 +62,11 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
+    with:
+      skip-codecov: ${{ startsWith(github.head_ref, 'dependabot/') }}
     secrets: inherit
   build:
-    if: ${{ github.triggering_actor != 'dependabot[bot]' && !cancelled() && (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success') }}
+    if: ${{ !startsWith(github.head_ref, 'dependabot/') && !cancelled() && (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success') }}
     needs: [validate_layouts, test_run]
     uses: ./.github/workflows/build.yaml
     with:
@@ -88,4 +90,4 @@ jobs:
     needs: [validate_layouts, test_run]
     runs-on: ubuntu-latest
     steps:
-      - run: exit ${{ ((needs.validate_layouts.result == 'skipped' && needs.test_run.result == 'skipped') || (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success')) && '0' || '1' }}
+      - run: exit ${{ ((needs.validate_layouts.result == 'skipped' && needs.test_run.result == 'skipped') || (needs.test_run.result != 'failure' && needs.validate_layouts.result != 'failure')) && '0' || '1' }}
