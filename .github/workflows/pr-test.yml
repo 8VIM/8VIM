@@ -12,6 +12,11 @@ on:
       - "**.gradle.kts"
       - "8vim/**"
 jobs:
+  debug_actor:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ github.actor }} -- ${{ github.triggering_actor }}"
+
   changes:
     name: Detect changed files
     runs-on: ubuntu-latest
