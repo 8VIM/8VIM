@@ -38,6 +38,7 @@ jobs:
           echo "url=https://github.com/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts/$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
           echo "expires=$(jq -j '.expires_at' artifact.json)" >> $GITHUB_OUTPUT
       - name: Update comment
+        if: ${{steps.artifact.outputs.expires != 'null' }}
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
