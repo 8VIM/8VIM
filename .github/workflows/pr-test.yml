@@ -63,15 +63,9 @@ jobs:
     if: ${{ github.actor == 'dependabot[bot]' || needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
     secrets: inherit
-  test_check:
-    name: Github action test check workaround
-    needs: test_run
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo OK
   build:
-    if: ${{ github.actor != 'dependabot[bot]' && !cancelled() && (needs.test_check.result == 'success' || needs.validate_layouts.result == 'success') }}
-    needs: [validate_layouts, test_check]
+    if: ${{ github.actor != 'dependabot[bot]' && !cancelled() && (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success') }}
+    needs: [validate_layouts, test_run]
     uses: ./.github/workflows/build.yaml
     with:
       ref: ${{github.ref}}
@@ -88,3 +82,10 @@ jobs:
           name: artifact
           path: pr_number
           retention-days: 7
+  test_check:
+    name: Github action test check workaround
+    if: ${{always()}}
+    needs: [validate_layouts, test_run]
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit ${{ ((needs.validate_layouts.result == 'skipped' && needs.test_run.result == 'skipped') || (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success')) && '0' || '1' }}
