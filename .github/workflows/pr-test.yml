@@ -60,7 +60,7 @@ jobs:
   test_run:
     name: 8VIM tests
     needs: changes
-    if: ${{ github.actor == 'dependabot[bot]' || needs.changes.outputs.src == 'true' }}
+    if: ${{ needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
     secrets: inherit
   build:
