@@ -20,7 +20,7 @@ jobs:
     outputs:
       src: ${{ steps.changes.outputs.src }}
     steps:
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         id: changes
         with:
           filters: |

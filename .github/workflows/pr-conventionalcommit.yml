@@ -8,7 +8,7 @@ jobs:
   check-for-cc:
     name: Conventional commit checker
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
+    if: github.triggering_actor != 'dependabot[bot]'
     permissions:
       pull-requests: read
     steps:

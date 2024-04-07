@@ -6,6 +6,7 @@ on:
     types: [opened, closed]
 jobs:
   notify:
+    if: github.triggering_actor != 'dependabot[bot]'
     name: Matrix notification PR
     uses: ./.github/workflows/matrix-notify.yaml
     with:

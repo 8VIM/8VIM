@@ -5,6 +5,9 @@ on:
       continue-on-error:
         type: boolean
         default: false
+      skip-codecov:
+        type: boolean
+        default: false
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -19,7 +22,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
       - run: ./gradlew check
       - name: Upload coverage reports to Codecov
-        if: github.actor != 'dependabot[bot]'
+        if: ${{ !inputs.skip-codecov }}
         uses: codecov/codecov-action@v3
         with:
           directory: ./8vim/build/reports/jacoco/jacocoTestReportDebug
