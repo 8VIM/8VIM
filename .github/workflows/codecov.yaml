@@ -6,7 +6,7 @@ on:
   push:
     branches: [master]
     paths:
-      - "gradle/libs.version.toml"
+      - "gradle/libs.versions.toml"
       - "**.gradle.kts"
       - "8vim/src/**"
 jobs:

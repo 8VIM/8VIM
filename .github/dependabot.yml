@@ -1,11 +1,28 @@
 version: 2
 updates:
   - package-ecosystem: gradle
-    directory: /gradle
+    directory: /
     schedule:
       interval: weekly
       timezone: Etc/UTC
-      time: 00:00
+      time: "00:00"
+      day: sunday
+    labels: [ignore]
+    groups:
+      kotlin:
+        applies-to: version-updates
+        patterns:
+          - "org.jetbrains.kotlin*"
+          - "com.google.devtools.ksp*"
+    commit-message:
+      include: scope
+      prefix: chore
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      timezone: Etc/UTC
+      time: "00:00"
       day: sunday
     labels: [ignore]
     commit-message:

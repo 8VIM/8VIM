@@ -103,6 +103,7 @@ class KeyboardControllerSpec : FunSpec({
                     }
                     every { circle } returns mockk {
                         every { dynamic } returns mockk {
+                            every { isEnabled } returns mockk(relaxed = true)
                             every { isOverlayEnabled } answers { isDynamicCircleOverlayEnabled }
                         }
                     }
@@ -125,7 +126,7 @@ class KeyboardControllerSpec : FunSpec({
             every { key(any()) } returns null
         }
 
-        isDynamicCircleOverlayEnabled = mockk<PreferenceData<Boolean>>()
+        isDynamicCircleOverlayEnabled = mockk<PreferenceData<Boolean>>(relaxed = true)
 
         showTrail = mockk<PreferenceData<Boolean>> {
             every { get() } returns false
@@ -151,7 +152,7 @@ class KeyboardControllerSpec : FunSpec({
                 every { keyboardCircle.hasVirtualCentre } returns hasDynamicCircle
                 every { isDynamicCircleOverlayEnabled.get() } returns hasOverlay
                 val controller = KeyboardController(context).also { it.keyboard = xpadKeyboard }
-                controller.drawSectors(drawScope, Color.Black)
+                controller.drawSectors(drawScope, hasDynamicCircle && hasOverlay, Color.Black)
                 verifySequence {
                     drawScope.drawCircle(
                         Color.Black,

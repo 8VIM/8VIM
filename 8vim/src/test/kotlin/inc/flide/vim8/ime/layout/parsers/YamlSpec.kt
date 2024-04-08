@@ -12,26 +12,22 @@ import inc.flide.vim8.ime.layout.models.characterSets
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.arrow.core.shouldBeSome
-import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.mockkStatic
 
-class YamlSpec : DescribeSpec({
+class YamlSpec : FunSpec({
     beforeSpec {
         mockkStatic(KeyEvent::keyCodeFromString)
         every { KeyEvent.keyCodeFromString(any()) } returns KeyEvent.KEYCODE_UNKNOWN
         every { KeyEvent.keyCodeFromString("KEYCODE_A") } returns KeyEvent.KEYCODE_A
     }
 
-    afterSpec {
-        clearStaticMockk(KeyEvent::class)
-    }
-
-    describe("Parsing a valid file") {
-        it("load the correct KeyboardData") {
+    context("Parsing a valid file") {
+        test("load the correct KeyboardData") {
             val movementSequences = mapOf(
                 listOf(
                     FingerPosition.TOP,
@@ -146,43 +142,46 @@ class YamlSpec : DescribeSpec({
             keyboardData.actionMap shouldContainExactly movementSequences
         }
 
-        it("there is only an hidden layer") {
+        test("there is only an hidden layer") {
             val inputStream = javaClass.getResourceAsStream("/hidden_layer.yaml")
             val layoutParser = YamlParser()
             layoutParser.readKeyboardData(inputStream).shouldBeRight().totalLayers shouldBe 0
         }
 
-        it("there is only a default layer") {
+        test("there is only a default layer") {
             val inputStream = javaClass.getResourceAsStream("/one_layer.yaml")
             val layoutParser = YamlParser()
             layoutParser.readKeyboardData(inputStream).shouldBeRight().totalLayers shouldBe 1
         }
     }
 
-    describe("Paring files with error") {
-
-        it("not a valid layout") {
+    context("Paring files with error") {
+        test("not a valid layout") {
             val inputStream = javaClass.getResourceAsStream("/invalid_file.yaml")
             val layoutParser = YamlParser()
             layoutParser.readKeyboardData(inputStream).shouldBeLeft()
         }
 
-        it("there is only an extra layer") {
+        test("there is only an extra layer") {
             val inputStream = javaClass.getResourceAsStream("/extra_layers.yaml")
             val layoutParser = YamlParser()
             layoutParser.readKeyboardData(inputStream).shouldBeLeft()
         }
 
-        it("there is no layers") {
+        test("there is no layers") {
             val inputStream = javaClass.getResourceAsStream("/no_layers.yaml")
             val layoutParser = YamlParser()
             layoutParser.readKeyboardData(inputStream).shouldBeLeft()
         }
 
-        it("it's not a YAML file") {
+        test("it's not a YAML file") {
             val inputStream = javaClass.getResourceAsStream("/invalid_file.xml")
             val layoutParser = YamlParser()
             layoutParser.readKeyboardData(inputStream).shouldBeLeft()
         }
+    }
+
+    afterSpec {
+        clearStaticMockk(KeyEvent::class)
     }
 })

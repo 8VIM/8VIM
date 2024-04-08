@@ -7,7 +7,7 @@ on:
     branches: [master]
     paths:
       - "metadata/**/changelogs/*.txt"
-      - "gradle/libs.version.toml"
+      - "gradle/libs.versions.toml"
       - "**.gradle"
       - "**.gradle.kts"
       - "8vim/**"
@@ -17,12 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
-    if: github.actor != 'dependabot[bot]'
     outputs:
       src: ${{ steps.changes.outputs.src }}
       yaml: ${{ steps.changes.outputs.yaml }}
     steps:
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         id: changes
         with:
           filters: |
@@ -35,7 +34,7 @@ jobs:
               - '8vim/**/*.pro'
               - '**.gradle'
               - '**.gradle.kts'
-              - 'gradle/libs.version.toml'
+              - 'gradle/libs.versions.toml'
             yaml:
               - '8vim/src/main/res/raw/*.yaml'
               - '8vim/src/main/res/raw/*.yml'
@@ -51,29 +50,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: 8VIM/json-yaml-validate@main
+      - uses: 8VIM/json-yaml-validate@use-multiple-schemas
         with:
-          json_schema: ./8vim/src/main/resources/schema.json
-          yaml_as_json: "true"
+          schema_dir: ./8vim/src/main/resources/schemas
+          schema_name: https://8vim.github.io/schemas/schema.json
           base_dir: ./8vim/src/main/res/raw
   test_run:
-    name: 8VIM tests
+    name: Test & coverage
     needs: changes
-    if: ${{ github.actor == 'dependabot[bot]' || needs.changes.outputs.src == 'true' }}
+    if: ${{ needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
+    with:
+      skip-codecov: ${{ startsWith(github.head_ref, 'dependabot/') }}
     secrets: inherit
-  test_check:
-    name: Github action test check workaround
-    if: ${{always()}}
-    needs: test_run
-    runs-on: ubuntu-latest
-    steps:
-      - run: exit ${{ needs.test_run.result == 'success' && '0' || '1' }}
   build:
-    if: ${{ github.actor != 'dependabot[bot]' && !cancelled() && (needs.test_check.result == 'success' || needs.validate_layouts.result == 'success') }}
-    needs: [validate_layouts, test_check]
+    if: |
+      !startsWith(github.head_ref, 'dependabot/') && !cancelled() && (
+        (needs.test_run.result != 'skipped' 
+          && needs.validate_layouts.result != 'skipped' 
+          && needs.test_run.result == 'success' 
+          && needs.validate_layouts.result == 'success')
+        || (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success')
+      )
+    needs: [validate_layouts, test_run]
     uses: ./.github/workflows/build.yaml
     with:
       ref: ${{github.ref}}
       target: debug
     secrets: inherit
+  test_check:
+    name: Github action test check workaround
+    if: ${{always()}}
+    needs: [validate_layouts, test_run]
+    runs-on: ubuntu-latest
+    steps:
+      - run: exit ${{ ((needs.validate_layouts.result == 'skipped' && needs.test_run.result == 'skipped') || (needs.test_run.result != 'failure' && needs.validate_layouts.result != 'failure')) && '0' || '1' }}

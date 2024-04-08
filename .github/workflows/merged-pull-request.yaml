@@ -7,7 +7,7 @@ on:
     branches: [master]
     types: [closed]
     paths:
-      - "gradle/libs.version.toml"
+      - "gradle/libs.versions.toml"
       - "**.gradle.kts"
       - "8vim/**"
 jobs:
@@ -20,7 +20,7 @@ jobs:
     outputs:
       src: ${{ steps.changes.outputs.src }}
     steps:
-      - uses: dorny/paths-filter@v2
+      - uses: dorny/paths-filter@v3
         id: changes
         with:
           filters: |
@@ -31,7 +31,7 @@ jobs:
               - '8vim/**/*.pro'
               - '**.gradle'
               - '**.gradle.kts'
-              - 'gradle/libs.version.toml'
+              - 'gradle/libs.versions.toml'
               - '8vim/src/main/res/raw/*.yaml'
               - '8vim/src/main/res/raw/*.yml'
               - modified: '8vim/src/main/resources/schema.json'
