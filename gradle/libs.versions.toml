@@ -1,7 +1,7 @@
 [versions]
 # Main
 androidx-activity           = "1.8.2"
-android-gradle-plugin       = "8.3.1"
+android-gradle-plugin       = "8.3.2"
 android-appcompat           = "1.6.1"
 android-material            = "1.11.0"
 androidx-compose            = "1.6.5"
@@ -28,7 +28,6 @@ slf4j = "2.0.12"
 
 # Testing
 androidx-test-core        = "1.5.0"
-androidx-test-ext         = "1.1.5"
 androidx-test-runner      = "1.5.2"
 kotest-runner-android     = "1.1.0"
 kotest-assertions-android = "1.1.1"

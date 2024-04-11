@@ -49,7 +49,7 @@ import java.text.MessageFormat
 
 private val schemaMappings = mapOf(
     "https://8vim.github.io/schemas/schema.json" to "resource:/schemas/schema.json",
-    "https://8vim.github.io/schemas/version2.json" to "resource:/schemas/version2.json"
+    "https://8vim.github.io/schemas/versions/2.json" to "resource:/schemas/versions/2.json"
 )
 
 interface LayoutParser {
