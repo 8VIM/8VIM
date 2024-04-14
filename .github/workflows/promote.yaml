@@ -23,11 +23,28 @@ on:
 
 jobs:
   promote:
-   runs-on: ubuntu-latest
-   steps:
-     - uses: kevin-david/promote-play-release@v1.1.0
-       with:
-         from-track: ${{inputs.from}}
-         to-track: ${{inputs.to}}
-         service-account-json-raw: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-         package-name: inc.flide.vi8
+    runs-on: ubuntu-latest
+    steps:
+      - uses: kevin-david/promote-play-release@v1.1.0
+        with:
+          from-track: ${{inputs.from}}
+          to-track: ${{inputs.to}}
+          service-account-json-raw: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          package-name: inc.flide.vi8
+  tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{steps.tag.outputs.tag}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: "Get Previous tag"
+        id: tag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+  notify:
+    uses: ./.github/workflows/matrix-release.yaml
+    needs: [promote]
+    with:
+      channel: ${{inputs.to}}
+      version: ${{inputs.version_name}}
