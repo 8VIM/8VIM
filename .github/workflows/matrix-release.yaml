@@ -36,8 +36,8 @@ jobs:
           INPUT_VERSION: ${{inputs.version}}
         with:
           script: |
-            const channel = core.getInput("channel").toLowerCase();
-            let version = core.getInput("version");
+            const channel = core.getInput("channel").toLowerCase().trim();
+            let version = core.getInput("version").trim();
             if(version[0] !== 'v') {
               version = `v${version}`;
             }
