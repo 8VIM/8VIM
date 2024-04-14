@@ -1,0 +1,67 @@
+name: Update Schemas
+concurrency: update_schemas
+on:
+  workflow_call:
+    inputs:
+      schema-dir:
+        type: string
+        default: 8vim/src/main/resources/schemas
+      page-schema-dir:
+        type: string
+        default: schemas
+      metadata-file:
+        type: string
+        default: schemas-metadata.json
+jobs:
+  get_schemas:
+    name: Get current schemas
+    runs-on: ubuntu-latest
+    outputs:
+      hash: ${{steps.hash.outputs.hash}}
+    steps:
+      - uses: actions/checkout@v4
+      - id: hash
+        run: |
+          echo hash=$(tar -cf - ${{inputs.schema-dir}}| md5sum | cut -d" " -f1) >> $GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v4
+        with:
+          name: schemas
+          path: 8vim/src/main/resources/schemas/**/*.json
+          overwrite: true
+  latest_hash:
+    name: Latest schemas hash
+    runs-on: ubuntu-latest
+    needs: [get_schemas]
+    outputs:
+      hash: ${{steps.latest.outputs.hash}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{secrets.PAT}}
+          repository: 8VIM/8VIM.github.io
+          persist-credentials: false
+      - id: latest
+        run: |
+          echo hash=$(cat ${{inputs.metadata-file}} | jq -j '.hash') >> $GITHUB_OUTPUT
+  page_update:
+    name: Update page schemas
+    runs-on: ubuntu-latest
+    needs: [get_schemas, latest_hash]
+    if: ${{success() && needs.get_schemas.outputs.hash != needs.latest_hash.outputs.hash}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{secrets.PAT}}
+          repository: 8VIM/8VIM.github.io
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: schemas
+      - run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          echo '{"hash": "${{needs.get_schemas.outputs.hash}}"}' > ${{inputs.metadata-file}}
+          rm -rf ${{inputs.page-schema-dir}}
+          cp -r  ${{inputs.schema-dir}} ${{inputs.page-schema-dir}}
+          git add ${{inputs.page-schema-dir}} ${{inputs.metadata-file}}
+          git commit
