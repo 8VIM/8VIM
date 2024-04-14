@@ -51,7 +51,7 @@ jobs:
                 body = `Available for everyone on the Playstore and F-Droid.
             The F-Droid version can take up to 72h to be available.`;
               } else {
-                body = `Available as on the internal test channel of the Playstore`;
+                body = `Available on the internal test channel of the Playstore`;
               }
             } else {
               header = `Release: ${version}`;
