@@ -62,6 +62,8 @@ jobs:
     #    if: ${{ needs.changes.outputs.schemas == 'true' }}
     uses: ./.github/workflows/update-schemas.yaml
     secrets: inherit
+    permissions:
+      contents: write
   test_run:
     name: Test & coverage
     needs: changes
