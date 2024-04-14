@@ -38,7 +38,9 @@ jobs:
             yaml:
               - '8vim/src/main/res/raw/*.yaml'
               - '8vim/src/main/res/raw/*.yml'
-              - modified: '8vim/src/main/resources/schema.json'
+              - '8vim/src/main/resources/schemas/**/*.json'
+            schemas:
+              - '8vim/src/main/resources/schemas/**/*.json'
       - if: ${{ steps.changes.outputs.metadata == 'true' }}
         run: |
           echo "You cannot change the changelogs manually"

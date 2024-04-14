@@ -34,7 +34,9 @@ jobs:
               - 'gradle/libs.versions.toml'
               - '8vim/src/main/res/raw/*.yaml'
               - '8vim/src/main/res/raw/*.yml'
-              - modified: '8vim/src/main/resources/schema.json'
+              - '8vim/src/main/resources/schemas/**/*.json'
+            schemas:
+              - '8vim/src/main/resources/schemas/**/*.json'
   bump_version:
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
@@ -56,4 +58,11 @@ jobs:
       actions: read
       issues: read
       pull-requests: read
+      contents: write
+  update_schema:
+    needs: [changes]
+    if: ${{ needs.changes.outputs.schemas == 'true' }}
+    uses: ./.github/workflows/update-schemas.yaml
+    secrets: inherit
+    permissions:
       contents: write
