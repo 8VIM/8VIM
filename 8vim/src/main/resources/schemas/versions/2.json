@@ -1,9 +1,5 @@
 {
-<<<<<<<< HEAD:8vim/src/main/resources/schemas/version2.json
-  "$id": "https://8vim.github.io/schemas/version2.json",
-========
   "$id": "https://8vim.github.io/schemas/versions/2.json",
->>>>>>>> master:8vim/src/main/resources/schemas/versions/2.json
   "$schema": "https://json-schema.org/draft/2019-09/schema#",
   "$defs": {
     "action": {
@@ -145,13 +141,9 @@
   },
   "type": "object",
   "properties": {
-<<<<<<<< HEAD:8vim/src/main/resources/schemas/version2.json
-    "version": {"$ref":"/schemas/schema.json#version"},
-========
     "version": {
       "$ref": "/schemas/schema.json#version"
     },
->>>>>>>> master:8vim/src/main/resources/schemas/versions/2.json
     "info": {
       "type": "object",
       "properties": {
