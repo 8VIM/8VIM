@@ -1,4 +1,6 @@
 name: Build 8Vim
+run-name: Build 8VIM ${{inputs.target}}
+
 on:
   workflow_call:
     inputs:

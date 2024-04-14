@@ -1,4 +1,5 @@
 name: Matrix notification release
+run-name: Matrix notification release ${{inputs.version}} to ${{inputs.channel}}
 
 on:
   workflow_dispatch:

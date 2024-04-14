@@ -1,4 +1,5 @@
 name: Publish 8VIM
+run-name: Publish 8VIM v${{inputs.version_name}}
 
 on:
   workflow_dispatch:
