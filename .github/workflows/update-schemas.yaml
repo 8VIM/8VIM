@@ -34,7 +34,7 @@ jobs:
       - id: hash
         run: |
           cd ${{inputs.schema-dir}}
-          find . -type f -exec md5sum {} + | LC_ALL=C sort | md5sum
+          find . -type f -exec md5sum {} + | LC_ALL=C sort
           echo hash=$(find . -type f -exec md5sum {} + | LC_ALL=C sort | md5sum | cut -d" " -f1) >> $GITHUB_OUTPUT
       - uses: actions/upload-artifact@v4
         with:
