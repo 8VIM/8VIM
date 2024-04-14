@@ -47,6 +47,11 @@ import java.io.IOException
 import java.io.InputStream
 import java.text.MessageFormat
 
+private val schemaMappings = mapOf(
+    "https://8vim.github.io/schemas/schema.json" to "resource:/schemas/schema.json",
+    "https://8vim.github.io/schemas/versions/2.json" to "resource:/schemas/versions/2.json"
+)
+
 interface LayoutParser {
     fun readKeyboardData(inputStream: InputStream?): Either<LayoutError, KeyboardData>
 }
@@ -67,12 +72,12 @@ class YamlParser : LayoutParser {
     private var schema: JsonSchema
 
     init {
-        LayoutParser::class.java.getResourceAsStream("/schema.json")
+        LayoutParser::class.java.getResourceAsStream("/schemas/schema.json")
             .use { schemaInputStream ->
                 val schemaJson = mapper.readTree(schemaInputStream)
                 val factory = JsonSchemaFactory.builder(
                     JsonSchemaFactory.getInstance(SpecVersionDetector.detect(schemaJson))
-                )
+                ).addUriMappings(schemaMappings)
                     .objectMapper(mapper)
                     .build()
                 schema = factory.getSchema(schemaJson)
@@ -103,8 +108,8 @@ class YamlParser : LayoutParser {
         }
     }
 
-    private fun validateYaml(node: JsonNode): Either<LayoutError, Layout> {
-        return schema.validate(node)
+    private fun validateYaml(node: JsonNode): Either<LayoutError, Layout> =
+        schema.validate(node)
             .fold(InvalidLayoutError(emptySet())) { acc, error ->
                 val newError =
                     if (error.message.startsWith('$')) {
@@ -127,7 +132,6 @@ class YamlParser : LayoutParser {
                     mapper.convertValue<Layout>(node).right()
                 }
             }
-    }
 
     private fun addLayer(
         keyboardData: KeyboardData,

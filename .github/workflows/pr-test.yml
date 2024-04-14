@@ -48,17 +48,15 @@ jobs:
     if: ${{ needs.changes.outputs.yaml == 'true' }}
     name: Validate language layouts
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: 8VIM/json-yaml-validate@main
         with:
-          json_schema: ./8vim/src/main/resources/schema.json
-          yaml_as_json: "true"
+          schema_dir: ./8vim/src/main/resources/schemas
+          schema_name: https://8vim.github.io/schemas/schema.json
           base_dir: ./8vim/src/main/res/raw
   test_run:
-    name: 8VIM tests
+    name: Test & coverage
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
@@ -66,7 +64,14 @@ jobs:
       skip-codecov: ${{ startsWith(github.head_ref, 'dependabot/') }}
     secrets: inherit
   build:
-    if: ${{ !startsWith(github.head_ref, 'dependabot/') && !cancelled() && (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success') }}
+    if: |
+      !startsWith(github.head_ref, 'dependabot/') && !cancelled() && (
+        (needs.test_run.result != 'skipped' 
+          && needs.validate_layouts.result != 'skipped' 
+          && needs.test_run.result == 'success' 
+          && needs.validate_layouts.result == 'success')
+        || (needs.test_run.result == 'success' || needs.validate_layouts.result == 'success')
+      )
     needs: [validate_layouts, test_run]
     uses: ./.github/workflows/build.yaml
     with:

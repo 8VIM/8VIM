@@ -11,11 +11,18 @@ class ClipboardManager(context: Context) : OnPrimaryClipChangedListener {
     private val prefs by appPreferenceModel()
     private val systemClipboardManager =
         context.systemService(android.content.ClipboardManager::class)
-    private val _history = MutableLiveData(clipHistoryFromHistory())
+    private val _history = MutableLiveData<List<String>>()
     val history: LiveData<List<String>> get() = _history
 
     init {
+        _history.value = clipHistoryFromHistory()
         systemClipboardManager.addPrimaryClipChangedListener(this)
+        prefs.clipboard.maxHistory.observe {
+            updateHistory(
+                prefs.clipboard.history.get().asSequence(),
+                it
+            )
+        }
     }
 
     override fun onPrimaryClipChanged() {
@@ -40,39 +47,45 @@ class ClipboardManager(context: Context) : OnPrimaryClipChangedListener {
     private fun addClipToHistory(newClip: String) {
         if (newClip.isNotEmpty()) {
             val timestampedClip = "[${System.currentTimeMillis()}] $newClip"
-            val history = (prefs.clipboard.history.get().asSequence() + timestampedClip)
-                .fold(mapOf<String, Long>()) { acc, clip ->
-                    val cleanedClip = getClipFromTimestampedClip(clip)
-                    val timestamp = getTimestampFromTimestampedClip(clip)
-                    val toAdd = mapOf(cleanedClip to timestamp)
-                    acc + (
-                        acc[cleanedClip]?.let {
-                            if (timestamp > it) {
-                                toAdd
-                            } else {
-                                emptyMap()
-                            }
-                        } ?: toAdd
-                        )
-                }
-                .toList()
-                .sortedByDescending { it.second }
-                .take(MAX_HISTORY_SIZE)
-
-            history
-                .map { "[${it.second}] ${it.first}" }
-                .toSet()
-                .let { prefs.clipboard.history.set(it) }
-            _history.postValue(history.map { it.first })
+            updateHistory(
+                prefs.clipboard.history.get().asSequence() + timestampedClip,
+                prefs.clipboard.maxHistory.get()
+            )
         }
+    }
+
+    private fun updateHistory(
+        history: Sequence<String>,
+        maxHistory: Int
+    ) {
+        val result = history
+            .fold(mapOf<String, Long>()) { acc, clip ->
+                val cleanedClip = getClipFromTimestampedClip(clip)
+                val timestamp = getTimestampFromTimestampedClip(clip)
+                val toAdd = mapOf(cleanedClip to timestamp)
+                acc + (
+                    acc[cleanedClip]?.let {
+                        if (timestamp > it) {
+                            toAdd
+                        } else {
+                            emptyMap()
+                        }
+                    } ?: toAdd
+                    )
+            }
+            .toList()
+            .sortedByDescending { it.second }
+            .take(maxHistory)
+        result.map { "[${it.second}] ${it.first}" }
+            .toSet()
+            .let {
+                prefs.clipboard.history.set(it)
+            }
+        _history.postValue(result.map { it.first })
     }
 
     private fun clipHistoryFromHistory(): List<String> = prefs.clipboard.history.get()
         .toList()
         .sortedByDescending { getTimestampFromTimestampedClip(it) }
         .map { getClipFromTimestampedClip(it) }
-
-    companion object {
-        private const val MAX_HISTORY_SIZE = 10 // This could be made user-configurable
-    }
 }

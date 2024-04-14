@@ -1,5 +1,7 @@
 package inc.flide.vim8.arbitraries
 
+import androidx.compose.ui.geometry.Offset
+import inc.flide.vim8.ime.keyboard.xpad.gestures.GlideGesture
 import inc.flide.vim8.ime.layout.EmbeddedLayout
 import inc.flide.vim8.ime.layout.models.CHARACTER_SET_SIZE
 import inc.flide.vim8.ime.layout.models.KeyboardAction
@@ -10,6 +12,7 @@ import inc.flide.vim8.ime.layout.models.MovementSequence
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.arbitrary
 import io.kotest.property.arbitrary.enum
+import io.kotest.property.arbitrary.float
 import io.kotest.property.arbitrary.int
 import io.kotest.property.arbitrary.list
 import io.kotest.property.arbitrary.map
@@ -17,7 +20,7 @@ import io.kotest.property.arbitrary.orNull
 import io.kotest.property.arbitrary.string
 
 object Arbitraries {
-    val arbMovementSequence: Arb<MovementSequence> = Arb.list(Arb.enum(), 1..10)
+    private val arbMovementSequence: Arb<MovementSequence> = Arb.list(Arb.enum(), 1..10)
 
     val arbKeyboardAction: Arb<KeyboardAction> = arbitrary {
         val type = Arb.enum<KeyboardActionType>().bind()
@@ -38,4 +41,11 @@ object Arbitraries {
     }
 
     val arbEmbeddedLayout: Arb<EmbeddedLayout> = Arb.string(1..10).map { EmbeddedLayout(it) }
+
+    val arbPoint: Arb<GlideGesture.Point> = arbitrary {
+        val radius = Arb.float(1f, 14f).bind()
+        val x = Arb.float().bind()
+        val y = Arb.float().bind()
+        GlideGesture.Point(radius, Offset(x, y))
+    }
 }

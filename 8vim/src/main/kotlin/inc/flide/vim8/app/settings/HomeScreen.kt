@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -47,38 +47,92 @@ fun HomeScreen() = Screen {
             iconId = R.drawable.ic_language,
             title = stringRes(R.string.settings__layouts__title),
             onClick = { navController.navigate(Routes.Settings.Layouts) },
-            trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+            trailing = {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
         )
 
         Preference(
             iconId = R.drawable.ic_keyboard,
             title = stringRes(R.string.settings__keyboard__title),
             onClick = { navController.navigate(Routes.Settings.Keyboard) },
-            trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+            trailing = {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
         )
+
+        Preference(
+            iconId = R.drawable.ic_content_paste,
+            title = stringRes(R.string.settings__clipboard__title),
+            onClick = { navController.navigate(Routes.Settings.Clipboard) },
+            trailing = {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
+        )
+
         Preference(
             iconId = R.drawable.ic_outline_palette,
             title = stringRes(R.string.settings__theme__title),
             onClick = { navController.navigate(Routes.Settings.Theme) },
-            trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+            trailing = {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
         )
         Preference(
             iconId = R.drawable.ic_gesture,
             title = stringRes(R.string.settings__gesture__title),
             onClick = { navController.navigate(Routes.Settings.Gesture) },
-            trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+            trailing = {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
+        )
+        Preference(
+            iconId = R.drawable.ic_settings_backup_restore,
+            title = stringRes(R.string.settings__backup_and_restore__title),
+            onClick = { navController.navigate(Routes.Settings.BackupAndRestore) },
+            trailing = {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
         )
         Preference(
             iconId = R.drawable.ic_error_outline,
             title = stringRes(R.string.about__title),
             onClick = { navController.navigate(Routes.Settings.About) },
-            trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+            trailing = {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
         )
         Preference(
             iconId = R.drawable.ic_help,
             title = stringRes(R.string.settings__help__feedback),
             onClick = { context.launchUrl(Urls.MAIL_TO) },
-            trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+            trailing = {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
         )
 
         Preference(
@@ -93,7 +147,12 @@ https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
 """
                 )
             },
-            trailing = { Icon(Icons.Filled.KeyboardArrowRight, contentDescription = null) }
+            trailing = {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null
+                )
+            }
         )
     }
 }

@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import inc.flide.vim8.lib.compose.AppTheme
-import inc.flide.vim8.lib.observeAsNonNullState
+import inc.flide.vim8.lib.compose.observeAsNonNullState
 import inc.flide.vim8.themeManager
 
 private val LocalTheme = staticCompositionLocalOf<ThemeManager.ThemeInfo> { error("not init") }

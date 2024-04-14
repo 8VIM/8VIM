@@ -8,7 +8,8 @@ import inc.flide.vim8.lib.ExcludeFromJacocoGeneratedReport
 @optics
 data class Layout(
     @JsonProperty(required = true) val layers: Layers = Layers(),
-    val info: LayoutInfo = LayoutInfo()
+    val info: LayoutInfo = LayoutInfo(),
+    val version: String = "2"
 ) {
     companion object
 }

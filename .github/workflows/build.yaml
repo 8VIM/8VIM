@@ -8,10 +8,18 @@ on:
       ref:
         type: string
         required: true
+    outputs:
+      artifact-url:
+        value: ${{ jobs.build.outputs.artifact-url }}
+      expires-at:
+        value: ${{ jobs.build.outputs.expires-at }}
 jobs:
   build:
     name: Build app
     runs-on: ubuntu-latest
+    outputs:
+      artifact-url: ${{ steps.upload.outputs.artifact-url }}
+      expires-at: ${{steps.expiration.outputs.expires_at}}
     steps:
       - name: Get gradle command
         id: gradle
@@ -53,7 +61,8 @@ jobs:
           VIM8_BUILD_KEY_PASSWORD: ${{ secrets.VIM8_BUILD_KEY_PASSWORD }}
         run: ./gradlew ${{steps.gradle.outputs.cmd}}
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
+        id: upload
         with:
           name: artifact
           if-no-files-found: ignore
@@ -61,3 +70,8 @@ jobs:
             8vim/build/outputs/*/${{inputs.target}}/8vim-${{inputs.target}}.*
             8vim/build/outputs/mapping/${{inputs.target}}/mapping.txt
           retention-days: 7
+          overwrite: true
+      - name: Expiration
+        id: expiration
+        run: |
+          echo "expires_at=$(date -u -Iseconds --date='+7 days')" >> $GITHUB_OUTPUT

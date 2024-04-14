@@ -40,7 +40,7 @@ import inc.flide.vim8.R
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.ime.input.InputShiftState
-import inc.flide.vim8.ime.keyboard.LocalKeyboardHeight
+import inc.flide.vim8.ime.keyboard.compose.LocalKeyboardHeight
 import inc.flide.vim8.keyboardManager
 import inc.flide.vim8.lib.compose.DisposableLifecycleEffect
 import kotlin.math.max
@@ -126,10 +126,10 @@ fun XpadLayout() = with(LocalDensity.current) {
                 return@pointerInteropFilter true
             }
             .drawWithContent {
+                controller.drawSectors(this, controller.hasVirtualCentre, fg)
                 if (controller.hasTrail && controller.trailPoints.isNotEmpty()) {
                     controller.drawTrail(this, controller.trailPoints)
                 }
-                controller.drawSectors(this, fg)
                 drawContent()
             }
     ) {
