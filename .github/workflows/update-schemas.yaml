@@ -64,4 +64,20 @@ jobs:
           rm -rf ${{inputs.page-schema-dir}}
           cp -r  ${{inputs.schema-dir}} ${{inputs.page-schema-dir}}
           git add ${{inputs.page-schema-dir}} ${{inputs.metadata-file}}
-          git commit
+          git commit -m "chore: update layout schemas"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          repository: 8VIM/8VIM.github.io
+  cleanup:
+    name: Cleanup artifact
+    needs: [get_schemas, page_update]
+    runs-on: ubuntu-latest
+    if: ${{always() && needs.get_schemas.result == 'success'}}
+    steps:
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          name: schemas
+          failOnError: false
