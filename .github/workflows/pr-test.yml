@@ -3,7 +3,7 @@ name: PR test
 concurrency: pr-${{github.event.number}}
 
 on:
-  pull_request_target:
+  pull_request:
     branches: [master]
     paths:
       - "metadata/**/changelogs/*.txt"
@@ -57,13 +57,6 @@ jobs:
           schema_dir: ./8vim/src/main/resources/schemas
           schema_name: https://8vim.github.io/schemas/schema.json
           base_dir: ./8vim/src/main/res/raw
-  update_schema:
-    #    needs: [changes, validate_layouts]
-    #    if: ${{ needs.changes.outputs.schemas == 'true' }}
-    uses: ./.github/workflows/update-schemas.yaml
-    secrets: inherit
-    permissions:
-      contents: write
   test_run:
     name: Test & coverage
     needs: changes

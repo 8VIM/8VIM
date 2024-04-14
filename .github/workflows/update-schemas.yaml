@@ -1,6 +1,17 @@
 name: Update Schemas
 concurrency: update_schemas
 on:
+  workflow_dispatch:
+    inputs:
+      schema-dir:
+        type: string
+        default: 8vim/src/main/resources/schemas
+      page-schema-dir:
+        type: string
+        default: schemas
+      metadata-file:
+        type: string
+        default: schemas-metadata.json
   workflow_call:
     inputs:
       schema-dir:

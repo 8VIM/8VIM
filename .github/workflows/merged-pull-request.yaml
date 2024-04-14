@@ -59,3 +59,10 @@ jobs:
       issues: read
       pull-requests: read
       contents: write
+  update_schema:
+    needs: [changes]
+    if: ${{ needs.changes.outputs.schemas == 'true' }}
+    uses: ./.github/workflows/update-schemas.yaml
+    secrets: inherit
+    permissions:
+      contents: write
