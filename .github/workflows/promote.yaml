@@ -44,7 +44,8 @@ jobs:
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
   notify:
     uses: ./.github/workflows/matrix-release.yaml
-    needs: [promote]
+    needs: [promote, tag]
     with:
       channel: ${{inputs.to}}
-      version: ${{inputs.version_name}}
+      version: ${{needs.tag.outputs.tag}}
+    secrets: inherit
