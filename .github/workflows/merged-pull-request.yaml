@@ -61,6 +61,7 @@ jobs:
       contents: write
   update_schema:
     needs: [changes]
+    name: "Website: Update layout schemas"
     if: ${{ needs.changes.outputs.schemas == 'true' }}
     uses: ./.github/workflows/update-schemas.yaml
     secrets: inherit
