@@ -24,6 +24,7 @@ on:
         required: true
 jobs:
   msg:
+    name: Generate message
     runs-on: ubuntu-latest
     outputs:
       text: ${{steps.msg.outputs.text}}
