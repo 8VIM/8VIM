@@ -1,6 +1,14 @@
 name: Publish 8VIM
 
 on:
+  workflow_dispatch:
+    inputs:
+      version_code:
+        required: true
+        type: string
+      version_name:
+        required: true
+        type: string
   workflow_call:
     inputs:
       version_code:
@@ -37,7 +45,7 @@ jobs:
         id: artifact
         uses: actions/download-artifact@v4
         with:
-          name: artifact
+          name: artifact-release
           path: artifact/
       - name: Setup env
         run: |
@@ -93,7 +101,7 @@ jobs:
         id: artifact
         uses: actions/download-artifact@v4
         with:
-          name: artifact
+          name: artifact-${{env.target}}
           path: artifact/
       - name: Create Changelog
         id: github_release
