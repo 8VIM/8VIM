@@ -1,0 +1,1 @@
+feat: :sparkles: Adaptative circle centre and new haptics options

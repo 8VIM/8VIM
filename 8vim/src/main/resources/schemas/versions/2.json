@@ -1,12 +1,13 @@
 {
+<<<<<<<< HEAD:8vim/src/main/resources/schemas/version2.json
   "$id": "https://8vim.github.io/schemas/version2.json",
+========
+  "$id": "https://8vim.github.io/schemas/versions/2.json",
+>>>>>>>> master:8vim/src/main/resources/schemas/versions/2.json
   "$schema": "https://json-schema.org/draft/2019-09/schema#",
   "$defs": {
     "action": {
-      "type": [
-        "object",
-        "null"
-      ],
+      "type": ["object", "null"],
       "properties": {
         "type": {
           "type": "string",
@@ -17,18 +18,11 @@
           }
         },
         "flags": {
-          "type": [
-            "integer",
-            "string",
-            "array"
-          ],
+          "type": ["integer", "string", "array"],
           "pattern": "^(?i)(meta_shift_on|meta_alt_on|meta_sym_on|meta_function_on|meta_alt_left_on|meta_alt_right_on|meta_shift_left_on|meta_shift_right_on|meta_ctrl_on|meta_ctrl_left_on|meta_ctrl_right_on|meta_meta_on|meta_meta_left_on|meta_meta_right_on|meta_caps_lock_on|meta_num_lock_on|meta_scroll_lock_on)$",
           "minimum": 0,
           "items": {
-            "type": [
-              "integer",
-              "string"
-            ],
+            "type": ["integer", "string"],
             "minimum": 0,
             "pattern": "^(?i)(meta_shift_on|meta_alt_on|meta_sym_on|meta_function_on|meta_alt_left_on|meta_alt_right_on|meta_shift_left_on|meta_shift_right_on|meta_ctrl_on|meta_ctrl_left_on|meta_ctrl_right_on|meta_meta_on|meta_meta_left_on|meta_meta_right_on|meta_caps_lock_on|meta_num_lock_on|meta_scroll_lock_on)$",
             "message": {
@@ -68,9 +62,7 @@
         "anyOf": [
           {
             "not": {
-              "required": [
-                "type"
-              ]
+              "required": ["type"]
             }
           },
           {
@@ -84,9 +76,7 @@
         ]
       },
       "then": {
-        "required": [
-          "lower_case"
-        ],
+        "required": ["lower_case"],
         "message": {
           "required": "lower_case is required for input_text type"
         }
@@ -114,9 +104,7 @@
                   }
                 }
               },
-              "required": [
-                "parts"
-              ],
+              "required": ["parts"],
               "additionalProperties": false
             },
             "^(?i)(top|bottom)$": {
@@ -135,9 +123,7 @@
                   }
                 }
               },
-              "required": [
-                "parts"
-              ],
+              "required": ["parts"],
               "additionalProperties": false
             }
           },
@@ -159,7 +145,13 @@
   },
   "type": "object",
   "properties": {
+<<<<<<<< HEAD:8vim/src/main/resources/schemas/version2.json
     "version": {"$ref":"/schemas/schema.json#version"},
+========
+    "version": {
+      "$ref": "/schemas/schema.json#version"
+    },
+>>>>>>>> master:8vim/src/main/resources/schemas/versions/2.json
     "info": {
       "type": "object",
       "properties": {
@@ -216,33 +208,23 @@
       },
       "additionalProperties": false,
       "if": {
-        "required": [
-          "extra_layers"
-        ]
+        "required": ["extra_layers"]
       },
       "then": {
-        "required": [
-          "default"
-        ],
+        "required": ["default"],
         "message": {
           "required": "Default layer is required if extra_layers is defined"
         }
       },
       "else": {
         "if": {
-          "required": [
-            "hidden"
-          ]
+          "required": ["hidden"]
         },
         "then": {
-          "required": [
-            "hidden"
-          ]
+          "required": ["hidden"]
         },
         "else": {
-          "required": [
-            "default"
-          ],
+          "required": ["default"],
           "message": {
             "required": "default or hidden is required"
           }
@@ -250,8 +232,6 @@
       }
     }
   },
-  "required": [
-    "layers"
-  ],
+  "required": ["layers"],
   "additionalProperties": false
 }

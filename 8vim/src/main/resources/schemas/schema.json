@@ -2,13 +2,12 @@
   "$id": "https://8vim.github.io/schemas/schema.json",
   "$schema": "https://json-schema.org/draft/2019-09/schema#",
   "type": "object",
+  "title": "8VIM layout",
   "properties": {
     "version": {
       "$anchor": "version",
       "type": "string",
-      "enum": [
-        "2"
-      ]
+      "const": "2"
     }
   },
   "if": {
@@ -19,20 +18,16 @@
             "const": "2"
           }
         },
-        "required": [
-          "version"
-        ]
+        "required": ["version"]
       },
       {
         "not": {
-          "required": [
-            "version"
-          ]
+          "required": ["version"]
         }
       }
     ]
   },
   "then": {
-    "$ref": "/schemas/version2.json"
+    "$ref": "/schemas/versions/2.json"
   }
 }
