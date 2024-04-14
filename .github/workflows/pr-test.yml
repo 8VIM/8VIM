@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: 8VIM/json-yaml-validate@use-multiple-schemas
+      - uses: 8VIM/json-yaml-validate@main
         with:
           schema_dir: ./8vim/src/main/resources/schemas
           schema_name: https://8vim.github.io/schemas/schema.json
