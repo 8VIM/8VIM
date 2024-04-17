@@ -1,6 +1,6 @@
 [versions]
 # Main
-androidx-activity           = "1.8.2"
+androidx-activity           = "1.9.0"
 android-gradle-plugin       = "8.3.2"
 android-appcompat           = "1.6.1"
 android-material            = "1.11.0"
