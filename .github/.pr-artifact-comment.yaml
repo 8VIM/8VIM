@@ -2,7 +2,7 @@ name: Update PR comment
 
 on:
   workflow_run:
-    workflows: [Build 8Vim]
+    workflows: [PR test]
     types: [completed]
     branches-ignore: ["dependabot/**"]
 jobs:
