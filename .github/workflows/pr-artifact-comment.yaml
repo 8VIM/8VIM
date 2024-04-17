@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: [PR test]
     types: [completed]
+    branches-ignore: ["dependabot/**"]
 jobs:
   update_pr_comment:
     permissions:
