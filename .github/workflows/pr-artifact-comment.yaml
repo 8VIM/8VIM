@@ -2,7 +2,7 @@ name: Update PR comment
 
 on:
   workflow_run:
-    workflows: [PR test]
+    workflows: [Build 8Vim]
     types: [completed]
     branches-ignore: ["dependabot/**"]
 jobs:
@@ -24,6 +24,8 @@ jobs:
           -s \
           "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts" \
           | jq -c '.artifacts[0]' > artifact.json
+
+          [[ $(jq -j '.name' artifact.json)  = "artifact-debug" ]] && exit 0
 
           pr_number=$(curl \
           -L \
