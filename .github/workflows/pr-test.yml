@@ -80,21 +80,6 @@ jobs:
       ref: ${{github.ref}}
       target: debug
     secrets: inherit
-  update_pr_comment:
-    permissions:
-      actions: write
-      pull-requests: write
-    needs: build
-    if: ${{always()}}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Update comment
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            Artifact [8vim-debug](${{needs.build.outputs.artifact-url}}) available until: ${{needs.build.outputs.expires-at}}
-          comment_tag: artifact
-          pr_number: ${{github.event.number}}
   test_check:
     name: Github action test check workaround
     if: ${{always()}}
