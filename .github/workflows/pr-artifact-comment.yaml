@@ -4,7 +4,6 @@ on:
   workflow_run:
     workflows: [PR test]
     types: [completed]
-    branches-ignore: ["dependabot/**"]
 jobs:
   update_pr_comment:
     permissions:
@@ -25,7 +24,7 @@ jobs:
           "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts" \
           | jq -c '.artifacts[0]' > artifact.json
 
-          [[ $(jq -j '.name' artifact.json)  != "artifact-debug" ]] && exit 0
+          [[ $(jq -j '.name' artifact.json)  != "artifact-debug" ]] && exit 1
 
           pr_number=$(curl \
           -L \
