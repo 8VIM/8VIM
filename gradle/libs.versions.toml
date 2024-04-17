@@ -34,7 +34,7 @@ kotest-assertions-android = "1.1.1"
 androidx-test-espresso    = "3.5.1"
 kotest                    = "5.8.1"
 kotest-arrow              = "1.4.0"
-logback-classic           = "1.5.5"
+logback-classic           = "1.5.6"
 mockk                     = "1.13.10"
 
 [libraries]
