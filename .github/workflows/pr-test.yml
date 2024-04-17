@@ -85,7 +85,7 @@ jobs:
     permissions:
       actions: write
       pull-requests: write
-    needs: [build]
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Update comment
