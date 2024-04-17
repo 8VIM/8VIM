@@ -86,6 +86,7 @@ jobs:
       actions: write
       pull-requests: write
     needs: build
+    if: ${{success()}}
     runs-on: ubuntu-latest
     steps:
       - name: Update comment
