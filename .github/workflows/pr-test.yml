@@ -1,5 +1,4 @@
 name: PR test
-run-name: Tests for PR#${{github.event.number}}
 
 concurrency: pr-${{github.event.number}}
 
