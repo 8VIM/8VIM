@@ -1,0 +1,56 @@
+name: Assign PR to project
+
+on:
+  pull_request:
+    branches-ignore: [dependabot/**]
+    types: [opened, labeled, ]
+
+jobs:
+  project:
+    runs-on: ubuntu-latest
+    permissions:
+      repository-projects: write
+    steps:
+      - name: Assign
+        if: github.event.action == 'opened' 
+        uses: 8VIM/github-project-automation-plus@main
+        with:
+          project: 8VIM
+          column: In Progress
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Remove
+        if: github.event.action == 'labeled' && contains(github.event.pull_request.labels.*.name, 'ignore')
+        uses: 8VIM/github-project-automation-plus@main
+        with:
+          project: 8VIM
+          column: In Progress
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          action: delete
+  find_issues:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened' || (github.event.action=='labeled' && contains(github.event.pull_request.labels.*.name, 'link'))
+    outputs:
+      issues: ${{ fromJSON(format('[{0}]',steps.action.outputs.refs)) }}
+    steps:
+      - name: Issue Refs Parser Action
+        uses: FujiHaruka/issue-refs-parser-action@v1.1
+        id: action
+        with:
+          body: ${{ github.event.pull_request.body }}
+          self_slug: ${{github.repository}}
+  link_issues:
+    runs-on: ubuntu-latest
+    needs: find_issues
+    strategy:
+      matrix:
+        issue: ${{needs.find_issues.outputs.issues}}
+    steps:
+      - name: Assign
+        uses: 8VIM/github-project-automation-plus@main
+        with:
+          project: 8VIM
+          column: In Progress
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          url: https://github.com/${{github.repository}}/issues/${{matrix.issue}}
+          type: issue
