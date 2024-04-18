@@ -69,10 +69,10 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
 ) {
     val controller = rememberColorPickerController()
     val prefValue by pref.observeAsState()
-    var color by remember(prefValue) { mutableStateOf(Color(prefValue)) }
+    var color by remember { mutableStateOf(Color(pref.get())) }
     val evalScope = PreferenceDataEvaluatorScope.instance()
     var openAlertDialog by remember { mutableStateOf(false) }
-    var hexCode by remember(color) { mutableStateOf("#${color.toHexCode().uppercase()}") }
+    var hexCode by remember { mutableStateOf("#${color.toHexCode().uppercase()}") }
     var isError by remember { mutableStateOf(false) }
     if (this.visibleIf(evalScope) && visibleIf(evalScope)) {
         if (openAlertDialog) {
@@ -100,11 +100,10 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
                             HsvColorPicker(
                                 modifier = Modifier.padding(10.dp),
                                 controller = controller,
-                                initialColor = color,
+                                initialColor = Color(pref.get()),
                                 onColorChanged = {
-                                    if (!it.fromUser) return@HsvColorPicker
                                     color = it.color
-                                    hexCode = "#${it.hexCode.uppercase()}"
+                                    hexCode = "#${it.color.toHexCode().uppercase()}"
                                 }
                             )
                         }
