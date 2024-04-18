@@ -16,6 +16,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import arrow.core.Option
 import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.BrightnessSlider
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
@@ -67,13 +69,13 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
 ) {
     val controller = rememberColorPickerController()
     val prefValue by pref.observeAsState()
+    var color by remember(prefValue) { mutableStateOf(Color(prefValue)) }
     val evalScope = PreferenceDataEvaluatorScope.instance()
     var openAlertDialog by remember { mutableStateOf(false) }
-
+    var hexCode by remember(color) { mutableStateOf("#${color.toHexCode().uppercase()}") }
+    var isError by remember { mutableStateOf(false) }
     if (this.visibleIf(evalScope) && visibleIf(evalScope)) {
         if (openAlertDialog) {
-            var color = Color(prefValue)
-            var hexCode = color.toHexCode()
             AlertDialog(
                 title = { Text(title) },
                 onDismissRequest = { openAlertDialog = false },
@@ -100,8 +102,9 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
                                 controller = controller,
                                 initialColor = color,
                                 onColorChanged = {
+                                    if (!it.fromUser) return@HsvColorPicker
                                     color = it.color
-                                    hexCode = it.hexCode
+                                    hexCode = "#${it.hexCode.uppercase()}"
                                 }
                             )
                         }
@@ -113,17 +116,31 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
                                 .align(Alignment.CenterHorizontally),
                             controller = controller
                         )
-                        Text(
-                            text = "#$hexCode",
+                        TextField(
+                            value = hexCode,
+                            isError = isError,
+                            onValueChange = {
+                                val value = if (it[0] == '#') it else "#$it"
+                                if (value.length > 7) return@TextField
+                                isError = Option
+                                    .catch { Color(android.graphics.Color.parseColor(value)) }
+                                    .onSome { color -> controller.selectByColor(color, true) }
+                                    .onNone { hexCode = value }
+                                    .isNone()
+                            },
+                            singleLine = true,
+                            trailingIcon = {
+                                AlphaTile(
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .align(Alignment.CenterHorizontally)
+                                        .clip(RoundedCornerShape(6.dp)),
+                                    controller = controller
+                                )
+                            },
                             modifier = Modifier.align(Alignment.CenterHorizontally)
                         )
-                        AlphaTile(
-                            modifier = Modifier
-                                .size(80.dp)
-                                .align(Alignment.CenterHorizontally)
-                                .clip(RoundedCornerShape(6.dp)),
-                            controller = controller
-                        )
+
                         Spacer(modifier = Modifier.weight(1f))
                     }
                 }
@@ -148,6 +165,7 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
         )
     }
 }
+
 private fun Color.toHexCode(): String {
     val red = this.red * 255
     val green = this.green * 255
