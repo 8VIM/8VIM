@@ -26,7 +26,14 @@ class MovementSequenceDeserializer : KeyDeserializer() {
 }
 
 enum class FingerPosition {
-    NO_TOUCH, INSIDE_CIRCLE, TOP, LEFT, BOTTOM, RIGHT, LONG_PRESS, LONG_PRESS_END;
+    NO_TOUCH,
+    INSIDE_CIRCLE,
+    TOP,
+    LEFT,
+    BOTTOM,
+    RIGHT,
+    LONG_PRESS,
+    LONG_PRESS_END;
 
     companion object {
 

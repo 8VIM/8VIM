@@ -35,9 +35,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
 private object SetupStep {
-    const val EnableIme: Int = 1
-    const val SelectIme: Int = 2
-    const val FinishUp: Int = 3
+    const val ENABLE_IME: Int = 1
+    const val SELECT_IME: Int = 2
+    const val FINISH_UP: Int = 3
 }
 
 @Composable
@@ -54,9 +54,9 @@ fun SetupScreen() = Screen {
 
     val stepState = rememberSaveable(saver = StepState.Saver) {
         val initStep = when {
-            !is8VimEnabled -> SetupStep.EnableIme
-            !is8VimSelected -> SetupStep.SelectIme
-            else -> SetupStep.FinishUp
+            !is8VimEnabled -> SetupStep.ENABLE_IME
+            !is8VimSelected -> SetupStep.SELECT_IME
+            else -> SetupStep.FINISH_UP
         }
         StepState.new(init = initStep)
     }
@@ -65,9 +65,9 @@ fun SetupScreen() = Screen {
         LaunchedEffect(is8VimEnabled, is8VimSelected) {
             stepState.setCurrentAuto(
                 when {
-                    !is8VimEnabled -> SetupStep.EnableIme
-                    !is8VimSelected -> SetupStep.SelectIme
-                    else -> SetupStep.FinishUp
+                    !is8VimEnabled -> SetupStep.ENABLE_IME
+                    !is8VimSelected -> SetupStep.SELECT_IME
+                    else -> SetupStep.FINISH_UP
                 }
             )
         }
@@ -78,7 +78,7 @@ fun SetupScreen() = Screen {
             while (isActive) {
                 delay(200)
                 val isEnabled = InputMethodUtils.parseIs8VimEnabled(context)
-                if (stepState.getCurrentAuto().value == SetupStep.EnableIme &&
+                if (stepState.getCurrentAuto().value == SetupStep.ENABLE_IME &&
                     stepState.getCurrentManual().value == -1 &&
                     !is8VimEnabled &&
                     !is8VimSelected &&
@@ -106,7 +106,7 @@ fun SetupScreen() = Screen {
             },
             steps = listOf(
                 Step(
-                    id = SetupStep.EnableIme,
+                    id = SetupStep.ENABLE_IME,
                     title = stringRes(R.string.setup__enable_ime__title)
                 ) {
                     StepText(stringRes(R.string.setup__enable_ime__description))
@@ -115,7 +115,7 @@ fun SetupScreen() = Screen {
                     }
                 },
                 Step(
-                    id = SetupStep.SelectIme,
+                    id = SetupStep.SELECT_IME,
                     title = stringRes(R.string.setup__select_ime__title)
                 ) {
                     StepText(stringRes(R.string.setup__select_ime__description))
@@ -124,15 +124,15 @@ fun SetupScreen() = Screen {
                     }
                 },
                 Step(
-                    id = SetupStep.FinishUp,
+                    id = SetupStep.FINISH_UP,
                     title = stringRes(R.string.setup__finish_up__title)
                 ) {
                     StepText(stringRes(R.string.setup__finish_up__description_p1))
                     StepText(stringRes(R.string.setup__finish_up__description_p2))
                     StepButton(label = stringRes(R.string.setup__finish_up__finish_btn)) {
                         this@content.prefs.internal.isImeSetup.set(true)
-                        navController.navigate(Routes.Settings.Home) {
-                            popUpTo(Routes.Setup.Screen) {
+                        navController.navigate(Routes.Settings.HOME) {
+                            popUpTo(Routes.Setup.SCREEN) {
                                 inclusive = true
                             }
                         }

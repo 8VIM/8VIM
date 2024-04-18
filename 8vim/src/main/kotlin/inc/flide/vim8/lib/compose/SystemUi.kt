@@ -67,10 +67,7 @@ private class AppSystemUiController(view: View) {
     private val window = view.context.findWindow()!!
     private val windowInsetsController = WindowInsetsControllerCompat(window, view)
 
-    fun setStatusBarColor(
-        color: Color,
-        darkIcons: Boolean
-    ) {
+    fun setStatusBarColor(color: Color, darkIcons: Boolean) {
         statusBarDarkContentEnabled = darkIcons
 
         window.statusBarColor = when {

@@ -108,30 +108,29 @@ class YamlParser : LayoutParser {
         }
     }
 
-    private fun validateYaml(node: JsonNode): Either<LayoutError, Layout> =
-        schema.validate(node)
-            .fold(InvalidLayoutError(emptySet())) { acc, error ->
-                val newError =
-                    if (error.message.startsWith('$')) {
-                        error
-                    } else {
-                        ValidationMessage.Builder()
-                            .type(error.type)
-                            .code(error.code)
-                            .path(error.path)
-                            .details(error.details)
-                            .arguments(error.message)
-                            .format(MessageFormat("{0}: {1}"))
-                            .build()
-                    }
-                InvalidLayoutError.validationMessages.modify(acc) { it + newError }
-            }.let {
-                if (it.validationMessages.isNotEmpty()) {
-                    it.left()
+    private fun validateYaml(node: JsonNode): Either<LayoutError, Layout> = schema.validate(node)
+        .fold(InvalidLayoutError(emptySet())) { acc, error ->
+            val newError =
+                if (error.message.startsWith('$')) {
+                    error
                 } else {
-                    mapper.convertValue<Layout>(node).right()
+                    ValidationMessage.Builder()
+                        .type(error.type)
+                        .code(error.code)
+                        .path(error.path)
+                        .details(error.details)
+                        .arguments(error.message)
+                        .format(MessageFormat("{0}: {1}"))
+                        .build()
                 }
+            InvalidLayoutError.validationMessages.modify(acc) { it + newError }
+        }.let {
+            if (it.validationMessages.isNotEmpty()) {
+                it.left()
+            } else {
+                mapper.convertValue<Layout>(node).right()
             }
+        }
 
     private fun addLayer(
         keyboardData: KeyboardData,

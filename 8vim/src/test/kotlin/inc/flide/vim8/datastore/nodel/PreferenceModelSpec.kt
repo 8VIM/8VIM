@@ -305,7 +305,8 @@ class PreferenceModelSpec : WordSpec() {
     }
 
     private enum class Enum {
-        A, B
+        A,
+        B
     }
 
     private class TestModel : PreferenceModel(1) {

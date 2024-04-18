@@ -1,7 +1,13 @@
 package inc.flide.vim8.ime.layout.models
 
 enum class LayerLevel {
-    HIDDEN, FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH;
+    HIDDEN,
+    FIRST,
+    SECOND,
+    THIRD,
+    FOURTH,
+    FIFTH,
+    SIXTH;
 
     companion object {
         val VisibleLayers = entries.drop(1)

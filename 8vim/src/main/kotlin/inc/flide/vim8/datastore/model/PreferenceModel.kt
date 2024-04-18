@@ -78,10 +78,7 @@ abstract class PreferenceModel(val version: Int) :
     }
 
     @Suppress("Unchecked_cast")
-    private fun <V : Any> PreferenceData<V>.serialize(
-        editor: Editor,
-        rawValue: Any?
-    ) {
+    private fun <V : Any> PreferenceData<V>.serialize(editor: Editor, rawValue: Any?) {
         rawValue?.let { serde.serialize(editor, key, it as V) }
     }
 

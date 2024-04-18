@@ -38,25 +38,25 @@ import inc.flide.vim8.lib.compose.SystemUiIme
 import inc.flide.vim8.lib.util.InputMethodUtils
 import java.lang.ref.WeakReference
 
-private var Vim8ImeServiceReference = WeakReference<Vim8ImeService?>(null)
+private var vim8ImeServiceReference = WeakReference<Vim8ImeService?>(null)
 
 class Vim8ImeService : LifecycleInputMethodService() {
     companion object {
         fun currentInputConnection(): InputConnection? =
-            Vim8ImeServiceReference.get()?.currentInputConnection
+            vim8ImeServiceReference.get()?.currentInputConnection
 
         fun inputFeedbackController(): InputFeedbackController? =
-            Vim8ImeServiceReference.get()?.inputFeedbackController
+            vim8ImeServiceReference.get()?.inputFeedbackController
 
         fun switchToEmoticonKeyboard() {
-            Vim8ImeServiceReference.get()?.let { InputMethodUtils.switchToEmoticonKeyboard(it) }
+            vim8ImeServiceReference.get()?.let { InputMethodUtils.switchToEmoticonKeyboard(it) }
         }
 
         fun hideKeyboard() {
-            Vim8ImeServiceReference.get()?.requestHideSelf(InputMethodManager.HIDE_NOT_ALWAYS)
+            vim8ImeServiceReference.get()?.requestHideSelf(InputMethodManager.HIDE_NOT_ALWAYS)
         }
 
-        fun keyboardData() = Vim8ImeServiceReference.get()?.keyboardData
+        fun keyboardData() = vim8ImeServiceReference.get()?.keyboardData
     }
 
     private val prefs by appPreferenceModel()
@@ -77,7 +77,7 @@ class Vim8ImeService : LifecycleInputMethodService() {
 
     override fun onCreate() {
         super.onCreate()
-        Vim8ImeServiceReference = WeakReference(this)
+        vim8ImeServiceReference = WeakReference(this)
         resourcesContext = createConfigurationContext(Configuration(resources.configuration))
         prefs.layout.current.observe {
             it.loadKeyboardData(layoutLoader, this)
@@ -120,7 +120,7 @@ class Vim8ImeService : LifecycleInputMethodService() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Vim8ImeServiceReference = WeakReference(null)
+        vim8ImeServiceReference = WeakReference(null)
         inputWindowView = null
     }
 

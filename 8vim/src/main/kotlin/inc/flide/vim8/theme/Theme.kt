@@ -10,19 +10,17 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.luminance
 import inc.flide.vim8.lib.android.AndroidVersion
 
-fun darkColorPalette(context: Context) =
-    if (AndroidVersion.ATLEAST_API31_S) {
-        dynamicDarkColorScheme(context)
-    } else {
-        darkColorScheme()
-    }
+fun darkColorPalette(context: Context) = if (AndroidVersion.ATLEAST_API31_S) {
+    dynamicDarkColorScheme(context)
+} else {
+    darkColorScheme()
+}
 
-fun lightColorPalette(context: Context) =
-    if (AndroidVersion.ATLEAST_API31_S) {
-        dynamicLightColorScheme(context)
-    } else {
-        lightColorScheme()
-    }
+fun lightColorPalette(context: Context) = if (AndroidVersion.ATLEAST_API31_S) {
+    dynamicLightColorScheme(context)
+} else {
+    lightColorScheme()
+}
 
 fun ColorScheme.isLightTheme() = this.background.luminance() >= 0.5f
 

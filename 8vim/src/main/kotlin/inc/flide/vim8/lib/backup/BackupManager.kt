@@ -50,7 +50,7 @@ class BackupManager(private val context: Context) {
         prefs.layout.custom.history.get().forEach { layoutName ->
             val layout = layoutName.toCustomLayout()
             val fileName = "${
-            layout.md5(context).getOrElse { UUID.randomUUID().toString() }
+                layout.md5(context).getOrElse { UUID.randomUUID().toString() }
             }_${layout.defaultName(context)}"
             val file = File(customDir, fileName)
             customs[layoutName] = layout.inputStream(context)

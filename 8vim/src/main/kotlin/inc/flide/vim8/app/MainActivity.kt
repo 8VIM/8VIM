@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
                 Routes.AppNavHost(
                     modifier = Modifier.weight(1.0f),
                     navController = navController,
-                    startDestination = if (isImeSetUp) Routes.Settings.Home else Routes.Setup.Screen
+                    startDestination = if (isImeSetUp) Routes.Settings.HOME else Routes.Setup.SCREEN
                 )
                 PreviewKeyboardField(previewFieldController)
             }
