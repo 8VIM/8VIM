@@ -14,8 +14,9 @@ class SettingsScreenTest : FunSpec({
     test("test") {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         val compose = createAndroidComposeRule<MainActivity>()
-        compose.onNodeWithText(appContext.resources.getString(R.string.setup__enable_ime__open_settings_btn))
+        compose.onNodeWithText(
+            appContext.resources.getString(R.string.setup__enable_ime__open_settings_btn)
+        )
             .performClick()
     }
-
 })

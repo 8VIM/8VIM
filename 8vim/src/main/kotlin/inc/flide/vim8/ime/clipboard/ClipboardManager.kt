@@ -54,10 +54,7 @@ class ClipboardManager(context: Context) : OnPrimaryClipChangedListener {
         }
     }
 
-    private fun updateHistory(
-        history: Sequence<String>,
-        maxHistory: Int
-    ) {
+    private fun updateHistory(history: Sequence<String>, maxHistory: Int) {
         val result = history
             .fold(mapOf<String, Long>()) { acc, clip ->
                 val cleanedClip = getClipFromTimestampedClip(clip)

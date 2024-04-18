@@ -52,11 +52,10 @@ fun KeyboardData.characterSets(layer: LayerLevel): Option<List<KeyboardAction?>>
 fun KeyboardData.setCharacterSets(
     characterSets: List<KeyboardAction?>,
     layer: LayerLevel
-): KeyboardData =
-    KeyboardData.characterSets.index(
-        Index.list(),
-        layer.ordinal - 1
-    ).set(this, characterSets)
+): KeyboardData = KeyboardData.characterSets.index(
+    Index.list(),
+    layer.ordinal - 1
+).set(this, characterSets)
 
 fun KeyboardData.findLayer(movementSequence: MovementSequence): LayerLevel =
     actionMap[movementSequence]?.layer.let {

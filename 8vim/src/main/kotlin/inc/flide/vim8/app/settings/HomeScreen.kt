@@ -46,7 +46,7 @@ fun HomeScreen() = Screen {
         Preference(
             iconId = R.drawable.ic_language,
             title = stringRes(R.string.settings__layouts__title),
-            onClick = { navController.navigate(Routes.Settings.Layouts) },
+            onClick = { navController.navigate(Routes.Settings.LAYOUTS) },
             trailing = {
                 Icon(
                     Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -58,7 +58,7 @@ fun HomeScreen() = Screen {
         Preference(
             iconId = R.drawable.ic_keyboard,
             title = stringRes(R.string.settings__keyboard__title),
-            onClick = { navController.navigate(Routes.Settings.Keyboard) },
+            onClick = { navController.navigate(Routes.Settings.KEYBOARD) },
             trailing = {
                 Icon(
                     Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -70,7 +70,7 @@ fun HomeScreen() = Screen {
         Preference(
             iconId = R.drawable.ic_content_paste,
             title = stringRes(R.string.settings__clipboard__title),
-            onClick = { navController.navigate(Routes.Settings.Clipboard) },
+            onClick = { navController.navigate(Routes.Settings.CLIPBOARD) },
             trailing = {
                 Icon(
                     Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -82,7 +82,7 @@ fun HomeScreen() = Screen {
         Preference(
             iconId = R.drawable.ic_outline_palette,
             title = stringRes(R.string.settings__theme__title),
-            onClick = { navController.navigate(Routes.Settings.Theme) },
+            onClick = { navController.navigate(Routes.Settings.THEME) },
             trailing = {
                 Icon(
                     Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -93,7 +93,7 @@ fun HomeScreen() = Screen {
         Preference(
             iconId = R.drawable.ic_gesture,
             title = stringRes(R.string.settings__gesture__title),
-            onClick = { navController.navigate(Routes.Settings.Gesture) },
+            onClick = { navController.navigate(Routes.Settings.GESTURE) },
             trailing = {
                 Icon(
                     Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -104,7 +104,7 @@ fun HomeScreen() = Screen {
         Preference(
             iconId = R.drawable.ic_settings_backup_restore,
             title = stringRes(R.string.settings__backup_and_restore__title),
-            onClick = { navController.navigate(Routes.Settings.BackupAndRestore) },
+            onClick = { navController.navigate(Routes.Settings.BACKUP_AND_RESTORE) },
             trailing = {
                 Icon(
                     Icons.AutoMirrored.Filled.KeyboardArrowRight,
@@ -115,7 +115,7 @@ fun HomeScreen() = Screen {
         Preference(
             iconId = R.drawable.ic_error_outline,
             title = stringRes(R.string.about__title),
-            onClick = { navController.navigate(Routes.Settings.About) },
+            onClick = { navController.navigate(Routes.Settings.ABOUT) },
             trailing = {
                 Icon(
                     Icons.AutoMirrored.Filled.KeyboardArrowRight,

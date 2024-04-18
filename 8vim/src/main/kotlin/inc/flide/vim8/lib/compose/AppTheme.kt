@@ -6,10 +6,7 @@ import androidx.compose.runtime.Composable
 import inc.flide.vim8.theme.typography
 
 @Composable
-fun AppTheme(
-    colorScheme: ColorScheme,
-    content: @Composable () -> Unit
-) {
+fun AppTheme(colorScheme: ColorScheme, content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = colorScheme,
         typography = colorScheme.typography(),

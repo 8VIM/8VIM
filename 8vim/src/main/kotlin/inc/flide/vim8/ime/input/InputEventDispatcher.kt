@@ -25,9 +25,7 @@ class InputEventDispatcher {
 
     var keyEventReceiver: InputKeyEventReceiver? = null
 
-    fun sendDown(
-        keyboardAction: KeyboardAction
-    ) = runBlocking {
+    fun sendDown(keyboardAction: KeyboardAction) = runBlocking {
         val eventTime = SystemClock.uptimeMillis()
         val result = pressedKeys.withLock { pressedKeys ->
             if (pressedKeys.containsKey(keyboardAction)) return@withLock null

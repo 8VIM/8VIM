@@ -73,6 +73,7 @@ class EditorInstanceSpec : FunSpec({
         keyboardState = mockk<ObservableKeyboardState>(relaxed = true)
     }
 
+    @Suppress("ktlint:standard:max-line-length")
     context("handleStartInputView") {
         withData(
             nameFn = { it.first.second },
@@ -84,10 +85,10 @@ class EditorInstanceSpec : FunSpec({
         ) { (typeClass, mode) ->
             withData(
                 nameFn = { it.first.second },
-                (InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD to "TYPE_TEXT_VARIATION_WEB_PASSWORD") to KeyVariation.PASSWORD, // ktlint-disable standard_max-line-length
-                (InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD to "TYPE_TEXT_VARIATION_VISIBLE_PASSWORD") to KeyVariation.PASSWORD, // ktlint-disable standard_max-line-length
-                (InputType.TYPE_TEXT_VARIATION_PASSWORD to "TYPE_TEXT_VARIATION_PASSWORD") to KeyVariation.PASSWORD, // ktlint-disable standard_max-line-length
-                (InputType.TYPE_TEXT_VARIATION_NORMAL to "TYPE_TEXT_VARIATION_NORMAL") to KeyVariation.NORMAL // ktlint-disable standard_max-line-length
+                (InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD to "TYPE_TEXT_VARIATION_WEB_PASSWORD") to KeyVariation.PASSWORD,
+                (InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD to "TYPE_TEXT_VARIATION_VISIBLE_PASSWORD") to KeyVariation.PASSWORD,
+                (InputType.TYPE_TEXT_VARIATION_PASSWORD to "TYPE_TEXT_VARIATION_PASSWORD") to KeyVariation.PASSWORD,
+                (InputType.TYPE_TEXT_VARIATION_NORMAL to "TYPE_TEXT_VARIATION_NORMAL") to KeyVariation.NORMAL
             ) { (typeVariation, variation) ->
                 val editorInfo = EditorInfo()
                 editorInfo.inputType = (typeClass.first or typeVariation.first)

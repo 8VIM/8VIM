@@ -203,8 +203,9 @@ fun KeyboardScreen() = Screen {
             )
             SwitchPreference(
                 pref = prefs.inputFeedback.hapticSectorCrossEnabled,
-                title = stringRes(
-                    R.string.settings__keyboard__haptic__feedback__haptic_sector_cross_enabled__title// ktlint-disable
+                title = @Suppress("ktlint")
+                stringRes(
+                    R.string.settings__keyboard__haptic__feedback__haptic_sector_cross_enabled__title
                 ),
                 summaryOff = stringRes(
                     R.string.settings__keyboard__haptic__feedback__enabled__summary__off

@@ -3,7 +3,10 @@ package inc.flide.vim8.ime.layout.models
 import kotlin.math.abs
 
 enum class Direction {
-    RIGHT, TOP, LEFT, BOTTOM;
+    RIGHT,
+    TOP,
+    LEFT,
+    BOTTOM;
 
     companion object {
         fun baseQuadrant(continuousQuadrantValue: Int): Direction {

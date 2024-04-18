@@ -54,11 +54,7 @@ object IntPreferenceSerde : PreferenceSerDe<Int> {
         editor.putInt(key, value)
     }
 
-    override fun deserialize(
-        sharedPreferences: SharedPreferences,
-        key: String,
-        default: Int
-    ): Int {
+    override fun deserialize(sharedPreferences: SharedPreferences, key: String, default: Int): Int {
         return tryOrNull {
             sharedPreferences.getInt(key, default)
         } ?: default

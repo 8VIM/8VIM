@@ -61,11 +61,7 @@ fun ElevatedCard(
 }
 
 @Composable
-fun ErrorCard(
-    text: String,
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null
-) {
+fun ErrorCard(text: String, modifier: Modifier = Modifier, onClick: (() -> Unit)? = null) {
     ElevatedCard(
         text = text,
         containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -85,11 +81,7 @@ fun ErrorCard(
 }
 
 @Composable
-fun WarningCard(
-    text: String,
-    modifier: Modifier = Modifier,
-    onClick: (() -> Unit)? = null
-) {
+fun WarningCard(text: String, modifier: Modifier = Modifier, onClick: (() -> Unit)? = null) {
     ElevatedCard(
         text = text,
         containerColor = MaterialTheme.colorScheme.tertiaryContainer,

@@ -108,6 +108,6 @@ abstract class SwipeGesture {
         UP,
         RIGHT,
         DOWN,
-        LEFT;
+        LEFT
     }
 }
