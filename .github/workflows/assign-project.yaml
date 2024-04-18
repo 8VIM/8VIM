@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.action == 'opened' || (github.event.action=='labeled' && contains(github.event.pull_request.labels.*.name, 'link'))
     outputs:
-      issues: ${{ fromJSON(format('[{0}]',steps.action.outputs.refs)) }}
+      issues: ${{ format('[{0}]',steps.action.outputs.refs) }}
     steps:
       - name: Issue Refs Parser Action
         uses: FujiHaruka/issue-refs-parser-action@v1.1
@@ -44,7 +44,7 @@ jobs:
     needs: find_issues
     strategy:
       matrix:
-        issue: ${{needs.find_issues.outputs.issues}}
+        issue: ${{fromJSON(needs.find_issues.outputs.issues)}}
     steps:
       - name: Assign
         uses: 8VIM/github-project-automation-plus@main
