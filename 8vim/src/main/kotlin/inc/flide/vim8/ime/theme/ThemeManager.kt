@@ -71,12 +71,11 @@ class ThemeManager(context: Context) {
         }
     }
 
-    private fun trailColor(): TrailColor =
-        if (prefs.keyboard.trail.useRandomColor.get()) {
-            randomTrailColor
-        } else {
-            FixedTrailColor(Color(prefs.keyboard.trail.color.get()))
-        }
+    private fun trailColor(): TrailColor = if (prefs.keyboard.trail.useRandomColor.get()) {
+        randomTrailColor
+    } else {
+        FixedTrailColor(Color(prefs.keyboard.trail.color.get()))
+    }
 
     data class ThemeInfo(val scheme: ColorScheme, val trailColor: TrailColor)
 

@@ -1,0 +1,1 @@
+chore(deps): bump org.jlleitschuh.gradle.ktlint from 11.5.0 to 12.1.0

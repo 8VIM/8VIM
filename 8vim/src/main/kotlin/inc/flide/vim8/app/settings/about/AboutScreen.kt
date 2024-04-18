@@ -97,7 +97,7 @@ fun AboutScreen() = Screen {
             iconId = R.drawable.ic_description,
             title = stringRes(R.string.about__third_party_licenses__title),
             summary = stringRes(R.string.about__third_party_licenses__summary),
-            onClick = { navController.navigate(Routes.Settings.ThirdPartyLicenses) }
+            onClick = { navController.navigate(Routes.Settings.THIRD_PARTY_LICENSES) }
         )
     }
 }

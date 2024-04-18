@@ -91,11 +91,7 @@ class StepLayoutScope(
     }
 
     @Composable
-    fun StepButton(
-        label: String,
-        modifier: Modifier = Modifier,
-        onClick: () -> Unit
-    ) {
+    fun StepButton(label: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
         Button(
             modifier = modifier
                 .align(Alignment.CenterHorizontally)

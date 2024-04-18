@@ -13,17 +13,10 @@ class Rect private constructor(
 ) {
     companion object {
         fun empty() = Rect(0.0f, 0.0f, 0.0f, 0.0f)
-        fun new(
-            left: Float = 0.0f,
-            top: Float = 0.0f,
-            right: Float = 0.0f,
-            bottom: Float = 0.0f
-        ) = Rect(left, top, right, bottom)
+        fun new(left: Float = 0.0f, top: Float = 0.0f, right: Float = 0.0f, bottom: Float = 0.0f) =
+            Rect(left, top, right, bottom)
 
-        fun new(
-            width: Float,
-            height: Float
-        ) = Rect(0.0f, 0.0f, width, height)
+        fun new(width: Float, height: Float) = Rect(0.0f, 0.0f, width, height)
 
         fun from(r: Rect) = Rect(r.left, r.top, r.right, r.bottom)
     }

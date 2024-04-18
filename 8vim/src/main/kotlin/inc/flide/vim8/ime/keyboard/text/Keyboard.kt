@@ -14,11 +14,7 @@ class Keyboard(private val arrangement: Array<Array<Key>>) {
         return arrangement.iterator()
     }
 
-    fun layout(
-        keyboardWidth: Float,
-        keyboardHeight: Float,
-        desiredKey: Key
-    ) {
+    fun layout(keyboardWidth: Float, keyboardHeight: Float, desiredKey: Key) {
         if (arrangement.isEmpty()) return
 
         val desiredTouchBounds = desiredKey.touchBounds
@@ -65,30 +61,30 @@ class Keyboard(private val arrangement: Array<Array<Key>>) {
                     key.visibleBounds.apply {
                         left =
                             key.touchBounds.left + abs(
-                            desiredTouchBounds.left - desiredVisibleBounds.left
-                        ) + when {
-                            growSum == 0.0f && k == 0 ->
-                                ((additionalWidth / 2.0f) * desiredTouchBounds.width)
+                                desiredTouchBounds.left - desiredVisibleBounds.left
+                            ) + when {
+                                growSum == 0.0f && k == 0 ->
+                                    ((additionalWidth / 2.0f) * desiredTouchBounds.width)
 
-                            else -> 0.0f
-                        }
+                                else -> 0.0f
+                            }
                         top =
                             key.touchBounds.top + abs(
-                            desiredTouchBounds.top - desiredVisibleBounds.top
-                        )
+                                desiredTouchBounds.top - desiredVisibleBounds.top
+                            )
                         right =
                             key.touchBounds.right - abs(
-                            desiredTouchBounds.right - desiredVisibleBounds.right
-                        ) - when {
-                            growSum == 0.0f && k == row.size - 1 ->
-                                ((additionalWidth / 2.0f) * desiredTouchBounds.width)
+                                desiredTouchBounds.right - desiredVisibleBounds.right
+                            ) - when {
+                                growSum == 0.0f && k == row.size - 1 ->
+                                    ((additionalWidth / 2.0f) * desiredTouchBounds.width)
 
-                            else -> 0.0f
-                        }
+                                else -> 0.0f
+                            }
                         bottom =
                             key.touchBounds.bottom - abs(
-                            desiredTouchBounds.bottom - desiredVisibleBounds.bottom
-                        )
+                                desiredTouchBounds.bottom - desiredVisibleBounds.bottom
+                            )
                     }
                     posX += keyWidth
                     // After-adjust touch bounds for the row margin
@@ -116,20 +112,20 @@ class Keyboard(private val arrangement: Array<Array<Key>>) {
                     key.visibleBounds.apply {
                         left =
                             key.touchBounds.left + abs(
-                            desiredTouchBounds.left - desiredVisibleBounds.left
-                        )
+                                desiredTouchBounds.left - desiredVisibleBounds.left
+                            )
                         top =
                             key.touchBounds.top + abs(
-                            desiredTouchBounds.top - desiredVisibleBounds.top
-                        )
+                                desiredTouchBounds.top - desiredVisibleBounds.top
+                            )
                         right =
                             key.touchBounds.right - abs(
-                            desiredTouchBounds.right - desiredVisibleBounds.right
-                        )
+                                desiredTouchBounds.right - desiredVisibleBounds.right
+                            )
                         bottom =
                             key.touchBounds.bottom - abs(
-                            desiredTouchBounds.bottom - desiredVisibleBounds.bottom
-                        )
+                                desiredTouchBounds.bottom - desiredVisibleBounds.bottom
+                            )
                     }
                     posX += keyWidth
                     // After-adjust touch bounds for the row margin

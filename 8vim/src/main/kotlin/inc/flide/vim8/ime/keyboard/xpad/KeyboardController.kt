@@ -349,9 +349,8 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             }
     }
 
-    private fun processMovementSequence(movementSequence: MovementSequence) =
-        keyboard
-            .action(movementSequence, currentMovementSequenceType)
+    private fun processMovementSequence(movementSequence: MovementSequence) = keyboard
+        .action(movementSequence, currentMovementSequenceType)
 
     private fun interruptLongPress() = runBlocking {
         if (job == null) return@runBlocking

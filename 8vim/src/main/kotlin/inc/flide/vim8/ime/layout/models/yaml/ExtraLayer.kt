@@ -4,7 +4,11 @@ import inc.flide.vim8.ime.layout.models.FingerPosition
 import inc.flide.vim8.ime.layout.models.LayerLevel
 
 enum class ExtraLayer {
-    FIRST, SECOND, THIRD, FOURTH, FIFTH;
+    FIRST,
+    SECOND,
+    THIRD,
+    FOURTH,
+    FIFTH;
 
     companion object {
         val MOVEMENT_SEQUENCES: Map<ExtraLayer, List<FingerPosition>> = entries.fold(
