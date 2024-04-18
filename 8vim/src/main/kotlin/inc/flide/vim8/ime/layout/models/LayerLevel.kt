@@ -1,16 +1,24 @@
 package inc.flide.vim8.ime.layout.models
 
-enum class LayerLevel {
-    HIDDEN,
-    FIRST,
-    SECOND,
-    THIRD,
-    FOURTH,
-    FIFTH,
-    SIXTH;
+import arrow.core.Option
+import arrow.core.firstOrNone
+
+enum class LayerLevel(val value: Int) {
+    FUNCTIONS(-1),
+    HIDDEN(0),
+    FIRST(1),
+    SECOND(2),
+    THIRD(3),
+    FOURTH(4),
+    FIFTH(5),
+    SIXTH(6);
+
+    fun toInt(): Int = value
 
     companion object {
-        val VisibleLayers = entries.drop(1)
+        fun fromInt(int: Int): Option<LayerLevel> = entries.firstOrNone { it.value == int }
+
+        val VisibleLayers = entries.drop(2)
 
         val MovementSequences: Map<LayerLevel, MovementSequence> =
             entries.fold(mapOf()) { acc, layer ->

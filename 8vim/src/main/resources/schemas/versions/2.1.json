@@ -5,7 +5,7 @@
   "properties": {
     "version": {
       "type": "string",
-      "const": "2"
+      "const": "2.1"
     },
     "info": {
       "$ref": "/schemas/common.json#/$defs/info"
@@ -20,6 +20,9 @@
           "$ref": "/schemas/common.json#/$defs/extra_layers"
         },
         "hidden": {
+          "$ref": "/schemas/common.json#/$defs/actions"
+        },
+        "functions": {
           "$ref": "/schemas/common.json#/$defs/actions"
         }
       },
@@ -39,21 +42,42 @@
       },
       "else": {
         "if": {
-          "required": [
-            "hidden"
+          "anyOf": [
+            {
+              "required": [
+                "hidden"
+              ]
+            },
+            {
+              "required": [
+                "functions"
+              ]
+            }
           ]
         },
         "then": {
-          "required": [
-            "hidden"
-          ]
+          "if": {
+            "required": [
+              "hidden"
+            ]
+          },
+          "then": {
+            "required": [
+              "hidden"
+            ]
+          },
+          "else": {
+            "required": [
+              "functions"
+            ]
+          }
         },
         "else": {
           "required": [
             "default"
           ],
           "message": {
-            "required": "default or hidden is required"
+            "required": "default, hidden or functions is required"
           }
         }
       }

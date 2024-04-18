@@ -29,7 +29,7 @@ class KeyboardDataSpec : DescribeSpec({
                     val keyboardData = KeyboardData()
                         .setCharacterSets(characterSet, layer)
                     when (layer) {
-                        LayerLevel.HIDDEN -> {
+                        LayerLevel.HIDDEN, LayerLevel.FUNCTIONS -> {
                             keyboardData.characterSets(layer).shouldBeNone()
                         }
 
@@ -49,8 +49,10 @@ class KeyboardDataSpec : DescribeSpec({
                 withAssumptions(characterSet.any { it != null }) {
                     val keyboardData = KeyboardData().setCharacterSets(characterSet, layer)
                     when (layer) {
-                        LayerLevel.HIDDEN -> keyboardData.totalLayers shouldBe 0
-                        else -> keyboardData.totalLayers shouldBe layer.ordinal
+                        LayerLevel.HIDDEN, LayerLevel.FUNCTIONS -> {
+                            keyboardData.totalLayers shouldBe 0
+                        }
+                        else -> keyboardData.totalLayers shouldBe layer.toInt()
                     }
                 }
             }

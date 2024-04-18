@@ -1,6 +1,6 @@
-version: "2"
+version: "2.1"
 layers:
-  hidden:
+  functions:
     - type: input_key
       movement_sequence:
         - no_touch

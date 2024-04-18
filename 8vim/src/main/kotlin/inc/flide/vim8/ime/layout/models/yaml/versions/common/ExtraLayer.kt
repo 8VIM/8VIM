@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.layout.models.yaml
+package inc.flide.vim8.ime.layout.models.yaml.versions.common
 
 import inc.flide.vim8.ime.layout.models.FingerPosition
 import inc.flide.vim8.ime.layout.models.LayerLevel

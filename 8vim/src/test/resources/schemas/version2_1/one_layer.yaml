@@ -1,0 +1,8 @@
+version: "2.1"
+layers:
+  default:
+    sectors:
+      right:
+        parts:
+          bottom:
+            - lower_case: n

@@ -203,7 +203,7 @@ fun KeyboardScreen() = Screen {
             )
             SwitchPreference(
                 pref = prefs.inputFeedback.hapticSectorCrossEnabled,
-                title = @Suppress("ktlint")
+                title = @Suppress("ktlint:standard:max-line-length")
                 stringRes(
                     R.string.settings__keyboard__haptic__feedback__haptic_sector_cross_enabled__title
                 ),

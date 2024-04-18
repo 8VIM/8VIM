@@ -1,0 +1,8 @@
+version: "2.1"
+layers:
+  hidden:
+    - type: input_key
+      movement_sequence:
+        - top
+        - no_touch
+      key_code: shift_toggle

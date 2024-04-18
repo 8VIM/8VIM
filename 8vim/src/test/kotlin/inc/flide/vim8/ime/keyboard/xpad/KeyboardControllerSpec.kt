@@ -78,6 +78,9 @@ class KeyboardControllerSpec : FunSpec({
             every { keyboardManager() } returns lazy {
                 mockk {
                     every { inputEventDispatcher } answers { eventDispatcher }
+                    every { activeState } returns mockk {
+                        every { isFnOn } returns true
+                    }
                 }
             }
             every { themeManager() } returns lazy {

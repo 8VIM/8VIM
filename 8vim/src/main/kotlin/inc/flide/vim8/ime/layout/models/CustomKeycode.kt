@@ -19,7 +19,8 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
     HIDE_KEYBOARD(-15),
     NO_OPERATION(-16),
     SWITCH_TO_CLIPPAD_KEYBOARD(-17),
-    CTRL_TOGGLE(-18);
+    CTRL_TOGGLE(-18),
+    FN_TOGGLE(-19);
 
     fun toKeyEvent(): Int = when (this) {
         MOVE_CURRENT_END_POINT_LEFT, SELECTION_START -> KeyEvent.KEYCODE_DPAD_LEFT

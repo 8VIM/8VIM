@@ -13,7 +13,7 @@ import inc.flide.vim8.cache
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.info
-import inc.flide.vim8.ime.layout.models.yaml.name
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.name
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec

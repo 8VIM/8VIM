@@ -11,7 +11,7 @@ import inc.flide.vim8.datastore.model.PreferenceData
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.info
-import inc.flide.vim8.ime.layout.models.yaml.name
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.name
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
