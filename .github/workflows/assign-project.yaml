@@ -53,6 +53,6 @@ jobs:
         with:
           project: 8VIM
           column: In Progress
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.PAT }}
           url: https://github.com/${{github.repository}}/issues/${{matrix.issue}}
           type: issue
