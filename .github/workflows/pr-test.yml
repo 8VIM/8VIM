@@ -74,7 +74,8 @@ jobs:
           && needs.validate_layouts.result == 'success')
         || (needs.test_run.result == 'skipped' 
           || needs.validate_layouts.result == 'skipped' 
-          needs.test_run.result == 'success' || needs.validate_layouts.result == 'success')
+          || needs.test_run.result == 'success' 
+          || needs.validate_layouts.result == 'success')
       )
     needs: [validate_layouts, test_run]
     uses: ./.github/workflows/build.yaml
