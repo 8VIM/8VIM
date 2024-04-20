@@ -91,7 +91,7 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
                         pref.set(color.toArgb())
                         openAlertDialog = false
                     }) {
-                        Text(stringRes(R.string.dialog__confirm__label))
+                        Text(stringRes(R.string.dialog__save__label))
                     }
                 },
                 text = {
