@@ -23,7 +23,11 @@
           "$ref": "/schemas/common.json#/$defs/actions"
         },
         "functions": {
-          "$ref": "/schemas/common.json#/$defs/actions"
+          "description": "Like hidden but requires 'fn button' to be active for being able to be triggered",
+          "type": "array",
+          "items": {
+            "$ref": "/schemas/common.json#/$defs/action"
+          }
         }
       },
       "additionalProperties": false,
