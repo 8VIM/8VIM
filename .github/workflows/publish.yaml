@@ -127,6 +127,7 @@ jobs:
     with:
       channel: ${{contains(inputs.version_name, 'rc') && 'internal' || 'production'}}
       version: ${{inputs.version_name}}
+    secrets: inherit
   cleanup:
     name: Cleanup artifact
     needs: [build, build_rc, release]
