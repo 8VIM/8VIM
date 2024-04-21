@@ -123,6 +123,7 @@ jobs:
   notify:
     uses: ./.github/workflows/matrix-release.yaml
     needs: [release]
+    if: ${{ !cancelled() && needs.release.result !='failure'}}
     with:
       channel: ${{contains(inputs.version_name, 'rc') && 'internal' || 'production'}}
       version: ${{inputs.version_name}}
