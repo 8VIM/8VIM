@@ -69,10 +69,10 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
 ) {
     val controller = rememberColorPickerController()
     val prefValue by pref.observeAsState()
-    var color by remember { mutableStateOf(Color(pref.get())) }
     val evalScope = PreferenceDataEvaluatorScope.instance()
     var openAlertDialog by remember { mutableStateOf(false) }
-    var hexCode by remember { mutableStateOf("#${color.toHexCode().uppercase()}") }
+    val color by controller.selectedColor
+    var hexCode by remember { mutableStateOf("#${Color(pref.get()).toHexCode().uppercase()}") }
     var isError by remember { mutableStateOf(false) }
     if (this.visibleIf(evalScope) && visibleIf(evalScope)) {
         if (openAlertDialog) {
@@ -102,8 +102,9 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
                                 controller = controller,
                                 initialColor = Color(pref.get()),
                                 onColorChanged = {
-                                    color = it.color
-                                    hexCode = "#${it.color.toHexCode().uppercase()}"
+                                    if (it.fromUser) {
+                                        hexCode = "#${it.color.toHexCode().uppercase()}"
+                                    }
                                 }
                             )
                         }
@@ -127,7 +128,10 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
                                 if (value.length > 7) return@TextField
                                 isError = Option
                                     .catch { Color(android.graphics.Color.parseColor(value)) }
-                                    .onSome { color -> controller.selectByColor(color, true) }
+                                    .onSome { color ->
+                                        controller.selectByColor(color, true)
+                                        hexCode = "#${color.toHexCode().uppercase()}"
+                                    }
                                     .onNone { hexCode = value }
                                     .isNone()
                             },
