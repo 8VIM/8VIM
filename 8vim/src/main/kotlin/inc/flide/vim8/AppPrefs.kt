@@ -12,6 +12,8 @@ import inc.flide.vim8.datastore.Datastore
 import inc.flide.vim8.datastore.model.PreferenceMigrationEntry
 import inc.flide.vim8.datastore.model.PreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
+import inc.flide.vim8.ime.EmbeddedMode
+import inc.flide.vim8.ime.FullScreenModeSerde
 import inc.flide.vim8.ime.layout.EmbeddedLayout
 import inc.flide.vim8.ime.layout.LayoutSerDe
 import inc.flide.vim8.theme.ThemeMode
@@ -20,7 +22,7 @@ import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
 
-class AppPrefs : PreferenceModel(6) {
+class AppPrefs : PreferenceModel(8) {
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
@@ -127,6 +129,12 @@ class AppPrefs : PreferenceModel(6) {
         val emoticonKeyboard = string(
             key = "prefs_keyboard_emoticon_keyboard",
             default = ""
+        )
+
+        val fullScreenMode = custom(
+            key = "prefs_keyboard_full_screen_mode",
+            default = EmbeddedMode,
+            serde = FullScreenModeSerde
         )
 
         inner class SideBar {

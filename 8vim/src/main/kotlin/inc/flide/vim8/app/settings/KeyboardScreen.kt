@@ -15,6 +15,8 @@ import inc.flide.vim8.datastore.ui.PreferenceGroup
 import inc.flide.vim8.datastore.ui.RangeSliderPreference
 import inc.flide.vim8.datastore.ui.SliderPreference
 import inc.flide.vim8.datastore.ui.SwitchPreference
+import inc.flide.vim8.ime.EmbeddedMode
+import inc.flide.vim8.ime.PopupMode
 import inc.flide.vim8.lib.compose.Dialog
 import inc.flide.vim8.lib.compose.Screen
 import inc.flide.vim8.lib.compose.stringRes
@@ -30,6 +32,7 @@ fun KeyboardScreen() = Screen {
         val isDynamicCircleEnabled by prefs.keyboard.circle.dynamic.isEnabled.observeAsState()
         val hapticEnabled by prefs.inputFeedback.hapticEnabled.observeAsState()
         val soundEnabled by prefs.inputFeedback.soundEnabled.observeAsState()
+        val fullScreenMode by prefs.keyboard.fullScreenMode.observeAsState()
 
         PreferenceGroup {
             Dialog {
@@ -62,6 +65,46 @@ fun KeyboardScreen() = Screen {
                 )
             }
         }
+
+        PreferenceGroup {
+            Dialog {
+                title = stringRes(R.string.settings__keyboard__full_screen_mode__title)
+                index = {
+                    when (fullScreenMode) {
+                        is EmbeddedMode -> 0
+                        else -> 1
+                    }
+                }
+                items = {
+                    listOf(
+                        stringRes(R.string.settings__keyboard__full_screen_mode__embedded),
+                        stringRes(R.string.settings__keyboard__full_screen_mode__popup)
+                    )
+                }
+                onConfirm {
+                    val mode = when (it) {
+                        0 -> EmbeddedMode
+                        1 -> PopupMode()
+                        else -> return@onConfirm
+                    }
+                    prefs.keyboard.fullScreenMode.set(mode)
+                }
+                Preference(
+                    title = stringRes(R.string.settings__keyboard__full_screen_mode__title),
+                    summary = stringRes(
+                        R.string.settings__keyboard__select__emoji__keyboard__summary
+                    ),
+                    onClick = { show() },
+                    trailing = {
+                        Icon(
+                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = null
+                        )
+                    }
+                )
+            }
+        }
+
         PreferenceGroup(
             title = stringRes(R.string.settings__keyboard__circle__auto_resize_group__title)
         ) {

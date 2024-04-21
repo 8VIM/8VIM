@@ -12,16 +12,24 @@ import androidx.compose.ui.unit.dp
 import inc.flide.vim8.R
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
+import inc.flide.vim8.ime.PopupMode
 import inc.flide.vim8.lib.android.isOrientationPortrait
 import inc.flide.vim8.lib.geometry.px2dp
 
 val LocalKeyboardHeight = staticCompositionLocalOf { 65.dp }
 
 @Composable
-fun ProvideKeyboardHeight(content: @Composable () -> Unit) {
+fun ProvideKeyboardHeight(isFullScreen: Boolean, content: @Composable () -> Unit) {
     val resources = LocalContext.current.resources
     val prefs by appPreferenceModel()
-    val height by prefs.keyboard.height.observeAsState()
+    val prefHeight by prefs.keyboard.height.observeAsState()
+    val fullScreenMode by prefs.keyboard.fullScreenMode.observeAsState()
+    val height = if (isFullScreen && fullScreenMode is PopupMode) {
+        fullScreenMode.rect().size.height.toInt()
+    } else {
+        prefHeight
+    }
+
     val keyboardHeight = remember(resources, height) {
         calcInputViewHeight(resources, height)
     }

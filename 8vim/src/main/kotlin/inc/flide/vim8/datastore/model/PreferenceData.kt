@@ -37,7 +37,7 @@ internal abstract class SharedPreferencePreferenceData<V : Any>(
             cachedValue.set(value)
             if (sync) {
                 val editor = model.sharedPreferences.edit()
-                serde.serialize(editor, key, value)
+                serde.serialize(model.sharedPreferences, editor, key, value)
                 editor.apply()
             }
         }

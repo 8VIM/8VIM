@@ -105,6 +105,10 @@
     <string name="settings__keyboard__circle__x__centre__offset__title">Circle offset X axis</string>
     <string name="settings__keyboard__circle__y__centre__offset__key">prefs_keyboard_circle_centre_y_offset</string>
     <string name="settings__keyboard__circle__y__centre__offset__title">Circle offset Y axis</string>
+    <string name="settings__keyboard__full_screen_mode__title">How to display the keyboard on landscape or tablet</string>
+    <string name="settings__keyboard__full_screen_mode__summary">The keyboard can be displayed at the bottom of the screen or be a popup</string>
+    <string name="settings__keyboard__full_screen_mode__embedded">Keyboard displayed at the bottom of the screen</string>
+    <string name="settings__keyboard__full_screen_mode__popup">Keyboard as a popup uo can move around the screen</string>
 
     <string name="settings__keyboard__height__title">Keyboard height</string>
     <string name="settings__keyboard__height__summary">Resize keyboard to your needs</string>
