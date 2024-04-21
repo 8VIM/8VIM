@@ -2,7 +2,7 @@ name: Matrix notification issues
 
 on:
   issues:
-    types: [opened, closed]
+    types: [opened, closed, reopened]
 
 jobs:
   notify:

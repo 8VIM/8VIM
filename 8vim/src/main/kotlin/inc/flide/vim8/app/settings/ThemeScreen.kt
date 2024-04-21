@@ -42,13 +42,11 @@ fun ThemeScreen() = Screen {
             ColorPreference(
                 prefs.keyboard.customColors.background,
                 title = stringRes(R.string.settings__theme__custom__background__color__title),
-                colorChoices = R.array.color_palette,
                 visibleIf = { colorMode == ThemeMode.CUSTOM }
             )
             ColorPreference(
                 prefs.keyboard.customColors.foreground,
                 title = stringRes(R.string.settings__theme__custom__foreground__color__title),
-                colorChoices = R.array.color_palette,
                 visibleIf = { colorMode == ThemeMode.CUSTOM }
             )
         }
@@ -78,7 +76,6 @@ fun ThemeScreen() = Screen {
             ColorPreference(
                 prefs.keyboard.trail.color,
                 title = stringRes(R.string.settings__theme__trail__color__title),
-                colorChoices = R.array.color_palette,
                 visibleIf = { trailIsVisible && !trailUseRandomColor }
             )
         }
