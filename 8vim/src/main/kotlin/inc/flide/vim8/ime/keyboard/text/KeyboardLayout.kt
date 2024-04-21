@@ -93,7 +93,7 @@ fun KeyboardLayout(keyboard: Keyboard): Unit = with(LocalDensity.current) {
                         return@pointerInteropFilter true
                     }
                 }
-                return@pointerInteropFilter false
+                return@pointerInteropFilter true
             }
     ) {
         val desiredKey = remember { Key(action = KeyboardAction.UNSPECIFIED) }
