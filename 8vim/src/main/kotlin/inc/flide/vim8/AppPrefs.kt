@@ -5,6 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -12,10 +13,10 @@ import inc.flide.vim8.datastore.Datastore
 import inc.flide.vim8.datastore.model.PreferenceMigrationEntry
 import inc.flide.vim8.datastore.model.PreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
-import inc.flide.vim8.ime.EmbeddedMode
-import inc.flide.vim8.ime.FullScreenModeSerde
 import inc.flide.vim8.ime.layout.EmbeddedLayout
 import inc.flide.vim8.ime.layout.LayoutSerDe
+import inc.flide.vim8.ime.ui.KeyboardLayoutMode
+import inc.flide.vim8.ime.ui.RectSerDe
 import inc.flide.vim8.theme.ThemeMode
 import inc.flide.vim8.theme.darkColorPalette
 import inc.flide.vim8.theme.lightColorPalette
@@ -120,6 +121,7 @@ class AppPrefs : PreferenceModel(8) {
         val display = Display()
         val circle = Circle()
         val behavior = Behavior()
+        val layoutMode = LayoutMode()
 
         val height = int(
             key = "prefs_keyboard_height",
@@ -131,11 +133,18 @@ class AppPrefs : PreferenceModel(8) {
             default = ""
         )
 
-        val fullScreenMode = custom(
-            key = "prefs_keyboard_full_screen_mode",
-            default = EmbeddedMode,
-            serde = FullScreenModeSerde
-        )
+        inner class LayoutMode {
+            val mode =
+                enum(
+                    key = "prefs_keyboard_layout_mode",
+                    default = KeyboardLayoutMode.EMBEDDED
+                )
+            val floatingRect = custom(
+                key = "prefs_keyboard_layout_floating_rect",
+                default = Rect.Zero,
+                serde = RectSerDe
+            )
+        }
 
         inner class SideBar {
             val isVisible = boolean(

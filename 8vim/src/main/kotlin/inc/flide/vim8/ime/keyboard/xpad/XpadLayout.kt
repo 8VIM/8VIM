@@ -81,7 +81,7 @@ fun XpadLayout() = with(LocalDensity.current) {
     val touchEventChannel = remember { Channel<MotionEvent>(64) }
 
     val controller = remember { KeyboardController(context) }.also { it.keyboard = keyboard }
-    val fg = MaterialTheme.colorScheme.onBackground
+    val fg = MaterialTheme.colorScheme.onSurface
     val iconSize = 25.sp.toDp()
     val iconHalf = iconSize / 2
 
@@ -217,7 +217,7 @@ private fun SectorImage(@DrawableRes res: Int, x: Dp, y: Dp, size: Dp) {
             .absoluteOffset(x, y)
             .requiredSize(size),
         contentScale = ContentScale.Fit,
-        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground),
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
         alpha = 0.33f
     )
 }

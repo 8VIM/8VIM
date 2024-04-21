@@ -84,7 +84,7 @@ abstract class PreferenceModel(val version: Int) :
         editor: Editor,
         rawValue: Any?
     ) {
-        rawValue?.let { serde.serialize(sharedPreferences, editor, key, it as V) }
+        rawValue?.let { serde.serialize(editor, key, it as V) }
     }
 
     protected open fun migrate(
@@ -178,12 +178,7 @@ abstract class PreferenceModel(val version: Int) :
         canBeReset: Boolean = true
     ): PreferenceData<V> {
         val serde = object : PreferenceSerDe<V> {
-            override fun serialize(
-                sharedPreferences: SharedPreferences,
-                editor: Editor,
-                key: String,
-                value: V
-            ) {
+            override fun serialize(editor: Editor, key: String, value: V) {
                 editor.putString(key, value.toString())
             }
 

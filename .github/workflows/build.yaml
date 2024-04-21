@@ -17,7 +17,7 @@ on:
         value: ${{ jobs.build.outputs.expires-at }}
 jobs:
   build:
-    name: Build app
+    name: "Build app: ${{inputs.target}}"
     runs-on: ubuntu-latest
     outputs:
       artifact-url: ${{ steps.upload.outputs.artifact-url }}
@@ -49,7 +49,7 @@ jobs:
           java-version: "17"
           distribution: temurin
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/actions/setup-gradle@v3
       - name: Get keystore
         if: ${{inputs.target!='debug'}}
         run: |

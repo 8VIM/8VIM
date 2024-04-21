@@ -10,7 +10,7 @@ import inc.flide.vim8.lib.geometry.px2dp
 import kotlin.math.abs
 import kotlin.math.atan2
 
-abstract class SwipeGesture {
+object SwipeGesture {
     class Detector(private val listener: Listener) {
         private val pointerMap: PointerMap<GesturePointer> = PointerMap { GesturePointer() }
         private val velocityTracker: VelocityTracker = VelocityTracker.obtain()

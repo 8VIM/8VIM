@@ -21,6 +21,7 @@ import inc.flide.vim8.ime.input.ImeUiMode
 import inc.flide.vim8.ime.keyboard.text.toKeyboardAction
 import inc.flide.vim8.ime.keyboard.xpad.XpadLayout
 import inc.flide.vim8.ime.layout.models.CustomKeycode
+import inc.flide.vim8.ime.ui.KeyboardLayoutMode
 import inc.flide.vim8.keyboardManager
 import inc.flide.vim8.lib.android.launchActivity
 import inc.flide.vim8.lib.compose.ImageButton
@@ -68,6 +69,7 @@ fun RowScope.Sidebar() {
     val prefs by appPreferenceModel()
 
     val isVisible by prefs.keyboard.sidebar.isVisible.observeAsState()
+    val keyboardLayoutMode by prefs.keyboard.layoutMode.mode.observeAsState()
 
     if (!isVisible) return
 
@@ -143,5 +145,18 @@ fun RowScope.Sidebar() {
                 }
             )
         }
+
+        ImageButton(
+            resourceId = R.drawable.ic_keyboard_onscreen,
+            description = stringRes(R.string.floating_keyboard_button_content_description),
+            onClick = {
+                val layoutMode = if (keyboardLayoutMode == KeyboardLayoutMode.EMBEDDED) {
+                    KeyboardLayoutMode.FLOATING
+                } else {
+                    KeyboardLayoutMode.EMBEDDED
+                }
+                prefs.keyboard.layoutMode.mode.set(layoutMode)
+            }
+        )
     }
 }

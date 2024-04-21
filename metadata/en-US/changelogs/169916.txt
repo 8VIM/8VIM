@@ -1,0 +1,1 @@
+feat: Create a colorpicker making easier to choose colors

@@ -125,7 +125,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
     private val backgroundColor: Color
         get() = themeManager
             .currentTheme
-            .value?.scheme?.background ?: Color.White
+            .value?.scheme?.surface ?: Color.White
 
     private val inputEventDispatcher get() = keyboardManager.inputEventDispatcher
     private val glideGesture = GlideGesture.Detector(this)

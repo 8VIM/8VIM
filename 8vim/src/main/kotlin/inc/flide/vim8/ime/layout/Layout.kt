@@ -101,12 +101,7 @@ fun String.toCustomLayout(): CustomLayout {
 }
 
 object LayoutSerDe : PreferenceSerDe<Layout<*>> {
-    override fun serialize(
-        sharedPreferences: SharedPreferences,
-        editor: SharedPreferences.Editor,
-        key: String,
-        value: Layout<*>
-    ) {
+    override fun serialize(editor: SharedPreferences.Editor, key: String, value: Layout<*>) {
         val encodedValue = when (value) {
             is EmbeddedLayout -> "e${value.path}"
             is CustomLayout -> "c${value.path}"

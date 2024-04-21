@@ -4,23 +4,13 @@ import android.content.SharedPreferences
 import inc.flide.vim8.lib.android.tryOrNull
 
 interface PreferenceSerDe<V : Any> {
-    fun serialize(
-        sharedPreferences: SharedPreferences,
-        editor: SharedPreferences.Editor,
-        key: String,
-        value: V
-    )
+    fun serialize(editor: SharedPreferences.Editor, key: String, value: V)
     fun deserialize(sharedPreferences: SharedPreferences, key: String, default: V): V
     fun deserialize(value: Any?): V?
 }
 
 object BooleanPreferenceSerde : PreferenceSerDe<Boolean> {
-    override fun serialize(
-        sharedPreferences: SharedPreferences,
-        editor: SharedPreferences.Editor,
-        key: String,
-        value: Boolean
-    ) {
+    override fun serialize(editor: SharedPreferences.Editor, key: String, value: Boolean) {
         editor.putBoolean(key, value)
     }
 
@@ -40,12 +30,7 @@ object BooleanPreferenceSerde : PreferenceSerDe<Boolean> {
 }
 
 object FloatPreferenceSerde : PreferenceSerDe<Float> {
-    override fun serialize(
-        sharedPreferences: SharedPreferences,
-        editor: SharedPreferences.Editor,
-        key: String,
-        value: Float
-    ) {
+    override fun serialize(editor: SharedPreferences.Editor, key: String, value: Float) {
         editor.putFloat(key, value)
     }
 
@@ -65,12 +50,7 @@ object FloatPreferenceSerde : PreferenceSerDe<Float> {
 }
 
 object IntPreferenceSerde : PreferenceSerDe<Int> {
-    override fun serialize(
-        sharedPreferences: SharedPreferences,
-        editor: SharedPreferences.Editor,
-        key: String,
-        value: Int
-    ) {
+    override fun serialize(editor: SharedPreferences.Editor, key: String, value: Int) {
         editor.putInt(key, value)
     }
 
@@ -86,12 +66,7 @@ object IntPreferenceSerde : PreferenceSerDe<Int> {
 }
 
 object StringPreferenceSerde : PreferenceSerDe<String> {
-    override fun serialize(
-        sharedPreferences: SharedPreferences,
-        editor: SharedPreferences.Editor,
-        key: String,
-        value: String
-    ) {
+    override fun serialize(editor: SharedPreferences.Editor, key: String, value: String) {
         editor.putString(key, value)
     }
 
@@ -111,12 +86,7 @@ object StringPreferenceSerde : PreferenceSerDe<String> {
 }
 
 object StringSetPreferenceSerde : PreferenceSerDe<Set<String>> {
-    override fun serialize(
-        sharedPreferences: SharedPreferences,
-        editor: SharedPreferences.Editor,
-        key: String,
-        value: Set<String>
-    ) {
+    override fun serialize(editor: SharedPreferences.Editor, key: String, value: Set<String>) {
         editor.putStringSet(key, value)
     }
 

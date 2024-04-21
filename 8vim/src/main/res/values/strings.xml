@@ -21,6 +21,7 @@
     <string name="dialog__yaml__error__title">Couldn\'t load layout file</string>
     <string name="dialog__error__title">Error</string>
     <string name="dialog__confirm__label">OK</string>
+    <string name="dialog__save__label">Save</string>
     <string name="dialog__dismiss__label">Cancel</string>
 
     <string name="about__title">About Us</string>
@@ -34,6 +35,7 @@
     <string name="open_keyboard_settings_button_content_description">Open Keyboard Settings</string>
     <string name="clipboard_button_content_description">Open Clipboard keypad</string>
     <string name="main_keyboard_button_content_description">Open Main keypad</string>
+    <string name="floating_keyboard_button_content_description">Floating</string>
     <string name="generic_back_button_content_description">Go Back</string>
     <string name="settings__about__owner__label">Designed and Developed by flide</string>
     <string name="connect_with_us_label">Connect with us</string>
@@ -105,10 +107,6 @@
     <string name="settings__keyboard__circle__x__centre__offset__title">Circle offset X axis</string>
     <string name="settings__keyboard__circle__y__centre__offset__key">prefs_keyboard_circle_centre_y_offset</string>
     <string name="settings__keyboard__circle__y__centre__offset__title">Circle offset Y axis</string>
-    <string name="settings__keyboard__full_screen_mode__title">How to display the keyboard on landscape or tablet</string>
-    <string name="settings__keyboard__full_screen_mode__summary">The keyboard can be displayed at the bottom of the screen or be a popup</string>
-    <string name="settings__keyboard__full_screen_mode__embedded">Keyboard displayed at the bottom of the screen</string>
-    <string name="settings__keyboard__full_screen_mode__popup">Keyboard as a popup uo can move around the screen</string>
 
     <string name="settings__keyboard__height__title">Keyboard height</string>
     <string name="settings__keyboard__height__summary">Resize keyboard to your needs</string>
