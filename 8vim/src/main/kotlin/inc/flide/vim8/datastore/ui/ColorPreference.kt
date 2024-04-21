@@ -119,6 +119,10 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
                             value = hexCode,
                             isError = isError,
                             onValueChange = {
+                                if (it.isEmpty()) {
+                                    hexCode = it
+                                    return@TextField
+                                }
                                 val value = if (it[0] == '#') it else "#$it"
                                 if (value.length > 7) return@TextField
                                 isError = Option

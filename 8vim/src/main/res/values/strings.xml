@@ -21,7 +21,7 @@
     <string name="dialog__yaml__error__title">Couldn\'t load layout file</string>
     <string name="dialog__error__title">Error</string>
     <string name="dialog__confirm__label">OK</string>
-    <string name="dialog__save__label">OK</string>
+    <string name="dialog__save__label">Save</string>
     <string name="dialog__dismiss__label">Cancel</string>
 
     <string name="about__title">About Us</string>
