@@ -128,6 +128,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             .value?.scheme?.background ?: Color.White
 
     private val inputEventDispatcher get() = keyboardManager.inputEventDispatcher
+    private val activeState get() = keyboardManager.activeState
     private val glideGesture = GlideGesture.Detector(this)
     private val showTrail: Boolean get() = prefs.keyboard.trail.isVisible.get()
     private val isDynamicCircleOverlayEnabled: Boolean
@@ -351,6 +352,9 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
 
     private fun processMovementSequence(movementSequence: MovementSequence) = keyboard
         .action(movementSequence, currentMovementSequenceType)
+        .filter {
+            it.layer != LayerLevel.FUNCTIONS || activeState.isFnOn
+        }
 
     private fun interruptLongPress() = runBlocking {
         if (job == null) return@runBlocking

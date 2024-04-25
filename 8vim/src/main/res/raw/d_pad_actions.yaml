@@ -1,50 +1,58 @@
-version: "2"
+version: "2.1"
 layers:
-  hidden:
+  functions:
     - type: input_key
       movement_sequence:
+        - no_touch
         - inside_circle
         - top
         - no_touch
       key_code: keycode_dpad_up
     - type: input_key
       movement_sequence:
+        - no_touch
         - inside_circle
         - bottom
         - no_touch
       key_code: keycode_dpad_down
     - type: input_key
       movement_sequence:
+        - no_touch
         - inside_circle
         - left
         - no_touch
       key_code: keycode_dpad_left
     - type: input_key
       movement_sequence:
+        - no_touch
         - inside_circle
         - right
         - no_touch
       key_code: keycode_dpad_right
     - type: input_key
       movement_sequence:
+        - no_touch
         - inside_circle
         - top
         - long_press
       key_code: keycode_dpad_up
     - type: input_key
       movement_sequence:
+        - no_touch
         - inside_circle
         - bottom
         - long_press
       key_code: keycode_dpad_down
     - type: input_key
       movement_sequence:
+        - no_touch
         - inside_circle
         - left
         - long_press
       key_code: keycode_dpad_left
     - type: input_key
       movement_sequence:
+        - no_touch
         - inside_circle
         - right
         - long_press

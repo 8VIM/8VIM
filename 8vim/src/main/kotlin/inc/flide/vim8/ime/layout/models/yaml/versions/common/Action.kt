@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.layout.models.yaml
+package inc.flide.vim8.ime.layout.models.yaml.versions.common
 
 import android.view.KeyEvent
 import arrow.core.Option

@@ -23,7 +23,7 @@ import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.error.LayoutError
 import inc.flide.vim8.ime.layout.models.info
-import inc.flide.vim8.ime.layout.models.yaml.name
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.name
 import inc.flide.vim8.lib.android.tryOrNull
 import java.io.InputStream
 import java.util.Locale
