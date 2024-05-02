@@ -232,6 +232,8 @@ class AppPrefs : PreferenceModel(8) {
         inner class Behavior {
             val cursor = Cursor()
 
+            val fnEnabled = boolean("prefs_keyboard_behavior_fn_enabled", default = true)
+
             inner class Cursor {
                 val moveByWord =
                     boolean(key = "prefs_keyboard_behavior_cursor_move_by_word", default = false)

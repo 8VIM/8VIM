@@ -10,7 +10,7 @@ import inc.flide.vim8.ime.keyboard.text.KeyboardManager
 import inc.flide.vim8.ime.layout.Cache
 import inc.flide.vim8.ime.layout.YamlLayoutLoader
 import inc.flide.vim8.ime.layout.parsers.CborParser
-import inc.flide.vim8.ime.layout.parsers.YamlParser
+import inc.flide.vim8.ime.layout.parsers.yaml.YamlParser
 import inc.flide.vim8.ime.theme.ThemeManager
 import inc.flide.vim8.lib.android.tryOrNull
 import inc.flide.vim8.lib.backup.BackupManager

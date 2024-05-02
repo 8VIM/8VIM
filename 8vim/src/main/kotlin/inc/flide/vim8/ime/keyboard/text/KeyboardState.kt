@@ -21,6 +21,7 @@ open class KeyboardState protected constructor(open var rawValue: ULong) {
         const val O_INPUT_SHIFT_STATE: Int = 8
 
         const val F_IS_CTRL_ON: ULong = 0x00000400u
+        const val F_IS_FN_ON: ULong = 0x00000800u
 
         const val STATE_ALL_ZERO: ULong = 0uL
 
@@ -76,6 +77,12 @@ open class KeyboardState protected constructor(open var rawValue: ULong) {
         get() = getFlag(F_IS_CTRL_ON)
         set(v) {
             setFlag(F_IS_CTRL_ON, v)
+        }
+
+    var isFnOn: Boolean
+        get() = getFlag(F_IS_FN_ON)
+        set(v) {
+            setFlag(F_IS_FN_ON, v)
         }
 
     val ctrlFlag: Int

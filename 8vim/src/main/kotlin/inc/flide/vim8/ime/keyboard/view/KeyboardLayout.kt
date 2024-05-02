@@ -124,6 +124,17 @@ fun RowScope.Sidebar() {
                 )
             }
         )
+
+        ImageButton(
+            resourceId = if (state.isFnOn) R.drawable.ic_fn_engaged else R.drawable.ic_fn,
+            description = stringRes(R.string.open_emoticon_keyboard_button_content_description),
+            onClick = {
+                inputEventDispatcher.sendDownUp(
+                    CustomKeycode.FN_TOGGLE.toKeyboardAction()
+                )
+            }
+        )
+
         if (state.imeUiMode == ImeUiMode.TEXT) {
             ImageButton(
                 resourceId = R.drawable.ic_content_paste,

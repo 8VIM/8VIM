@@ -6,7 +6,7 @@ import arrow.core.right
 import inc.flide.vim8.arbitraries.Arbitraries
 import inc.flide.vim8.ime.layout.models.FingerPosition
 import inc.flide.vim8.ime.layout.models.KeyboardData
-import inc.flide.vim8.ime.layout.models.yaml.LayoutInfo
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.LayoutInfo
 import inc.flide.vim8.ime.layout.parsers.LayoutParser
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.core.spec.style.FunSpec
