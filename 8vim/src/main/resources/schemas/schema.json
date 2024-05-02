@@ -7,7 +7,7 @@
     "version": {
       "$anchor": "version",
       "type": "string",
-      "const": "2"
+      "enum": ["2","2.1"]
     }
   },
   "if": {
@@ -18,16 +18,35 @@
             "const": "2"
           }
         },
-        "required": ["version"]
+        "required": [
+          "version"
+        ]
       },
       {
         "not": {
-          "required": ["version"]
+          "required": [
+            "version"
+          ]
         }
       }
     ]
   },
   "then": {
     "$ref": "/schemas/versions/2.json"
+  },
+  "else": {
+    "if": {
+      "properties": {
+        "version": {
+          "const": "2.1"
+        }
+      },
+      "required": [
+        "version"
+      ]
+    },
+    "then": {
+      "$ref": "/schemas/versions/2.1.json"
+    }
   }
 }

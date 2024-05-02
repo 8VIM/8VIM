@@ -1,7 +1,7 @@
 [versions]
 # Main
 androidx-activity = "1.9.0"
-android-gradle-plugin = "8.3.2"
+android-gradle-plugin = "8.4.0"
 android-appcompat = "1.6.1"
 android-material = "1.11.0"
 androidx-compose = "1.6.6"
@@ -14,7 +14,7 @@ androidx-navigation = "2.7.7"
 androidx-preference = "1.2.1"
 apache-commons = "1.12.0"
 colorpicker = "1.0.7"
-commons-codec = "1.16.1"
+commons-codec = "1.17.0"
 arrow = "1.2.4"
 arrow-jackson = "0.14.0"
 jackson = "2.13.5"

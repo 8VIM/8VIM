@@ -20,7 +20,7 @@ import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
 
-class AppPrefs : PreferenceModel(6) {
+class AppPrefs : PreferenceModel(7) {
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
@@ -214,6 +214,8 @@ class AppPrefs : PreferenceModel(6) {
 
         inner class Behavior {
             val cursor = Cursor()
+
+            val fnEnabled = boolean("prefs_keyboard_behavior_fn_enabled", default = true)
 
             inner class Cursor {
                 val moveByWord =

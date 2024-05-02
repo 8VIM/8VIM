@@ -2,6 +2,9 @@ package inc.flide.vim8.ime.layout.models.yaml
 
 import android.view.KeyEvent
 import inc.flide.vim8.ime.layout.models.CustomKeycode
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.Action
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.isEmpty
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.keyCode
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.booleans.shouldBeFalse

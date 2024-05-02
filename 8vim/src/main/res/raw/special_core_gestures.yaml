@@ -1,6 +1,6 @@
-version: "2"
+version: "2.1"
 layers:
-  hidden:
+  functions:
     - type: input_key
       movement_sequence:
         - top
@@ -31,7 +31,19 @@ layers:
         - inside_circle
         - long_press_end
       key_code: switch_to_selection_keypad
+  hidden:
+    - type: input_key
+      movement_sequence:
+        - no_touch
+        - top
+        - left
+        - bottom
+        - right
+        - top
+        - no_touch
+      key_code: fn_toggle
     - movement_sequence:
+        - no_touch
         - left
         - bottom
         - right
@@ -39,6 +51,7 @@ layers:
       lower_case: 😊
       upper_case: 😁
     - movement_sequence:
+        - no_touch
         - left
         - bottom
         - right
@@ -47,6 +60,7 @@ layers:
       lower_case: 😉
       upper_case: 🤣
     - movement_sequence:
+        - no_touch
         - left
         - top
         - right
@@ -54,6 +68,7 @@ layers:
       lower_case: 😢
       upper_case: 😭
     - movement_sequence:
+        - no_touch
         - bottom
         - left
         - top
@@ -65,6 +80,7 @@ layers:
       lower_case: ❤
       upper_case: 😍
     - movement_sequence:
+        - no_touch
         - bottom
         - left
         - top
@@ -82,6 +98,7 @@ layers:
       lower_case: 😘
       upper_case: 🌹
     - movement_sequence:
+        - no_touch
         - left
         - inside_circle
         - top
@@ -91,6 +108,7 @@ layers:
       lower_case: 🤔
       upper_case: 🙏
     - movement_sequence:
+        - no_touch
         - top
         - left
         - top
@@ -100,6 +118,7 @@ layers:
       lower_case: 👏
       upper_case: 😇
     - movement_sequence:
+        - no_touch
         - left
         - bottom
         - right
@@ -110,6 +129,7 @@ layers:
       lower_case: 👍
       upper_case: 🎉
     - movement_sequence:
+        - no_touch
         - top
         - left
         - bottom
@@ -124,6 +144,7 @@ layers:
       lower_case: )
       upper_case: "]"
     - movement_sequence:
+        - no_touch
         - top
         - left
         - inside_circle
@@ -133,6 +154,7 @@ layers:
       lower_case: "{"
       upper_case: <
     - movement_sequence:
+        - no_touch
         - top
         - right
         - inside_circle

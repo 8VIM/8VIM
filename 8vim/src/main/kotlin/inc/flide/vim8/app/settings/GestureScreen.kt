@@ -23,6 +23,11 @@ fun GestureScreen() = Screen {
                     R.string.settings__gesture__cursor__move__by__word__summary__on
                 )
             )
+            SwitchPreference(
+                prefs.keyboard.behavior.fnEnabled,
+                title = stringRes(R.string.settings__gesture__fn_enabled__title),
+                summary = stringRes(R.string.settings__gesture__fn_enabled__summary)
+            )
         }
     }
 }
