@@ -80,8 +80,10 @@ fun KeyboardLayout(keyboard: Keyboard): Unit = with(LocalDensity.current) {
             .pointerInteropFilter { event ->
                 when (event.actionMasked) {
                     MotionEvent.ACTION_DOWN,
+                    MotionEvent.ACTION_POINTER_DOWN,
                     MotionEvent.ACTION_MOVE,
                     MotionEvent.ACTION_UP,
+                    MotionEvent.ACTION_POINTER_UP,
                     MotionEvent.ACTION_CANCEL
                     -> {
                         val clonedEvent = MotionEvent.obtainNoHistory(event)
@@ -93,7 +95,7 @@ fun KeyboardLayout(keyboard: Keyboard): Unit = with(LocalDensity.current) {
                         return@pointerInteropFilter true
                     }
                 }
-                return@pointerInteropFilter true
+                return@pointerInteropFilter false
             }
     ) {
         val desiredKey = remember { Key(action = KeyboardAction.UNSPECIFIED) }
@@ -180,7 +182,19 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
                     onTouchDownInternal(event, it)
                 }
             }
-
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                val pointerIndex = event.actionIndex
+                val pointerId = event.getPointerId(pointerIndex)
+                pointerMap.findById(pointerId).onSome { oldPointer ->
+                    swipeGestureDetector.onTouchCancel(oldPointer)
+                    onTouchCancelInternal(oldPointer)
+                    pointerMap.removeById(oldPointer.id)
+                }
+                pointerMap.add(pointerId, pointerIndex).onSome {
+                    swipeGestureDetector.onTouchDown(event, it)
+                    onTouchDownInternal(event, it)
+                }
+            }
             MotionEvent.ACTION_MOVE -> {
                 for (pointerIndex in 0 until event.pointerCount) {
                     val pointerId = event.getPointerId(pointerIndex)
@@ -196,7 +210,21 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
                     }
                 }
             }
-
+            MotionEvent.ACTION_POINTER_UP -> {
+                val pointerIndex = event.actionIndex
+                val pointerId = event.getPointerId(pointerIndex)
+                pointerMap.findById(pointerId).onSome { pointer ->
+                    pointer.index = pointerIndex
+                    if (swipeGestureDetector.onTouchUp(event, pointer, size) ||
+                        pointer.hasTriggeredGestureMove
+                    ) {
+                        onTouchCancelInternal(pointer)
+                    } else {
+                        onTouchUpInternal(pointer)
+                    }
+                    pointerMap.removeById(pointer.id)
+                }
+            }
             MotionEvent.ACTION_UP -> {
                 val pointerIndex = event.actionIndex
                 val pointerId = event.getPointerId(pointerIndex)
