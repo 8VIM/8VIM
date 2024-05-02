@@ -27,12 +27,12 @@ import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.ui.KeyboardLayoutMode
 import inc.flide.vim8.ime.ui.floating.ActiveState
 import inc.flide.vim8.ime.ui.floating.CoroutineActiveState
-import inc.flide.vim8.ime.ui.floating.Direction
+import inc.flide.vim8.ime.ui.floating.CornerPosition
 import inc.flide.vim8.ime.ui.floating.boundRectIntoScreen
 import inc.flide.vim8.ime.ui.floating.coerceIn
 import inc.flide.vim8.ime.ui.floating.minHeight
 import inc.flide.vim8.ime.ui.floating.minWidth
-import inc.flide.vim8.ime.ui.floating.toDirection
+import inc.flide.vim8.ime.ui.floating.toCornerPosition
 import inc.flide.vim8.lib.android.offset
 import inc.flide.vim8.lib.compose.DisposableLifecycleEffect
 import inc.flide.vim8.lib.geometry.px2dp
@@ -98,14 +98,14 @@ class FloatingScope(val screenSize: Size) {
         )
     }
 
-    private fun computeResizeRect(direction: Direction, rect: Rect, delta: Offset): Rect {
-        val newSize = direction.computeSize(
+    private fun computeResizeRect(cornerPosition: CornerPosition, rect: Rect, delta: Offset): Rect {
+        val newSize = cornerPosition.computeSize(
             rect.size,
             screenSize,
             delta
         )
 
-        val newOffset = direction.computeOffset(
+        val newOffset = cornerPosition.computeOffset(
             rect.offset,
             newSize,
             screenSize,
@@ -136,7 +136,7 @@ class FloatingScope(val screenSize: Size) {
                 down.position.x.px2dp(),
                 down.position.y.px2dp()
             )
-                .toDirection(popupSize, imePadding.value) ?: return@awaitEachGesture
+                .toCornerPosition(popupSize, imePadding.value) ?: return@awaitEachGesture
             do {
                 activeState.stop()
                 val event =
