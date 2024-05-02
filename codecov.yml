@@ -25,4 +25,6 @@ flags:
       - 8vim/src/**/LifecycleInputMethodService.kt
       - 8vim/src/**/clipboard/*Layout.kt
       - 8vim/src/**/keyboard/**/*Layout.kt
+      - 8vim/src/**/ime/ui/**/compose
+      - 8vim/src/**/ime/ui/**/*Layout.kt
       - 8vim/src/**/AppPrefs.kt
