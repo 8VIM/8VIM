@@ -45,15 +45,15 @@ inline val CornerPosition.isTop: Boolean
     get() = this == CornerPosition.TOP_LEFT || this == CornerPosition.TOP_RIGHT
 
 fun Offset.toCornerPosition(size: Size, padding: Float): CornerPosition? {
-    val isLeft = x <= (padding * 2)
-    val isRight = x >= size.width - (padding * 2)
-    val isTop = y <= (padding * 2)
-    val isBottom = y >= size.height - (padding * 2)
+    val isLeftPosition = x <= (padding * 2)
+    val isRightPosition = x >= size.width - (padding * 2)
+    val isTopPosition = y <= (padding * 2)
+    val isBottomPosition = y >= size.height - (padding * 2)
     return when {
-        isTop && isLeft -> CornerPosition.TOP_LEFT
-        isTop && isRight -> CornerPosition.TOP_RIGHT
-        isBottom && isLeft -> CornerPosition.BOTTOM_LEFT
-        isBottom && isRight -> CornerPosition.BOTTOM_RIGHT
+        isTopPosition && isLeftPosition -> CornerPosition.TOP_LEFT
+        isTopPosition && isRightPosition -> CornerPosition.TOP_RIGHT
+        isBottomPosition && isLeftPosition -> CornerPosition.BOTTOM_LEFT
+        isBottomPosition && isRightPosition -> CornerPosition.BOTTOM_RIGHT
         else -> null
     }
 }

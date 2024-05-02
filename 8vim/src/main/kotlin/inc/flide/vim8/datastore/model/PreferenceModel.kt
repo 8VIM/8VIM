@@ -68,7 +68,7 @@ abstract class PreferenceModel(val version: Int) :
             for ((k, v) in value) {
                 registry[k]?.let {
                     it.serde.deserialize(v)
-                        ?.let { deser -> it.serialize(sharedPreferences, editor, deser) }
+                        ?.let { deser -> it.serialize(editor, deser) }
                 }
             }
             (value[DATASTORE_VERSION] as Int?)?.let { editor.putInt(DATASTORE_VERSION, it).apply() }
@@ -79,11 +79,7 @@ abstract class PreferenceModel(val version: Int) :
     }
 
     @Suppress("Unchecked_cast")
-    private fun <V : Any> PreferenceData<V>.serialize(
-        sharedPreferences: SharedPreferences,
-        editor: Editor,
-        rawValue: Any?
-    ) {
+    private fun <V : Any> PreferenceData<V>.serialize(editor: Editor, rawValue: Any?) {
         rawValue?.let { serde.serialize(editor, key, it as V) }
     }
 
@@ -268,7 +264,7 @@ abstract class PreferenceModel(val version: Int) :
             registry[prefKey]?.let { prefData ->
                 prefData.deserialize(rawValue)
                 if (updateValue) {
-                    prefData.serialize(sharedPreferences, editor, prefData.get())
+                    prefData.serialize(editor, prefData.get())
                 }
             }
         }
