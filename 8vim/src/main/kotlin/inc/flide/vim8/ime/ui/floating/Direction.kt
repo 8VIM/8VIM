@@ -2,13 +2,6 @@ package inc.flide.vim8.ime.ui.floating
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import inc.flide.vim8.ime.ui.coerceIn
-import inc.flide.vim8.ime.ui.isWithinHeight
-import inc.flide.vim8.ime.ui.isWithinWidth
-import inc.flide.vim8.ime.ui.maxHeight
-import inc.flide.vim8.ime.ui.maxWidth
-import inc.flide.vim8.ime.ui.minHeight
-import inc.flide.vim8.ime.ui.minWidth
 
 enum class Direction {
     TOP_LEFT,

@@ -135,12 +135,13 @@ class ThemeManagerSpec : FunSpec({
                 every { androidConfiguration.isDarkTheme() } returns darkMode
                 val manager = ThemeManager(context)
                 val scheme = when {
-                    mode == ThemeMode.CUSTOM -> lightColorScheme.copy(
-                        background = Color.White,
-                        surface = Color.White,
-                        onBackground = Color.Black,
-                        onSurface = Color.Black
-                    )
+                    mode == ThemeMode.CUSTOM -> {
+                        (if (darkMode)darkColorScheme else lightColorScheme)
+                            .copy(
+                                surface = Color.White,
+                                onSurface = Color.Black
+                            )
+                    }
 
                     mode == ThemeMode.DARK ||
                         (mode == ThemeMode.SYSTEM && darkMode) -> darkColorScheme

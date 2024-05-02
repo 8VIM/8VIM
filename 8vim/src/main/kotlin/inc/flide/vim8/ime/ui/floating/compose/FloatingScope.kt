@@ -1,6 +1,5 @@
-package inc.flide.vim8.ime.ui.floating.composable
+package inc.flide.vim8.ime.ui.floating.compose
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -23,16 +22,17 @@ import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.unit.dp
+import arrow.core.getOrElse
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.ui.KeyboardLayoutMode
-import inc.flide.vim8.ime.ui.coerceIn
 import inc.flide.vim8.ime.ui.floating.ActiveState
 import inc.flide.vim8.ime.ui.floating.CoroutineActiveState
 import inc.flide.vim8.ime.ui.floating.Direction
+import inc.flide.vim8.ime.ui.floating.boundRectIntoScreen
+import inc.flide.vim8.ime.ui.floating.coerceIn
+import inc.flide.vim8.ime.ui.floating.minHeight
+import inc.flide.vim8.ime.ui.floating.minWidth
 import inc.flide.vim8.ime.ui.floating.toDirection
-import inc.flide.vim8.ime.ui.minHeight
-import inc.flide.vim8.ime.ui.minWidth
 import inc.flide.vim8.lib.android.offset
 import inc.flide.vim8.lib.compose.DisposableLifecycleEffect
 import inc.flide.vim8.lib.geometry.px2dp
@@ -43,9 +43,10 @@ fun Floating(content: @Composable FloatingScope.() -> Unit) {
     val screenWidth = configuration.screenWidthDp.toFloat()
     val screenHeight = configuration.screenHeightDp.toFloat()
     val screenSize = Size(screenWidth, screenHeight)
-    val floatingScope = remember {
-        FloatingScope(screenSize)
-    }.also { it.activeState = CoroutineActiveState.default() }
+
+    val floatingScope = remember { FloatingScope(screenSize) }
+        .also { it.activeState = CoroutineActiveState.default() }
+
     DisposableEffect(Unit) {
         onDispose { floatingScope.stop() }
     }
@@ -62,7 +63,6 @@ class FloatingScope(val screenSize: Size) {
     private val layoutModePref = prefs.keyboard.layoutMode
     lateinit var activeState: ActiveState
     var popupSize by mutableStateOf(Size.Zero)
-    var imePadding by mutableStateOf(16.dp)
     val canBeResized: State<Boolean>
         @Composable
         get() = activeState.isActive.collectAsState()
@@ -76,15 +76,15 @@ class FloatingScope(val screenSize: Size) {
     )
 
     var layoutRect by mutableStateOf(
-        layoutModePref.floatingRect.get().let { floatingRect ->
-            if (!floatingRect.isEmpty) {
+        layoutModePref
+            .floatingRect.get().let { floatingRect ->
                 floatingRect
-            } else {
-                defaultRect.also { rect ->
-                    layoutModePref.floatingRect.set(rect)
-                }
+                    .boundRectIntoScreen(screenSize)
+                    .getOrElse { defaultRect }
+                    .also { rect ->
+                        layoutModePref.floatingRect.set(rect)
+                    }
             }
-        }
     )
 
     private fun computeMoveOffset(rect: Rect, delta: Offset): Rect {
@@ -137,7 +137,6 @@ class FloatingScope(val screenSize: Size) {
                 down.position.y.px2dp()
             )
                 .toDirection(popupSize, imePadding.value) ?: return@awaitEachGesture
-            Log.d("fullscreen drag", "$direction/$popupSize/$screenSize")
             do {
                 activeState.stop()
                 val event =

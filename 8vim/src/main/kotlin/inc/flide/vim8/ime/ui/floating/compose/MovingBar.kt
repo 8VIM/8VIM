@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.ui.floating.composable
+package inc.flide.vim8.ime.ui.floating.compose
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

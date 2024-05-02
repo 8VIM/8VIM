@@ -1,4 +1,4 @@
-package inc.flide.vim8.ime.ui.floating.composable
+package inc.flide.vim8.ime.ui.floating.compose
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterExitState
