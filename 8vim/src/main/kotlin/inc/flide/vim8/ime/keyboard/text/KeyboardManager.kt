@@ -159,10 +159,12 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     }
 
     private fun handleSelectionStart() {
+        editorInstance.sendDownEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
         editorInstance.sendDownAndUpKeyEvent(
             KeyEvent.KEYCODE_DPAD_LEFT,
             KeyEvent.META_SHIFT_MASK or activeState.ctrlFlag
         )
+        editorInstance.sendUpEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
     }
 
     private fun handleSelectAll() {

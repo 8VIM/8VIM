@@ -107,8 +107,10 @@ class KeyboardManagerSpec : FunSpec(
                 }
 
                 CustomKeycode.NO_OPERATION.keyCode -> {}
-                CustomKeycode.SELECTION_START.keyCode -> verify {
+                CustomKeycode.SELECTION_START.keyCode -> verifyOrder {
+                    editor.sendDownEvent(KeyEvent.KEYCODE_SHIFT_LEFT, any())
                     editor.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, any())
+                    editor.sendUpEvent(KeyEvent.KEYCODE_SHIFT_LEFT, any())
                 }
 
                 CustomKeycode.SELECT_ALL.keyCode -> verify {
