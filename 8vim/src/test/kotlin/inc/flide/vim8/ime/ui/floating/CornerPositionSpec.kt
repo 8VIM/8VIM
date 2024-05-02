@@ -62,34 +62,37 @@ class CornerPositionSpec : FunSpec({
         }
     }
 
-    context("toCornerPosition"){
+    context("toCornerPosition") {
         val padding = 2f
-        withData(nameFn = {"${it.first} -> ${it.second}"},
+        withData(
+            nameFn = { "${it.first} -> ${it.second}" },
             Offset.Zero to CornerPosition.TOP_LEFT,
-            Offset(screenSize.width,0f) to CornerPosition.TOP_RIGHT,
-            Offset(0f,screenSize.height) to CornerPosition.BOTTOM_LEFT,
-            Offset(screenSize.width,screenSize.height) to CornerPosition.BOTTOM_RIGHT,
-            Offset(screenSize.width/2f,screenSize.height/2f) to null,
-            ) { (offset, position) ->
-            offset.toCornerPosition(screenSize,padding) shouldBe position
+            Offset(screenSize.width, 0f) to CornerPosition.TOP_RIGHT,
+            Offset(0f, screenSize.height) to CornerPosition.BOTTOM_LEFT,
+            Offset(screenSize.width, screenSize.height) to CornerPosition.BOTTOM_RIGHT,
+            Offset(screenSize.width / 2f, screenSize.height / 2f) to null
+        ) { (offset, position) ->
+            offset.toCornerPosition(screenSize, padding) shouldBe position
         }
     }
 
-    context("isLeft"){
-        withData(nameFn = {"${it.first}:  ${it.second}"},
-             CornerPosition.TOP_LEFT to true,
+    context("isLeft") {
+        withData(
+            nameFn = { "${it.first}:  ${it.second}" },
+            CornerPosition.TOP_LEFT to true,
             CornerPosition.BOTTOM_LEFT to true,
-            CornerPosition.BOTTOM_RIGHT to false,
+            CornerPosition.BOTTOM_RIGHT to false
         ) { (position, expected) ->
             position.isLeft shouldBe expected
         }
     }
 
-    context("isTop"){
-        withData(nameFn = {"${it.first}:  ${it.second}"},
+    context("isTop") {
+        withData(
+            nameFn = { "${it.first}:  ${it.second}" },
             CornerPosition.TOP_LEFT to true,
             CornerPosition.TOP_RIGHT to true,
-            CornerPosition.BOTTOM_RIGHT to false,
+            CornerPosition.BOTTOM_RIGHT to false
         ) { (position, expected) ->
             position.isTop shouldBe expected
         }

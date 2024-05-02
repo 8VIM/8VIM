@@ -26,8 +26,8 @@ import arrow.core.getOrElse
 import inc.flide.vim8.appPreferenceModel
 import inc.flide.vim8.ime.ui.KeyboardLayoutMode
 import inc.flide.vim8.ime.ui.floating.ActiveState
-import inc.flide.vim8.ime.ui.floating.CoroutineActiveState
 import inc.flide.vim8.ime.ui.floating.CornerPosition
+import inc.flide.vim8.ime.ui.floating.CoroutineActiveState
 import inc.flide.vim8.ime.ui.floating.boundRectIntoScreen
 import inc.flide.vim8.ime.ui.floating.coerceIn
 import inc.flide.vim8.ime.ui.floating.minHeight
