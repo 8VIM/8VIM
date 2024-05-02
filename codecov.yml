@@ -13,10 +13,10 @@ coverage:
 flags:
   unit:
     ignore:
-      - 8vim/src/**/app
-      - 8vim/src/**/datastore/ui
+      - 8vim/src/**/app/**/.*
+      - 8vim/src/**/datastore/ui/**/.*
       - 8vim/src/**/datastore/Datastore.kt
-      - 8vim/src/**/lib
+      - 8vim/src/**/lib/**/.*
       - 8vim/src/**/theme/Theme.kt
       - 8vim/src/**/models/error/LayoutError.kt
       - 8vim/src/**/VIM8Application.kt
@@ -25,6 +25,6 @@ flags:
       - 8vim/src/**/LifecycleInputMethodService.kt
       - 8vim/src/**/clipboard/*Layout.kt
       - 8vim/src/**/keyboard/**/*Layout.kt
-      - 8vim/src/**/ime/ui/**/compose
+      - 8vim/src/**/ime/ui/**/compose/**/.*
       - 8vim/src/**/ime/ui/**/*Layout.kt
       - 8vim/src/**/AppPrefs.kt
