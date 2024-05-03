@@ -25,6 +25,6 @@ ignore:
   - "8vim/src/main/kotlin/inc/flide/vim8/LifecycleInputMethodService.kt"
   - "8vim/src/main/kotlin/inc/flide/vim8/clipboard/*Layout.kt"
   - "8vim/src/main/kotlin/inc/flide/vim8/keyboard/**/*Layout.kt"
-  - "8vim/src/main/kotlin/inc/flide/vim8/ime/ui/**/compose"
+  - "8vim/src/main/kotlin/inc/flide/vim8/ime/ui/floating/compose"
   - "8vim/src/main/kotlin/inc/flide/vim8/ime/ui/**/*Layout.kt"
   - "8vim/src/main/kotlin/inc/flide/vim8/AppPrefs.kt"
