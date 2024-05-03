@@ -25,5 +25,5 @@ jobs:
         if: ${{ !inputs.skip-codecov }}
         uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./8vim/build/reports/jacoco/jacocoTestReportDebug
-          flags: unit
