@@ -13,18 +13,18 @@ coverage:
       default:
         if_ci_failed: success
 ignore:
-  - 8vim/src/**/app/**/*
-  - 8vim/src/**/datastore/ui/**/*
-  - 8vim/src/**/datastore/Datastore.kt
-  - 8vim/src/**/lib/**/*
-  - 8vim/src/**/theme/Theme.kt
-  - 8vim/src/**/models/error/LayoutError.kt
-  - 8vim/src/**/VIM8Application.kt
-  - 8vim/src/**/PreferenceDataAdapter.kt
-  - 8vim/src/**/Vim8ImeService.kt
-  - 8vim/src/**/LifecycleInputMethodService.kt
-  - 8vim/src/**/clipboard/*Layout.kt
-  - 8vim/src/**/keyboard/**/*Layout.kt
-  - 8vim/src/**/ime/ui/**/compose/**/*
-  - 8vim/src/**/ime/ui/**/*Layout.kt
-  - 8vim/src/**/AppPrefs.kt
+  - "8vim/src/main/kotlin/inc/flide/vim8/app"
+  - "8vim/src/main/kotlin/inc/flide/vim8/datastore/ui"
+  - "8vim/src/main/kotlin/inc/flide/vim8/datastore/Datastore.kt"
+  - "8vim/src/main/kotlin/inc/flide/vim8/lib"
+  - "8vim/src/main/kotlin/inc/flide/vim8/theme/Theme.kt"
+  - "8vim/src/main/kotlin/inc/flide/vim8/models/error/LayoutError.kt"
+  - "8vim/src/main/kotlin/inc/flide/vim8/VIM8Application.kt"
+  - "8vim/src/main/kotlin/inc/flide/vim8/PreferenceDataAdapter.kt"
+  - "8vim/src/main/kotlin/inc/flide/vim8/Vim8ImeService.kt"
+  - "8vim/src/main/kotlin/inc/flide/vim8/LifecycleInputMethodService.kt"
+  - "8vim/src/main/kotlin/inc/flide/vim8/clipboard/*Layout.kt"
+  - "8vim/src/main/kotlin/inc/flide/vim8/keyboard/**/*Layout.kt"
+  - "8vim/src/main/kotlin/inc/flide/vim8/ime/ui/**/compose"
+  - "8vim/src/main/kotlin/inc/flide/vim8/ime/ui/**/*Layout.kt"
+  - "8vim/src/main/kotlin/inc/flide/vim8/AppPrefs.kt"
