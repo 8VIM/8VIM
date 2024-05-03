@@ -31,7 +31,9 @@ object RectSerDe : PreferenceSerDe<Rect> {
 
     override fun deserialize(value: Any?): Rect? = option {
         val input = Option.fromNullable(value).bind()
-        val (left, top, right, bottom) = input.toString().split(';').map { it.toFloat() }
-        Rect(left, top, right, bottom)
+        Option.catch {
+            val (left, top, right, bottom) = input.toString().split(';').map { it.toFloat() }
+            Rect(left, top, right, bottom)
+        }.bind()
     }.getOrNull()
 }
