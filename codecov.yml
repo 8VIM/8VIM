@@ -2,6 +2,8 @@ comment:
   layout: "diff, files"
   behavior: default
   require_changes: false
+github_checks:
+  annotations: false
 coverage:
   status:
     project:
