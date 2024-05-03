@@ -50,8 +50,6 @@ jobs:
           distribution: temurin
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.6
       - name: Get keystore
         if: ${{inputs.target!='debug'}}
         run: |
