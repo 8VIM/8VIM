@@ -7,22 +7,20 @@ import arrow.core.none
 import arrow.core.some
 import inc.flide.vim8.lib.android.offset
 
-internal fun Rect.boundRectIntoScreen(screenSize: Size): Option<Rect> {
-    return if (!isEmpty) {
-        val size = size.coerceIn(screenSize)
-        val offset = offset.coerceIn(size, screenSize).let {
-            if (it.y == -size.height) {
-                it.copy(y = it.y + 1)
-            } else {
-                it
-            }
-        }
-        return if (size != this.size || offset != this.offset) {
-            Rect(offset, size).some()
+internal fun Rect.boundRectIntoScreen(screenSize: Size): Option<Rect> = if (!isEmpty) {
+    val size = size.coerceIn(screenSize)
+    val offset = offset.coerceIn(size, screenSize).let {
+        if (it.y == -size.height) {
+            it.copy(y = size.height * -0.9f)
         } else {
-            this.some()
+            it
         }
-    } else {
-        none()
     }
+    if (size != this.size || offset != this.offset) {
+        Rect(offset, size).some()
+    } else {
+        this.some()
+    }
+} else {
+    none()
 }
