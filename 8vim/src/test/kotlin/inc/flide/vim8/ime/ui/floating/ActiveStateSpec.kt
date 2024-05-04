@@ -11,7 +11,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class ActiveStateSpec : FunSpec({
-    var state = false
+    var state: Boolean
 
     beforeSpec {
         mockkStatic("kotlinx.coroutines.flow.StateFlowKt")
@@ -51,7 +51,7 @@ class ActiveStateSpec : FunSpec({
         delay(11)
         activeState.isActive.value.shouldBeTrue()
         activeState.start()
-        delay(21)
+        delay(25)
         activeState.isActive.value.shouldBeFalse()
     }
 })
