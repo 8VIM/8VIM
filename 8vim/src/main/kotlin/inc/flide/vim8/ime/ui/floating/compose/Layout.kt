@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -19,10 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntRect
@@ -96,27 +99,39 @@ fun Layout(content: @Composable () -> Unit) = Floating {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(imePadding),
+                            .padding(horizontal = imePadding),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Absolute.SpaceBetween
                     ) {
                         Icon(
                             modifier = Modifier
-                                .clickable(role = Role.Button) { Vim8ImeService.hideKeyboard() }
-                                .padding(horizontal = imePadding),
+                                .clickable(role = Role.Button) { Vim8ImeService.hideKeyboard() },
+
                             painter = painterResource(R.drawable.ic_keyboard_arrow_down),
                             contentDescription = null
                         )
                         MovingBar()
                         Icon(
-                            modifier = Modifier
-                                .clickable(role = Role.Button) { reset() }
-                                .padding(horizontal = imePadding),
+                            modifier = Modifier.matchRowSize()
+                                .clickable(role = Role.Button) { reset() },
                             painter = painterResource(R.drawable.ic_reset),
                             contentDescription = null
                         )
                     }
                 }
+            }
+        }
+    }
+}
+
+private fun Modifier.matchRowSize(): Modifier {
+    return layout { measurable, constraints ->
+        if (constraints.maxHeight == Constraints.Infinity) {
+            layout(0, 0) {}
+        } else {
+            val placeable = measurable.measure(constraints)
+            layout(placeable.width, placeable.height) {
+                placeable.place(0, 0)
             }
         }
     }
