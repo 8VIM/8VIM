@@ -50,6 +50,7 @@ jobs:
         if: ${{inputs.target=='debug'}}
         run: |
           echo "\nPR=${{inputs.pr}}" >> 8vim/version.properties
+          cat 8vim/version.properties
       - uses: actions/setup-java@v4
         with:
           java-version: "17"
