@@ -82,6 +82,7 @@ jobs:
     with:
       ref: ${{github.ref}}
       target: debug
+      pr: ${{github.event.number}}
     secrets: inherit
   test_check:
     name: Github action test check workaround

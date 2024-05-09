@@ -45,6 +45,7 @@ android {
     val versionMinor = (versionProps["MINOR"] as String).toInt()
     val versionPatch = (versionProps["PATCH"] as String).toInt()
     val versionRc = (versionProps["RC"] as String).toInt()
+    val prNumber = versionProps["PR"] as String?
 
     namespace = "inc.flide.vim8"
     compileSdk = 34
@@ -79,16 +80,19 @@ android {
         applicationId = "inc.flide.vi8"
         minSdk = 24
         targetSdk = 34
-
-        val rcValue = if (versionRc > 0) 100 - versionRc else 0
-        versionCode =
-            versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - rcValue
-        versionName = "$versionMajor.$versionMinor.$versionPatch"
-
         resValue("string", "app_name", "8Vim")
+        if (prNumber != null) {
+            versionCode = (System.currentTimeMillis() / 1000).toInt()
+            versionName = "pr-$prNumber+$versionCode"
+        } else {
+            val rcValue = if (versionRc > 0) 100 - versionRc else 0
+            versionCode =
+                versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - rcValue
+            versionName = "$versionMajor.$versionMinor.$versionPatch"
+        }
         resValue("string", "version_name", versionName.toString())
 
-        if (versionRc > 0) {
+        if (versionRc > 0 && prNumber == null) {
             versionNameSuffix = "-rc.$versionRc"
             resValue("string", "version_name", versionName + versionNameSuffix)
         }
