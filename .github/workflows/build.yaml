@@ -10,6 +10,10 @@ on:
       ref:
         type: string
         required: true
+      pr:
+        type: number
+      sha:
+        type: string
     outputs:
       artifact-url:
         value: ${{ jobs.build.outputs.artifact-url }}
@@ -44,6 +48,13 @@ jobs:
         with:
           ref: ${{inputs.ref}}
           fetch-depth: 0
+      - name: Setup PR number
+        if: ${{inputs.target=='debug'}}
+        run: |
+          echo "" >> 8vim/version.properties
+          echo "PR=${{inputs.pr}}" >> 8vim/version.properties
+          echo "SHA=${{inputs.sha}}" >> 8vim/version.properties
+          cat 8vim/version.properties
       - uses: actions/setup-java@v4
         with:
           java-version: "17"
