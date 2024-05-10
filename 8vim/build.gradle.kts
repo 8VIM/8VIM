@@ -83,7 +83,7 @@ android {
         resValue("string", "app_name", "8Vim")
         if (prNumber != null) {
             versionCode = (System.currentTimeMillis() / 1000).toInt()
-            versionName = "pr-$prNumber+$versionCode"
+            versionName = "pr-$prNumber+${(versionProps["SHA"] as String)}"
         } else {
             val rcValue = if (versionRc > 0) 100 - versionRc else 0
             versionCode =

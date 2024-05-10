@@ -67,3 +67,13 @@ jobs:
     secrets: inherit
     permissions:
       contents: write
+  private_fdroid:
+    needs: [release, update_schema]
+    if: ${{!cancelled() && (needs.release.result == 'success' || needs.update_schema.result == 'success')}}
+    permissions:
+      actions: write
+    uses: ./.github/workflows/private-fdroid-repo.yaml
+    with:
+      type: 'merge'
+      pr: ${{github.event.number}}
+    secrets: inherit
