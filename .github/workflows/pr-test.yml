@@ -12,7 +12,17 @@ on:
       - "**.gradle.kts"
       - "8vim/**"
 jobs:
+  dependabot_check:
+    if: |
+      contains(github.event.pull_request.labels.*.name, 'ignore') 
+        && startsWith(github.head_ref, 'dependabot/gradle')
+    uses: ./.github/workflows/codecheck.yaml
+    with:
+      skip-codecov: true
+    secrets: inherit
+
   changes:
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ignore') }}
     name: Detect changed files
     runs-on: ubuntu-latest
     permissions:
@@ -62,12 +72,11 @@ jobs:
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
-    with:
-      skip-codecov: ${{ startsWith(github.head_ref, 'dependabot/') }}
     secrets: inherit
   build:
+    needs: [validate_layouts, test_run]
     if: |
-      !startsWith(github.head_ref, 'dependabot/') && !cancelled() && (
+      !cancelled() && (
         (needs.test_run.result != 'skipped' 
           && needs.validate_layouts.result != 'skipped' 
           && needs.test_run.result == 'success' 
@@ -77,7 +86,6 @@ jobs:
         || (needs.validate_layouts.result == 'skipped' 
           && needs.test_run.result == 'success')
       )
-    needs: [validate_layouts, test_run]
     uses: ./.github/workflows/build.yaml
     with:
       ref: ${{github.ref}}
