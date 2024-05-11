@@ -59,7 +59,7 @@ jobs:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: inc.flide.vi8
           releaseFiles: ${{ steps.artifact.outputs.download-path }}/apk/release/8vim-release.apk
-          track: ${{contains(inputs.version_name, 'rc') && 'internal' || 'production'}}
+          track: ${{contains(inputs.version_name, 'rc') && 'beta' || 'production'}}
           whatsNewDirectory: distribution/whatsnew
           mappingFile: ${{ steps.artifact.outputs.download-path }}/mapping/release/mapping.txt
   f_droid:
@@ -121,17 +121,26 @@ jobs:
           files: ${{ steps.artifact.outputs.download-path }}/apk/${{env.target}}/8vim-${{env.target}}.apk
           prerelease: ${{contains(inputs.version_name, 'rc')}}
           tag_name: v${{inputs.version_name}}
+  private_fdroid:
+    needs: [build_rc, release]
+    if: ${{ contains(inputs.version_name, 'rc') }}
+    permissions:
+      actions: write
+    uses: ./.github/workflows/private-fdroid-repo.yaml
+    with:
+      type: rc
+      tag: v${{inputs.version_name}}
   notify:
     uses: ./.github/workflows/matrix-release.yaml
     needs: [release]
     if: ${{ !cancelled() && needs.release.result !='failure'}}
     with:
-      channel: ${{contains(inputs.version_name, 'rc') && 'internal' || 'production'}}
+      channel: ${{contains(inputs.version_name, 'rc') && 'beta' || 'production'}}
       version: ${{inputs.version_name}}
     secrets: inherit
   cleanup:
     name: Cleanup artifact
-    needs: [build, build_rc, release]
+    needs: [build, build_rc, release, private_fdroid]
     runs-on: ubuntu-latest
     if: ${{always()}}
     steps:
