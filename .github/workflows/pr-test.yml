@@ -73,11 +73,9 @@ jobs:
       msg: ${{steps.commit.outcome.msg}}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - id: commit
         run: |
-          echo "msg=$(git log -1 --no-merges --pretty=%B)" >> $GITHUB_OUTPUT
+          echo "msg=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
   build:
     needs: [validate_layouts, test_run, commit]
     if: |
