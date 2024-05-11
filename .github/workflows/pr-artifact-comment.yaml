@@ -52,15 +52,22 @@ jobs:
             Artifact [8vim-debug](${{steps.artifact.outputs.url}}) available until: ${{steps.artifact.outputs.expires}}
           comment_tag: artifact
           pr_number: ${{steps.artifact.outputs.pr_number}}
-  fdroid:
+  private_fdroid:
     permissions: 
       actions: write
     needs: [update_pr_comment]
-    if: ${{success()}}
     uses: ./.github/workflows/private-fdroid-repo.yaml
     with:
       type: 'pr'
       pr: ${{needs.update_pr_comment.outputs.pr_number}}
       sha: ${{needs.update_pr_comment.outputs.sha}}
       artifact: ${{needs.update_pr_comment.outputs.artifact_id}}
+    secrets: inherit
+  notify:
+    uses: ./.github/workflows/matrix-release.yaml
+    needs: [update_pr_comment, private_fdroid]
+    with:
+      channel: debug
+      pr: ${{needs.update_pr_comment.outputs.pr_number}}
+      sha: ${{needs.update_pr_comment.outputs.sha}}
     secrets: inherit

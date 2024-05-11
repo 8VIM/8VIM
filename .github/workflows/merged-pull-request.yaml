@@ -59,6 +59,16 @@ jobs:
       issues: read
       pull-requests: read
       contents: write
+  private_fdroid:
+    needs: [release]
+    if: !cancelled() && needs.release.result != 'failure'
+    permissions:
+      actions: write
+    uses: ./.github/workflows/private-fdroid-repo.yaml
+    with:
+      type: merge
+      pr: ${{github.event.number}}
+    secrets: inherit
   update_schema:
     needs: [changes]
     name: "Website: Update layout schemas"
@@ -67,13 +77,3 @@ jobs:
     secrets: inherit
     permissions:
       contents: write
-  private_fdroid:
-    needs: [release, update_schema]
-    if: ${{!cancelled() && (needs.release.result == 'success' || needs.update_schema.result == 'success')}}
-    permissions:
-      actions: write
-    uses: ./.github/workflows/private-fdroid-repo.yaml
-    with:
-      type: 'merge'
-      pr: ${{github.event.number}}
-    secrets: inherit
