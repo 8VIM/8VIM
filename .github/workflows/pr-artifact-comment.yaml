@@ -77,7 +77,7 @@ jobs:
       type: 'pr'
       pr: ${{fromJson(needs.fetch_metadata.outputs.pr_number || -1)}}
       sha: ${{needs.fetch_metadata.outputs.sha}}
-      artifact: ${{fromJson(needs.fetch_metadata.artifact_id || -1)}}
+      artifact: ${{fromJson(needs.fetch_metadata.outputs.artifact_id || -1)}}
     secrets: inherit
   notify:
     uses: ./.github/workflows/matrix-release.yaml
