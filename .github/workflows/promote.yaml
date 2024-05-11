@@ -44,7 +44,7 @@ jobs:
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
   private_fdroid:
     needs: [tag]
-    if: !cancelled() && inputs.to == 'beta'
+    if: ${{ !cancelled() && inputs.to == 'beta' }}
     permissions:
       actions: write
     uses: ./.github/workflows/private-fdroid-repo.yaml
