@@ -73,6 +73,9 @@ jobs:
           VIM8_BUILD_KEY_ALIAS: ${{ secrets.VIM8_BUILD_KEY_ALIAS }}
           VIM8_BUILD_KEY_PASSWORD: ${{ secrets.VIM8_BUILD_KEY_PASSWORD }}
         run: ./gradlew ${{steps.gradle.outputs.cmd}}
+      - id: commit
+        run: |
+          echo "$(git show -s --format=%s)" > commit
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         id: upload
@@ -82,6 +85,7 @@ jobs:
           path: |
             8vim/build/outputs/*/${{inputs.target}}/8vim-${{inputs.target}}.*
             8vim/build/outputs/mapping/${{inputs.target}}/mapping.txt
+            commit
           retention-days: 7
           overwrite: true
       - name: Expiration
