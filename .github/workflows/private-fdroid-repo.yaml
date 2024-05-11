@@ -22,9 +22,6 @@ on:
 env:
   DISPATCH_URL: https://api.github.com/repos/8VIM/fdroid/dispatches
 
-permissions: 
-    actions: write
-
 jobs:
   fail:
     name: None valid type
