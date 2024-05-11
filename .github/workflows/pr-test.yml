@@ -5,16 +5,20 @@ concurrency: pr-${{github.event.number}}
 on:
   pull_request:
     branches: [master]
-    paths:
-      - "metadata/**/changelogs/*.txt"
-      - "gradle/libs.versions.toml"
-      - "**.gradle"
-      - "**.gradle.kts"
-      - "8vim/**"
+
 jobs:
+  dependabot_check:
+    if: |
+      contains(github.event.pull_request.labels.*.name, 'ignore') 
+        && startsWith(github.head_ref, 'dependabot/gradle')
+    uses: ./.github/workflows/codecheck.yaml
+    with:
+      skip-codecov: true
+    secrets: inherit
   changes:
     name: Detect changed files
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ignore') }}
     permissions:
       pull-requests: read
     outputs:
