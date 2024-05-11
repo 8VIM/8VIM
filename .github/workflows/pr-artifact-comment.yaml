@@ -11,6 +11,10 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    outputs:
+      pr_number: ${{steps.artifact.outputs.pr_number}}
+      sha: ${{steps.artifact.outputs.sha}}
+      artifact_id: ${{steps.artifact.outputs.artifact_id}}
     steps:
       - name: Get artifact link
         id: artifact
@@ -38,6 +42,8 @@ jobs:
           echo "pr_number=$pr_number" >> $GITHUB_OUTPUT
           echo "url=https://github.com/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts/$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
           echo "expires=$(jq -j '.expires_at' artifact.json)" >> $GITHUB_OUTPUT
+          echo "sha=$(jq -j '.head_commit.id' artifact.json)" >> $GITHUB_OUTPUT
+          echo "artifact_id=$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
       - name: Update comment
         if: ${{steps.artifact.outputs.expires != 'null' }}
         uses: thollander/actions-comment-pull-request@v2
@@ -53,9 +59,9 @@ jobs:
     uses: ./.github/workflows/private-fdroid-repo.yaml
     with:
       type: 'pr'
-      pr: ${{needs.update_pr_comment.outputs.pr_number}}
+      pr: ${{fromJson(needs.update_pr_comment.outputs.pr_number || -1)}}
       sha: ${{needs.update_pr_comment.outputs.sha}}
-      artifact: ${{needs.update_pr_comment.outputs.artifact_id}}
+      artifact: ${{fromJson(needs.update_pr_comment.outputs.artifact_id || -1)}}
     secrets: inherit
   notify:
     uses: ./.github/workflows/matrix-release.yaml
