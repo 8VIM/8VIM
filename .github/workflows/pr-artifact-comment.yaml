@@ -28,7 +28,7 @@ jobs:
           "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts" \
           | jq -c '.artifacts[0]' > artifact.json
 
-          [[ $(jq -j '.name' artifact.json)  != "artifact-debug" ]] && exit 1
+          [[ $(jq -j '.name' artifact.json)  != "artifact-debug" ]] && exit 0
 
           pr_number=$(curl \
           -L \
@@ -56,6 +56,7 @@ jobs:
     permissions: 
       actions: write
     needs: [update_pr_comment]
+    if: ${{ success() && needs.update_pr_comment.outputs.sha != '' }}
     uses: ./.github/workflows/private-fdroid-repo.yaml
     with:
       type: 'pr'
@@ -68,6 +69,6 @@ jobs:
     needs: [update_pr_comment, private_fdroid]
     with:
       channel: debug
-      pr: ${{needs.update_pr_comment.outputs.pr_number}}
+      pr: "${{needs.update_pr_comment.outputs.pr_number}}"
       sha: ${{needs.update_pr_comment.outputs.sha}}
     secrets: inherit
