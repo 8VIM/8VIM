@@ -16,7 +16,6 @@ jobs:
       skip-codecov: true
     secrets: inherit
   changes:
-    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ignore') }}
     name: Detect changed files
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ignore') }}
