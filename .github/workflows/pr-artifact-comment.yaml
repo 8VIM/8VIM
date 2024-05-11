@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     outputs:
-      pr_number: ${{steps.artifact.pr_number}}
-      sha: ${{steps.artifact.sha}}
-      artifact_id: ${{steps.artifact.artifact_id}}
+      pr_number: ${{steps.artifact.outputs.pr_number}}
+      sha: ${{steps.artifact.outputs.sha}}
+      artifact_id: ${{steps.artifact.outputs.artifact_id}}
     steps:
       - name: Get artifact link
         id: artifact
@@ -59,9 +59,9 @@ jobs:
     uses: ./.github/workflows/private-fdroid-repo.yaml
     with:
       type: 'pr'
-      pr: ${{needs.update_pr_comment.outputs.pr_number}}
+      pr: ${{fromJson(needs.update_pr_comment.outputs.pr_number || -1)}}
       sha: ${{needs.update_pr_comment.outputs.sha}}
-      artifact: ${{needs.update_pr_comment.outputs.artifact_id}}
+      artifact: ${{fromJson(needs.update_pr_comment.outputs.artifact_id || -1)}}
     secrets: inherit
   notify:
     uses: ./.github/workflows/matrix-release.yaml
