@@ -69,6 +69,6 @@ jobs:
     needs: [update_pr_comment, private_fdroid]
     with:
       channel: debug
-      pr: ${{needs.update_pr_comment.outputs.pr_number}}
+      pr: "${{needs.update_pr_comment.outputs.pr_number}}"
       sha: ${{needs.update_pr_comment.outputs.sha}}
     secrets: inherit
