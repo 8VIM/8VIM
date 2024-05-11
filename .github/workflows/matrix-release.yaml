@@ -49,6 +49,8 @@ jobs:
         env:
           INPUT_CHANNEL: ${{inputs.channel}}
           INPUT_VERSION: ${{inputs.version}}
+          INPUT_PR: ${{inputs.pr}}
+          INPUT_SHA: ${{inputs.sha}}
         with:
           script: |
             const channel = core.getInput("channel").toLowerCase().trim();
