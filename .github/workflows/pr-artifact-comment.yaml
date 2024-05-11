@@ -1,19 +1,31 @@
 name: Update PR comment
-
+run-name: "Relase debug APK for #${{github.event.workflow_run.pull_requests[0].number}}"
 on:
   workflow_run:
     workflows: [PR test]
     types: [completed]
 jobs:
+  fetch_metadata:
+    runs-on: ubuntu-latest
+    if: |
+        github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.pull_requests[0].number != null
+        && !startsWith(github.event.workflow_run.head_branch, 'dependabot/')
+    outputs:
+      metadata: ${{steps.metadata.outputs.metadata}}
+    steps:
+        - id: metadata
+          uses: redhat-plumbers-in-action/gather-pull-request-metadata@v1
+          with:
+            pr-number: ${{github.event.workflow_run.pull_requests[0].number}}
   update_pr_comment:
     permissions:
       actions: read
       pull-requests: write
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    needs: [fetch_metadata]
+    if: ${{!contains(fromJson(needs.fetch_metadata.outputs.metadata).labels.*.name,'ignore')}}
     outputs:
-      pr_number: ${{steps.artifact.outputs.pr_number}}
-      sha: ${{steps.artifact.outputs.sha}}
       artifact_id: ${{steps.artifact.outputs.artifact_id}}
     steps:
       - name: Get artifact link
@@ -42,7 +54,6 @@ jobs:
           echo "pr_number=$pr_number" >> $GITHUB_OUTPUT
           echo "url=https://github.com/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts/$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
           echo "expires=$(jq -j '.expires_at' artifact.json)" >> $GITHUB_OUTPUT
-          echo "sha=$(jq -j '.workflow_run.head_sha' artifact.json)" >> $GITHUB_OUTPUT
           echo "artifact_id=$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
       - name: Update comment
         if: ${{steps.artifact.outputs.expires != 'null' }}
@@ -56,19 +67,19 @@ jobs:
     permissions: 
       actions: write
     needs: [update_pr_comment]
-    if: ${{ success() && needs.update_pr_comment.outputs.sha != null }}
+    if: ${{ success() && needs.update_pr_comment.outputs.artifact_id != null }}
     uses: ./.github/workflows/private-fdroid-repo.yaml
     with:
       type: 'pr'
-      pr: ${{fromJson(needs.update_pr_comment.outputs.pr_number) || -1)}}
-      sha: ${{needs.update_pr_comment.outputs.sha}}
+      pr: ${{github.event.workflow_run.pull_requests[0].number}}
+      sha: ${{github.event.workflow_run.head_sha}}
       artifact: ${{fromJson(needs.update_pr_comment.outputs.artifact_id) || -1)}}
     secrets: inherit
   notify:
     uses: ./.github/workflows/matrix-release.yaml
-    needs: [update_pr_comment, private_fdroid]
+    needs: [private_fdroid]
     with:
       channel: debug
-      pr: ${{fromJson(needs.update_pr_comment.outputs.pr_number) || -1)}}
-      sha: ${{needs.update_pr_comment.outputs.sha}}
+      pr: ${{github.event.workflow_run.pull_requests[0].number}}
+      sha: ${{github.event.workflow_run.head_sha}}
     secrets: inherit
