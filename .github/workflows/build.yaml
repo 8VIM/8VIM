@@ -14,6 +14,9 @@ on:
         type: number
       sha:
         type: string
+      commit:
+        type: string
+        default: ''
     outputs:
       artifact-url:
         value: ${{ jobs.build.outputs.artifact-url }}
@@ -48,13 +51,13 @@ jobs:
         with:
           ref: ${{inputs.ref}}
           fetch-depth: 0
+      - run: echo "${{inputs.commit}}" > commit
       - name: Setup PR number
         if: ${{inputs.target == 'debug'}}
         run: |
           echo "" >> 8vim/version.properties
           echo "PR=${{inputs.pr}}" >> 8vim/version.properties
           echo "SHA=${{inputs.sha}}" >> 8vim/version.properties
-          cat 8vim/version.properties
       - uses: actions/setup-java@v4
         with:
           java-version: "17"
@@ -73,9 +76,6 @@ jobs:
           VIM8_BUILD_KEY_ALIAS: ${{ secrets.VIM8_BUILD_KEY_ALIAS }}
           VIM8_BUILD_KEY_PASSWORD: ${{ secrets.VIM8_BUILD_KEY_PASSWORD }}
         run: ./gradlew ${{steps.gradle.outputs.cmd}}
-      - id: commit
-        run: |
-          echo "$(git show -s --format=%s)" > commit
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         id: upload

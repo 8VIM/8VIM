@@ -67,8 +67,19 @@ jobs:
     if: ${{ needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
     secrets: inherit
+  commit:
+    runs-on: ubuntu-latest
+    outputs:
+      msg: ${{steps.commit.outcome.msg}}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: commit
+        run: |
+          echo "msg=$(git log -1 --no-merges --pretty=%B)" >> $GITHUB_OUTPUT
   build:
-    needs: [validate_layouts, test_run]
+    needs: [validate_layouts, test_run, commit]
     if: |
       !cancelled() && (
         (needs.test_run.result != 'skipped' 
@@ -86,6 +97,7 @@ jobs:
       target: debug
       pr: ${{github.event.number}}
       sha: ${{github.event.pull_request.head.sha}}
+      commit: "${{needs.commit.outputs.msg}}"
     secrets: inherit
   test_check:
     name: Github action test check workaround
