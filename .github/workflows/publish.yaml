@@ -18,6 +18,7 @@ on:
       version_name:
         required: true
         type: string
+
 jobs:
   build_rc:
     if: ${{contains(inputs.version_name, 'rc')}}
@@ -120,17 +121,6 @@ jobs:
           files: ${{ steps.artifact.outputs.download-path }}/apk/${{env.target}}/8vim-${{env.target}}.apk
           prerelease: ${{contains(inputs.version_name, 'rc')}}
           tag_name: v${{inputs.version_name}}
-  private_fdroid:
-    needs: [release]
-    if: ${{contains(inputs.version_name, 'rc') && !cancelled() && needs.release.result != 'failure'}}
-    permissions:
-      actions: write
-    uses: ./.github/workflows/private-fdroid-repo.yaml
-    with:
-      type: 'rc'
-      tag: v${{inputs.version_name}}
-    secrets: inherit
-
   notify:
     uses: ./.github/workflows/matrix-release.yaml
     needs: [release]

@@ -16,7 +16,7 @@ on:
         description: To track
         required: true
         type: choice
-        default: alpha
+        default: beta
         options:
           - alpha
           - beta
@@ -42,6 +42,15 @@ jobs:
       - name: "Get Previous tag"
         id: tag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
+  private_fdroid:
+    needs: [tag]
+    if: !cancelled() && inputs.to == 'beta'
+    permissions:
+      actions: write
+    uses: ./.github/workflows/private-fdroid-repo.yaml
+    with:
+      type: rc
+      tag: ${{needs.tag.outputs.tag}}
   notify:
     uses: ./.github/workflows/matrix-release.yaml
     needs: [promote, tag]
