@@ -6,27 +6,41 @@ on:
     inputs:
       version:
         type: string
-        required: true
+        default:  ''
       channel:
         type: choice
-        required: true
         default: internal
         options:
+          - debug
           - internal
           - beta
           - production
+      pr:
+        type: number
+        default: -1
   workflow_call:
     inputs:
       version:
         type: string
-        required: true
+        default:  ''
       channel:
         type: string
         required: true
+      pr:
+        type: number
+        default: -1
+      sha:
+        type: string
+        default: ""
 jobs:
   msg:
     name: Generate message
     runs-on: ubuntu-latest
+    if: |
+      (inputs.channel == 'debug' 
+        && inputs.pr > 0
+        && inputs.sha != '')
+      || inputs.channel != 'debug'
     outputs:
       text: ${{steps.msg.outputs.text}}
     steps:
@@ -39,24 +53,37 @@ jobs:
           script: |
             const channel = core.getInput("channel").toLowerCase().trim();
             let version = core.getInput("version").trim();
-            if(version[0] !== 'v') {
-              version = `v${version}`;
+            let pr = parseInt(core.getInput("pr").trim(), 10);
+            let sha = core.getInput("sha").trim();
+            let url = "";
+            if(pr < 0) {
+              if(version[0] !== 'v') {
+                version = `v${version}`;
+              }
+              url = `https://github.com/${context.repo.owner}/${context.repo.repo}/releases/tag/${version}`;
+            } else {
+              url = `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${pr}`;
+              version = `Debug for #${pr} (${sha})`;
             }
-            const url = `https://github.com/${context.repo.owner}/${context.repo.repo}/releases/tag/${version}`;
-
             let body = "";
             let header = "";
-            if (channel !== "beta") {
-              header = `New release: ${version}`;
-              if (channel == "production") {
-                body = `Available for everyone on the Playstore and F-Droid.
-            The F-Droid version can take up to 72h to be available.`;
-              } else {
-                body = `Available on the internal test channel of the Playstore`;
-              }
-            } else {
+            if (channel === "beta") {
               header = `Release: ${version}`;
-              body = `Now available for open testing on the Playstore`;
+              body = `Now available for open testing on the Playstore and
+            on the private F-Droid repo (https://github.com/${context.repo.owner}/fdroid)`;
+            } else {
+              header = `New release: ${version}`;
+              switch(channel) {
+                case 'production':
+                  body = `Available for everyone on the Playstore and F-Droid.
+            The F-Droid version can take up to 72h to be available.`;
+                  break;
+                case 'internal':
+                  body = `Now available on the internal test channel of the Playstore`;
+                  break;
+                default:
+                  body =  `Now available on the internal test channel of the private F-Droid repo (https://github.com/${context.repo.owner}/fdroid)`;
+              }
             }
 
             core.setOutput(
