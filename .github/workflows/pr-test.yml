@@ -25,9 +25,18 @@ jobs:
       src: ${{ steps.changes.outputs.src }}
       yaml: ${{ steps.changes.outputs.yaml }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - id: commit
+        run: |
+          echo "previous=$(git rev-parse HEAD^)" >> $GITHUB_OUTPUT
       - uses: dorny/paths-filter@v3
         id: changes
         with:
+          base: ${{steps.commit.outputs.previous}}
+          token: ${{github.event.pull_request.commits < 2 && github.token || ''}}
           filters: |
             metadata:
               - 'metadata/**/changelogs/*.txt'
@@ -61,17 +70,19 @@ jobs:
           schema_dir: ./8vim/src/main/resources/schemas
           schema_name: https://8vim.github.io/schemas/schema.json
           base_dir: ./8vim/src/main/res/raw
+      - name: Add layout label to the PR
+        if: ${{!contains(github.event.pull_request.labels.*.name,'layout')}}
+        run: gh pr edit --add-label layout
   test_run:
     name: Test & coverage
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
     uses: ./.github/workflows/codecheck.yaml
-    with:
-      skip-codecov: ${{ startsWith(github.head_ref, 'dependabot/') }}
     secrets: inherit
   build:
+    needs: [validate_layouts, test_run, changes]
     if: |
-      !startsWith(github.head_ref, 'dependabot/') && !cancelled() && (
+      !cancelled() && (
         (needs.test_run.result != 'skipped' 
           && needs.validate_layouts.result != 'skipped' 
           && needs.test_run.result == 'success' 
@@ -81,12 +92,29 @@ jobs:
         || (needs.validate_layouts.result == 'skipped' 
           && needs.test_run.result == 'success')
       )
-    needs: [validate_layouts, test_run]
     uses: ./.github/workflows/build.yaml
     with:
       ref: ${{github.ref}}
       target: debug
       pr: ${{github.event.number}}
+      sha: ${{github.event.pull_request.head.sha}}
+    secrets: inherit
+  private_fdroid:
+    needs: [build]
+    uses: ./.github/workflows/private-fdroid-repo.yaml
+    with:
+      type: "pr"
+      pr: ${{github.event.number}}
+      sha: ${{github.event.pull_request.head.sha}}
+      artifact: ${{needs.build.outputs.artifact-id}}
+    secrets: inherit
+  notify:
+    needs: [build, private_fdroid]
+    uses: ./.github/workflows/matrix-release.yaml
+    with:
+      channel: debug
+      pr: ${{github.event.number}}
+      sha: ${{github.event.pull_request.head.sha}}
     secrets: inherit
   test_check:
     name: Github action test check workaround
