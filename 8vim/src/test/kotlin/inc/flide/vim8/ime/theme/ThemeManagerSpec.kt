@@ -30,6 +30,7 @@ import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
 import io.mockk.verify
+import kotlin.random.Random
 
 class ThemeManagerSpec : FunSpec({
     lateinit var context: Context
@@ -44,6 +45,7 @@ class ThemeManagerSpec : FunSpec({
     lateinit var trailColorObserver: PreferenceObserver<Int>
     lateinit var useRandomColorObserver: PreferenceObserver<Boolean>
     lateinit var modeObserver: PreferenceObserver<ThemeMode>
+    lateinit var random: Random
 
     val lightColorScheme = lightColorScheme()
     val darkColorScheme = darkColorScheme()
@@ -54,6 +56,10 @@ class ThemeManagerSpec : FunSpec({
         mockkStatic(::lightColorPalette)
         mockkStatic(Configuration::isDarkTheme)
         mockkConstructor(MutableLiveData::class)
+
+        random = mockk {
+            every { nextInt(any()) } returns 0
+        }
 
         every { darkColorPalette(any()) } returns darkColorScheme
         every { lightColorPalette(any()) } returns lightColorScheme
@@ -123,6 +129,11 @@ class ThemeManagerSpec : FunSpec({
             every { observe(any()) } answers { modeObserver = firstArg() }
         }
         every { androidConfiguration.isDarkTheme() } returns false
+    }
+
+    test("RandomTrailColor") {
+        val randomTrailColor = ThemeManager.RandomTrailColor(random)
+        randomTrailColor.color() shouldBe Color.Black
     }
 
     context("Initialize color mode") {

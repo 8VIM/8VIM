@@ -85,11 +85,11 @@ class ThemeManager(context: Context) {
         override fun color(): Color = color
     }
 
-    class RandomTrailColor : TrailColor {
+    class RandomTrailColor(private val random: Random = Random.Default) : TrailColor {
         override fun color(): Color = Color(
-            Random.nextInt(256),
-            Random.nextInt(256),
-            Random.nextInt(256),
+            random.nextInt(256),
+            random.nextInt(256),
+            random.nextInt(256),
             255
         )
     }
