@@ -14,9 +14,6 @@ on:
         type: number
       sha:
         type: string
-      commit:
-        type: string
-        default: ''
     outputs:
       artifact-url:
         value: ${{ jobs.build.outputs.artifact-url }}
@@ -51,7 +48,6 @@ jobs:
         with:
           ref: ${{inputs.ref}}
           fetch-depth: 0
-      - run: echo "${{inputs.commit}}" > commit
       - name: Setup PR number
         if: ${{inputs.target == 'debug'}}
         run: |
@@ -85,7 +81,6 @@ jobs:
           path: |
             8vim/build/outputs/*/${{inputs.target}}/8vim-${{inputs.target}}.*
             8vim/build/outputs/mapping/${{inputs.target}}/mapping.txt
-            commit
           retention-days: 7
           overwrite: true
       - name: Expiration

@@ -90,20 +90,17 @@ android {
                 versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - rcValue
         }
         versionName = "$versionMajor.$versionMinor.$versionPatch"
-        resValue("string", "version_name", versionName.toString())
 
         if (versionRc > 0) {
             versionNameSuffix = "-rc.$versionRc"
         }
 
         if (prNumber != null) {
-            versionNameSuffix = "$versionNameSuffix-$prNumber-${(versionProps["SHA"] as String)
+            versionNameSuffix = "${versionNameSuffix.orEmpty()}-$prNumber-${(versionProps["SHA"] as String)
                 .substring(0 until 10)}"
         }
 
-        if (versionNameSuffix?.isNotEmpty() == true) {
-            resValue("string", "version_name", versionName + versionNameSuffix)
-        }
+            resValue("string", "version_name", "$versionName${versionNameSuffix.orEmpty()}")
 
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

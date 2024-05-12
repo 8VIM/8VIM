@@ -22,7 +22,6 @@ jobs:
     permissions:
       pull-requests: read
     outputs:
-      msg: ${{steps.commit.outputs.msg}}
       src: ${{ steps.changes.outputs.src }}
       yaml: ${{ steps.changes.outputs.yaml }}
     steps:
@@ -32,7 +31,6 @@ jobs:
           fetch-depth: 2
       - id: commit
         run: |
-          echo "msg=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
           echo "previous=$(git rev-parse HEAD^)" >> $GITHUB_OUTPUT
       - uses: dorny/paths-filter@v3
         id: changes
@@ -97,7 +95,6 @@ jobs:
       target: debug
       pr: ${{github.event.number}}
       sha: ${{github.event.pull_request.head.sha}}
-      commit: "${{needs.changes.outputs.msg}}"
     secrets: inherit
   test_check:
     name: Github action test check workaround
