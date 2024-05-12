@@ -33,10 +33,11 @@ jobs:
       - id: commit
         run: |
           echo "msg=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
+          echo "previous=$(git rev-parse HEAD^)" >> $GITHUB_OUTPUT
       - uses: dorny/paths-filter@v3
         id: changes
         with:
-          base: HEAD^
+          base: ${{steps.commit.outputs.previous}}
           token: ${{github.event.pull_request.commits < 2 && github.token || ''}}
           filters: |
             metadata:
