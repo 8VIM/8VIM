@@ -70,6 +70,9 @@ jobs:
           schema_dir: ./8vim/src/main/resources/schemas
           schema_name: https://8vim.github.io/schemas/schema.json
           base_dir: ./8vim/src/main/res/raw
+      - name: Add layout label to the PR
+        if: ${{!contains(github.event.pull_request.labels.*.name,'layout')}}
+        run: gh pr edit --add-label layout
   test_run:
     name: Test & coverage
     needs: changes

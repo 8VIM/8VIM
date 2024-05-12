@@ -96,11 +96,11 @@ android {
         }
 
         if (prNumber != null) {
-            versionNameSuffix = "${versionNameSuffix.orEmpty()}-$prNumber-${(versionProps["SHA"] as String)
-                .substring(0 until 10)}"
+            val shortSha = (versionProps["SHA"] as String).substring(0 until 10)
+            versionNameSuffix = "${versionNameSuffix.orEmpty()}-$prNumber-$shortSha"
         }
 
-            resValue("string", "version_name", "$versionName${versionNameSuffix.orEmpty()}")
+        resValue("string", "version_name", "$versionName${versionNameSuffix.orEmpty()}")
 
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
