@@ -22,6 +22,7 @@ jobs:
     permissions:
       pull-requests: read
     outputs:
+      ci: ${{ steps.changes.outputs.ci }}
       src: ${{ steps.changes.outputs.src }}
       yaml: ${{ steps.changes.outputs.yaml }}
     steps:
@@ -33,10 +34,19 @@ jobs:
         run: |
           echo "previous=$(git rev-parse HEAD^)" >> $GITHUB_OUTPUT
       - uses: dorny/paths-filter@v3
+        id: ci_changes
+        with:
+          base: ${{steps.commit.outputs.previous}}
+          token: ${{ github.event.pull_request.commits < 2 && github.token || ''}}
+          filters: |
+            ci:
+              - '.github/workflows/*.yaml'
+              - '.github/workflows/*.yml'
+      - uses: dorny/paths-filter@v3
         id: changes
         with:
           base: ${{steps.commit.outputs.previous}}
-          token: ${{github.event.pull_request.commits < 2 && github.token || ''}}
+          token: ${{ (steps.ci_changes.outputs.ci == 'true' || github.event.pull_request.commits < 2) && github.token || ''}}
           filters: |
             metadata:
               - 'metadata/**/changelogs/*.txt'
@@ -96,23 +106,6 @@ jobs:
     with:
       ref: ${{github.ref}}
       target: debug
-      pr: ${{github.event.number}}
-      sha: ${{github.event.pull_request.head.sha}}
-    secrets: inherit
-  private_fdroid:
-    needs: [build]
-    uses: ./.github/workflows/private-fdroid-repo.yaml
-    with:
-      type: "pr"
-      pr: ${{github.event.number}}
-      sha: ${{github.event.pull_request.head.sha}}
-      artifact: ${{needs.build.outputs.artifact-id}}
-    secrets: inherit
-  notify:
-    needs: [build, private_fdroid]
-    uses: ./.github/workflows/matrix-release.yaml
-    with:
-      channel: debug
       pr: ${{github.event.number}}
       sha: ${{github.event.pull_request.head.sha}}
     secrets: inherit
