@@ -15,12 +15,16 @@ jobs:
     with:
       skip-codecov: true
     secrets: inherit
-  commit:
+  changes:
+    name: Detect changed files
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.pull_request.labels.*.name, 'ignore') }}
+    permissions:
+      pull-requests: read
     outputs:
       msg: ${{steps.commit.outputs.msg}}
-      previous: ${{steps.commit.outputs.previous}}
+      src: ${{ steps.changes.outputs.src }}
+      yaml: ${{ steps.changes.outputs.yaml }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,22 +33,11 @@ jobs:
       - id: commit
         run: |
           echo "msg=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
-          echo "previous=$(git rev-parse HEAD^)" >> $GITHUB_OUTPUT
-  changes:
-    name: Detect changed files
-    runs-on: ubuntu-latest
-    needs: [commit]
-    permissions:
-      pull-requests: read
-    outputs:
-      src: ${{ steps.changes.outputs.src }}
-      yaml: ${{ steps.changes.outputs.yaml }}
-    steps:
       - uses: dorny/paths-filter@v3
         id: changes
         with:
-          base: ${{needs.commit.outputs.previous}}
-          token: ''
+          base: HEAD^
+          token: ${{github.event.pull_request.commits >1 && github.token || ''}}
           filters: |
             metadata:
               - 'metadata/**/changelogs/*.txt'
@@ -85,7 +78,7 @@ jobs:
     uses: ./.github/workflows/codecheck.yaml
     secrets: inherit
   build:
-    needs: [validate_layouts, test_run, commit]
+    needs: [validate_layouts, test_run, changes]
     if: |
       !cancelled() && (
         (needs.test_run.result != 'skipped' 
@@ -103,7 +96,7 @@ jobs:
       target: debug
       pr: ${{github.event.number}}
       sha: ${{github.event.pull_request.head.sha}}
-      commit: "${{needs.commit.outputs.msg}}"
+      commit: "${{needs.changes.outputs.msg}}"
     secrets: inherit
   test_check:
     name: Github action test check workaround
