@@ -119,14 +119,13 @@ jobs:
       type: "pr"
       pr: ${{github.event.number}}
       sha: ${{github.event.pull_request.head.sha}}
-      artifact: ${{needs.build.outputs.artifact-id}}
+      artifact: ${{ fromJson(needs.build.outputs.artifact-id) }}
     secrets: inherit
   notify:
-    needs: [build, private_fdroid]
+    needs: [build]
     if: |
       !cancelled() 
       && needs.build.result == 'success'
-      && needs.private_fdroid.result == 'success'
     uses: ./.github/workflows/matrix-release.yaml
     with:
       channel: debug
