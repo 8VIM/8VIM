@@ -19,6 +19,7 @@ jobs:
       pull-requests: read
     outputs:
       src: ${{ steps.changes.outputs.src }}
+      schemas: ${{ steps.changes.outputs.schemas }}
     steps:
       - uses: dorny/paths-filter@v3
         id: changes
@@ -37,6 +38,14 @@ jobs:
               - '8vim/src/main/resources/schemas/**/*.json'
             schemas:
               - '8vim/src/main/resources/schemas/**/*.json'
+  update_schema:
+    needs: [changes]
+    name: "Website: Update layout schemas"
+    if: ${{ needs.changes.outputs.schemas == 'true' }}
+    uses: ./.github/workflows/update-schemas.yaml
+    secrets: inherit
+    permissions:
+      contents: write
   bump_version:
     needs: changes
     if: ${{ needs.changes.outputs.src == 'true' }}
@@ -69,12 +78,3 @@ jobs:
       type: merge
       pr: ${{github.event.number}}
     secrets: inherit
-  update_schema:
-    needs: [changes]
-    name: "Website: Update layout schemas"
-    if: ${{ needs.changes.outputs.schemas == 'true' }}
-    uses: ./.github/workflows/update-schemas.yaml
-    secrets: inherit
-    permissions:
-      contents: write
-      
