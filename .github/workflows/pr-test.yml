@@ -41,6 +41,7 @@ jobs:
           filters: |
             ci:
               - '.github/workflows/*.yaml'
+              - '.github/workflows/*.yml'
       - uses: dorny/paths-filter@v3
         id: changes
         with:
