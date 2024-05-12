@@ -28,6 +28,7 @@ jobs:
       - uses: dorny/paths-filter@v3
         id: changes
         with:
+          initial-fetch-depth: 1
           filters: |
             metadata:
               - 'metadata/**/changelogs/*.txt'
@@ -69,6 +70,18 @@ jobs:
     secrets: inherit
   commit:
     runs-on: ubuntu-latest
+    needs: [validate_layouts, test_run]
+    if: |
+      !cancelled() && (
+        (needs.test_run.result != 'skipped' 
+          && needs.validate_layouts.result != 'skipped' 
+          && needs.test_run.result == 'success' 
+          && needs.validate_layouts.result == 'success')
+        || (needs.test_run.result == 'skipped'
+          && needs.validate_layouts.result == 'success')
+        || (needs.validate_layouts.result == 'skipped' 
+          && needs.test_run.result == 'success')
+      )
     outputs:
       msg: ${{steps.commit.outputs.msg}}
     steps:
