@@ -15,17 +15,14 @@ on:
       sha:
         type: string
     outputs:
-      artifact-url:
-        value: ${{ jobs.build.outputs.artifact-url }}
-      expires-at:
-        value: ${{ jobs.build.outputs.expires-at }}
+      artifact-id:
+        value: ${{ jobs.build.outputs.artifact-id }}
 jobs:
   build:
     name: "Build app: ${{inputs.target}}"
     runs-on: ubuntu-latest
     outputs:
-      artifact-url: ${{ steps.upload.outputs.artifact-url }}
-      expires-at: ${{steps.expiration.outputs.expires_at}}
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - name: Get gradle command
         id: gradle
@@ -81,9 +78,5 @@ jobs:
           path: |
             8vim/build/outputs/*/${{inputs.target}}/8vim-${{inputs.target}}.*
             8vim/build/outputs/mapping/${{inputs.target}}/mapping.txt
-          retention-days: 7
+          retention-days: 1
           overwrite: true
-      - name: Expiration
-        id: expiration
-        run: |
-          echo "expires_at=$(date -u -Iseconds --date='+7 days')" >> $GITHUB_OUTPUT
