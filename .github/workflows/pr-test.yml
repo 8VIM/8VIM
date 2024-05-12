@@ -111,7 +111,9 @@ jobs:
     secrets: inherit
   private_fdroid:
     needs: [build]
-    if: ${{success()}}
+    if: |
+      !cancelled() 
+      && needs.build.result == 'success'
     uses: ./.github/workflows/private-fdroid-repo.yaml
     with:
       type: "pr"
@@ -121,7 +123,10 @@ jobs:
     secrets: inherit
   notify:
     needs: [build, private_fdroid]
-    if: ${{success()}}
+    if: |
+      !cancelled() 
+      && needs.build.result == 'success'
+      && needs.private_fdroid.result == 'success'
     uses: ./.github/workflows/matrix-release.yaml
     with:
       channel: debug
