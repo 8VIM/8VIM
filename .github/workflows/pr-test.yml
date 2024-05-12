@@ -73,8 +73,6 @@ jobs:
     if: ${{ needs.changes.outputs.yaml == 'true' }}
     name: Validate language layouts
     runs-on: ubuntu-latest
-    permissions: 
-      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: 8VIM/json-yaml-validate@main
@@ -82,11 +80,6 @@ jobs:
           schema_dir: ./8vim/src/main/resources/schemas
           schema_name: https://8vim.github.io/schemas/schema.json
           base_dir: ./8vim/src/main/res/raw
-      - name: Add layout label to the PR
-        if: ${{!contains(github.event.pull_request.labels.*.name,'layout')}}
-        run: gh pr edit ${{github.event.number}} --add-label layout
-        env:
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
   test_run:
     name: Test & coverage
     needs: changes
