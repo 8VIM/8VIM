@@ -109,29 +109,6 @@ jobs:
       pr: ${{github.event.number}}
       sha: ${{github.event.pull_request.head.sha}}
     secrets: inherit
-  private_fdroid:
-    needs: [build]
-    if: |
-      !cancelled() 
-      && needs.build.result == 'success'
-    uses: ./.github/workflows/private-fdroid-repo.yaml
-    with:
-      type: "pr"
-      pr: ${{github.event.number}}
-      sha: ${{github.event.pull_request.head.sha}}
-      artifact: ${{ fromJson(needs.build.outputs.artifact-id) }}
-    secrets: inherit
-  notify:
-    needs: [build]
-    if: |
-      !cancelled() 
-      && needs.build.result == 'success'
-    uses: ./.github/workflows/matrix-release.yaml
-    with:
-      channel: debug
-      pr: ${{github.event.number}}
-      sha: ${{github.event.pull_request.head.sha}}
-    secrets: inherit
   test_check:
     name: Github action test check workaround
     if: ${{always()}}
