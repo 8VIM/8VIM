@@ -37,7 +37,7 @@ jobs:
         id: changes
         with:
           base: HEAD^
-          token: ${{github.event.pull_request.commits >1 && github.token || ''}}
+          token: ${{github.event.pull_request.commits < 2 && github.token || ''}}
           filters: |
             metadata:
               - 'metadata/**/changelogs/*.txt'
