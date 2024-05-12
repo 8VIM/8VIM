@@ -22,7 +22,6 @@ jobs:
     permissions:
       pull-requests: read
     outputs:
-      ci: ${{ steps.changes.outputs.ci }}
       src: ${{ steps.changes.outputs.src }}
       yaml: ${{ steps.changes.outputs.yaml }}
     steps:
