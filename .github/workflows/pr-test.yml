@@ -73,6 +73,8 @@ jobs:
       msg: ${{steps.commit.outcome.msg}}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - id: commit
         run: |
           echo "msg=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
