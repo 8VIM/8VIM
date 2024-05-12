@@ -130,11 +130,18 @@ android {
 
     buildTypes {
         named("debug") {
-            isDebuggable = true
+            isDebuggable = prNumber == null
             applicationIdSuffix = ".debug"
 
             resValue("string", "app_name", "8Vim Debug")
             enableUnitTestCoverage
+            if (prNumber != null) {
+                isMinifyEnabled = true
+                proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+                if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
+                    signingConfig = signingConfigs.getByName("release")
+                }
+            }
 //            Activate R8 in debug mode, good to check if any new library added works
 //            isMinifyEnabled = true
 //            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
