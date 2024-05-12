@@ -73,6 +73,8 @@ jobs:
     if: ${{ needs.changes.outputs.yaml == 'true' }}
     name: Validate language layouts
     runs-on: ubuntu-latest
+    permissions: 
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
       - uses: 8VIM/json-yaml-validate@main
@@ -83,6 +85,8 @@ jobs:
       - name: Add layout label to the PR
         if: ${{!contains(github.event.pull_request.labels.*.name,'layout')}}
         run: gh pr edit --add-label layout
+        env:
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
   test_run:
     name: Test & coverage
     needs: changes
