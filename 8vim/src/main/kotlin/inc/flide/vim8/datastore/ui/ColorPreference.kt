@@ -32,6 +32,7 @@ import arrow.core.Option
 import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.BrightnessSlider
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
+import com.github.skydoves.colorpicker.compose.drawColorIndicator
 import com.github.skydoves.colorpicker.compose.rememberColorPickerController
 import inc.flide.vim8.R
 import inc.flide.vim8.datastore.model.PreferenceData
@@ -67,13 +68,10 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
     enabledIf: PreferenceDataEvaluator = { true },
     visibleIf: PreferenceDataEvaluator = { true }
 ) {
-    val controller = rememberColorPickerController()
     val prefValue by pref.observeAsState()
     val evalScope = PreferenceDataEvaluatorScope.instance()
     var openAlertDialog by remember { mutableStateOf(false) }
-    val color by controller.selectedColor
-    var hexCode by remember { mutableStateOf("#${Color(pref.get()).toHexCode().uppercase()}") }
-    var isError by remember { mutableStateOf(false) }
+    var color by remember { mutableStateOf(Color(pref.get())) }
     if (this.visibleIf(evalScope) && visibleIf(evalScope)) {
         if (openAlertDialog) {
             AlertDialog(
@@ -95,60 +93,8 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
                     }
                 },
                 text = {
-                    Column(verticalArrangement = Arrangement.Top) {
-                        Box(modifier = Modifier.weight(8f)) {
-                            HsvColorPicker(
-                                modifier = Modifier.padding(10.dp),
-                                controller = controller,
-                                initialColor = Color(pref.get()),
-                                onColorChanged = {
-                                    if (it.fromUser) {
-                                        hexCode = "#${it.color.toHexCode().uppercase()}"
-                                    }
-                                }
-                            )
-                        }
-                        BrightnessSlider(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp)
-                                .height(35.dp)
-                                .align(Alignment.CenterHorizontally),
-                            controller = controller
-                        )
-                        TextField(
-                            value = hexCode,
-                            isError = isError,
-                            onValueChange = {
-                                if (it.isEmpty()) {
-                                    hexCode = it
-                                    return@TextField
-                                }
-                                val value = if (it[0] == '#') it else "#$it"
-                                if (value.length > 7) return@TextField
-                                isError = Option
-                                    .catch { Color(android.graphics.Color.parseColor(value)) }
-                                    .onSome { color ->
-                                        controller.selectByColor(color, true)
-                                        hexCode = "#${color.toHexCode().uppercase()}"
-                                    }
-                                    .onNone { hexCode = value }
-                                    .isNone()
-                            },
-                            singleLine = true,
-                            trailingIcon = {
-                                AlphaTile(
-                                    modifier = Modifier
-                                        .size(24.dp)
-                                        .align(Alignment.CenterHorizontally)
-                                        .clip(RoundedCornerShape(6.dp)),
-                                    controller = controller
-                                )
-                            },
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
-                        )
-
-                        Spacer(modifier = Modifier.weight(1f))
+                    ColorPicker(defaultColor = Color(prefValue)) {
+                        color = it
                     }
                 }
             )
@@ -173,9 +119,80 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
     }
 }
 
+@Composable
+private fun ColorPicker(defaultColor: Color, onUpdate: (color: Color) -> Unit) {
+    val controller = rememberColorPickerController()
+    var hexCode by remember { mutableStateOf("#${defaultColor.toHexCode()}") }
+    var isError by remember { mutableStateOf(false) }
+    Column(verticalArrangement = Arrangement.Top) {
+        Box(modifier = Modifier.weight(8f)) {
+            HsvColorPicker(
+                modifier = Modifier.padding(10.dp),
+                controller = controller,
+                initialColor = defaultColor,
+                drawOnPosSelected = {
+                    drawColorIndicator(
+                        controller.selectedPoint.value,
+                        controller.selectedColor.value
+                    )
+                },
+                onColorChanged = {
+                    if (it.fromUser) {
+                        hexCode = "#${it.color.toHexCode().uppercase()}"
+                        onUpdate(it.color)
+                    }
+                }
+            )
+        }
+        BrightnessSlider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+                .height(35.dp)
+                .align(Alignment.CenterHorizontally),
+            controller = controller,
+            initialColor = defaultColor
+        )
+        TextField(
+            value = hexCode,
+            isError = isError,
+            onValueChange = {
+                if (it.isEmpty()) {
+                    hexCode = it
+                    return@TextField
+                }
+                val value = if (it[0] == '#') it else "#$it"
+                if (value.length > 7) return@TextField
+                isError = Option
+                    .catch { Color(android.graphics.Color.parseColor(value)) }
+                    .onSome { color ->
+                        controller.selectByColor(color, true)
+                        hexCode = "#${color.toHexCode()}"
+                        onUpdate(color)
+                    }
+                    .onNone { hexCode = value }
+                    .isNone()
+            },
+            singleLine = true,
+            trailingIcon = {
+                AlphaTile(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .clip(RoundedCornerShape(6.dp)),
+                    controller = controller
+                )
+            },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+    }
+}
+
 private fun Color.toHexCode(): String {
     val red = this.red * 255
     val green = this.green * 255
     val blue = this.blue * 255
-    return String.format("%02x%02x%02x", red.toInt(), green.toInt(), blue.toInt())
+    return String.format("%02x%02x%02x", red.toInt(), green.toInt(), blue.toInt()).uppercase()
 }
