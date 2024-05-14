@@ -24,6 +24,7 @@ jobs:
     outputs:
       src: ${{ steps.changes.outputs.src }}
       yaml: ${{ steps.changes.outputs.yaml }}
+      schemas: ${{ steps.changes.outputs.schemas }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -79,13 +80,12 @@ jobs:
           schema_dir: ./8vim/src/main/resources/schemas
           schema_name: https://8vim.github.io/schemas/schema.json
           base_dir: ./8vim/src/main/res/raw
-      - name: Add layout label to the PR
-        if: ${{!contains(github.event.pull_request.labels.*.name,'layout')}}
-        run: gh pr edit --add-label layout
   test_run:
     name: Test & coverage
     needs: changes
-    if: ${{ needs.changes.outputs.src == 'true' }}
+    if: |
+      needs.changes.outputs.src == 'true' 
+      || needs.changes.outputs.schemas == 'true'
     uses: ./.github/workflows/codecheck.yaml
     secrets: inherit
   build:

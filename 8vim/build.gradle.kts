@@ -45,6 +45,7 @@ android {
     val versionMinor = (versionProps["MINOR"] as String).toInt()
     val versionPatch = (versionProps["PATCH"] as String).toInt()
     val versionRc = (versionProps["RC"] as String).toInt()
+    val prNumber = versionProps["PR"] as String?
 
     namespace = "inc.flide.vim8"
     compileSdk = 34
@@ -79,19 +80,27 @@ android {
         applicationId = "inc.flide.vi8"
         minSdk = 24
         targetSdk = 34
-
-        val rcValue = if (versionRc > 0) 100 - versionRc else 0
-        versionCode =
-            versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - rcValue
-        versionName = "$versionMajor.$versionMinor.$versionPatch"
-
         resValue("string", "app_name", "8Vim")
-        resValue("string", "version_name", versionName.toString())
+        if (prNumber != null) {
+            versionCode = (System.currentTimeMillis() / 1000).toInt()
+            versionName = "pr-$prNumber+${(versionProps["SHA"] as String)}"
+        } else {
+            val rcValue = if (versionRc > 0) 100 - versionRc else 0
+            versionCode =
+                versionMajor * 1000000 + 10000 * versionMinor + 100 * versionPatch - rcValue
+        }
+        versionName = "$versionMajor.$versionMinor.$versionPatch"
 
         if (versionRc > 0) {
             versionNameSuffix = "-rc.$versionRc"
-            resValue("string", "version_name", versionName + versionNameSuffix)
         }
+
+        if (prNumber != null) {
+            val shortSha = (versionProps["SHA"] as String).substring(0 until 10)
+            versionNameSuffix = "${versionNameSuffix.orEmpty()}-$prNumber-$shortSha"
+        }
+
+        resValue("string", "version_name", "$versionName${versionNameSuffix.orEmpty()}")
 
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
