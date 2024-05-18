@@ -55,6 +55,7 @@ class InputFeedbackControllerSpec : FunSpec({
     lateinit var hapticSectorCrossPref: PreferenceData<Int>
     lateinit var soundEnabledPref: PreferenceData<Boolean>
     lateinit var soundSectorCrossPref: PreferenceData<Int>
+    lateinit var soundVolumePref: PreferenceData<Int>
 
     beforeSpec {
         mockkStatic(Context::class)
@@ -73,9 +74,7 @@ class InputFeedbackControllerSpec : FunSpec({
                     every { hapticSectorCross } answers { hapticSectorCrossPref }
                     every { soundEnabled } answers { soundEnabledPref }
                     every { soundSectorCross } answers { soundSectorCrossPref }
-                    every { soundVolume } returns mockk {
-                        every { get() } returns 100
-                    }
+                    every { soundVolume } answers { soundVolumePref }
                 }
             }
         )
@@ -83,13 +82,30 @@ class InputFeedbackControllerSpec : FunSpec({
 
     beforeTest {
         hapticEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
-        hapticSectorCrossPref = mockk<PreferenceData<Int>>(relaxed = true)
+        hapticSectorCrossPref = mockk<PreferenceData<Int>>(relaxed = true) {
+            every { get() } returns 0
+        }
         soundEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
-        soundSectorCrossPref = mockk<PreferenceData<Int>>(relaxed = true)
+        soundSectorCrossPref = mockk<PreferenceData<Int>>(relaxed = true) {
+            every { get() } returns 0
+        }
+        soundVolumePref = mockk<PreferenceData<Int>>(relaxed = true) {
+            every { get() } returns 100
+        }
         audioManager = mockk<AudioManager>(relaxed = true)
         vibrator = mockk<Vibrator>(relaxed = true)
-        every { hapticSectorCrossPref.get() } returns 0
-        every { soundSectorCrossPref.get() } returns 0
+    }
+
+    context("performAudioFeedback") {
+        withData(nameFn = { "Volume $it" }, values) { volume ->
+            every { soundVolumePref.get() } returns volume
+            every { audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) } returns 10
+            every { audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) } returns 100
+            val controller = InputFeedbackController.new(ims)
+            controller.performAudioFeedback(0, 1.0)
+            val expected = if (volume == 0) 0.1f else 0.9f
+            verify { audioManager.playSoundEffect(0, expected) }
+        }
     }
 
     context("keyPress") {
