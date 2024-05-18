@@ -91,13 +91,11 @@ android {
         }
         versionName = "$versionMajor.$versionMinor.$versionPatch"
 
-        if (versionRc > 0) {
-            versionNameSuffix = "-rc.$versionRc"
-        }
-
         if (prNumber != null) {
             val shortSha = (versionProps["SHA"] as String).substring(0 until 10)
-            versionNameSuffix = "${versionNameSuffix.orEmpty()}-$prNumber-$shortSha"
+            versionNameSuffix = "$prNumber-$shortSha"
+        } else if (versionRc > 0) {
+            versionNameSuffix = "-rc.$versionRc"
         }
 
         resValue("string", "version_name", "$versionName${versionNameSuffix.orEmpty()}")
