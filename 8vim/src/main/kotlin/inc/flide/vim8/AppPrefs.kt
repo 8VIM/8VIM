@@ -329,14 +329,16 @@ class AppPrefs : PreferenceModel(8) {
                 else -> entry.keepAsIs()
             }
             7 -> when (entry.key) {
-                "prefs_input_feedback_haptic_sector_cross" -> entry.transform(
+                "prefs_input_feedback_haptic_sector_cross_enabled" -> entry.transform(
+                    key = "prefs_input_feedback_haptic_sector_cross",
                     rawValue = if ((entry.rawValue as Boolean?) == true) {
                         90
                     } else {
                         0
                     }
                 )
-                "prefs_input_feedback_sound_sector_cross" -> entry.transform(
+                "prefs_input_feedback_sound_sector_cross_enabled" -> entry.transform(
+                    key = "prefs_input_feedback_sound_sector_cross",
                     rawValue = if ((entry.rawValue as Boolean?) == true) {
                         90
                     } else {
