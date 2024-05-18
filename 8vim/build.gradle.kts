@@ -91,13 +91,11 @@ android {
         }
         versionName = "$versionMajor.$versionMinor.$versionPatch"
 
-        if (versionRc > 0) {
-            versionNameSuffix = "-rc.$versionRc"
-        }
-
         if (prNumber != null) {
             val shortSha = (versionProps["SHA"] as String).substring(0 until 10)
-            versionNameSuffix = "${versionNameSuffix.orEmpty()}-$prNumber-$shortSha"
+            versionNameSuffix = "-pr.$prNumber-$shortSha"
+        } else if (versionRc > 0) {
+            versionNameSuffix = "-rc.$versionRc"
         }
 
         resValue("string", "version_name", "$versionName${versionNameSuffix.orEmpty()}")
@@ -131,9 +129,9 @@ android {
     buildTypes {
         named("debug") {
             isDebuggable = true
-            applicationIdSuffix = ".debug"
-
-            resValue("string", "app_name", "8Vim Debug")
+            applicationIdSuffix = if (prNumber != null) ".pr$prNumber" else ".debug"
+            val name = if (prNumber != null) "PR $prNumber" else "Debug"
+            resValue("string", "app_name", "8Vim $name")
             enableUnitTestCoverage
 //            Activate R8 in debug mode, good to check if any new library added works
 //            isMinifyEnabled = true
