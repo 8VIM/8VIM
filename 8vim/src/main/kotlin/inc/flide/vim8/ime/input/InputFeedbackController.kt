@@ -34,14 +34,17 @@ class InputFeedbackController private constructor(ims: InputMethodService) {
 
     fun sectorCross() {
         if (prefs.inputFeedback.hapticEnabled.get() &&
-            prefs.inputFeedback.hapticSectorCrossEnabled.get()
+            prefs.inputFeedback.hapticSectorCross.get() > 0
         ) {
-            performHapticFeedback(0.9)
+            performHapticFeedback(prefs.inputFeedback.hapticSectorCross.get() / 100.0)
         }
         if (prefs.inputFeedback.soundEnabled.get() &&
-            prefs.inputFeedback.soundSectorCrossEnabled.get()
+            prefs.inputFeedback.soundSectorCross.get() > 0
         ) {
-            performAudioFeedback(AudioManager.FX_KEYPRESS_STANDARD, 0.5)
+            performAudioFeedback(
+                AudioManager.FX_KEYPRESS_STANDARD,
+                prefs.inputFeedback.soundSectorCross.get() / 100.0
+            )
         }
     }
 
