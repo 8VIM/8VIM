@@ -36,7 +36,7 @@ class InputFeedbackController private constructor(ims: InputMethodService) {
         if (prefs.inputFeedback.hapticEnabled.get() &&
             prefs.inputFeedback.hapticSectorCrossEnabled.get()
         ) {
-            performHapticFeedback(0.4)
+            performHapticFeedback(0.9)
         }
         if (prefs.inputFeedback.soundEnabled.get() &&
             prefs.inputFeedback.soundSectorCrossEnabled.get()
