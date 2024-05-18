@@ -93,7 +93,7 @@ android {
 
         if (prNumber != null) {
             val shortSha = (versionProps["SHA"] as String).substring(0 until 10)
-            versionNameSuffix = "$prNumber-$shortSha"
+            versionNameSuffix = "-pr.$prNumber-$shortSha"
         } else if (versionRc > 0) {
             versionNameSuffix = "-rc.$versionRc"
         }
