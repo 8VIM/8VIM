@@ -97,7 +97,7 @@ android {
         } else if (versionRc > 0) {
             versionNameSuffix = "-rc.$versionRc"
         }
-        
+
         resValue("string", "version_name", "$versionName${versionNameSuffix.orEmpty()}")
 
         vectorDrawables.useSupportLibrary = true
