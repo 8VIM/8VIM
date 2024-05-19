@@ -10,6 +10,7 @@ import inc.flide.vim8.lib.geometry.Rect
 
 private val minCode = CustomKeycode.entries.minBy { it.keyCode }.keyCode
 private val maxCode = if (ATLEAST_API29_Q) KeyEvent.KEYCODE_PROFILE_SWITCH else 288
+
 private val keyboardActionCache: Map<Int, KeyboardAction> =
     (minCode..maxCode).associateBy({ it }, {
         KeyboardAction(
