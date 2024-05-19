@@ -71,8 +71,6 @@ jobs:
   private_fdroid:
     needs: [release]
     if: ${{ !cancelled() && needs.release.result != 'failure' }}
-    permissions:
-      actions: write
     uses: ./.github/workflows/private-fdroid-repo.yaml
     with:
       type: merge
