@@ -10,18 +10,19 @@ on:
       ref:
         type: string
         required: true
+      pr:
+        type: number
+      sha:
+        type: string
     outputs:
-      artifact-url:
-        value: ${{ jobs.build.outputs.artifact-url }}
-      expires-at:
-        value: ${{ jobs.build.outputs.expires-at }}
+      artifact-id:
+        value: ${{ jobs.build.outputs.artifact-id }}
 jobs:
   build:
     name: "Build app: ${{inputs.target}}"
     runs-on: ubuntu-latest
     outputs:
-      artifact-url: ${{ steps.upload.outputs.artifact-url }}
-      expires-at: ${{steps.expiration.outputs.expires_at}}
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - name: Get gradle command
         id: gradle
@@ -44,6 +45,12 @@ jobs:
         with:
           ref: ${{inputs.ref}}
           fetch-depth: 0
+      - name: Setup PR number
+        if: ${{inputs.target == 'debug'}}
+        run: |
+          echo "" >> 8vim/version.properties
+          echo "PR=${{inputs.pr}}" >> 8vim/version.properties
+          echo "SHA=${{inputs.sha}}" >> 8vim/version.properties
       - uses: actions/setup-java@v4
         with:
           java-version: "17"
@@ -51,7 +58,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
       - name: Get keystore
-        if: ${{inputs.target!='debug'}}
+        if: ${{ inputs.target != 'debug'}}
         run: |
           echo "${{ secrets.SIGNING_KEYSTORE_BASE64 }}" > keystore-b64.txt
           base64 -d keystore-b64.txt > 8vim/8vim.jks
@@ -71,9 +78,5 @@ jobs:
           path: |
             8vim/build/outputs/*/${{inputs.target}}/8vim-${{inputs.target}}.*
             8vim/build/outputs/mapping/${{inputs.target}}/mapping.txt
-          retention-days: 7
+          retention-days: 1
           overwrite: true
-      - name: Expiration
-        id: expiration
-        run: |
-          echo "expires_at=$(date -u -Iseconds --date='+7 days')" >> $GITHUB_OUTPUT

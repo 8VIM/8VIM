@@ -105,9 +105,21 @@ class EditorInstance(context: Context) {
         return ic.setSelection(end, start)
     }
 
+    fun sendDownEvent(keyEventCode: Int, flags: Int): Boolean {
+        val ic = currentInputConnection() ?: return false
+        ic.sendDownKeyEvent(keyEventCode, flags)
+        return true
+    }
+
     fun sendDownAndUpKeyEvent(keyEventCode: Int, flags: Int): Boolean {
         val ic = currentInputConnection() ?: return false
         ic.sendDownKeyEvent(keyEventCode, flags)
+        ic.sendUpKeyEvent(keyEventCode, flags)
+        return true
+    }
+
+    fun sendUpEvent(keyEventCode: Int, flags: Int): Boolean {
+        val ic = currentInputConnection() ?: return false
         ic.sendUpKeyEvent(keyEventCode, flags)
         return true
     }

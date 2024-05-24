@@ -5,25 +5,48 @@ concurrency: pr-${{github.event.number}}
 on:
   pull_request:
     branches: [master]
-    paths:
-      - "metadata/**/changelogs/*.txt"
-      - "gradle/libs.versions.toml"
-      - "**.gradle"
-      - "**.gradle.kts"
-      - "8vim/**"
+
 jobs:
+  dependabot_check:
+    if: |
+      contains(github.event.pull_request.labels.*.name, 'ignore') 
+        && startsWith(github.head_ref, 'dependabot/gradle')
+    uses: ./.github/workflows/codecheck.yaml
+    with:
+      skip-codecov: true
+    secrets: inherit
   changes:
     name: Detect changed files
     runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.pull_request.labels.*.name, 'ignore') }}
     permissions:
       pull-requests: read
     outputs:
       src: ${{ steps.changes.outputs.src }}
       yaml: ${{ steps.changes.outputs.yaml }}
+      schemas: ${{ steps.changes.outputs.schemas }}
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      - id: commit
+        run: |
+          echo "previous=$(git rev-parse HEAD^)" >> $GITHUB_OUTPUT
+      - uses: dorny/paths-filter@v3
+        id: ci_changes
+        with:
+          base: ${{steps.commit.outputs.previous}}
+          token: ${{ github.event.pull_request.commits < 2 && github.token || ''}}
+          filters: |
+            ci:
+              - '.github/workflows/*.yaml'
+              - '.github/workflows/*.yml'
       - uses: dorny/paths-filter@v3
         id: changes
         with:
+          base: ${{steps.commit.outputs.previous}}
+          token: ${{ (steps.ci_changes.outputs.ci == 'true' || github.event.pull_request.commits < 2) && github.token || ''}}
           filters: |
             metadata:
               - 'metadata/**/changelogs/*.txt'
@@ -60,28 +83,30 @@ jobs:
   test_run:
     name: Test & coverage
     needs: changes
-    if: ${{ needs.changes.outputs.src == 'true' }}
+    if: |
+      needs.changes.outputs.src == 'true' 
+      || needs.changes.outputs.schemas == 'true'
     uses: ./.github/workflows/codecheck.yaml
-    with:
-      skip-codecov: ${{ startsWith(github.head_ref, 'dependabot/') }}
     secrets: inherit
   build:
+    needs: [validate_layouts, test_run, changes]
     if: |
-      !startsWith(github.head_ref, 'dependabot/') && !cancelled() && (
+      !cancelled() && (
         (needs.test_run.result != 'skipped' 
           && needs.validate_layouts.result != 'skipped' 
           && needs.test_run.result == 'success' 
           && needs.validate_layouts.result == 'success')
-        || (needs.test_run.result == 'skipped' 
-          || needs.validate_layouts.result == 'skipped' 
-          || needs.test_run.result == 'success' 
-          || needs.validate_layouts.result == 'success')
+        || (needs.test_run.result == 'skipped'
+          && needs.validate_layouts.result == 'success')
+        || (needs.validate_layouts.result == 'skipped' 
+          && needs.test_run.result == 'success')
       )
-    needs: [validate_layouts, test_run]
     uses: ./.github/workflows/build.yaml
     with:
       ref: ${{github.ref}}
       target: debug
+      pr: ${{github.event.number}}
+      sha: ${{github.event.pull_request.head.sha}}
     secrets: inherit
   test_check:
     name: Github action test check workaround

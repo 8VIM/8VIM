@@ -6,7 +6,9 @@ on:
     types: [opened, closed]
 jobs:
   notify:
-    if: ${{ !startsWith(github.head_ref, 'dependabot/') }}
+    if: |
+      !contains(github.event.pull_request.labels.*.name, 'ignore')
+      && !startsWith(github.head_ref, 'dependabot/')
     name: Matrix notification PR
     uses: ./.github/workflows/matrix-notify.yaml
     with:
