@@ -69,7 +69,7 @@ class FloatingScope(val screenSize: Size) {
 
     private val defaultRect = Rect(
         offset = Offset(
-            screenSize.width - screenSize.minWidth,
+            (screenSize.width - screenSize.minWidth) / 2f,
             -screenSize.height + screenSize.minHeight * 1.1f
         ),
         size = Size(screenSize.minWidth, screenSize.minHeight)
