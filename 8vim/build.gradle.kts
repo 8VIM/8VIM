@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.mannodermaus.android.junit5)
     alias(libs.plugins.mikepenz.aboutlibraries)
+    alias(libs.plugins.compose.compiler)
     checkstyle
     jacoco
 }
@@ -109,10 +110,6 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidx.compose.compiler.get()
     }
 
     if (System.getenv("VIM8_BUILD_KEYSTORE_FILE") != null) {
