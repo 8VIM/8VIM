@@ -1,11 +1,10 @@
 [versions]
 # Main
 androidx-activity = "1.9.0"
-android-gradle-plugin = "8.4.0"
+android-gradle-plugin = "8.4.1"
 android-appcompat = "1.6.1"
 android-material = "1.12.0"
 androidx-compose = "1.6.7"
-androidx-compose-compiler = "1.5.13"
 androidx-compose-material3 = "1.2.1"
 androidx-core = "1.13.1"
 androidx-core-splashscreen = "1.0.1"
@@ -20,10 +19,10 @@ arrow-jackson = "0.14.0"
 jackson = "2.13.5"
 json-schema-validator = "1.0.73"
 ktlint = "12.1.1"
-kotlin = "1.9.23"
-ksp = "1.9.23-1.0.20"
+kotlin = "2.0.0"
+ksp = "2.0.0-1.0.21"
 logback-android = "3.0.0"
-mikepenz-aboutlibraries = "11.1.4"
+mikepenz-aboutlibraries = "11.2.0"
 mannodermaus-android-junit5 = "1.10.0.0"
 slf4j = "2.0.13"
 
@@ -97,6 +96,7 @@ agp-application = { id = "com.android.application", version.ref = "android-gradl
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 mannodermaus-android-junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "mannodermaus-android-junit5" }
 mikepenz-aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "mikepenz-aboutlibraries" }
