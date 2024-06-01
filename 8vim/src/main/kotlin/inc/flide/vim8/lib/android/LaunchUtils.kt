@@ -31,7 +31,7 @@ inline fun <T : Any> Context.launchActivity(
     intentModifier: (Intent) -> Unit = { }
 ) {
     contract {
-        callsInPlace(intentModifier, InvocationKind.EXACTLY_ONCE)
+        callsInPlace(intentModifier, InvocationKind.AT_MOST_ONCE)
     }
     try {
         val intent = Intent(this, kClass.java)
