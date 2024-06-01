@@ -1,80 +1,153 @@
-name: Merged pull request
-
-concurrency: release
+name: Publish 8VIM
+run-name: Publish 8VIM v${{inputs.version_name}}
 
 on:
-  pull_request_target:
-    branches: [master]
-    types: [closed]
-    paths:
-      - "gradle/libs.versions.toml"
-      - "**.gradle.kts"
-      - "8vim/**"
+  workflow_dispatch:
+    inputs:
+      version_code:
+        required: true
+        type: string
+      version_name:
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      version_code:
+        required: true
+        type: string
+      version_name:
+        required: true
+        type: string
+
 jobs:
-  changes:
-    if: ${{ github.event_name=='pull_request_target' && github.event.pull_request.merged == true }}
-    name: Detect changed files
+  build_rc:
+    if: ${{contains(inputs.version_name, 'rc')}}
+    name: Build release candidate app
+    uses: ./.github/workflows/build.yaml
+    with:
+      ref: v${{inputs.version_name}}
+      target: rc
+    secrets: inherit
+  build:
+    name: Build app
+    uses: ./.github/workflows/build.yaml
+    with:
+      ref: v${{inputs.version_name}}
+      target: release
+    secrets: inherit
+  playstore:
+    name: Deploy the app to Google playstore
+    needs: build
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read
-    outputs:
-      src: ${{ steps.changes.outputs.src }}
-      schemas: ${{ steps.changes.outputs.schemas }}
     steps:
-      - uses: dorny/paths-filter@v3
-        id: changes
+      - uses: actions/checkout@v4
         with:
-          filters: |
-            src:
-              - '8vim/**/*.java'
-              - '8vim/**/*.kt'
-              - '8vim/**/*.xml'
-              - '8vim/**/*.pro'
-              - '**.gradle'
-              - '**.gradle.kts'
-              - 'gradle/libs.versions.toml'
-              - '8vim/src/main/res/raw/*.yaml'
-              - '8vim/src/main/res/raw/*.yml'
-              - '8vim/src/main/resources/schemas/**/*.json'
-            schemas:
-              - '8vim/src/main/resources/schemas/**/*.json'
-  update_schema:
-    needs: [changes]
-    name: "Website: Update layout schemas"
-    if: ${{ needs.changes.outputs.schemas == 'true' }}
-    uses: ./.github/workflows/update-schemas.yaml
-    secrets: inherit
-    permissions:
-      contents: write
-  bump_version:
-    needs: changes
-    if: ${{ needs.changes.outputs.src == 'true' }}
-    name: Update version
-    uses: ./.github/workflows/bump-version.yaml
-    with:
-      message: ${{github.event.pull_request.title}}
-      version: rc
-    secrets: inherit
+          ref: v${{inputs.version_name}}
+      - name: Download artifact
+        id: artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact-release
+          path: artifact/
+      - name: Setup env
+        run: |
+          mkdir -p distribution/whatsnew
+          cp metadata/en-US/changelogs/${{inputs.version_code}}.txt distribution/whatsnew/whatsnew-en-US
+      - name: Google play release
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: inc.flide.vi8
+          releaseFiles: ${{ steps.artifact.outputs.download-path }}/apk/release/8vim-release.apk
+          track: ${{contains(inputs.version_name, 'rc') && 'beta' || 'production'}}
+          whatsNewDirectory: distribution/whatsnew
+          mappingFile: ${{ steps.artifact.outputs.download-path }}/mapping/release/mapping.txt
+  f_droid:
+    name: Release to F-droid
+    if: ${{!contains(inputs.version_name, 'rc')}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{secrets.PAT}}
+          repository: 8VIM/8VIM.github.io
+          persist-credentials: false
+      - run: |
+          echo "{\"version_code\": ${{inputs.version_code}}, \"version_name\": \"${{inputs.version_name}}\"}" > version.json
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add version.json
+          set +e
+          git commit -a -m "chore: release ${{inputs.version_name}}"
+          set -e
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT }}
+          repository: 8VIM/8VIM.github.io
   release:
-    needs: [bump_version]
-    name: Release
-    uses: ./.github/workflows/publish.yaml
-    with:
-      version_code: ${{needs.bump_version.outputs.version_code}}
-      version_name: ${{needs.bump_version.outputs.version_name}}
-    secrets: inherit
+    name: Create github release
+    needs: [build, build_rc, playstore, f_droid]
+    if: ${{ !cancelled() && needs.build.result !='failure' && needs.build_rc.result !='failure' && needs.playstore.result != 'failure' && needs.f_droid.result != 'failure' }}
     permissions:
-      actions: write
+      actions: read
       issues: read
       pull-requests: read
       contents: write
+    env:
+      target: ${{contains(inputs.version_name, 'rc') && 'rc' || 'release'}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download artifact
+        id: artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: artifact-${{env.target}}
+          path: artifact/
+      - name: Create Changelog
+        id: github_release
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configuration: changelog-configuration.json
+          ignorePreReleases: "${{!contains(inputs.version_name, 'rc') && 'true' || 'false'}}"
+          toTag: v${{inputs.version_name}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: ${{steps.github_release.outputs.changelog}}
+          files: ${{ steps.artifact.outputs.download-path }}/apk/${{env.target}}/8vim-${{env.target}}.apk
+          prerelease: ${{contains(inputs.version_name, 'rc')}}
+          tag_name: v${{inputs.version_name}}
   private_fdroid:
-    needs: [release]
-    if: ${{ !cancelled() && needs.release.result != 'failure' }}
-    uses: ./.github/workflows/private-fdroid-repo.yaml
+    needs: [build_rc, release]
+    if: ${{!cancelled() && needs.release.result !='failure' && needs.build_rc.result != 'failure' &&  contains(inputs.version_name, 'rc') }}
     permissions:
       actions: write
+    uses: ./.github/workflows/private-fdroid-repo.yaml
     with:
-      type: merge
-      pr: ${{github.event.number}}
+      type: rc
+      tag: v${{inputs.version_name}}
     secrets: inherit
+  notify:
+    uses: ./.github/workflows/matrix-release.yaml
+    needs: [release]
+    if: ${{ !cancelled() && needs.release.result !='failure'}}
+    with:
+      channel: ${{contains(inputs.version_name, 'rc') && 'beta' || 'production'}}
+      version: ${{inputs.version_name}}
+    secrets: inherit
+  cleanup:
+    name: Cleanup artifact
+    needs: [build, build_rc, release, private_fdroid]
+    runs-on: ubuntu-latest
+    if: ${{always()}}
+    steps:
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          name: |
+            artifact-rc
+            artifact-release
+          failOnError: false

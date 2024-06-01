@@ -1,0 +1,1 @@
+feat: Floating keyboard option
