@@ -37,7 +37,6 @@ fun LayoutScreen() = Screen {
     title = stringRes(R.string.settings__layouts__title)
     previewFieldVisible = true
 
-
     val navController = LocalNavController.current
     val keyboardDatabaseController = LocalKeyboardDatabaseController.current
     val fileSelector = fileSelector()

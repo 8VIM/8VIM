@@ -31,8 +31,7 @@ object Routes {
         const val LAYOUTS = "settings/layouts"
         const val LAYOUT_USAGES = "settings/layouts/usages"
         const val LAYOUT_USAGE = "settings/layouts/usages/{id}"
-        fun layoutUsage(item: ActionMapDatabase.Item) =
-            LAYOUT_USAGE.curlyFormat("id" to item.index)
+        fun layoutUsage(item: ActionMapDatabase.Item) = LAYOUT_USAGE.curlyFormat("id" to item.index)
 
         const val KEYBOARD = "settings/keyboard"
         const val CLIPBOARD = "settings/clipboard"

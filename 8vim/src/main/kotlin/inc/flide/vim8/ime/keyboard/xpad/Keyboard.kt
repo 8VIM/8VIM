@@ -26,14 +26,11 @@ import inc.flide.vim8.ime.layout.models.FingerPosition
 import inc.flide.vim8.ime.layout.models.KeyboardAction
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.LayerLevel
-import inc.flide.vim8.ime.layout.models.LayerLevel.Companion.MovementSequencesByLayer
-import inc.flide.vim8.ime.layout.models.LayerLevel.Companion.VisibleLayers
 import inc.flide.vim8.ime.layout.models.MovementSequence
 import inc.flide.vim8.ime.layout.models.MovementSequenceType
 import inc.flide.vim8.ime.layout.models.characterSets
 import inc.flide.vim8.ime.layout.models.findLayer
 import inc.flide.vim8.ime.layout.models.toFingerPosition
-import inc.flide.vim8.ime.layout.models.yaml.versions.common.ExtraLayer
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -58,7 +55,7 @@ class Keyboard(private val context: Context) {
     private val isTabletLandscape: Boolean
         get() =
             context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-                    context.resources.configuration.screenHeightDp >= 480
+                context.resources.configuration.screenHeightDp >= 480
 
     fun reset() {
         layerLevel = LayerLevel.FIRST
@@ -66,11 +63,12 @@ class Keyboard(private val context: Context) {
 
     fun findLayer(movementSequence: List<FingerPosition>) {
         if (keyboardData == null) return
-        layerLevel = (VisibleLayers.size downTo LayerLevel.SECOND.toInt())
+        layerLevel = (LayerLevel.VisibleLayers.size downTo LayerLevel.SECOND.toInt())
             .map {
                 option {
                     val layerLevel = LayerLevel.fromInt(it).bind()
-                    val extraLayerMovementSequence = MovementSequences.getOrNone(layerLevel).bind()
+                    val extraLayerMovementSequence = LayerLevel.MovementSequencesByLayer
+                        .getOrNone(layerLevel).bind()
                     layerLevel to extraLayerMovementSequence
                 }
             }.firstOrNone {
@@ -81,7 +79,7 @@ class Keyboard(private val context: Context) {
                     .isSome { (layerLevel, extraLayerMovementSequence) ->
                         val startWith: MovementSequence =
                             movementSequence.subList(0, extraLayerMovementSequence.size)
-                        extraLayerMovementSequences.contains(startWith) &&
+                        LayerLevel.MovementSequences.contains(startWith) &&
                             layerLevel.toInt() <= keyboardData!!.totalLayers
                     }
             }

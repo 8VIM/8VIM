@@ -157,9 +157,11 @@ private fun Path.fingerPath(
             val prev = offsets[i - 1]
             Log.d("layout draw", "$prev -> $current")
 
-            if ((prev.x == current.x && current.x == 0f) || (prev.y == current.y && current.y == 0f))
+            if ((prev.x == current.x && current.x == 0f) ||
+                (prev.y == current.y && current.y == 0f)
+            ) {
                 lineTo(current.x, current.y)
-            else {
+            } else {
                 val x = ((current.x - prev.x) / 2f).toDouble()
                 val y = ((current.y - prev.y) / 2f).toDouble()
                 val angle = atan2(y, x).toFloat()
@@ -221,5 +223,4 @@ private fun DrawScope.drawLayout(density: Float, radius: Float) {
         style = Stroke(density * 2)
     )
     drawPath(path, Color.Black, style = Stroke(density * 2))
-
 }

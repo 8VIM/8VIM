@@ -20,7 +20,6 @@ import inc.flide.vim8.ime.keyboard.xpad.gestures.GlideGesture
 import inc.flide.vim8.ime.layout.models.CustomKeycode
 import inc.flide.vim8.ime.layout.models.FingerPosition
 import inc.flide.vim8.ime.layout.models.LayerLevel
-import inc.flide.vim8.ime.layout.models.LayerLevel.Companion.MovementSequencesByLayer
 import inc.flide.vim8.ime.layout.models.MovementSequence
 import inc.flide.vim8.ime.layout.models.MovementSequenceType
 import inc.flide.vim8.ime.theme.ThemeManager
@@ -219,7 +218,9 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                         var start = 2
                         var size = FULL_ROTATION_STEPS - 1
                         if (keyboard.layerLevel !== LayerLevel.FIRST) {
-                            MovementSequencesByLayer.getOrNone(keyboard.layerLevel).onSome {
+                            LayerLevel.MovementSequencesByLayer.getOrNone(
+                                keyboard.layerLevel
+                            ).onSome {
                                 start += it.size
                                 size += it.size
                             }
@@ -292,7 +293,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
         var layerSize = 0
         val extraLayerMovementSequences =
             if (keyboard.layerLevel !== LayerLevel.FIRST) {
-                MovementSequencesByLayer.getOrNone(keyboard.layerLevel)
+                LayerLevel.MovementSequencesByLayer.getOrNone(keyboard.layerLevel)
                     .onSome {
                         layerSize = it.size + 1
                     }.getOrElse { listOf() }
@@ -373,7 +374,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             var start = 1
             var layerCondition = movementSequence[0] == FingerPosition.INSIDE_CIRCLE
             if (keyboard.layerLevel !== LayerLevel.FIRST) {
-                MovementSequencesByLayer.getOrNone(keyboard.layerLevel).onSome {
+                LayerLevel.MovementSequencesByLayer.getOrNone(keyboard.layerLevel).onSome {
                     size += it.size
                     start += it.size
                     layerCondition = LayerLevel.MovementSequences.contains(

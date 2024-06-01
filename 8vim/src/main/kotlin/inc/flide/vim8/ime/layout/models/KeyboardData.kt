@@ -1,6 +1,5 @@
 package inc.flide.vim8.ime.layout.models
 
-import arrow.core.None
 import arrow.core.Option
 import arrow.core.elementAtOrNone
 import arrow.core.getOrElse
@@ -13,8 +12,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import inc.flide.vim8.ime.layout.models.yaml.versions.common.LayoutInfo
 
 const val CHARACTER_SET_SIZE = 4 * 4 * 2 // 4 sectors, 2 parts, 4 characters per parts
-
-
 
 @optics
 data class KeyboardData(

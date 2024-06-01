@@ -1,10 +1,10 @@
 package inc.flide.vim8.ime.layout.models
 
+import android.content.Context
 import arrow.core.Option
 import arrow.core.firstOrNone
-import android.content.Context
 import inc.flide.vim8.R
-
+import inc.flide.vim8.lib.android.stringRes
 
 enum class LayerLevel(val value: Int) {
     FUNCTIONS(-1),
@@ -23,7 +23,7 @@ enum class LayerLevel(val value: Int) {
 
         val VisibleLayers = entries.drop(2)
 
-        val MovementSequences: Map<LayerLevel, MovementSequence> =
+        val MovementSequencesByLayer: Map<LayerLevel, MovementSequence> =
             entries.fold(mapOf()) { acc, layer ->
                 val movementSequence = when (layer) {
                     SECOND -> listOf(
@@ -40,6 +40,7 @@ enum class LayerLevel(val value: Int) {
                 }
                 acc + (layer to movementSequence)
             }
+
         val MovementSequences =
             MovementSequencesByLayer
                 .filter { (layer, _) -> layer.ordinal > FIRST.ordinal }.values.toSet()
@@ -47,6 +48,7 @@ enum class LayerLevel(val value: Int) {
 
     fun name(context: Context): String {
         val stringId = when (this) {
+            FUNCTIONS -> R.string.layer_level__functions
             HIDDEN -> R.string.layer_level__hidden
             FIRST -> R.string.layer_level__first
             SECOND -> R.string.layer_level__second

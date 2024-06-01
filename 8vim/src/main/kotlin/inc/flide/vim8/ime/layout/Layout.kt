@@ -25,9 +25,9 @@ import inc.flide.vim8.ime.layout.models.error.LayoutError
 import inc.flide.vim8.ime.layout.models.info
 import inc.flide.vim8.ime.layout.models.yaml.versions.common.name
 import inc.flide.vim8.lib.android.tryOrNull
-import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream
 import java.util.Locale
+import org.apache.commons.codec.digest.DigestUtils
 
 private val isoCodes = Locale.getISOLanguages().toSet()
 

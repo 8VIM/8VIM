@@ -22,7 +22,9 @@ import inc.flide.vim8.ime.layout.models.name
 import inc.flide.vim8.layoutLoader
 
 val LocalKeyboardDatabaseController =
-    staticCompositionLocalOf<KeyboardDatabaseController> { error("LocalKeyboardDatabaseController not initialized") }
+    staticCompositionLocalOf<KeyboardDatabaseController> {
+        error("LocalKeyboardDatabaseController not initialized")
+    }
 
 class ActionMapDatabase internal constructor(actionMap: Map<MovementSequence, KeyboardAction>) {
     companion object {
@@ -45,10 +47,11 @@ class ActionMapDatabase internal constructor(actionMap: Map<MovementSequence, Ke
                                 extraMovement.size
                             )
                         )
-                    )
+                    ) {
                         movement.subList(extraMovement.size, movement.size)
-                    else
+                    } else {
                         movement
+                    }
                 val toAdd = if (extraMovementSet.contains(subMovement)) {
                     emptyMap()
                 } else {
@@ -65,8 +68,11 @@ class ActionMapDatabase internal constructor(actionMap: Map<MovementSequence, Ke
 
     fun byLayer(filter: Option<LayerLevel>): List<Item> =
         layerMapping.fold(emptyList()) { acc, (layer, item) ->
-            if (filter.isNone() || filter.isSome { it == layer }) acc + item
-            else acc
+            if (filter.isNone() || filter.isSome { it == layer }) {
+                acc + item
+            } else {
+                acc
+            }
         }
 
     fun byId(id: String): Item? = items[id]
@@ -86,7 +92,6 @@ class KeyboardDatabaseController(private val context: Context) {
 
     private val optionsMapping = mutableMapOf<String, LayerLevel>()
     private var layersOptions = emptyList<String>()
-
 
     internal fun keyboardData(keyboardData: KeyboardData?, isEmbedded: Boolean) {
         if (keyboardData == null) return

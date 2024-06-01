@@ -42,23 +42,46 @@ enum class CustomKeycode(@JvmField val keyCode: Int) {
 
     fun name(context: Context): String {
         return when (this) {
-            MOVE_CURRENT_END_POINT_LEFT -> context.stringRes(R.string.custom_key_code__move_current_end_point_left)
-            MOVE_CURRENT_END_POINT_RIGHT -> context.stringRes(R.string.custom_key_code__move_current_end_point_right)
-            MOVE_CURRENT_END_POINT_UP -> context.stringRes(R.string.custom_key_code__move_current_end_point_up)
-            MOVE_CURRENT_END_POINT_DOWN -> context.stringRes(R.string.custom_key_code__move_current_end_point_down)
+            MOVE_CURRENT_END_POINT_LEFT -> context.stringRes(
+                R.string.custom_key_code__move_current_end_point_left
+            )
+            MOVE_CURRENT_END_POINT_RIGHT -> context.stringRes(
+                R.string.custom_key_code__move_current_end_point_right
+            )
+            MOVE_CURRENT_END_POINT_UP -> context.stringRes(
+                R.string.custom_key_code__move_current_end_point_up
+            )
+            MOVE_CURRENT_END_POINT_DOWN -> context.stringRes(
+                R.string.custom_key_code__move_current_end_point_down
+            )
             SELECTION_START -> context.stringRes(R.string.custom_key_code__selection_start)
             SELECT_ALL -> context.stringRes(R.string.custom_key_code__select_all)
-            TOGGLE_SELECTION_ANCHOR -> context.stringRes(R.string.custom_key_code__toggle_selection_anchor)
+            TOGGLE_SELECTION_ANCHOR -> context.stringRes(
+                R.string.custom_key_code__toggle_selection_anchor
+            )
             SHIFT_TOGGLE -> context.stringRes(R.string.custom_key_code__shift_toggle)
-            SWITCH_TO_MAIN_KEYPAD -> context.stringRes(R.string.custom_key_code__switch_to_main_keypad)
-            SWITCH_TO_NUMBER_KEYPAD -> context.stringRes(R.string.custom_key_code__switch_to_number_keypad)
-            SWITCH_TO_SYMBOLS_KEYPAD -> context.stringRes(R.string.custom_key_code__switch_to_symbols_keypad)
-            SWITCH_TO_SELECTION_KEYPAD -> context.stringRes(R.string.custom_key_code__switch_to_selection_keypad)
-            SWITCH_TO_EMOTICON_KEYBOARD -> context.stringRes(R.string.custom_key_code__switch_to_emoticon_keyboard)
+            SWITCH_TO_MAIN_KEYPAD -> context.stringRes(
+                R.string.custom_key_code__switch_to_main_keypad
+            )
+            SWITCH_TO_NUMBER_KEYPAD -> context.stringRes(
+                R.string.custom_key_code__switch_to_number_keypad
+            )
+            SWITCH_TO_SYMBOLS_KEYPAD -> context.stringRes(
+                R.string.custom_key_code__switch_to_symbols_keypad
+            )
+            SWITCH_TO_SELECTION_KEYPAD -> context.stringRes(
+                R.string.custom_key_code__switch_to_selection_keypad
+            )
+            SWITCH_TO_EMOTICON_KEYBOARD -> context.stringRes(
+                R.string.custom_key_code__switch_to_emoticon_keyboard
+            )
             HIDE_KEYBOARD -> context.stringRes(R.string.custom_key_code__hide_keyboard)
             NO_OPERATION -> context.stringRes(R.string.custom_key_code__no_operation)
-            SWITCH_TO_CLIPPAD_KEYBOARD -> context.stringRes(R.string.custom_key_code__switch_to_clippad_keyboard)
+            SWITCH_TO_CLIPPAD_KEYBOARD -> context.stringRes(
+                R.string.custom_key_code__switch_to_clippad_keyboard
+            )
             CTRL_TOGGLE -> context.stringRes(R.string.custom_key_code__ctrl_toggle)
+            FN_TOGGLE -> context.stringRes(R.string.custom_key_code__fn_toggle)
         }
     }
 }

@@ -190,6 +190,7 @@
     <string name="settings__backup_and_restore__reset">Settings have been reset</string>
 
     <string name="xpad__help__option__all">All layers</string>
+    <string name="layer_level__functions">Functions</string>
     <string name="layer_level__hidden">Hidden</string>
     <string name="layer_level__first">Default</string>
     <string name="layer_level__second">First extra layer</string>
@@ -222,4 +223,5 @@
     <string name="custom_key_code__no_operation">No operation</string>
     <string name="custom_key_code__switch_to_clippad_keyboard">Switch to the clipboard view</string>
     <string name="custom_key_code__ctrl_toggle">Toggle CTRL</string>
+    <string name="custom_key_code__fn_toggle">Toggle FN</string>
 </resources>

@@ -10,7 +10,7 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
-fun Context.launchUrl(url: String,intentModifier: (Intent) -> Unit = { }) {
+fun Context.launchUrl(url: String, intentModifier: (Intent) -> Unit = { }) {
     val intent = Intent().also {
         it.action = Intent.ACTION_VIEW
         it.data = Uri.parse(url)

@@ -32,8 +32,8 @@ import inc.flide.vim8.datastore.ui.Preference
 import inc.flide.vim8.datastore.ui.PreferenceGroup
 import inc.flide.vim8.datastore.ui.PreferenceUiScope
 import inc.flide.vim8.ime.layout.models.LayerLevel
-import inc.flide.vim8.ime.layout.models.yaml.Contact
-import inc.flide.vim8.ime.layout.models.yaml.isEmpty
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.Contact
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.isEmpty
 import inc.flide.vim8.lib.android.launchUrl
 import inc.flide.vim8.lib.compose.Dialog
 import inc.flide.vim8.lib.compose.LocalKeyboardDatabaseController
@@ -54,7 +54,6 @@ fun UsagesScreen() = Screen {
 
     content {
         Card(modifier = Modifier.padding(8.dp)) {
-
         }
         PreferenceGroup(title = "Layout: ${keyboardDatabaseController.layoutName()}") {
             if (keyboardDatabaseController.info()?.isEmpty() == false) {
@@ -72,7 +71,8 @@ fun UsagesScreen() = Screen {
 
         keyboardDatabaseController
             .byLayer(currentLayoutFilter).forEach {
-                Preference(title = keyboardDatabaseController.action(it),
+                Preference(
+                    title = keyboardDatabaseController.action(it),
                     summary = "Layer: ${keyboardDatabaseController.layer(it)}\nMovement: ${
                         keyboardDatabaseController.movementSequence(
                             it
@@ -84,13 +84,16 @@ fun UsagesScreen() = Screen {
                             Icons.AutoMirrored.Filled.KeyboardArrowRight,
                             contentDescription = null
                         )
-                    })
+                    }
+                )
             }
     }
 }
 
 @Composable
-private fun <T : PreferenceModel> PreferenceUiScope<T>.FilterLayer(onSelect: (Option<LayerLevel>) -> Unit) {
+private fun <T : PreferenceModel> PreferenceUiScope<T>.FilterLayer(
+    onSelect: (Option<LayerLevel>) -> Unit
+) {
     val keyboardDatabaseController = LocalKeyboardDatabaseController.current
     var idx by remember { mutableIntStateOf(0) }
     var selectedText by remember { mutableStateOf(keyboardDatabaseController.layer(0)) }
@@ -133,13 +136,19 @@ private fun Author(contact: Contact) {
             contact.name.ifEmpty { contact.email }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             Text(
-                modifier = if (contact.email.isNotEmpty()) Modifier.clickable(
-                    role = Role.Button,
-                    onClick = {
-                        context.launchUrl("mailto:${contact.email}") {
-                            it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                modifier = if (contact.email.isNotEmpty()) {
+                    Modifier.clickable(
+                        role = Role.Button,
+                        onClick = {
+                            context.launchUrl("mailto:${contact.email}") {
+                                it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            }
                         }
-                    }) else Modifier, text = "by $name"
+                    )
+                } else {
+                    Modifier
+                },
+                text = "by $name"
             )
         }
     }
