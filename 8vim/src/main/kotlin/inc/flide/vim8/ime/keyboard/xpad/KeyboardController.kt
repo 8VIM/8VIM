@@ -216,6 +216,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                     interruptLongPress()
                     movementSequence.add(currentFingerPosition)
                     keyboard.findLayer(movementSequence)
+
                     if (isFullRotation) {
                         var start = 2
                         var size = FULL_ROTATION_STEPS - 1
@@ -237,6 +238,7 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                         processKeyPress(movementSequence)
                         resetKey()
                         movementSequence.clear()
+                        keyboard.layerLevel = LayerLevel.FIRST
                         currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT
                         movementSequence.add(currentFingerPosition)
                     } else {
