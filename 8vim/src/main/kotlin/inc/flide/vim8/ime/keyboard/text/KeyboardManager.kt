@@ -152,10 +152,12 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     }
 
     private fun handleMove(keycode: CustomKeycode) {
+        editorInstance.sendDownEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
         editorInstance.sendDownAndUpKeyEvent(
             keycode.toKeyEvent(),
-            activeState.shiftFlag or activeState.ctrlFlag
+            KeyEvent.META_SHIFT_MASK or activeState.ctrlFlag
         )
+        editorInstance.sendUpEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
     }
 
     private fun handleSelectionStart() {

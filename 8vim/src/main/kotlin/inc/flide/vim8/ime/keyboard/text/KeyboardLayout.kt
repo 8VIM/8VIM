@@ -144,7 +144,7 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
                         .requiredSize(20.sp.toDp())
                         .align(Alignment.Center),
                     contentScale = ContentScale.Fit,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
                 )
             } else {
                 Text(
@@ -153,7 +153,7 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
                         .align(Alignment.Center),
                     text = key.alternateText ?: key.action.text,
                     fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
             }

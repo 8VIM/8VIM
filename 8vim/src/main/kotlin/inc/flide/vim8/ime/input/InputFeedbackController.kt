@@ -34,14 +34,17 @@ class InputFeedbackController private constructor(ims: InputMethodService) {
 
     fun sectorCross() {
         if (prefs.inputFeedback.hapticEnabled.get() &&
-            prefs.inputFeedback.hapticSectorCrossEnabled.get()
+            prefs.inputFeedback.hapticSectorCross.get() > 0
         ) {
-            performHapticFeedback(0.4)
+            performHapticFeedback(prefs.inputFeedback.hapticSectorCross.get() / 100.0)
         }
         if (prefs.inputFeedback.soundEnabled.get() &&
-            prefs.inputFeedback.soundSectorCrossEnabled.get()
+            prefs.inputFeedback.soundSectorCross.get() > 0
         ) {
-            performAudioFeedback(AudioManager.FX_KEYPRESS_STANDARD, 0.5)
+            performAudioFeedback(
+                AudioManager.FX_KEYPRESS_STANDARD,
+                prefs.inputFeedback.soundSectorCross.get() / 100.0
+            )
         }
     }
 
@@ -54,7 +57,7 @@ class InputFeedbackController private constructor(ims: InputMethodService) {
         }
     }
 
-    private fun performHapticFeedback(factor: Double) {
+    fun performHapticFeedback(factor: Double) {
         if (vibrator == null) return
         scope.launch {
             vibrator.vibrate(
@@ -65,13 +68,21 @@ class InputFeedbackController private constructor(ims: InputMethodService) {
         }
     }
 
-    private fun performAudioFeedback(keySound: Int, factor: Double) {
-        val volume = if (prefs.inputFeedback.soundVolume.get() == 0) {
-            -1.0
-        } else {
-            (prefs.inputFeedback.soundVolume.get() * factor) / 100.0
-        }
-        if (volume == -1.0 || volume in 0.01..1.0) {
+    internal fun performAudioFeedback(keySound: Int, factor: Double) {
+        val prefVolume = prefs.inputFeedback.soundVolume.get()
+        val volume = (
+            if (prefVolume == 0 && audioManager != null) {
+                val volumeLevel = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+                val maxVolumeLevel = audioManager.getStreamMaxVolume(
+                    AudioManager.STREAM_MUSIC
+                ).toFloat()
+                volumeLevel / maxVolumeLevel
+            } else {
+                prefVolume / 100.0f
+            }
+            ) * factor
+
+        if (volume in 0.01..1.0) {
             audioManager?.playSoundEffect(keySound, volume.toFloat())
         }
     }

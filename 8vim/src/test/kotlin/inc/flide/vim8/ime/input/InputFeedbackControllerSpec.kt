@@ -14,6 +14,8 @@ import inc.flide.vim8.lib.android.systemVibratorOrNull
 import inc.flide.vim8.lib.android.vibrate
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
+import io.kotest.property.Exhaustive
+import io.kotest.property.exhaustive.boolean
 import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.mockk
@@ -35,7 +37,8 @@ class InputFeedbackControllerSpec : FunSpec({
         AudioManager.FX_KEYPRESS_SPACEBAR to "FX_KEYPRESS_SPACEBAR",
         AudioManager.FX_KEYPRESS_STANDARD to "FX_KEYPRESS_STANDARD"
     )
-    val values = listOf(true, false)
+
+    val values = listOf(90, 0)
 
     val sounds = listOf(
         KeyEvent.KEYCODE_ENTER to AudioManager.FX_KEYPRESS_RETURN,
@@ -49,9 +52,10 @@ class InputFeedbackControllerSpec : FunSpec({
     lateinit var audioManager: AudioManager
     lateinit var vibrator: Vibrator
     lateinit var hapticEnabledPref: PreferenceData<Boolean>
-    lateinit var hapticSectorCrossPref: PreferenceData<Boolean>
+    lateinit var hapticSectorCrossPref: PreferenceData<Int>
     lateinit var soundEnabledPref: PreferenceData<Boolean>
-    lateinit var soundSectorCrossEnabledPref: PreferenceData<Boolean>
+    lateinit var soundSectorCrossPref: PreferenceData<Int>
+    lateinit var soundVolumePref: PreferenceData<Int>
 
     beforeSpec {
         mockkStatic(Context::class)
@@ -67,12 +71,10 @@ class InputFeedbackControllerSpec : FunSpec({
             mockk<AppPrefs> {
                 every { inputFeedback } returns mockk {
                     every { hapticEnabled } answers { hapticEnabledPref }
-                    every { hapticSectorCrossEnabled } answers { hapticSectorCrossPref }
+                    every { hapticSectorCross } answers { hapticSectorCrossPref }
                     every { soundEnabled } answers { soundEnabledPref }
-                    every { soundSectorCrossEnabled } answers { soundSectorCrossEnabledPref }
-                    every { soundVolume } returns mockk {
-                        every { get() } returns 100
-                    }
+                    every { soundSectorCross } answers { soundSectorCrossPref }
+                    every { soundVolume } answers { soundVolumePref }
                 }
             }
         )
@@ -80,17 +82,36 @@ class InputFeedbackControllerSpec : FunSpec({
 
     beforeTest {
         hapticEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
-        hapticSectorCrossPref = mockk<PreferenceData<Boolean>>(relaxed = true)
+        hapticSectorCrossPref = mockk<PreferenceData<Int>>(relaxed = true) {
+            every { get() } returns 0
+        }
         soundEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
-        soundSectorCrossEnabledPref = mockk<PreferenceData<Boolean>>(relaxed = true)
+        soundSectorCrossPref = mockk<PreferenceData<Int>>(relaxed = true) {
+            every { get() } returns 0
+        }
+        soundVolumePref = mockk<PreferenceData<Int>>(relaxed = true) {
+            every { get() } returns 100
+        }
         audioManager = mockk<AudioManager>(relaxed = true)
         vibrator = mockk<Vibrator>(relaxed = true)
     }
 
+    context("performAudioFeedback") {
+        withData(nameFn = { "Volume $it" }, values) { volume ->
+            every { soundVolumePref.get() } returns volume
+            every { audioManager.getStreamVolume(AudioManager.STREAM_MUSIC) } returns 10
+            every { audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC) } returns 100
+            val controller = InputFeedbackController.new(ims)
+            controller.performAudioFeedback(0, 1.0)
+            val expected = if (volume == 0) 0.1f else 0.9f
+            verify { audioManager.playSoundEffect(0, expected) }
+        }
+    }
+
     context("keyPress") {
-        withData(nameFn = { "Haptic: $it" }, values) { haptic ->
-            withData(nameFn = { "Sound: $it" }, values) { sound ->
-                withData(nameFn = { "Repeat: $it" }, values) { repeat ->
+        withData(nameFn = { "Haptic: $it" }, Exhaustive.boolean().values) { haptic ->
+            withData(nameFn = { "Sound: $it" }, Exhaustive.boolean().values) { sound ->
+                withData(nameFn = { "Repeat: $it" }, Exhaustive.boolean().values) { repeat ->
                     withData(
                         nameFn = {
                             "Keycode: ${keyCodes[it.first]} produces ${soundFxs[it.second]}"
@@ -122,30 +143,30 @@ class InputFeedbackControllerSpec : FunSpec({
     }
 
     context("sectorCross") {
-        withData(nameFn = { "Haptic: $it" }, values) { haptic ->
+        withData(nameFn = { "Haptic: $it" }, Exhaustive.boolean().values) { haptic ->
             withData(nameFn = { "Haptic sector cross: $it" }, values) { hapticSector ->
-                withData(nameFn = { "Sound: $it" }, values) { sound ->
+                withData(nameFn = { "Sound: $it" }, Exhaustive.boolean().values) { sound ->
                     withData(nameFn = { "Sound sector cross: $it" }, values) { soundSector ->
                         every { hapticEnabledPref.get() } returns haptic
                         every { hapticSectorCrossPref.get() } returns hapticSector
                         every { soundEnabledPref.get() } returns sound
-                        every { soundSectorCrossEnabledPref.get() } returns soundSector
+                        every { soundSectorCrossPref.get() } returns soundSector
                         val controller = InputFeedbackController.new(ims)
                         controller.sectorCross()
-                        if (sound && soundSector) {
+                        if (sound && soundSector > 0) {
                             verify {
                                 audioManager.playSoundEffect(
                                     AudioManager.FX_KEYPRESS_STANDARD,
-                                    0.5f
+                                    soundSector / 100f
                                 )
                             }
                         }
-                        if (haptic && hapticSector) {
+                        if (haptic && hapticSector > 0) {
                             verify {
                                 vibrator.vibrate(
                                     duration = 50,
                                     strength = 50,
-                                    factor = 0.4
+                                    factor = hapticSector / 100.0
                                 )
                             }
                         }

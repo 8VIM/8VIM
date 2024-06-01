@@ -1,0 +1,1 @@
+fix: 🐛 Cursor movements was moving the cursor out of the input box (#509)

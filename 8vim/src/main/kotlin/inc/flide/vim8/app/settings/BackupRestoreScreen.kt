@@ -120,7 +120,7 @@ fun BackupRestoreScreen() = Screen {
             }
 
             Preference(
-                iconId = R.drawable.ic_autorenew,
+                iconId = R.drawable.ic_reset,
                 title = stringRes(R.string.settings__backup_and_restore__reset__title),
                 onClick = { if (!confirmDialogOpened) confirmDialogOpened = true }
             )

@@ -5,6 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -14,13 +15,15 @@ import inc.flide.vim8.datastore.model.PreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.ime.layout.EmbeddedLayout
 import inc.flide.vim8.ime.layout.LayoutSerDe
+import inc.flide.vim8.ime.ui.KeyboardLayoutMode
+import inc.flide.vim8.ime.ui.RectSerDe
 import inc.flide.vim8.theme.ThemeMode
 import inc.flide.vim8.theme.darkColorPalette
 import inc.flide.vim8.theme.lightColorPalette
 
 fun appPreferenceModel() = Datastore.getOrCreatePreferenceModel(AppPrefs::class, ::AppPrefs)
 
-class AppPrefs : PreferenceModel(7) {
+class AppPrefs : PreferenceModel(8) {
     val layout = Layout()
     val theme = Theme()
     val clipboard = Clipboard()
@@ -80,13 +83,13 @@ class AppPrefs : PreferenceModel(7) {
             key = "prefs_input_feedback_haptic_enabled",
             default = true
         )
-        val hapticSectorCrossEnabled = boolean(
-            key = "prefs_input_feedback_haptic_sector_cross_enabled",
-            default = false
+        val hapticSectorCross = int(
+            key = "prefs_input_feedback_haptic_sector_cross",
+            default = 0
         )
-        val soundSectorCrossEnabled = boolean(
-            key = "prefs_input_feedback_sound_sector_cross_enabled",
-            default = false
+        val soundSectorCross = int(
+            key = "prefs_input_feedback_sound_sector_cross",
+            default = 0
         )
     }
 
@@ -118,6 +121,7 @@ class AppPrefs : PreferenceModel(7) {
         val display = Display()
         val circle = Circle()
         val behavior = Behavior()
+        val layoutMode = LayoutMode()
 
         val height = int(
             key = "prefs_keyboard_height",
@@ -128,6 +132,19 @@ class AppPrefs : PreferenceModel(7) {
             key = "prefs_keyboard_emoticon_keyboard",
             default = ""
         )
+
+        inner class LayoutMode {
+            val mode =
+                enum(
+                    key = "prefs_keyboard_layout_mode",
+                    default = KeyboardLayoutMode.EMBEDDED
+                )
+            val floatingRect = custom(
+                key = "prefs_keyboard_layout_floating_rect",
+                default = Rect.Zero,
+                serde = RectSerDe
+            )
+        }
 
         inner class SideBar {
             val isVisible = boolean(
@@ -328,7 +345,27 @@ class AppPrefs : PreferenceModel(7) {
 
                 else -> entry.keepAsIs()
             }
-
+            7 -> when (entry.key) {
+                "prefs_input_feedback_haptic_sector_cross_enabled" -> {
+                    entry.transform(
+                        key = "prefs_input_feedback_haptic_sector_cross",
+                        rawValue = if ((entry.rawValue as Boolean?) == true) {
+                            90
+                        } else {
+                            0
+                        }
+                    )
+                }
+                "prefs_input_feedback_sound_sector_cross_enabled" -> entry.transform(
+                    key = "prefs_input_feedback_sound_sector_cross",
+                    rawValue = if ((entry.rawValue as Boolean?) == true) {
+                        90
+                    } else {
+                        0
+                    }
+                )
+                else -> entry.keepAsIs()
+            }
             else -> entry.keepAsIs()
         }
     }

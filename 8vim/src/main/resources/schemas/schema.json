@@ -1,6 +1,6 @@
 {
   "$id": "https://8vim.github.io/schemas/schema.json",
-  "$schema": "https://json-schema.org/draft/2019-09/schema#",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "title": "8VIM layout",
   "properties": {

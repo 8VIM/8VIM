@@ -28,6 +28,6 @@ fun ColumnScope.ImageButton(
             .fillMaxWidth()
             .weight(1f),
         contentScale = ContentScale.Inside,
-        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
     )
 }

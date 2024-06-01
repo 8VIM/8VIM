@@ -123,13 +123,14 @@ jobs:
           tag_name: v${{inputs.version_name}}
   private_fdroid:
     needs: [build_rc, release]
-    if: ${{ contains(inputs.version_name, 'rc') }}
+    if: ${{!cancelled() && needs.release.result !='failure' && needs.build_rc.result != 'failure' &&  contains(inputs.version_name, 'rc') }}
     permissions:
       actions: write
     uses: ./.github/workflows/private-fdroid-repo.yaml
     with:
       type: rc
       tag: v${{inputs.version_name}}
+    secrets: inherit
   notify:
     uses: ./.github/workflows/matrix-release.yaml
     needs: [release]
