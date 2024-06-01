@@ -83,13 +83,13 @@ class AppPrefs : PreferenceModel(8) {
             key = "prefs_input_feedback_haptic_enabled",
             default = true
         )
-        val hapticSectorCrossEnabled = boolean(
-            key = "prefs_input_feedback_haptic_sector_cross_enabled",
-            default = false
+        val hapticSectorCross = int(
+            key = "prefs_input_feedback_haptic_sector_cross",
+            default = 0
         )
-        val soundSectorCrossEnabled = boolean(
-            key = "prefs_input_feedback_sound_sector_cross_enabled",
-            default = false
+        val soundSectorCross = int(
+            key = "prefs_input_feedback_sound_sector_cross",
+            default = 0
         )
     }
 
@@ -345,7 +345,27 @@ class AppPrefs : PreferenceModel(8) {
 
                 else -> entry.keepAsIs()
             }
-
+            7 -> when (entry.key) {
+                "prefs_input_feedback_haptic_sector_cross_enabled" -> {
+                    entry.transform(
+                        key = "prefs_input_feedback_haptic_sector_cross",
+                        rawValue = if ((entry.rawValue as Boolean?) == true) {
+                            90
+                        } else {
+                            0
+                        }
+                    )
+                }
+                "prefs_input_feedback_sound_sector_cross_enabled" -> entry.transform(
+                    key = "prefs_input_feedback_sound_sector_cross",
+                    rawValue = if ((entry.rawValue as Boolean?) == true) {
+                        90
+                    } else {
+                        0
+                    }
+                )
+                else -> entry.keepAsIs()
+            }
             else -> entry.keepAsIs()
         }
     }
