@@ -13,8 +13,6 @@ import inc.flide.vim8.ime.layout.models.LayerLevel
 import inc.flide.vim8.ime.layout.models.MovementSequenceType
 import inc.flide.vim8.ime.layout.models.characterSets
 import inc.flide.vim8.ime.layout.models.findLayer
-import inc.flide.vim8.ime.layout.models.yaml.ExtraLayer
-import inc.flide.vim8.ime.layout.models.yaml.toLayerLevel
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.floats.plusOrMinus
@@ -54,13 +52,8 @@ class KeyboardSpec : FunSpec() {
         context("find layer") {
             every { keyboardData.findLayer(any()) } returns LayerLevel.HIDDEN
             val movementSequences =
-                (
-                    ExtraLayer.MOVEMENT_SEQUENCES
-                        .map { (layer, sequence) -> sequence to layer.toLayerLevel() } + (
-                        emptyList<FingerPosition>() to LayerLevel.HIDDEN
-                        )
-                    )
-                    .map { (sequence, layer) -> (sequence + FingerPosition.NO_TOUCH) to layer }
+                LayerLevel.MovementSequencesByLayer
+                    .map { (layer, sequence) -> (sequence + FingerPosition.NO_TOUCH) to layer }
             withData(
                 nameFn = { "${it.first} -> ${it.second}" },
                 movementSequences
@@ -103,17 +96,17 @@ class KeyboardSpec : FunSpec() {
                 nameFn = { "${it.first}" },
                 ((emptyList<FingerPosition>() to MovementSequenceType.NO_MOVEMENT) to None),
                 (
-                    (listOf(FingerPosition.INSIDE_CIRCLE) to MovementSequenceType.NO_MOVEMENT)
-                        to None
-                    ),
+                        (listOf(FingerPosition.INSIDE_CIRCLE) to MovementSequenceType.NO_MOVEMENT)
+                                to None
+                        ),
                 (
-                    (listOf(FingerPosition.INSIDE_CIRCLE) to MovementSequenceType.NEW_MOVEMENT)
-                        to action.some()
-                    ),
+                        (listOf(FingerPosition.INSIDE_CIRCLE) to MovementSequenceType.NEW_MOVEMENT)
+                                to action.some()
+                        ),
                 (
-                    (listOf(FingerPosition.LONG_PRESS) to MovementSequenceType.NO_MOVEMENT)
-                        to action.some()
-                    )
+                        (listOf(FingerPosition.LONG_PRESS) to MovementSequenceType.NO_MOVEMENT)
+                                to action.some()
+                        )
             ) { (params, result) ->
                 every { keyboardData.actionMap } returns mapOf(
                     listOf(
@@ -132,13 +125,13 @@ class KeyboardSpec : FunSpec() {
             withData(
                 nameFn = { "${it.first} ${it.second}" },
                 LayoutParam(isTabletLandscape = false, isSidebarOnLeft = false)
-                    to Offset(5f, 10f),
+                        to Offset(5f, 10f),
                 LayoutParam(
                     isTabletLandscape = true,
                     isSidebarOnLeft = false
                 ) to Offset(6.4f, 10f),
                 LayoutParam(isTabletLandscape = true, isSidebarOnLeft = true)
-                    to Offset(3.6f, 10f)
+                        to Offset(3.6f, 10f)
             ) { (params, result) ->
                 val keyboard = Keyboard(context)
                 config.orientation =

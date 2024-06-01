@@ -131,8 +131,8 @@ fun SetupScreen() = Screen {
                     StepText(stringRes(R.string.setup__finish_up__description_p2))
                     StepButton(label = stringRes(R.string.setup__finish_up__finish_btn)) {
                         this@content.prefs.internal.isImeSetup.set(true)
-                        navController.navigate(Routes.Settings.Home) {
-                            popUpTo(Routes.Setup.Screen) {
+                        navController.navigate(Routes.Settings.HOME) {
+                            popUpTo(Routes.Setup.SCREEN) {
                                 inclusive = true
                             }
                         }

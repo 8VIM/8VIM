@@ -1,20 +1,6 @@
 name: Matrix notification release
-run-name: Matrix notification release ${{inputs.version}} to ${{inputs.channel}}
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        type: string
-        required: true
-      channel:
-        type: choice
-        required: true
-        default: internal
-        options:
-          - internal
-          - beta
-          - production
   workflow_call:
     inputs:
       version:
@@ -25,51 +11,19 @@ on:
         required: true
 jobs:
   msg:
-    name: Generate message
-    runs-on: ubuntu-latest
+
     outputs:
       text: ${{steps.msg.outputs.text}}
     steps:
-      - uses: actions/github-script@v7
-        id: msg
-        env:
-          INPUT_CHANNEL: ${{inputs.channel}}
-          INPUT_VERSION: ${{inputs.version}}
-        with:
-          script: |
-            const channel = core.getInput("channel").toLowerCase().trim();
-            let version = core.getInput("version").trim();
-            if(version[0] !== 'v') {
-              version = `v${version}`;
-            }
-            const url = `https://github.com/${context.repo.owner}/${context.repo.repo}/releases/tag/${version}`;
+      - id: msg
+        run: |
 
-            let body = "";
-            let header = "";
-            if (channel !== "beta") {
-              header = `New release: ${version}`;
-              if (channel == "production") {
-                body = `Available for everyone on the Playstore and F-Droid.
-            The F-Droid version can take up to 72h to be available.`;
-              } else {
-                body = `Available on the internal test channel of the Playstore`;
-              }
-            } else {
-              header = `Release: ${version}`;
-              body = `Now available for open testing on the Playstore`;
-            }
-
-            core.setOutput(
-              "text",
-              `${header}
-            ${body}
-
-            ${url}`
-            );
   notify:
     name: Matrix notify
     uses: ./.github/workflows/matrix-notify.yaml
     needs: [msg]
     with:
-      message: ${{needs.msg.outputs.text}}
+      message: |
+        New release: ${{github.event.release.name}}
+        ${{github.event.release.html_url}}
     secrets: inherit

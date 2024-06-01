@@ -104,7 +104,7 @@ class Vim8ImeService : LifecycleInputMethodService() {
     override fun onEvaluateFullscreenMode(): Boolean {
         val configuration = resources.configuration
         return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-            configuration.screenHeightDp < 480
+                configuration.screenHeightDp < 480
     }
 
     override fun onStartInputView(info: EditorInfo, restarting: Boolean) {

@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import inc.flide.vim8.R
+import inc.flide.vim8.lib.android.stringRes
 import inc.flide.vim8.lib.kotlin.CurlyArg
 import inc.flide.vim8.lib.kotlin.curlyFormat
 

@@ -25,9 +25,9 @@ import inc.flide.vim8.ime.layout.models.error.LayoutError
 import inc.flide.vim8.ime.layout.models.info
 import inc.flide.vim8.ime.layout.models.yaml.name
 import inc.flide.vim8.lib.android.tryOrNull
+import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream
 import java.util.Locale
-import org.apache.commons.codec.digest.DigestUtils
 
 private val isoCodes = Locale.getISOLanguages().toSet()
 
@@ -55,6 +55,7 @@ interface Layout<T> {
     fun inputStream(context: Context): Either<LayoutError, InputStream>
     fun md5(context: Context): Option<String>
     fun defaultName(context: Context): String
+    fun isEmbedded(): Boolean
 }
 
 fun safeLoadKeyboardData(layoutLoader: LayoutLoader, context: Context): KeyboardData? {
@@ -159,6 +160,8 @@ data class EmbeddedLayout(override val path: String) : Layout<String> {
         return Locale.forLanguageTag(path).getDisplayName(locale)
             .replaceFirstChar { it.titlecase(locale) }
     }
+
+    override fun isEmbedded(): Boolean = true
 }
 
 data class CustomLayout(override val path: Uri) : Layout<Uri> {
@@ -200,4 +203,6 @@ data class CustomLayout(override val path: Uri) : Layout<Uri> {
                 }
             }
     }.flatten().getOrElse { "" }
+
+    override fun isEmbedded(): Boolean = false
 }
