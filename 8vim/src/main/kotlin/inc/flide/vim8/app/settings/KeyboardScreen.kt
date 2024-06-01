@@ -29,6 +29,12 @@ fun KeyboardScreen() = Screen {
         val circleAutoResize by prefs.keyboard.circle.autoResize.observeAsState()
         val isDynamicCircleEnabled by prefs.keyboard.circle.dynamic.isEnabled.observeAsState()
         val hapticEnabled by prefs.inputFeedback.hapticEnabled.observeAsState()
+        val hapticOff = stringRes(
+            R.string.settings__keyboard__haptic__feedback__enabled__summary__off
+        )
+        val soundOff = stringRes(
+            R.string.settings__keyboard__sound__feedback__enabled__summary__off
+        )
         val soundEnabled by prefs.inputFeedback.soundEnabled.observeAsState()
 
         PreferenceGroup {
@@ -194,33 +200,32 @@ fun KeyboardScreen() = Screen {
             SwitchPreference(
                 pref = prefs.inputFeedback.hapticEnabled,
                 title = stringRes(R.string.settings__keyboard__haptic__feedback__enabled__title),
-                summaryOff = stringRes(
-                    R.string.settings__keyboard__haptic__feedback__enabled__summary__off
-                ),
+                summaryOff = hapticOff,
                 summaryOn = stringRes(
                     R.string.settings__keyboard__haptic__feedback__enabled__summary__on
                 )
             )
-            SwitchPreference(
-                pref = prefs.inputFeedback.hapticSectorCrossEnabled,
+            SliderPreference(
+                pref = prefs.inputFeedback.hapticSectorCross,
                 title = @Suppress("ktlint:standard:max-line-length")
                 stringRes(
                     R.string.settings__keyboard__haptic__feedback__haptic_sector_cross_enabled__title
                 ),
-                summaryOff = stringRes(
-                    R.string.settings__keyboard__haptic__feedback__enabled__summary__off
-                ),
-                summaryOn = stringRes(
-                    R.string.settings__keyboard__haptic__feedback__enabled__summary__on
-                ),
+                min = 0,
+                max = 100,
+                toText = {
+                    if (it == 0) {
+                        hapticOff
+                    } else {
+                        "$it%"
+                    }
+                },
                 visibleIf = { hapticEnabled }
             )
             SwitchPreference(
                 pref = prefs.inputFeedback.soundEnabled,
                 title = stringRes(R.string.settings__keyboard__sound__feedback__enabled__title),
-                summaryOff = stringRes(
-                    R.string.settings__keyboard__sound__feedback__enabled__summary__off
-                ),
+                summaryOff = soundOff,
                 summaryOn = stringRes(
                     R.string.settings__keyboard__sound__feedback__enabled__summary__on
                 )
@@ -239,17 +244,22 @@ fun KeyboardScreen() = Screen {
                     }
                 }
             )
-            SwitchPreference(
-                pref = prefs.inputFeedback.soundSectorCrossEnabled,
-                title = stringRes(
+
+            SliderPreference(
+                pref = prefs.inputFeedback.soundSectorCross,
+                title = @Suppress("ktlint:standard:max-line-length")
+                stringRes(
                     R.string.settings__keyboard__haptic__feedback__sound_sector_cross_enabled__title
                 ),
-                summaryOff = stringRes(
-                    R.string.settings__keyboard__sound__feedback__enabled__summary__off
-                ),
-                summaryOn = stringRes(
-                    R.string.settings__keyboard__sound__feedback__enabled__summary__on
-                ),
+                min = 0,
+                max = 100,
+                toText = {
+                    if (it == 0) {
+                        soundOff
+                    } else {
+                        "$it%"
+                    }
+                },
                 visibleIf = { soundEnabled }
             )
         }
