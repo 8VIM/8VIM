@@ -32,7 +32,10 @@ import inc.flide.vim8.ime.layout.loadKeyboardData
 import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.safeLoadKeyboardData
 import inc.flide.vim8.ime.lifecycle.LifecycleInputMethodService
-import inc.flide.vim8.ime.theme.ImeTheme
+import inc.flide.vim8.ime.ui.ImeLayout
+import inc.flide.vim8.ime.ui.KeyboardLayoutMode
+import inc.flide.vim8.lib.android.isFullScreen
+import inc.flide.vim8.lib.android.isTablet
 import inc.flide.vim8.lib.compose.ProvideLocalizedResources
 import inc.flide.vim8.lib.compose.SystemUiIme
 import inc.flide.vim8.lib.util.InputMethodUtils
@@ -67,6 +70,7 @@ class Vim8ImeService : LifecycleInputMethodService() {
 
     private var resourcesContext by mutableStateOf(this as Context)
     private var inputWindowView by mutableStateOf<View?>(null)
+    private var isFloating by mutableStateOf(false)
     private val activeState get() = keyboardManager.activeState
     private val inputFeedbackController by lazy { InputFeedbackController.new(this) }
     var keyboardData: KeyboardData? by mutableStateOf(null)
@@ -79,6 +83,12 @@ class Vim8ImeService : LifecycleInputMethodService() {
         super.onCreate()
         vim8ImeServiceReference = WeakReference(this)
         resourcesContext = createConfigurationContext(Configuration(resources.configuration))
+        isFloating = prefs.keyboard.layoutMode.mode.get() == KeyboardLayoutMode.FLOATING
+
+        prefs.keyboard.layoutMode.mode.observe {
+            isFloating = it == KeyboardLayoutMode.FLOATING
+        }
+
         prefs.layout.current.observe {
             it.loadKeyboardData(layoutLoader, this)
                 .onRight { keyboardData ->
@@ -103,8 +113,12 @@ class Vim8ImeService : LifecycleInputMethodService() {
 
     override fun onEvaluateFullscreenMode(): Boolean {
         val configuration = resources.configuration
-        return configuration.orientation == Configuration.ORIENTATION_LANDSCAPE &&
-            configuration.screenHeightDp < 480
+        if ((configuration.isFullScreen() || configuration.isTablet()) &&
+            prefs.keyboard.layoutMode.mode.getOrNull() == null
+        ) {
+            prefs.keyboard.layoutMode.mode.set(KeyboardLayoutMode.FLOATING)
+        }
+        return super.onEvaluateFullscreenMode()
     }
 
     override fun onStartInputView(info: EditorInfo, restarting: Boolean) {
@@ -132,20 +146,15 @@ class Vim8ImeService : LifecycleInputMethodService() {
                 CompositionLocalProvider(
                     LocalInputFeedbackController provides inputFeedbackController
                 ) {
-                    ImeTheme {
-                        Surface(
-                            modifier = Modifier.height(keyboardHeight),
-                            color = MaterialTheme.colorScheme.background,
-                            contentColor = MaterialTheme.colorScheme.onBackground
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
-                                ImeUi()
-                            }
-                            SystemUiIme()
+                    Surface(
+                        modifier = Modifier.height(keyboardHeight),
+                        color = MaterialTheme.colorScheme.surface,
+                        contentColor = MaterialTheme.colorScheme.onSurface
+                    ) {
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            ImeUi()
                         }
+                        SystemUiIme()
                     }
                 }
             }
@@ -171,7 +180,9 @@ class Vim8ImeService : LifecycleInputMethodService() {
 
         @Composable
         override fun Content() {
-            ImeUiWrapper()
+            ImeLayout(isFloating) {
+                ImeUiWrapper()
+            }
         }
 
         override fun getAccessibilityClassName(): CharSequence {

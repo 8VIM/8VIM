@@ -67,7 +67,8 @@ abstract class PreferenceModel(val version: Int) :
             val editor = sharedPreferences.edit()
             for ((k, v) in value) {
                 registry[k]?.let {
-                    it.serde.deserialize(v)?.let { deser -> it.serialize(editor, deser) }
+                    it.serde.deserialize(v)
+                        ?.let { deser -> it.serialize(editor, deser) }
                 }
             }
             (value[DATASTORE_VERSION] as Int?)?.let { editor.putInt(DATASTORE_VERSION, it).apply() }

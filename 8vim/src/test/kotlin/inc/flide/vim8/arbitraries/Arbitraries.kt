@@ -1,6 +1,7 @@
 package inc.flide.vim8.arbitraries
 
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import inc.flide.vim8.ime.keyboard.xpad.gestures.GlideGesture
 import inc.flide.vim8.ime.layout.EmbeddedLayout
 import inc.flide.vim8.ime.layout.models.CHARACTER_SET_SIZE
@@ -47,5 +48,13 @@ object Arbitraries {
         val x = Arb.float().bind()
         val y = Arb.float().bind()
         GlideGesture.Point(radius, Offset(x, y))
+    }
+
+    val arbRect: Arb<Rect> = arbitrary {
+        val left = Arb.float().bind()
+        val top = Arb.float().bind()
+        val right = Arb.float().bind()
+        val bottom = Arb.float().bind()
+        Rect(left, top, right, bottom)
     }
 }
