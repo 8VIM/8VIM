@@ -44,20 +44,14 @@ fun ProvideLocalizedResources(
 }
 
 @Composable
-fun stringRes(
-    @StringRes id: Int,
-    vararg args: CurlyArg
-): String {
+fun stringRes(@StringRes id: Int, vararg args: CurlyArg): String {
     val string = localResourcesContext.current.resources
         .getString(id)
     return formatString(string, args)
 }
 
 @Composable
-private fun formatString(
-    string: String,
-    args: Array<out CurlyArg>
-): String {
+private fun formatString(string: String, args: Array<out CurlyArg>): String {
     return string.curlyFormat(
         "app_name" to localAppNameString.current,
         *args

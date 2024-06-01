@@ -3,13 +3,14 @@ package inc.flide.vim8.ime.layout.models
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.elementAtOrNone
-import arrow.core.fold
+import arrow.core.getOrElse
+import arrow.core.getOrNone
 import arrow.optics.dsl.index
 import arrow.optics.optics
 import arrow.optics.typeclasses.Index
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import inc.flide.vim8.ime.layout.models.yaml.LayoutInfo
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.LayoutInfo
 
 const val CHARACTER_SET_SIZE = 4 * 4 * 2 // 4 sectors, 2 parts, 4 characters per parts
 
@@ -50,23 +51,20 @@ fun KeyboardData.addAllToActionMap(
 }
 
 fun KeyboardData.characterSets(layer: LayerLevel): Option<List<KeyboardAction?>> =
-    characterSets.elementAtOrNone(layer.ordinal - 1)
+    characterSets.elementAtOrNone(layer.toInt() - 1)
         .filter { it.isNotEmpty() && it.any { action -> action != null } }
 
 fun KeyboardData.setCharacterSets(
     characterSets: List<KeyboardAction?>,
     layer: LayerLevel
-): KeyboardData =
-    KeyboardData.characterSets.index(
-        Index.list(),
-        layer.ordinal - 1
-    ).set(this, characterSets)
+): KeyboardData = KeyboardData.characterSets.index(
+    Index.list(),
+    layer.toInt() - 1
+).set(this, characterSets)
 
-fun KeyboardData.findLayer(movementSequence: MovementSequence): LayerLevel =
-    actionMap[movementSequence]?.layer.let {
-        if (it == LayerLevel.HIDDEN) {
-            LayerLevel.FIRST
-        } else {
-            it
-        }
-    } ?: LayerLevel.FIRST
+fun KeyboardData.findLayer(movementSequence: MovementSequence): LayerLevel = actionMap
+    .getOrNone(movementSequence)
+    .flatMap {
+        LayerLevel.fromInt(it.layer.toInt().coerceAtLeast(LayerLevel.FIRST.toInt()))
+    }
+    .getOrElse { LayerLevel.FIRST }

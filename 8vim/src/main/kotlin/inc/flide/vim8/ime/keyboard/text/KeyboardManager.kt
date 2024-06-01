@@ -36,12 +36,21 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
         .also { it.keyEventReceiver = this }
 
     init {
+        val fnEnabled = prefs.keyboard.behavior.fnEnabled
         val moveByWord = prefs.keyboard.behavior.cursor.moveByWord
+
+        activeState.isFnOn = fnEnabled.get()
         activeState.isCtrlOn = moveByWord.get()
 
         moveByWord.observe {
             if (it != activeState.isCtrlOn) {
                 activeState.isCtrlOn = it
+            }
+        }
+
+        fnEnabled.observe {
+            if (it != activeState.isFnOn) {
+                activeState.isFnOn = it
             }
         }
     }
@@ -100,6 +109,7 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
 
             CustomKeycode.TOGGLE_SELECTION_ANCHOR -> editorInstance.performSwitchAnchor()
             CustomKeycode.CTRL_TOGGLE -> handleCtrl()
+            CustomKeycode.FN_TOGGLE -> handleFn()
             CustomKeycode.SHIFT_TOGGLE -> if (keyFlags == -1) toggleShift() else handleShift()
             CustomKeycode.MOVE_CURRENT_END_POINT_LEFT,
             CustomKeycode.MOVE_CURRENT_END_POINT_RIGHT,
@@ -142,17 +152,21 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     }
 
     private fun handleMove(keycode: CustomKeycode) {
+        editorInstance.sendDownEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
         editorInstance.sendDownAndUpKeyEvent(
             keycode.toKeyEvent(),
-            activeState.shiftFlag or activeState.ctrlFlag
+            KeyEvent.META_SHIFT_MASK or activeState.ctrlFlag
         )
+        editorInstance.sendUpEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
     }
 
     private fun handleSelectionStart() {
+        editorInstance.sendDownEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
         editorInstance.sendDownAndUpKeyEvent(
             KeyEvent.KEYCODE_DPAD_LEFT,
             KeyEvent.META_SHIFT_MASK or activeState.ctrlFlag
         )
+        editorInstance.sendUpEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
     }
 
     private fun handleSelectAll() {
@@ -161,6 +175,10 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
 
     private fun handleCtrl() {
         activeState.isCtrlOn = !activeState.isCtrlOn
+    }
+
+    private fun handleFn() {
+        activeState.isFnOn = !activeState.isFnOn
     }
 
     private fun handleEnter() {

@@ -21,6 +21,8 @@ class ThemeManager(context: Context) {
     private val randomTrailColor = RandomTrailColor()
     private val darkColorScheme: ColorScheme = darkColorPalette(context)
     private val lightColorScheme: ColorScheme = lightColorPalette(context)
+    private val systemColorScheme: ColorScheme
+        get() = if (configuration.isDarkTheme()) darkColorScheme else lightColorScheme
 
     var configuration: Configuration = context.resources.configuration
         set(value) {
@@ -51,32 +53,27 @@ class ThemeManager(context: Context) {
 
     private fun colorScheme(): ColorScheme {
         val mode = prefs.theme.mode.get()
-        return when {
-            mode == ThemeMode.CUSTOM -> {
+        return when (mode) {
+            ThemeMode.CUSTOM -> {
                 val customColorsPrefs = prefs.keyboard.customColors
                 val backgroundColor = Color(customColorsPrefs.background.get())
                 val foregroundColor = Color(customColorsPrefs.foreground.get())
-                lightColorScheme.copy(
-                    background = backgroundColor,
+                systemColorScheme.copy(
                     surface = backgroundColor,
-                    onBackground = foregroundColor,
                     onSurface = foregroundColor
                 )
             }
-
-            mode == ThemeMode.DARK ||
-                (mode == ThemeMode.SYSTEM && configuration.isDarkTheme()) -> darkColorScheme
-
-            else -> lightColorScheme
+            ThemeMode.DARK -> darkColorScheme
+            ThemeMode.LIGHT -> lightColorScheme
+            else -> systemColorScheme
         }
     }
 
-    private fun trailColor(): TrailColor =
-        if (prefs.keyboard.trail.useRandomColor.get()) {
-            randomTrailColor
-        } else {
-            FixedTrailColor(Color(prefs.keyboard.trail.color.get()))
-        }
+    private fun trailColor(): TrailColor = if (prefs.keyboard.trail.useRandomColor.get()) {
+        randomTrailColor
+    } else {
+        FixedTrailColor(Color(prefs.keyboard.trail.color.get()))
+    }
 
     data class ThemeInfo(val scheme: ColorScheme, val trailColor: TrailColor)
 
@@ -88,11 +85,11 @@ class ThemeManager(context: Context) {
         override fun color(): Color = color
     }
 
-    class RandomTrailColor : TrailColor {
+    class RandomTrailColor(private val random: Random = Random.Default) : TrailColor {
         override fun color(): Color = Color(
-            Random.nextInt(256),
-            Random.nextInt(256),
-            Random.nextInt(256),
+            random.nextInt(256),
+            random.nextInt(256),
+            random.nextInt(256),
             255
         )
     }

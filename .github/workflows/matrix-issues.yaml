@@ -2,7 +2,7 @@ name: Matrix notification issues
 
 on:
   issues:
-    types: [opened, closed]
+    types: [opened, closed, reopened]
 
 jobs:
   notify:
@@ -10,6 +10,6 @@ jobs:
     uses: ./.github/workflows/matrix-notify.yaml
     with:
       message: |
-        Issue #${{github.event.issue.number}} [${{github.event.issue.state}}] by ${{github.event.issue.user.login}}
+        [${{github.event.issue.state}}] Issue #${{github.event.issue.number}} by ${{github.event.issue.user.login}}
         ${{github.event.issue.html_url}}
     secrets: inherit

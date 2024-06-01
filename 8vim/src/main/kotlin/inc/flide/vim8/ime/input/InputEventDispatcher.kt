@@ -25,9 +25,7 @@ class InputEventDispatcher {
 
     var keyEventReceiver: InputKeyEventReceiver? = null
 
-    fun sendDown(
-        keyboardAction: KeyboardAction
-    ) = runBlocking {
+    fun sendDown(keyboardAction: KeyboardAction) = runBlocking {
         val eventTime = SystemClock.uptimeMillis()
         val result = pressedKeys.withLock { pressedKeys ->
             if (pressedKeys.containsKey(keyboardAction)) return@withLock null
@@ -74,6 +72,14 @@ class InputEventDispatcher {
         lastKeyEventDown = eventData
         keyEventReceiver?.onInputKeyUp(keyboardAction, repeat)
         lastKeyEventUp = eventData
+    }
+
+    fun sendCancel(keyboardAction: KeyboardAction) = runBlocking {
+        pressedKeys.withLock { pressedKeys ->
+            if (pressedKeys.containsKey(keyboardAction)) {
+                pressedKeys.remove(keyboardAction)?.also { it.cancelJobs() }
+            }
+        }
     }
 
     data class PressedKeyInfo(

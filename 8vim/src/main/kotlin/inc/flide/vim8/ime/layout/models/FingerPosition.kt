@@ -29,7 +29,14 @@ class MovementSequenceDeserializer : KeyDeserializer() {
 }
 
 enum class FingerPosition {
-    NO_TOUCH, INSIDE_CIRCLE, TOP, LEFT, BOTTOM, RIGHT, LONG_PRESS, LONG_PRESS_END;
+    NO_TOUCH,
+    INSIDE_CIRCLE,
+    TOP,
+    LEFT,
+    BOTTOM,
+    RIGHT,
+    LONG_PRESS,
+    LONG_PRESS_END;
 
     companion object {
 
@@ -80,7 +87,7 @@ enum class FingerPosition {
                     val nextPosition = getNextPosition(quadrant, lastPosition)
                     acc + nextPosition
                 }
-            return (LayerLevel.SECOND.ordinal..layer.ordinal)
+            return (LayerLevel.SECOND.toInt()..layer.toInt())
                 .fold(baseMovementSequence) { acc, _ ->
                     val lastPosition = acc.lastOrNone().getOrElse { INSIDE_CIRCLE }
                     val nextPosition = getNextPosition(oppositeQuadrant, lastPosition)
@@ -94,7 +101,7 @@ enum class FingerPosition {
             position: CharacterPosition
         ): MovementSequence {
             return when (layer) {
-                LayerLevel.HIDDEN -> emptyList()
+                LayerLevel.FUNCTIONS, LayerLevel.HIDDEN -> emptyList()
                 else -> {
                     val maxMovements = position.ordinal + 1
                     val movementSequence =

@@ -35,7 +35,8 @@ class KeyboardManagerSpec : FunSpec(
         lateinit var context: Context
         lateinit var keyboardState: ObservableKeyboardState
         lateinit var editor: EditorInstance
-        lateinit var observer: PreferenceObserver<Boolean>
+        lateinit var observerCtrl: PreferenceObserver<Boolean>
+        lateinit var observerFn: PreferenceObserver<Boolean>
         val inputFeedbackController = mockk<InputFeedbackController>(relaxed = true)
         val repeatableKeyCodes = intArrayOf(
             KeyEvent.KEYCODE_DEL,
@@ -86,10 +87,10 @@ class KeyboardManagerSpec : FunSpec(
 
                 CustomKeycode.TOGGLE_SELECTION_ANCHOR.keyCode ->
                     verify { editor.performSwitchAnchor() }
-
                 CustomKeycode.CTRL_TOGGLE.keyCode ->
                     verify { keyboardState setProperty "isCtrlOn" value true }
-
+                CustomKeycode.FN_TOGGLE.keyCode ->
+                    verify { keyboardState setProperty "isFnOn" value true }
                 CustomKeycode.SHIFT_TOGGLE.keyCode ->
                     verify {
                         keyboardState setProperty "inputShiftState" value InputShiftState.UNSHIFTED
@@ -106,8 +107,10 @@ class KeyboardManagerSpec : FunSpec(
                 }
 
                 CustomKeycode.NO_OPERATION.keyCode -> {}
-                CustomKeycode.SELECTION_START.keyCode -> verify {
+                CustomKeycode.SELECTION_START.keyCode -> verifyOrder {
+                    editor.sendDownEvent(KeyEvent.KEYCODE_SHIFT_LEFT, any())
                     editor.sendDownAndUpKeyEvent(KeyEvent.KEYCODE_DPAD_LEFT, any())
+                    editor.sendUpEvent(KeyEvent.KEYCODE_SHIFT_LEFT, any())
                 }
 
                 CustomKeycode.SELECT_ALL.keyCode -> verify {
@@ -121,6 +124,7 @@ class KeyboardManagerSpec : FunSpec(
                 }
             }
         }
+
         beforeSpec {
             mockkStatic(Context::editorInstance)
             mockkStatic(::appPreferenceModel)
@@ -137,10 +141,15 @@ class KeyboardManagerSpec : FunSpec(
                 mockk {
                     every { keyboard } returns mockk {
                         every { behavior } returns mockk {
+                            every { fnEnabled } returns mockk(relaxed = true) {
+                                every { get() } returns false
+                                every { observe(any()) } answers { observerFn = firstArg() }
+                            }
+
                             every { cursor } returns mockk {
                                 every { moveByWord } returns mockk(relaxed = true) {
                                     every { get() } returns false
-                                    every { observe(any()) } answers { observer = firstArg() }
+                                    every { observe(any()) } answers { observerCtrl = firstArg() }
                                 }
                             }
                         }
@@ -166,16 +175,20 @@ class KeyboardManagerSpec : FunSpec(
             }
             keyboardState = mockk(relaxed = true) {
                 every { isCtrlOn } returns false
+                every { isFnOn } returns false
                 every { inputShiftState } returns InputShiftState.CAPS_LOCK
             }
         }
 
-        test("Observe ctrl on switch") {
+        test("Observe ctrl and fn on switch") {
             KeyboardManager(context)
-            observer.onChanged(true)
+            observerCtrl.onChanged(true)
+            observerFn.onChanged(true)
             verifyOrder {
+                keyboardState setProperty "isFnOn" value false
                 keyboardState setProperty "isCtrlOn" value false
                 keyboardState setProperty "isCtrlOn" value true
+                keyboardState setProperty "isFnOn" value true
             }
         }
 

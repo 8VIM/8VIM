@@ -9,7 +9,7 @@ internal const val TRAIL_STEPS = 150
 internal const val TRAIL_STEP_DISTANCE = 5
 internal const val TRAIL_MAX_RADIUS = 14
 
-class GlideGesture {
+object GlideGesture {
     class Detector(private val listener: Listener) {
         private val typingTrailPath = Path()
         private val pathMeasure = PathMeasure()

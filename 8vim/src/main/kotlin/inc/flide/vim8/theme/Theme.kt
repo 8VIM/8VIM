@@ -10,39 +10,37 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.luminance
 import inc.flide.vim8.lib.android.AndroidVersion
 
-fun darkColorPalette(context: Context) =
-    if (AndroidVersion.ATLEAST_API31_S) {
-        dynamicDarkColorScheme(context)
-    } else {
-        darkColorScheme()
-    }
+fun darkColorPalette(context: Context) = if (AndroidVersion.ATLEAST_API31_S) {
+    dynamicDarkColorScheme(context)
+} else {
+    darkColorScheme()
+}
 
-fun lightColorPalette(context: Context) =
-    if (AndroidVersion.ATLEAST_API31_S) {
-        dynamicLightColorScheme(context)
-    } else {
-        lightColorScheme()
-    }
+fun lightColorPalette(context: Context) = if (AndroidVersion.ATLEAST_API31_S) {
+    dynamicLightColorScheme(context)
+} else {
+    lightColorScheme()
+}
 
 fun ColorScheme.isLightTheme() = this.background.luminance() >= 0.5f
 
 fun ColorScheme.typography(): Typography {
     val current = Typography()
     return current.copy(
-        displayLarge = current.displayLarge.copy(color = onBackground),
-        displayMedium = current.displayMedium.copy(color = onBackground),
-        displaySmall = current.displaySmall.copy(color = onBackground),
-        titleLarge = current.titleLarge.copy(color = onBackground),
-        titleMedium = current.titleMedium.copy(color = onBackground),
-        titleSmall = current.titleSmall.copy(color = onBackground),
-        headlineLarge = current.headlineLarge.copy(color = onBackground),
-        headlineMedium = current.headlineMedium.copy(color = onBackground),
-        headlineSmall = current.headlineSmall.copy(color = onBackground),
-        bodyLarge = current.bodyLarge.copy(color = onBackground),
-        bodyMedium = current.bodyMedium.copy(color = onBackground),
-        bodySmall = current.bodySmall.copy(color = onBackground),
-        labelLarge = current.labelLarge.copy(color = onBackground),
-        labelMedium = current.labelMedium.copy(color = onBackground),
-        labelSmall = current.labelSmall.copy(color = onBackground)
+        displayLarge = current.displayLarge.copy(color = onSurface),
+        displayMedium = current.displayMedium.copy(color = onSurface),
+        displaySmall = current.displaySmall.copy(color = onSurface),
+        titleLarge = current.titleLarge.copy(color = onSurface),
+        titleMedium = current.titleMedium.copy(color = onSurface),
+        titleSmall = current.titleSmall.copy(color = onSurface),
+        headlineLarge = current.headlineLarge.copy(color = onSurface),
+        headlineMedium = current.headlineMedium.copy(color = onSurface),
+        headlineSmall = current.headlineSmall.copy(color = onSurface),
+        bodyLarge = current.bodyLarge.copy(color = onSurface),
+        bodyMedium = current.bodyMedium.copy(color = onSurface),
+        bodySmall = current.bodySmall.copy(color = onSurface),
+        labelLarge = current.labelLarge.copy(color = onSurface),
+        labelMedium = current.labelMedium.copy(color = onSurface),
+        labelSmall = current.labelSmall.copy(color = onSurface)
     )
 }

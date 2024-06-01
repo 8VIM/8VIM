@@ -23,7 +23,7 @@ import inc.flide.vim8.ime.layout.models.KeyboardData
 import inc.flide.vim8.ime.layout.models.error.ExceptionWrapperError
 import inc.flide.vim8.ime.layout.models.error.LayoutError
 import inc.flide.vim8.ime.layout.models.info
-import inc.flide.vim8.ime.layout.models.yaml.name
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.name
 import inc.flide.vim8.lib.android.tryOrNull
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream
@@ -34,21 +34,20 @@ private val isoCodes = Locale.getISOLanguages().toSet()
 fun embeddedLayouts(
     layoutLoader: LayoutLoader,
     context: Context
-): List<Pair<EmbeddedLayout, String>> =
-    (R.raw::class.java.fields)
-        .filter { isoCodes.contains(it.name) }
-        .flatMap { field ->
-            EmbeddedLayout(field.name)
-                .let { layout ->
-                    layout
-                        .loadKeyboardData(layoutLoader, context)
-                        .getOrNone()
-                        .filterNot {
-                            it.totalLayers == 0
-                        }
-                        .map { layout to it.toString() }
-                }.toList()
-        }.sortedBy { it.second }
+): List<Pair<EmbeddedLayout, String>> = (R.raw::class.java.fields)
+    .filter { isoCodes.contains(it.name) }
+    .flatMap { field ->
+        EmbeddedLayout(field.name)
+            .let { layout ->
+                layout
+                    .loadKeyboardData(layoutLoader, context)
+                    .getOrNone()
+                    .filterNot {
+                        it.totalLayers == 0
+                    }
+                    .map { layout to it.toString() }
+            }.toList()
+    }.sortedBy { it.second }
 
 interface Layout<T> {
     val path: T
@@ -81,34 +80,29 @@ fun safeLoadKeyboardData(layoutLoader: LayoutLoader, context: Context): Keyboard
 fun <T> Layout<T>.loadKeyboardData(
     layoutLoader: LayoutLoader,
     context: Context
-): Either<LayoutError, KeyboardData> =
-    md5(context)
-        .toEither { ExceptionWrapperError(Exception("MD5")) }
-        .flatMap { md5 ->
-            val cache by context.cache()
-            cache.load(md5).fold({
-                inputStream(context)
-                    .flatMap {
-                        layoutLoader.loadKeyboardData(it)
+): Either<LayoutError, KeyboardData> = md5(context)
+    .toEither { ExceptionWrapperError(Exception("MD5")) }
+    .flatMap { md5 ->
+        val cache by context.cache()
+        cache.load(md5).fold({
+            inputStream(context)
+                .flatMap {
+                    layoutLoader.loadKeyboardData(it)
+                }
+                .map {
+                    KeyboardData.info.name.modify(it) { name ->
+                        name.ifEmpty { defaultName(context) }
                     }
-                    .map {
-                        KeyboardData.info.name.modify(it) { name ->
-                            name.ifEmpty { defaultName(context) }
-                        }
-                    }.onRight { cache.add(md5, it) }
-            }, { it.right() })
-        }
+                }.onRight { cache.add(md5, it) }
+        }, { it.right() })
+    }
 
 fun String.toCustomLayout(): CustomLayout {
     return CustomLayout(Uri.parse(this))
 }
 
 object LayoutSerDe : PreferenceSerDe<Layout<*>> {
-    override fun serialize(
-        editor: SharedPreferences.Editor,
-        key: String,
-        value: Layout<*>
-    ) {
+    override fun serialize(editor: SharedPreferences.Editor, key: String, value: Layout<*>) {
         val encodedValue = when (value) {
             is EmbeddedLayout -> "e${value.path}"
             is CustomLayout -> "c${value.path}"

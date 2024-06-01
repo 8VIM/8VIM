@@ -21,10 +21,8 @@ class PreferenceMigrationEntry internal constructor(
     /**
      * Transform this entry's type, key, and/or raw value in the migration process.
      */
-    fun transform(
-        key: String = this.key,
-        rawValue: Any? = this.rawValue
-    ) = PreferenceMigrationEntry(Action.TRANSFORM, key, rawValue)
+    fun transform(key: String = this.key, rawValue: Any? = this.rawValue) =
+        PreferenceMigrationEntry(Action.TRANSFORM, key, rawValue)
 
     private fun copy(
         action: Action = this.action,
@@ -35,6 +33,6 @@ class PreferenceMigrationEntry internal constructor(
     internal enum class Action {
         KEEP_AS_IS,
         RESET,
-        TRANSFORM;
+        TRANSFORM
     }
 }

@@ -13,6 +13,8 @@ import inc.flide.vim8.ime.layout.models.LayerLevel
 import inc.flide.vim8.ime.layout.models.MovementSequenceType
 import inc.flide.vim8.ime.layout.models.characterSets
 import inc.flide.vim8.ime.layout.models.findLayer
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.ExtraLayer
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.toLayerLevel
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.datatest.withData
 import io.kotest.matchers.floats.plusOrMinus

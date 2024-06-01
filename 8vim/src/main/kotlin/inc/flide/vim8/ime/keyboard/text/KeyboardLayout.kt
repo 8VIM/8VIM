@@ -34,8 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import inc.flide.vim8.ime.input.InputEventDispatcher
 import inc.flide.vim8.ime.keyboard.compose.LocalKeyboardHeight
-import inc.flide.vim8.ime.keyboard.text.gestures.SwipeGesture
-import inc.flide.vim8.ime.layout.models.CustomKeycode
 import inc.flide.vim8.ime.layout.models.KeyboardAction
 import inc.flide.vim8.keyboardManager
 import inc.flide.vim8.lib.compose.DisposableLifecycleEffect
@@ -82,8 +80,8 @@ fun KeyboardLayout(keyboard: Keyboard): Unit = with(LocalDensity.current) {
                     MotionEvent.ACTION_DOWN,
                     MotionEvent.ACTION_POINTER_DOWN,
                     MotionEvent.ACTION_MOVE,
-                    MotionEvent.ACTION_POINTER_UP,
                     MotionEvent.ACTION_UP,
+                    MotionEvent.ACTION_POINTER_UP,
                     MotionEvent.ACTION_CANCEL
                     -> {
                         val clonedEvent = MotionEvent.obtainNoHistory(event)
@@ -144,7 +142,7 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
                         .requiredSize(20.sp.toDp())
                         .align(Alignment.Center),
                     contentScale = ContentScale.Fit,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onBackground)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
                 )
             } else {
                 Text(
@@ -153,7 +151,7 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
                         .align(Alignment.Center),
                     text = key.alternateText ?: key.action.text,
                     fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Center
                 )
             }
@@ -161,24 +159,21 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
     }
 }
 
-private class KeyboardController(context: Context) : SwipeGesture.Listener {
+private class KeyboardController(context: Context) {
     private val keyboardManager by context.keyboardManager()
 
     private val inputEventDispatcher get() = keyboardManager.inputEventDispatcher
     private val pointerMap: PointerMap<TouchPointer> = PointerMap { TouchPointer() }
-    private val swipeGestureDetector = SwipeGesture.Detector(this)
 
     lateinit var keyboard: Keyboard
     var size = Size.Zero
 
     fun onTouchEventInternal(event: MotionEvent) {
-        swipeGestureDetector.onTouchEvent(event)
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 val pointerIndex = event.actionIndex
                 val pointerId = event.getPointerId(pointerIndex)
                 pointerMap.add(pointerId, pointerIndex).onSome {
-                    swipeGestureDetector.onTouchDown(event, it)
                     onTouchDownInternal(event, it)
                 }
             }
@@ -186,23 +181,11 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
             MotionEvent.ACTION_POINTER_DOWN -> {
                 val pointerIndex = event.actionIndex
                 val pointerId = event.getPointerId(pointerIndex)
-                pointerMap.findById(pointerId)
-                    .onSome {
-                        swipeGestureDetector.onTouchCancel(it)
-                        onTouchCancelInternal(it)
-                        pointerMap.removeById(it.id)
-                    }
-
-                for (pointer in pointerMap) {
-                    val activeKey = pointer.activeKey
-                    if (activeKey != null) {
-                        swipeGestureDetector.onTouchCancel(pointer)
-                        onTouchUpInternal(pointer)
-                    }
+                pointerMap.findById(pointerId).onSome { oldPointer ->
+                    onTouchCancelInternal(oldPointer)
+                    pointerMap.removeById(oldPointer.id)
                 }
-
                 pointerMap.add(pointerId, pointerIndex).onSome {
-                    swipeGestureDetector.onTouchDown(event, it)
                     onTouchDownInternal(event, it)
                 }
             }
@@ -212,13 +195,7 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
                     val pointerId = event.getPointerId(pointerIndex)
                     pointerMap.findById(pointerId).onSome {
                         it.index = pointerIndex
-                        if (swipeGestureDetector.onTouchMove(it) ||
-                            it.hasTriggeredGestureMove
-                        ) {
-                            it.hasTriggeredGestureMove = true
-                        } else {
-                            onTouchMoveInternal(event, it)
-                        }
+                        onTouchMoveInternal(event, it)
                     }
                 }
             }
@@ -226,19 +203,10 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
             MotionEvent.ACTION_POINTER_UP -> {
                 val pointerIndex = event.actionIndex
                 val pointerId = event.getPointerId(pointerIndex)
-                pointerMap.findById(pointerId).onSome {
-                    it.index = pointerIndex
-                    if (swipeGestureDetector.onTouchUp(
-                            event,
-                            it,
-                            size
-                        ) || it.hasTriggeredGestureMove
-                    ) {
-                        onTouchCancelInternal(it)
-                    } else {
-                        onTouchUpInternal(it)
-                    }
-                    pointerMap.removeById(it.id)
+                pointerMap.findById(pointerId).onSome { pointer ->
+                    pointer.index = pointerIndex
+                    onTouchUpInternal(pointer)
+                    pointerMap.removeById(pointer.id)
                 }
             }
 
@@ -248,18 +216,8 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
                 for (pointer in pointerMap) {
                     if (pointer.id == pointerId) {
                         pointer.index = pointerIndex
-                        if (swipeGestureDetector.onTouchUp(
-                                event,
-                                pointer,
-                                size
-                            ) || pointer.hasTriggeredGestureMove
-                        ) {
-                            onTouchCancelInternal(pointer)
-                        } else {
-                            onTouchUpInternal(pointer)
-                        }
+                        onTouchUpInternal(pointer)
                     } else {
-                        swipeGestureDetector.onTouchCancel(pointer)
                         onTouchCancelInternal(pointer)
                     }
                 }
@@ -268,7 +226,6 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
 
             MotionEvent.ACTION_CANCEL -> {
                 for (pointer in pointerMap) {
-                    swipeGestureDetector.onTouchCancel(pointer)
                     onTouchCancelInternal(pointer)
                 }
                 pointerMap.clear()
@@ -285,14 +242,13 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
             val left = activeKey.visibleBounds.left - 0.1f * activeKey.visibleBounds.width
             val right = activeKey.visibleBounds.right + 0.1f * activeKey.visibleBounds.width
             val top = activeKey.visibleBounds.top - 0.35f * activeKey.visibleBounds.height
-            val bottom = activeKey.visibleBounds.bottom - 0.35f * activeKey.visibleBounds.height
+            val bottom = activeKey.visibleBounds.bottom + 0.35f * activeKey.visibleBounds.height
             if (eventX < left ||
                 eventX > right ||
                 eventY < top ||
                 eventY > bottom
             ) {
                 onTouchCancelInternal(pointer)
-                onTouchDownInternal(event, pointer)
             }
         }
     }
@@ -314,6 +270,7 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
 
     private fun onTouchDownInternal(event: MotionEvent, pointer: TouchPointer) {
         val key = keyboard.getKeyForPos(event.getX(pointer.index), event.getY(pointer.index))
+
         if (key != null) {
             pointer.pressedKeyInfo = inputEventDispatcher.sendDown(key.action)
             if (pointer.initialKey == null) {
@@ -331,6 +288,7 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
 
         val activeKey = pointer.activeKey
         if (activeKey != null) {
+            inputEventDispatcher.sendCancel(activeKey.action)
             pointer.activeKey = null
         }
         pointer.hasTriggeredGestureMove = false
@@ -349,12 +307,5 @@ private class KeyboardController(context: Context) : SwipeGesture.Listener {
             hasTriggeredGestureMove = false
             pressedKeyInfo = null
         }
-    }
-
-    override fun onSwipe(direction: SwipeGesture.Direction): Boolean {
-        if (direction == SwipeGesture.Direction.DOWN) {
-            inputEventDispatcher.sendDownUp(CustomKeycode.HIDE_KEYBOARD.toKeyboardAction())
-        }
-        return true
     }
 }

@@ -1,0 +1,94 @@
+{
+  "$id": "https://8vim.github.io/schemas/versions/2.1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "2.1"
+    },
+    "info": {
+      "$ref": "/schemas/common.json#/$defs/info"
+    },
+    "layers": {
+      "type": "object",
+      "properties": {
+        "default": {
+          "$ref": "/schemas/common.json#/$defs/sectors"
+        },
+        "extra_layers": {
+          "$ref": "/schemas/common.json#/$defs/extra_layers"
+        },
+        "hidden": {
+          "$ref": "/schemas/common.json#/$defs/actions"
+        },
+        "functions": {
+          "description": "Like hidden but requires 'fn button' to be active for being able to be triggered",
+          "type": "array",
+          "items": {
+            "$ref": "/schemas/common.json#/$defs/action"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "if": {
+        "required": [
+          "extra_layers"
+        ]
+      },
+      "then": {
+        "required": [
+          "default"
+        ],
+        "message": {
+          "required": "Default layer is required if extra_layers is defined"
+        }
+      },
+      "else": {
+        "if": {
+          "anyOf": [
+            {
+              "required": [
+                "hidden"
+              ]
+            },
+            {
+              "required": [
+                "functions"
+              ]
+            }
+          ]
+        },
+        "then": {
+          "if": {
+            "required": [
+              "hidden"
+            ]
+          },
+          "then": {
+            "required": [
+              "hidden"
+            ]
+          },
+          "else": {
+            "required": [
+              "functions"
+            ]
+          }
+        },
+        "else": {
+          "required": [
+            "default"
+          ],
+          "message": {
+            "required": "default, hidden or functions is required"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "layers"
+  ],
+  "additionalProperties": false
+}

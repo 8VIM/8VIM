@@ -21,6 +21,7 @@
     <string name="dialog__yaml__error__title">Couldn\'t load layout file</string>
     <string name="dialog__error__title">Error</string>
     <string name="dialog__confirm__label">OK</string>
+    <string name="dialog__save__label">Save</string>
     <string name="dialog__dismiss__label">Cancel</string>
 
     <string name="about__title">About Us</string>
@@ -34,6 +35,7 @@
     <string name="open_keyboard_settings_button_content_description">Open Keyboard Settings</string>
     <string name="clipboard_button_content_description">Open Clipboard keypad</string>
     <string name="main_keyboard_button_content_description">Open Main keypad</string>
+    <string name="floating_keyboard_button_content_description">Floating</string>
     <string name="generic_back_button_content_description">Go Back</string>
     <string name="settings__about__owner__label">Designed and Developed by flide</string>
     <string name="connect_with_us_label">Connect with us</string>
@@ -169,6 +171,8 @@
     <string name="settings__gesture__cursor__move__by__word__title">Cursor movement behavior</string>
     <string name="settings__gesture__cursor__move__by__word__summary__on">Move the cursor word by word</string>
     <string name="settings__gesture__cursor__move__by__word__summary__off">Move the cursor character by character</string>
+    <string name="settings__gesture__fn_enabled__title">Functions movements such as moving the cursors</string>
+    <string name="settings__gesture__fn_enabled__summary">Can be toggled from the sidebar or doing a full counter-clockwise rotation starting from the top sector</string>
 
     <string name="settings__backup_and_restore__title" comment="Title of Advanced screen">Back up &amp; Restore</string>
     <string name="settings__backup_and_restore__back_up__title" comment="Title of Back up screen">Back up data</string>

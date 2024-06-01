@@ -19,11 +19,11 @@ jobs:
           java-version: "17"
           distribution: temurin
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/actions/setup-gradle@v3
       - run: ./gradlew check
       - name: Upload coverage reports to Codecov
         if: ${{ !inputs.skip-codecov }}
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./8vim/build/reports/jacoco/jacocoTestReportDebug
-          flags: unit

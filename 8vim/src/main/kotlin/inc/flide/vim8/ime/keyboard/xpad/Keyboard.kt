@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.asAndroidPath
 import arrow.core.Option
 import arrow.core.firstOrNone
+import arrow.core.getOrElse
 import arrow.core.getOrNone
 import arrow.core.raise.nullable
 import arrow.core.raise.option
@@ -32,6 +33,7 @@ import inc.flide.vim8.ime.layout.models.MovementSequenceType
 import inc.flide.vim8.ime.layout.models.characterSets
 import inc.flide.vim8.ime.layout.models.findLayer
 import inc.flide.vim8.ime.layout.models.toFingerPosition
+import inc.flide.vim8.ime.layout.models.yaml.versions.common.ExtraLayer
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -64,30 +66,30 @@ class Keyboard(private val context: Context) {
 
     fun findLayer(movementSequence: List<FingerPosition>) {
         if (keyboardData == null) return
-
-        for (i in VisibleLayers.size downTo LayerLevel.SECOND.ordinal) {
-            val layerLevel = LayerLevel.entries[i]
-            val extraLayerMovementSequence = MovementSequencesByLayer[layerLevel]
-            if (extraLayerMovementSequence == null) {
-                this.layerLevel = LayerLevel.FIRST
-                return
+        layerLevel = (VisibleLayers.size downTo LayerLevel.SECOND.toInt())
+            .map {
+                option {
+                    val layerLevel = LayerLevel.fromInt(it).bind()
+                    val extraLayerMovementSequence = MovementSequences.getOrNone(layerLevel).bind()
+                    layerLevel to extraLayerMovementSequence
+                }
+            }.firstOrNone {
+                it.isNone() || it
+                    .filter { (_, extraLayerMovementSequence) ->
+                        movementSequence.size >= extraLayerMovementSequence.size
+                    }
+                    .isSome { (layerLevel, extraLayerMovementSequence) ->
+                        val startWith: MovementSequence =
+                            movementSequence.subList(0, extraLayerMovementSequence.size)
+                        extraLayerMovementSequences.contains(startWith) &&
+                            layerLevel.toInt() <= keyboardData!!.totalLayers
+                    }
             }
-            if (movementSequence.size < extraLayerMovementSequence.size) {
-                continue
+            .map { it.map { (layerLevel, _) -> layerLevel }.getOrElse { LayerLevel.FIRST } }
+            .getOrElse {
+                keyboardData!!
+                    .findLayer(movementSequence + FingerPosition.INSIDE_CIRCLE)
             }
-            val startWith: MovementSequence =
-                movementSequence.subList(0, extraLayerMovementSequence.size)
-
-            if (LayerLevel.MovementSequences.contains(startWith) &&
-                layerLevel.ordinal <= keyboardData!!.totalLayers
-            ) {
-                this.layerLevel = layerLevel
-                return
-            }
-        }
-
-        this.layerLevel = keyboardData!!
-            .findLayer(movementSequence + FingerPosition.INSIDE_CIRCLE)
     }
 
     fun key(movementSequence: MovementSequence): Key? = nullable {

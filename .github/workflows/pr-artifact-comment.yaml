@@ -1,17 +1,21 @@
-name: Update PR comment
+name: Relase debug APK
 
 on:
   workflow_run:
     workflows: [PR test]
     types: [completed]
-    branches-ignore: ["dependabot/**"]
 jobs:
-  update_pr_comment:
+  fetch_metadata:
     permissions:
       actions: read
-      pull-requests: write
+      pull-requests: read
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    outputs:
+      pr_number: ${{steps.artifact.outputs.pr_number}}
+      sha: ${{steps.artifact.outputs.sha}}
+      artifact_id: ${{steps.artifact.outputs.artifact_id}}
+      url: ${{steps.artifact.outputs.url}}
+      metadata: ${{steps.metadata.outputs.metadata}}
     steps:
       - name: Get artifact link
         id: artifact
@@ -25,6 +29,8 @@ jobs:
           "https://api.github.com/repos/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts" \
           | jq -c '.artifacts[0]' > artifact.json
 
+          [[ $(jq -j '.name' artifact.json)  != "artifact-debug" ]] && exit 0
+
           pr_number=$(curl \
           -L \
           -H "Accept: application/vnd.github+json" \
@@ -35,13 +41,30 @@ jobs:
           | jq -j '.referenced_workflows[0].ref' | cut -d '/' -f 3)
 
           echo "pr_number=$pr_number" >> $GITHUB_OUTPUT
-          echo "url=https://github.com/${{ github.repository }}/actions/runs/${{github.event.workflow_run.id}}/artifacts/$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
-          echo "expires=$(jq -j '.expires_at' artifact.json)" >> $GITHUB_OUTPUT
-      - name: Update comment
-        if: ${{steps.artifact.outputs.expires != 'null' }}
-        uses: thollander/actions-comment-pull-request@v2
+          echo "sha=$(jq -j '.workflow_run.head_sha' artifact.json)" >> $GITHUB_OUTPUT
+          echo "artifact_id=$(jq -j '.id' artifact.json)" >> $GITHUB_OUTPUT
+      - id: metadata
+        if: ${{ steps.artifact.outputs.pr_number != null }}
+        uses: redhat-plumbers-in-action/gather-pull-request-metadata@v1
         with:
-          message: |
-            Artifact [8vim-debug](${{steps.artifact.outputs.url}}) available until: ${{steps.artifact.outputs.expires}}
-          comment_tag: artifact
-          pr_number: ${{steps.artifact.outputs.pr_number}}
+          pr-number: ${{steps.artifact.outputs.pr_number}}
+  private_fdroid:
+    needs: [fetch_metadata]
+    if: |
+      needs.fetch_metadata.outputs.artifact_id != null
+      && !contains(fromJson(needs.fetch_metadata.outputs.metadata).labels.*.name,'ignore')
+    uses: ./.github/workflows/private-fdroid-repo.yaml
+    with:
+      type: 'pr'
+      pr: ${{fromJson(needs.fetch_metadata.outputs.pr_number || -1)}}
+      sha: ${{needs.fetch_metadata.outputs.sha}}
+      artifact: ${{fromJson(needs.fetch_metadata.outputs.artifact_id || -1)}}
+    secrets: inherit
+  notify:
+    uses: ./.github/workflows/matrix-release.yaml
+    needs: [fetch_metadata, private_fdroid]
+    with:
+      channel: debug
+      pr: ${{fromJson(needs.fetch_metadata.outputs.pr_number || -1)}}
+      sha: ${{needs.fetch_metadata.outputs.sha}}
+    secrets: inherit

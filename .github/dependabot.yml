@@ -10,7 +10,6 @@ updates:
     labels: [ignore]
     groups:
       kotlin:
-        applies-to: version-updates
         patterns:
           - "org.jetbrains.kotlin*"
           - "com.google.devtools.ksp*"
