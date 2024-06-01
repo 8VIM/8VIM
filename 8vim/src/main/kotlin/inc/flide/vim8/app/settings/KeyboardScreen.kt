@@ -73,6 +73,20 @@ fun KeyboardScreen() = Screen {
             title = stringRes(R.string.settings__keyboard__circle__auto_resize_group__title)
         ) {
             SwitchPreference(
+                prefs.keyboard.circle.dynamic.isEnabled,
+                title = stringRes(R.string.settings__keyboard__circle__dynamic_centre__title),
+                summary = stringRes(R.string.settings__keyboard__circle__dynamic_centre__summary)
+            )
+
+            SwitchPreference(
+                prefs.keyboard.circle.dynamic.isOverlayEnabled,
+                title = stringRes(
+                    R.string.settings__keyboard__circle__dynamic_centre_overlay_enabled__title
+                ),
+                visibleIf = { isDynamicCircleEnabled }
+            )
+
+            SwitchPreference(
                 prefs.keyboard.circle.autoResize,
                 title = stringRes(R.string.settings__keyboard__circle__auto_resize__title),
                 summaryOff = stringRes(
@@ -89,6 +103,7 @@ fun KeyboardScreen() = Screen {
                     maxPref = prefs.keyboard.circle.radiusSizeFactor,
                     title = stringRes(R.string.settings__keyboard__circle__size__title),
                     summary = stringRes(R.string.settings__keyboard__circle__size__summary),
+                    visibleIf = { isDynamicCircleEnabled },
                     min = 1,
                     max = 40
                 )
@@ -97,24 +112,11 @@ fun KeyboardScreen() = Screen {
                     pref = prefs.keyboard.circle.radiusSizeFactor,
                     title = stringRes(R.string.settings__keyboard__circle__size__title),
                     summary = stringRes(R.string.settings__keyboard__circle__size__summary),
+                    visibleIf = { isDynamicCircleEnabled },
                     min = 1,
                     max = 40
                 )
             }
-
-            SwitchPreference(
-                prefs.keyboard.circle.dynamic.isEnabled,
-                title = stringRes(R.string.settings__keyboard__circle__dynamic_centre__title),
-                summary = stringRes(R.string.settings__keyboard__circle__dynamic_centre__summary)
-            )
-
-            SwitchPreference(
-                prefs.keyboard.circle.dynamic.isOverlayEnabled,
-                title = stringRes(
-                    R.string.settings__keyboard__circle__dynamic_centre_overlay_enabled__title
-                ),
-                visibleIf = { isDynamicCircleEnabled }
-            )
         }
 
         PreferenceGroup(
