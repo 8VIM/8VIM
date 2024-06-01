@@ -1,0 +1,45 @@
+name: Manual RC
+
+concurrency: release
+
+on: 
+  workflow_dispatch:
+    inputs:
+      title:
+        type: string
+        required: true
+      pr:
+        type: number
+        required: true
+
+jobs:
+  bump_version:
+    name: Update version
+    uses: ./.github/workflows/bump-version.yaml
+    with:
+      message: ${{inputs.title}}
+      version: rc
+    secrets: inherit
+  release:
+    needs: [bump_version]
+    name: Release
+    uses: ./.github/workflows/publish.yaml
+    with:
+      version_code: ${{needs.bump_version.outputs.version_code}}
+      version_name: ${{needs.bump_version.outputs.version_name}}
+    secrets: inherit
+    permissions:
+      actions: write
+      issues: read
+      pull-requests: read
+      contents: write
+  private_fdroid:
+    needs: [release]
+    if: ${{ !cancelled() && needs.release.result != 'failure' }}
+    uses: ./.github/workflows/private-fdroid-repo.yaml
+    permissions:
+      actions: write
+    with:
+      type: merge
+      pr: ${{inputs.pr}}
+    secrets: inherit
