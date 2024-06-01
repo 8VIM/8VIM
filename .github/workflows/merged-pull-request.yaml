@@ -64,7 +64,7 @@ jobs:
       version_name: ${{needs.bump_version.outputs.version_name}}
     secrets: inherit
     permissions:
-      actions: read
+      actions: write
       issues: read
       pull-requests: read
       contents: write
@@ -72,6 +72,8 @@ jobs:
     needs: [release]
     if: ${{ !cancelled() && needs.release.result != 'failure' }}
     uses: ./.github/workflows/private-fdroid-repo.yaml
+    permissions:
+      actions: write
     with:
       type: merge
       pr: ${{github.event.number}}
