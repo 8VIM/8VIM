@@ -87,8 +87,8 @@ jobs:
           repository: 8VIM/8VIM.github.io
   release:
     name: Create github release
-    needs: [build, build_rc, playstore, f_droid]
-    if: ${{ !cancelled() && needs.build.result !='failure' && needs.build_rc.result !='failure' && needs.playstore.result != 'failure' && needs.f_droid.result != 'failure' }}
+    needs: [build, build_rc]
+    if: ${{ !cancelled() && needs.build.result !='failure' && needs.build_rc.result !='failure' }}
     permissions:
       actions: read
       issues: read
