@@ -69,8 +69,7 @@ jobs:
       pull-requests: read
       contents: write
   private_fdroid:
-    needs: [release]
-    if: ${{ !cancelled() && needs.release.result != 'failure' }}
+    needs: changes
     uses: ./.github/workflows/private-fdroid-repo.yaml
     permissions:
       actions: write
