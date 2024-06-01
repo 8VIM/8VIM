@@ -74,6 +74,14 @@ class InputEventDispatcher {
         lastKeyEventUp = eventData
     }
 
+    fun sendCancel(keyboardAction: KeyboardAction) = runBlocking {
+        pressedKeys.withLock { pressedKeys ->
+            if (pressedKeys.containsKey(keyboardAction)) {
+                pressedKeys.remove(keyboardAction)?.also { it.cancelJobs() }
+            }
+        }
+    }
+
     data class PressedKeyInfo(
         val eventTimeDown: Long,
         var job: Job? = null,
