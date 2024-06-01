@@ -68,6 +68,7 @@ fun KeyboardScreen() = Screen {
                 )
             }
         }
+
         PreferenceGroup(
             title = stringRes(R.string.settings__keyboard__circle__auto_resize_group__title)
         ) {

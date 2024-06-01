@@ -57,7 +57,7 @@ class InputFeedbackController private constructor(ims: InputMethodService) {
         }
     }
 
-    private fun performHapticFeedback(factor: Double) {
+    fun performHapticFeedback(factor: Double) {
         if (vibrator == null) return
         scope.launch {
             vibrator.vibrate(
