@@ -41,7 +41,7 @@ jobs:
       version_name: ${{needs.update_version.outputs.version_name}}
     secrets: inherit
     permissions:
-      actions: read
+      actions: write
       issues: read
       pull-requests: read
       contents: write
