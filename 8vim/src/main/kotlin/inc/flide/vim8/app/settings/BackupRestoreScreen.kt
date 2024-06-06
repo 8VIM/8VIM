@@ -35,7 +35,7 @@ fun BackupRestoreScreen() = Screen {
 
     val context = LocalContext.current
     val navController = LocalNavController.current
-    
+
     val backupManager by context.backupManager()
     var errorId by remember { mutableStateOf<Int?>(null) }
     var confirmDialogOpened by remember { mutableStateOf(false) }
