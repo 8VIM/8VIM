@@ -60,9 +60,18 @@ abstract class PreferenceModel(val version: Int) :
     }
 
     var exportedKeys: Map<String, Any?>
-        get() = sharedPreferences.all.entries
-            .filter { (key, _) -> registry[key]?.canBeExported ?: false }
-            .associateBy({ it.key }, { it.value }) + (DATASTORE_VERSION to version)
+        get() {
+            val editor = sharedPreferences.edit()
+            registry
+                .toMap()
+                .filter { (_, pref) -> pref.canBeExported && pref.getOrNull() == null }
+                .forEach { (_, pref) -> pref.serialize(editor, pref.get()) }
+            editor.apply()
+            return sharedPreferences.all.entries
+                .filter { (key, _) -> registry[key]?.canBeExported ?: false }
+                .associateBy({ it.key }, { it.value }) + (DATASTORE_VERSION to version)
+        }
+
         set(value) {
             val editor = sharedPreferences.edit()
             for ((k, v) in value) {
