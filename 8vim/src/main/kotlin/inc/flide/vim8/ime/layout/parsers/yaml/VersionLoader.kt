@@ -12,9 +12,9 @@ import inc.flide.vim8.ime.layout.models.error.InvalidLayoutError
 import inc.flide.vim8.ime.layout.models.error.LayoutError
 import inc.flide.vim8.ime.layout.models.error.UnknownVersion
 import inc.flide.vim8.ime.layout.models.error.validationMessages
-import java.text.MessageFormat
 import inc.flide.vim8.ime.layout.models.yaml.versions.version2.LayoutParser as Layout2
 import inc.flide.vim8.ime.layout.models.yaml.versions.version21.LayoutParser as Layout21
+import java.text.MessageFormat
 
 val versions = mapOf("2" to Layout2::parse, "2.1" to Layout21::parse)
 

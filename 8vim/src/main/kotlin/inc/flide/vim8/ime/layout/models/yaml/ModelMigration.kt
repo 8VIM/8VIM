@@ -8,5 +8,5 @@ interface ModelMigration<T> {
 }
 
 interface Parser<T> {
-    fun parse(mapper: ObjectMapper, jsonNode: JsonNode):T
+    fun parse(mapper: ObjectMapper, jsonNode: JsonNode): T
 }

@@ -28,7 +28,7 @@ data class Layout(
     companion object
 }
 
-object LayoutParser: Parser<Layout> {
-    override fun parse(mapper: ObjectMapper, jsonNode: JsonNode):Layout= mapper
+object LayoutParser : Parser<Layout> {
+    override fun parse(mapper: ObjectMapper, jsonNode: JsonNode): Layout = mapper
         .convertValue(jsonNode)
 }
