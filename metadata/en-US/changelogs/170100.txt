@@ -1,0 +1,6 @@
+## What's Changed
+
+- fix: circle resized when dynamic option was off by @MaethorNaur in #529
+
+
+**Full Changelog**: [v0.17.0...v0.17.1](https://github.com/8VIM/8VIM/compare/v0.17.0...v0.17.1)

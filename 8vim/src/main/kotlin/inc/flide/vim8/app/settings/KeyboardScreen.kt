@@ -73,36 +73,6 @@ fun KeyboardScreen() = Screen {
             title = stringRes(R.string.settings__keyboard__circle__auto_resize_group__title)
         ) {
             SwitchPreference(
-                prefs.keyboard.circle.autoResize,
-                title = stringRes(R.string.settings__keyboard__circle__auto_resize__title),
-                summaryOff = stringRes(
-                    R.string.settings__keyboard__circle__auto_resize__summary__off
-                ),
-                summaryOn = stringRes(
-                    R.string.settings__keyboard__circle__auto_resize__summary__on
-                )
-            )
-
-            if (circleAutoResize) {
-                RangeSliderPreference(
-                    minPref = prefs.keyboard.circle.radiusMinSizeFactor,
-                    maxPref = prefs.keyboard.circle.radiusSizeFactor,
-                    title = stringRes(R.string.settings__keyboard__circle__size__title),
-                    summary = stringRes(R.string.settings__keyboard__circle__size__summary),
-                    min = 1,
-                    max = 40
-                )
-            } else {
-                SliderPreference(
-                    pref = prefs.keyboard.circle.radiusSizeFactor,
-                    title = stringRes(R.string.settings__keyboard__circle__size__title),
-                    summary = stringRes(R.string.settings__keyboard__circle__size__summary),
-                    min = 1,
-                    max = 40
-                )
-            }
-
-            SwitchPreference(
                 prefs.keyboard.circle.dynamic.isEnabled,
                 title = stringRes(R.string.settings__keyboard__circle__dynamic_centre__title),
                 summary = stringRes(R.string.settings__keyboard__circle__dynamic_centre__summary)
@@ -115,6 +85,39 @@ fun KeyboardScreen() = Screen {
                 ),
                 visibleIf = { isDynamicCircleEnabled }
             )
+
+            SwitchPreference(
+                prefs.keyboard.circle.autoResize,
+                title = stringRes(R.string.settings__keyboard__circle__auto_resize__title),
+                summaryOff = stringRes(
+                    R.string.settings__keyboard__circle__auto_resize__summary__off
+                ),
+                summaryOn = stringRes(
+                    R.string.settings__keyboard__circle__auto_resize__summary__on
+                ),
+                visibleIf = { isDynamicCircleEnabled }
+            )
+
+            if (circleAutoResize) {
+                RangeSliderPreference(
+                    minPref = prefs.keyboard.circle.radiusMinSizeFactor,
+                    maxPref = prefs.keyboard.circle.radiusSizeFactor,
+                    title = stringRes(R.string.settings__keyboard__circle__size__title),
+                    summary = stringRes(R.string.settings__keyboard__circle__size__summary),
+                    visibleIf = { isDynamicCircleEnabled },
+                    min = 1,
+                    max = 40
+                )
+            } else {
+                SliderPreference(
+                    pref = prefs.keyboard.circle.radiusSizeFactor,
+                    title = stringRes(R.string.settings__keyboard__circle__size__title),
+                    summary = stringRes(R.string.settings__keyboard__circle__size__summary),
+                    visibleIf = { isDynamicCircleEnabled },
+                    min = 1,
+                    max = 40
+                )
+            }
         }
 
         PreferenceGroup(

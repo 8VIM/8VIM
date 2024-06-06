@@ -1,0 +1,1 @@
+fix: :bug: Reset to the default layer after a layered sequence

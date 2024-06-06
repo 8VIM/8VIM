@@ -1,0 +1,10 @@
+## What's ChaVged
+
+- feat: :sparkles: UI revamp in #432, #480, #443, #445
+- fix: :bug: Characters not displayed when selected in #444
+- feat: :sparkles: New haptics options in #445
+- feat: :rocket: Export/Import settings in #446
+- fix: Swipe-out gestures involuntarily applied on swipe-out termination in #471
+- feat: Floating keyboard option (usefull for tablet/foldable phones) in #490
+
+**Full Changes**: [here](https://github.com/8VIM/8VIM/releases/tag/v0.17.0)
