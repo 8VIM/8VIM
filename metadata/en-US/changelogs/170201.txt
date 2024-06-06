@@ -1,0 +1,1 @@
+fix: :bug: Cursor movements are selecting text instead of moving

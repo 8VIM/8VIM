@@ -32,8 +32,10 @@ import inc.flide.vim8.lib.compose.stringRes
 fun BackupRestoreScreen() = Screen {
     title = stringRes(R.string.settings__backup_and_restore__title)
     previewFieldVisible = false
+
     val context = LocalContext.current
     val navController = LocalNavController.current
+
     val backupManager by context.backupManager()
     var errorId by remember { mutableStateOf<Int?>(null) }
     var confirmDialogOpened by remember { mutableStateOf(false) }
