@@ -152,12 +152,16 @@ class KeyboardManager(context: Context) : InputKeyEventReceiver {
     }
 
     private fun handleMove(keycode: CustomKeycode) {
-        editorInstance.sendDownEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+        if (activeState.isUppercase) {
+            editorInstance.sendDownEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+        }
         editorInstance.sendDownAndUpKeyEvent(
             keycode.toKeyEvent(),
-            KeyEvent.META_SHIFT_MASK or activeState.ctrlFlag
+            activeState.shiftFlag or activeState.ctrlFlag
         )
-        editorInstance.sendUpEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+        if (activeState.isUppercase) {
+            editorInstance.sendUpEvent(KeyEvent.KEYCODE_SHIFT_LEFT, 0)
+        }
     }
 
     private fun handleSelectionStart() {
