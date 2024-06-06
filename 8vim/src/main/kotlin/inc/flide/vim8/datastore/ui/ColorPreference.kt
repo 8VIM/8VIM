@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import arrow.core.Option
+import com.github.skydoves.colorpicker.compose.AlphaSlider
 import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.BrightnessSlider
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
@@ -39,6 +40,8 @@ import inc.flide.vim8.datastore.model.PreferenceData
 import inc.flide.vim8.datastore.model.PreferenceModel
 import inc.flide.vim8.datastore.model.observeAsState
 import inc.flide.vim8.lib.compose.stringRes
+
+private val hexaRegex = "^[[:xdigit:]]{0,8}\$".toRegex(RegexOption.IGNORE_CASE)
 
 private fun Color.darkenColor(): Color = Color(
     red * 192 / 256,
@@ -122,7 +125,7 @@ fun <T : PreferenceModel> PreferenceUiScope<T>.ColorPreference(
 @Composable
 private fun ColorPicker(defaultColor: Color, onUpdate: (color: Color) -> Unit) {
     val controller = rememberColorPickerController()
-    var hexCode by remember { mutableStateOf("#${defaultColor.toHexCode()}") }
+    var hexCode by remember { mutableStateOf(defaultColor.toHexCode()) }
     var isError by remember { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.Top) {
         Box(modifier = Modifier.weight(8f)) {
@@ -138,12 +141,21 @@ private fun ColorPicker(defaultColor: Color, onUpdate: (color: Color) -> Unit) {
                 },
                 onColorChanged = {
                     if (it.fromUser) {
-                        hexCode = "#${it.color.toHexCode().uppercase()}"
+                        hexCode = it.color.toHexCode().uppercase()
                         onUpdate(it.color)
                     }
                 }
             )
         }
+        AlphaSlider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+                .height(35.dp)
+                .align(Alignment.CenterHorizontally),
+            controller = controller,
+            initialColor = defaultColor
+        )
         BrightnessSlider(
             modifier = Modifier
                 .fillMaxWidth()
@@ -156,22 +168,25 @@ private fun ColorPicker(defaultColor: Color, onUpdate: (color: Color) -> Unit) {
         TextField(
             value = hexCode,
             isError = isError,
+            prefix = { Text("#") },
             onValueChange = {
                 if (it.isEmpty()) {
                     hexCode = it
                     return@TextField
                 }
-                val value = if (it[0] == '#') it else "#$it"
-                if (value.length > 7) return@TextField
-                isError = Option
-                    .catch { Color(android.graphics.Color.parseColor(value)) }
-                    .onSome { color ->
-                        controller.selectByColor(color, true)
-                        hexCode = "#${color.toHexCode()}"
-                        onUpdate(color)
-                    }
-                    .onNone { hexCode = value }
-                    .isNone()
+                if (it.length > 8) return@TextField
+                hexCode = it
+                isError = if (hexaRegex.matches(it)) {
+                    Option
+                        .catch { Color(android.graphics.Color.parseColor("#$it")) }
+                        .onSome { color ->
+                            controller.selectByColor(color, true)
+                            onUpdate(color)
+                        }
+                        .isNone()
+                } else {
+                    true
+                }
             },
             singleLine = true,
             trailingIcon = {
@@ -194,5 +209,12 @@ private fun Color.toHexCode(): String {
     val red = this.red * 255
     val green = this.green * 255
     val blue = this.blue * 255
-    return String.format("%02x%02x%02x", red.toInt(), green.toInt(), blue.toInt()).uppercase()
+    val alpha = this.alpha * 255
+    return String.format(
+        "%02x%02x%02x%02x",
+        alpha.toInt(),
+        red.toInt(),
+        green.toInt(),
+        blue.toInt()
+    ).uppercase()
 }
