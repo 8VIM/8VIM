@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import arrow.core.Option
+import com.github.skydoves.colorpicker.compose.AlphaSlider
 import com.github.skydoves.colorpicker.compose.AlphaTile
 import com.github.skydoves.colorpicker.compose.BrightnessSlider
 import com.github.skydoves.colorpicker.compose.HsvColorPicker
@@ -144,6 +145,15 @@ private fun ColorPicker(defaultColor: Color, onUpdate: (color: Color) -> Unit) {
                 }
             )
         }
+        AlphaSlider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+                .height(35.dp)
+                .align(Alignment.CenterHorizontally),
+            controller = controller,
+            initialColor = defaultColor
+        )
         BrightnessSlider(
             modifier = Modifier
                 .fillMaxWidth()
@@ -162,7 +172,7 @@ private fun ColorPicker(defaultColor: Color, onUpdate: (color: Color) -> Unit) {
                     return@TextField
                 }
                 val value = if (it[0] == '#') it else "#$it"
-                if (value.length > 7) return@TextField
+                if (value.length > 9) return@TextField
                 isError = Option
                     .catch { Color(android.graphics.Color.parseColor(value)) }
                     .onSome { color ->
@@ -194,5 +204,12 @@ private fun Color.toHexCode(): String {
     val red = this.red * 255
     val green = this.green * 255
     val blue = this.blue * 255
-    return String.format("%02x%02x%02x", red.toInt(), green.toInt(), blue.toInt()).uppercase()
+    val alpha = this.alpha * 255
+    return String.format(
+        "%02x%02x%02x%02x",
+        red.toInt(),
+        green.toInt(),
+        blue.toInt(),
+        alpha.toInt()
+    ).uppercase()
 }
