@@ -141,7 +141,7 @@ jobs:
     secrets: inherit
   cleanup:
     name: Cleanup artifact
-    needs: [build, build_rc, release, private_fdroid]
+    needs: [build, build_rc, release, playstore, private_fdroid]
     runs-on: ubuntu-latest
     if: ${{always()}}
     steps:
