@@ -7,6 +7,7 @@
       "properties": {
         "type": {
           "type": "string",
+          "description": "type can be either `input_text` (default in not specified) or `input_key`",
           "pattern": "^(?i)(input_text|input_key)$",
           "message": {
             "type": "Invalid type",
@@ -14,6 +15,7 @@
           }
         },
         "flags": {
+          "description": "Allowed string value or integer equivalent:\n* meta_shift_on\n* meta_alt_on\n* meta_sym_on\n* meta_function_on\n* meta_alt_left_on\n* meta_alt_right_on\n* meta_shift_left_on\n* meta_shift_right_on\n* meta_ctrl_on\n* meta_ctrl_left_on\n* meta_ctrl_right_on\n* meta_meta_on\n* meta_meta_left_on\n* meta_meta_right_on\n* meta_caps_lock_on\n* meta_num_lock_on\n* meta_scroll_lock_on",
           "type": ["integer", "string", "array"],
           "pattern": "^(?i)(meta_shift_on|meta_alt_on|meta_sym_on|meta_function_on|meta_alt_left_on|meta_alt_right_on|meta_shift_left_on|meta_shift_right_on|meta_ctrl_on|meta_ctrl_left_on|meta_ctrl_right_on|meta_meta_on|meta_meta_left_on|meta_meta_right_on|meta_caps_lock_on|meta_num_lock_on|meta_scroll_lock_on)$",
           "minimum": 0,
@@ -21,6 +23,7 @@
             "type": ["integer", "string"],
             "minimum": 0,
             "pattern": "^(?i)(meta_shift_on|meta_alt_on|meta_sym_on|meta_function_on|meta_alt_left_on|meta_alt_right_on|meta_shift_left_on|meta_shift_right_on|meta_ctrl_on|meta_ctrl_left_on|meta_ctrl_right_on|meta_meta_on|meta_meta_left_on|meta_meta_right_on|meta_caps_lock_on|meta_num_lock_on|meta_scroll_lock_on)$",
+            "description": "Allowed string value or integer equivalent:\n* meta_shift_on\n* meta_alt_on\n* meta_sym_on\n* meta_function_on\n* meta_alt_left_on\n* meta_alt_right_on\n* meta_shift_left_on\n* meta_shift_right_on\n* meta_ctrl_on\n* meta_ctrl_left_on\n* meta_ctrl_right_on\n* meta_meta_on\n* meta_meta_left_on\n* meta_meta_right_on\n* meta_caps_lock_on\n* meta_num_lock_on\n* meta_scroll_lock_on",
             "message": {
               "pattern": "Valid flag: [meta_shift_on, meta_alt_on, meta_sym_on, meta_function_on, meta_alt_left_on, meta_alt_right_on, meta_shift_left_on, meta_shift_right_on, meta_ctrl_on, meta_ctrl_left_on, meta_ctrl_right_on, meta_meta_on, meta_meta_left_on, meta_meta_right_on, meta_caps_lock_on, meta_num_lock_on, meta_scroll_lock_on]"
             }
@@ -31,6 +34,7 @@
         },
         "key_code": {
           "type": "string",
+          "description": "Allowed string value one of the android key event code name or:\n* move_current_end_point_left\n* move_current_end_point_right\n* move_current_end_point_up\n* move_current_end_point_down\n* selection_start\n* select_all\n* toggle_selection_anchor\n* shift_toggle\n* switch_to_main_keypad\n* switch_to_number_keypad\n* switch_to_symbols_keypad\n* switch_to_selection_keypad\n* switch_to_emoticon_keyboard\n* hide_keyboard\n* no_operation\n* fn_toggle",
           "pattern": "^(?i)(keycode_.+|move_current_end_point_left|move_current_end_point_right|move_current_end_point_up|move_current_end_point_down|selection_start|select_all|toggle_selection_anchor|shift_toggle|switch_to_main_keypad|switch_to_number_keypad|switch_to_symbols_keypad|switch_to_selection_keypad|switch_to_emoticon_keyboard|hide_keyboard|no_operation|fn_toggle)$",
           "message": {
             "pattern": "Must be one of a valid android KeyCode or one of: [move_current_end_point_left, move_current_end_point_right, move_current_end_point_up, move_current_end_point_down, selection_start, select_all, toggle_selection_anchor, shift_toggle, switch_to_main_keypad, switch_to_number_keypad, switch_to_symbols_keypad, switch_to_selection_keypad, switch_to_emoticon_keyboard, hide_keyboard, no_operation,fn_toggle]"
@@ -40,9 +44,11 @@
           "type": "string"
         },
         "movement_sequence": {
+          "description": "If `type` in `input_text` the movement sequence is computed from the layer/sector/part. However if this field is defined, the move sequence will follow that pattern",
           "type": "array",
           "items": {
             "type": "string",
+            "description": "* no_touch\n* inside_circle\n* top\n* left\n* bottom\n* right\n* long_press\n* long_press_end",
             "pattern": "^(?i)(no_touch|inside_circle|top|left|bottom|right|long_press|long_press_end)$",
             "message": {
               "pattern": "Finger position can only be one of: [no_touch, inside_circle, top, left, bottom right, long_press, long_press_end]"
@@ -50,6 +56,7 @@
           }
         },
         "upper_case": {
+          "description": "If not set and `type` is `input_text` the value will the upper case version `lower_case`.\nRequire `lower_case` to be defined",
           "type": "string"
         }
       },
@@ -82,6 +89,7 @@
       "type": "object",
       "properties": {
         "sectors": {
+          "description": "sectors accept left/right and top/bottom properties\nEach accepts receptively a sub parts top/bottom and left/right properties",
           "type": "object",
           "patternProperties": {
             "^(?i)(left|right)$": {
@@ -140,27 +148,34 @@
     },
     "info": {
       "type": "object",
+      "description": "Information about the layout",
       "properties": {
         "contact": {
+          "description": "Author information",
           "type": "object",
           "properties": {
             "email": {
+              "description": "Author email",
               "type": "string",
               "format": "email"
             },
             "name": {
+              "description": "Author name",
               "type": "string"
             }
           },
           "additionalProperties": false
         },
         "description": {
+          "description": "Layout description",
           "type": "string"
         },
         "name": {
+          "description": "Layout name",
           "type": "string"
         },
         "rtl": {
+          "description": "Is the language is written from right to left",
           "type": "boolean",
           "default": false
         }
@@ -168,6 +183,7 @@
       "additionalProperties": false
     },
     "extra_layers": {
+      "description": "Defined extra layers. Requires `default` to be set",
       "type": "object",
       "patternProperties": {
         "^(?i)(first|second|third|fourth|fifth)$": {

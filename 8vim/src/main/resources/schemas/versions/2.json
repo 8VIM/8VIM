@@ -2,8 +2,10 @@
   "$id": "https://8vim.github.io/schemas/versions/2.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
+  "description": "Layout version 2",
   "properties": {
     "version": {
+      "description": "Version can be ommited or have the value `2`",
       "type": "string",
       "const": "2"
     },
@@ -14,44 +16,36 @@
       "type": "object",
       "properties": {
         "default": {
+          "description": "Required if `extra_layers` is defined or at least as one of the other layers",
           "$ref": "/schemas/common.json#/$defs/sectors"
         },
         "extra_layers": {
           "$ref": "/schemas/common.json#/$defs/extra_layers"
         },
         "hidden": {
+          "description": "Required at least as one of layer",
           "$ref": "/schemas/common.json#/$defs/actions"
         }
       },
       "additionalProperties": false,
       "if": {
-        "required": [
-          "extra_layers"
-        ]
+        "required": ["extra_layers"]
       },
       "then": {
-        "required": [
-          "default"
-        ],
+        "required": ["default"],
         "message": {
           "required": "Default layer is required if extra_layers is defined"
         }
       },
       "else": {
         "if": {
-          "required": [
-            "hidden"
-          ]
+          "required": ["hidden"]
         },
         "then": {
-          "required": [
-            "hidden"
-          ]
+          "required": ["hidden"]
         },
         "else": {
-          "required": [
-            "default"
-          ],
+          "required": ["default"],
           "message": {
             "required": "default or hidden is required"
           }
@@ -59,8 +53,6 @@
       }
     }
   },
-  "required": [
-    "layers"
-  ],
+  "required": ["layers"],
   "additionalProperties": false
 }

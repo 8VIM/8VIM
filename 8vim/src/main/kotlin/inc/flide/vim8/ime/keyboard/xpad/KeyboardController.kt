@@ -302,14 +302,11 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             } else {
                 listOf()
             }
-        val defaultLayerCondition = (
-            keyboard.layerLevel == LayerLevel.FIRST &&
-                movementSequence[0] == FingerPosition.INSIDE_CIRCLE
-            )
+
         val extraLayerCondition =
             keyboard.layerLevel !== LayerLevel.FIRST &&
                 movementSequence.size >= layerSize
-        if (defaultLayerCondition || extraLayerCondition) {
+        if (extraLayerCondition) {
             movementSequence.clear()
             resetKey()
             currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT
