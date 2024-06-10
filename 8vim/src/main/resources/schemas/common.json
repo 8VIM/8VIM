@@ -44,7 +44,7 @@
           "type": "string"
         },
         "movement_sequence": {
-          "description": "If `type` in `input_text` the movement sequence is computed from the layer/sector/part. However if this field is defined, the move sequence will follow that pattern",
+          "description": "If `type` in `input_text` the movement sequence is computed from the layer/sector/part. However if this field is defined, the move sequence will follow that pattern and must end by `inside_circle` or `no_touch`.",
           "type": "array",
           "items": {
             "type": "string",
