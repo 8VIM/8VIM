@@ -104,7 +104,6 @@ fun KeyboardScreen() = Screen {
                     maxPref = prefs.keyboard.circle.radiusSizeFactor,
                     title = stringRes(R.string.settings__keyboard__circle__size__title),
                     summary = stringRes(R.string.settings__keyboard__circle__size__summary),
-                    visibleIf = { isDynamicCircleEnabled },
                     min = 1,
                     max = 40
                 )
@@ -113,7 +112,6 @@ fun KeyboardScreen() = Screen {
                     pref = prefs.keyboard.circle.radiusSizeFactor,
                     title = stringRes(R.string.settings__keyboard__circle__size__title),
                     summary = stringRes(R.string.settings__keyboard__circle__size__summary),
-                    visibleIf = { isDynamicCircleEnabled },
                     min = 1,
                     max = 40
                 )

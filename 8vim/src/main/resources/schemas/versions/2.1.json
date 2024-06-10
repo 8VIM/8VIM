@@ -2,8 +2,10 @@
   "$id": "https://8vim.github.io/schemas/versions/2.1.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
+  "description": "Layout version 2.1",
   "properties": {
     "version": {
+      "description": "Version should have the value `2.1`",
       "type": "string",
       "const": "2.1"
     },
@@ -14,16 +16,18 @@
       "type": "object",
       "properties": {
         "default": {
+          "description": "Required if `extra_layers` is defined or at least as one of the other layers",
           "$ref": "/schemas/common.json#/$defs/sectors"
         },
         "extra_layers": {
           "$ref": "/schemas/common.json#/$defs/extra_layers"
         },
         "hidden": {
+          "description": "Required at least as one of layer",
           "$ref": "/schemas/common.json#/$defs/actions"
         },
         "functions": {
-          "description": "Like hidden but requires 'fn button' to be active for being able to be triggered",
+          "description": "Like hidden but requires 'fn button' to be active for being able to be triggered\nRequired at least as one of layer",
           "type": "array",
           "items": {
             "$ref": "/schemas/common.json#/$defs/action"
@@ -88,7 +92,8 @@
     }
   },
   "required": [
-    "layers"
+    "layers",
+    "version"
   ],
   "additionalProperties": false
 }

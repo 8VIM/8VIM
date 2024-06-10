@@ -14,6 +14,9 @@ on:
         type: number
       sha:
         type: string
+      cache-read-only:
+        type: boolean
+        default: false
     outputs:
       artifact-id:
         value: ${{ jobs.build.outputs.artifact-id }}
@@ -57,6 +60,8 @@ jobs:
           distribution: temurin
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-read-only: ${{inputs.cache-read-only}}
       - name: Get keystore
         if: ${{ inputs.target != 'debug'}}
         run: |
