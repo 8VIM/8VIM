@@ -10,6 +10,9 @@ on:
       version_name:
         required: true
         type: string
+      cache-read-only:
+        type: boolean
+        default: false
   workflow_call:
     inputs:
       version_code:
@@ -18,7 +21,9 @@ on:
       version_name:
         required: true
         type: string
-
+      cache-read-only:
+        type: boolean
+        default: false
 jobs:
   build_rc:
     if: ${{contains(inputs.version_name, 'rc')}}
@@ -27,6 +32,7 @@ jobs:
     with:
       ref: v${{inputs.version_name}}
       target: rc
+      cache-read-only: ${{inputs.cache-read-only}}
     secrets: inherit
   build:
     name: Build app
@@ -34,6 +40,7 @@ jobs:
     with:
       ref: v${{inputs.version_name}}
       target: release
+      cache-read-only: ${{inputs.cache-read-only}}
     secrets: inherit
   playstore:
     name: Deploy the app to Google playstore
@@ -141,7 +148,7 @@ jobs:
     secrets: inherit
   cleanup:
     name: Cleanup artifact
-    needs: [build, build_rc, release, private_fdroid]
+    needs: [build, build_rc, release, playstore, private_fdroid]
     runs-on: ubuntu-latest
     if: ${{always()}}
     steps:

@@ -1,0 +1,5 @@
+## What's Changed
+
+- fix: :bug: Default settings values were not exported by @MaethorNaur in #531
+
+**Full Changelog**: [v0.17.1...v0.17.2](https://github.com/8VIM/8VIM/compare/v0.17.1...v0.17.2)

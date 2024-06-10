@@ -1,0 +1,5 @@
+## What's Changed
+
+- fix: :bug: Overriden movements on visibles layers not alwaus trigggered by @MaethorNaur in #537
+
+**Full Changelog**: [v0.17.3...v0.17.4](https://github.com/8VIM/8VIM/compare/v0.17.3...v0.17.4)

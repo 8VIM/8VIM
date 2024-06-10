@@ -39,6 +39,7 @@ jobs:
     with:
       version_code: ${{needs.update_version.outputs.version_code}}
       version_name: ${{needs.update_version.outputs.version_name}}
+      cache-read-only: true
     secrets: inherit
     permissions:
       actions: write
