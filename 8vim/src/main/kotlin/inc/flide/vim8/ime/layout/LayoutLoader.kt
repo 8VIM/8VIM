@@ -60,15 +60,7 @@ class YamlLayoutLoader(
             KeyboardData.info
                 .set(keyboardData, tempKeyboardData.info)
                 .addAllToActionMap(
-                    if (validateNoConflictingActions(
-                            keyboardData.actionMap,
-                            tempKeyboardDataActionMap
-                        )
-                    ) {
-                        tempKeyboardDataActionMap
-                    } else {
-                        emptyMap()
-                    }
+                    tempKeyboardDataActionMap
                 ).let {
                     LayerLevel.VisibleLayers.fold(it) { acc, layer ->
                         val characterSets =
