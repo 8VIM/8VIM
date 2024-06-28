@@ -98,7 +98,7 @@ fun KeyboardScreen() = Screen {
                 visibleIf = { isDynamicCircleEnabled }
             )
 
-            if (circleAutoResize) {
+            if (isDynamicCircleEnabled && circleAutoResize) {
                 RangeSliderPreference(
                     minPref = prefs.keyboard.circle.radiusMinSizeFactor,
                     maxPref = prefs.keyboard.circle.radiusSizeFactor,
