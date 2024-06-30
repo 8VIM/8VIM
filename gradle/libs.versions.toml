@@ -27,7 +27,7 @@ mannodermaus-android-junit5 = "1.10.0.0"
 slf4j = "2.0.13"
 
 # Testing
-androidx-test-core = "1.6.0"
+androidx-test-core = "1.6.1"
 androidx-test-runner = "1.5.2"
 kotest-runner-android = "1.1.1"
 kotest-assertions-android = "1.1.1"
