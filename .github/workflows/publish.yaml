@@ -114,7 +114,7 @@ jobs:
           path: artifact/
       - name: Create Changelog
         id: github_release
-        uses: mikepenz/release-changelog-builder-action@v4
+        uses: mikepenz/release-changelog-builder-action@v5
         with:
           configuration: changelog-configuration.json
           ignorePreReleases: "${{!contains(inputs.version_name, 'rc') && 'true' || 'false'}}"
