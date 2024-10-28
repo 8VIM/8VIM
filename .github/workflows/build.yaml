@@ -56,7 +56,7 @@ jobs:
           echo "SHA=${{inputs.sha}}" >> 8vim/version.properties
       - uses: actions/setup-java@v4
         with:
-          java-version: "17"
+          java-version: "19"
           distribution: temurin
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
