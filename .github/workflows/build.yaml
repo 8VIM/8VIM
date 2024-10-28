@@ -62,7 +62,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           cache-read-only: ${{inputs.cache-read-only}}
-          gradle-version: "8.9"
       - name: Get keystore
         if: ${{ inputs.target != 'debug'}}
         run: |

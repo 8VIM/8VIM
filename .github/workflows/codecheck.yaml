@@ -20,8 +20,6 @@ jobs:
           distribution: temurin
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: "8.9"
       - run: ./gradlew check
       - name: Upload coverage reports to Codecov
         if: ${{ !inputs.skip-codecov }}
