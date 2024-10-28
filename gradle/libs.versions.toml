@@ -31,7 +31,6 @@ androidx-test-core = "1.6.1"
 androidx-test-runner = "1.6.2"
 kotest-runner-android = "1.1.1"
 kotest-assertions-android = "1.1.1"
-androidx-test-espresso = "3.6.1"
 kotest = "5.9.1"
 kotest-arrow = "1.4.0"
 logback-classic = "1.5.6"
@@ -75,7 +74,6 @@ androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-te
 androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test-core" }
 androidx-test-core-ktx = { module = "androidx.test:core-ktx", version.ref = "androidx-test-core" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test-runner" }
-androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback-classic" }
 kotest-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
