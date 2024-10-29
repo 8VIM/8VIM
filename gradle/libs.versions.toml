@@ -33,7 +33,7 @@ kotest-runner-android = "1.1.1"
 kotest-assertions-android = "1.1.1"
 kotest = "5.9.1"
 kotest-arrow = "1.4.0"
-logback-classic = "1.5.6"
+logback-classic = "1.5.12"
 mockk = "1.13.10"
 
 [libraries]
