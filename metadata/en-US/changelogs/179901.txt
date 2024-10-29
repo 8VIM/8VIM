@@ -1,1 +1,1 @@
-fix: circle resized when dynamic option was off
+chore(deps): update versions

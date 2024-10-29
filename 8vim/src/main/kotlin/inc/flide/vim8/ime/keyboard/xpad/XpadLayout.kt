@@ -43,6 +43,7 @@ import inc.flide.vim8.ime.input.InputShiftState
 import inc.flide.vim8.ime.keyboard.compose.LocalKeyboardHeight
 import inc.flide.vim8.keyboardManager
 import inc.flide.vim8.lib.compose.DisposableLifecycleEffect
+import inc.flide.vim8.lib.geometry.toIntOffset
 import kotlin.math.max
 import kotlin.math.min
 import kotlinx.coroutines.channels.Channel
@@ -233,10 +234,9 @@ private fun KeyButton(key: Key) = with(LocalDensity.current) {
 
     Text(
         modifier = Modifier
-            .absoluteOffset(
-                key.position.x.toDp(),
-                key.position.y.toDp()
-            )
+            .absoluteOffset {
+                key.position.toIntOffset()
+            }
             .drawWithContent {
                 if (key.isSelected) {
                     val topLeft = key.position.copy(
