@@ -120,7 +120,7 @@ fun PreviewKeyboardField(
                 keyboardActions = KeyboardActions(
                     onDone = { focusManager.clearFocus() }
                 ),
-                keyboardOptions = KeyboardOptions(autoCorrect = true),
+                keyboardOptions = KeyboardOptions(autoCorrectEnabled = true),
                 singleLine = false,
                 maxLines = 5,
                 shape = RectangleShape,

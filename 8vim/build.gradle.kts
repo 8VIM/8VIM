@@ -240,7 +240,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.core.ktx)
     androidTestImplementation(libs.androidx.test.rules)
-    androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.kotest.assertions)
     androidTestImplementation(libs.kotest.runner.android)
     androidTestImplementation(libs.androidx.test.runner)
