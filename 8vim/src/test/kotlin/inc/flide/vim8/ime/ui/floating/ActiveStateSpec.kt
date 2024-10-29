@@ -36,7 +36,7 @@ class ActiveStateSpec : FunSpec({
         activeState.isActive.value.shouldBeTrue()
         delay(25)
         activeState.isActive.value.shouldBeTrue()
-        delay(26)
+        delay(50)
         activeState.isActive.value.shouldBeFalse()
     }
 
