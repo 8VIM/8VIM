@@ -23,7 +23,7 @@ kotlin = "2.0.21"
 ksp = "2.0.21-1.0.26"
 logback-android = "3.0.0"
 mikepenz-aboutlibraries = "11.2.3"
-mannodermaus-android-junit5 = "1.10.0.0"
+mannodermaus-android-junit5 = "1.11.2.0"
 slf4j = "2.0.16"
 
 # Testing
