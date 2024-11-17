@@ -23,7 +23,7 @@ jobs:
       - run: ./gradlew check
       - name: Upload coverage reports to Codecov
         if: ${{ !inputs.skip-codecov }}
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: ./8vim/build/reports/jacoco/jacocoTestReportDebug
