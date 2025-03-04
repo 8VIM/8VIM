@@ -188,6 +188,10 @@ android {
         findByName("main")?.java?.srcDirs(project.file("src/main/kotlin"))
         findByName("test")?.java?.srcDirs(project.file("src/test/kotlin"))
     }
+
+    aboutLibraries {
+        excludeFields = arrayOf("generated")
+    }
 }
 
 tasks.withType<JacocoReport> {
