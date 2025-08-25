@@ -1,1 +1,0 @@
-A small screen keyboard inspired by VIM and 8Pen

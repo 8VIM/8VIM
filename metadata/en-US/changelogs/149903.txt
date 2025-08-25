@@ -1,1 +1,0 @@
-fix: 🚑 Fix app crashing due to some code incompatibility

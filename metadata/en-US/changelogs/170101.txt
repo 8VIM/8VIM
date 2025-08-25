@@ -1,1 +1,0 @@
-fix: :bug: Default settings values were not exported

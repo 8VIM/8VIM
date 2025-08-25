@@ -1,1 +1,0 @@
-fix: 🐛 Couldn't launch 8VIM settings from android settings

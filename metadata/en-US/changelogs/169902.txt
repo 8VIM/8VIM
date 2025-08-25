@@ -1,1 +1,0 @@
-feat: :sparkles: Reduce the circle if a movement starts within it

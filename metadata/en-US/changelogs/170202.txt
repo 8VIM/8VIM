@@ -1,1 +1,0 @@
-feat: :sparkles: Add an alpha slider for the color picker

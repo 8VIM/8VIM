@@ -1,1 +1,0 @@
-feat: more option for cursor movement/selection

@@ -1,1 +1,0 @@
-fix: :bug: Keyboard with buttons not registering all touch events

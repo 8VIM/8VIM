@@ -1,1 +1,0 @@
-fix: Swipe-out gestures involuntarily applied on swipe-out termination

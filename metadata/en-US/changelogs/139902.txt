@@ -1,1 +1,0 @@
-Update it.yaml - letters disposition follows letter frequency

@@ -1,1 +1,0 @@
-fix: centre the keyboard on phone landscape only

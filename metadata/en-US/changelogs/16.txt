@@ -1,6 +1,0 @@
-🐛 fix : Incorrect height for layouts
-🐛 fix : Make jackson library compatible for older android version
-🚀 feat : Dark theme now available
-
-@Contributors :
-    - Pedro Mangabeira

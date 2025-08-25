@@ -1,1 +1,0 @@
-fix: :bug: Characters not displayed when selected

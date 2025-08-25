@@ -1,1 +1,0 @@
-fix: 🐛 delete key not working on some apps

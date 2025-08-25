@@ -1,1 +1,0 @@
-fix: 🐛 app crashing when changing color by @MaethorNaur in #410

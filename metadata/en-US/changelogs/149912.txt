@@ -1,1 +1,0 @@
-fix: 🐛 8Vim crashing when a layout is deleted

@@ -1,2 +1,0 @@
-- fix: 🐛 IMEs listing not working on Android 14 by @MaethorNaur in #425
-- fix: 🐛 Extra layers not displayed by @MaethorNaur in #427
