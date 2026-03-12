@@ -114,5 +114,5 @@ private fun fileSelector(): () -> Unit {
                 }
         }
     }
-    return { launcher.launch(arrayOf("application/octet-stream")) }
+    return { launcher.launch(arrayOf("*/*")) }
 }
