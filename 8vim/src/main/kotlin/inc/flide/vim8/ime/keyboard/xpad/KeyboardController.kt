@@ -131,6 +131,8 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
     private val activeState get() = keyboardManager.activeState
     private val glideGesture = GlideGesture.Detector(this)
     private val showTrail: Boolean get() = prefs.keyboard.trail.isVisible.get()
+    private val allowComplexGestures: Boolean
+        get() = prefs.keyboard.behavior.allowComplexGestures.get()
     private val isDynamicCircleOverlayEnabled: Boolean
         get() = prefs.keyboard.circle.dynamic.isOverlayEnabled.get()
     lateinit var keyboard: Keyboard
@@ -236,15 +238,19 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
                         keyboard.hasAction(movementSequence)
                     ) {
                         processKeyPress(movementSequence)
-                        resetKey()
-                        movementSequence.clear()
-                        keyboard.layerLevel = LayerLevel.FIRST
-                        currentMovementSequenceType = MovementSequenceType.CONTINUED_MOVEMENT
-                        movementSequence.add(currentFingerPosition)
+                        restartMovementSequence(
+                            movementType = MovementSequenceType.CONTINUED_MOVEMENT
+                        )
                     } else {
                         Vim8ImeService.inputFeedbackController()?.sectorCross()
                         if (currentFingerPosition == FingerPosition.INSIDE_CIRCLE) {
-                            processLayerMovements()
+                            if (allowComplexGestures) {
+                                processLayerMovements()
+                            } else {
+                                restartMovementSequence(
+                                    movementType = MovementSequenceType.NEW_MOVEMENT
+                                )
+                            }
                         } else {
                             detectKeySelection()
                         }
@@ -307,13 +313,28 @@ class KeyboardController(context: Context) : GlideGesture.Listener {
             keyboard.layerLevel !== LayerLevel.FIRST &&
                 movementSequence.size >= layerSize
         if (extraLayerCondition) {
-            movementSequence.clear()
-            resetKey()
-            currentMovementSequenceType = MovementSequenceType.NEW_MOVEMENT
-            movementSequence.addAll(extraLayerMovementSequences)
-            movementSequence.add(currentFingerPosition)
+            restartMovementSequence(
+                movementType = MovementSequenceType.NEW_MOVEMENT,
+                prefix = extraLayerMovementSequences,
+                resetLayer = false
+            )
             if (!isReducesCircleSize) isReducesCircleSize = true
         }
+    }
+
+    private fun restartMovementSequence(
+        movementType: MovementSequenceType,
+        prefix: List<FingerPosition> = emptyList(),
+        resetLayer: Boolean = true
+    ) {
+        resetKey()
+        movementSequence.clear()
+        if (resetLayer) {
+            keyboard.layerLevel = LayerLevel.FIRST
+        }
+        currentMovementSequenceType = movementType
+        movementSequence.addAll(prefix)
+        movementSequence.add(currentFingerPosition)
     }
 
     private fun initiateLongPressDetection() {
