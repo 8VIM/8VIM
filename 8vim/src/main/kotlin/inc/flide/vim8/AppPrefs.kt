@@ -234,6 +234,10 @@ class AppPrefs : PreferenceModel(9) {
         inner class Behavior {
             val cursor = Cursor()
 
+            val allowComplexGestures = boolean(
+                key = "prefs_keyboard_behavior_allow_complex_gestures",
+                default = true
+            )
             val fnEnabled = boolean("prefs_keyboard_behavior_fn_enabled", default = true)
 
             inner class Cursor {

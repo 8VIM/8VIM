@@ -192,6 +192,9 @@
     <string name="settings__gesture__cursor__move__by__word__summary__off">Move the cursor character by character</string>
     <string name="settings__gesture__fn_enabled__title">Functions movements such as moving the cursors</string>
     <string name="settings__gesture__fn_enabled__summary">Can be toggled from the sidebar or doing a full counter-clockwise rotation starting from the top sector</string>
+    <string name="settings__gesture__allow_complex_gestures__title">Complex gesture stacking</string>
+    <string name="settings__gesture__allow_complex_gestures__summary__on">Keep unresolved center crossings as part of the current gesture</string>
+    <string name="settings__gesture__allow_complex_gestures__summary__off">Reset to a new gesture when returning to the center without matching an action</string>
 
     <string name="settings__backup_and_restore__title" comment="Title of Advanced screen">Back up &amp; Restore</string>
     <string name="settings__backup_and_restore__back_up__title" comment="Title of Back up screen">Back up data</string>

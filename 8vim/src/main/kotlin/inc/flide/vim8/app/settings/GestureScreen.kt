@@ -28,6 +28,16 @@ fun GestureScreen() = Screen {
                 title = stringRes(R.string.settings__gesture__fn_enabled__title),
                 summary = stringRes(R.string.settings__gesture__fn_enabled__summary)
             )
+            SwitchPreference(
+                prefs.keyboard.behavior.allowComplexGestures,
+                title = stringRes(R.string.settings__gesture__allow_complex_gestures__title),
+                summaryOff = stringRes(
+                    R.string.settings__gesture__allow_complex_gestures__summary__off
+                ),
+                summaryOn = stringRes(
+                    R.string.settings__gesture__allow_complex_gestures__summary__on
+                )
+            )
         }
     }
 }

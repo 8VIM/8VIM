@@ -60,6 +60,7 @@ class KeyboardControllerSpec : FunSpec({
     lateinit var keyboardCircle: Keyboard.Circle
     lateinit var isDynamicCircleOverlayEnabled: PreferenceData<Boolean>
     lateinit var showTrail: PreferenceData<Boolean>
+    lateinit var allowComplexGesturesPref: PreferenceData<Boolean>
     val colorScheme = lightColorScheme()
 
     beforeSpec {
@@ -110,6 +111,9 @@ class KeyboardControllerSpec : FunSpec({
                             every { isOverlayEnabled } answers { isDynamicCircleOverlayEnabled }
                         }
                     }
+                    every { behavior } returns mockk {
+                        every { allowComplexGestures } answers { allowComplexGesturesPref }
+                    }
                 }
             }
         )
@@ -133,6 +137,10 @@ class KeyboardControllerSpec : FunSpec({
 
         showTrail = mockk<PreferenceData<Boolean>> {
             every { get() } returns false
+        }
+
+        allowComplexGesturesPref = mockk<PreferenceData<Boolean>> {
+            every { get() } returns true
         }
 
         keyboardCircle = mockk<Keyboard.Circle>(relaxed = true) {
@@ -272,6 +280,101 @@ class KeyboardControllerSpec : FunSpec({
                     eventDispatcher.sendDownUp(action, false)
                 }
             }
+        }
+
+        test("preserves unresolved center crossings when complex gestures are enabled") {
+            every { allowComplexGesturesPref.get() } returns true
+            val action = arbKeyboardAction.next()
+            val resetMovement = listOf(
+                FingerPosition.INSIDE_CIRCLE,
+                FingerPosition.BOTTOM,
+                FingerPosition.LEFT,
+                FingerPosition.INSIDE_CIRCLE
+            )
+            every { xpadKeyboard.layerLevel } returns LayerLevel.FIRST
+            every { xpadKeyboard.hasAction(resetMovement) } returns true
+            every { xpadKeyboard.action(resetMovement, any()) } returns action.some()
+
+            every { event.actionMasked } answers { MotionEvent.ACTION_DOWN } andThenAnswer {
+                MotionEvent.ACTION_MOVE
+            }
+
+            val sequence = listOf(
+                FingerPosition.INSIDE_CIRCLE,
+                FingerPosition.BOTTOM,
+                FingerPosition.INSIDE_CIRCLE,
+                FingerPosition.BOTTOM,
+                FingerPosition.LEFT,
+                FingerPosition.INSIDE_CIRCLE
+            )
+
+            every { event.y } returnsMany sequence.map { it.ordinal.toFloat() }
+
+            val controller = KeyboardController(context).also { it.keyboard = xpadKeyboard }
+
+            sequence.forEach { _ -> controller.onTouchEventInternal(event) }
+
+            verify(exactly = 0) { eventDispatcher.sendDownUp(action, false) }
+        }
+
+        test("resets unresolved center crossings when complex gestures are disabled") {
+            every { allowComplexGesturesPref.get() } returns false
+            val action = arbKeyboardAction.next()
+            val resetMovement = listOf(
+                FingerPosition.INSIDE_CIRCLE,
+                FingerPosition.BOTTOM,
+                FingerPosition.LEFT,
+                FingerPosition.INSIDE_CIRCLE
+            )
+            every { xpadKeyboard.layerLevel } returns LayerLevel.FIRST
+            every { xpadKeyboard.hasAction(resetMovement) } returns true
+            every { xpadKeyboard.action(resetMovement, any()) } returns action.some()
+
+            every { event.actionMasked } answers { MotionEvent.ACTION_DOWN } andThenAnswer {
+                MotionEvent.ACTION_MOVE
+            }
+
+            val sequence = listOf(
+                FingerPosition.INSIDE_CIRCLE,
+                FingerPosition.BOTTOM,
+                FingerPosition.INSIDE_CIRCLE,
+                FingerPosition.BOTTOM,
+                FingerPosition.LEFT,
+                FingerPosition.INSIDE_CIRCLE
+            )
+
+            every { event.y } returnsMany sequence.map { it.ordinal.toFloat() }
+
+            val controller = KeyboardController(context).also { it.keyboard = xpadKeyboard }
+
+            sequence.forEach { _ -> controller.onTouchEventInternal(event) }
+
+            verify(exactly = 1) { eventDispatcher.sendDownUp(action, false) }
+        }
+
+        test("still commits valid center hit when complex gestures are disabled") {
+            every { allowComplexGesturesPref.get() } returns false
+            val action = arbKeyboardAction.next()
+            val movement = listOf(
+                FingerPosition.INSIDE_CIRCLE,
+                FingerPosition.BOTTOM,
+                FingerPosition.LEFT,
+                FingerPosition.INSIDE_CIRCLE
+            )
+
+            every { xpadKeyboard.hasAction(movement) } returns true
+            every { xpadKeyboard.action(movement, any()) } returns action.some()
+
+            every { event.actionMasked } answers { MotionEvent.ACTION_DOWN } andThenAnswer {
+                MotionEvent.ACTION_MOVE
+            }
+            every { event.y } returnsMany movement.map { it.ordinal.toFloat() }
+
+            val controller = KeyboardController(context).also { it.keyboard = xpadKeyboard }
+
+            movement.forEach { _ -> controller.onTouchEventInternal(event) }
+
+            verify(exactly = 1) { eventDispatcher.sendDownUp(action, false) }
         }
 
         test("long press") {
