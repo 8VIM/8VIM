@@ -204,6 +204,10 @@ kotlin {
             "-Xjvm-default=all-compatibility"
         )
     }
+
+    aboutLibraries {
+        excludeFields = arrayOf("generated")
+    }
 }
 
 tasks.withType<JacocoReport> {
